@@ -2358,5 +2358,74 @@
         }
       }
     }
+  },
+  "aiCapabilities": {
+    "heading": {
+      "why": "Waarom Multi-Agent Orchestratie",
+      "transforms": "Transformeert",
+      "yourBusiness": "Uw Bedrijf"
+    },
+    "subtitle": "Traditionele AI geeft u één perspectief. Onze georkestreerde agents geven u een compleet team van specialisten die in perfecte harmonie werken, met resultaten die enkele modellen simpelweg niet kunnen evenaren.",
+    "capabilities": {
+      "autonomous": {
+        "title": "Autonome Agents",
+        "description": "Zelforganiserende AI-teams die zich aanpassen aan uw uitdagingen",
+        "features": {
+          "selfHealing": "Zelfherstellende systemen",
+          "dynamicAllocation": "Dynamische taakverdeling",
+          "continuousLearning": "Continu leren"
+        }
+      },
+      "parallel": {
+        "title": "Parallelle Verwerking",
+        "description": "Meerdere agents die gelijktijdig aan verschillende aspecten werken",
+        "features": {
+          "fasterDelivery": "10x snellere levering",
+          "noBottlenecks": "Geen knelpunten",
+          "optimalUsage": "Optimaal gebruik van resources"
+        }
+      },
+      "collective": {
+        "title": "Collectieve Intelligentie",
+        "description": "Gecombineerde expertise van gespecialiseerde agents voor superieure resultaten",
+        "features": {
+          "domainExpertise": "Domeinexpertise",
+          "crossValidation": "Kruisvalidatie",
+          "knowledgeSynthesis": "Kennissynthese"
+        }
+      },
+      "quality": {
+        "title": "Ingebouwde Kwaliteit",
+        "description": "Automatische validatie en testen door toegewijde agents",
+        "features": {
+          "codeReview": "Code review agents",
+          "securityScanning": "Beveiligingsscans",
+          "performanceOptimization": "Prestatieoptimalisatie"
+        }
+      },
+      "creative": {
+        "title": "Creatieve Oplossingen",
+        "description": "Emergente innovatie door agentsamenwerking",
+        "features": {
+          "novelApproaches": "Nieuwe benaderingen",
+          "patternRecognition": "Patroonherkenning",
+          "solutionEvolution": "Oplossingsevolutie"
+        }
+      },
+      "monitoring": {
+        "title": "Real-time Monitoring",
+        "description": "Volledige zichtbaarheid in agentprestaties en voortgang",
+        "features": {
+          "liveDashboards": "Live dashboards",
+          "performanceMetrics": "Prestatiemetingen",
+          "predictiveInsights": "Voorspellende inzichten"
+        }
+      }
+    },
+    "cta": {
+      "question": "Klaar om de kracht van georkestreerde AI-intelligentie te ervaren?",
+      "startJourney": "Start Uw AI-reis",
+      "exploreServices": "Ontdek Onze Diensten"
+    }
   }
 }

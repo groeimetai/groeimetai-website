@@ -3,54 +3,81 @@
 import { motion } from 'framer-motion';
 import { Bot, GitBranch, Brain, Shield, Sparkles, Gauge } from 'lucide-react';
 import { useState } from 'react';
-
-const capabilities = [
-  {
-    icon: Bot,
-    title: 'Autonomous Agents',
-    description: 'Self-organizing AI teams that adapt to your challenges',
-    features: ['Self-healing systems', 'Dynamic task allocation', 'Continuous learning'],
-    color: 'from-orange-500 to-orange-600',
-  },
-  {
-    icon: GitBranch,
-    title: 'Parallel Processing',
-    description: 'Multiple agents working simultaneously on different aspects',
-    features: ['10x faster delivery', 'No bottlenecks', 'Optimal resource usage'],
-    color: 'from-blue-500 to-blue-600',
-  },
-  {
-    icon: Brain,
-    title: 'Collective Intelligence',
-    description: 'Combined expertise of specialized agents for superior results',
-    features: ['Domain expertise', 'Cross-validation', 'Knowledge synthesis'],
-    color: 'from-purple-500 to-purple-600',
-  },
-  {
-    icon: Shield,
-    title: 'Built-in Quality',
-    description: 'Automatic validation and testing by dedicated agents',
-    features: ['Code review agents', 'Security scanning', 'Performance optimization'],
-    color: 'from-green-500 to-green-600',
-  },
-  {
-    icon: Sparkles,
-    title: 'Creative Solutions',
-    description: 'Emergent innovation from agent collaboration',
-    features: ['Novel approaches', 'Pattern recognition', 'Solution evolution'],
-    color: 'from-pink-500 to-pink-600',
-  },
-  {
-    icon: Gauge,
-    title: 'Real-time Monitoring',
-    description: 'Complete visibility into agent performance and progress',
-    features: ['Live dashboards', 'Performance metrics', 'Predictive insights'],
-    color: 'from-indigo-500 to-indigo-600',
-  },
-];
+import { Link } from '@/i18n/routing';
+import { useTranslations } from 'next-intl';
 
 export default function AICapabilities() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const t = useTranslations('aiCapabilities');
+
+  const capabilities = [
+    {
+      icon: Bot,
+      title: t('capabilities.autonomous.title'),
+      description: t('capabilities.autonomous.description'),
+      features: [
+        t('capabilities.autonomous.features.selfHealing'),
+        t('capabilities.autonomous.features.dynamicAllocation'),
+        t('capabilities.autonomous.features.continuousLearning'),
+      ],
+      color: 'from-orange-500 to-orange-600',
+    },
+    {
+      icon: GitBranch,
+      title: t('capabilities.parallel.title'),
+      description: t('capabilities.parallel.description'),
+      features: [
+        t('capabilities.parallel.features.fasterDelivery'),
+        t('capabilities.parallel.features.noBottlenecks'),
+        t('capabilities.parallel.features.optimalUsage'),
+      ],
+      color: 'from-blue-500 to-blue-600',
+    },
+    {
+      icon: Brain,
+      title: t('capabilities.collective.title'),
+      description: t('capabilities.collective.description'),
+      features: [
+        t('capabilities.collective.features.domainExpertise'),
+        t('capabilities.collective.features.crossValidation'),
+        t('capabilities.collective.features.knowledgeSynthesis'),
+      ],
+      color: 'from-purple-500 to-purple-600',
+    },
+    {
+      icon: Shield,
+      title: t('capabilities.quality.title'),
+      description: t('capabilities.quality.description'),
+      features: [
+        t('capabilities.quality.features.codeReview'),
+        t('capabilities.quality.features.securityScanning'),
+        t('capabilities.quality.features.performanceOptimization'),
+      ],
+      color: 'from-green-500 to-green-600',
+    },
+    {
+      icon: Sparkles,
+      title: t('capabilities.creative.title'),
+      description: t('capabilities.creative.description'),
+      features: [
+        t('capabilities.creative.features.novelApproaches'),
+        t('capabilities.creative.features.patternRecognition'),
+        t('capabilities.creative.features.solutionEvolution'),
+      ],
+      color: 'from-pink-500 to-pink-600',
+    },
+    {
+      icon: Gauge,
+      title: t('capabilities.monitoring.title'),
+      description: t('capabilities.monitoring.description'),
+      features: [
+        t('capabilities.monitoring.features.liveDashboards'),
+        t('capabilities.monitoring.features.performanceMetrics'),
+        t('capabilities.monitoring.features.predictiveInsights'),
+      ],
+      color: 'from-indigo-500 to-indigo-600',
+    },
+  ];
 
   return (
     <section className="py-20 bg-black relative overflow-hidden">
@@ -75,14 +102,12 @@ export default function AICapabilities() {
           className="text-center mb-16"
         >
           <h2 className="mb-4 text-white">
-            Why Multi-Agent Orchestration
-            <span className="text-orange-500"> Transforms </span>
-            Your Business
+            {t('heading.why')}
+            <span className="text-orange-500"> {t('heading.transforms')} </span>
+            {t('heading.yourBusiness')}
           </h2>
           <p className="text-xl text-white/70 max-w-3xl mx-auto">
-            Traditional AI gives you one perspective. Our orchestrated agents give you an entire
-            team of specialists working in perfect harmony, delivering results that single models
-            simply can&apos;t match.
+            {t('subtitle')}
           </p>
         </motion.div>
 
@@ -174,25 +199,27 @@ export default function AICapabilities() {
           className="mt-16 text-center"
         >
           <p className="text-xl text-white/70 mb-8">
-            Ready to experience the power of orchestrated AI intelligence?
+            {t('cta.question')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <motion.a
-              href="/contact"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
-            >
-              Start Your AI Journey
-            </motion.a>
-            <motion.a
-              href="/services"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all"
-            >
-              Explore Our Services
-            </motion.a>
+            <Link href="/contact">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer"
+              >
+                {t('cta.startJourney')}
+              </motion.div>
+            </Link>
+            <Link href="/services">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all cursor-pointer"
+              >
+                {t('cta.exploreServices')}
+              </motion.div>
+            </Link>
           </div>
         </motion.div>
       </div>

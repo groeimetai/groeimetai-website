@@ -45,7 +45,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import {
   firebaseDocumentService,
   FirebaseDocument,

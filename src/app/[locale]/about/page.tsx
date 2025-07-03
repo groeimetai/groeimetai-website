@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { Award, Users, Target, Lightbulb, Building, Globe, Cloud } from 'lucide-react';
 
 export default function AboutPage() {

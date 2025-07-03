@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Code, Zap, Brain, CheckCircle } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 
 const caseStudies = [
   {

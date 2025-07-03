@@ -2234,5 +2234,74 @@
       "days": "days",
       "ongoing": "Ongoing"
     }
+  },
+  "aiCapabilities": {
+    "heading": {
+      "why": "Why Multi-Agent Orchestration",
+      "transforms": "Transforms",
+      "yourBusiness": "Your Business"
+    },
+    "subtitle": "Traditional AI gives you one perspective. Our orchestrated agents give you an entire team of specialists working in perfect harmony, delivering results that single models simply can't match.",
+    "capabilities": {
+      "autonomous": {
+        "title": "Autonomous Agents",
+        "description": "Self-organizing AI teams that adapt to your challenges",
+        "features": {
+          "selfHealing": "Self-healing systems",
+          "dynamicAllocation": "Dynamic task allocation",
+          "continuousLearning": "Continuous learning"
+        }
+      },
+      "parallel": {
+        "title": "Parallel Processing",
+        "description": "Multiple agents working simultaneously on different aspects",
+        "features": {
+          "fasterDelivery": "10x faster delivery",
+          "noBottlenecks": "No bottlenecks",
+          "optimalUsage": "Optimal resource usage"
+        }
+      },
+      "collective": {
+        "title": "Collective Intelligence",
+        "description": "Combined expertise of specialized agents for superior results",
+        "features": {
+          "domainExpertise": "Domain expertise",
+          "crossValidation": "Cross-validation",
+          "knowledgeSynthesis": "Knowledge synthesis"
+        }
+      },
+      "quality": {
+        "title": "Built-in Quality",
+        "description": "Automatic validation and testing by dedicated agents",
+        "features": {
+          "codeReview": "Code review agents",
+          "securityScanning": "Security scanning",
+          "performanceOptimization": "Performance optimization"
+        }
+      },
+      "creative": {
+        "title": "Creative Solutions",
+        "description": "Emergent innovation from agent collaboration",
+        "features": {
+          "novelApproaches": "Novel approaches",
+          "patternRecognition": "Pattern recognition",
+          "solutionEvolution": "Solution evolution"
+        }
+      },
+      "monitoring": {
+        "title": "Real-time Monitoring",
+        "description": "Complete visibility into agent performance and progress",
+        "features": {
+          "liveDashboards": "Live dashboards",
+          "performanceMetrics": "Performance metrics",
+          "predictiveInsights": "Predictive insights"
+        }
+      }
+    },
+    "cta": {
+      "question": "Ready to experience the power of orchestrated AI intelligence?",
+      "startJourney": "Start Your AI Journey",
+      "exploreServices": "Explore Our Services"
+    }
   }
 }

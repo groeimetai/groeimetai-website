@@ -53,7 +53,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { userSettingsService } from '@/services/userSettingsService';
 import { accountDeletionService } from '@/services/accountDeletionService';
 import { UserSettings } from '@/types';

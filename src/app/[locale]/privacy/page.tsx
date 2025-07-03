@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import PrintButton from '@/components/privacy/PrintButton';
 import {
   Shield,

@@ -24,7 +24,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { projectService } from '@/services/projects';
 import { Project, ProjectStatus } from '@/types';
 
