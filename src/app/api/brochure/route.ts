@@ -2,12 +2,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { renderToBuffer } from '@react-pdf/renderer';
 import { createBrochureDocument } from '@/components/BrochureTemplate';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { locale: string } }
-) {
+export async function GET(request: NextRequest) {
   try {
-    const locale = params.locale as 'en' | 'nl';
+    // Get locale from URL path
+    const url = new URL(request.url);
+    const pathParts = url.pathname.split('/');
+    const localeIndex = pathParts.indexOf('brochure') + 1;
+    const locale = (pathParts[localeIndex] as 'en' | 'nl') || 'en';
+    
+    // Validate locale
+    if (!['en', 'nl'].includes(locale)) {
+      return NextResponse.json(
+        { error: 'Invalid locale' },
+        { status: 400 }
+      );
+    }
     
     // Import the correct translations
     const translations = await import(`@/translations/${locale}.json`);

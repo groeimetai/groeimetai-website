@@ -209,11 +209,11 @@ export default async function ServiceDetailPage({
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
-              <Link href={`/api/brochure/${params.locale}`}>
+              <a href={`/api/brochure/${params.locale}`} download>
                 <Button size="lg" variant="outline" className="hover-lift">
                   {t('downloadBrochure')}
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
         </div>
