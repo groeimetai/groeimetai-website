@@ -264,7 +264,7 @@ export default function LoginPage() {
               </div>
 
               <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
-                <p className="text-sm text-white">{t('trustMessage', { count: 500 })}</p>
+                <p className="text-sm text-white">{t('trustMessage')}</p>
               </div>
             </div>
           </motion.div>

@@ -167,9 +167,9 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
 
         <View style={styles.stats}>
           <View style={styles.statBox}>
-            <Text style={styles.statNumber}>500+</Text>
+            <Text style={styles.statNumber}>100%</Text>
             <Text style={styles.statLabel}>
-              {locale === 'nl' ? 'Gebruikers' : 'Users'}
+              {locale === 'nl' ? 'GDPR Compliant' : 'GDPR Compliant'}
             </Text>
           </View>
           <View style={styles.statBox}>

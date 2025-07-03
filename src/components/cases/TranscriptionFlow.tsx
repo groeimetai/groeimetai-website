@@ -251,8 +251,8 @@ export const TranscriptionFlow: React.FC = () => {
           <span className="text-sm text-white/70">Hours Transcribed</span>
         </motion.div>
         <motion.div whileHover={{ scale: 1.05 }} className="bg-white/5 rounded-lg p-4">
-          <div className="text-3xl font-bold text-orange">500+</div>
-          <span className="text-sm text-white/70">Active Users</span>
+          <div className="text-3xl font-bold text-orange">100%</div>
+          <span className="text-sm text-white/70">GDPR Compliant</span>
         </motion.div>
       </div>
     </div>

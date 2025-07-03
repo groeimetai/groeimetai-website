@@ -835,7 +835,7 @@
       "noAccount": "Don't have an account?",
       "getStarted": "Get Started",
       "portalTitle": "Your AI Project Portal",
-      "trustMessage": "{count}+ companies trust GroeimetAI for their AI transformation journey",
+      "trustMessage": "Join forward-thinking organizations leveraging our AI expertise for strategic transformation",
       "benefits": {
         "secure": {
           "title": "Secure Portal",
@@ -918,7 +918,7 @@
         }
       },
       "accountMessage": {
-        "title": "Join 500+ companies using our portal",
+        "title": "Join leading companies using our portal",
         "description": "Account holders report 40% faster project completion"
       },
       "passwordLabel": "Password",
@@ -1077,7 +1077,7 @@
     "case1Metrics": "Results: 85% faster response times, 72% higher resolution rate, €2.8M annual savings",
     "case2Title": "Snelnotuleren.nl - AI Transcription Platform",
     "case2Description": "Built a GDPR-compliant AI transcription platform processing over 1 million tokens.",
-    "case2Metrics": "Results: 1500+ hours transcribed, 500+ active users, 100% GDPR compliant",
+    "case2Metrics": "Results: 1500+ hours transcribed, growing user base, 100% GDPR compliant",
     "case3Title": "Multi-Agent Learning Platform",
     "case3Description": "Revolutionary project where AI agents autonomously built a complete learning platform.",
     "case3Metrics": "Results: 2-week development, 10+ courses created, 95% agent efficiency",
@@ -2103,7 +2103,7 @@
         "challenge": "Dutch market needed a GDPR-compliant AI transcription service for meetings and interviews.",
         "solution": "GCP-based platform with Firebase, fully GDPR and EU AI Act compliant. Ingenious algorithm for long transcriptions within token limits.",
         "details": "Successful AI venture that processed over a million tokens and transcribed 1500+ hours of meetings with perfect GDPR compliance.",
-        "overview": "Built a GDPR-compliant AI transcription platform that processed over 1 million tokens and transcribed 1500+ hours of meetings, serving 500+ active users.",
+        "overview": "Built a GDPR-compliant AI transcription platform that processed over 1 million tokens and transcribed 1500+ hours of meetings for a growing user base.",
         "challengePoints": [
           "Dutch market lacked GDPR-compliant transcription services",
           "Existing solutions had token limitations for long meetings",
@@ -2146,9 +2146,9 @@
             "description": "Transcribed meetings, interviews, and lectures"
           },
           "users": {
-            "metric": "500+",
-            "value": "Active Users",
-            "description": "Growing user base across Netherlands"
+            "metric": "Growing",
+            "value": "User Base",
+            "description": "Active users across Netherlands"
           }
         },
         "keyFeatures": [

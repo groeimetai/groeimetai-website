@@ -147,7 +147,7 @@ const caseDetails: Record<string, CaseDetail> = {
     industry: 'SaaS',
     duration: '2023 - July 2025',
     overview:
-      'Built a GDPR-compliant AI transcription platform that processed over 1 million tokens and transcribed 1500+ hours of meetings, serving 500+ active users.',
+      'Built a GDPR-compliant AI transcription platform that processed over 1 million tokens and transcribed 1500+ hours of meetings for a growing user base.',
     challenge: {
       title: 'The Challenge',
       points: [
@@ -203,9 +203,9 @@ const caseDetails: Record<string, CaseDetail> = {
         description: 'Transcribed meetings, interviews, and lectures',
       },
       {
-        metric: '500+',
-        value: 'Active Users',
-        description: 'Growing user base across Netherlands',
+        metric: 'Growing',
+        value: 'User Base',
+        description: 'Active users across Netherlands',
       },
     ],
     technologies: ['Google Cloud Platform', 'Firebase', 'Whisper AI', 'Next.js', 'Python'],
