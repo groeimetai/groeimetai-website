@@ -1,11 +1,11 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { locales } from '@/i18n';
-import { BrochureDownloadButton } from '@/components/BrochureDownloadButton';
 import {
   Brain,
   Bot,
@@ -19,6 +19,18 @@ import {
   Check,
   ArrowLeft,
 } from 'lucide-react';
+
+const BrochureDownloadButton = dynamic(
+  () => import('@/components/BrochureDownloadButton').then((mod) => mod.BrochureDownloadButton),
+  {
+    ssr: false,
+    loading: () => (
+      <Button size="lg" variant="outline" className="hover-lift" disabled>
+        Loading...
+      </Button>
+    ),
+  }
+);
 
 interface ServiceDetailData {
   slug: string;

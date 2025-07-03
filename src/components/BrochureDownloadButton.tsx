@@ -14,31 +14,31 @@ interface BrochureDownloadButtonProps {
 export function BrochureDownloadButton({ locale }: BrochureDownloadButtonProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const t = useTranslations('serviceDetails');
-  
+
   const handleDownload = async () => {
     try {
       setIsGenerating(true);
-      
+
       // Import translations
       const translations = await import(`@/translations/${locale}.json`);
-      
+
       // Create the document
       const document = createBrochureDocument(locale, translations.default);
-      
+
       // Generate the PDF blob
       const blob = await pdf(document).toBlob();
-      
+
       // Create download link
       const url = URL.createObjectURL(blob);
       const link = window.document.createElement('a');
       link.href = url;
       link.download = `GroeimetAI_Brochure_${locale.toUpperCase()}.pdf`;
-      
+
       // Trigger download
       window.document.body.appendChild(link);
       link.click();
       window.document.body.removeChild(link);
-      
+
       // Cleanup
       URL.revokeObjectURL(url);
     } catch (error) {
@@ -48,11 +48,11 @@ export function BrochureDownloadButton({ locale }: BrochureDownloadButtonProps) 
       setIsGenerating(false);
     }
   };
-  
+
   return (
-    <Button 
-      size="lg" 
-      variant="outline" 
+    <Button
+      size="lg"
+      variant="outline"
       className="hover-lift"
       onClick={handleDownload}
       disabled={isGenerating}
@@ -62,3 +62,4 @@ export function BrochureDownloadButton({ locale }: BrochureDownloadButtonProps) 
     </Button>
   );
 }
+

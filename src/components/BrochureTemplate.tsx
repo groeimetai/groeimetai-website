@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-  Font,
-  Image,
-} from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Font, Image } from '@react-pdf/renderer';
 
 // Register custom fonts if needed
 // Font.register({
@@ -168,9 +160,7 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
           <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#333333', marginBottom: 20 }}>
             {t.brochure.coverTitle}
           </Text>
-          <Text style={styles.text}>
-            {t.brochure.coverDescription}
-          </Text>
+          <Text style={styles.text}>{t.brochure.coverDescription}</Text>
         </View>
 
         <View style={styles.stats}>
@@ -197,10 +187,8 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t.brochure.aboutTitle}</Text>
-          <Text style={styles.text}>
-            {t.brochure.aboutDescription}
-          </Text>
-          
+          <Text style={styles.text}>{t.brochure.aboutDescription}</Text>
+
           <View style={{ marginTop: 20 }}>
             <Text style={styles.subtitle}>{t.brochure.whyChooseUs}</Text>
             <Text style={styles.bulletPoint}>• {t.brochure.whyPoint1}</Text>
@@ -212,9 +200,7 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t.brochure.approachTitle}</Text>
-          <Text style={styles.text}>
-            {t.brochure.approachDescription}
-          </Text>
+          <Text style={styles.text}>{t.brochure.approachDescription}</Text>
         </View>
 
         <Text style={styles.pageNumber}>2</Text>
@@ -224,47 +210,35 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t.brochure.servicesTitle}</Text>
-          
+
           <View style={styles.serviceBox}>
             <Text style={styles.serviceTitle}>{t.serviceDetails.genai.title}</Text>
-            <Text style={styles.serviceDescription}>
-              {t.serviceDetails.genai.description}
-            </Text>
+            <Text style={styles.serviceDescription}>{t.serviceDetails.genai.description}</Text>
           </View>
 
           <View style={styles.serviceBox}>
             <Text style={styles.serviceTitle}>{t.serviceDetails.llm.title}</Text>
-            <Text style={styles.serviceDescription}>
-              {t.serviceDetails.llm.description}
-            </Text>
+            <Text style={styles.serviceDescription}>{t.serviceDetails.llm.description}</Text>
           </View>
 
           <View style={styles.serviceBox}>
             <Text style={styles.serviceTitle}>{t.serviceDetails.security.title}</Text>
-            <Text style={styles.serviceDescription}>
-              {t.serviceDetails.security.description}
-            </Text>
+            <Text style={styles.serviceDescription}>{t.serviceDetails.security.description}</Text>
           </View>
 
           <View style={styles.serviceBox}>
             <Text style={styles.serviceTitle}>{t.serviceDetails.multiAgent.title}</Text>
-            <Text style={styles.serviceDescription}>
-              {t.serviceDetails.multiAgent.description}
-            </Text>
+            <Text style={styles.serviceDescription}>{t.serviceDetails.multiAgent.description}</Text>
           </View>
 
           <View style={styles.serviceBox}>
             <Text style={styles.serviceTitle}>{t.serviceDetails.rag.title}</Text>
-            <Text style={styles.serviceDescription}>
-              {t.serviceDetails.rag.description}
-            </Text>
+            <Text style={styles.serviceDescription}>{t.serviceDetails.rag.description}</Text>
           </View>
 
           <View style={styles.serviceBox}>
             <Text style={styles.serviceTitle}>{t.serviceDetails.servicenow.title}</Text>
-            <Text style={styles.serviceDescription}>
-              {t.serviceDetails.servicenow.description}
-            </Text>
+            <Text style={styles.serviceDescription}>{t.serviceDetails.servicenow.description}</Text>
           </View>
         </View>
 
@@ -275,7 +249,7 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t.brochure.caseStudiesTitle}</Text>
-          
+
           <View style={styles.caseStudy}>
             <Text style={styles.caseStudyTitle}>{t.brochure.case1Title}</Text>
             <Text style={styles.text}>{t.brochure.case1Description}</Text>
@@ -308,10 +282,8 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t.brochure.contactTitle}</Text>
-          <Text style={styles.text}>
-            {t.brochure.contactDescription}
-          </Text>
-          
+          <Text style={styles.text}>{t.brochure.contactDescription}</Text>
+
           <View style={{ marginTop: 30 }}>
             <Text style={styles.subtitle}>{t.brochure.getInTouch}</Text>
             <Text style={styles.contactInfo}>Email: info@groeimetai.io</Text>
@@ -330,12 +302,8 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
         </View>
 
         <View style={[styles.footer, { position: 'relative', marginTop: 50 }]}>
-          <Text style={styles.footerText}>
-            © 2024 GroeimetAI - {t.brochure.allRightsReserved}
-          </Text>
-          <Text style={[styles.footerText, { marginTop: 5 }]}>
-            {t.brochure.strategicPartner}
-          </Text>
+          <Text style={styles.footerText}>© 2024 GroeimetAI - {t.brochure.allRightsReserved}</Text>
+          <Text style={[styles.footerText, { marginTop: 5 }]}>{t.brochure.strategicPartner}</Text>
         </View>
 
         <Text style={styles.pageNumber}>5</Text>
@@ -343,3 +311,4 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
     </Document>
   );
 };
+
