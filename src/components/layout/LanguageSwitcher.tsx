@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 import { Globe } from 'lucide-react';
 import { useLocale } from 'next-intl';
@@ -16,15 +16,9 @@ export default function LanguageSwitcher() {
     // Toggle between nl and en
     const newLocale = locale === 'nl' ? 'en' : 'nl';
 
-    // Set cookie for language preference
-    document.cookie = `NEXT_LOCALE=${newLocale}; max-age=${365 * 24 * 60 * 60}; path=/; samesite=lax${process.env.NODE_ENV === 'production' ? '; secure' : ''}`;
-
-    // Remove the current locale from the pathname if it exists
-    const pathWithoutLocale = pathname.replace(/^\/(nl|en)/, '');
-
-    // Navigate to the new locale path with transition
+    // Navigate to the new locale with transition
     startTransition(() => {
-      router.push(`/${newLocale}${pathWithoutLocale}`);
+      router.replace(pathname, { locale: newLocale });
     });
   };
 
