@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "GroeimetAI - AI Consultancy & Innovatie",
-    "description": "Strategisch AI-adviesbureau gespecialiseerd in custom model training, multi-agent orchestratie en enterprise AI-architectuur. Wij creëren AI-oplossingen, niet alleen implementeren."
+    "description": "Strategisch AI-adviesbureau dat directieteams begeleidt door digitale transformatie. Wij leveren uitvoerbare inzichten voor procesoptimalisatie, kostenreductie en duurzame groei."
   },
   "navigation": {
     "services": "Diensten",
@@ -14,10 +14,10 @@
     "getStarted": "Aan de slag"
   },
   "hero": {
-    "badge": "Custom AI Model Training & Strategische Architectuur",
+    "badge": "Toonaangevende AI Strategie & Business Transformatie",
     "title": "Versneld Bedrijfswaarde",
     "subtitle": "Door AI Excellentie",
-    "description": "Wij ontwerpen custom AI-modellen en orchestratie systemen die ondernemingen transformeren. Onze strategische consulting gaat verder dan implementatie - wij trainen, ontwerpen en creëren AI-oplossingen op maat voor uw unieke uitdagingen.",
+    "description": "Wij begeleiden directieteams door de complexiteit van AI-adoptie. Onze strategische advisory focust op bedrijfsresultaten - procesoptimalisatie, kostenreductie en omzetgroei door intelligente AI-implementatie.",
     "cta": {
       "consultation": "Consultatie Plannen",
       "services": "Onze Advisory Services"
@@ -25,16 +25,16 @@
   },
   "services": {
     "title": "Onze Advisory Services",
-    "subtitle": "Wij implementeren niet alleen AI - wij ontwerpen, trainen en orkestreren custom AI-modellen die uw competitief voordeel worden",
+    "subtitle": "Strategische begeleiding om leiders te helpen navigeren door AI-complexiteit en transformatieve bedrijfswaarde te ontsluiten door intelligente procesoptimalisatie",
     "items": {
       "strategy": {
         "title": "AI Strategie & Roadmap",
-        "description": "Ontwerp custom AI-architecturen en train doelgerichte modellen die aansluiten bij uw strategische doelstellingen.",
+        "description": "Definieer uw AI-visie en creëer uitvoerbare roadmaps die technologie-investeringen afstemmen op bedrijfsdoelstellingen en meetbare ROI.",
         "features": ["Executive Advisory", "Kansen Assessment", "Strategische Planning"]
       },
       "transformation": {
         "title": "Digitale Transformatie",
-        "description": "Transformeer uw organisatie met op maat getrainde AI-modellen en multi-agent orchestratie systemen.",
+        "description": "Navigeer door complexe digitale ecosystemen met uitgebreide transformatiestrategieën gericht op procesoptimalisatie en kostenefficiëntie.",
         "features": ["Operating Model Ontwerp", "Proces Herontwerp", "Waarde Realisatie"]
       },
       "governance": {
@@ -44,7 +44,7 @@
       },
       "innovation": {
         "title": "Innovatie Labs",
-        "description": "Creëer baanbrekende AI-modellen via onze innovatie labs. Wij trainen, testen en implementeren custom oplossingen.",
+        "description": "Versnel innovatie door strategische pilots en proof-of-concepts die duidelijke bedrijfswaarde en ROI aantonen.",
         "features": ["Use Case Ontdekking", "Pilot Programma's", "Innovatie Workshops"]
       },
       "advisory": {
@@ -62,7 +62,7 @@
   "servicesPage": {
     "hero": {
       "title": "Onze AI Diensten",
-      "description": "Van model architectuur tot deployment - wij creëren custom AI-oplossingen die uw bedrijf transformeren"
+      "description": "Van strategie tot waarderealisatie - wij begeleiden uw AI-transformatiereis met focus op meetbare bedrijfsresultaten"
     },
     "cta": {
       "start": "Start Uw AI Journey",
@@ -74,11 +74,11 @@
       "steps": {
         "discovery": {
           "title": "Discovery",
-          "description": "We analyseren uw unieke uitdagingen en ontwerpen custom AI-model architecturen"
+          "description": "We analyseren uw bedrijfsprocessen en identificeren high-impact AI-kansen voor optimalisatie"
         },
         "strategy": {
           "title": "Strategy",
-          "description": "Ontwerp en training van custom AI-modellen specifiek voor uw behoeften"
+          "description": "Ontwikkeling van op maat gemaakte AI-strategie afgestemd op uw bedrijfsdoelen en ROI-targets"
         },
         "implementation": {
           "title": "Implementation",
@@ -95,9 +95,9 @@
       "expertise": {
         "title": "Bewezen Expertise",
         "items": [
-          "50+ succesvolle AI-implementaties",
-          "Gecertificeerde experts in alle major AI platforms",
-          "Partnerships met wereldleiders in AI",
+          "Strategisch advies gericht op meetbare bedrijfsresultaten",
+          "Diepgaande expertise in AI-strategie en business transformatie",
+          "Strategische partnerschappen met toonaangevende technologieleveranciers",
           "Focus op Nederlandse markt en regelgeving"
         ]
       },
@@ -669,7 +669,7 @@
     "differentiators": {
       "track": {
         "title": "Bewezen Track Record",
-        "description": "Meer dan 50+ succesvolle AI-transformaties bij Fortune 500 bedrijven met meetbare ROI",
+        "description": "Strategisch AI-advies met bewezen resultaten in procesoptimalisatie en kostenreductie",
         "metric": "€2.8M+ jaarlijks bespaard"
       },
       "partnership": {
@@ -767,7 +767,7 @@
       },
       "innovation": {
         "title": "Innovatieleider",
-        "description": "Custom AI model training en multi-agent orchestratie expertise"
+        "description": "Strategisch advies voor AI-gedreven procesoptimalisatie en business transformatie"
       }
     },
     "achievements": {

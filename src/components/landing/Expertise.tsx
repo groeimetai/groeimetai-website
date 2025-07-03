@@ -135,56 +135,52 @@ export default function Expertise() {
                 <Zap className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  Our Multi-Agent Success Story
-                </h3>
+                <h3 className="text-2xl font-bold text-white mb-2">Strategic AI Success Story</h3>
                 <p className="text-white/80 text-lg">
-                  We built a complete educational platform using our multi-agent orchestration
-                  system
+                  We advised on the strategic implementation of AI-driven process optimization
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-500 mb-1">2</div>
-                <div className="text-white/70">Weeks</div>
+                <div className="text-3xl font-bold text-orange-500 mb-1">€2.8M+</div>
+                <div className="text-white/70">Annual Savings</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-green-500 mb-1">10+</div>
-                <div className="text-white/70">Courses</div>
+                <div className="text-3xl font-bold text-green-500 mb-1">85%</div>
+                <div className="text-white/70">Process Efficiency</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-500 mb-1">40+</div>
-                <div className="text-white/70">Modules</div>
+                <div className="text-3xl font-bold text-blue-500 mb-1">94%</div>
+                <div className="text-white/70">Accuracy Improvement</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-500 mb-1">160+</div>
-                <div className="text-white/70">Lessons</div>
+                <div className="text-3xl font-bold text-purple-500 mb-1">50K+</div>
+                <div className="text-white/70">Users Impacted</div>
               </div>
             </div>
 
             <p className="text-white/70 mb-6">
-              Using our multi-agent orchestration system, we created a comprehensive learning
-              platform with:
+              Through strategic AI advisory, we helped a major financial institution achieve:
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center gap-3">
                 <Code className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                <span className="text-white/80">Automated content generation</span>
+                <span className="text-white/80">Process automation strategy</span>
               </div>
               <div className="flex items-center gap-3">
                 <Brain className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                <span className="text-white/80">Intelligent curriculum design</span>
+                <span className="text-white/80">AI adoption roadmap</span>
               </div>
               <div className="flex items-center gap-3">
                 <Sparkles className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                <span className="text-white/80">Interactive exercises & quizzes</span>
+                <span className="text-white/80">Cost optimization framework</span>
               </div>
               <div className="flex items-center gap-3">
                 <TrendingUp className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                <span className="text-white/80">Personalized learning paths</span>
+                <span className="text-white/80">Measurable ROI delivery</span>
               </div>
             </div>
           </div>

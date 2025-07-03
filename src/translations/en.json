@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "GroeimetAI - AI Consultancy & Innovation",
-    "description": "Strategic AI consultancy specializing in custom model training, multi-agent orchestration, and enterprise AI architecture. We create AI solutions, not just implement them."
+    "description": "Strategic AI consultancy guiding executive teams through digital transformation. We deliver actionable insights for process optimization, cost reduction, and sustainable growth."
   },
   "navigation": {
     "services": "Services",
@@ -14,10 +14,10 @@
     "getStarted": "Get Started"
   },
   "hero": {
-    "badge": "Custom AI Model Training & Strategic Architecture",
+    "badge": "Leading AI Strategy & Business Transformation",
     "title": "Accelerate Business Value",
     "subtitle": "Through AI Excellence",
-    "description": "We architect custom AI models and orchestration systems that transform enterprises. Our strategic consulting goes beyond implementation - we train, design, and create AI solutions tailored to your unique challenges.",
+    "description": "We guide executive teams through the complexity of AI adoption. Our strategic advisory focuses on business outcomes - process optimization, cost reduction, and revenue growth through intelligent AI implementation.",
     "cta": {
       "consultation": "Schedule Consultation",
       "services": "Our Advisory Services"
@@ -25,16 +25,16 @@
   },
   "services": {
     "title": "Our Advisory Services",
-    "subtitle": "We don't just implement AI - we architect, train, and orchestrate custom AI models that become your competitive advantage",
+    "subtitle": "Strategic guidance to help leaders navigate AI complexity and unlock transformative business value through intelligent process optimization",
     "items": {
       "strategy": {
         "title": "AI Strategy & Roadmap",
-        "description": "Design custom AI architectures and train purpose-built models that align with your strategic objectives.",
+        "description": "Define your AI vision and create actionable roadmaps that align technology investments with business objectives and measurable ROI.",
         "features": ["Executive Advisory", "Opportunity Assessment", "Strategic Planning"]
       },
       "transformation": {
         "title": "Digital Transformation",
-        "description": "Transform your organization with custom-trained AI models and multi-agent orchestration systems.",
+        "description": "Navigate complex digital ecosystems with comprehensive transformation strategies focused on process optimization and cost efficiency.",
         "features": ["Operating Model Design", "Process Redesign", "Value Realization"]
       },
       "governance": {
@@ -44,7 +44,7 @@
       },
       "innovation": {
         "title": "Innovation Labs",
-        "description": "Create breakthrough AI models through our innovation labs. We train, test, and deploy custom solutions.",
+        "description": "Accelerate innovation through strategic pilots and proof-of-concepts that demonstrate clear business value and ROI.",
         "features": ["Use Case Discovery", "Pilot Programs", "Innovation Workshops"]
       },
       "advisory": {
@@ -62,7 +62,7 @@
   "servicesPage": {
     "hero": {
       "title": "Our AI Services",
-      "description": "From model architecture to deployment - we create custom AI solutions that transform your business"
+      "description": "From strategy to value realization - we guide your AI transformation journey with focus on measurable business outcomes"
     },
     "cta": {
       "start": "Start Your AI Journey",
@@ -74,11 +74,11 @@
       "steps": {
         "discovery": {
           "title": "Discovery",
-          "description": "We analyze your unique challenges and design custom AI model architectures"
+          "description": "We analyze your business processes and identify high-impact AI opportunities for optimization"
         },
         "strategy": {
           "title": "Strategy",
-          "description": "Design and training of custom AI models specific to your needs"
+          "description": "Development of tailored AI strategy aligned with your business goals and ROI targets"
         },
         "implementation": {
           "title": "Implementation",
@@ -95,9 +95,9 @@
       "expertise": {
         "title": "Proven Expertise",
         "items": [
-          "50+ successful AI implementations",
-          "Certified experts in all major AI platforms",
-          "Partnerships with world leaders in AI",
+          "Strategic advisory focused on measurable business outcomes",
+          "Deep expertise in AI strategy and business transformation",
+          "Strategic partnerships with leading technology providers",
           "Focus on European market and regulations"
         ]
       },
@@ -679,7 +679,7 @@
     "differentiators": {
       "track": {
         "title": "Proven Track Record",
-        "description": "Over 50+ successful AI transformations at Fortune 500 companies with measurable ROI",
+        "description": "Strategic AI advisory with proven results in process optimization and cost reduction",
         "metric": "€2.8M+ saved annually"
       },
       "partnership": {
@@ -777,7 +777,7 @@
       },
       "innovation": {
         "title": "Innovation Leader",
-        "description": "Custom AI model training and multi-agent orchestration expertise"
+        "description": "Strategic advisory for AI-driven process optimization and business transformation"
       }
     },
     "achievements": {
