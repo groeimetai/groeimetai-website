@@ -13,11 +13,11 @@ export default function LanguageSwitcherDebug() {
 
   const handleLanguageChange = () => {
     const newLocale = locale === 'nl' ? 'en' : 'nl';
-    
+
     // Get current path without locale
     const segments = pathname.split('/');
     const currentLocale = segments[1];
-    
+
     // Check if first segment is a locale
     if (currentLocale === 'nl' || currentLocale === 'en') {
       segments[1] = newLocale;
@@ -25,9 +25,9 @@ export default function LanguageSwitcherDebug() {
       // No locale in path, add it
       segments.unshift('', newLocale);
     }
-    
+
     const newPath = segments.join('/').replace('//', '/');
-    
+
     startTransition(() => {
       // Force a hard navigation to ensure everything reloads
       window.location.href = newPath;

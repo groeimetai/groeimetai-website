@@ -83,7 +83,9 @@ export default function TrustIndicators() {
                 className="bg-black/50 backdrop-blur-sm border border-white/10 rounded-2xl p-6
                   transition-all duration-300 hover:border-orange/50 hover:shadow-xl hover:scale-[1.02]"
               >
-                <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${factor.gradient} mb-4`}>
+                <div
+                  className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${factor.gradient} mb-4`}
+                >
                   <Icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2 text-white">
@@ -103,7 +105,9 @@ export default function TrustIndicators() {
           transition={{ duration: 0.6 }}
           className="bg-gradient-to-r from-orange/20 to-green/20 rounded-2xl p-8 md:p-12 border border-white/10 mb-20"
         >
-          <h3 className="text-2xl font-bold text-center mb-8 text-white">{t('achievements.title')}</h3>
+          <h3 className="text-2xl font-bold text-center mb-8 text-white">
+            {t('achievements.title')}
+          </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {achievements.map((achievement, index) => {
               const Icon = achievement.icon;

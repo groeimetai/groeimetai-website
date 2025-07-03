@@ -65,7 +65,7 @@ export default function ParticleBackground() {
   useEffect(() => {
     // Skip animation during build time
     if (isBuildTime) return;
-    
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 

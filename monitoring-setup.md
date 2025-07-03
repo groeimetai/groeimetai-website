@@ -1,6 +1,7 @@
 # Google Cloud Monitoring & Logging Setup
 
 ## 1. Enable Required APIs
+
 ```bash
 gcloud services enable monitoring.googleapis.com
 gcloud services enable logging.googleapis.com
@@ -11,6 +12,7 @@ gcloud services enable clouddebugger.googleapis.com
 ## 2. Cloud Run Metrics
 
 ### Default Metrics Available
+
 - Request count
 - Request latency
 - Container CPU utilization
@@ -19,11 +21,13 @@ gcloud services enable clouddebugger.googleapis.com
 - Container instance count
 
 ### View in Console
+
 1. Go to Cloud Console > Cloud Run
 2. Click on your service
 3. Click "Metrics" tab
 
 ### View via CLI
+
 ```bash
 # Get basic metrics
 gcloud run services describe groeimetai-app \
@@ -38,6 +42,7 @@ gcloud run services describe groeimetai-app \
 ## 3. Set Up Logging
 
 ### Application Logging
+
 ```javascript
 // utils/logger.ts
 export const logger = {
@@ -70,6 +75,7 @@ export const logger = {
 ```
 
 ### View Logs
+
 ```bash
 # Stream logs
 gcloud run services logs read groeimetai-app \
@@ -91,6 +97,7 @@ gcloud logging read "resource.type=cloud_run_revision" \
 ## 4. Create Dashboards
 
 ### Custom Dashboard
+
 ```bash
 # Create dashboard via API
 cat > dashboard.json << EOF
@@ -143,6 +150,7 @@ gcloud monitoring dashboards create --config-from-file=dashboard.json
 ## 5. Set Up Alerts
 
 ### Response Time Alert
+
 ```bash
 gcloud alpha monitoring policies create \
   --display-name="High Response Time" \
@@ -154,6 +162,7 @@ gcloud alpha monitoring policies create \
 ```
 
 ### Error Rate Alert
+
 ```bash
 gcloud alpha monitoring policies create \
   --display-name="High Error Rate" \
@@ -165,6 +174,7 @@ gcloud alpha monitoring policies create \
 ```
 
 ### Create Notification Channel
+
 ```bash
 # Email notification
 gcloud alpha monitoring channels create \
@@ -176,6 +186,7 @@ gcloud alpha monitoring channels create \
 ## 6. Application Performance Monitoring
 
 ### Add Google Cloud Trace
+
 ```bash
 npm install @google-cloud/trace-agent
 ```
@@ -188,6 +199,7 @@ if (process.env.NODE_ENV === 'production') {
 ```
 
 ### Add Custom Traces
+
 ```javascript
 import { Tracer } from '@google-cloud/trace-agent';
 
@@ -195,7 +207,7 @@ const tracer = Tracer.get();
 
 export async function tracedFunction() {
   const span = tracer.createChildSpan({ name: 'custom-operation' });
-  
+
   try {
     // Your code here
     const result = await someOperation();
@@ -212,6 +224,7 @@ export async function tracedFunction() {
 ## 7. Uptime Monitoring
 
 ### Create Uptime Check
+
 ```bash
 gcloud monitoring uptime-checks create \
   --display-name="GroeimetAI Homepage" \
@@ -223,6 +236,7 @@ gcloud monitoring uptime-checks create \
 ```
 
 ### Health Check Endpoint
+
 ```typescript
 // app/api/health/route.ts
 export async function GET() {
@@ -231,23 +245,29 @@ export async function GET() {
     const checks = {
       database: await checkDatabase(),
       storage: await checkStorage(),
-      auth: await checkAuth()
+      auth: await checkAuth(),
     };
-    
-    const healthy = Object.values(checks).every(check => check);
-    
-    return Response.json({
-      status: healthy ? 'healthy' : 'unhealthy',
-      checks,
-      timestamp: new Date().toISOString()
-    }, {
-      status: healthy ? 200 : 503
-    });
+
+    const healthy = Object.values(checks).every((check) => check);
+
+    return Response.json(
+      {
+        status: healthy ? 'healthy' : 'unhealthy',
+        checks,
+        timestamp: new Date().toISOString(),
+      },
+      {
+        status: healthy ? 200 : 503,
+      }
+    );
   } catch (error) {
-    return Response.json({
-      status: 'error',
-      error: error.message
-    }, { status: 503 });
+    return Response.json(
+      {
+        status: 'error',
+        error: error.message,
+      },
+      { status: 503 }
+    );
   }
 }
 ```
@@ -255,6 +275,7 @@ export async function GET() {
 ## 8. Cost Monitoring
 
 ### Set Budget Alert
+
 ```bash
 gcloud billing budgets create \
   --billing-account=[BILLING_ACCOUNT_ID] \
@@ -266,6 +287,7 @@ gcloud billing budgets create \
 ```
 
 ### View Costs
+
 ```bash
 # Get current month costs
 gcloud billing accounts describe [BILLING_ACCOUNT_ID]
@@ -274,6 +296,7 @@ gcloud billing accounts describe [BILLING_ACCOUNT_ID]
 ## 9. Log Analysis
 
 ### Create Log Sink for Analysis
+
 ```bash
 # Export to BigQuery
 gcloud logging sinks create groeimetai-logs \
@@ -282,6 +305,7 @@ gcloud logging sinks create groeimetai-logs \
 ```
 
 ### Common Queries
+
 ```sql
 -- Top errors in BigQuery
 SELECT
@@ -300,9 +324,11 @@ LIMIT 100;
 ## 10. Integration with External Tools
 
 ### Sentry Integration
+
 Already configured in the application via `sentry.client.config.tsx`
 
 ### Datadog Integration (Optional)
+
 ```bash
 # Install Datadog agent
 npm install --save dd-trace
@@ -314,7 +340,7 @@ if (process.env.DD_AGENT_HOST) {
   require('dd-trace').init({
     analytics: true,
     env: process.env.NODE_ENV,
-    service: 'groeimetai-app'
+    service: 'groeimetai-app',
   });
 }
 ```

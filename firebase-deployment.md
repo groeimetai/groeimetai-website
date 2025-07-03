@@ -1,6 +1,7 @@
 # Firebase Deployment Guide
 
 ## Prerequisites
+
 1. Firebase CLI installed: `npm install -g firebase-tools`
 2. Logged in to Firebase: `firebase login`
 3. Firebase project created
@@ -12,6 +13,7 @@ firebase init
 ```
 
 Select:
+
 - Firestore
 - Storage
 - Hosting (optional)
@@ -58,16 +60,19 @@ firebase deploy
 ## Current Rules Summary
 
 ### Firestore Rules
+
 - Authenticated users can read/write their own data
 - Admin users have full access
 - Public content is readable by all
 
 ### Storage Rules
+
 - Authenticated users can upload to their own folders
 - Max file size: 10MB
 - Allowed types: images and documents
 
 ### Indexes
+
 - User queries optimized
 - Project queries with filters
 - Message queries with pagination

@@ -1,11 +1,13 @@
 # Custom Domain Setup for Cloud Run
 
 ## Prerequisites
+
 - Domain registered (e.g., groeimetai.io)
 - Access to DNS settings
 - Cloud Run service deployed
 
 ## Step 1: Reserve a Static IP Address
+
 ```bash
 # Reserve an IP address
 gcloud compute addresses create groeimetai-ip \
@@ -21,6 +23,7 @@ gcloud compute addresses describe groeimetai-ip \
 ## Step 2: Create a Load Balancer
 
 ### 2.1 Create a NEG (Network Endpoint Group)
+
 ```bash
 gcloud compute network-endpoint-groups create groeimetai-neg \
   --region=europe-west1 \
@@ -29,6 +32,7 @@ gcloud compute network-endpoint-groups create groeimetai-neg \
 ```
 
 ### 2.2 Create a Backend Service
+
 ```bash
 gcloud compute backend-services create groeimetai-backend \
   --global \
@@ -43,12 +47,14 @@ gcloud compute backend-services add-backend groeimetai-backend \
 ```
 
 ### 2.3 Create URL Map
+
 ```bash
 gcloud compute url-maps create groeimetai-lb \
   --default-service=groeimetai-backend
 ```
 
 ### 2.4 Create SSL Certificate
+
 ```bash
 # Managed certificate (recommended)
 gcloud compute ssl-certificates create groeimetai-cert \
@@ -63,6 +69,7 @@ gcloud compute ssl-certificates create groeimetai-cert \
 ```
 
 ### 2.5 Create HTTPS Proxy
+
 ```bash
 gcloud compute target-https-proxies create groeimetai-https-proxy \
   --ssl-certificates=groeimetai-cert \
@@ -71,6 +78,7 @@ gcloud compute target-https-proxies create groeimetai-https-proxy \
 ```
 
 ### 2.6 Create Forwarding Rule
+
 ```bash
 gcloud compute forwarding-rules create groeimetai-https-rule \
   --address=groeimetai-ip \
@@ -80,6 +88,7 @@ gcloud compute forwarding-rules create groeimetai-https-rule \
 ```
 
 ### 2.7 HTTP to HTTPS Redirect
+
 ```bash
 # Create HTTP proxy
 gcloud compute target-http-proxies create groeimetai-http-proxy \
@@ -99,6 +108,7 @@ gcloud compute forwarding-rules create groeimetai-http-rule \
 Add these records to your DNS provider:
 
 ### A Records
+
 ```
 Type: A
 Name: @
@@ -112,6 +122,7 @@ TTL: 300
 ```
 
 ### Alternative: Using Cloud DNS
+
 ```bash
 # Create DNS zone
 gcloud dns managed-zones create groeimetai-zone \
@@ -135,6 +146,7 @@ gcloud dns record-sets create www.groeimetai.io. \
 ## Step 4: Update Application
 
 ### 4.1 Update Environment Variables
+
 ```bash
 gcloud run services update groeimetai-app \
   --set-env-vars NEXT_PUBLIC_APP_URL=https://groeimetai.io \
@@ -142,23 +154,26 @@ gcloud run services update groeimetai-app \
 ```
 
 ### 4.2 Update next.config.js
+
 ```javascript
 module.exports = {
   // ... other config
   images: {
     domains: ['groeimetai.io', 'www.groeimetai.io'],
   },
-}
+};
 ```
 
 ## Step 5: Verify Setup
 
 ### Check SSL Certificate Status
+
 ```bash
 gcloud compute ssl-certificates describe groeimetai-cert --global
 ```
 
 ### Test Domain
+
 ```bash
 # Test HTTPS
 curl -I https://groeimetai.io
@@ -168,6 +183,7 @@ curl -I http://groeimetai.io
 ```
 
 ## Step 6: Configure Firewall Rules
+
 ```bash
 # Allow HTTPS traffic
 gcloud compute firewall-rules create allow-https \
@@ -183,11 +199,13 @@ gcloud compute firewall-rules create allow-http \
 ## Troubleshooting
 
 ### SSL Certificate Not Provisioning
+
 - Check domain ownership
 - Ensure DNS records are correct
 - Wait up to 24 hours for provisioning
 
 ### Domain Not Accessible
+
 ```bash
 # Check DNS propagation
 nslookup groeimetai.io
@@ -197,6 +215,7 @@ gcloud compute ssl-certificates list --global
 ```
 
 ### 502 Bad Gateway
+
 - Check Cloud Run service is running
 - Verify backend service configuration
 - Check logs: `gcloud logging read`
@@ -204,6 +223,7 @@ gcloud compute ssl-certificates list --global
 ## Monitoring
 
 ### Set Up Uptime Checks
+
 ```bash
 gcloud monitoring uptime-checks create groeimetai-uptime \
   --display-name="GroeimetAI Uptime Check" \
@@ -214,6 +234,7 @@ gcloud monitoring uptime-checks create groeimetai-uptime \
 ```
 
 ### View Load Balancer Metrics
+
 1. Go to Cloud Console > Network Services > Load Balancing
 2. Click on your load balancer
 3. View metrics and logs
@@ -221,12 +242,14 @@ gcloud monitoring uptime-checks create groeimetai-uptime \
 ## Cost Optimization
 
 ### Estimated Monthly Costs
+
 - Static IP: ~$7/month
 - Load Balancer: ~$18/month + data processing
 - SSL Certificate (managed): Free
 - Total: ~$25/month + traffic costs
 
 ### Cost Saving Tips
+
 1. Use Cloud CDN for static assets
 2. Enable compression
 3. Set appropriate cache headers
@@ -245,6 +268,7 @@ gcloud run domain-mappings create \
 ```
 
 Note: This method:
+
 - ✅ Simpler setup
 - ✅ Lower cost
 - ❌ No static IP

@@ -182,14 +182,21 @@ export default function AboutPage() {
       <section className="py-20 bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">{t('partners.title')}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+              {t('partners.title')}
+            </h2>
             <p className="text-xl text-white/70 text-center mb-12 max-w-3xl mx-auto">
               {t('partners.subtitle')}
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {techPartners.map((partner, index) => (
-                <Card key={index} className="p-6 hover-lift transition-all duration-300 hover:border-orange/50">
-                  <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${partner.color} mb-4 flex items-center justify-center`}>
+                <Card
+                  key={index}
+                  className="p-6 hover-lift transition-all duration-300 hover:border-orange/50"
+                >
+                  <div
+                    className={`w-20 h-20 rounded-full bg-gradient-to-br ${partner.color} mb-4 flex items-center justify-center`}
+                  >
                     <span className="text-white font-bold text-2xl">{partner.name.charAt(0)}</span>
                   </div>
                   <h3 className="text-lg font-semibold mb-1">{partner.name}</h3>
@@ -201,7 +208,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
 
       {/* CTA */}
       <section className="py-20 bg-black">
