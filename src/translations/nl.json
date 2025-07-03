@@ -1065,7 +1065,19 @@
     "nextStep3": "Begin uw transformatie met deskundige begeleiding",
     "nextStep4": "Behaal meetbare bedrijfsresultaten met AI",
     "allRightsReserved": "Alle Rechten Voorbehouden",
-    "strategicPartner": "Strategische AI Consultancy - Digitale Transformatie Mogelijk Maken"
+    "strategicPartner": "Strategische AI Consultancy - Digitale Transformatie Mogelijk Maken",
+    "service1Title": "GenAI Strategie & Consultancy",
+    "service1Description": "Navigeer de AI-revolutie met deskundige begeleiding. Wij helpen u kansen te identificeren, strategieën te ontwikkelen en AI-oplossingen te implementeren die echte bedrijfswaarde leveren.",
+    "service2Title": "LLM Integratie & Optimalisatie",
+    "service2Description": "Transformeer uw bedrijfsprocessen met Large Language Models. Van klantenservice tot interne operaties, wij implementeren en optimaliseren LLM-oplossingen.",
+    "service3Title": "AI Beveiliging & Governance",
+    "service3Description": "Zorg ervoor dat uw AI-implementaties veilig, compliant en ethisch zijn. Wij bieden uitgebreide beveiligingsbeoordelingen en governance-frameworks.",
+    "service4Title": "Multi-Agent Orkestratie",
+    "service4Description": "Benut de kracht van meerdere AI-agenten die samenwerken. Onze orkestratieoplossingen maken complexe workflows en autonome operaties mogelijk.",
+    "service5Title": "RAG Architectuur Ontwerp",
+    "service5Description": "Bouw intelligente kennissystemen met Retrieval Augmented Generation. Wij ontwerpen en implementeren RAG-oplossingen die uw data effectief benutten.",
+    "service6Title": "ServiceNow AI Oplossingen",
+    "service6Description": "Verbeter uw ServiceNow-platform met AI-mogelijkheden. Van intelligente routing tot geautomatiseerde antwoorden, wij maximaliseren uw ServiceNow-investering."
   },
   "about": {
     "metadata": {

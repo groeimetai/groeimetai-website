@@ -153,7 +153,9 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.logo}>GroeimetAI</Text>
-          <Text style={styles.tagline}>{t.hero.subtitle}</Text>
+          <Text style={styles.tagline}>
+            {locale === 'nl' ? 'Strategische AI Consultancy' : 'Strategic AI Consultancy'}
+          </Text>
         </View>
 
         <View style={{ marginTop: 50, marginBottom: 50 }}>
@@ -166,15 +168,21 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
         <View style={styles.stats}>
           <View style={styles.statBox}>
             <Text style={styles.statNumber}>500+</Text>
-            <Text style={styles.statLabel}>{t.hero.stats.users.label}</Text>
+            <Text style={styles.statLabel}>
+              {locale === 'nl' ? 'Gebruikers' : 'Users'}
+            </Text>
           </View>
           <View style={styles.statBox}>
             <Text style={styles.statNumber}>4</Text>
-            <Text style={styles.statLabel}>{t.hero.stats.projects.label}</Text>
+            <Text style={styles.statLabel}>
+              {locale === 'nl' ? 'Projecten' : 'Projects'}
+            </Text>
           </View>
           <View style={styles.statBox}>
             <Text style={styles.statNumber}>€2.8M</Text>
-            <Text style={styles.statLabel}>{t.hero.stats.savings.label}</Text>
+            <Text style={styles.statLabel}>
+              {locale === 'nl' ? 'Bespaard' : 'Saved'}
+            </Text>
           </View>
         </View>
 
@@ -212,33 +220,33 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
           <Text style={styles.sectionTitle}>{t.brochure.servicesTitle}</Text>
 
           <View style={styles.serviceBox}>
-            <Text style={styles.serviceTitle}>{t.serviceDetails.genai.title}</Text>
-            <Text style={styles.serviceDescription}>{t.serviceDetails.genai.description}</Text>
+            <Text style={styles.serviceTitle}>{t.brochure.service1Title}</Text>
+            <Text style={styles.serviceDescription}>{t.brochure.service1Description}</Text>
           </View>
 
           <View style={styles.serviceBox}>
-            <Text style={styles.serviceTitle}>{t.serviceDetails.llm.title}</Text>
-            <Text style={styles.serviceDescription}>{t.serviceDetails.llm.description}</Text>
+            <Text style={styles.serviceTitle}>{t.brochure.service2Title}</Text>
+            <Text style={styles.serviceDescription}>{t.brochure.service2Description}</Text>
           </View>
 
           <View style={styles.serviceBox}>
-            <Text style={styles.serviceTitle}>{t.serviceDetails.security.title}</Text>
-            <Text style={styles.serviceDescription}>{t.serviceDetails.security.description}</Text>
+            <Text style={styles.serviceTitle}>{t.brochure.service3Title}</Text>
+            <Text style={styles.serviceDescription}>{t.brochure.service3Description}</Text>
           </View>
 
           <View style={styles.serviceBox}>
-            <Text style={styles.serviceTitle}>{t.serviceDetails.multiAgent.title}</Text>
-            <Text style={styles.serviceDescription}>{t.serviceDetails.multiAgent.description}</Text>
+            <Text style={styles.serviceTitle}>{t.brochure.service4Title}</Text>
+            <Text style={styles.serviceDescription}>{t.brochure.service4Description}</Text>
           </View>
 
           <View style={styles.serviceBox}>
-            <Text style={styles.serviceTitle}>{t.serviceDetails.rag.title}</Text>
-            <Text style={styles.serviceDescription}>{t.serviceDetails.rag.description}</Text>
+            <Text style={styles.serviceTitle}>{t.brochure.service5Title}</Text>
+            <Text style={styles.serviceDescription}>{t.brochure.service5Description}</Text>
           </View>
 
           <View style={styles.serviceBox}>
-            <Text style={styles.serviceTitle}>{t.serviceDetails.servicenow.title}</Text>
-            <Text style={styles.serviceDescription}>{t.serviceDetails.servicenow.description}</Text>
+            <Text style={styles.serviceTitle}>{t.brochure.service6Title}</Text>
+            <Text style={styles.serviceDescription}>{t.brochure.service6Description}</Text>
           </View>
         </View>
 
