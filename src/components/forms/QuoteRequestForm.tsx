@@ -38,19 +38,15 @@ import {
   Lock,
   Users,
   AlertCircle,
+  Brain,
+  Bot,
+  Layers,
+  Workflow,
+  Sparkles,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 // Steps will be defined inside the component to use translations
-
-const services = [
-  'GenAI Consulting',
-  'ServiceNow Solutions',
-  'Custom AI Development',
-  'Enterprise Security',
-  'Performance Optimization',
-  'Training & Support',
-];
 
 const budgetRanges = [
   'Under $10,000',
@@ -78,10 +74,11 @@ export default function QuoteRequestForm() {
 
   const steps = [
     { id: 1, title: t('form.accountSetup'), icon: Shield },
-    { id: 2, title: t('form.contactInfo'), icon: User },
-    { id: 3, title: t('form.projectDetails'), icon: FileText },
-    { id: 4, title: t('form.requirements'), icon: Building },
-    { id: 5, title: t('form.review'), icon: Check },
+    { id: 2, title: t('form.serviceSelection'), icon: Sparkles },
+    { id: 3, title: t('form.contactInfo'), icon: User },
+    { id: 4, title: t('form.projectDetails'), icon: FileText },
+    { id: 5, title: t('form.requirements'), icon: Building },
+    { id: 6, title: t('form.review'), icon: Check },
   ];
 
   const [formData, setFormData] = useState({
@@ -150,10 +147,12 @@ export default function QuoteRequestForm() {
         }
         return true; // Guest can proceed
       case 2:
-        return formData.fullName && formData.email && formData.company;
+        return formData.services.length > 0; // At least one service must be selected
       case 3:
-        return formData.projectName && formData.services.length > 0 && formData.projectDescription;
+        return formData.fullName && formData.email && formData.company;
       case 4:
+        return formData.projectName && formData.projectDescription;
+      case 5:
         return formData.budget && formData.timeline;
       default:
         return true;
@@ -442,8 +441,121 @@ export default function QuoteRequestForm() {
             </motion.div>
           )}
 
-          {/* Step 2: Contact Information */}
+          {/* Step 2: Service Selection */}
           {currentStep === 2 && (
+            <motion.div
+              key="step2"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-6"
+            >
+              <div>
+                <h2 className="text-2xl font-bold mb-2 text-white">{t('servicesTitle')}</h2>
+                <p className="text-white/60">{t('servicesSubtitle')}</p>
+              </div>
+
+              <div>
+                <Label className="text-white mb-4 block">{t('selectServicesLabel')}</Label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {[
+                    {
+                      id: 'genai-consultancy',
+                      title: t('form.services.genai'),
+                      description: t('form.services.genaiDesc'),
+                      icon: Brain,
+                    },
+                    {
+                      id: 'llm-integration',
+                      title: t('form.services.llm'),
+                      description: t('form.services.llmDesc'),
+                      icon: Bot,
+                    },
+                    {
+                      id: 'rag-architecture',
+                      title: t('form.services.rag'),
+                      description: t('form.services.ragDesc'),
+                      icon: Layers,
+                    },
+                    {
+                      id: 'servicenow-ai',
+                      title: t('form.services.servicenow'),
+                      description: t('form.services.servicenowDesc'),
+                      icon: Workflow,
+                    },
+                    {
+                      id: 'multi-agent',
+                      title: t('form.services.multiAgent'),
+                      description: t('form.services.multiAgentDesc'),
+                      icon: Users,
+                    },
+                    {
+                      id: 'ai-security',
+                      title: t('form.services.security'),
+                      description: t('form.services.securityDesc'),
+                      icon: Shield,
+                    },
+                  ].map((service) => {
+                    const Icon = service.icon;
+                    const isSelected = formData.services.includes(service.title);
+                    return (
+                      <label
+                        key={service.id}
+                        className={`
+                          relative flex flex-col p-4 rounded-xl border cursor-pointer
+                          transition-all duration-200 hover:shadow-lg
+                          ${
+                            isSelected
+                              ? 'border-orange bg-orange/10 shadow-lg'
+                              : 'border-white/20 hover:border-orange/50 hover:bg-white/5'
+                          }
+                        `}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => handleServiceToggle(service.title)}
+                          className="sr-only"
+                        />
+                        <div className="flex items-start gap-3">
+                          <div
+                            className={`
+                              p-2 rounded-lg transition-colors
+                              ${
+                                isSelected
+                                  ? 'bg-orange text-white'
+                                  : 'bg-white/10 text-white/60'
+                              }
+                            `}
+                          >
+                            <Icon className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-white mb-1">{service.title}</h4>
+                            <p className="text-sm text-white/60">{service.description}</p>
+                          </div>
+                          {isSelected && (
+                            <Check className="w-5 h-5 text-orange absolute top-4 right-4" />
+                          )}
+                        </div>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="bg-orange/10 border border-orange/20 rounded-lg p-4">
+                <p className="text-sm text-white/80">
+                  <AlertCircle className="w-4 h-4 inline mr-2 text-orange" />
+                  {t('multipleServicesNote')}
+                </p>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Step 3: Contact Information */}
+          {currentStep === 3 && (
             <motion.div
               key="step2"
               initial={{ opacity: 0, x: 20 }}
@@ -542,8 +654,8 @@ export default function QuoteRequestForm() {
             </motion.div>
           )}
 
-          {/* Step 3: Project Details */}
-          {currentStep === 3 && (
+          {/* Step 4: Project Details */}
+          {currentStep === 4 && (
             <motion.div
               key="step3"
               initial={{ opacity: 0, x: 20 }}
@@ -575,7 +687,14 @@ export default function QuoteRequestForm() {
                 <Label className="text-white">{t('servicesLabel')}</Label>
                 <p className="text-sm text-white/60 mb-3">{t('servicesDescription')}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {services.map((service) => (
+                  {[
+                    t('form.services.genai'),
+                    t('form.services.llm'),
+                    t('form.services.rag'),
+                    t('form.services.servicenow'),
+                    t('form.services.multiAgent'),
+                    t('form.services.security'),
+                  ].map((service) => (
                     <label
                       key={service}
                       className={`flex items-center p-3 rounded-lg border cursor-pointer transition-colors ${
@@ -613,8 +732,8 @@ export default function QuoteRequestForm() {
             </motion.div>
           )}
 
-          {/* Step 4: Requirements */}
-          {currentStep === 4 && (
+          {/* Step 5: Requirements */}
+          {currentStep === 5 && (
             <motion.div
               key="step4"
               initial={{ opacity: 0, x: 20 }}
@@ -721,8 +840,8 @@ export default function QuoteRequestForm() {
             </motion.div>
           )}
 
-          {/* Step 5: Review & Submit */}
-          {currentStep === 5 && (
+          {/* Step 6: Review & Submit */}
+          {currentStep === 6 && (
             <motion.div
               key="step5"
               initial={{ opacity: 0, x: 20 }}

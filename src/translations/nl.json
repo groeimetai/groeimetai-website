@@ -864,10 +864,25 @@
     "quoteRequest": {
       "form": {
         "accountSetup": "Account Instellen",
+        "serviceSelection": "Service Selectie",
         "contactInfo": "Contactgegevens",
         "projectDetails": "Project Details",
         "requirements": "Vereisten",
-        "review": "Controleren & Versturen"
+        "review": "Controleren & Versturen",
+        "services": {
+          "genai": "GenAI Strategie & Consultancy",
+          "genaiDesc": "Strategische AI roadmap en implementatiebegeleiding",
+          "llm": "LLM Integratie & Optimalisatie",
+          "llmDesc": "Large Language Model implementatie voor uw bedrijf",
+          "rag": "RAG Architectuur Ontwerp",
+          "ragDesc": "Intelligente kennisophaalsystemen",
+          "servicenow": "ServiceNow AI Oplossingen",
+          "servicenowDesc": "AI-aangedreven ServiceNow verbeteringen",
+          "multiAgent": "Multi-Agent Orkestratie",
+          "multiAgentDesc": "Coördineer meerdere AI-agenten voor complexe workflows",
+          "security": "AI Beveiliging & Governance",
+          "securityDesc": "Veilige en compliant AI-implementaties"
+        }
       },
       "getStarted": "Aan de Slag",
       "getStartedDescription": "Maak een account aan voor de beste ervaring of ga verder als gast",
@@ -957,6 +972,10 @@
       "next": "Volgende",
       "submitting": "Versturen...",
       "submitRequest": "Aanvraag Versturen",
+      "servicesTitle": "Waar kunnen we u mee helpen?",
+      "servicesSubtitle": "Selecteer één of meerdere diensten die aansluiten bij uw behoeften",
+      "selectServicesLabel": "Kies de diensten waarin u geïnteresseerd bent:",
+      "multipleServicesNote": "U kunt meerdere diensten selecteren. We creëren een uitgebreide oplossing afgestemd op uw behoeften.",
       "errors": {
         "emailInUse": "Er bestaat al een account met dit e-mailadres. Meld u in plaats daarvan aan.",
         "weakPassword": "Wachtwoord moet minimaal 6 tekens bevatten.",

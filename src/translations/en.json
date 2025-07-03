@@ -874,10 +874,25 @@
     "quoteRequest": {
       "form": {
         "accountSetup": "Account Setup",
+        "serviceSelection": "Service Selection",
         "contactInfo": "Contact Information",
         "projectDetails": "Project Details",
         "requirements": "Requirements",
-        "review": "Review & Submit"
+        "review": "Review & Submit",
+        "services": {
+          "genai": "GenAI Strategy & Consultancy",
+          "genaiDesc": "Strategic AI roadmap and implementation guidance",
+          "llm": "LLM Integration & Optimization",
+          "llmDesc": "Large Language Model implementation for your business",
+          "rag": "RAG Architecture Design",
+          "ragDesc": "Intelligent knowledge retrieval systems",
+          "servicenow": "ServiceNow AI Solutions",
+          "servicenowDesc": "AI-powered ServiceNow enhancements",
+          "multiAgent": "Multi-Agent Orchestration",
+          "multiAgentDesc": "Coordinate multiple AI agents for complex workflows",
+          "security": "AI Security & Governance",
+          "securityDesc": "Secure and compliant AI implementations"
+        }
       },
       "getStarted": "Get Started",
       "getStartedDescription": "Create an account for the best experience or continue as guest",
@@ -967,6 +982,10 @@
       "next": "Next",
       "submitting": "Submitting...",
       "submitRequest": "Submit Request",
+      "servicesTitle": "What can we help you with?",
+      "servicesSubtitle": "Select one or more services that match your needs",
+      "selectServicesLabel": "Choose the services you're interested in:",
+      "multipleServicesNote": "You can select multiple services. We'll create a comprehensive solution tailored to your needs.",
       "errors": {
         "emailInUse": "An account with this email already exists. Please sign in instead.",
         "weakPassword": "Password should be at least 6 characters.",
