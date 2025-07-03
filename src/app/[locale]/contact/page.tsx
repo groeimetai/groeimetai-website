@@ -342,10 +342,12 @@ export default function ContactPage() {
                   <p className="text-muted-foreground mb-4">
                     {t('additionalInfo.scheduleMeetingDescription')}
                   </p>
-                  <Button className="w-full hover-lift" variant="outline">
-                    <Calendar className="mr-2 w-5 h-5" />
-                    {t('additionalInfo.scheduleMeetingButton')}
-                  </Button>
+                  <Link href="mailto:info@groeimetai.io?subject=Meeting%20Request%20-%20GroeimetAI">
+                    <Button className="w-full hover-lift" variant="outline">
+                      <Calendar className="mr-2 w-5 h-5" />
+                      {t('additionalInfo.scheduleMeetingButton')}
+                    </Button>
+                  </Link>
                 </Card>
 
                 {/* Social Links */}

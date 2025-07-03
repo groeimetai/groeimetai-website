@@ -422,7 +422,7 @@ export default function CaseStudyPage({ params }: { params: { locale: string; sl
       <section className="relative py-20 lg:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-orange/5 to-green/5" />
         <div className="container mx-auto px-4 relative z-10">
-          <Link href={`/${params.locale}/cases`}>
+          <Link href="/cases">
             <Button variant="ghost" className="mb-8">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Case Studies
@@ -602,12 +602,12 @@ export default function CaseStudyPage({ params }: { params: { locale: string; sl
               Let&apos;s discuss how we can help you achieve similar results
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href={`/${params.locale}/contact`}>
+              <Link href="/contact">
                 <Button size="lg" className="shadow-premium hover-lift">
                   Start Your Project
                 </Button>
               </Link>
-              <Link href={`/${params.locale}/services`}>
+              <Link href="/services">
                 <Button size="lg" variant="outline" className="hover-lift">
                   Explore Our Services
                 </Button>

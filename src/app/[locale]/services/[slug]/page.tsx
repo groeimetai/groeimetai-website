@@ -180,7 +180,7 @@ export default async function ServiceDetailPage({
         <div className="absolute inset-0 bg-gradient-to-br from-orange/5 to-green/5" />
         <div className="container mx-auto px-4 relative z-10">
           <Link
-            href={`/${params.locale}/services`}
+            href="/services"
             className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -203,7 +203,7 @@ export default async function ServiceDetailPage({
             </div>
             <p className="text-lg text-white/80 mb-8">{service.longDescription}</p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href={`/${params.locale}/contact`}>
+              <Link href="/contact">
                 <Button size="lg" className="shadow-premium hover-lift">
                   {t('startProject')}
                   <ArrowRight className="ml-2 w-5 h-5" />
@@ -333,12 +333,12 @@ export default async function ServiceDetailPage({
             </h2>
             <p className="text-xl text-white/70 mb-8">{t('letsRealize')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href={`/${params.locale}/contact`}>
+              <Link href="/contact">
                 <Button size="lg" className="shadow-premium hover-lift">
                   {tServicesPage('cta.consultation')}
                 </Button>
               </Link>
-              <Link href={`/${params.locale}/cases`}>
+              <Link href="/cases">
                 <Button size="lg" variant="outline" className="hover-lift">
                   {tServicesPage('cta.caseStudies')}
                 </Button>
