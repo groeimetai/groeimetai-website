@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "GroeimetAI - AI Consultancy & Innovation",
-    "description": "Transform your business with advanced AI solutions. Expert advice in GenAI, LLM integration, RAG architecture and ServiceNow implementation."
+    "description": "Strategic AI consultancy specializing in custom model training, multi-agent orchestration, and enterprise AI architecture. We create AI solutions, not just implement them."
   },
   "navigation": {
     "services": "Services",
@@ -14,10 +14,10 @@
     "getStarted": "Get Started"
   },
   "hero": {
-    "badge": "Leading AI Strategy & Transformation Advisory",
+    "badge": "Custom AI Model Training & Strategic Architecture",
     "title": "Accelerate Business Value",
     "subtitle": "Through AI Excellence",
-    "description": "We guide executive teams through the complexity of AI adoption and deliver strategic insights that drive competitive advantage and sustainable growth.",
+    "description": "We architect custom AI models and orchestration systems that transform enterprises. Our strategic consulting goes beyond implementation - we train, design, and create AI solutions tailored to your unique challenges.",
     "cta": {
       "consultation": "Schedule Consultation",
       "services": "Our Advisory Services"
@@ -25,16 +25,16 @@
   },
   "services": {
     "title": "Our Advisory Services",
-    "subtitle": "Strategic guidance to help leaders navigate the complexity of AI and unlock transformative business value",
+    "subtitle": "We don't just implement AI - we architect, train, and orchestrate custom AI models that become your competitive advantage",
     "items": {
       "strategy": {
         "title": "AI Strategy & Roadmap",
-        "description": "Define your AI vision and create actionable roadmaps that align technology with business objectives.",
+        "description": "Design custom AI architectures and train purpose-built models that align with your strategic objectives.",
         "features": ["Executive Advisory", "Opportunity Assessment", "Strategic Planning"]
       },
       "transformation": {
         "title": "Digital Transformation",
-        "description": "Navigate complex digital ecosystems with comprehensive transformation strategies and governance.",
+        "description": "Transform your organization with custom-trained AI models and multi-agent orchestration systems.",
         "features": ["Operating Model Design", "Process Redesign", "Value Realization"]
       },
       "governance": {
@@ -44,7 +44,7 @@
       },
       "innovation": {
         "title": "Innovation Labs",
-        "description": "Accelerate breakthrough innovations through rapid prototyping and proof-of-concept development.",
+        "description": "Create breakthrough AI models through our innovation labs. We train, test, and deploy custom solutions.",
         "features": ["Use Case Discovery", "Pilot Programs", "Innovation Workshops"]
       },
       "advisory": {
@@ -62,7 +62,7 @@
   "servicesPage": {
     "hero": {
       "title": "Our AI Services",
-      "description": "From strategy to implementation - we are your partner in every phase of your AI transformation"
+      "description": "From model architecture to deployment - we create custom AI solutions that transform your business"
     },
     "cta": {
       "start": "Start Your AI Journey",
@@ -74,11 +74,11 @@
       "steps": {
         "discovery": {
           "title": "Discovery",
-          "description": "We analyze your current situation and identify AI opportunities"
+          "description": "We analyze your unique challenges and design custom AI model architectures"
         },
         "strategy": {
           "title": "Strategy",
-          "description": "Development of a tailored AI strategy"
+          "description": "Design and training of custom AI models specific to your needs"
         },
         "implementation": {
           "title": "Implementation",
@@ -680,32 +680,32 @@
       "track": {
         "title": "Proven Track Record",
         "description": "Over 50+ successful AI transformations at Fortune 500 companies with measurable ROI",
-        "metric": "€250M+ value delivered"
+        "metric": "€2.8M+ saved annually"
       },
       "partnership": {
         "title": "Executive-Level Partnership",
         "description": "Direct engagement with C-suite leaders to align AI initiatives with business strategy",
-        "metric": "95% executive satisfaction"
+        "metric": "94% routing accuracy"
       },
       "global": {
         "title": "Global Expertise, Local Presence",
         "description": "International best practices combined with deep understanding of European markets",
-        "metric": "15+ countries served"
+        "metric": "1500+ hours processed"
       },
       "value": {
         "title": "Value-Driven Approach",
         "description": "Focus on business outcomes, not technology for technology's sake",
-        "metric": "Average 3x ROI"
+        "metric": "1M+ tokens processed"
       },
       "speed": {
         "title": "Accelerated Time-to-Value",
         "description": "Rapid strategy development with clear implementation roadmaps",
-        "metric": "60% faster deployment"
+        "metric": "85% faster response"
       },
       "risk": {
         "title": "Risk Mitigation",
         "description": "Comprehensive approach to AI governance, ethics and regulatory compliance",
-        "metric": "100% compliance rate"
+        "metric": "50K+ employees helped"
       }
     },
     "cta": {
@@ -758,9 +758,40 @@
       }
     }
   },
-  "testimonials": {
-    "title": "Client Success Stories",
-    "subtitle": "Leading organizations trust us to guide their AI transformation journey and deliver measurable business impact"
+  "trust": {
+    "title": "Why Trust",
+    "subtitle": "GroeimetAI",
+    "description": "Built on proven technology partnerships, real achievements, and enterprise-grade security standards",
+    "factors": {
+      "security": {
+        "title": "Enterprise Security",
+        "description": "GDPR compliant, EU AI Act ready, with bank-level data protection"
+      },
+      "achievement": {
+        "title": "Proven Results",
+        "description": "Real projects delivering millions in savings and operational efficiency"
+      },
+      "scale": {
+        "title": "Enterprise Scale",
+        "description": "Solutions deployed for 50,000+ employees handling millions of interactions"
+      },
+      "innovation": {
+        "title": "Innovation Leader",
+        "description": "Custom AI model training and multi-agent orchestration expertise"
+      }
+    },
+    "achievements": {
+      "title": "Real Impact from Real Projects"
+    },
+    "partners": {
+      "title": "Powered by Industry-Leading Technology"
+    },
+    "compliance": {
+      "gdpr": "GDPR Compliant",
+      "euAi": "EU AI Act Ready",
+      "iso": "ISO 27001 Standards",
+      "soc2": "SOC 2 Type II"
+    }
   },
   "quote": {
     "title": "Let's Discuss Your",
@@ -1024,7 +1055,11 @@
       "projects": "Successful Projects",
       "satisfaction": "Client Satisfaction",
       "experts": "AI Experts",
-      "support": "Support & Monitoring"
+      "support": "Support & Monitoring",
+      "savedAnnually": "Saved Annually",
+      "hoursProcessed": "Hours Processed",
+      "accuracy": "Routing Accuracy",
+      "deliveryTime": "Record Delivery"
     },
     "mission": {
       "title": "Our Mission",
@@ -1055,39 +1090,28 @@
         }
       }
     },
-    "team": {
-      "title": "Our Team",
-      "subtitle": "A diverse team of AI experts, developers and business consultants with a shared passion for innovation.",
-      "members": {
-        "sarah": {
-          "name": "Dr. Sarah Chen",
-          "role": "Chief AI Officer",
-          "expertise": "Machine Learning & NLP",
-          "bio": "15+ years of experience in AI research and enterprise implementations"
-        },
-        "mark": {
-          "name": "Mark van der Berg",
-          "role": "Lead Solutions Architect",
-          "expertise": "Cloud Architecture & MLOps",
-          "bio": "Expert in scalable AI infrastructure and enterprise integrations"
-        },
-        "emma": {
-          "name": "Emma Rodriguez",
-          "role": "Head of Innovation",
-          "expertise": "GenAI & Multi-Agent Systems",
-          "bio": "Pioneer in next-gen AI applications and autonomous agents"
-        },
-        "tom": {
-          "name": "Tom Jansen",
-          "role": "ServiceNow Practice Lead",
-          "expertise": "ServiceNow & Process Automation",
-          "bio": "Specialist in AI-powered workflow automation"
-        }
-      }
-    },
     "partners": {
-      "title": "Our Partners",
-      "subtitle": "We work with world leaders in AI and cloud technology"
+      "title": "Our Technology Partners",
+      "subtitle": "As a strategic consultancy, we leverage best-in-class technologies to create custom AI solutions tailored to your needs",
+      "categories": {
+        "cloud": "Cloud Infrastructure",
+        "ai": "AI Platform",
+        "speech": "Speech Recognition",
+        "framework": "AI Framework",
+        "models": "Model Hub",
+        "enterprise": "Enterprise Platform",
+        "vector": "Vector Database"
+      },
+      "descriptions": {
+        "gcp": "Our primary cloud infrastructure for scalable, secure AI deployments",
+        "anthropic": "Advanced language models for strategic consulting and analysis",
+        "assemblyai": "State-of-the-art speech recognition and transcription services",
+        "langchain": "Framework for building sophisticated LLM applications",
+        "huggingface": "Access to thousands of pre-trained models and datasets",
+        "servicenow": "Enterprise workflow automation and AI integration",
+        "openai": "Cutting-edge GPT models for various AI applications",
+        "pinecone": "High-performance vector database for RAG implementations"
+      }
     },
     "cta": {
       "title": "Ready to grow with AI?",

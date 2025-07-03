@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "GroeimetAI - AI Consultancy & Innovatie",
-    "description": "Transformeer uw bedrijf met geavanceerde AI-oplossingen. Expert advies in GenAI, LLM integratie, RAG architectuur en ServiceNow implementatie."
+    "description": "Strategisch AI-adviesbureau gespecialiseerd in custom model training, multi-agent orchestratie en enterprise AI-architectuur. Wij creëren AI-oplossingen, niet alleen implementeren."
   },
   "navigation": {
     "services": "Diensten",
@@ -14,10 +14,10 @@
     "getStarted": "Aan de slag"
   },
   "hero": {
-    "badge": "Toonaangevende AI Strategie & Transformatie Advies",
+    "badge": "Custom AI Model Training & Strategische Architectuur",
     "title": "Versneld Bedrijfswaarde",
     "subtitle": "Door AI Excellentie",
-    "description": "Wij begeleiden directieteams door de complexiteit van AI-adoptie en leveren strategische inzichten die competitief voordeel en duurzame groei stimuleren.",
+    "description": "Wij ontwerpen custom AI-modellen en orchestratie systemen die ondernemingen transformeren. Onze strategische consulting gaat verder dan implementatie - wij trainen, ontwerpen en creëren AI-oplossingen op maat voor uw unieke uitdagingen.",
     "cta": {
       "consultation": "Consultatie Plannen",
       "services": "Onze Advisory Services"
@@ -25,16 +25,16 @@
   },
   "services": {
     "title": "Onze Advisory Services",
-    "subtitle": "Strategische begeleiding om leiders te helpen navigeren door de complexiteit van AI en transformatieve bedrijfswaarde te ontsluiten",
+    "subtitle": "Wij implementeren niet alleen AI - wij ontwerpen, trainen en orkestreren custom AI-modellen die uw competitief voordeel worden",
     "items": {
       "strategy": {
         "title": "AI Strategie & Roadmap",
-        "description": "Definieer uw AI-visie en creëer uitvoerbare roadmaps die technologie afstemmen op bedrijfsdoelstellingen.",
+        "description": "Ontwerp custom AI-architecturen en train doelgerichte modellen die aansluiten bij uw strategische doelstellingen.",
         "features": ["Executive Advisory", "Kansen Assessment", "Strategische Planning"]
       },
       "transformation": {
         "title": "Digitale Transformatie",
-        "description": "Navigeer door complexe digitale ecosystemen met uitgebreide transformatiestrategieën en governance.",
+        "description": "Transformeer uw organisatie met op maat getrainde AI-modellen en multi-agent orchestratie systemen.",
         "features": ["Operating Model Ontwerp", "Proces Herontwerp", "Waarde Realisatie"]
       },
       "governance": {
@@ -44,7 +44,7 @@
       },
       "innovation": {
         "title": "Innovatie Labs",
-        "description": "Versnel baanbrekende innovaties door snelle prototyping en proof-of-concept ontwikkeling.",
+        "description": "Creëer baanbrekende AI-modellen via onze innovatie labs. Wij trainen, testen en implementeren custom oplossingen.",
         "features": ["Use Case Ontdekking", "Pilot Programma's", "Innovatie Workshops"]
       },
       "advisory": {
@@ -62,7 +62,7 @@
   "servicesPage": {
     "hero": {
       "title": "Onze AI Diensten",
-      "description": "Van strategie tot implementatie - wij zijn uw partner in elke fase van uw AI-transformatie"
+      "description": "Van model architectuur tot deployment - wij creëren custom AI-oplossingen die uw bedrijf transformeren"
     },
     "cta": {
       "start": "Start Uw AI Journey",
@@ -74,11 +74,11 @@
       "steps": {
         "discovery": {
           "title": "Discovery",
-          "description": "We analyseren uw huidige situatie en identificeren AI-kansen"
+          "description": "We analyseren uw unieke uitdagingen en ontwerpen custom AI-model architecturen"
         },
         "strategy": {
           "title": "Strategy",
-          "description": "Ontwikkeling van een op maat gemaakte AI-strategie"
+          "description": "Ontwerp en training van custom AI-modellen specifiek voor uw behoeften"
         },
         "implementation": {
           "title": "Implementation",
@@ -670,32 +670,32 @@
       "track": {
         "title": "Bewezen Track Record",
         "description": "Meer dan 50+ succesvolle AI-transformaties bij Fortune 500 bedrijven met meetbare ROI",
-        "metric": "€250M+ geleverde waarde"
+        "metric": "€2.8M+ jaarlijks bespaard"
       },
       "partnership": {
         "title": "Executive-Level Partnership",
         "description": "Directe betrokkenheid met C-suite leiders om AI-initiatieven af te stemmen op bedrijfsstrategie",
-        "metric": "95% executive tevredenheid"
+        "metric": "94% routing nauwkeurigheid"
       },
       "global": {
         "title": "Wereldwijde Expertise, Lokale Aanwezigheid",
         "description": "Internationale best practices gecombineerd met diepgaand begrip van Europese markten",
-        "metric": "15+ landen bediend"
+        "metric": "1500+ uren verwerkt"
       },
       "value": {
         "title": "Waardegedreven Aanpak",
         "description": "Focus op bedrijfsresultaten, niet technologie omwille van technologie",
-        "metric": "Gemiddeld 3x ROI"
+        "metric": "1M+ tokens verwerkt"
       },
       "speed": {
         "title": "Versnelde Time-to-Value",
         "description": "Snelle strategieontwikkeling met duidelijke implementatie roadmaps",
-        "metric": "60% snellere uitrol"
+        "metric": "85% snellere respons"
       },
       "risk": {
         "title": "Risico Mitigatie",
         "description": "Uitgebreide aanpak van AI-governance, ethiek en regelgevende compliance",
-        "metric": "100% compliance rate"
+        "metric": "50K+ medewerkers geholpen"
       }
     },
     "cta": {
@@ -748,9 +748,40 @@
       }
     }
   },
-  "testimonials": {
-    "title": "Klant Succesverhalen",
-    "subtitle": "Toonaangevende organisaties vertrouwen ons om hun AI-transformatiereis te begeleiden en meetbare bedrijfsimpact te leveren"
+  "trust": {
+    "title": "Waarom Vertrouwen op",
+    "subtitle": "GroeimetAI",
+    "description": "Gebouwd op bewezen technologiepartnerschappen, echte prestaties en enterprise-grade beveiligingsstandaarden",
+    "factors": {
+      "security": {
+        "title": "Enterprise Beveiliging",
+        "description": "GDPR compliant, EU AI Act gereed, met beveiliging op bankniveau"
+      },
+      "achievement": {
+        "title": "Bewezen Resultaten",
+        "description": "Echte projecten die miljoenen aan besparingen en operationele efficiëntie opleveren"
+      },
+      "scale": {
+        "title": "Enterprise Schaal",
+        "description": "Oplossingen ingezet voor 50.000+ medewerkers die miljoenen interacties verwerken"
+      },
+      "innovation": {
+        "title": "Innovatieleider",
+        "description": "Custom AI model training en multi-agent orchestratie expertise"
+      }
+    },
+    "achievements": {
+      "title": "Echte Impact van Echte Projecten"
+    },
+    "partners": {
+      "title": "Aangedreven door Industrie-leidende Technologie"
+    },
+    "compliance": {
+      "gdpr": "GDPR Compliant",
+      "euAi": "EU AI Act Gereed",
+      "iso": "ISO 27001 Standaarden",
+      "soc2": "SOC 2 Type II"
+    }
   },
   "quote": {
     "title": "Laten We Uw",
@@ -1014,7 +1045,11 @@
       "projects": "Succesvolle Projecten",
       "satisfaction": "Klanttevredenheid",
       "experts": "AI Experts",
-      "support": "Support & Monitoring"
+      "support": "Support & Monitoring",
+      "savedAnnually": "Jaarlijks Bespaard",
+      "hoursProcessed": "Uren Verwerkt",
+      "accuracy": "Routing Nauwkeurigheid",
+      "deliveryTime": "Record Levertijd"
     },
     "mission": {
       "title": "Onze Missie",
@@ -1045,39 +1080,28 @@
         }
       }
     },
-    "team": {
-      "title": "Ons Team",
-      "subtitle": "Een divers team van AI-experts, developers en business consultants met een gedeelde passie voor innovatie.",
-      "members": {
-        "sarah": {
-          "name": "Dr. Sarah Chen",
-          "role": "Chief AI Officer",
-          "expertise": "Machine Learning & NLP",
-          "bio": "15+ jaar ervaring in AI research en enterprise implementaties"
-        },
-        "mark": {
-          "name": "Mark van der Berg",
-          "role": "Lead Solutions Architect",
-          "expertise": "Cloud Architecture & MLOps",
-          "bio": "Expert in schaalbare AI infrastructuur en enterprise integraties"
-        },
-        "emma": {
-          "name": "Emma Rodriguez",
-          "role": "Head of Innovation",
-          "expertise": "GenAI & Multi-Agent Systems",
-          "bio": "Pionier in next-gen AI applicaties en autonomous agents"
-        },
-        "tom": {
-          "name": "Tom Jansen",
-          "role": "ServiceNow Practice Lead",
-          "expertise": "ServiceNow & Process Automation",
-          "bio": "Specialist in AI-powered workflow automation"
-        }
-      }
-    },
     "partners": {
-      "title": "Onze Partners",
-      "subtitle": "Wij werken samen met wereldleiders in AI en cloud technologie"
+      "title": "Onze Technologie Partners",
+      "subtitle": "Als strategisch adviesbureau gebruiken we best-in-class technologieën om op maat gemaakte AI-oplossingen te creëren",
+      "categories": {
+        "cloud": "Cloud Infrastructuur",
+        "ai": "AI Platform",
+        "speech": "Spraakherkenning",
+        "framework": "AI Framework",
+        "models": "Model Hub",
+        "enterprise": "Enterprise Platform",
+        "vector": "Vector Database"
+      },
+      "descriptions": {
+        "gcp": "Onze primaire cloud infrastructuur voor schaalbare, veilige AI-implementaties",
+        "anthropic": "Geavanceerde taalmodellen voor strategisch advies en analyse",
+        "assemblyai": "State-of-the-art spraakherkenning en transcriptiediensten",
+        "langchain": "Framework voor het bouwen van geavanceerde LLM-applicaties",
+        "huggingface": "Toegang tot duizenden voorgetrainde modellen en datasets",
+        "servicenow": "Enterprise workflow automatisering en AI-integratie",
+        "openai": "Geavanceerde GPT-modellen voor diverse AI-toepassingen",
+        "pinecone": "High-performance vector database voor RAG-implementaties"
+      }
     },
     "cta": {
       "title": "Klaar om te groeien met AI?",

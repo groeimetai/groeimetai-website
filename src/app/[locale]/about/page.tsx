@@ -5,16 +5,16 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
-import { Award, Users, Target, Lightbulb, Building, Globe } from 'lucide-react';
+import { Award, Users, Target, Lightbulb, Building, Globe, Cloud } from 'lucide-react';
 
 export default function AboutPage() {
   const t = useTranslations('about');
 
   const stats = [
-    { value: '50+', label: t('stats.projects') },
-    { value: '98%', label: t('stats.satisfaction') },
-    { value: '15+', label: t('stats.experts') },
-    { value: '24/7', label: t('stats.support') },
+    { value: '€2.8M+', label: t('stats.savedAnnually') },
+    { value: '1500+', label: t('stats.hoursProcessed') },
+    { value: '94%', label: t('stats.accuracy') },
+    { value: '2 weeks', label: t('stats.deliveryTime') },
   ];
 
   const values = [
@@ -40,30 +40,54 @@ export default function AboutPage() {
     },
   ];
 
-  const teamMembers = [
+  const techPartners = [
     {
-      name: t('team.members.sarah.name'),
-      role: t('team.members.sarah.role'),
-      expertise: t('team.members.sarah.expertise'),
-      bio: t('team.members.sarah.bio'),
+      name: 'Google Cloud Platform',
+      category: t('partners.categories.cloud'),
+      description: t('partners.descriptions.gcp'),
+      color: 'from-blue-500 to-blue-600',
     },
     {
-      name: t('team.members.mark.name'),
-      role: t('team.members.mark.role'),
-      expertise: t('team.members.mark.expertise'),
-      bio: t('team.members.mark.bio'),
+      name: 'Anthropic Claude',
+      category: t('partners.categories.ai'),
+      description: t('partners.descriptions.anthropic'),
+      color: 'from-purple-500 to-purple-600',
     },
     {
-      name: t('team.members.emma.name'),
-      role: t('team.members.emma.role'),
-      expertise: t('team.members.emma.expertise'),
-      bio: t('team.members.emma.bio'),
+      name: 'AssemblyAI',
+      category: t('partners.categories.speech'),
+      description: t('partners.descriptions.assemblyai'),
+      color: 'from-red-500 to-red-600',
     },
     {
-      name: t('team.members.tom.name'),
-      role: t('team.members.tom.role'),
-      expertise: t('team.members.tom.expertise'),
-      bio: t('team.members.tom.bio'),
+      name: 'LangChain',
+      category: t('partners.categories.framework'),
+      description: t('partners.descriptions.langchain'),
+      color: 'from-green-500 to-green-600',
+    },
+    {
+      name: 'Hugging Face',
+      category: t('partners.categories.models'),
+      description: t('partners.descriptions.huggingface'),
+      color: 'from-yellow-500 to-yellow-600',
+    },
+    {
+      name: 'ServiceNow',
+      category: t('partners.categories.enterprise'),
+      description: t('partners.descriptions.servicenow'),
+      color: 'from-teal-500 to-teal-600',
+    },
+    {
+      name: 'OpenAI',
+      category: t('partners.categories.ai'),
+      description: t('partners.descriptions.openai'),
+      color: 'from-gray-600 to-gray-700',
+    },
+    {
+      name: 'Pinecone',
+      category: t('partners.categories.vector'),
+      description: t('partners.descriptions.pinecone'),
+      color: 'from-indigo-500 to-indigo-600',
     },
   ];
 
@@ -154,22 +178,23 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team */}
+      {/* Technology Partners */}
       <section className="py-20 bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">{t('team.title')}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">{t('partners.title')}</h2>
             <p className="text-xl text-white/70 text-center mb-12 max-w-3xl mx-auto">
-              {t('team.subtitle')}
+              {t('partners.subtitle')}
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {teamMembers.map((member, index) => (
-                <Card key={index} className="p-6 hover-lift">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-purple-600 mb-4" />
-                  <h3 className="text-lg font-semibold mb-1">{member.name}</h3>
-                  <p className="text-sm text-primary mb-2">{member.role}</p>
-                  <p className="text-sm font-medium text-white/70 mb-3">{member.expertise}</p>
-                  <p className="text-sm text-white/70">{member.bio}</p>
+              {techPartners.map((partner, index) => (
+                <Card key={index} className="p-6 hover-lift transition-all duration-300 hover:border-orange/50">
+                  <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${partner.color} mb-4 flex items-center justify-center`}>
+                    <span className="text-white font-bold text-2xl">{partner.name.charAt(0)}</span>
+                  </div>
+                  <h3 className="text-lg font-semibold mb-1">{partner.name}</h3>
+                  <p className="text-sm text-primary mb-2">{partner.category}</p>
+                  <p className="text-sm text-white/70">{partner.description}</p>
                 </Card>
               ))}
             </div>
@@ -177,21 +202,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Partners */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-900/50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('partners.title')}</h2>
-            <p className="text-xl text-white/70 mb-12">{t('partners.subtitle')}</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
-              <div className="h-16 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
-              <div className="h-16 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
-              <div className="h-16 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
-              <div className="h-16 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA */}
       <section className="py-20 bg-black">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
 import {

@@ -7,7 +7,7 @@ import ServicesShowcase from '@/components/landing/ServicesShowcase';
 import Expertise from '@/components/landing/Expertise';
 import WhyChooseUs from '@/components/landing/WhyChooseUs';
 import OurApproach from '@/components/landing/OurApproach';
-import TestimonialsCarousel from '@/components/landing/TestimonialsCarousel';
+import TrustIndicators from '@/components/landing/TrustIndicators';
 import QuoteRequestForm from '@/components/forms/QuoteRequestForm';
 import ChatbotWidget from '@/components/chatbot/ChatbotWidget';
 import ParticleBackground from '@/components/landing/ParticleBackground';
@@ -65,7 +65,7 @@ function HomePageContent() {
         <Expertise />
         <WhyChooseUs />
         <OurApproach />
-        <TestimonialsCarousel />
+        <TrustIndicators />
 
         <section id="quote" className="py-20 bg-black relative overflow-hidden">
           <div className="absolute inset-0 opacity-20">
