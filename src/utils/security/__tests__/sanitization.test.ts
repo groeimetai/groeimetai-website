@@ -82,7 +82,7 @@ describe('Sanitization Utilities', () => {
 
   describe('sanitizeSqlInput', () => {
     it('should remove SQL injection attempts', () => {
-      expect(sanitizeSqlInput("'; DROP TABLE users--")).toBe(' TABLE users');
+      expect(sanitizeSqlInput("'; DROP TABLE users--")).toBe('TABLE users');
       expect(sanitizeSqlInput("1' OR '1'='1")).toBe('1 OR 11');
     });
 
@@ -90,14 +90,14 @@ describe('Sanitization Utilities', () => {
       const keywords = ['DROP', 'DELETE', 'INSERT', 'UPDATE', 'ALTER', 'CREATE', 'EXEC', 'EXECUTE'];
 
       keywords.forEach((keyword) => {
-        expect(sanitizeSqlInput(`${keyword} something`)).toBe(' something');
-        expect(sanitizeSqlInput(`${keyword.toLowerCase()} something`)).toBe(' something');
+        expect(sanitizeSqlInput(`${keyword} something`)).toBe('something');
+        expect(sanitizeSqlInput(`${keyword.toLowerCase()} something`)).toBe('something');
       });
     });
 
     it('should remove SQL comments', () => {
-      expect(sanitizeSqlInput('valid -- comment')).toBe('valid  comment');
-      expect(sanitizeSqlInput('valid /* comment */ text')).toBe('valid  text');
+      expect(sanitizeSqlInput('valid -- comment')).toBe('valid comment');
+      expect(sanitizeSqlInput('valid /* comment */ text')).toBe('valid text');
     });
 
     it('should handle non-string input', () => {

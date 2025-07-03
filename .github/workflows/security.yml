@@ -63,6 +63,9 @@ jobs:
   container-scan:
     name: Container Security Scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     steps:
       - uses: actions/checkout@v4
 
@@ -101,6 +104,9 @@ jobs:
   owasp-zap:
     name: OWASP ZAP Scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     steps:
       - name: Run OWASP ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.10.0
