@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+import PrintButton from '@/components/privacy/PrintButton';
 import {
   Shield,
   Lock,
@@ -810,13 +811,7 @@ export default function PrivacyPage() {
             <Card className="p-8 mt-16 bg-gradient-to-br from-primary/5 to-purple-600/5">
               <h2 className="text-xl font-semibold mb-4">Documentopties</h2>
               <div className="flex flex-wrap gap-4">
-                <button
-                  onClick={() => window.print()}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-                >
-                  <FileText className="w-5 h-5" />
-                  Print deze pagina
-                </button>
+                <PrintButton />
                 <a
                   href="/privacy-policy-groeimetai.pdf"
                   download

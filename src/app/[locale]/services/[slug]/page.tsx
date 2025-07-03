@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import {
   Brain,
   Bot,
@@ -127,12 +127,13 @@ export async function generateMetadata({
   };
 }
 
-export default function ServiceDetailPage({
+export default async function ServiceDetailPage({
   params,
 }: {
   params: { locale: string; slug: string };
 }) {
-  const t = useTranslations('serviceDetails');
+  const t = await getTranslations('serviceDetails');
+  const tServicesPage = await getTranslations('servicesPage');
   const service = getServiceDataFromTranslations(params.slug, t);
 
   if (!service) {
@@ -303,12 +304,12 @@ export default function ServiceDetailPage({
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href={`/${params.locale}/contact`}>
                 <Button size="lg" className="shadow-premium hover-lift">
-                  {t.raw('../servicesPage.cta.consultation')}
+                  {tServicesPage('cta.consultation')}
                 </Button>
               </Link>
               <Link href={`/${params.locale}/cases`}>
                 <Button size="lg" variant="outline" className="hover-lift">
-                  {t.raw('../servicesPage.cta.caseStudies')}
+                  {tServicesPage('cta.caseStudies')}
                 </Button>
               </Link>
             </div>

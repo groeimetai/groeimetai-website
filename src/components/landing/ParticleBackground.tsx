@@ -32,9 +32,13 @@ export default function ParticleBackground() {
   // Check for reduced motion preference
   const prefersReducedMotion = useRef(false);
 
+  // Skip animations during build
+  const isBuildTime = typeof window === 'undefined';
+
   useEffect(() => {
+    if (isBuildTime) return;
     prefersReducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }, []);
+  }, [isBuildTime]);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     const rect = canvasRef.current?.getBoundingClientRect();
@@ -59,6 +63,9 @@ export default function ParticleBackground() {
   }, []);
 
   useEffect(() => {
+    // Skip animation during build time
+    if (isBuildTime) return;
+    
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -337,7 +344,7 @@ export default function ParticleBackground() {
       canvas.removeEventListener('touchmove', handleTouchMove);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [handleMouseMove, handleTouchMove]);
+  }, [handleMouseMove, handleTouchMove, isBuildTime]);
 
   return (
     <canvas

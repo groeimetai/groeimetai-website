@@ -43,9 +43,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Set NODE_ENV to production
-ENV NODE_ENV production
-ENV PORT 8080
-ENV HOSTNAME "0.0.0.0"
+ENV NODE_ENV=production
+ENV PORT=8080
+ENV HOSTNAME="0.0.0.0"
 
 # Switch to non-root user
 USER nextjs

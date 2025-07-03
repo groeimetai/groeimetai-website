@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import HeroSection from '@/components/landing/HeroSection';
 import ServicesShowcase from '@/components/landing/ServicesShowcase';
@@ -15,7 +15,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function HomePage() {
+function HomePageContent() {
   const searchParams = useSearchParams();
   const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
 
@@ -89,5 +89,13 @@ export default function HomePage() {
       </main>
       <ChatbotWidget />
     </>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={null}>
+      <HomePageContent />
+    </Suspense>
   );
 }

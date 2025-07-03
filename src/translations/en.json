@@ -489,6 +489,126 @@
         "Privacy Tech"
       ],
       "duration": "8-12 weeks"
+    },
+    "ai-strategy": {
+      "title": "AI Strategy Consulting",
+      "description": "Develop a comprehensive AI roadmap aligned with your business objectives. We help you identify opportunities, assess readiness, and create a strategic plan for successful AI adoption across your organization.",
+      "features": [
+        "AI maturity assessment and gap analysis",
+        "Strategic roadmap development with clear milestones",
+        "ROI modeling and business case development",
+        "Change management and adoption planning"
+      ],
+      "highlights": [
+        "Executive-level strategic guidance",
+        "Industry-specific AI opportunities",
+        "Risk mitigation strategies"
+      ]
+    },
+    "chatbot-development": {
+      "title": "Intelligent Chatbot Development",
+      "description": "Create sophisticated conversational AI solutions that enhance customer experience and automate support. Our chatbots leverage advanced NLP to provide human-like interactions across multiple channels.",
+      "features": [
+        "Multi-channel deployment (web, mobile, voice)",
+        "Natural language understanding and generation",
+        "Integration with existing CRM and support systems",
+        "Continuous learning and improvement capabilities"
+      ],
+      "highlights": [
+        "24/7 automated customer support",
+        "Multilingual conversation handling",
+        "Sentiment analysis and escalation"
+      ]
+    },
+    "ai-integration": {
+      "title": "AI Systems Integration",
+      "description": "Seamlessly integrate AI capabilities into your existing technology stack. We ensure smooth deployment, optimal performance, and minimal disruption to your current operations.",
+      "features": [
+        "API development and microservices architecture",
+        "Legacy system modernization with AI",
+        "Real-time data pipeline integration",
+        "Scalable cloud-native AI deployment"
+      ],
+      "highlights": [
+        "Enterprise-grade integration solutions",
+        "Performance optimization and monitoring",
+        "Secure data handling and compliance"
+      ]
+    },
+    "prompt-engineering": {
+      "title": "Advanced Prompt Engineering",
+      "description": "Maximize the potential of Large Language Models through expert prompt design and optimization. We create sophisticated prompting strategies that deliver consistent, high-quality AI outputs.",
+      "features": [
+        "Custom prompt libraries for your use cases",
+        "Prompt optimization and A/B testing",
+        "Context management and chaining strategies",
+        "Output validation and quality control"
+      ],
+      "highlights": [
+        "Reduced token costs up to 60%",
+        "Improved accuracy and relevance",
+        "Reusable prompt templates"
+      ]
+    },
+    "workflow-automation": {
+      "title": "AI-Powered Workflow Automation",
+      "description": "Transform manual processes into intelligent automated workflows. We design and implement AI-driven automation that reduces costs, eliminates errors, and accelerates business operations.",
+      "features": [
+        "Process mining and optimization analysis",
+        "Intelligent document processing and extraction",
+        "Decision automation with AI reasoning",
+        "End-to-end workflow orchestration"
+      ],
+      "highlights": [
+        "Up to 80% reduction in processing time",
+        "Zero-touch automation capabilities",
+        "Compliance and audit trail"
+      ]
+    },
+    "compliance-safety": {
+      "title": "AI Compliance & Safety",
+      "description": "Ensure your AI systems meet regulatory requirements and ethical standards. We provide comprehensive governance frameworks, risk assessments, and safety measures for responsible AI deployment.",
+      "features": [
+        "Regulatory compliance assessment (GDPR, AI Act)",
+        "Bias detection and fairness testing",
+        "Model explainability and transparency",
+        "Ethical AI guidelines and policies"
+      ],
+      "highlights": [
+        "Risk mitigation strategies",
+        "Audit-ready documentation",
+        "Continuous compliance monitoring"
+      ]
+    },
+    "data-analysis": {
+      "title": "AI-Enhanced Data Analytics",
+      "description": "Unlock insights from your data using advanced AI and machine learning techniques. We help you discover patterns, predict trends, and make data-driven decisions with confidence.",
+      "features": [
+        "Predictive analytics and forecasting models",
+        "Automated anomaly detection and alerting",
+        "Natural language data querying interfaces",
+        "Real-time analytics dashboards"
+      ],
+      "highlights": [
+        "Actionable business intelligence",
+        "Self-service analytics capabilities",
+        "Proactive decision support"
+      ]
+    },
+    "cloud-migration": {
+      "title": "AI Cloud Migration Services",
+      "description": "Migrate your AI workloads to the cloud for enhanced scalability, performance, and cost efficiency. We ensure seamless transition with minimal downtime and optimal architecture design.",
+      "features": [
+        "Cloud architecture design for AI workloads",
+        "Multi-cloud and hybrid deployment strategies",
+        "Cost optimization and resource management",
+        "Security hardening and compliance setup"
+      ],
+      "highlights": [
+        "Up to 40% cost reduction",
+        "Elastic scaling capabilities",
+        "Global deployment options"
+      ]
     }
   },
   "expertise": {

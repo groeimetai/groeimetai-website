@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import {
   Brain,
   Bot,
@@ -34,9 +34,9 @@ export async function generateMetadata({
   };
 }
 
-export default function ServicesPage() {
-  const t = useTranslations('servicesPage');
-  const tServiceDetails = useTranslations('serviceDetails');
+export default async function ServicesPage() {
+  const t = await getTranslations('servicesPage');
+  const tServiceDetails = await getTranslations('serviceDetails');
 
   const services = [
     {

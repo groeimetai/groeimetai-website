@@ -489,6 +489,126 @@
         "Privacy Tech"
       ],
       "duration": "8-12 weken"
+    },
+    "ai-strategy": {
+      "title": "AI Strategie Consultancy",
+      "description": "Ontwikkel een uitgebreide AI-roadmap die aansluit bij uw bedrijfsdoelstellingen. Wij helpen u kansen te identificeren, gereedheid te beoordelen en een strategisch plan te creëren voor succesvolle AI-adoptie binnen uw organisatie.",
+      "features": [
+        "AI-volwassenheidsanalyse en gap-analyse",
+        "Strategische roadmap ontwikkeling met duidelijke mijlpalen",
+        "ROI-modellering en business case ontwikkeling",
+        "Verandermanagement en adoptie planning"
+      ],
+      "highlights": [
+        "Strategisch advies op directieniveau",
+        "Industrie-specifieke AI-kansen",
+        "Risicomitigatie strategieën"
+      ]
+    },
+    "chatbot-development": {
+      "title": "Intelligente Chatbot Ontwikkeling",
+      "description": "Creëer geavanceerde conversationele AI-oplossingen die de klantervaring verbeteren en support automatiseren. Onze chatbots benutten geavanceerde NLP voor menselijke interacties over meerdere kanalen.",
+      "features": [
+        "Multi-channel deployment (web, mobiel, spraak)",
+        "Natuurlijke taalverwerking en -generatie",
+        "Integratie met bestaande CRM en support systemen",
+        "Continue leer- en verbetermogelijkheden"
+      ],
+      "highlights": [
+        "24/7 geautomatiseerde klantenservice",
+        "Meertalige conversatie afhandeling",
+        "Sentimentanalyse en escalatie"
+      ]
+    },
+    "ai-integration": {
+      "title": "AI Systeem Integratie",
+      "description": "Integreer AI-mogelijkheden naadloos in uw bestaande technologie stack. Wij zorgen voor soepele implementatie, optimale prestaties en minimale verstoring van uw huidige operaties.",
+      "features": [
+        "API-ontwikkeling en microservices architectuur",
+        "Legacy systeem modernisering met AI",
+        "Real-time data pipeline integratie",
+        "Schaalbare cloud-native AI deployment"
+      ],
+      "highlights": [
+        "Enterprise-grade integratie oplossingen",
+        "Prestatie optimalisatie en monitoring",
+        "Veilige dataverwerking en compliance"
+      ]
+    },
+    "prompt-engineering": {
+      "title": "Geavanceerde Prompt Engineering",
+      "description": "Maximaliseer het potentieel van Large Language Models door expert prompt design en optimalisatie. Wij creëren geavanceerde prompting strategieën die consistente, hoogwaardige AI-output leveren.",
+      "features": [
+        "Aangepaste prompt bibliotheken voor uw use cases",
+        "Prompt optimalisatie en A/B testing",
+        "Context management en chaining strategieën",
+        "Output validatie en kwaliteitscontrole"
+      ],
+      "highlights": [
+        "Tot 60% reductie in token kosten",
+        "Verbeterde nauwkeurigheid en relevantie",
+        "Herbruikbare prompt templates"
+      ]
+    },
+    "workflow-automation": {
+      "title": "AI-Gedreven Workflow Automatisering",
+      "description": "Transformeer handmatige processen naar intelligente geautomatiseerde workflows. Wij ontwerpen en implementeren AI-gedreven automatisering die kosten reduceert, fouten elimineert en bedrijfsoperaties versnelt.",
+      "features": [
+        "Process mining en optimalisatie analyse",
+        "Intelligente document verwerking en extractie",
+        "Beslissingsautomatisering met AI-redenering",
+        "End-to-end workflow orkestratie"
+      ],
+      "highlights": [
+        "Tot 80% reductie in verwerkingstijd",
+        "Zero-touch automatisering mogelijkheden",
+        "Compliance en audit trail"
+      ]
+    },
+    "compliance-safety": {
+      "title": "AI Compliance & Veiligheid",
+      "description": "Zorg dat uw AI-systemen voldoen aan regelgeving en ethische standaarden. Wij bieden uitgebreide governance frameworks, risicobeoordelingen en veiligheidsmaatregelen voor verantwoorde AI-implementatie.",
+      "features": [
+        "Regelgeving compliance beoordeling (AVG, AI Act)",
+        "Bias detectie en fairness testing",
+        "Model uitlegbaarheid en transparantie",
+        "Ethische AI-richtlijnen en beleid"
+      ],
+      "highlights": [
+        "Risicomitigatie strategieën",
+        "Audit-klare documentatie",
+        "Continue compliance monitoring"
+      ]
+    },
+    "data-analysis": {
+      "title": "AI-Verrijkte Data Analytics",
+      "description": "Ontsluit inzichten uit uw data met geavanceerde AI en machine learning technieken. Wij helpen u patronen te ontdekken, trends te voorspellen en datagedreven beslissingen te nemen met vertrouwen.",
+      "features": [
+        "Predictive analytics en forecasting modellen",
+        "Geautomatiseerde anomalie detectie en alertering",
+        "Natuurlijke taal data query interfaces",
+        "Real-time analytics dashboards"
+      ],
+      "highlights": [
+        "Actiegerichte business intelligence",
+        "Self-service analytics mogelijkheden",
+        "Proactieve beslissingsondersteuning"
+      ]
+    },
+    "cloud-migration": {
+      "title": "AI Cloud Migratie Services",
+      "description": "Migreer uw AI-workloads naar de cloud voor verbeterde schaalbaarheid, prestaties en kostenefficiëntie. Wij zorgen voor naadloze transitie met minimale downtime en optimaal architectuur ontwerp.",
+      "features": [
+        "Cloud architectuur ontwerp voor AI-workloads",
+        "Multi-cloud en hybride deployment strategieën",
+        "Kostenoptimalisatie en resource management",
+        "Security hardening en compliance setup"
+      ],
+      "highlights": [
+        "Tot 40% kostenreductie",
+        "Elastische schaalmogelijkheden",
+        "Wereldwijde deployment opties"
+      ]
     }
   },
   "expertise": {
