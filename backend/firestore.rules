@@ -1,0 +1,226 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function hasRole(role) {
+      return isAuthenticated() && 
+        request.auth.token.roles != null &&
+        role in request.auth.token.roles;
+    }
+    
+    function hasAnyRole(roles) {
+      return isAuthenticated() && 
+        request.auth.token.roles != null &&
+        request.auth.token.roles.hasAny(roles);
+    }
+    
+    function isValidEmail(email) {
+      return email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+    }
+    
+    function isValidTimestamp(timestamp) {
+      return timestamp is timestamp;
+    }
+    
+    function futureTimestamp(timestamp) {
+      return timestamp > request.time;
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if isAuthenticated() && 
+        (isOwner(userId) || hasAnyRole(['admin', 'consultant']));
+      
+      allow create: if isAuthenticated() && 
+        isOwner(userId) &&
+        request.resource.data.keys().hasAll(['email', 'displayName', 'createdAt']) &&
+        isValidEmail(request.resource.data.email) &&
+        request.resource.data.createdAt == request.time;
+      
+      allow update: if isAuthenticated() && 
+        (isOwner(userId) || hasRole('admin')) &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['uid', 'email', 'createdAt']) ||
+         hasRole('admin'));
+      
+      allow delete: if hasRole('admin');
+      
+      // User subcollections
+      match /preferences/{prefId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      match /notifications/{notificationId} {
+        allow read: if isOwner(userId);
+        allow create: if hasAnyRole(['admin', 'consultant', 'system']);
+        allow update: if isOwner(userId) && 
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read', 'readAt']);
+        allow delete: if isOwner(userId) || hasRole('admin');
+      }
+    }
+    
+    // Consultations collection
+    match /consultations/{consultationId} {
+      allow read: if isAuthenticated() && 
+        (resource.data.clientId == request.auth.uid ||
+         resource.data.consultantId == request.auth.uid ||
+         hasRole('admin'));
+      
+      allow create: if isAuthenticated() &&
+        request.resource.data.keys().hasAll(['clientId', 'type', 'status', 'createdAt']) &&
+        request.resource.data.clientId == request.auth.uid &&
+        request.resource.data.status == 'requested' &&
+        request.resource.data.createdAt == request.time;
+      
+      allow update: if isAuthenticated() && 
+        ((resource.data.clientId == request.auth.uid && 
+          request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['status', 'rating', 'feedback', 'updatedAt'])) ||
+         (resource.data.consultantId == request.auth.uid && 
+          request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['status', 'notes', 'recommendations', 'updatedAt'])) ||
+         hasRole('admin'));
+      
+      allow delete: if hasRole('admin');
+      
+      // Consultation messages subcollection
+      match /messages/{messageId} {
+        allow read: if isAuthenticated() && 
+          (get(/databases/$(database)/documents/consultations/$(consultationId)).data.clientId == request.auth.uid ||
+           get(/databases/$(database)/documents/consultations/$(consultationId)).data.consultantId == request.auth.uid ||
+           hasRole('admin'));
+        
+        allow create: if isAuthenticated() &&
+          (get(/databases/$(database)/documents/consultations/$(consultationId)).data.clientId == request.auth.uid ||
+           get(/databases/$(database)/documents/consultations/$(consultationId)).data.consultantId == request.auth.uid) &&
+          request.resource.data.senderId == request.auth.uid &&
+          request.resource.data.timestamp == request.time;
+        
+        allow update, delete: if false;
+      }
+    }
+    
+    // Quotes collection
+    match /quotes/{quoteId} {
+      allow read: if isAuthenticated() && 
+        (resource.data.clientId == request.auth.uid ||
+         resource.data.consultantId == request.auth.uid ||
+         hasRole('admin'));
+      
+      allow create: if isAuthenticated() &&
+        hasAnyRole(['consultant', 'admin']) &&
+        request.resource.data.keys().hasAll(['clientId', 'consultantId', 'items', 'total', 'status']) &&
+        request.resource.data.consultantId == request.auth.uid &&
+        request.resource.data.status == 'draft';
+      
+      allow update: if isAuthenticated() && 
+        ((resource.data.consultantId == request.auth.uid && 
+          resource.data.status in ['draft', 'sent']) ||
+         (resource.data.clientId == request.auth.uid && 
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']) &&
+          resource.data.status == 'sent' &&
+          request.resource.data.status in ['accepted', 'rejected']) ||
+         hasRole('admin'));
+      
+      allow delete: if hasRole('admin') || 
+        (resource.data.consultantId == request.auth.uid && resource.data.status == 'draft');
+    }
+    
+    // Messages collection (direct messages)
+    match /messages/{messageId} {
+      allow read: if isAuthenticated() && 
+        (resource.data.senderId == request.auth.uid ||
+         resource.data.recipientId == request.auth.uid ||
+         hasRole('admin'));
+      
+      allow create: if isAuthenticated() &&
+        request.resource.data.senderId == request.auth.uid &&
+        request.resource.data.timestamp == request.time &&
+        request.resource.data.keys().hasAll(['senderId', 'recipientId', 'content', 'timestamp']);
+      
+      allow update: if isAuthenticated() && 
+        resource.data.recipientId == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read', 'readAt']);
+      
+      allow delete: if false;
+    }
+    
+    // Appointments collection
+    match /appointments/{appointmentId} {
+      allow read: if isAuthenticated() && 
+        (resource.data.clientId == request.auth.uid ||
+         resource.data.consultantId == request.auth.uid ||
+         hasRole('admin'));
+      
+      allow create: if isAuthenticated() &&
+        request.resource.data.clientId == request.auth.uid &&
+        futureTimestamp(request.resource.data.scheduledAt) &&
+        request.resource.data.status == 'pending';
+      
+      allow update: if isAuthenticated() && 
+        ((resource.data.clientId == request.auth.uid && 
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']) &&
+          request.resource.data.status == 'cancelled') ||
+         (resource.data.consultantId == request.auth.uid && 
+          request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['status', 'meetingLink', 'notes'])) ||
+         hasRole('admin'));
+      
+      allow delete: if hasRole('admin');
+    }
+    
+    // Services collection (public read)
+    match /services/{serviceId} {
+      allow read: if true;
+      allow create, update: if hasRole('admin');
+      allow delete: if hasRole('admin');
+    }
+    
+    // Reviews collection
+    match /reviews/{reviewId} {
+      allow read: if true;
+      
+      allow create: if isAuthenticated() &&
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.keys().hasAll(['userId', 'consultationId', 'rating', 'createdAt']) &&
+        request.resource.data.rating >= 1 &&
+        request.resource.data.rating <= 5 &&
+        request.resource.data.createdAt == request.time &&
+        exists(/databases/$(database)/documents/consultations/$(request.resource.data.consultationId)) &&
+        get(/databases/$(database)/documents/consultations/$(request.resource.data.consultationId)).data.clientId == request.auth.uid &&
+        get(/databases/$(database)/documents/consultations/$(request.resource.data.consultationId)).data.status == 'completed';
+      
+      allow update: if isAuthenticated() && 
+        resource.data.userId == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['comment', 'rating', 'updatedAt']);
+      
+      allow delete: if hasRole('admin') || 
+        (isAuthenticated() && resource.data.userId == request.auth.uid);
+    }
+    
+    // Analytics collection (restricted)
+    match /analytics/{docId} {
+      allow read: if hasAnyRole(['admin', 'consultant']);
+      allow write: if hasRole('admin') || hasRole('system');
+    }
+    
+    // System configuration (admin only)
+    match /config/{configId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole('admin');
+    }
+    
+    // Catch all - deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules",
+    "bucket": "groeimetai-458417.firebasestorage.app"
+  }
+}

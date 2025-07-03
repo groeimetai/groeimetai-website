@@ -1,0 +1,194 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      // Users can read their own profile
+      allow read: if isOwner(userId) || isAdmin();
+      
+      // Users can create their own profile during registration
+      allow create: if isOwner(userId);
+      
+      // Users can update their own profile
+      allow update: if isOwner(userId) || isAdmin();
+      
+      // Only admins can delete user profiles
+      allow delete: if isAdmin();
+    }
+    
+    // Quotes collection
+    match /quotes/{quoteId} {
+      // Anyone can create a quote (including guests)
+      allow create: if true;
+      
+      // Users can read their own quotes, admins can read all
+      allow read: if (resource.data.userId == request.auth.uid) || 
+                    (resource.data.email == request.auth.token.email) ||
+                    isAdmin();
+      
+      // Users can update their own quotes, admins can update all
+      allow update: if (resource.data.userId == request.auth.uid && isAuthenticated()) || 
+                      isAdmin();
+      
+      // Only admins can delete quotes
+      allow delete: if isAdmin();
+    }
+    
+    // Projects collection
+    match /projects/{projectId} {
+      // Users can read projects they're involved in
+      allow read: if isAuthenticated() && (
+        resource.data.clientId == request.auth.uid ||
+        resource.data.consultantId == request.auth.uid ||
+        request.auth.uid in resource.data.teamIds ||
+        isAdmin()
+      );
+      
+      // Only admins and consultants can create projects
+      allow create: if isAuthenticated() && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'consultant']
+      );
+      
+      // Project participants and admins can update
+      allow update: if isAuthenticated() && (
+        resource.data.consultantId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Only admins can delete projects
+      allow delete: if isAdmin();
+    }
+    
+    // Messages collection
+    match /messages/{messageId} {
+      // Users can read messages in conversations they're part of
+      allow read: if isAuthenticated() && 
+        exists(/databases/$(database)/documents/conversations/$(resource.data.conversationId)) &&
+        request.auth.uid in get(/databases/$(database)/documents/conversations/$(resource.data.conversationId)).data.participantIds;
+      
+      // Users can create messages in conversations they're part of
+      allow create: if isAuthenticated() && 
+        exists(/databases/$(database)/documents/conversations/$(request.data.conversationId)) &&
+        request.auth.uid in get(/databases/$(database)/documents/conversations/$(request.data.conversationId)).data.participantIds;
+      
+      // Users can update their own messages
+      allow update: if isAuthenticated() && resource.data.senderId == request.auth.uid;
+      
+      // Only message sender or admin can delete
+      allow delete: if isAuthenticated() && (resource.data.senderId == request.auth.uid || isAdmin());
+    }
+    
+    // Conversations collection
+    match /conversations/{conversationId} {
+      // Participants can read conversations
+      allow read: if isAuthenticated() && request.auth.uid in resource.data.participantIds;
+      
+      // Authenticated users can create conversations
+      allow create: if isAuthenticated() && request.auth.uid in request.data.participantIds;
+      
+      // Participants can update conversations
+      allow update: if isAuthenticated() && request.auth.uid in resource.data.participantIds;
+      
+      // Only admins can delete conversations
+      allow delete: if isAdmin();
+    }
+    
+    // Consultations collection
+    match /consultations/{consultationId} {
+      // Users can read their own consultations
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Authenticated users can create consultations
+      allow create: if isAuthenticated();
+      
+      // Users can update their own consultations
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Only admins can delete consultations
+      allow delete: if isAdmin();
+    }
+    
+    // Notifications collection
+    match /notifications/{notificationId} {
+      // Users can only read their own notifications
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Only system (admin) can create notifications
+      allow create: if isAdmin();
+      
+      // Users can update their own notifications (mark as read)
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Users can delete their own notifications
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+    
+    // Documents collection
+    match /documents/{documentId} {
+      // Users can read their own documents
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Users can create their own documents
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      
+      // Users can update their own documents
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Users can delete their own documents
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+    
+    // Meetings collection
+    match /meetings/{meetingId} {
+      // Users can read meetings they're involved in
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        request.auth.uid in resource.data.participantIds
+      );
+      
+      // Users can create meetings
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      
+      // Users can update meetings they created or are participants in
+      allow update: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        request.auth.uid in resource.data.participantIds
+      );
+      
+      // Users can delete meetings they created
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+    
+    // UserSettings collection
+    match /userSettings/{userId} {
+      // Users can read their own settings
+      allow read: if isOwner(userId);
+      
+      // Users can create their own settings
+      allow create: if isOwner(userId);
+      
+      // Users can update their own settings
+      allow update: if isOwner(userId);
+      
+      // Users can delete their own settings
+      allow delete: if isOwner(userId);
+    }
+  }
+}
