@@ -106,9 +106,7 @@ export default function AICapabilities() {
             <span className="text-orange-500"> {t('heading.transforms')} </span>
             {t('heading.yourBusiness')}
           </h2>
-          <p className="text-xl text-white/70 max-w-3xl mx-auto">
-            {t('subtitle')}
-          </p>
+          <p className="text-xl text-white/70 max-w-3xl mx-auto">{t('subtitle')}</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -198,9 +196,7 @@ export default function AICapabilities() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-16 text-center"
         >
-          <p className="text-xl text-white/70 mb-8">
-            {t('cta.question')}
-          </p>
+          <p className="text-xl text-white/70 mb-8">{t('cta.question')}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/contact">
               <motion.div

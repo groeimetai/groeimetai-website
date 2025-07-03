@@ -42,12 +42,12 @@ interface ServiceDetailData {
 }
 
 const iconMap = {
-  'strategy': Brain,
-  'transformation': Bot,
-  'governance': Shield,
-  'innovation': Sparkles,
-  'advisory': Layers,
-  'adoption': Workflow,
+  strategy: Brain,
+  transformation: Bot,
+  governance: Shield,
+  innovation: Sparkles,
+  advisory: Layers,
+  adoption: Workflow,
   // Legacy slugs for backwards compatibility
   'genai-consultancy': Brain,
   'llm-integration': Bot,
@@ -60,12 +60,12 @@ const iconMap = {
 function getServiceDataFromTranslations(slug: string, t: any): ServiceDetailData | null {
   const serviceKey = {
     // New service slugs (matching landing page)
-    'strategy': 'genai',
-    'transformation': 'llm',
-    'governance': 'security',
-    'innovation': 'multiAgent',
-    'advisory': 'rag',
-    'adoption': 'servicenow',
+    strategy: 'genai',
+    transformation: 'llm',
+    governance: 'security',
+    innovation: 'multiAgent',
+    advisory: 'rag',
+    adoption: 'servicenow',
     // Legacy slugs for backwards compatibility
     'genai-consultancy': 'genai',
     'llm-integration': 'llm',
@@ -98,11 +98,11 @@ export async function generateStaticParams() {
   // Only include the service slugs that are actually used in the navigation
   const services = [
     'strategy',
-    'transformation', 
+    'transformation',
     'governance',
     'innovation',
     'advisory',
-    'adoption'
+    'adoption',
   ];
 
   return locales.flatMap((locale) =>
@@ -123,12 +123,12 @@ export async function generateMetadata({
 
   const serviceKey = {
     // New service slugs (matching landing page)
-    'strategy': 'genai',
-    'transformation': 'llm',
-    'governance': 'security',
-    'innovation': 'multiAgent',
-    'advisory': 'rag',
-    'adoption': 'servicenow',
+    strategy: 'genai',
+    transformation: 'llm',
+    governance: 'security',
+    innovation: 'multiAgent',
+    advisory: 'rag',
+    adoption: 'servicenow',
     // Legacy slugs for backwards compatibility
     'genai-consultancy': 'genai',
     'llm-integration': 'llm',
