@@ -125,7 +125,7 @@ describe('Sanitization Utilities', () => {
       const sanitized = sanitizeFileName(longName);
       
       expect(sanitized.length).toBeLessThanOrEqual(255);
-      expect(sanitized).toEndWith('.txt');
+      expect(sanitized.endsWith('.txt')).toBe(true);
     });
 
     it('should handle non-string input', () => {
@@ -162,22 +162,38 @@ describe('Sanitization Utilities', () => {
 
     it('should reject localhost in production', () => {
       const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = 'production';
+      Object.defineProperty(process.env, 'NODE_ENV', {
+        value: 'production',
+        writable: true,
+        configurable: true
+      });
       
       expect(sanitizeUrl('http://localhost:3000')).toBeNull();
       expect(sanitizeUrl('http://127.0.0.1:8080')).toBeNull();
       expect(sanitizeUrl('http://192.168.1.1')).toBeNull();
       
-      process.env.NODE_ENV = originalEnv;
+      Object.defineProperty(process.env, 'NODE_ENV', {
+        value: originalEnv,
+        writable: true,
+        configurable: true
+      });
     });
 
     it('should allow localhost in development', () => {
       const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = 'development';
+      Object.defineProperty(process.env, 'NODE_ENV', {
+        value: 'development',
+        writable: true,
+        configurable: true
+      });
       
       expect(sanitizeUrl('http://localhost:3000')).toBe('http://localhost:3000/');
       
-      process.env.NODE_ENV = originalEnv;
+      Object.defineProperty(process.env, 'NODE_ENV', {
+        value: originalEnv,
+        writable: true,
+        configurable: true
+      });
     });
   });
 
