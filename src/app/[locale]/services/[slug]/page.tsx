@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n/routing';
 import { getTranslations } from 'next-intl/server';
+import { locales } from '@/i18n';
 import {
   Brain,
   Bot,
@@ -41,6 +42,13 @@ interface ServiceDetailData {
 }
 
 const iconMap = {
+  'strategy': Brain,
+  'transformation': Bot,
+  'governance': Shield,
+  'innovation': Sparkles,
+  'advisory': Layers,
+  'adoption': Workflow,
+  // Legacy slugs for backwards compatibility
   'genai-consultancy': Brain,
   'llm-integration': Bot,
   'rag-architecture': Layers,
@@ -51,6 +59,14 @@ const iconMap = {
 
 function getServiceDataFromTranslations(slug: string, t: any): ServiceDetailData | null {
   const serviceKey = {
+    // New service slugs (matching landing page)
+    'strategy': 'genai',
+    'transformation': 'llm',
+    'governance': 'security',
+    'innovation': 'multiAgent',
+    'advisory': 'rag',
+    'adoption': 'servicenow',
+    // Legacy slugs for backwards compatibility
     'genai-consultancy': 'genai',
     'llm-integration': 'llm',
     'rag-architecture': 'rag',
@@ -79,8 +95,15 @@ function getServiceDataFromTranslations(slug: string, t: any): ServiceDetailData
 }
 
 export async function generateStaticParams() {
-  const locales = ['en', 'nl'];
-  const services = Object.keys(iconMap);
+  // Only include the service slugs that are actually used in the navigation
+  const services = [
+    'strategy',
+    'transformation', 
+    'governance',
+    'innovation',
+    'advisory',
+    'adoption'
+  ];
 
   return locales.flatMap((locale) =>
     services.map((slug) => ({
@@ -99,6 +122,14 @@ export async function generateMetadata({
   const messages = (await import(`@/translations/${locale}.json`)).default;
 
   const serviceKey = {
+    // New service slugs (matching landing page)
+    'strategy': 'genai',
+    'transformation': 'llm',
+    'governance': 'security',
+    'innovation': 'multiAgent',
+    'advisory': 'rag',
+    'adoption': 'servicenow',
+    // Legacy slugs for backwards compatibility
     'genai-consultancy': 'genai',
     'llm-integration': 'llm',
     'rag-architecture': 'rag',

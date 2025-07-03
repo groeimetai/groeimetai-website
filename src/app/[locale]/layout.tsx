@@ -18,7 +18,8 @@ export default async function LocaleLayout({ children, params: { locale } }: Roo
 
   let messages;
   try {
-    messages = await getMessages();
+    // Import the messages for the specific locale
+    messages = (await import(`@/translations/${locale}.json`)).default;
   } catch (error) {
     notFound();
   }
