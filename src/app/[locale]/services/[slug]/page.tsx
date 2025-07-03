@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { locales } from '@/i18n';
+import { BrochureDownloadButton } from '@/components/BrochureDownloadButton';
 import {
   Brain,
   Bot,
@@ -209,11 +210,7 @@ export default async function ServiceDetailPage({
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
-              <a href={`/api/brochure/${params.locale}`} download>
-                <Button size="lg" variant="outline" className="hover-lift">
-                  {t('downloadBrochure')}
-                </Button>
-              </a>
+              <BrochureDownloadButton locale={params.locale as 'en' | 'nl'} />
             </div>
           </div>
         </div>
