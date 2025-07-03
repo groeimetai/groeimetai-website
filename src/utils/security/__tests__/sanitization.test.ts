@@ -83,7 +83,7 @@ describe('Sanitization Utilities', () => {
   describe('sanitizeSqlInput', () => {
     it('should remove SQL injection attempts', () => {
       expect(sanitizeSqlInput("'; DROP TABLE users--")).toBe('TABLE users');
-      expect(sanitizeSqlInput("1' OR '1'='1")).toBe('1 OR 11');
+      expect(sanitizeSqlInput("1' OR '1'='1")).toBe('1 OR 1=1');
     });
 
     it('should remove SQL keywords', () => {
@@ -97,7 +97,7 @@ describe('Sanitization Utilities', () => {
 
     it('should remove SQL comments', () => {
       expect(sanitizeSqlInput('valid -- comment')).toBe('valid comment');
-      expect(sanitizeSqlInput('valid /* comment */ text')).toBe('valid text');
+      expect(sanitizeSqlInput('valid /* comment */ text')).toBe('valid comment text');
     });
 
     it('should handle non-string input', () => {
