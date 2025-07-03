@@ -20,32 +20,40 @@ const STATIC_CACHE_URLS = [
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_CACHE_URLS.map(url => {
-        return new Request(url, { cache: 'no-cache' });
-      }));
-    }).then(() => {
-      self.skipWaiting();
-    })
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => {
+        return cache.addAll(
+          STATIC_CACHE_URLS.map((url) => {
+            return new Request(url, { cache: 'no-cache' });
+          })
+        );
+      })
+      .then(() => {
+        self.skipWaiting();
+      })
   );
 });
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((cacheName) => {
-            return cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE;
-          })
-          .map((cacheName) => {
-            return caches.delete(cacheName);
-          })
-      );
-    }).then(() => {
-      self.clients.claim();
-    })
+    caches
+      .keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames
+            .filter((cacheName) => {
+              return cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE;
+            })
+            .map((cacheName) => {
+              return caches.delete(cacheName);
+            })
+        );
+      })
+      .then(() => {
+        self.clients.claim();
+      })
   );
 });
 
@@ -76,12 +84,12 @@ self.addEventListener('fetch', (event) => {
         .then((response) => {
           // Clone the response before caching
           const responseToCache = response.clone();
-          
+
           // Update the cache
           caches.open(RUNTIME_CACHE).then((cache) => {
             cache.put(request, responseToCache);
           });
-          
+
           return response;
         })
         .catch(() => {
@@ -103,7 +111,7 @@ self.addEventListener('fetch', (event) => {
           fetchAndCache(request);
           return response;
         }
-        
+
         // Not in cache, fetch and cache
         return fetchAndCache(request);
       })
@@ -119,13 +127,13 @@ self.addEventListener('fetch', (event) => {
         if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
-        
+
         // Clone and cache the response
         const responseToCache = response.clone();
         caches.open(RUNTIME_CACHE).then((cache) => {
           cache.put(request, responseToCache);
         });
-        
+
         return response;
       })
       .catch(() => {
@@ -153,25 +161,23 @@ self.addEventListener('push', (event) => {
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
-      primaryKey: 1
+      primaryKey: 1,
     },
     actions: [
       {
         action: 'view',
         title: 'View',
-        icon: '/icons/view.png'
+        icon: '/icons/view.png',
       },
       {
         action: 'close',
         title: 'Close',
-        icon: '/icons/close.png'
-      }
-    ]
+        icon: '/icons/close.png',
+      },
+    ],
   };
 
-  event.waitUntil(
-    self.registration.showNotification('GroeimetAI', options)
-  );
+  event.waitUntil(self.registration.showNotification('GroeimetAI', options));
 });
 
 // Notification click handler
@@ -179,23 +185,34 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
   if (event.action === 'view') {
-    event.waitUntil(
-      clients.openWindow('/')
-    );
+    event.waitUntil(clients.openWindow('/'));
   }
 });
 
 // Helper functions
 function isStaticAsset(pathname) {
   const staticExtensions = [
-    '.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.svg',
-    '.ico', '.woff', '.woff2', '.ttf', '.eot', '.json'
+    '.js',
+    '.css',
+    '.png',
+    '.jpg',
+    '.jpeg',
+    '.gif',
+    '.svg',
+    '.ico',
+    '.woff',
+    '.woff2',
+    '.ttf',
+    '.eot',
+    '.json',
   ];
-  
-  return staticExtensions.some(ext => pathname.endsWith(ext)) ||
-         pathname.startsWith('/_next/static/') ||
-         pathname.startsWith('/fonts/') ||
-         pathname.startsWith('/images/');
+
+  return (
+    staticExtensions.some((ext) => pathname.endsWith(ext)) ||
+    pathname.startsWith('/_next/static/') ||
+    pathname.startsWith('/fonts/') ||
+    pathname.startsWith('/images/')
+  );
 }
 
 function fetchAndCache(request) {
@@ -204,13 +221,13 @@ function fetchAndCache(request) {
     if (!response || response.status !== 200 || response.type !== 'basic') {
       return response;
     }
-    
+
     // Clone and cache
     const responseToCache = response.clone();
     caches.open(RUNTIME_CACHE).then((cache) => {
       cache.put(request, responseToCache);
     });
-    
+
     return response;
   });
 }
@@ -218,16 +235,16 @@ function fetchAndCache(request) {
 async function syncAnalytics() {
   // Get queued analytics from IndexedDB
   const analytics = await getQueuedAnalytics();
-  
+
   // Send to server
   for (const data of analytics) {
     try {
       await fetch('/api/analytics/batch', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
-      
+
       // Remove from queue on success
       await removeFromAnalyticsQueue(data.id);
     } catch (error) {
@@ -239,16 +256,16 @@ async function syncAnalytics() {
 async function syncMessages() {
   // Get queued messages from IndexedDB
   const messages = await getQueuedMessages();
-  
+
   // Send to server
   for (const message of messages) {
     try {
       await fetch('/api/messages/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(message)
+        body: JSON.stringify(message),
       });
-      
+
       // Remove from queue on success
       await removeFromMessageQueue(message.id);
     } catch (error) {
@@ -281,9 +298,9 @@ self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
-  
+
   if (event.data && event.data.type === 'GET_CACHE_SIZE') {
-    getCacheSize().then(size => {
+    getCacheSize().then((size) => {
       event.ports[0].postMessage({ type: 'CACHE_SIZE', size });
     });
   }
@@ -292,11 +309,11 @@ self.addEventListener('message', (event) => {
 async function getCacheSize() {
   const cacheNames = await caches.keys();
   let totalSize = 0;
-  
+
   for (const cacheName of cacheNames) {
     const cache = await caches.open(cacheName);
     const requests = await cache.keys();
-    
+
     for (const request of requests) {
       const response = await cache.match(request);
       if (response) {
@@ -305,6 +322,6 @@ async function getCacheSize() {
       }
     }
   }
-  
+
   return totalSize;
 }

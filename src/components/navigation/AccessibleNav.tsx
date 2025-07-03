@@ -3,9 +3,9 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  Menu, 
-  X, 
+import {
+  Menu,
+  X,
   ChevronDown,
   Home,
   Briefcase,
@@ -13,7 +13,7 @@ import {
   BookOpen,
   Phone,
   MessageSquare,
-  User
+  User,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { announce, useKeyboardNavigation } from '@/lib/accessibility';
@@ -71,25 +71,20 @@ export const AccessibleNav: React.FC = () => {
   ];
 
   const toggleDropdown = (itemId: string) => {
-    setOpenDropdowns(prev => 
-      prev.includes(itemId) 
-        ? prev.filter(id => id !== itemId)
-        : [...prev, itemId]
+    setOpenDropdowns((prev) =>
+      prev.includes(itemId) ? prev.filter((id) => id !== itemId) : [...prev, itemId]
     );
-    
+
     const isOpen = !openDropdowns.includes(itemId);
     announce(
-      `${navItems.find(item => item.id === itemId)?.label} submenu ${isOpen ? 'expanded' : 'collapsed'}`,
+      `${navItems.find((item) => item.id === itemId)?.label} submenu ${isOpen ? 'expanded' : 'collapsed'}`,
       'polite'
     );
   };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-    announce(
-      `Mobile menu ${!isMobileMenuOpen ? 'opened' : 'closed'}`,
-      'polite'
-    );
+    announce(`Mobile menu ${!isMobileMenuOpen ? 'opened' : 'closed'}`, 'polite');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent, item: NavItem) => {
@@ -166,7 +161,7 @@ export const AccessibleNav: React.FC = () => {
                           )}
                         />
                       </button>
-                      
+
                       {openDropdowns.includes(item.id) && (
                         <div
                           className="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
@@ -181,7 +176,9 @@ export const AccessibleNav: React.FC = () => {
                                 className={cn(
                                   'block px-4 py-2 text-sm transition-colors',
                                   'hover:bg-gray-100 focus:outline-none focus:bg-gray-100',
-                                  isActive(child.href) ? 'text-blue-600 bg-blue-50' : 'text-gray-700'
+                                  isActive(child.href)
+                                    ? 'text-blue-600 bg-blue-50'
+                                    : 'text-gray-700'
                                 )}
                                 role="menuitem"
                               >
@@ -218,7 +215,7 @@ export const AccessibleNav: React.FC = () => {
                   <User className="h-4 w-4" />
                   <span className="sr-only">Dashboard</span>
                 </Link>
-                
+
                 <button
                   className="flex items-center space-x-1 px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   aria-label="Start chat consultation"
@@ -237,11 +234,7 @@ export const AccessibleNav: React.FC = () => {
                 aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={isMobileMenuOpen}
               >
-                {isMobileMenuOpen ? (
-                  <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
             </div>
           </div>
@@ -281,7 +274,7 @@ export const AccessibleNav: React.FC = () => {
                           )}
                         />
                       </button>
-                      
+
                       {openDropdowns.includes(item.id) && (
                         <div className="pl-8 space-y-1">
                           {item.children.map((child) => (
@@ -327,10 +320,8 @@ export const AccessibleNav: React.FC = () => {
                   <User className="h-5 w-5" />
                   <span>Dashboard</span>
                 </Link>
-                
-                <button
-                  className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md text-base font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
+
+                <button className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md text-base font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <MessageSquare className="h-5 w-5" />
                   <span>Start Chat</span>
                 </button>

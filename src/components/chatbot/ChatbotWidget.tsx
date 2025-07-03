@@ -6,10 +6,7 @@ import dynamic from 'next/dynamic';
 import { cn } from '@/lib/utils';
 
 // Dynamically import the chatbot to avoid SSR issues
-const ChatbotInterface = dynamic(
-  () => import('./ChatbotInterface'),
-  { ssr: false }
-);
+const ChatbotInterface = dynamic(() => import('./ChatbotInterface'), { ssr: false });
 
 interface ChatbotWidgetProps {
   autoOpen?: boolean;
@@ -20,7 +17,7 @@ interface ChatbotWidgetProps {
 export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
   autoOpen = false,
   delay = 5000,
-  proactiveMessage = "👋 Need help exploring our AI solutions? I'm here to assist!"
+  proactiveMessage = "👋 Need help exploring our AI solutions? I'm here to assist!",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showProactive, setShowProactive] = useState(false);
@@ -112,7 +109,7 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
       >
         <MessageSquare className="h-6 w-6" />
         <span className="absolute -top-1 -right-1 h-3 w-3 bg-green-400 rounded-full animate-pulse"></span>
-        
+
         {/* Hover tooltip */}
         <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
           <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">

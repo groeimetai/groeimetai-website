@@ -1,16 +1,16 @@
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
-import { 
-  getAuth, 
+import {
+  getAuth,
   Auth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
   onAuthStateChanged,
-  User
+  User,
 } from 'firebase/auth';
-import { 
-  getFirestore, 
+import {
+  getFirestore,
   Firestore,
   collection,
   doc,
@@ -18,18 +18,18 @@ import {
   getDoc,
   updateDoc,
   serverTimestamp,
-  Timestamp
+  Timestamp,
 } from 'firebase/firestore';
 import { getAnalytics, Analytics, isSupported } from 'firebase/analytics';
-import { 
-  getStorage, 
+import {
+  getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
   deleteObject,
   listAll,
   getMetadata,
-  FirebaseStorage
+  FirebaseStorage,
 } from 'firebase/storage';
 
 // Firebase configuration
@@ -62,7 +62,7 @@ storage = getStorage(app);
 
 // Initialize Analytics only on client-side
 if (typeof window !== 'undefined') {
-  isSupported().then(supported => {
+  isSupported().then((supported) => {
     if (supported) {
       analytics = getAnalytics(app);
     }
@@ -129,7 +129,7 @@ export const authFunctions = {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      
+
       // Create user profile in Firestore
       const userProfile: UserProfile = {
         uid: user.uid,
@@ -149,9 +149,9 @@ export const authFunctions = {
           language: 'en',
         },
       };
-      
+
       await setDoc(doc(db, collections.users, user.uid), userProfile);
-      
+
       return { user, userProfile };
     } catch (error) {
       console.error('Error signing up:', error);
@@ -164,11 +164,11 @@ export const authFunctions = {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      
+
       // Get user profile from Firestore
       const userDoc = await getDoc(doc(db, collections.users, user.uid));
       const userProfile = userDoc.data() as UserProfile;
-      
+
       return { user, userProfile };
     } catch (error) {
       console.error('Error signing in:', error);
@@ -218,11 +218,11 @@ export const quoteFunctions = {
         createdAt: serverTimestamp() as Timestamp,
         updatedAt: serverTimestamp() as Timestamp,
       };
-      
+
       const docRef = await setDoc(doc(collection(db, collections.quotes)), quote);
-      
+
       // Send notification email (implement this on backend)
-      
+
       return docRef;
     } catch (error) {
       console.error('Error submitting quote:', error);

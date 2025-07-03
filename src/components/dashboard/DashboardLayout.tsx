@@ -72,9 +72,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-lg">
                   G
                 </div>
-                {!isSidebarCollapsed && (
-                  <span className="text-xl font-semibold">GroeimetAI</span>
-                )}
+                {!isSidebarCollapsed && <span className="text-xl font-semibold">GroeimetAI</span>}
               </Link>
               <Button
                 variant="ghost"
@@ -82,9 +80,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
                 className="hidden md:flex"
               >
-                <ChevronLeft className={`h-4 w-4 transition-transform ${
-                  isSidebarCollapsed ? 'rotate-180' : ''
-                }`} />
+                <ChevronLeft
+                  className={`h-4 w-4 transition-transform ${
+                    isSidebarCollapsed ? 'rotate-180' : ''
+                  }`}
+                />
               </Button>
             </div>
           </div>
@@ -132,9 +132,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </motion.aside>
 
       {/* Main content */}
-      <div className={`transition-all duration-300 ${
-        isSidebarCollapsed ? 'md:ml-20' : 'md:ml-60'
-      }`}>
+      <div
+        className={`transition-all duration-300 ${isSidebarCollapsed ? 'md:ml-20' : 'md:ml-60'}`}
+      >
         {/* Top bar */}
         <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-lg border-b border-border">
           <div className="flex items-center justify-between h-16 px-4 md:px-6">
@@ -197,9 +197,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </header>
 
         {/* Page content */}
-        <main className="p-4 md:p-6">
-          {children}
-        </main>
+        <main className="p-4 md:p-6">{children}</main>
       </div>
     </div>
   );

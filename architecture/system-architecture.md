@@ -1,11 +1,13 @@
 # GroeimetAI System Architecture
 
 ## Overview
+
 GroeimetAI is a modern GenAI consultancy platform built with a serverless architecture using Google Cloud Platform (GCP) services, with Firebase as the core backend infrastructure.
 
 ## Architecture Components
 
 ### 1. Frontend Layer
+
 - **Next.js 14** - React-based framework with App Router
 - **Tailwind CSS** - Utility-first CSS framework
 - **Shadcn/UI** - Component library
@@ -13,6 +15,7 @@ GroeimetAI is a modern GenAI consultancy platform built with a serverless archit
 - **Vercel** - Deployment and edge functions
 
 ### 2. Authentication & Authorization
+
 - **Firebase Auth** - Multi-provider authentication
   - Email/Password
   - Google OAuth
@@ -23,12 +26,14 @@ GroeimetAI is a modern GenAI consultancy platform built with a serverless archit
 ### 3. Backend Services
 
 #### Firebase Services
+
 - **Firestore** - NoSQL database for real-time data
 - **Cloud Functions** - Serverless compute
 - **Cloud Storage** - File uploads (documents, avatars)
 - **Firebase Hosting** - Static asset serving
 
 #### API Layer
+
 - **REST API** - Built with Express.js on Cloud Functions
 - **GraphQL** - Apollo Server for complex queries
 - **WebSockets** - Real-time messaging via Socket.io
@@ -36,11 +41,13 @@ GroeimetAI is a modern GenAI consultancy platform built with a serverless archit
 ### 4. AI Integration Layer
 
 #### Gemini API Integration
+
 - **Gemini Pro** - Main AI model for consultations
 - **Gemini Vision** - Document analysis
 - **Embeddings API** - Semantic search
 
 #### RAG Architecture
+
 - **Vertex AI** - Vector database for knowledge base
 - **LangChain** - Orchestration framework
 - **Document Processing Pipeline**
@@ -52,16 +59,19 @@ GroeimetAI is a modern GenAI consultancy platform built with a serverless archit
 ### 5. Communication Services
 
 #### Real-time Messaging
+
 - **Firebase Realtime Database** - Chat messages
 - **Presence System** - Online/offline status
 - **Push Notifications** - FCM integration
 
 #### Video Consultations
+
 - **Google Meet API** - Video conferencing
 - **Calendar Integration** - Google Calendar API
 - **Scheduling System** - Custom booking logic
 
 ### 6. Payment & Billing
+
 - **Stripe** - Payment processing
   - Subscription management
   - Invoice generation
@@ -69,6 +79,7 @@ GroeimetAI is a modern GenAI consultancy platform built with a serverless archit
 - **Firebase Extensions** - Stripe integration
 
 ### 7. Analytics & Monitoring
+
 - **Google Analytics 4** - User behavior tracking
 - **Firebase Performance Monitoring** - App performance
 - **Cloud Logging** - Centralized logging
@@ -77,12 +88,14 @@ GroeimetAI is a modern GenAI consultancy platform built with a serverless archit
 ### 8. Infrastructure
 
 #### Security
+
 - **Cloud Armor** - DDoS protection
 - **Identity Platform** - Enhanced authentication
 - **Secret Manager** - API key management
 - **VPC** - Network isolation
 
 #### CI/CD Pipeline
+
 - **GitHub Actions** - Automated testing and deployment
 - **Cloud Build** - Container building
 - **Artifact Registry** - Container storage
@@ -90,6 +103,7 @@ GroeimetAI is a modern GenAI consultancy platform built with a serverless archit
 ## Data Flow
 
 ### User Journey
+
 1. User visits website → Served by Vercel Edge
 2. Authentication → Firebase Auth
 3. Dashboard access → Next.js + Firestore
@@ -98,6 +112,7 @@ GroeimetAI is a modern GenAI consultancy platform built with a serverless archit
 6. Payment → Stripe webhook → Cloud Function → Firestore
 
 ### AI Consultation Flow
+
 1. User submits query
 2. Cloud Function triggered
 3. RAG retrieval from Vertex AI
@@ -109,17 +124,20 @@ GroeimetAI is a modern GenAI consultancy platform built with a serverless archit
 ## Scalability Considerations
 
 ### Horizontal Scaling
+
 - Cloud Functions auto-scale
 - Firestore automatic sharding
 - CDN for static assets
 
 ### Performance Optimization
+
 - Edge caching with Vercel
 - Firestore composite indexes
 - Query optimization
 - Image optimization with Next.js
 
 ### Cost Optimization
+
 - Reserved capacity for predictable workloads
 - Lifecycle policies for Cloud Storage
 - Function concurrency limits
@@ -128,6 +146,7 @@ GroeimetAI is a modern GenAI consultancy platform built with a serverless archit
 ## Security Architecture
 
 ### Authentication Flow
+
 ```
 User → Firebase Auth → ID Token → Cloud Function → Firestore
          ↓
@@ -137,18 +156,21 @@ User → Firebase Auth → ID Token → Cloud Function → Firestore
 ```
 
 ### Data Security
+
 - Firestore Security Rules
 - Field-level encryption for sensitive data
 - HTTPS everywhere
 - CORS configuration
 
 ### Compliance
+
 - GDPR compliance tools
 - Data retention policies
 - Audit logging
 - Privacy-first design
 
 ## Disaster Recovery
+
 - **Firestore** - Multi-region replication
 - **Cloud Storage** - Cross-region backup
 - **Database Export** - Scheduled backups

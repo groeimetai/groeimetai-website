@@ -2,16 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Bot, 
-  Users, 
-  Database, 
-  Brain, 
-  ArrowRight, 
+import {
+  Bot,
+  Users,
+  Database,
+  Brain,
+  ArrowRight,
   MessageSquare,
   Sparkles,
   Zap,
-  CheckCircle
+  CheckCircle,
 } from 'lucide-react';
 
 export const EnterpriseAIAnimation: React.FC = () => {
@@ -128,7 +128,9 @@ export const EnterpriseAIAnimation: React.FC = () => {
               )}
             </AnimatePresence>
           </div>
-          <span className="text-xs text-white/70 mt-2 block text-center absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">GPT-4o-mini</span>
+          <span className="text-xs text-white/70 mt-2 block text-center absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
+            GPT-4o-mini
+          </span>
         </motion.div>
 
         {/* Agent Options */}
@@ -143,7 +145,9 @@ export const EnterpriseAIAnimation: React.FC = () => {
               }}
               transition={{ delay: index * 0.1 }}
             >
-              <div className={`w-16 h-16 bg-gradient-to-br ${agent.color} rounded-lg flex items-center justify-center`}>
+              <div
+                className={`w-16 h-16 bg-gradient-to-br ${agent.color} rounded-lg flex items-center justify-center`}
+              >
                 <agent.icon className="w-8 h-8 text-white" />
               </div>
               <span className="text-xs text-white/70 mt-1 block text-center max-w-[80px]">
@@ -175,23 +179,24 @@ export const EnterpriseAIAnimation: React.FC = () => {
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 0.5 }}
               />
-              
+
               {/* AI to Agents */}
-              {activeStep >= 2 && agents.map((_, index) => (
-                <motion.line
-                  key={index}
-                  x1="55%"
-                  y1="50%"
-                  x2="85%"
-                  y2={`${25 + index * 25}%`}
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeDasharray="5,5"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                />
-              ))}
+              {activeStep >= 2 &&
+                agents.map((_, index) => (
+                  <motion.line
+                    key={index}
+                    x1="55%"
+                    y1="50%"
+                    x2="85%"
+                    y2={`${25 + index * 25}%`}
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeDasharray="5,5"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  />
+                ))}
             </motion.svg>
           )}
         </AnimatePresence>

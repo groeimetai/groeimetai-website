@@ -361,7 +361,12 @@
         "Training Materials",
         "Best Practices Guide"
       ],
-      "technologies": ["ServiceNow Now Assist", "Virtual Agent", "Performance Analytics", "IntegrationHub"],
+      "technologies": [
+        "ServiceNow Now Assist",
+        "Virtual Agent",
+        "Performance Analytics",
+        "IntegrationHub"
+      ],
       "duration": "10-16 weken"
     },
     "multiAgent": {
@@ -477,7 +482,12 @@
         "Policy Documents",
         "Training Program"
       ],
-      "technologies": ["Security Frameworks", "Monitoring Tools", "Audit Platforms", "Privacy Tech"],
+      "technologies": [
+        "Security Frameworks",
+        "Monitoring Tools",
+        "Audit Platforms",
+        "Privacy Tech"
+      ],
       "duration": "8-12 weken"
     }
   },
@@ -488,12 +498,22 @@
       "finance": {
         "title": "Financiële Diensten",
         "description": "Transformeer bank-, verzekerings- en investeringsdiensten met AI-gedreven inzichten en automatisering",
-        "skills": ["Risicomanagement", "Fraudedetectie", "Klantintelligentie", "Regelgevende Compliance"]
+        "skills": [
+          "Risicomanagement",
+          "Fraudedetectie",
+          "Klantintelligentie",
+          "Regelgevende Compliance"
+        ]
       },
       "healthcare": {
         "title": "Gezondheidszorg & Life Sciences",
         "description": "Revolutioneer patiëntenzorg en versnel onderzoek door intelligente systemen",
-        "skills": ["Klinische Beslissingsondersteuning", "Medicijnontdekking", "Patiëntervaring", "Operationele Excellentie"]
+        "skills": [
+          "Klinische Beslissingsondersteuning",
+          "Medicijnontdekking",
+          "Patiëntervaring",
+          "Operationele Excellentie"
+        ]
       },
       "retail": {
         "title": "Retail & Consument",
@@ -503,7 +523,12 @@
       "manufacturing": {
         "title": "Productie & Industrie 4.0",
         "description": "Stimuleer operationele excellentie door voorspellend onderhoud en intelligente automatisering",
-        "skills": ["Voorspellend Onderhoud", "Kwaliteitscontrole", "Supply Chain Optimalisatie", "Digital Twins"]
+        "skills": [
+          "Voorspellend Onderhoud",
+          "Kwaliteitscontrole",
+          "Supply Chain Optimalisatie",
+          "Digital Twins"
+        ]
       },
       "public": {
         "title": "Publieke Sector",
@@ -2063,22 +2088,42 @@
         "necessary": {
           "name": "Noodzakelijke cookies",
           "description": "Deze cookies zijn essentieel voor het functioneren van de website en kunnen niet worden uitgeschakeld.",
-          "examples": ["Authenticatie en beveiliging", "Winkelwagenfunctionaliteit", "Cookievoorkeuren", "Fraudepreventie"]
+          "examples": [
+            "Authenticatie en beveiliging",
+            "Winkelwagenfunctionaliteit",
+            "Cookievoorkeuren",
+            "Fraudepreventie"
+          ]
         },
         "analytical": {
           "name": "Analytische cookies",
           "description": "Deze cookies helpen ons begrijpen hoe bezoekers onze website gebruiken.",
-          "examples": ["Google Analytics tracking", "Prestatiemetingen", "A/B-test cookies", "Heatmap tracking"]
+          "examples": [
+            "Google Analytics tracking",
+            "Prestatiemetingen",
+            "A/B-test cookies",
+            "Heatmap tracking"
+          ]
         },
         "functional": {
           "name": "Functionele cookies",
           "description": "Deze cookies onthouden uw voorkeuren en personaliseren uw ervaring.",
-          "examples": ["Taalvoorkeuren", "Regio-instellingen", "UI-themavoorkeuren", "Recent bekeken items"]
+          "examples": [
+            "Taalvoorkeuren",
+            "Regio-instellingen",
+            "UI-themavoorkeuren",
+            "Recent bekeken items"
+          ]
         },
         "marketing": {
           "name": "Marketing cookies",
           "description": "Deze cookies worden gebruikt om de effectiviteit van advertenties te meten (alleen met toestemming).",
-          "examples": ["Conversietracking", "Remarketing pixels", "Social media pixels", "Advertentietargeting"]
+          "examples": [
+            "Conversietracking",
+            "Remarketing pixels",
+            "Social media pixels",
+            "Advertentietargeting"
+          ]
         }
       },
       "cookieSettings": {
@@ -2091,10 +2136,34 @@
         "description": "U kunt cookies ook beheren via uw browserinstellingen. Hieronder vindt u instructies voor populaire browsers:",
         "moreInfo": "Meer info",
         "steps": {
-          "chrome": ["Klik op de drie puntjes rechtsboven", "Selecteer 'Instellingen'", "Klik op 'Privacy en veiligheid'", "Klik op 'Cookies en andere sitegegevens'", "Pas uw voorkeuren aan"],
-          "firefox": ["Klik op het menu-icoon", "Selecteer 'Instellingen'", "Ga naar 'Privacy & Beveiliging'", "Scroll naar 'Cookies en sitegegevens'", "Beheer uw cookie-instellingen"],
-          "edge": ["Klik op de drie puntjes rechtsboven", "Selecteer 'Instellingen'", "Klik op 'Privacy, zoeken en services'", "Onder 'Browsegegevens wissen'", "Kies wat u wilt verwijderen"],
-          "safari": ["Open Safari-voorkeuren", "Klik op 'Privacy'", "Klik op 'Websitegegevens beheren'", "Selecteer websites en klik op 'Verwijder'", "Of klik op 'Verwijder alles'"]
+          "chrome": [
+            "Klik op de drie puntjes rechtsboven",
+            "Selecteer 'Instellingen'",
+            "Klik op 'Privacy en veiligheid'",
+            "Klik op 'Cookies en andere sitegegevens'",
+            "Pas uw voorkeuren aan"
+          ],
+          "firefox": [
+            "Klik op het menu-icoon",
+            "Selecteer 'Instellingen'",
+            "Ga naar 'Privacy & Beveiliging'",
+            "Scroll naar 'Cookies en sitegegevens'",
+            "Beheer uw cookie-instellingen"
+          ],
+          "edge": [
+            "Klik op de drie puntjes rechtsboven",
+            "Selecteer 'Instellingen'",
+            "Klik op 'Privacy, zoeken en services'",
+            "Onder 'Browsegegevens wissen'",
+            "Kies wat u wilt verwijderen"
+          ],
+          "safari": [
+            "Open Safari-voorkeuren",
+            "Klik op 'Privacy'",
+            "Klik op 'Websitegegevens beheren'",
+            "Selecteer websites en klik op 'Verwijder'",
+            "Of klik op 'Verwijder alles'"
+          ]
         }
       },
       "warning": {

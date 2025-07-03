@@ -26,21 +26,21 @@ interface AuthenticationFlow {
     password: string;
     mfaToken?: string;
   };
-  
+
   // 2. Firebase validates credentials
   validation: {
     checkCredentials: boolean;
     checkMFA: boolean;
     checkAccountStatus: boolean;
   };
-  
+
   // 3. Generate tokens
   tokens: {
-    idToken: string;        // Short-lived (1 hour)
-    refreshToken: string;   // Long-lived (30 days)
-    customToken?: string;   // For service accounts
+    idToken: string; // Short-lived (1 hour)
+    refreshToken: string; // Long-lived (30 days)
+    customToken?: string; // For service accounts
   };
-  
+
   // 4. Set custom claims
   claims: {
     role: UserRole;
@@ -74,7 +74,7 @@ interface MFAConfiguration {
       timeout: 600; // 10 minutes
     };
   };
-  
+
   enforcement: {
     required: boolean;
     roles: ['admin', 'consultant'];
@@ -91,7 +91,7 @@ OAuth Providers:
     - Client ID configuration
     - Scope: email, profile
     - Domain restrictions for business accounts
-    
+
   LinkedIn:
     - Professional verification
     - Scope: r_liteprofile, r_emailaddress
@@ -106,14 +106,14 @@ interface SessionManagement {
     type: 'secure-cookie' | 'memory';
     encryption: 'AES-256-GCM';
   };
-  
+
   policies: {
     maxConcurrentSessions: 3;
     sessionTimeout: 3600; // 1 hour
     absoluteTimeout: 86400; // 24 hours
     idleTimeout: 1800; // 30 minutes
   };
-  
+
   tracking: {
     deviceFingerprint: boolean;
     ipAddress: boolean;
@@ -132,37 +132,23 @@ enum Role {
   ADMIN = 'admin',
   CONSULTANT = 'consultant',
   CLIENT = 'client',
-  GUEST = 'guest'
+  GUEST = 'guest',
 }
 
 interface RolePermissions {
-  admin: [
-    'users:*',
-    'projects:*',
-    'billing:*',
-    'settings:*',
-    'analytics:*'
-  ];
-  
-  consultant: [
-    'projects:read',
-    'projects:update',
-    'consultations:*',
-    'messages:*',
-    'knowledge:*'
-  ];
-  
+  admin: ['users:*', 'projects:*', 'billing:*', 'settings:*', 'analytics:*'];
+
+  consultant: ['projects:read', 'projects:update', 'consultations:*', 'messages:*', 'knowledge:*'];
+
   client: [
     'projects:read:own',
     'consultations:create',
     'consultations:read:own',
     'messages:*:own',
-    'billing:read:own'
+    'billing:read:own',
   ];
-  
-  guest: [
-    'knowledge:read:public'
-  ];
+
+  guest: ['knowledge:read:public'];
 }
 ```
 
@@ -198,13 +184,13 @@ const projectAccessPolicy: AccessPolicy = {
   action: 'update',
   conditions: {
     user: {
-      role: Role.CLIENT
+      role: Role.CLIENT,
     },
     resource: {
       ownerId: '${user.id}',
-      status: 'active'
-    }
-  }
+      status: 'active',
+    },
+  },
 };
 ```
 
@@ -220,10 +206,10 @@ interface APIAuthorization {
     checkIssuer: boolean;
     checkAudience: boolean;
   };
-  
+
   // Permission checking
   checkPermission: (user: User, resource: string, action: string) => boolean;
-  
+
   // Rate limiting
   rateLimit: {
     windowMs: 900000; // 15 minutes
@@ -242,13 +228,13 @@ Firestore Encryption:
   - Default: AES-256-GCM encryption
   - Key Management: Google Cloud KMS
   - Key Rotation: Automatic quarterly
-  
+
 Field-Level Encryption:
   Sensitive Fields:
     - users.ssn: AES-256-GCM
     - invoices.bankAccount: AES-256-GCM
     - messages.content: AES-256-GCM (for sensitive conversations)
-  
+
   Key Storage:
     - Primary: Google Secret Manager
     - Backup: Hardware Security Module (HSM)
@@ -263,7 +249,7 @@ TLS Configuration:
     - TLS_AES_256_GCM_SHA384
     - TLS_AES_128_GCM_SHA256
     - TLS_CHACHA20_POLY1305_SHA256
-  
+
   Certificate Management:
     - Provider: Let's Encrypt / Google-managed
     - Auto-renewal: Enabled
@@ -280,18 +266,18 @@ interface DataMasking {
       const [local, domain] = email.split('@');
       return `${local[0]}***@${domain}`;
     };
-    
+
     phone: (phone: string) => {
       // +31612345678 → +31 6** *** 678
       return phone.replace(/(\d{3})\d{3}(\d{3})/, '$1***$2');
     };
-    
+
     creditCard: (cc: string) => {
       // 4111111111111111 → 4111 **** **** 1111
       return cc.replace(/(\d{4})\d{8}(\d{4})/, '$1 **** **** $2');
     };
   };
-  
+
   contexts: {
     logs: ['email', 'phone', 'creditCard', 'ssn'];
     ui: ['creditCard', 'ssn'];
@@ -311,7 +297,7 @@ DDoS Protection:
     - Geographic restrictions: Optional
     - Bot detection: reCAPTCHA Enterprise
     - Custom rules: Block known malicious IPs
-  
+
   Adaptive Protection:
     - Machine learning-based threat detection
     - Automatic rule updates
@@ -324,17 +310,17 @@ DDoS Protection:
 Network Segmentation:
   Production VPC:
     CIDR: 10.0.0.0/16
-    
+
     Subnets:
       Public:
         - Load Balancers: 10.0.1.0/24
         - NAT Gateways: 10.0.2.0/24
-      
+
       Private:
         - Application Servers: 10.0.10.0/24
         - Database Servers: 10.0.20.0/24
         - Internal Services: 10.0.30.0/24
-    
+
     Firewall Rules:
       - Deny all ingress by default
       - Allow HTTPS (443) to load balancers
@@ -350,22 +336,17 @@ interface APIGatewaySecurity {
     methods: ['bearer-token', 'api-key'];
     tokenValidation: 'strict';
   };
-  
+
   throttling: {
     burstLimit: 5000;
     rateLimit: 2000;
   };
-  
+
   waf: {
     enabled: true;
-    rules: [
-      'SQLi protection',
-      'XSS protection',
-      'Common exploits',
-      'Protocol anomalies'
-    ];
+    rules: ['SQLi protection', 'XSS protection', 'Common exploits', 'Protocol anomalies'];
   };
-  
+
   cors: {
     allowedOrigins: ['https://groeimetai.io'];
     allowedMethods: ['GET', 'POST', 'PUT', 'DELETE'];
@@ -387,14 +368,14 @@ interface InputValidation {
     typeChecking: boolean;
     lengthLimits: boolean;
   };
-  
+
   validators: {
     email: (input: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
     url: (input: string) => URL.canParse(input);
     uuid: (input: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(input);
     phone: (input: string) => /^\+?[1-9]\d{1,14}$/.test(input);
   };
-  
+
   sanitizers: {
     html: (input: string) => DOMPurify.sanitize(input);
     sql: (input: string) => input.replace(/['";\\]/g, '');
@@ -413,13 +394,13 @@ interface OutputEncoding {
     url: (data: string) => encodeURIComponent(data);
     css: (data: string) => cssEncode(data);
   };
-  
+
   contentTypes: {
     'text/html': 'utf-8',
     'application/json': 'utf-8',
     'application/xml': 'utf-8'
   };
-  
+
   headers: {
     'X-Content-Type-Options': 'nosniff',
     'X-Frame-Options': 'DENY',
@@ -437,13 +418,13 @@ interface CSRFProtection {
     length: 32;
     storage: 'encrypted-cookie';
   };
-  
+
   validation: {
     methods: ['POST', 'PUT', 'DELETE', 'PATCH'];
     excludePaths: ['/api/webhooks/*'];
     doubleSubmit: true;
   };
-  
+
   headers: {
     'X-CSRF-Token': string;
   };
@@ -460,12 +441,12 @@ Secret Storage:
     - Path: projects/groeimetai/secrets/api-keys
     - Rotation: Every 90 days
     - Access: Service accounts only
-  
+
   Database Credentials:
     - Path: projects/groeimetai/secrets/db-creds
     - Rotation: Every 30 days
     - Access: Backend services only
-  
+
   Encryption Keys:
     - Path: projects/groeimetai/secrets/encryption-keys
     - Rotation: Quarterly
@@ -481,12 +462,12 @@ interface SecureEnvironment {
     validation: boolean;
     required: string[];
   };
-  
+
   runtime: {
     readonly: true;
     masked: ['*_KEY', '*_SECRET', '*_PASSWORD'];
   };
-  
+
   audit: {
     accessLogging: boolean;
     changeTracking: boolean;
@@ -507,14 +488,14 @@ interface GDPRCompliance {
     portability: '/api/privacy/download';
     restriction: '/api/privacy/restrict';
   };
-  
+
   consent: {
     required: ['marketing', 'analytics', 'profiling'];
     granular: boolean;
     withdrawable: boolean;
     documented: boolean;
   };
-  
+
   dataRetention: {
     userProfiles: 'activeAccount + 30 days';
     activityLogs: '90 days';
@@ -531,12 +512,12 @@ Data Minimization:
   - Collect only necessary data
   - Anonymous analytics where possible
   - Automatic data expiration
-  
+
 Pseudonymization:
   - User IDs instead of emails in logs
   - Hashed identifiers in analytics
   - Tokenized payment data
-  
+
 Right to be Forgotten:
   - Soft delete with 30-day recovery
   - Hard delete after grace period
@@ -553,12 +534,12 @@ Detection Rules:
     - Multiple failed login attempts
     - Login from new location
     - Concurrent sessions from different countries
-    
+
   API Usage:
     - Unusual API call patterns
     - Excessive data downloads
     - Privilege escalation attempts
-    
+
   Data Access:
     - Bulk data exports
     - Access to multiple unrelated records
@@ -575,7 +556,7 @@ interface SecurityMonitoring {
     data: ['export', 'bulk_operation', 'sensitive_access'];
     system: ['config_change', 'service_restart', 'error_spike'];
   };
-  
+
   alerting: {
     critical: {
       channels: ['pagerduty', 'email', 'sms'];
@@ -590,7 +571,7 @@ interface SecurityMonitoring {
       response: '4 hours';
     };
   };
-  
+
   reporting: {
     daily: ['failed_logins', 'api_errors', 'security_events'];
     weekly: ['user_activity', 'access_patterns', 'threat_summary'];
@@ -609,27 +590,27 @@ Phases:
     - Automated monitoring alerts
     - User reports
     - Third-party notifications
-    
+
   2. Analysis:
     - Severity assessment
     - Impact analysis
     - Root cause identification
-    
+
   3. Containment:
     - Isolate affected systems
     - Disable compromised accounts
     - Block malicious IPs
-    
+
   4. Eradication:
     - Remove malicious code
     - Patch vulnerabilities
     - Reset credentials
-    
+
   5. Recovery:
     - Restore from backups
     - Verify system integrity
     - Resume normal operations
-    
+
   6. Lessons Learned:
     - Document incident
     - Update procedures
@@ -643,11 +624,11 @@ Security Response Team:
   Primary:
     - Security Lead: security@groeimetai.io
     - On-call: +31-6-SECURITY
-    
+
   Escalation:
     - CTO: cto@groeimetai.io
     - External SOC: soc@security-partner.com
-    
+
   External:
     - Google Cloud Support: Premium support ticket
     - Law Enforcement: Local cybercrime unit
@@ -677,14 +658,9 @@ Scope:
 interface SecurityCodeReview {
   automated: {
     tools: ['SonarQube', 'Snyk', 'GitGuardian'];
-    checks: [
-      'OWASP Top 10',
-      'Known vulnerabilities',
-      'Secret detection',
-      'License compliance'
-    ];
+    checks: ['OWASP Top 10', 'Known vulnerabilities', 'Secret detection', 'License compliance'];
   };
-  
+
   manual: {
     frequency: 'Pull request';
     checklist: [
@@ -692,7 +668,7 @@ interface SecurityCodeReview {
       'Authorization checks',
       'Input validation',
       'Cryptographic operations',
-      'Session management'
+      'Session management',
     ];
   };
 }
@@ -708,12 +684,12 @@ Topics:
   - OWASP Top 10 awareness
   - Security tool usage
   - Incident response procedures
-  
+
 Schedule:
   - Onboarding: Security basics
   - Quarterly: Topic deep-dives
   - Annual: Comprehensive review
-  
+
 Resources:
   - Internal wiki
   - Security champions program
@@ -729,15 +705,15 @@ SOC 2 Type II:
   - Timeline: Year 2
   - Scope: Security, Availability
   - Auditor: Big 4 firm
-  
+
 ISO 27001:
   - Timeline: Year 3
   - Scope: Information Security Management
-  
+
 GDPR Compliance:
   - Status: Implemented
   - Audit: Annual
-  
+
 PCI DSS:
   - Level: SAQ-A (payment tokenization)
   - Status: Compliant via Stripe

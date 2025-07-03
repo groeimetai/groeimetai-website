@@ -7,14 +7,14 @@ import { getStorage } from 'firebase-admin/storage';
 const serviceAccount: ServiceAccount = {
   projectId: process.env.FIREBASE_PROJECT_ID!,
   clientEmail: process.env.FIREBASE_CLIENT_EMAIL!,
-  privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')!
+  privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')!,
 };
 
 if (!getApps().length) {
   initializeApp({
     credential: cert(serviceAccount),
     databaseURL: process.env.FIREBASE_DATABASE_URL,
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   });
 }
 
@@ -62,11 +62,11 @@ export const increment = (n: number) => FieldValue.increment(n);
 // Batch operations helper
 export const batchWrite = async (operations: Array<() => Promise<any>>) => {
   const batch = adminDb.batch();
-  
+
   for (const operation of operations) {
     await operation();
   }
-  
+
   return batch.commit();
 };
 

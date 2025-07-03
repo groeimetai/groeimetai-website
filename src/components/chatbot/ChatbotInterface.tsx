@@ -17,9 +17,9 @@ interface ChatbotInterfaceProps {
   initialMessage?: string;
 }
 
-export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({ 
+export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
   className,
-  initialMessage = "Welkom bij GroeimetAI! 👋 Ik ben uw AI-assistent. Hoe kan ik u helpen met onze AI consultancy diensten? U kunt mij vragen stellen over GenAI, multi-agent orchestration, ServiceNow integratie of een van onze andere expertise gebieden."
+  initialMessage = 'Welkom bij GroeimetAI! 👋 Ik ben uw AI-assistent. Hoe kan ik u helpen met onze AI consultancy diensten? U kunt mij vragen stellen over GenAI, multi-agent orchestration, ServiceNow integratie of een van onze andere expertise gebieden.',
 }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -60,7 +60,7 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
       timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
     setIsTyping(true);
@@ -79,24 +79,24 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
 
       if (!response.ok) {
         const errorData = await response.json();
-        
+
         // Handle rate limiting
         if (response.status === 429) {
           throw new Error(errorData.error || 'Te veel berichten. Probeer het later opnieuw.');
         }
-        
+
         // Handle validation errors
         if (response.status === 400) {
           throw new Error(errorData.error || 'Ongeldig bericht.');
         }
-        
+
         throw new Error(errorData.error || 'Failed to get response');
       }
 
       const data = await response.json();
-      
+
       setIsTyping(false);
-      
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -104,21 +104,22 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
         timestamp: new Date(),
       };
 
-      setMessages(prev => [...prev, assistantMessage]);
+      setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Chat error:', error);
       setIsTyping(false);
-      
+
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: error instanceof Error && error.message.includes('Te veel') 
-          ? error.message 
-          : "Mijn excuses, ik heb momenteel problemen met de verbinding. Probeer het later opnieuw of neem direct contact op via info@groeimetai.io of ons contactformulier.",
+        content:
+          error instanceof Error && error.message.includes('Te veel')
+            ? error.message
+            : 'Mijn excuses, ik heb momenteel problemen met de verbinding. Probeer het later opnieuw of neem direct contact op via info@groeimetai.io of ons contactformulier.',
         timestamp: new Date(),
       };
-      
-      setMessages(prev => [...prev, errorMessage]);
+
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -157,7 +158,7 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
           <button
             onClick={() => setIsMinimized(!isMinimized)}
             className="hover:bg-white/20 p-1 rounded transition-colors"
-            aria-label={isMinimized ? "Maximize chat" : "Minimize chat"}
+            aria-label={isMinimized ? 'Maximize chat' : 'Minimize chat'}
           >
             {isMinimized ? <Maximize2 className="h-5 w-5" /> : <Minimize2 className="h-5 w-5" />}
           </button>
@@ -186,17 +187,20 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
                 <div
                   className={cn(
                     'max-w-[70%] rounded-lg px-4 py-2',
-                    message.role === 'user'
-                      ? 'bg-orange text-white'
-                      : 'bg-white/10 text-white'
+                    message.role === 'user' ? 'bg-orange text-white' : 'bg-white/10 text-white'
                   )}
                 >
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                  <p className={cn(
-                    'text-xs mt-1',
-                    message.role === 'user' ? 'text-white/90' : 'text-white/70'
-                  )}>
-                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  <p
+                    className={cn(
+                      'text-xs mt-1',
+                      message.role === 'user' ? 'text-white/90' : 'text-white/70'
+                    )}
+                  >
+                    {message.timestamp.toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
                   </p>
                 </div>
                 {message.role === 'user' && (
@@ -208,7 +212,7 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
                 )}
               </div>
             ))}
-            
+
             {isTyping && (
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0">
@@ -218,14 +222,23 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
                 </div>
                 <div className="bg-white/10 rounded-lg px-4 py-2">
                   <div className="flex space-x-1">
-                    <div className="h-2 w-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                    <div className="h-2 w-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                    <div className="h-2 w-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                    <div
+                      className="h-2 w-2 bg-white/60 rounded-full animate-bounce"
+                      style={{ animationDelay: '0ms' }}
+                    ></div>
+                    <div
+                      className="h-2 w-2 bg-white/60 rounded-full animate-bounce"
+                      style={{ animationDelay: '150ms' }}
+                    ></div>
+                    <div
+                      className="h-2 w-2 bg-white/60 rounded-full animate-bounce"
+                      style={{ animationDelay: '300ms' }}
+                    ></div>
                   </div>
                 </div>
               </div>
             )}
-            
+
             <div ref={messagesEndRef} />
           </div>
 

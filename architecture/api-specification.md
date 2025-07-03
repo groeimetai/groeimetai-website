@@ -3,11 +3,13 @@
 ## API Overview
 
 ### Base URLs
+
 - Development: `http://localhost:3000/api/v1`
 - Staging: `https://staging-api.groeimetai.io/v1`
 - Production: `https://api.groeimetai.io/v1`
 
 ### Authentication
+
 All API requests require authentication using Firebase ID tokens.
 
 ```http
@@ -15,6 +17,7 @@ Authorization: Bearer <firebase-id-token>
 ```
 
 ### Common Headers
+
 ```http
 Content-Type: application/json
 Accept: application/json
@@ -23,6 +26,7 @@ X-Request-ID: <unique-request-id>
 ```
 
 ### Response Format
+
 ```typescript
 interface ApiResponse<T> {
   success: boolean;
@@ -43,9 +47,11 @@ interface ApiResponse<T> {
 ## Authentication Endpoints
 
 ### POST /auth/login
+
 Authenticate user and get tokens.
 
 **Request:**
+
 ```json
 {
   "email": "user@example.com",
@@ -54,6 +60,7 @@ Authenticate user and get tokens.
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -74,9 +81,11 @@ Authenticate user and get tokens.
 ```
 
 ### POST /auth/logout
+
 Logout user and invalidate tokens.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -87,9 +96,11 @@ Logout user and invalidate tokens.
 ```
 
 ### POST /auth/refresh
+
 Refresh access token.
 
 **Request:**
+
 ```json
 {
   "refreshToken": "eyJ..."
@@ -97,9 +108,11 @@ Refresh access token.
 ```
 
 ### POST /auth/forgot-password
+
 Send password reset email.
 
 **Request:**
+
 ```json
 {
   "email": "user@example.com"
@@ -107,9 +120,11 @@ Send password reset email.
 ```
 
 ### POST /auth/verify-email
+
 Send email verification.
 
 **Request:**
+
 ```json
 {
   "email": "user@example.com"
@@ -119,9 +134,11 @@ Send email verification.
 ## User Management Endpoints
 
 ### GET /users/profile
+
 Get current user profile.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -147,9 +164,11 @@ Get current user profile.
 ```
 
 ### PUT /users/profile
+
 Update user profile.
 
 **Request:**
+
 ```json
 {
   "displayName": "John Smith",
@@ -165,18 +184,22 @@ Update user profile.
 ```
 
 ### POST /users/upload-avatar
+
 Upload user avatar.
 
 **Request:**
+
 ```
 Content-Type: multipart/form-data
 avatar: <file>
 ```
 
 ### GET /users
+
 List users (admin only).
 
 **Query Parameters:**
+
 - `role`: Filter by role
 - `organizationId`: Filter by organization
 - `search`: Search query
@@ -188,9 +211,11 @@ List users (admin only).
 ## Project Management Endpoints
 
 ### GET /projects
+
 List user's projects.
 
 **Query Parameters:**
+
 - `status`: Filter by status (active, completed, etc.)
 - `type`: Filter by type
 - `consultantId`: Filter by consultant
@@ -199,6 +224,7 @@ List user's projects.
 - `endDate`: Filter by end date
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -235,9 +261,11 @@ List user's projects.
 ```
 
 ### POST /projects
+
 Create new project.
 
 **Request:**
+
 ```json
 {
   "name": "New AI Project",
@@ -262,29 +290,37 @@ Create new project.
 ```
 
 ### GET /projects/:id
+
 Get project details.
 
 ### PUT /projects/:id
+
 Update project.
 
 ### DELETE /projects/:id
+
 Delete project (soft delete).
 
 ### POST /projects/:id/milestones
+
 Add milestone to project.
 
 ### PUT /projects/:id/milestones/:milestoneId
+
 Update milestone.
 
 ### POST /projects/:id/complete
+
 Mark project as completed.
 
 ## Consultation Endpoints
 
 ### GET /consultations
+
 List user's consultations.
 
 **Query Parameters:**
+
 - `projectId`: Filter by project
 - `type`: Filter by consultation type
 - `status`: Filter by status
@@ -292,9 +328,11 @@ List user's consultations.
 - `dateTo`: End date filter
 
 ### POST /consultations
+
 Start new consultation.
 
 **Request:**
+
 ```json
 {
   "title": "Architecture Review",
@@ -310,6 +348,7 @@ Start new consultation.
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -322,12 +361,15 @@ Start new consultation.
 ```
 
 ### GET /consultations/:id
+
 Get consultation details with full history.
 
 ### POST /consultations/:id/messages
+
 Send message in consultation.
 
 **Request:**
+
 ```json
 {
   "content": "How should I structure my microservices?",
@@ -336,29 +378,36 @@ Send message in consultation.
 ```
 
 ### POST /consultations/:id/complete
+
 Complete consultation and generate summary.
 
 ### GET /consultations/:id/export
+
 Export consultation as PDF/Markdown.
 
 **Query Parameters:**
+
 - `format`: pdf, markdown, docx
 
 ## Messaging Endpoints
 
 ### GET /conversations
+
 List user's conversations.
 
 **Query Parameters:**
+
 - `type`: Filter by type (direct, group, project)
 - `projectId`: Filter by project
 - `archived`: Include archived (true/false)
 - `unread`: Only unread conversations
 
 ### POST /conversations
+
 Create new conversation.
 
 **Request:**
+
 ```json
 {
   "type": "direct",
@@ -369,17 +418,21 @@ Create new conversation.
 ```
 
 ### GET /conversations/:id
+
 Get conversation with recent messages.
 
 **Query Parameters:**
+
 - `limit`: Number of messages (default: 50)
 - `before`: Get messages before this ID
 - `after`: Get messages after this ID
 
 ### POST /conversations/:id/messages
+
 Send message in conversation.
 
 **Request:**
+
 ```json
 {
   "content": "Hello, here's the update",
@@ -398,29 +451,36 @@ Send message in conversation.
 ```
 
 ### PUT /conversations/:id/read
+
 Mark conversation as read.
 
 ### POST /conversations/:id/typing
+
 Send typing indicator.
 
 ### DELETE /conversations/:id/messages/:messageId
+
 Delete message.
 
 ## Quote Management Endpoints
 
 ### GET /quotes
+
 List quotes.
 
 **Query Parameters:**
+
 - `status`: Filter by status
 - `clientId`: Filter by client
 - `dateFrom`: Created from date
 - `dateTo`: Created to date
 
 ### POST /quotes
+
 Create new quote.
 
 **Request:**
+
 ```json
 {
   "clientId": "client123",
@@ -445,15 +505,19 @@ Create new quote.
 ```
 
 ### GET /quotes/:id
+
 Get quote details.
 
 ### PUT /quotes/:id
+
 Update quote.
 
 ### POST /quotes/:id/send
+
 Send quote to client.
 
 **Request:**
+
 ```json
 {
   "email": "client@company.com",
@@ -463,17 +527,21 @@ Send quote to client.
 ```
 
 ### POST /quotes/:id/accept
+
 Accept quote (client action).
 
 ### POST /quotes/:id/convert
+
 Convert quote to project.
 
 ## Invoice Endpoints
 
 ### GET /invoices
+
 List invoices.
 
 **Query Parameters:**
+
 - `status`: Filter by status (paid, unpaid, overdue)
 - `clientId`: Filter by client
 - `projectId`: Filter by project
@@ -481,9 +549,11 @@ List invoices.
 - `dateTo`: Issue date to
 
 ### POST /invoices
+
 Create new invoice.
 
 **Request:**
+
 ```json
 {
   "clientId": "client123",
@@ -502,18 +572,23 @@ Create new invoice.
 ```
 
 ### GET /invoices/:id
+
 Get invoice details.
 
 ### PUT /invoices/:id
+
 Update invoice (draft only).
 
 ### POST /invoices/:id/send
+
 Send invoice to client.
 
 ### POST /invoices/:id/payments
+
 Record payment.
 
 **Request:**
+
 ```json
 {
   "amount": 2420,
@@ -524,39 +599,48 @@ Record payment.
 ```
 
 ### GET /invoices/:id/pdf
+
 Download invoice as PDF.
 
 ## Service Catalog Endpoints
 
 ### GET /services
+
 List available services.
 
 **Query Parameters:**
+
 - `category`: Filter by category
 - `isActive`: Active services only
 - `public`: Public services only
 
 ### GET /services/:id
+
 Get service details.
 
 ### POST /services
+
 Create new service (admin only).
 
 ### PUT /services/:id
+
 Update service (admin only).
 
 ## Knowledge Base Endpoints
 
 ### GET /knowledge
+
 Search knowledge base.
 
 **Query Parameters:**
+
 - `q`: Search query (required)
 - `category`: Filter by category
 - `type`: Filter by type
 - `tags`: Filter by tags (comma-separated)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -578,12 +662,15 @@ Search knowledge base.
 ```
 
 ### GET /knowledge/:id
+
 Get article details.
 
 ### POST /knowledge/:id/feedback
+
 Submit article feedback.
 
 **Request:**
+
 ```json
 {
   "helpful": true,
@@ -594,13 +681,16 @@ Submit article feedback.
 ## Analytics Endpoints
 
 ### GET /analytics/dashboard
+
 Get dashboard analytics.
 
 **Query Parameters:**
+
 - `period`: Period (7d, 30d, 90d, 1y)
 - `timezone`: User timezone
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -635,17 +725,21 @@ Get dashboard analytics.
 ```
 
 ### GET /analytics/projects/:id
+
 Get project analytics.
 
 ### GET /analytics/revenue
+
 Get revenue analytics.
 
 ## File Management Endpoints
 
 ### POST /files/upload
+
 Upload file.
 
 **Request:**
+
 ```
 Content-Type: multipart/form-data
 file: <file>
@@ -654,6 +748,7 @@ type: document|image|video
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -669,41 +764,51 @@ type: document|image|video
 ```
 
 ### GET /files/:id
+
 Get file metadata.
 
 ### DELETE /files/:id
+
 Delete file.
 
 ## Webhook Endpoints
 
 ### POST /webhooks/stripe
+
 Stripe webhook handler.
 
 **Headers:**
+
 ```
 Stripe-Signature: t=timestamp,v1=signature
 ```
 
 ### POST /webhooks/calendar
+
 Calendar webhook handler.
 
 ## WebSocket Events
 
 ### Connection
+
 ```javascript
 const ws = new WebSocket('wss://api.groeimetai.io/ws');
-ws.send(JSON.stringify({
-  type: 'auth',
-  token: 'firebase-id-token'
-}));
+ws.send(
+  JSON.stringify({
+    type: 'auth',
+    token: 'firebase-id-token',
+  })
+);
 ```
 
 ### Consultation Events
+
 - `consultation:message` - New message in consultation
 - `consultation:thinking` - AI is processing
 - `consultation:complete` - Consultation completed
 
 ### Messaging Events
+
 - `message:new` - New message received
 - `message:updated` - Message edited
 - `message:deleted` - Message deleted
@@ -713,6 +818,7 @@ ws.send(JSON.stringify({
 - `presence:offline` - User went offline
 
 ### Project Events
+
 - `project:updated` - Project updated
 - `project:milestone:completed` - Milestone completed
 - `project:comment` - New comment on project
@@ -720,6 +826,7 @@ ws.send(JSON.stringify({
 ## Error Codes
 
 ### Standard Error Codes
+
 - `AUTH_REQUIRED` - Authentication required
 - `AUTH_INVALID` - Invalid authentication token
 - `AUTH_EXPIRED` - Authentication token expired
@@ -731,6 +838,7 @@ ws.send(JSON.stringify({
 - `SERVICE_UNAVAILABLE` - Service temporarily unavailable
 
 ### Business Logic Errors
+
 - `PROJECT_COMPLETED` - Cannot modify completed project
 - `QUOTE_EXPIRED` - Quote has expired
 - `INVOICE_PAID` - Cannot modify paid invoice
@@ -740,12 +848,14 @@ ws.send(JSON.stringify({
 ## Rate Limiting
 
 ### Default Limits
+
 - Anonymous: 10 requests/minute
 - Authenticated: 100 requests/minute
 - Premium: 1000 requests/minute
 - Enterprise: Custom limits
 
 ### Headers
+
 ```http
 X-RateLimit-Limit: 100
 X-RateLimit-Remaining: 95
@@ -755,12 +865,14 @@ X-RateLimit-Reset: 1642444800
 ## Pagination
 
 ### Request Parameters
+
 - `page`: Page number (default: 1)
 - `limit`: Items per page (default: 20, max: 100)
 - `sort`: Sort field
 - `order`: Sort order (asc/desc)
 
 ### Response Format
+
 ```json
 {
   "data": {
@@ -780,12 +892,15 @@ X-RateLimit-Reset: 1642444800
 ## API Versioning
 
 ### Version Header
+
 ```http
 X-API-Version: 1.0
 ```
 
 ### Deprecated Endpoints
+
 Deprecated endpoints include:
+
 ```http
 X-API-Deprecated: true
 X-API-Sunset: 2024-12-31
@@ -794,20 +909,22 @@ X-API-Sunset: 2024-12-31
 ## SDK Support
 
 ### JavaScript/TypeScript
+
 ```typescript
 import { GroeimetAI } from '@groeimetai/sdk';
 
 const client = new GroeimetAI({
   apiKey: 'your-api-key',
-  environment: 'production'
+  environment: 'production',
 });
 
 const projects = await client.projects.list({
-  status: 'active'
+  status: 'active',
 });
 ```
 
 ### Python
+
 ```python
 from groeimetai import Client
 

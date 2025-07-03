@@ -7,7 +7,7 @@ interface RateLimitConfig {
 }
 
 export function checkRateLimit(
-  identifier: string, 
+  identifier: string,
   config: RateLimitConfig = { maxRequests: 30, windowMs: 60000 } // 30 requests per minute default
 ): { allowed: boolean; retryAfter?: number } {
   const now = Date.now();
@@ -26,16 +26,16 @@ export function checkRateLimit(
     // Create new rate limit window
     requestCounts.set(identifier, {
       count: 1,
-      resetTime: now + config.windowMs
+      resetTime: now + config.windowMs,
     });
     return { allowed: true };
   }
 
   if (userLimit.count >= config.maxRequests) {
     // Rate limit exceeded
-    return { 
-      allowed: false, 
-      retryAfter: Math.ceil((userLimit.resetTime - now) / 1000) 
+    return {
+      allowed: false,
+      retryAfter: Math.ceil((userLimit.resetTime - now) / 1000),
     };
   }
 
@@ -77,10 +77,10 @@ export function getClientIp(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for');
   const real = request.headers.get('x-real-ip');
   const client = request.headers.get('x-client-ip');
-  
+
   if (forwarded) {
     return forwarded.split(',')[0].trim();
   }
-  
+
   return real || client || 'unknown';
 }

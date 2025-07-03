@@ -11,9 +11,9 @@ export const announce = (message: string, priority: 'polite' | 'assertive' = 'po
   announcement.setAttribute('aria-atomic', 'true');
   announcement.setAttribute('class', 'sr-only');
   announcement.textContent = message;
-  
+
   document.body.appendChild(announcement);
-  
+
   setTimeout(() => {
     document.body.removeChild(announcement);
   }, 1000);
@@ -22,21 +22,21 @@ export const announce = (message: string, priority: 'polite' | 'assertive' = 'po
 // Focus management
 export const useFocusTrap = (isActive: boolean) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     if (!isActive || !containerRef.current) return;
-    
+
     const container = containerRef.current;
     const focusableElements = container.querySelectorAll(
       'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, [tabindex]:not([tabindex="-1"])'
     );
-    
+
     const firstFocusable = focusableElements[0] as HTMLElement;
     const lastFocusable = focusableElements[focusableElements.length - 1] as HTMLElement;
-    
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key !== 'Tab') return;
-      
+
       if (e.shiftKey) {
         if (document.activeElement === firstFocusable) {
           e.preventDefault();
@@ -49,15 +49,15 @@ export const useFocusTrap = (isActive: boolean) => {
         }
       }
     };
-    
+
     container.addEventListener('keydown', handleKeyDown);
     firstFocusable?.focus();
-    
+
     return () => {
       container.removeEventListener('keydown', handleKeyDown);
     };
   }, [isActive]);
-  
+
   return containerRef;
 };
 
@@ -84,21 +84,17 @@ export const SkipLinks = () => {
 // Keyboard navigation hooks
 export const useKeyboardNavigation = (items: any[], onSelect: (item: any) => void) => {
   const [focusedIndex, setFocusedIndex] = useState(-1);
-  
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
-          setFocusedIndex(prev => 
-            prev < items.length - 1 ? prev + 1 : 0
-          );
+          setFocusedIndex((prev) => (prev < items.length - 1 ? prev + 1 : 0));
           break;
         case 'ArrowUp':
           e.preventDefault();
-          setFocusedIndex(prev => 
-            prev > 0 ? prev - 1 : items.length - 1
-          );
+          setFocusedIndex((prev) => (prev > 0 ? prev - 1 : items.length - 1));
           break;
         case 'Enter':
         case ' ':
@@ -112,49 +108,49 @@ export const useKeyboardNavigation = (items: any[], onSelect: (item: any) => voi
           break;
       }
     };
-    
+
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [items, focusedIndex, onSelect]);
-  
+
   return { focusedIndex, setFocusedIndex };
 };
 
 // High contrast mode detection
 export const useHighContrast = () => {
   const [isHighContrast, setIsHighContrast] = useState(false);
-  
+
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-contrast: high)');
     setIsHighContrast(mediaQuery.matches);
-    
+
     const handler = (e: MediaQueryListEvent) => {
       setIsHighContrast(e.matches);
     };
-    
+
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
-  
+
   return isHighContrast;
 };
 
 // Reduced motion detection
 export const useReducedMotion = () => {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  
+
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setPrefersReducedMotion(mediaQuery.matches);
-    
+
     const handler = (e: MediaQueryListEvent) => {
       setPrefersReducedMotion(e.matches);
     };
-    
+
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
-  
+
   return prefersReducedMotion;
 };
 
@@ -168,7 +164,7 @@ export const getAriaLabel = (type: string, context: any): string => {
     error: (ctx) => `Error: ${ctx.message}`,
     success: (ctx) => `Success: ${ctx.message}`,
   };
-  
+
   return labels[type]?.(context) || '';
 };
 
@@ -176,31 +172,31 @@ export const getAriaLabel = (type: string, context: any): string => {
 export const validateForm = (formData: any, rules: any) => {
   const errors: Record<string, string> = {};
   const announcements: string[] = [];
-  
-  Object.keys(rules).forEach(field => {
+
+  Object.keys(rules).forEach((field) => {
     const value = formData[field];
     const fieldRules = rules[field];
-    
+
     if (fieldRules.required && !value) {
       errors[field] = `${field} is required`;
       announcements.push(`${field} field is required`);
     }
-    
+
     if (fieldRules.email && value && !isValidEmail(value)) {
       errors[field] = 'Please enter a valid email address';
       announcements.push(`${field} must be a valid email address`);
     }
-    
+
     if (fieldRules.minLength && value && value.length < fieldRules.minLength) {
       errors[field] = `${field} must be at least ${fieldRules.minLength} characters`;
       announcements.push(`${field} must be at least ${fieldRules.minLength} characters long`);
     }
   });
-  
+
   if (announcements.length > 0) {
     announce(`Form validation errors: ${announcements.join('. ')}`, 'assertive');
   }
-  
+
   return { errors, isValid: Object.keys(errors).length === 0 };
 };
 
@@ -221,7 +217,7 @@ export const AccessibleModal: React.FC<{
   children: React.ReactNode;
 }> = ({ isOpen, onClose, title, children }) => {
   const focusTrapRef = useFocusTrap(isOpen);
-  
+
   useEffect(() => {
     if (isOpen) {
       announce(`${title} dialog opened`, 'polite');
@@ -229,14 +225,14 @@ export const AccessibleModal: React.FC<{
     } else {
       document.body.style.overflow = '';
     }
-    
+
     return () => {
       document.body.style.overflow = '';
     };
   }, [isOpen, title]);
-  
+
   if (!isOpen) return null;
-  
+
   return (
     <div
       role="dialog"

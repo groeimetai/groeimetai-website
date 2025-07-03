@@ -1,11 +1,13 @@
 # GroeimetAI Enhanced System Architecture
 
 ## Executive Summary
+
 GroeimetAI is evolving from a portfolio website to a comprehensive AI consultancy platform with client portal, real-time collaboration, project management, and AI-powered features. This architecture supports enterprise-grade scalability, security, and performance.
 
 ## System Overview
 
 ### Platform Capabilities
+
 1. **Client Portal** - Secure access for clients to manage projects, consultations, and communications
 2. **AI Consultation Engine** - Powered by Gemini API with RAG architecture
 3. **Project Management** - Track milestones, deliverables, and progress
@@ -18,6 +20,7 @@ GroeimetAI is evolving from a portfolio website to a comprehensive AI consultanc
 ### Frontend Architecture
 
 #### Next.js 14 Application Structure
+
 ```
 src/
 ├── app/                          # App Router
@@ -50,6 +53,7 @@ src/
 ```
 
 #### Component Architecture
+
 - **Atomic Design Pattern** - Atoms, Molecules, Organisms, Templates
 - **Server Components** - For improved performance and SEO
 - **Client Components** - For interactivity and real-time features
@@ -58,6 +62,7 @@ src/
 ### Backend Architecture
 
 #### Microservices Architecture
+
 ```
 services/
 ├── auth-service/                 # Authentication & authorization
@@ -71,6 +76,7 @@ services/
 ```
 
 #### API Gateway Pattern
+
 - **Cloud Endpoints** - API management and monitoring
 - **Rate Limiting** - Per-user and per-API quotas
 - **API Versioning** - v1, v2 support
@@ -80,6 +86,7 @@ services/
 ### Database Architecture
 
 #### Firestore Collections Design
+
 ```
 firestore/
 ├── users/                        # User profiles
@@ -100,6 +107,7 @@ firestore/
 ### AI Integration Architecture
 
 #### RAG Pipeline Architecture
+
 ```
 1. Document Ingestion
    ├── PDF/DOCX Parser
@@ -133,6 +141,7 @@ firestore/
 ```
 
 #### AI Model Integration
+
 - **Primary Model**: Gemini Pro 1.5 for consultations
 - **Vision Model**: Gemini Vision for document analysis
 - **Code Model**: Gemini Code for technical consultations
@@ -141,6 +150,7 @@ firestore/
 ### Security Architecture
 
 #### Multi-Layer Security Model
+
 ```
 1. Network Security
    ├── Cloud Armor DDoS Protection
@@ -170,6 +180,7 @@ firestore/
 ### Real-time Architecture
 
 #### WebSocket Infrastructure
+
 ```
 Real-time Features:
 ├── Presence System
@@ -193,6 +204,7 @@ Real-time Features:
 ### Integration Architecture
 
 #### Third-Party Integrations
+
 ```
 1. Payment Processing
    ├── Stripe Connect
@@ -222,6 +234,7 @@ Real-time Features:
 ### Performance Architecture
 
 #### Optimization Strategies
+
 ```
 1. Frontend Performance
    ├── Code Splitting
@@ -255,6 +268,7 @@ Real-time Features:
 ### Scalability Architecture
 
 #### Horizontal Scaling Strategy
+
 ```
 1. Stateless Services
    ├── No Session State
@@ -284,6 +298,7 @@ Real-time Features:
 ### Monitoring & Observability
 
 #### Comprehensive Monitoring Stack
+
 ```
 1. Infrastructure Monitoring
    ├── Cloud Monitoring Dashboards
@@ -313,6 +328,7 @@ Real-time Features:
 ### Deployment Architecture
 
 #### CI/CD Pipeline
+
 ```
 1. Development Workflow
    ├── Feature Branches
@@ -342,6 +358,7 @@ Real-time Features:
 ## Architecture Decisions
 
 ### Technology Choices
+
 - **Next.js 14**: Modern React framework with excellent DX and performance
 - **TypeScript**: Type safety and better developer experience
 - **Firebase**: Comprehensive backend platform with real-time capabilities
@@ -350,6 +367,7 @@ Real-time Features:
 - **Stripe**: Industry-standard payment processing
 
 ### Design Patterns
+
 - **Domain-Driven Design**: Clear bounded contexts
 - **Event-Driven Architecture**: Loose coupling between services
 - **CQRS Pattern**: Separate read/write operations
@@ -358,6 +376,7 @@ Real-time Features:
 - **Observer Pattern**: Real-time updates
 
 ### Best Practices
+
 - **12-Factor App**: Cloud-native principles
 - **API-First Design**: Contract-driven development
 - **Security by Design**: Built-in security measures

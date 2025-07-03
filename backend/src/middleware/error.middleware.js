@@ -19,7 +19,7 @@ export const errorHandler = (err, req, res, next) => {
 
   // Handle MongoDB/Mongoose errors
   if (err.name === 'ValidationError') {
-    const errors = Object.values(err.errors).map(e => e.message);
+    const errors = Object.values(err.errors).map((e) => e.message);
     error = new AppError(errors.join(', '), 400);
     error.type = 'ValidationError';
   }
@@ -57,7 +57,7 @@ export const errorHandler = (err, req, res, next) => {
       message: error.message,
       type: error.type,
       statusCode: error.statusCode,
-      stack: error.stack
+      stack: error.stack,
     },
     request: {
       method: req.method,
@@ -67,12 +67,12 @@ export const errorHandler = (err, req, res, next) => {
       body: req.body,
       headers: {
         ...req.headers,
-        authorization: req.headers.authorization ? '[REDACTED]' : undefined
+        authorization: req.headers.authorization ? '[REDACTED]' : undefined,
       },
       ip: req.ip,
-      userAgent: req.get('user-agent')
+      userAgent: req.get('user-agent'),
     },
-    user: req.user ? { uid: req.user.uid, email: req.user.email } : null
+    user: req.user ? { uid: req.user.uid, email: req.user.email } : null,
   };
 
   if (error.isOperational) {

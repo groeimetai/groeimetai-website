@@ -8,20 +8,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  Lock, 
-  Mail, 
-  ArrowRight, 
-  Shield, 
+import {
+  Lock,
+  Mail,
+  ArrowRight,
+  Shield,
   Sparkles,
   MessageSquare,
   TrendingUp,
   Loader2,
   AlertCircle,
-  Smartphone
+  Smartphone,
 } from 'lucide-react';
 import { twoFactorService } from '@/services/twoFactorService';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { useTranslations } from 'next-intl';
 
 export default function LoginPage() {
@@ -43,7 +50,7 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
+
     try {
       await login(formData.email, formData.password);
       // Redirect to dashboard
@@ -75,18 +82,18 @@ export default function LoginPage() {
 
   const handle2FAVerification = async () => {
     if (!mfaResolver || !verificationCode) return;
-    
+
     setVerifying2FA(true);
     setError('');
-    
+
     try {
       const userCredential = await twoFactorService.verifyTotpCode(mfaResolver, verificationCode);
-      
+
       // Successfully authenticated with 2FA
       setShow2FADialog(false);
       setVerificationCode('');
       setMfaResolver(null);
-      
+
       // Redirect to dashboard
       router.push('/dashboard');
     } catch (error: any) {
@@ -102,23 +109,23 @@ export default function LoginPage() {
     {
       icon: Shield,
       title: t('benefits.secure.title'),
-      description: t('benefits.secure.description')
+      description: t('benefits.secure.description'),
     },
     {
       icon: MessageSquare,
       title: t('benefits.updates.title'),
-      description: t('benefits.updates.description')
+      description: t('benefits.updates.description'),
     },
     {
       icon: TrendingUp,
       title: t('benefits.tracking.title'),
-      description: t('benefits.tracking.description')
+      description: t('benefits.tracking.description'),
     },
     {
       icon: Sparkles,
       title: t('benefits.insights.title'),
-      description: t('benefits.insights.description')
-    }
+      description: t('benefits.insights.description'),
+    },
   ];
 
   return (
@@ -132,7 +139,10 @@ export default function LoginPage() {
             transition={{ duration: 0.6 }}
           >
             <div className="mb-8">
-              <Link href="/" className="inline-flex items-center text-white/60 hover:text-orange mb-6 transition-colors">
+              <Link
+                href="/"
+                className="inline-flex items-center text-white/60 hover:text-orange mb-6 transition-colors"
+              >
                 <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
                 {t('backToHome')}
               </Link>
@@ -147,9 +157,11 @@ export default function LoginPage() {
                   <p className="text-sm text-red-500">{error}</p>
                 </div>
               )}
-              
+
               <div>
-                <Label htmlFor="email" className="text-white">{t('emailLabel')}</Label>
+                <Label htmlFor="email" className="text-white">
+                  {t('emailLabel')}
+                </Label>
                 <div className="relative mt-1">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
                   <Input
@@ -166,8 +178,13 @@ export default function LoginPage() {
 
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <Label htmlFor="password" className="text-white">{t('passwordLabel')}</Label>
-                  <Link href="/forgot-password" className="text-sm text-orange hover:text-orange/80 transition-colors">
+                  <Label htmlFor="password" className="text-white">
+                    {t('passwordLabel')}
+                  </Label>
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-orange hover:text-orange/80 transition-colors"
+                  >
                     {t('forgotPassword')}
                   </Link>
                 </div>
@@ -207,7 +224,10 @@ export default function LoginPage() {
             <div className="mt-8 text-center">
               <p className="text-white/60">
                 {t('noAccount')}{' '}
-                <Link href="/#quote" className="text-orange hover:text-orange/80 transition-colors font-medium">
+                <Link
+                  href="/#quote"
+                  className="text-orange hover:text-orange/80 transition-colors font-medium"
+                >
                   {t('getStarted')}
                 </Link>
               </p>
@@ -244,15 +264,13 @@ export default function LoginPage() {
               </div>
 
               <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
-                <p className="text-sm text-white">
-                  {t('trustMessage', { count: 500 })}
-                </p>
+                <p className="text-sm text-white">{t('trustMessage', { count: 500 })}</p>
               </div>
             </div>
           </motion.div>
         </div>
       </div>
-      
+
       {/* 2FA Verification Dialog */}
       <Dialog open={show2FADialog} onOpenChange={setShow2FADialog}>
         <DialogContent className="bg-black border-white/10 text-white max-w-md">
@@ -262,12 +280,12 @@ export default function LoginPage() {
               {t('twoFactor.description')}
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="space-y-4 py-4">
             <div className="flex justify-center">
               <Smartphone className="w-16 h-16 text-orange" />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="2fa-code" className="text-white">
                 {t('twoFactor.codeLabel')}
@@ -283,7 +301,7 @@ export default function LoginPage() {
                 autoFocus
               />
             </div>
-            
+
             {error && (
               <div className="flex items-center space-x-2 text-red-500 text-sm">
                 <AlertCircle className="w-4 h-4" />
@@ -291,7 +309,7 @@ export default function LoginPage() {
               </div>
             )}
           </div>
-          
+
           <DialogFooter>
             <Button
               variant="ghost"

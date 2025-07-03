@@ -16,21 +16,21 @@ const io = new SocketIOServer(server, {
         'http://localhost:3000',
         'http://localhost:3001',
         'https://groeimetai.com',
-        'https://www.groeimetai.com'
+        'https://www.groeimetai.com',
       ];
-      
+
       if (!origin) return callback(null, true);
-      
+
       if (allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));
       }
     },
-    credentials: true
+    credentials: true,
   },
   path: process.env.WEBSOCKET_PATH || '/socket.io',
-  transports: ['websocket', 'polling']
+  transports: ['websocket', 'polling'],
 });
 
 // Initialize WebSocket handlers
@@ -64,23 +64,23 @@ process.on('unhandledRejection', (reason, promise) => {
 // Graceful shutdown
 const gracefulShutdown = async (signal) => {
   logger.info(`${signal} received. Starting graceful shutdown...`);
-  
+
   // Stop accepting new connections
   server.close(() => {
     logger.info('HTTP server closed');
   });
-  
+
   // Close WebSocket connections
   io.close(() => {
     logger.info('WebSocket server closed');
   });
-  
+
   // Give ongoing requests 30 seconds to complete
   setTimeout(() => {
     logger.error('Could not close connections in time, forcefully shutting down');
     process.exit(1);
   }, 30000);
-  
+
   // Close database connections, etc.
   try {
     // Add cleanup logic here
@@ -99,7 +99,9 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 // Start server
 server.listen(PORT, HOST, () => {
   logger.info(`Server running on http://${HOST}:${PORT}`);
-  logger.info(`WebSocket server running on ws://${HOST}:${PORT}${process.env.WEBSOCKET_PATH || '/socket.io'}`);
+  logger.info(
+    `WebSocket server running on ws://${HOST}:${PORT}${process.env.WEBSOCKET_PATH || '/socket.io'}`
+  );
   logger.info(`Environment: ${process.env.NODE_ENV}`);
   logger.info(`API Documentation: http://${HOST}:${PORT}/api/v1/docs`);
 });

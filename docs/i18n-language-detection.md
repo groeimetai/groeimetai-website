@@ -43,6 +43,7 @@ The language detection logic is implemented in `src/middleware-intl.ts`:
 ### Language Switcher
 
 The language switcher component (`LanguageSwitcher.tsx`):
+
 - Updates the cookie preference
 - Redirects to the new locale path
 - Shows a loading state during transition
@@ -70,7 +71,7 @@ export async function generateMetadata({ params }) {
     locale: params.locale,
     pathname: `/services`,
     title: 'Our Services',
-    description: 'AI consultancy services'
+    description: 'AI consultancy services',
   });
 }
 ```
@@ -97,6 +98,7 @@ export async function generateMetadata({ params }) {
 ### Automated Tests
 
 Run the test suite:
+
 ```bash
 npm test src/__tests__/middleware-intl.test.ts
 ```
@@ -112,11 +114,13 @@ npm test src/__tests__/middleware-intl.test.ts
 ### Debug Mode
 
 Enable debug logging by setting:
+
 ```typescript
 const DEBUG = process.env.NODE_ENV === 'development';
 ```
 
 This will log:
+
 - Detected locale and reason
 - Cookie operations
 - Redirect decisions

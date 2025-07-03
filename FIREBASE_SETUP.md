@@ -3,21 +3,27 @@
 ## Deploy Security Rules
 
 ### Prerequisites
+
 1. Install Firebase CLI:
+
 ```bash
 npm install -g firebase-tools
 ```
 
 2. Login to Firebase:
+
 ```bash
 firebase login
 ```
 
 3. Initialize Firebase in your project (if not already done):
+
 ```bash
 firebase init
 ```
+
 Select:
+
 - Firestore
 - Storage
 - Your project: groeimetai-458417
@@ -44,7 +50,7 @@ Select:
 # Deploy only Firestore rules
 firebase deploy --only firestore:rules
 
-# Deploy only Storage rules  
+# Deploy only Storage rules
 firebase deploy --only storage:rules
 
 # Deploy both
@@ -97,16 +103,19 @@ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
 ## Troubleshooting
 
 ### "Missing or insufficient permissions" error
+
 - Make sure rules are published
 - Check browser console for specific collection causing the error
 - Verify the rules syntax in Firebase Console
 
 ### Authentication not working
+
 - Check if Email/Password auth is enabled
 - Verify API keys in .env file
 - Check browser console for specific error messages
 
 ### User profile not creating
+
 - Ensure Firestore rules allow user document creation
 - Check if all required fields are being sent
 - Look for errors in browser console

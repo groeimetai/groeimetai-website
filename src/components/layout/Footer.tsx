@@ -6,17 +6,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Linkedin, 
-  Twitter, 
-  Github,
-  ArrowRight,
-  Heart
-} from 'lucide-react';
-
+import { Mail, Phone, MapPin, Linkedin, Twitter, Github, ArrowRight, Heart } from 'lucide-react';
 
 const socialLinks = [
   { icon: Linkedin, href: 'https://linkedin.com/company/groeimetai', label: 'LinkedIn' },
@@ -66,19 +56,13 @@ export default function Footer() {
               />
               <span className="text-xl font-bold gradient-text">GroeimetAI</span>
             </Link>
-            <p className="text-white/70 mb-6">
-              {t('tagline')}
-            </p>
-            
+            <p className="text-white/70 mb-6">{t('tagline')}</p>
+
             {/* Newsletter */}
             <div className="mb-6">
               <h3 className="font-semibold mb-3 text-white">{t('newsletter.title')}</h3>
               <div className="flex gap-2">
-                <Input
-                  type="email"
-                  placeholder={t('newsletter.placeholder')}
-                  className="flex-1"
-                />
+                <Input type="email" placeholder={t('newsletter.placeholder')} className="flex-1" />
                 <Button size="icon" className="hover-lift">
                   <ArrowRight className="w-4 h-4" />
                 </Button>

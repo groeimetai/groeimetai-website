@@ -19,6 +19,7 @@ Deze handleiding beschrijft hoe je GroeimetAI deployed naar Google Cloud Run via
 ```
 
 Dit script zal:
+
 - Je Google Cloud project configureren
 - Benodigde APIs enablen
 - Artifact Registry aanmaken
@@ -32,10 +33,12 @@ Ga naar je GitHub repository → Settings → Secrets and variables → Actions
 Voeg de volgende secrets toe:
 
 #### Google Cloud Secrets
+
 - `GCP_PROJECT_ID`: Je Google Cloud project ID
 - `GCP_SA_KEY`: De inhoud van het `gcp-sa-key.json` bestand (hele JSON)
 
 #### Firebase Public Keys (voor frontend)
+
 - `NEXT_PUBLIC_FIREBASE_API_KEY`
 - `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
 - `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
@@ -45,6 +48,7 @@ Voeg de volgende secrets toe:
 - `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID`
 
 #### Firebase Admin Keys (voor backend)
+
 - `FIREBASE_PROJECT_ID`
 - `FIREBASE_CLIENT_EMAIL`
 - `FIREBASE_PRIVATE_KEY` (let op: quotes behouden!)
@@ -52,6 +56,7 @@ Voeg de volgende secrets toe:
 - `FIREBASE_STORAGE_BUCKET`
 
 #### Optionele Secrets
+
 - `NEXT_PUBLIC_GEMINI_API_KEY`
 - `SENTRY_DSN`
 - `NEXT_PUBLIC_API_BASE_URL`
@@ -94,6 +99,7 @@ git push origin main
 ```
 
 GitHub Actions zal automatisch:
+
 1. Docker image builden
 2. Image pushen naar Artifact Registry
 3. Deployen naar Cloud Run
@@ -123,10 +129,12 @@ In `.github/workflows/deploy-cloud-run.yml`:
 ### Regio Veranderen
 
 Update de `REGION` variabele in:
+
 - `.github/workflows/deploy-cloud-run.yml`
 - `scripts/setup-gcp.sh`
 
 Beschikbare regio's voor Europa:
+
 - `europe-west1` (België)
 - `europe-west4` (Nederland)
 - `europe-north1` (Finland)
@@ -162,6 +170,7 @@ gcloud run services update groeimetai-app \
 ## 📊 Monitoring
 
 ### Cloud Run Metrics
+
 - Ga naar Cloud Run console
 - Bekijk Metrics tab voor:
   - Request count
@@ -232,6 +241,7 @@ gcloud run services logs read groeimetai-app \
 ## 🆘 Support
 
 Voor vragen of problemen:
+
 1. Check de [Cloud Run documentation](https://cloud.google.com/run/docs)
 2. Bekijk GitHub Actions logs
 3. Contact: support@groeimetai.io

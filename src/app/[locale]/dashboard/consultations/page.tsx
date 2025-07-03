@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
-import { 
+import {
   Calendar,
   Clock,
   Video,
@@ -19,7 +19,7 @@ import {
   Coffee,
   Loader2,
   Edit2,
-  X
+  X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -29,17 +29,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import Link from 'next/link';
 import { db, serverTimestamp } from '@/lib/firebase/config';
-import { 
-  collection, 
-  addDoc, 
-  query, 
-  where, 
-  orderBy, 
-  onSnapshot, 
-  doc, 
-  updateDoc, 
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+  doc,
+  updateDoc,
   Timestamp,
-  getDocs
+  getDocs,
 } from 'firebase/firestore';
 import { format, parseISO, isFuture, isPast, isToday, addMinutes } from 'date-fns';
 import { toast } from 'react-hot-toast';
@@ -85,7 +85,7 @@ export default function ConsultationsPage() {
   const [showScheduleForm, setShowScheduleForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [rescheduleMode, setRescheduleMode] = useState<string | null>(null);
-  
+
   // Form states
   const [formData, setFormData] = useState({
     title: '',
@@ -96,9 +96,9 @@ export default function ConsultationsPage() {
     duration: '60',
     platform: 'video' as MeetingPlatform,
     meetingLink: '',
-    address: ''
+    address: '',
   });
-  
+
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   // Fetch meetings from Firestore
@@ -124,7 +124,7 @@ export default function ConsultationsPage() {
         snapshot.forEach((doc) => {
           meetingsData.push({
             id: doc.id,
-            ...doc.data()
+            ...doc.data(),
           } as FirestoreMeeting);
         });
         setMeetings(meetingsData);
@@ -153,12 +153,12 @@ export default function ConsultationsPage() {
 
   // Filter meetings
   const now = new Date();
-  const upcomingMeetings = meetings.filter(m => {
+  const upcomingMeetings = meetings.filter((m) => {
     const startTime = m.startTime.toDate();
     return m.status === 'scheduled' && isFuture(startTime);
   });
-  
-  const pastMeetings = meetings.filter(m => {
+
+  const pastMeetings = meetings.filter((m) => {
     const startTime = m.startTime.toDate();
     return m.status === 'completed' || (m.status === 'scheduled' && isPast(startTime));
   });
@@ -166,11 +166,11 @@ export default function ConsultationsPage() {
   // Form validation
   const validateForm = () => {
     const errors: Record<string, string> = {};
-    
+
     if (!formData.title.trim()) {
       errors.title = 'Title is required';
     }
-    
+
     if (!formData.date) {
       errors.date = 'Date is required';
     } else {
@@ -179,7 +179,7 @@ export default function ConsultationsPage() {
         errors.date = 'Please select a future date';
       }
     }
-    
+
     if (!formData.time) {
       errors.time = 'Time is required';
     } else if (formData.date) {
@@ -188,15 +188,20 @@ export default function ConsultationsPage() {
         errors.time = 'Please select a future time';
       }
     }
-    
+
     if (formData.platform === 'in_person' && !formData.address.trim()) {
       errors.address = 'Address is required for in-person meetings';
     }
-    
-    if ((formData.platform === 'zoom' || formData.platform === 'teams' || formData.platform === 'meet') && !formData.meetingLink.trim()) {
+
+    if (
+      (formData.platform === 'zoom' ||
+        formData.platform === 'teams' ||
+        formData.platform === 'meet') &&
+      !formData.meetingLink.trim()
+    ) {
       errors.meetingLink = 'Meeting link is required for virtual meetings';
     }
-    
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -204,12 +209,12 @@ export default function ConsultationsPage() {
   // Create meeting
   const handleCreateMeeting = async () => {
     if (!validateForm()) return;
-    
+
     setSubmitting(true);
     try {
       const startTime = parseISO(`${formData.date}T${formData.time}`);
       const endTime = addMinutes(startTime, parseInt(formData.duration));
-      
+
       const meetingData: Omit<FirestoreMeeting, 'id'> = {
         userId: user.uid,
         title: formData.title,
@@ -223,26 +228,28 @@ export default function ConsultationsPage() {
           type: formData.platform === 'in_person' ? 'physical' : 'virtual',
           platform: formData.platform,
           link: formData.meetingLink || undefined,
-          address: formData.address || undefined
+          address: formData.address || undefined,
         },
         participantIds: [user.uid],
-        participants: [{
-          userId: user.uid,
-          name: user.displayName || user.email || 'Unknown',
-          email: user.email || '',
-          role: 'organizer'
-        }],
+        participants: [
+          {
+            userId: user.uid,
+            name: user.displayName || user.email || 'Unknown',
+            email: user.email || '',
+            role: 'organizer',
+          },
+        ],
         createdAt: serverTimestamp() as Timestamp,
         updatedAt: serverTimestamp() as Timestamp,
         createdBy: user.uid,
-        meetingLink: formData.meetingLink || undefined
+        meetingLink: formData.meetingLink || undefined,
       };
-      
+
       await addDoc(collection(db, 'meetings'), meetingData);
-      
+
       toast.success('Meeting scheduled successfully!');
       setShowScheduleForm(false);
-      
+
       // Reset form
       setFormData({
         title: '',
@@ -253,7 +260,7 @@ export default function ConsultationsPage() {
         duration: '60',
         platform: 'video',
         meetingLink: '',
-        address: ''
+        address: '',
       });
       setFormErrors({});
     } catch (error) {
@@ -267,19 +274,19 @@ export default function ConsultationsPage() {
   // Reschedule meeting
   const handleRescheduleMeeting = async (meetingId: string) => {
     if (!validateForm()) return;
-    
+
     setSubmitting(true);
     try {
       const startTime = parseISO(`${formData.date}T${formData.time}`);
       const endTime = addMinutes(startTime, parseInt(formData.duration));
-      
+
       await updateDoc(doc(db, 'meetings', meetingId), {
         startTime: Timestamp.fromDate(startTime),
         endTime: Timestamp.fromDate(endTime),
         status: 'rescheduled',
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       });
-      
+
       toast.success('Meeting rescheduled successfully!');
       setRescheduleMode(null);
       setFormData({
@@ -291,7 +298,7 @@ export default function ConsultationsPage() {
         duration: '60',
         platform: 'video',
         meetingLink: '',
-        address: ''
+        address: '',
       });
       setFormErrors({});
     } catch (error) {
@@ -304,10 +311,14 @@ export default function ConsultationsPage() {
 
   const getStatusIcon = (status: MeetingStatus) => {
     switch (status) {
-      case 'scheduled': return <Clock className="w-4 h-4" />;
-      case 'completed': return <CheckCircle className="w-4 h-4" />;
-      case 'cancelled': return <AlertCircle className="w-4 h-4" />;
-      case 'rescheduled': return <Calendar className="w-4 h-4" />;
+      case 'scheduled':
+        return <Clock className="w-4 h-4" />;
+      case 'completed':
+        return <CheckCircle className="w-4 h-4" />;
+      case 'cancelled':
+        return <AlertCircle className="w-4 h-4" />;
+      case 'rescheduled':
+        return <Calendar className="w-4 h-4" />;
     }
   };
 
@@ -328,21 +339,32 @@ export default function ConsultationsPage() {
   // Generate available time slots (only future times)
   const getAvailableTimeSlots = () => {
     const slots = [
-      '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-      '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00'
+      '09:00',
+      '09:30',
+      '10:00',
+      '10:30',
+      '11:00',
+      '11:30',
+      '14:00',
+      '14:30',
+      '15:00',
+      '15:30',
+      '16:00',
+      '16:30',
+      '17:00',
     ];
-    
+
     if (!formData.date) return slots;
-    
+
     const selectedDate = parseISO(formData.date);
     if (!isToday(selectedDate)) return slots;
-    
+
     // Filter out past times for today
     const now = new Date();
     const currentHours = now.getHours();
     const currentMinutes = now.getMinutes();
-    
-    return slots.filter(slot => {
+
+    return slots.filter((slot) => {
       const [hours, minutes] = slot.split(':').map(Number);
       return hours > currentHours || (hours === currentHours && minutes > currentMinutes);
     });
@@ -361,7 +383,7 @@ export default function ConsultationsPage() {
       duration: meeting.duration.toString(),
       platform: meeting.location.platform || 'video',
       meetingLink: meeting.meetingLink || '',
-      address: meeting.location.address || ''
+      address: meeting.location.address || '',
     });
     setShowScheduleForm(true);
   };
@@ -371,18 +393,21 @@ export default function ConsultationsPage() {
       <div className="container mx-auto px-4 py-8 mt-20">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/dashboard" className="inline-flex items-center text-white/60 hover:text-white mb-4">
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center text-white/60 hover:text-white mb-4"
+          >
             <ChevronLeft className="w-4 h-4 mr-1" />
             Back to Dashboard
           </Link>
-          
+
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold text-white">Consultations & Meetings</h1>
               <p className="text-white/60 mt-2">Schedule and manage your meetings with our team</p>
             </div>
-            
-            <Button 
+
+            <Button
               className="bg-orange hover:bg-orange/90"
               onClick={() => setShowScheduleForm(!showScheduleForm)}
             >
@@ -415,14 +440,16 @@ export default function ConsultationsPage() {
                 <X className="h-4 w-4" />
               </Button>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="md:col-span-2">
-                <Label htmlFor="title" className="text-white">Meeting Title *</Label>
+                <Label htmlFor="title" className="text-white">
+                  Meeting Title *
+                </Label>
                 <Input
                   id="title"
                   value={formData.title}
-                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
                   placeholder="e.g., Project Kickoff Meeting"
                   className={`mt-2 bg-white/5 border-white/20 text-white placeholder:text-white/40 ${
                     formErrors.title ? 'border-red-500' : ''
@@ -436,71 +463,95 @@ export default function ConsultationsPage() {
 
               <div>
                 <Label className="text-white">Meeting Type</Label>
-                <RadioGroup 
-                  value={formData.type} 
-                  onValueChange={(value) => setFormData(prev => ({ ...prev, type: value as MeetingType }))} 
+                <RadioGroup
+                  value={formData.type}
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, type: value as MeetingType }))
+                  }
                   className="mt-3"
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="consultation" id="consultation" />
-                    <Label htmlFor="consultation" className="text-white/80 cursor-pointer">Initial Consultation</Label>
+                    <Label htmlFor="consultation" className="text-white/80 cursor-pointer">
+                      Initial Consultation
+                    </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="project-update" id="project-update" />
-                    <Label htmlFor="project-update" className="text-white/80 cursor-pointer">Project Update</Label>
+                    <Label htmlFor="project-update" className="text-white/80 cursor-pointer">
+                      Project Update
+                    </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="technical-review" id="technical-review" />
-                    <Label htmlFor="technical-review" className="text-white/80 cursor-pointer">Technical Review</Label>
+                    <Label htmlFor="technical-review" className="text-white/80 cursor-pointer">
+                      Technical Review
+                    </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="training" id="training" />
-                    <Label htmlFor="training" className="text-white/80 cursor-pointer">Training Session</Label>
+                    <Label htmlFor="training" className="text-white/80 cursor-pointer">
+                      Training Session
+                    </Label>
                   </div>
                 </RadioGroup>
               </div>
 
               <div>
                 <Label className="text-white">Meeting Platform</Label>
-                <RadioGroup 
-                  value={formData.platform} 
-                  onValueChange={(value) => setFormData(prev => ({ ...prev, platform: value as MeetingPlatform }))} 
+                <RadioGroup
+                  value={formData.platform}
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, platform: value as MeetingPlatform }))
+                  }
                   className="mt-3"
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="zoom" id="zoom" />
-                    <Label htmlFor="zoom" className="text-white/80 cursor-pointer">Zoom</Label>
+                    <Label htmlFor="zoom" className="text-white/80 cursor-pointer">
+                      Zoom
+                    </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="teams" id="teams" />
-                    <Label htmlFor="teams" className="text-white/80 cursor-pointer">Microsoft Teams</Label>
+                    <Label htmlFor="teams" className="text-white/80 cursor-pointer">
+                      Microsoft Teams
+                    </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="meet" id="meet" />
-                    <Label htmlFor="meet" className="text-white/80 cursor-pointer">Google Meet</Label>
+                    <Label htmlFor="meet" className="text-white/80 cursor-pointer">
+                      Google Meet
+                    </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="phone" id="phone" />
-                    <Label htmlFor="phone" className="text-white/80 cursor-pointer">Phone Call</Label>
+                    <Label htmlFor="phone" className="text-white/80 cursor-pointer">
+                      Phone Call
+                    </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="in_person" id="in_person" />
-                    <Label htmlFor="in_person" className="text-white/80 cursor-pointer">In-Person</Label>
+                    <Label htmlFor="in_person" className="text-white/80 cursor-pointer">
+                      In-Person
+                    </Label>
                   </div>
                 </RadioGroup>
               </div>
 
               <div>
-                <Label htmlFor="date" className="text-white">Date *</Label>
+                <Label htmlFor="date" className="text-white">
+                  Date *
+                </Label>
                 <Input
                   id="date"
                   type="date"
                   value={formData.date}
                   onChange={(e) => {
-                    setFormData(prev => ({ ...prev, date: e.target.value }));
+                    setFormData((prev) => ({ ...prev, date: e.target.value }));
                     // Clear time if date changes to ensure valid time selection
                     if (e.target.value !== formData.date) {
-                      setFormData(prev => ({ ...prev, time: '' }));
+                      setFormData((prev) => ({ ...prev, time: '' }));
                     }
                   }}
                   min={new Date().toISOString().split('T')[0]}
@@ -508,40 +559,40 @@ export default function ConsultationsPage() {
                     formErrors.date ? 'border-red-500' : ''
                   }`}
                 />
-                {formErrors.date && (
-                  <p className="text-red-400 text-sm mt-1">{formErrors.date}</p>
-                )}
+                {formErrors.date && <p className="text-red-400 text-sm mt-1">{formErrors.date}</p>}
               </div>
 
               <div>
                 <Label className="text-white">Time *</Label>
                 <select
                   value={formData.time}
-                  onChange={(e) => setFormData(prev => ({ ...prev, time: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, time: e.target.value }))}
                   className={`mt-2 w-full px-3 py-2 bg-white/5 border border-white/20 rounded-md text-white ${
                     formErrors.time ? 'border-red-500' : 'border-white/20'
                   }`}
                   disabled={!formData.date}
                 >
                   <option value="">Select a time</option>
-                  {getAvailableTimeSlots().map(slot => (
-                    <option key={slot} value={slot}>{slot}</option>
+                  {getAvailableTimeSlots().map((slot) => (
+                    <option key={slot} value={slot}>
+                      {slot}
+                    </option>
                   ))}
                 </select>
-                {formErrors.time && (
-                  <p className="text-red-400 text-sm mt-1">{formErrors.time}</p>
-                )}
+                {formErrors.time && <p className="text-red-400 text-sm mt-1">{formErrors.time}</p>}
                 {!formData.date && (
                   <p className="text-white/40 text-sm mt-1">Please select a date first</p>
                 )}
               </div>
 
               <div>
-                <Label htmlFor="duration" className="text-white">Duration (minutes)</Label>
+                <Label htmlFor="duration" className="text-white">
+                  Duration (minutes)
+                </Label>
                 <select
                   id="duration"
                   value={formData.duration}
-                  onChange={(e) => setFormData(prev => ({ ...prev, duration: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, duration: e.target.value }))}
                   className="mt-2 w-full px-3 py-2 bg-white/5 border border-white/20 rounded-md text-white"
                 >
                   <option value="30">30 minutes</option>
@@ -551,13 +602,19 @@ export default function ConsultationsPage() {
                 </select>
               </div>
 
-              {(formData.platform === 'zoom' || formData.platform === 'teams' || formData.platform === 'meet') && (
+              {(formData.platform === 'zoom' ||
+                formData.platform === 'teams' ||
+                formData.platform === 'meet') && (
                 <div className="md:col-span-2">
-                  <Label htmlFor="meetingLink" className="text-white">Meeting Link *</Label>
+                  <Label htmlFor="meetingLink" className="text-white">
+                    Meeting Link *
+                  </Label>
                   <Input
                     id="meetingLink"
                     value={formData.meetingLink}
-                    onChange={(e) => setFormData(prev => ({ ...prev, meetingLink: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, meetingLink: e.target.value }))
+                    }
                     placeholder="https://zoom.us/j/..."
                     className={`mt-2 bg-white/5 border-white/20 text-white placeholder:text-white/40 ${
                       formErrors.meetingLink ? 'border-red-500' : ''
@@ -571,11 +628,13 @@ export default function ConsultationsPage() {
 
               {formData.platform === 'in_person' && (
                 <div className="md:col-span-2">
-                  <Label htmlFor="address" className="text-white">Meeting Address *</Label>
+                  <Label htmlFor="address" className="text-white">
+                    Meeting Address *
+                  </Label>
                   <Input
                     id="address"
                     value={formData.address}
-                    onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, address: e.target.value }))}
                     placeholder="123 Main St, Amsterdam"
                     className={`mt-2 bg-white/5 border-white/20 text-white placeholder:text-white/40 ${
                       formErrors.address ? 'border-red-500' : ''
@@ -588,11 +647,15 @@ export default function ConsultationsPage() {
               )}
 
               <div className="md:col-span-2">
-                <Label htmlFor="description" className="text-white">Meeting Agenda / Description</Label>
+                <Label htmlFor="description" className="text-white">
+                  Meeting Agenda / Description
+                </Label>
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, description: e.target.value }))
+                  }
                   placeholder="Please describe what you'd like to discuss..."
                   className="mt-2 bg-white/5 border-white/20 text-white placeholder:text-white/40"
                   rows={4}
@@ -613,7 +676,7 @@ export default function ConsultationsPage() {
               >
                 Cancel
               </Button>
-              <Button 
+              <Button
                 className="bg-orange hover:bg-orange/90"
                 onClick={() => {
                   if (rescheduleMode) {
@@ -629,8 +692,10 @@ export default function ConsultationsPage() {
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     {rescheduleMode ? 'Rescheduling...' : 'Scheduling...'}
                   </>
+                ) : rescheduleMode ? (
+                  'Reschedule Meeting'
                 ) : (
-                  rescheduleMode ? 'Reschedule Meeting' : 'Schedule Meeting'
+                  'Schedule Meeting'
                 )}
               </Button>
             </div>
@@ -640,7 +705,7 @@ export default function ConsultationsPage() {
         {/* Upcoming Meetings */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-white mb-4">Upcoming Meetings</h2>
-          
+
           {loadingMeetings ? (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="h-8 w-8 animate-spin text-orange" />
@@ -679,12 +744,15 @@ export default function ConsultationsPage() {
                     <div className="flex items-center text-white/80">
                       {getPlatformIcon(meeting.location.platform)}
                       <span className="ml-2 capitalize">
-                        {meeting.location.platform === 'in_person' ? 'In-Person' : meeting.location.platform} Meeting
+                        {meeting.location.platform === 'in_person'
+                          ? 'In-Person'
+                          : meeting.location.platform}{' '}
+                        Meeting
                       </span>
                     </div>
                     <div className="flex items-center text-white/80">
                       <User className="w-4 h-4 mr-2 text-white/60" />
-                      {meeting.participants.map(p => p.name).join(', ')}
+                      {meeting.participants.map((p) => p.name).join(', ')}
                     </div>
                     {meeting.description && (
                       <p className="text-white/60 text-sm pt-2">{meeting.description}</p>
@@ -692,9 +760,9 @@ export default function ConsultationsPage() {
                   </div>
 
                   <div className="mt-4 pt-4 border-t border-white/10 flex gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="flex-1"
                       onClick={() => startReschedule(meeting)}
                     >
@@ -702,8 +770,8 @@ export default function ConsultationsPage() {
                       Reschedule
                     </Button>
                     {meeting.meetingLink && (
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         className="flex-1 bg-orange hover:bg-orange/90"
                         onClick={() => window.open(meeting.meetingLink, '_blank')}
                       >
@@ -736,7 +804,7 @@ export default function ConsultationsPage() {
         {/* Past Meetings */}
         <div>
           <h2 className="text-xl font-semibold text-white mb-4">Past Meetings</h2>
-          
+
           {loadingMeetings ? (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="h-8 w-8 animate-spin text-orange" />
@@ -757,10 +825,14 @@ export default function ConsultationsPage() {
                     <div>
                       <h4 className="text-white font-medium">{meeting.title}</h4>
                       <p className="text-sm text-white/60">
-                        {format(meeting.startTime.toDate(), 'MMM d, yyyy')} at {format(meeting.startTime.toDate(), 'h:mm a')}
+                        {format(meeting.startTime.toDate(), 'MMM d, yyyy')} at{' '}
+                        {format(meeting.startTime.toDate(), 'h:mm a')}
                       </p>
                       {meeting.status === 'completed' && (
-                        <Badge variant="outline" className="text-green-400 border-green-400/50 mt-1">
+                        <Badge
+                          variant="outline"
+                          className="text-green-400 border-green-400/50 mt-1"
+                        >
                           <CheckCircle className="w-3 h-3 mr-1" />
                           Completed
                         </Badge>
@@ -769,7 +841,11 @@ export default function ConsultationsPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     {meeting.notes && (
-                      <Button variant="ghost" size="sm" className="text-orange hover:text-orange/80">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-orange hover:text-orange/80"
+                      >
                         View Notes
                       </Button>
                     )}
@@ -788,7 +864,7 @@ export default function ConsultationsPage() {
                           duration: meeting.duration.toString(),
                           platform: meeting.location.platform || 'video',
                           meetingLink: '',
-                          address: ''
+                          address: '',
                         });
                         setShowScheduleForm(true);
                       }}

@@ -1,4 +1,4 @@
-import { defineConfig } from 'cypress'
+import { defineConfig } from 'cypress';
 
 export default defineConfig({
   e2e: {
@@ -16,18 +16,18 @@ export default defineConfig({
       // implement node event listeners here
       on('task', {
         log(message) {
-          console.log(message)
-          return null
+          console.log(message);
+          return null;
         },
-      })
+      });
 
       // Load environment variables
       config.env = {
         ...config.env,
         ...process.env,
-      }
+      };
 
-      return config
+      return config;
     },
   },
   component: {
@@ -45,4 +45,4 @@ export default defineConfig({
     runMode: 2,
     openMode: 0,
   },
-})
+});

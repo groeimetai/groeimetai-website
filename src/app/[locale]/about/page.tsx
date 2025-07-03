@@ -74,13 +74,13 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-orange/5 to-green/5" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white px-8 py-4 inline-block relative" 
-                style={{background: 'linear-gradient(135deg, #FF6600, #FF8833)'}}>
+            <h1
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white px-8 py-4 inline-block relative"
+              style={{ background: 'linear-gradient(135deg, #FF6600, #FF8833)' }}
+            >
               {t('hero.title')}
             </h1>
-            <p className="text-xl text-white/80 mb-8">
-              {t('hero.description')}
-            </p>
+            <p className="text-xl text-white/80 mb-8">{t('hero.description')}</p>
           </div>
         </div>
       </section>
@@ -91,8 +91,10 @@ export default function AboutPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="inline-flex flex-col items-center p-6 hover:scale-105 transition-transform" 
-                     style={{background: 'linear-gradient(135deg, #FF6600, #FF8833)'}}>
+                <div
+                  className="inline-flex flex-col items-center p-6 hover:scale-105 transition-transform"
+                  style={{ background: 'linear-gradient(135deg, #FF6600, #FF8833)' }}
+                >
                   <div className="text-4xl font-bold text-white mb-2">{stat.value}</div>
                   <div className="text-white/90 text-sm">{stat.label}</div>
                 </div>
@@ -112,18 +114,14 @@ export default function AboutPage() {
                   <Target className="w-6 h-6 text-primary" />
                   {t('mission.title')}
                 </h2>
-                <p className="text-white/70">
-                  {t('mission.description')}
-                </p>
+                <p className="text-white/70">{t('mission.description')}</p>
               </Card>
               <Card className="p-8 hover-lift">
                 <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
                   <Globe className="w-6 h-6 text-primary" />
                   {t('vision.title')}
                 </h2>
-                <p className="text-white/70">
-                  {t('vision.description')}
-                </p>
+                <p className="text-white/70">{t('vision.description')}</p>
               </Card>
             </div>
           </div>
@@ -160,9 +158,7 @@ export default function AboutPage() {
       <section className="py-20 bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-              {t('team.title')}
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">{t('team.title')}</h2>
             <p className="text-xl text-white/70 text-center mb-12 max-w-3xl mx-auto">
               {t('team.subtitle')}
             </p>
@@ -185,12 +181,8 @@ export default function AboutPage() {
       <section className="py-20 bg-gray-50 dark:bg-gray-900/50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              {t('partners.title')}
-            </h2>
-            <p className="text-xl text-white/70 mb-12">
-              {t('partners.subtitle')}
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('partners.title')}</h2>
+            <p className="text-xl text-white/70 mb-12">{t('partners.subtitle')}</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
               <div className="h-16 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
               <div className="h-16 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
@@ -205,12 +197,8 @@ export default function AboutPage() {
       <section className="py-20 bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              {t('cta.title')}
-            </h2>
-            <p className="text-xl text-white/70 mb-8">
-              {t('cta.subtitle')}
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('cta.title')}</h2>
+            <p className="text-xl text-white/70 mb-8">{t('cta.subtitle')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact">
                 <Button size="lg" className="shadow-premium hover-lift">

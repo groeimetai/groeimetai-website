@@ -14,7 +14,7 @@ import {
   updateProfile,
   sendEmailVerification,
   getMultiFactorResolver,
-  MultiFactorError
+  MultiFactorError,
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase/config';
@@ -79,7 +79,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const userSnap = await getDoc(userRef);
 
     const now = new Date();
-    
+
     if (!userSnap.exists()) {
       // Create new user document
       // Prepare user data, removing undefined values
@@ -105,9 +105,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             email: true,
             push: true,
             sms: false,
-            inApp: true
+            inApp: true,
           },
-          theme: 'system'
+          theme: 'system',
         },
         createdAt: now,
         updatedAt: now,
@@ -117,11 +117,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           projectsCount: 0,
           consultationsCount: 0,
           messagesCount: 0,
-          totalSpent: 0
+          totalSpent: 0,
         },
-        ...additionalData
+        ...additionalData,
       };
-      
+
       // Add optional fields only if they have values
       if (firebaseUser.photoURL) {
         userData.photoURL = firebaseUser.photoURL;
@@ -132,9 +132,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (additionalData?.phoneNumber) {
         userData.phoneNumber = additionalData.phoneNumber;
       }
-      
+
       const newUser: User = userData;
-      
+
       await setDoc(userRef, newUser);
       return newUser;
     } else {
@@ -142,20 +142,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const updateData: any = {
         lastLoginAt: now,
         lastActivityAt: now,
-        isVerified: firebaseUser.emailVerified
+        isVerified: firebaseUser.emailVerified,
       };
-      
+
       // Add additional data, filtering out undefined values
       if (additionalData) {
-        Object.keys(additionalData).forEach(key => {
+        Object.keys(additionalData).forEach((key) => {
           if (additionalData[key as keyof typeof additionalData] !== undefined) {
             updateData[key] = additionalData[key as keyof typeof additionalData];
           }
         });
       }
-      
+
       await updateDoc(userRef, updateData);
-      
+
       return (await getDoc(userRef)).data() as User;
     }
   };
@@ -173,10 +173,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Return the resolver for the login page to handle
         const mfaError = error as MultiFactorError;
         const resolver = getMultiFactorResolver(auth, mfaError);
-        throw { 
-          code: 'auth/multi-factor-auth-required', 
+        throw {
+          code: 'auth/multi-factor-auth-required',
           resolver,
-          message: 'Multi-factor authentication required'
+          message: 'Multi-factor authentication required',
         };
       }
       setError(error.message);
@@ -189,17 +189,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setError(null);
       const credential = await createUserWithEmailAndPassword(auth, email, password);
-      
+
       // Update display name if provided
       if (userData.displayName) {
         await updateProfile(credential.user, {
-          displayName: userData.displayName
+          displayName: userData.displayName,
         });
       }
-      
+
       // Send verification email
       await sendEmailVerification(credential.user);
-      
+
       // Create user document
       const newUser = await createOrUpdateUserDoc(credential.user, userData);
       setUser(newUser);
@@ -240,11 +240,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const provider = new GoogleAuthProvider();
       provider.addScope('profile');
       provider.addScope('email');
-      
+
       const credential = await signInWithPopup(auth, provider);
       const userData = await createOrUpdateUserDoc(credential.user, {
         displayName: credential.user.displayName || undefined,
-        photoURL: credential.user.photoURL || undefined
+        photoURL: credential.user.photoURL || undefined,
       });
       setUser(userData);
     } catch (error: any) {
@@ -260,11 +260,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const provider = new OAuthProvider('linkedin.com');
       provider.addScope('r_liteprofile');
       provider.addScope('r_emailaddress');
-      
+
       const credential = await signInWithPopup(auth, provider);
       const userData = await createOrUpdateUserDoc(credential.user, {
         displayName: credential.user.displayName || undefined,
-        photoURL: credential.user.photoURL || undefined
+        photoURL: credential.user.photoURL || undefined,
       });
       setUser(userData);
     } catch (error: any) {
@@ -278,13 +278,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setError(null);
       if (!firebaseUser) throw new Error('No authenticated user');
-      
+
       const userRef = doc(db, 'users', firebaseUser.uid);
       await updateDoc(userRef, {
         ...data,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
-      
+
       // Update local state
       if (user) {
         setUser({ ...user, ...data });
@@ -324,7 +324,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setFirebaseUser(firebaseUser);
-      
+
       if (firebaseUser) {
         const userData = await fetchUserData(firebaseUser.uid);
         if (userData) {
@@ -337,7 +337,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       } else {
         setUser(null);
       }
-      
+
       setLoading(false);
     });
 
@@ -357,7 +357,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     loginWithLinkedIn,
     updateUserProfile,
     sendVerificationEmail,
-    refreshUser
+    refreshUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

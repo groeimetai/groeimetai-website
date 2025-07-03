@@ -93,10 +93,7 @@ export const projectService = {
       deliverables: string[];
     }
   ): Promise<Milestone> {
-    const response = await api.post<Milestone>(
-      `/projects/${projectId}/milestones`,
-      milestone
-    );
+    const response = await api.post<Milestone>(`/projects/${projectId}/milestones`, milestone);
     if (!response.success || !response.data) {
       throw new Error('Failed to add milestone');
     }
@@ -120,10 +117,7 @@ export const projectService = {
   },
 
   // Complete milestone
-  async completeMilestone(
-    projectId: string,
-    milestoneId: string
-  ): Promise<Milestone> {
+  async completeMilestone(projectId: string, milestoneId: string): Promise<Milestone> {
     const response = await api.post<Milestone>(
       `/projects/${projectId}/milestones/${milestoneId}/complete`
     );
@@ -134,23 +128,29 @@ export const projectService = {
   },
 
   // Get project tasks
-  async getTasks(projectId: string, params?: {
-    status?: string;
-    assignee?: string;
-    page?: number;
-    limit?: number;
-  }): Promise<PaginatedResponse<any>> {
+  async getTasks(
+    projectId: string,
+    params?: {
+      status?: string;
+      assignee?: string;
+      page?: number;
+      limit?: number;
+    }
+  ): Promise<PaginatedResponse<any>> {
     return fetchPaginated<any>(`/projects/${projectId}/tasks`, params);
   },
 
   // Add task to project
-  async addTask(projectId: string, task: {
-    title: string;
-    description: string;
-    assignee?: string;
-    dueDate?: string;
-    priority?: string;
-  }): Promise<any> {
+  async addTask(
+    projectId: string,
+    task: {
+      title: string;
+      description: string;
+      assignee?: string;
+      dueDate?: string;
+      priority?: string;
+    }
+  ): Promise<any> {
     const response = await api.post<any>(`/projects/${projectId}/tasks`, task);
     if (!response.success || !response.data) {
       throw new Error('Failed to add task');
@@ -176,11 +176,7 @@ export const projectService = {
       tags?: string[];
     }
   ): Promise<any> {
-    const response = await api.upload<any>(
-      `/projects/${projectId}/documents`,
-      file,
-      metadata
-    );
+    const response = await api.upload<any>(`/projects/${projectId}/documents`, file, metadata);
     if (!response.success || !response.data) {
       throw new Error('Failed to upload document');
     }
@@ -188,27 +184,30 @@ export const projectService = {
   },
 
   // Get project time entries
-  async getTimeEntries(projectId: string, params?: {
-    userId?: string;
-    startDate?: string;
-    endDate?: string;
-    page?: number;
-    limit?: number;
-  }): Promise<PaginatedResponse<any>> {
+  async getTimeEntries(
+    projectId: string,
+    params?: {
+      userId?: string;
+      startDate?: string;
+      endDate?: string;
+      page?: number;
+      limit?: number;
+    }
+  ): Promise<PaginatedResponse<any>> {
     return fetchPaginated<any>(`/projects/${projectId}/time-entries`, params);
   },
 
   // Add time entry to project
-  async addTimeEntry(projectId: string, entry: {
-    duration: number;
-    description: string;
-    date: string;
-    taskId?: string;
-  }): Promise<any> {
-    const response = await api.post<any>(
-      `/projects/${projectId}/time-entries`,
-      entry
-    );
+  async addTimeEntry(
+    projectId: string,
+    entry: {
+      duration: number;
+      description: string;
+      date: string;
+      taskId?: string;
+    }
+  ): Promise<any> {
+    const response = await api.post<any>(`/projects/${projectId}/time-entries`, entry);
     if (!response.success || !response.data) {
       throw new Error('Failed to add time entry');
     }
@@ -227,19 +226,21 @@ export const projectService = {
   // Export project data
   async export(projectId: string, format: 'pdf' | 'csv' | 'json'): Promise<Blob> {
     const response = await api.get(`/projects/${projectId}/export`, {
-      format
+      format,
     });
     // Handle blob response
     return new Blob();
   },
 
   // Batch operations
-  async batchUpdate(updates: Array<{
-    id: string;
-    data: Partial<Project>;
-  }>): Promise<Project[]> {
+  async batchUpdate(
+    updates: Array<{
+      id: string;
+      data: Partial<Project>;
+    }>
+  ): Promise<Project[]> {
     const response = await api.post<Project[]>('/projects/batch-update', {
-      updates
+      updates,
     });
     if (!response.success || !response.data) {
       throw new Error('Failed to batch update projects');
@@ -265,12 +266,15 @@ export const projectService = {
   },
 
   // Clone project
-  async clone(id: string, data: {
-    name: string;
-    includeTeam?: boolean;
-    includeTasks?: boolean;
-    includeDocuments?: boolean;
-  }): Promise<Project> {
+  async clone(
+    id: string,
+    data: {
+      name: string;
+      includeTeam?: boolean;
+      includeTasks?: boolean;
+      includeDocuments?: boolean;
+    }
+  ): Promise<Project> {
     const response = await api.post<Project>(`/projects/${id}/clone`, data);
     if (!response.success || !response.data) {
       throw new Error('Failed to clone project');
@@ -288,20 +292,20 @@ export const projectService = {
   },
 
   // Create project from template
-  async createFromTemplate(templateId: string, data: {
-    name: string;
-    clientId: string;
-    startDate: string;
-  }): Promise<Project> {
-    const response = await api.post<Project>(
-      `/projects/templates/${templateId}/create`,
-      data
-    );
+  async createFromTemplate(
+    templateId: string,
+    data: {
+      name: string;
+      clientId: string;
+      startDate: string;
+    }
+  ): Promise<Project> {
+    const response = await api.post<Project>(`/projects/templates/${templateId}/create`, data);
     if (!response.success || !response.data) {
       throw new Error('Failed to create project from template');
     }
     return response.data;
-  }
+  },
 };
 
 // Helper function to get project with retry
@@ -312,6 +316,6 @@ export async function getProjectWithRetry(id: string): Promise<Project> {
     shouldRetry: (error, attempt) => {
       // Retry on network errors or 5xx status codes
       return error.status >= 500 || error.code === 'NETWORK_ERROR';
-    }
+    },
   });
 }

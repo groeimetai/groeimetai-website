@@ -7,18 +7,24 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Clock, 
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
   Send,
   Linkedin,
   Twitter,
   Github,
-  Calendar
+  Calendar,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
@@ -36,7 +42,7 @@ const socialLinks = [
 
 export default function ContactPage() {
   const t = useTranslations('contact');
-  
+
   const contactInfo = [
     {
       icon: Mail,
@@ -63,7 +69,7 @@ export default function ContactPage() {
       action: '#',
     },
   ];
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -79,24 +85,24 @@ export default function ContactPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSelectChange = (value: string) => {
-    setFormData(prev => ({ ...prev, service: value }));
+    setFormData((prev) => ({ ...prev, service: value }));
   };
 
   const handleCheckboxChange = (checked: boolean) => {
-    setFormData(prev => ({ ...prev, privacy: checked }));
+    setFormData((prev) => ({ ...prev, privacy: checked }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       setSubmitStatus('success');
       // Reset form
       setFormData({
@@ -122,13 +128,13 @@ export default function ContactPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-orange/5 to-green/5" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white px-8 py-4 inline-block" 
-                style={{background: 'linear-gradient(135deg, #FF6600, #FF8833)'}}>
+            <h1
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white px-8 py-4 inline-block"
+              style={{ background: 'linear-gradient(135deg, #FF6600, #FF8833)' }}
+            >
               {t('pageTitle')}
             </h1>
-            <p className="text-xl text-white/80 mb-8">
-              {t('pageDescription')}
-            </p>
+            <p className="text-xl text-white/80 mb-8">{t('pageDescription')}</p>
           </div>
         </div>
       </section>
@@ -219,11 +225,17 @@ export default function ContactPage() {
                           <SelectValue placeholder={t('form.servicePlaceholder')} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="genai-consultancy">{t('form.services.genai')}</SelectItem>
+                          <SelectItem value="genai-consultancy">
+                            {t('form.services.genai')}
+                          </SelectItem>
                           <SelectItem value="llm-integration">{t('form.services.llm')}</SelectItem>
                           <SelectItem value="rag-architecture">{t('form.services.rag')}</SelectItem>
-                          <SelectItem value="servicenow-ai">{t('form.services.servicenow')}</SelectItem>
-                          <SelectItem value="multi-agent">{t('form.services.multiAgent')}</SelectItem>
+                          <SelectItem value="servicenow-ai">
+                            {t('form.services.servicenow')}
+                          </SelectItem>
+                          <SelectItem value="multi-agent">
+                            {t('form.services.multiAgent')}
+                          </SelectItem>
                           <SelectItem value="ai-security">{t('form.services.security')}</SelectItem>
                           <SelectItem value="other">{t('form.services.other')}</SelectItem>
                         </SelectContent>
@@ -256,7 +268,7 @@ export default function ContactPage() {
                             <Link href="/privacy" className="text-primary hover:underline">
                               {chunks}
                             </Link>
-                          )
+                          ),
                         })}
                       </Label>
                     </div>
@@ -271,9 +283,7 @@ export default function ContactPage() {
 
                     {submitStatus === 'error' && (
                       <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                        <p className="text-red-800 dark:text-red-200">
-                          {t('form.errorMessage')}
-                        </p>
+                        <p className="text-red-800 dark:text-red-200">{t('form.errorMessage')}</p>
                       </div>
                     )}
 
@@ -300,16 +310,24 @@ export default function ContactPage() {
               <div className="space-y-6">
                 {/* Direct Contact */}
                 <Card className="p-6">
-                  <h3 className="text-xl font-semibold mb-4">{t('additionalInfo.directContactTitle')}</h3>
+                  <h3 className="text-xl font-semibold mb-4">
+                    {t('additionalInfo.directContactTitle')}
+                  </h3>
                   <p className="text-muted-foreground mb-4">
                     {t('additionalInfo.directContactDescription')}
                   </p>
                   <div className="space-y-3">
-                    <a href="tel:+31201234567" className="flex items-center gap-3 text-primary hover:underline">
+                    <a
+                      href="tel:+31201234567"
+                      className="flex items-center gap-3 text-primary hover:underline"
+                    >
                       <Phone className="w-5 h-5" />
                       +31 (0)20 123 4567
                     </a>
-                    <a href="mailto:info@groeimetai.io" className="flex items-center gap-3 text-primary hover:underline">
+                    <a
+                      href="mailto:info@groeimetai.io"
+                      className="flex items-center gap-3 text-primary hover:underline"
+                    >
                       <Mail className="w-5 h-5" />
                       info@groeimetai.io
                     </a>
@@ -318,7 +336,9 @@ export default function ContactPage() {
 
                 {/* Schedule Meeting */}
                 <Card className="p-6">
-                  <h3 className="text-xl font-semibold mb-4">{t('additionalInfo.scheduleMeetingTitle')}</h3>
+                  <h3 className="text-xl font-semibold mb-4">
+                    {t('additionalInfo.scheduleMeetingTitle')}
+                  </h3>
                   <p className="text-muted-foreground mb-4">
                     {t('additionalInfo.scheduleMeetingDescription')}
                   </p>
@@ -330,7 +350,9 @@ export default function ContactPage() {
 
                 {/* Social Links */}
                 <Card className="p-6">
-                  <h3 className="text-xl font-semibold mb-4">{t('additionalInfo.followUsTitle')}</h3>
+                  <h3 className="text-xl font-semibold mb-4">
+                    {t('additionalInfo.followUsTitle')}
+                  </h3>
                   <p className="text-muted-foreground mb-4">
                     {t('additionalInfo.followUsDescription')}
                   </p>
@@ -352,7 +374,9 @@ export default function ContactPage() {
 
                 {/* Office Hours */}
                 <Card className="p-6">
-                  <h3 className="text-xl font-semibold mb-4">{t('additionalInfo.officeHoursTitle')}</h3>
+                  <h3 className="text-xl font-semibold mb-4">
+                    {t('additionalInfo.officeHoursTitle')}
+                  </h3>
                   <div className="space-y-2 text-muted-foreground">
                     <div className="flex justify-between">
                       <span>{t('additionalInfo.mondayFriday')}</span>

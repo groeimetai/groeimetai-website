@@ -7,40 +7,44 @@ import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
-  const testimonials = [
-    {
-      id: 1,
-      name: 'Sarah Chen',
-      role: 'CEO',
-      company: 'Global Banking Corporation',
-      content: 'GroeimetAI helped us reimagine our entire digital strategy. Their strategic insights led to a 40% increase in customer engagement and €15M in new revenue streams within the first year.',
-      image: 'https://i.pravatar.cc/150?img=1',
-    },
-    {
-      id: 2,
-      name: 'Michael Rodriguez',
-      role: 'Chief Digital Officer',
-      company: 'European Retail Group',
-      content: 'The partnership with GroeimetAI transformed our competitive position. Their advisory team guided us through a complex AI transformation that positioned us as industry leaders.',
-      image: 'https://i.pravatar.cc/150?img=2',
-    },
-    {
-      id: 3,
-      name: 'Emma Thompson',
-      role: 'Managing Director',
-      company: 'Healthcare Innovation Fund',
-      content: 'GroeimetAI\'s strategic approach to AI adoption delivered exceptional value. They helped us identify and capture opportunities we didn\'t even know existed, resulting in 3x portfolio growth.',
-      image: 'https://i.pravatar.cc/150?img=3',
-    },
-    {
-      id: 4,
-      name: 'David Kim',
-      role: 'Board Chairman',
-      company: 'Manufacturing Excellence Group',
-      content: 'Working with GroeimetAI was transformative for our business. Their executive advisory team brought clarity to our AI strategy and delivered measurable impact across all business units.',
-      image: 'https://i.pravatar.cc/150?img=4',
-    },
-  ];
+const testimonials = [
+  {
+    id: 1,
+    name: 'Sarah Chen',
+    role: 'CEO',
+    company: 'Global Banking Corporation',
+    content:
+      'GroeimetAI helped us reimagine our entire digital strategy. Their strategic insights led to a 40% increase in customer engagement and €15M in new revenue streams within the first year.',
+    image: 'https://i.pravatar.cc/150?img=1',
+  },
+  {
+    id: 2,
+    name: 'Michael Rodriguez',
+    role: 'Chief Digital Officer',
+    company: 'European Retail Group',
+    content:
+      'The partnership with GroeimetAI transformed our competitive position. Their advisory team guided us through a complex AI transformation that positioned us as industry leaders.',
+    image: 'https://i.pravatar.cc/150?img=2',
+  },
+  {
+    id: 3,
+    name: 'Emma Thompson',
+    role: 'Managing Director',
+    company: 'Healthcare Innovation Fund',
+    content:
+      "GroeimetAI's strategic approach to AI adoption delivered exceptional value. They helped us identify and capture opportunities we didn't even know existed, resulting in 3x portfolio growth.",
+    image: 'https://i.pravatar.cc/150?img=3',
+  },
+  {
+    id: 4,
+    name: 'David Kim',
+    role: 'Board Chairman',
+    company: 'Manufacturing Excellence Group',
+    content:
+      'Working with GroeimetAI was transformative for our business. Their executive advisory team brought clarity to our AI strategy and delivered measurable impact across all business units.',
+    image: 'https://i.pravatar.cc/150?img=4',
+  },
+];
 
 export default function TestimonialsCarousel() {
   const t = useTranslations('testimonials');
@@ -71,9 +75,7 @@ export default function TestimonialsCarousel() {
           className="text-center mb-16"
         >
           <h2 className="mb-4">{t('title')}</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            {t('subtitle')}
-          </p>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">{t('subtitle')}</p>
         </motion.div>
 
         <div className="max-w-4xl mx-auto">
@@ -166,7 +168,13 @@ export default function TestimonialsCarousel() {
         >
           <p className="text-sm text-muted-foreground mb-8">Trusted by industry leaders</p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-            {['TechCorp', 'Global Finance', 'Healthcare Plus', 'Retail Dynamics', 'Innovation Labs'].map((company) => (
+            {[
+              'TechCorp',
+              'Global Finance',
+              'Healthcare Plus',
+              'Retail Dynamics',
+              'Innovation Labs',
+            ].map((company) => (
               <div
                 key={company}
                 className="text-2xl font-bold text-muted-foreground/30 hover:text-muted-foreground/50 transition-colors"

@@ -104,16 +104,10 @@ export const documentService = {
   },
 
   // Create new version
-  async createVersion(
-    id: string,
-    file: File,
-    comment?: string
-  ): Promise<DocumentVersion> {
-    const response = await api.upload<DocumentVersion>(
-      `/documents/${id}/versions`,
-      file,
-      { comment }
-    );
+  async createVersion(id: string, file: File, comment?: string): Promise<DocumentVersion> {
+    const response = await api.upload<DocumentVersion>(`/documents/${id}/versions`, file, {
+      comment,
+    });
     if (!response.success || !response.data) {
       throw new Error('Failed to create document version');
     }
@@ -121,10 +115,7 @@ export const documentService = {
   },
 
   // Restore document version
-  async restoreVersion(
-    documentId: string,
-    versionId: string
-  ): Promise<Document> {
+  async restoreVersion(documentId: string, versionId: string): Promise<Document> {
     const response = await api.post<Document>(
       `/documents/${documentId}/versions/${versionId}/restore`
     );
@@ -145,7 +136,7 @@ export const documentService = {
     }>
   ): Promise<DocumentShare[]> {
     const response = await api.post<DocumentShare[]>(`/documents/${id}/share`, {
-      shares
+      shares,
     });
     if (!response.success || !response.data) {
       throw new Error('Failed to share document');
@@ -159,10 +150,9 @@ export const documentService = {
     shareId: string,
     permission: 'view' | 'edit' | 'comment'
   ): Promise<DocumentShare> {
-    const response = await api.put<DocumentShare>(
-      `/documents/${documentId}/shares/${shareId}`,
-      { permission }
-    );
+    const response = await api.put<DocumentShare>(`/documents/${documentId}/shares/${shareId}`, {
+      permission,
+    });
     if (!response.success || !response.data) {
       throw new Error('Failed to update share permissions');
     }
@@ -205,26 +195,31 @@ export const documentService = {
   },
 
   // Search documents
-  async search(query: string, params?: {
-    projectId?: string;
-    category?: string;
-    type?: string;
-    tags?: string[];
-    dateFrom?: string;
-    dateTo?: string;
-    page?: number;
-    limit?: number;
-  }): Promise<PaginatedResponse<Document>> {
+  async search(
+    query: string,
+    params?: {
+      projectId?: string;
+      category?: string;
+      type?: string;
+      tags?: string[];
+      dateFrom?: string;
+      dateTo?: string;
+      page?: number;
+      limit?: number;
+    }
+  ): Promise<PaginatedResponse<Document>> {
     return fetchPaginated<Document>('/documents/search', { query, ...params });
   },
 
   // Batch operations
-  async batchUpdate(updates: Array<{
-    id: string;
-    data: Partial<Document>;
-  }>): Promise<Document[]> {
+  async batchUpdate(
+    updates: Array<{
+      id: string;
+      data: Partial<Document>;
+    }>
+  ): Promise<Document[]> {
     const response = await api.post<Document[]>('/documents/batch-update', {
-      updates
+      updates,
     });
     if (!response.success || !response.data) {
       throw new Error('Failed to batch update documents');
@@ -275,9 +270,7 @@ export const documentService = {
 
   // Get document preview
   async getPreview(id: string): Promise<{ url: string; type: string }> {
-    const response = await api.get<{ url: string; type: string }>(
-      `/documents/${id}/preview`
-    );
+    const response = await api.get<{ url: string; type: string }>(`/documents/${id}/preview`);
     if (!response.success || !response.data) {
       throw new Error('Failed to get document preview');
     }
@@ -301,7 +294,7 @@ export const documentService = {
       throw new Error('Failed to check permissions');
     }
     return response.data;
-  }
+  },
 };
 
 // Helper function to get document with retry
@@ -312,7 +305,7 @@ export async function getDocumentWithRetry(id: string): Promise<Document> {
     shouldRetry: (error, attempt) => {
       // Retry on network errors or 5xx status codes
       return error.status >= 500 || error.code === 'NETWORK_ERROR';
-    }
+    },
   });
 }
 
@@ -329,7 +322,7 @@ export async function uploadDocumentWithProgress(
   }
 
   const xhr = new XMLHttpRequest();
-  
+
   return new Promise((resolve, reject) => {
     xhr.upload.addEventListener('progress', (e) => {
       if (e.lengthComputable && onProgress) {

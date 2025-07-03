@@ -27,10 +27,10 @@ export default function LoginForm() {
     try {
       // TODO: Implement Firebase email/password login
       console.log('Login with:', { email, password });
-      
+
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Redirect to dashboard
       router.push('/dashboard');
     } catch (err: any) {
@@ -47,10 +47,10 @@ export default function LoginForm() {
     try {
       // TODO: Implement Firebase social login
       console.log('Login with:', provider);
-      
+
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Redirect to dashboard
       router.push('/dashboard');
     } catch (err: any) {
@@ -126,19 +126,12 @@ export default function LoginForm() {
               />
               <span className="ml-2 text-sm text-muted-foreground">Remember me</span>
             </label>
-            <Link
-              href="/forgot-password"
-              className="text-sm text-primary hover:underline"
-            >
+            <Link href="/forgot-password" className="text-sm text-primary hover:underline">
               Forgot password?
             </Link>
           </div>
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isLoading}
-          >
+          <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

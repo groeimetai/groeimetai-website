@@ -6,17 +6,17 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { 
-  Calendar, 
-  Clock, 
-  User, 
-  ArrowLeft, 
-  Share2, 
+import {
+  Calendar,
+  Clock,
+  User,
+  ArrowLeft,
+  Share2,
   Linkedin,
   Twitter,
   Copy,
   Tag,
-  ArrowRight
+  ArrowRight,
 } from 'lucide-react';
 
 // Mock blog data - in production this would come from a CMS or database
@@ -24,7 +24,8 @@ const blogPosts = {
   'multi-agent-systems-future-automation': {
     slug: 'multi-agent-systems-future-automation',
     title: 'Multi-Agent Systems: De Toekomst van Enterprise Automation',
-    excerpt: 'Ontdek hoe multi-agent orchestration complexe bedrijfsprocessen revolutioneert en nieuwe mogelijkheden creëert voor automation.',
+    excerpt:
+      'Ontdek hoe multi-agent orchestration complexe bedrijfsprocessen revolutioneert en nieuwe mogelijkheden creëert voor automation.',
     content: `
 # Multi-Agent Systems: De Toekomst van Enterprise Automation
 
@@ -95,13 +96,14 @@ Bij GroeimetAI helpen we organisaties om het volledige potentieel van multi-agen
     relatedPosts: [
       'rag-architectuur-best-practices',
       'llm-security-compliance',
-      'genai-roi-measurement'
-    ]
+      'genai-roi-measurement',
+    ],
   },
   'rag-architectuur-best-practices': {
     slug: 'rag-architectuur-best-practices',
     title: 'RAG Architectuur: Best Practices voor 2024',
-    excerpt: 'Een diepgaande analyse van Retrieval-Augmented Generation en hoe u deze technologie optimaal kunt inzetten.',
+    excerpt:
+      'Een diepgaande analyse van Retrieval-Augmented Generation en hoe u deze technologie optimaal kunt inzetten.',
     content: `
 # RAG Architectuur: Best Practices voor 2024
 
@@ -151,26 +153,30 @@ RAG architectuur blijft evolueren en verbeteren. Door deze best practices te vol
     relatedPosts: [
       'multi-agent-systems-future-automation',
       'llm-security-compliance',
-      'prompt-engineering-advanced'
-    ]
-  }
+      'prompt-engineering-advanced',
+    ],
+  },
 };
 
 export async function generateStaticParams() {
   const locales = ['en', 'nl'];
   const posts = Object.keys(blogPosts);
-  
-  return locales.flatMap(locale =>
-    posts.map(slug => ({
+
+  return locales.flatMap((locale) =>
+    posts.map((slug) => ({
       locale,
       slug,
     }))
   );
 }
 
-export async function generateMetadata({ params }: { params: { locale: string; slug: string } }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string; slug: string };
+}): Promise<Metadata> {
   const post = blogPosts[params.slug as keyof typeof blogPosts];
-  
+
   if (!post) {
     return {
       title: 'Artikel niet gevonden - GroeimetAI Blog',
@@ -199,7 +205,7 @@ export default function BlogPostPage({ params }: { params: { locale: string; slu
 
   // Get related posts
   const relatedPosts = post.relatedPosts
-    .map(slug => blogPosts[slug as keyof typeof blogPosts])
+    .map((slug) => blogPosts[slug as keyof typeof blogPosts])
     .filter(Boolean)
     .slice(0, 3);
 
@@ -210,8 +216,8 @@ export default function BlogPostPage({ params }: { params: { locale: string; slu
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* Back to Blog */}
-            <Link 
-              href={`/${params.locale}/blog`} 
+            <Link
+              href={`/${params.locale}/blog`}
               className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -223,10 +229,10 @@ export default function BlogPostPage({ params }: { params: { locale: string; slu
               <Badge variant="secondary">{post.category}</Badge>
               <div className="flex items-center gap-1 text-sm text-muted-foreground">
                 <Calendar className="w-4 h-4" />
-                {new Date(post.date).toLocaleDateString('nl-NL', { 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
+                {new Date(post.date).toLocaleDateString('nl-NL', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
                 })}
               </div>
               <div className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -270,7 +276,15 @@ export default function BlogPostPage({ params }: { params: { locale: string; slu
 
             {/* Article Content */}
             <div className="prose prose-lg dark:prose-invert max-w-none mb-12">
-              <div dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />').replace(/#+\s/g, '<h2>').replace(/\*\*/g, '<strong>').replace(/\*/g, '</strong>') }} />
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: post.content
+                    .replace(/\n/g, '<br />')
+                    .replace(/#+\s/g, '<h2>')
+                    .replace(/\*\*/g, '<strong>')
+                    .replace(/\*/g, '</strong>'),
+                }}
+              />
             </div>
 
             {/* Tags */}
@@ -312,16 +326,24 @@ export default function BlogPostPage({ params }: { params: { locale: string; slu
             <h2 className="text-3xl font-bold mb-12">Gerelateerde Artikelen</h2>
             <div className="grid md:grid-cols-3 gap-8">
               {relatedPosts.map((relatedPost) => (
-                <Card key={relatedPost.slug} className="overflow-hidden hover-lift hover:shadow-premium transition-all">
+                <Card
+                  key={relatedPost.slug}
+                  className="overflow-hidden hover-lift hover:shadow-premium transition-all"
+                >
                   <div className="aspect-video bg-gray-200 dark:bg-gray-800">
                     <div className="w-full h-full flex items-center justify-center">
                       <span className="text-muted-foreground text-sm">Artikel afbeelding</span>
                     </div>
                   </div>
                   <div className="p-6">
-                    <Badge variant="secondary" className="mb-3">{relatedPost.category}</Badge>
+                    <Badge variant="secondary" className="mb-3">
+                      {relatedPost.category}
+                    </Badge>
                     <h3 className="text-lg font-semibold mb-2">
-                      <Link href={`/blog/${relatedPost.slug}`} className="hover:text-primary transition-colors">
+                      <Link
+                        href={`/blog/${relatedPost.slug}`}
+                        className="hover:text-primary transition-colors"
+                      >
                         {relatedPost.title}
                       </Link>
                     </h3>
@@ -360,9 +382,7 @@ export default function BlogPostPage({ params }: { params: { locale: string; slu
                   placeholder="uw.email@bedrijf.nl"
                   className="flex-1 px-4 py-2 rounded-lg border bg-background"
                 />
-                <Button className="shadow-premium hover-lift">
-                  Aanmelden
-                </Button>
+                <Button className="shadow-premium hover-lift">Aanmelden</Button>
               </div>
             </div>
           </Card>

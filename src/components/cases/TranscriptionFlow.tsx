@@ -2,16 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Mic, 
-  FileAudio, 
-  Brain, 
-  FileText, 
-  Cloud, 
+import {
+  Mic,
+  FileAudio,
+  Brain,
+  FileText,
+  Cloud,
   Shield,
   Zap,
   CheckCircle,
-  Volume2
+  Volume2,
 } from 'lucide-react';
 
 export const TranscriptionFlow: React.FC = () => {
@@ -27,7 +27,11 @@ export const TranscriptionFlow: React.FC = () => {
 
   useEffect(() => {
     const waveInterval = setInterval(() => {
-      setAudioWaves(Array(20).fill(0).map(() => Math.random() * 60 + 20));
+      setAudioWaves(
+        Array(20)
+          .fill(0)
+          .map(() => Math.random() * 60 + 20)
+      );
     }, 100);
     return () => clearInterval(waveInterval);
   }, []);
@@ -55,20 +59,24 @@ export const TranscriptionFlow: React.FC = () => {
               >
                 <motion.div
                   className={`w-20 h-20 rounded-full flex items-center justify-center mb-3 ${
-                    index <= activePhase ? 'bg-gradient-to-br from-orange to-orange-600' : 'bg-white/10'
+                    index <= activePhase
+                      ? 'bg-gradient-to-br from-orange to-orange-600'
+                      : 'bg-white/10'
                   }`}
                   whileHover={{ scale: 1.05 }}
                 >
                   <phase.icon className="w-10 h-10 text-white" />
                 </motion.div>
-                <h4 className={`font-semibold mb-1 ${index <= activePhase ? 'text-white' : 'text-white/50'}`}>
+                <h4
+                  className={`font-semibold mb-1 ${index <= activePhase ? 'text-white' : 'text-white/50'}`}
+                >
                   {phase.name}
                 </h4>
                 <p className="text-xs text-white/60 text-center max-w-[120px]">
                   {phase.description}
                 </p>
               </motion.div>
-              
+
               {index < phases.length - 1 && (
                 <motion.div
                   className="flex-1 h-0.5 bg-white/10 relative mx-4"
@@ -167,7 +175,7 @@ export const TranscriptionFlow: React.FC = () => {
                 <motion.div
                   className="absolute inset-0"
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
                 >
                   {[...Array(6)].map((_, i) => (
                     <motion.div
@@ -234,24 +242,15 @@ export const TranscriptionFlow: React.FC = () => {
 
       {/* Stats */}
       <div className="mt-12 grid grid-cols-3 gap-8 text-center">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="bg-white/5 rounded-lg p-4"
-        >
+        <motion.div whileHover={{ scale: 1.05 }} className="bg-white/5 rounded-lg p-4">
           <div className="text-3xl font-bold text-orange">1M+</div>
           <span className="text-sm text-white/70">Tokens Processed</span>
         </motion.div>
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="bg-white/5 rounded-lg p-4"
-        >
+        <motion.div whileHover={{ scale: 1.05 }} className="bg-white/5 rounded-lg p-4">
           <div className="text-3xl font-bold text-orange">1500+</div>
           <span className="text-sm text-white/70">Hours Transcribed</span>
         </motion.div>
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="bg-white/5 rounded-lg p-4"
-        >
+        <motion.div whileHover={{ scale: 1.05 }} className="bg-white/5 rounded-lg p-4">
           <div className="text-3xl font-bold text-orange">500+</div>
           <span className="text-sm text-white/70">Active Users</span>
         </motion.div>

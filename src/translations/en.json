@@ -361,7 +361,12 @@
         "Training Materials",
         "Best Practices Guide"
       ],
-      "technologies": ["ServiceNow Now Assist", "Virtual Agent", "Performance Analytics", "IntegrationHub"],
+      "technologies": [
+        "ServiceNow Now Assist",
+        "Virtual Agent",
+        "Performance Analytics",
+        "IntegrationHub"
+      ],
       "duration": "10-16 weeks"
     },
     "multiAgent": {
@@ -477,7 +482,12 @@
         "Policy Documents",
         "Training Program"
       ],
-      "technologies": ["Security Frameworks", "Monitoring Tools", "Audit Platforms", "Privacy Tech"],
+      "technologies": [
+        "Security Frameworks",
+        "Monitoring Tools",
+        "Audit Platforms",
+        "Privacy Tech"
+      ],
       "duration": "8-12 weeks"
     }
   },
@@ -488,22 +498,42 @@
       "finance": {
         "title": "Financial Services",
         "description": "Transform banking, insurance and investment services with AI-driven insights and automation",
-        "skills": ["Risk Management", "Fraud Detection", "Customer Intelligence", "Regulatory Compliance"]
+        "skills": [
+          "Risk Management",
+          "Fraud Detection",
+          "Customer Intelligence",
+          "Regulatory Compliance"
+        ]
       },
       "healthcare": {
         "title": "Healthcare & Life Sciences",
         "description": "Revolutionize patient care and accelerate research through intelligent systems",
-        "skills": ["Clinical Decision Support", "Drug Discovery", "Patient Experience", "Operational Excellence"]
+        "skills": [
+          "Clinical Decision Support",
+          "Drug Discovery",
+          "Patient Experience",
+          "Operational Excellence"
+        ]
       },
       "retail": {
         "title": "Retail & Consumer",
         "description": "Create personalized experiences and optimize operations across the value chain",
-        "skills": ["Customer Analytics", "Supply Chain AI", "Demand Forecasting", "Omnichannel Strategy"]
+        "skills": [
+          "Customer Analytics",
+          "Supply Chain AI",
+          "Demand Forecasting",
+          "Omnichannel Strategy"
+        ]
       },
       "manufacturing": {
         "title": "Manufacturing & Industry 4.0",
         "description": "Drive operational excellence through predictive maintenance and intelligent automation",
-        "skills": ["Predictive Maintenance", "Quality Control", "Supply Chain Optimization", "Digital Twins"]
+        "skills": [
+          "Predictive Maintenance",
+          "Quality Control",
+          "Supply Chain Optimization",
+          "Digital Twins"
+        ]
       },
       "public": {
         "title": "Public Sector",
@@ -513,7 +543,12 @@
       "energy": {
         "title": "Energy & Utilities",
         "description": "Optimize resource management and accelerate the transition to sustainable operations",
-        "skills": ["Grid Optimization", "Predictive Analytics", "Sustainability", "Asset Management"]
+        "skills": [
+          "Grid Optimization",
+          "Predictive Analytics",
+          "Sustainability",
+          "Asset Management"
+        ]
       }
     }
   },
@@ -1595,22 +1630,42 @@
         "necessary": {
           "name": "Necessary cookies",
           "description": "These cookies are essential for the website to function and cannot be disabled.",
-          "examples": ["Authentication and security", "Shopping cart functionality", "Cookie preferences", "Fraud prevention"]
+          "examples": [
+            "Authentication and security",
+            "Shopping cart functionality",
+            "Cookie preferences",
+            "Fraud prevention"
+          ]
         },
         "analytical": {
           "name": "Analytical cookies",
           "description": "These cookies help us understand how visitors use our website.",
-          "examples": ["Google Analytics tracking", "Performance measurements", "A/B testing cookies", "Heatmap tracking"]
+          "examples": [
+            "Google Analytics tracking",
+            "Performance measurements",
+            "A/B testing cookies",
+            "Heatmap tracking"
+          ]
         },
         "functional": {
           "name": "Functional cookies",
           "description": "These cookies remember your preferences and personalize your experience.",
-          "examples": ["Language preferences", "Region settings", "UI theme preferences", "Recently viewed items"]
+          "examples": [
+            "Language preferences",
+            "Region settings",
+            "UI theme preferences",
+            "Recently viewed items"
+          ]
         },
         "marketing": {
           "name": "Marketing cookies",
           "description": "These cookies are used to measure the effectiveness of advertisements (only with consent).",
-          "examples": ["Conversion tracking", "Remarketing pixels", "Social media pixels", "Ad targeting"]
+          "examples": [
+            "Conversion tracking",
+            "Remarketing pixels",
+            "Social media pixels",
+            "Ad targeting"
+          ]
         }
       },
       "cookieSettings": {
@@ -1623,10 +1678,34 @@
         "description": "You can also manage cookies via your browser settings. Below are instructions for popular browsers:",
         "moreInfo": "More info",
         "steps": {
-          "chrome": ["Click the three dots in the top right", "Select 'Settings'", "Click 'Privacy and security'", "Click 'Cookies and other site data'", "Adjust your preferences"],
-          "firefox": ["Click the menu icon", "Select 'Settings'", "Go to 'Privacy & Security'", "Scroll to 'Cookies and Site Data'", "Manage your cookie settings"],
-          "edge": ["Click the three dots in the top right", "Select 'Settings'", "Click 'Privacy, search, and services'", "Under 'Clear browsing data'", "Choose what you want to delete"],
-          "safari": ["Open Safari preferences", "Click 'Privacy'", "Click 'Manage Website Data'", "Select websites and click 'Remove'", "Or click 'Remove All'"]
+          "chrome": [
+            "Click the three dots in the top right",
+            "Select 'Settings'",
+            "Click 'Privacy and security'",
+            "Click 'Cookies and other site data'",
+            "Adjust your preferences"
+          ],
+          "firefox": [
+            "Click the menu icon",
+            "Select 'Settings'",
+            "Go to 'Privacy & Security'",
+            "Scroll to 'Cookies and Site Data'",
+            "Manage your cookie settings"
+          ],
+          "edge": [
+            "Click the three dots in the top right",
+            "Select 'Settings'",
+            "Click 'Privacy, search, and services'",
+            "Under 'Clear browsing data'",
+            "Choose what you want to delete"
+          ],
+          "safari": [
+            "Open Safari preferences",
+            "Click 'Privacy'",
+            "Click 'Manage Website Data'",
+            "Select websites and click 'Remove'",
+            "Or click 'Remove All'"
+          ]
         }
       },
       "warning": {

@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   FileText,
   Download,
   Eye,
@@ -23,7 +23,7 @@ import {
   X,
   CloudUpload,
   FolderPlus,
-  AlertCircle
+  AlertCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -46,7 +46,12 @@ import {
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
-import { firebaseDocumentService, FirebaseDocument, DocumentType, UploadProgress } from '@/services/firebaseDocumentService';
+import {
+  firebaseDocumentService,
+  FirebaseDocument,
+  DocumentType,
+  UploadProgress,
+} from '@/services/firebaseDocumentService';
 import { formatDistanceToNow } from 'date-fns';
 
 export default function DocumentsPage() {
@@ -65,24 +70,24 @@ export default function DocumentsPage() {
   const [uploadMetadata, setUploadMetadata] = useState({
     description: '',
     tags: '',
-    projectName: ''
+    projectName: '',
   });
   const [storageUsage, setStorageUsage] = useState({ totalBytes: 0, documentCount: 0 });
 
   // Fetch documents on component mount
   const fetchDocuments = useCallback(async () => {
     if (!user) return;
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const { documents: fetchedDocs } = await firebaseDocumentService.getUserDocuments(user.uid, {
-        pageSize: 50
+        pageSize: 50,
       });
       setDocuments(fetchedDocs);
       setFilteredDocuments(fetchedDocs);
-      
+
       // Fetch storage usage
       const usage = await firebaseDocumentService.getUserStorageUsage(user.uid);
       setStorageUsage(usage);
@@ -105,23 +110,24 @@ export default function DocumentsPage() {
   // Filter documents based on search and type
   useEffect(() => {
     let filtered = documents;
-    
+
     // Apply type filter
     if (typeFilter !== 'all') {
-      filtered = filtered.filter(doc => doc.type === typeFilter);
+      filtered = filtered.filter((doc) => doc.type === typeFilter);
     }
-    
+
     // Apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(doc => 
-        doc.name.toLowerCase().includes(query) ||
-        doc.projectName?.toLowerCase().includes(query) ||
-        doc.description?.toLowerCase().includes(query) ||
-        doc.tags?.some(tag => tag.toLowerCase().includes(query))
+      filtered = filtered.filter(
+        (doc) =>
+          doc.name.toLowerCase().includes(query) ||
+          doc.projectName?.toLowerCase().includes(query) ||
+          doc.description?.toLowerCase().includes(query) ||
+          doc.tags?.some((tag) => tag.toLowerCase().includes(query))
       );
     }
-    
+
     setFilteredDocuments(filtered);
   }, [documents, searchQuery, typeFilter]);
 
@@ -135,13 +141,16 @@ export default function DocumentsPage() {
 
   const handleUpload = async () => {
     if (!selectedFile || !user) return;
-    
+
     setIsUploading(true);
     setUploadProgress(null);
-    
+
     try {
-      const tags = uploadMetadata.tags.split(',').map(tag => tag.trim()).filter(Boolean);
-      
+      const tags = uploadMetadata.tags
+        .split(',')
+        .map((tag) => tag.trim())
+        .filter(Boolean);
+
       await firebaseDocumentService.uploadDocument(
         selectedFile,
         user.uid,
@@ -150,16 +159,16 @@ export default function DocumentsPage() {
         {
           description: uploadMetadata.description,
           tags,
-          projectName: uploadMetadata.projectName || undefined
+          projectName: uploadMetadata.projectName || undefined,
         },
         (progress) => {
           setUploadProgress(progress);
         }
       );
-      
+
       // Refresh documents list
       await fetchDocuments();
-      
+
       // Reset upload state
       setShowUploadDialog(false);
       setSelectedFile(null);
@@ -184,7 +193,7 @@ export default function DocumentsPage() {
 
   const handleDelete = async (document: FirebaseDocument) => {
     if (!document.id || !window.confirm('Are you sure you want to delete this document?')) return;
-    
+
     try {
       await firebaseDocumentService.deleteDocument(document.id, document.storagePath);
       await fetchDocuments();
@@ -196,7 +205,7 @@ export default function DocumentsPage() {
 
   const handleArchive = async (document: FirebaseDocument) => {
     if (!document.id) return;
-    
+
     try {
       await firebaseDocumentService.toggleArchiveDocument(document.id, !document.isArchived);
       await fetchDocuments();
@@ -208,23 +217,35 @@ export default function DocumentsPage() {
 
   const getDocumentIcon = (type: DocumentType) => {
     switch (type) {
-      case 'contract': return FileText;
-      case 'proposal': return File;
-      case 'report': return FileText;
-      case 'invoice': return FileText;
-      case 'presentation': return FileImage;
-      default: return File;
+      case 'contract':
+        return FileText;
+      case 'proposal':
+        return File;
+      case 'report':
+        return FileText;
+      case 'invoice':
+        return FileText;
+      case 'presentation':
+        return FileImage;
+      default:
+        return File;
     }
   };
 
   const getTypeColor = (type: DocumentType) => {
     switch (type) {
-      case 'contract': return 'text-blue-400';
-      case 'proposal': return 'text-green-400';
-      case 'report': return 'text-purple-400';
-      case 'invoice': return 'text-yellow-400';
-      case 'presentation': return 'text-pink-400';
-      default: return 'text-gray-400';
+      case 'contract':
+        return 'text-blue-400';
+      case 'proposal':
+        return 'text-green-400';
+      case 'report':
+        return 'text-purple-400';
+      case 'invoice':
+        return 'text-yellow-400';
+      case 'presentation':
+        return 'text-pink-400';
+      default:
+        return 'text-gray-400';
     }
   };
 
@@ -242,7 +263,7 @@ export default function DocumentsPage() {
     return {
       used: formatFileSize(storageUsage.totalBytes),
       total: '10 GB',
-      percentage: Math.min(percentage, 100)
+      percentage: Math.min(percentage, 100),
     };
   };
 
@@ -262,17 +283,20 @@ export default function DocumentsPage() {
       <div className="container mx-auto px-4 py-8 mt-20">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/dashboard" className="inline-flex items-center text-white/60 hover:text-white mb-4">
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center text-white/60 hover:text-white mb-4"
+          >
             <ChevronLeft className="w-4 h-4 mr-1" />
             Back to Dashboard
           </Link>
-          
+
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold text-white">Documents</h1>
               <p className="text-white/60 mt-2">Access all your project documents and files</p>
             </div>
-            
+
             <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
               <DialogTrigger asChild>
                 <Button className="bg-orange hover:bg-orange/90">
@@ -287,48 +311,60 @@ export default function DocumentsPage() {
                     Add a new document to your library
                   </DialogDescription>
                 </DialogHeader>
-                
+
                 {selectedFile && (
                   <div className="space-y-4">
                     <div className="p-4 bg-white/5 rounded-lg border border-white/10">
                       <p className="text-white font-medium">{selectedFile.name}</p>
                       <p className="text-white/60 text-sm">{formatFileSize(selectedFile.size)}</p>
                     </div>
-                    
+
                     <div className="space-y-2">
-                      <Label htmlFor="project" className="text-white">Project Name (Optional)</Label>
+                      <Label htmlFor="project" className="text-white">
+                        Project Name (Optional)
+                      </Label>
                       <Input
                         id="project"
                         value={uploadMetadata.projectName}
-                        onChange={(e) => setUploadMetadata({ ...uploadMetadata, projectName: e.target.value })}
+                        onChange={(e) =>
+                          setUploadMetadata({ ...uploadMetadata, projectName: e.target.value })
+                        }
                         placeholder="e.g., AI Transformation Initiative"
                         className="bg-white/5 border-white/10 text-white"
                       />
                     </div>
-                    
+
                     <div className="space-y-2">
-                      <Label htmlFor="description" className="text-white">Description (Optional)</Label>
+                      <Label htmlFor="description" className="text-white">
+                        Description (Optional)
+                      </Label>
                       <Textarea
                         id="description"
                         value={uploadMetadata.description}
-                        onChange={(e) => setUploadMetadata({ ...uploadMetadata, description: e.target.value })}
+                        onChange={(e) =>
+                          setUploadMetadata({ ...uploadMetadata, description: e.target.value })
+                        }
                         placeholder="Brief description of the document..."
                         className="bg-white/5 border-white/10 text-white"
                         rows={3}
                       />
                     </div>
-                    
+
                     <div className="space-y-2">
-                      <Label htmlFor="tags" className="text-white">Tags (Optional)</Label>
+                      <Label htmlFor="tags" className="text-white">
+                        Tags (Optional)
+                      </Label>
                       <Input
                         id="tags"
                         value={uploadMetadata.tags}
-                        onChange={(e) => setUploadMetadata({ ...uploadMetadata, tags: e.target.value })}
+                        onChange={(e) =>
+                          setUploadMetadata({ ...uploadMetadata, tags: e.target.value })
+                        }
                         placeholder="contract, legal, 2025 (comma separated)"
                         className="bg-white/5 border-white/10 text-white"
                       />
                     </div>
-                    
+
                     {uploadProgress && (
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
@@ -338,7 +374,7 @@ export default function DocumentsPage() {
                         <Progress value={uploadProgress.progress} className="bg-white/10" />
                       </div>
                     )}
-                    
+
                     <div className="flex gap-2">
                       <Button
                         onClick={handleUpload}
@@ -392,7 +428,7 @@ export default function DocumentsPage() {
               className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/40"
             />
           </div>
-          
+
           <div className="flex gap-2 flex-wrap">
             <Button
               variant={typeFilter === 'all' ? 'default' : 'outline'}
@@ -455,8 +491,8 @@ export default function DocumentsPage() {
                   </div>
                   <h3 className="text-xl font-semibold text-white mb-2">No documents yet</h3>
                   <p className="text-white/60 mb-6 max-w-md mx-auto">
-                    Start building your document library by uploading your first file. 
-                    Keep all your important project files organized in one place.
+                    Start building your document library by uploading your first file. Keep all your
+                    important project files organized in one place.
                   </p>
                   <label htmlFor="file-upload" className="cursor-pointer">
                     <input
@@ -487,9 +523,15 @@ export default function DocumentsPage() {
                 <thead>
                   <tr className="border-b border-white/10">
                     <th className="text-left p-4 text-white/60 font-medium">Name</th>
-                    <th className="text-left p-4 text-white/60 font-medium hidden md:table-cell">Project</th>
-                    <th className="text-left p-4 text-white/60 font-medium hidden sm:table-cell">Size</th>
-                    <th className="text-left p-4 text-white/60 font-medium hidden lg:table-cell">Uploaded</th>
+                    <th className="text-left p-4 text-white/60 font-medium hidden md:table-cell">
+                      Project
+                    </th>
+                    <th className="text-left p-4 text-white/60 font-medium hidden sm:table-cell">
+                      Size
+                    </th>
+                    <th className="text-left p-4 text-white/60 font-medium hidden lg:table-cell">
+                      Uploaded
+                    </th>
                     <th className="text-right p-4 text-white/60 font-medium">Actions</th>
                   </tr>
                 </thead>
@@ -497,8 +539,10 @@ export default function DocumentsPage() {
                   <AnimatePresence>
                     {filteredDocuments.map((doc) => {
                       const Icon = getDocumentIcon(doc.type);
-                      const uploadDate = doc.uploadedAt?.toDate ? doc.uploadedAt.toDate() : new Date();
-                      
+                      const uploadDate = doc.uploadedAt?.toDate
+                        ? doc.uploadedAt.toDate()
+                        : new Date();
+
                       return (
                         <motion.tr
                           key={doc.id}
@@ -518,7 +562,10 @@ export default function DocumentsPage() {
                                 {doc.tags && doc.tags.length > 0 && (
                                   <div className="flex flex-wrap gap-1 mt-1">
                                     {doc.tags.slice(0, 3).map((tag, index) => (
-                                      <span key={index} className="text-xs px-2 py-0.5 bg-white/10 rounded-full text-white/60">
+                                      <span
+                                        key={index}
+                                        className="text-xs px-2 py-0.5 bg-white/10 rounded-full text-white/60"
+                                      >
                                         {tag}
                                       </span>
                                     ))}
@@ -582,15 +629,18 @@ export default function DocumentsPage() {
                                     <MoreVertical className="w-4 h-4" />
                                   </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="bg-gray-900 border-white/10">
-                                  <DropdownMenuItem 
+                                <DropdownMenuContent
+                                  align="end"
+                                  className="bg-gray-900 border-white/10"
+                                >
+                                  <DropdownMenuItem
                                     onClick={() => handleArchive(doc)}
                                     className="text-white hover:bg-white/10"
                                   >
                                     <Archive className="w-4 h-4 mr-2" />
                                     {doc.isArchived ? 'Unarchive' : 'Archive'}
                                   </DropdownMenuItem>
-                                  <DropdownMenuItem 
+                                  <DropdownMenuItem
                                     onClick={() => handleDelete(doc)}
                                     className="text-red-400 hover:bg-red-500/10"
                                   >
@@ -620,14 +670,12 @@ export default function DocumentsPage() {
                 <p className="text-lg font-semibold text-white">
                   {formatStorageUsage().used} / {formatStorageUsage().total}
                 </p>
-                <p className="text-xs text-white/40 mt-1">
-                  {storageUsage.documentCount} documents
-                </p>
+                <p className="text-xs text-white/40 mt-1">{storageUsage.documentCount} documents</p>
               </div>
               <div className="w-32">
                 <div className="bg-white/10 rounded-full h-2 overflow-hidden">
-                  <div 
-                    className="bg-orange h-full rounded-full transition-all duration-300" 
+                  <div
+                    className="bg-orange h-full rounded-full transition-all duration-300"
                     style={{ width: `${formatStorageUsage().percentage}%` }}
                   />
                 </div>

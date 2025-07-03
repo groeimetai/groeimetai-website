@@ -30,7 +30,7 @@ const initializeFirebase = () => {
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
       }),
       databaseURL: process.env.FIREBASE_DATABASE_URL,
-      storageBucket: `${process.env.FIREBASE_PROJECT_ID}.appspot.com`
+      storageBucket: `${process.env.FIREBASE_PROJECT_ID}.appspot.com`,
     });
 
     console.log('Firebase Admin SDK initialized successfully');
@@ -52,7 +52,7 @@ export const storage = getStorage(app);
 // Firestore settings
 db.settings({
   ignoreUndefinedProperties: true,
-  timestampsInSnapshots: true
+  timestampsInSnapshots: true,
 });
 
 // Collection references
@@ -64,7 +64,7 @@ export const collections = {
   appointments: 'appointments',
   payments: 'payments',
   reviews: 'reviews',
-  notifications: 'notifications'
+  notifications: 'notifications',
 };
 
 // Helper functions for Firestore operations
@@ -95,7 +95,7 @@ export const FirestoreHelpers = {
    */
   runTransaction: async (callback) => {
     return db.runTransaction(callback);
-  }
+  },
 };
 
 export default app;

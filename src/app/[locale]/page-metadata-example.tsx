@@ -12,13 +12,13 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const locale = params.locale;
   const t = await getTranslations({ locale, namespace: 'home' });
-  
+
   return generateMetadataWithAlternates({
     locale,
     pathname: `/${locale}`,
     title: t('meta.title'),
     description: t('meta.description'),
-    image: '/og-image.png'
+    image: '/og-image.png',
   });
 }
 
@@ -37,6 +37,6 @@ export async function generateMetadataForDynamicPage(
     pathname: `/${locale}/blog/${slug}`,
     title: `${data.title} | GroeimetAI`,
     description: data.description,
-    image: data.image || '/og-image-blog.png'
+    image: data.image || '/og-image-blog.png',
   });
 }

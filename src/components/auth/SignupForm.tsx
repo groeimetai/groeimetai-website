@@ -25,7 +25,7 @@ export default function SignupForm() {
   const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
@@ -46,10 +46,10 @@ export default function SignupForm() {
     try {
       // TODO: Implement Firebase email/password signup
       console.log('Signup with:', formData);
-      
+
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Redirect to onboarding
       router.push('/onboarding');
     } catch (err: any) {
@@ -66,10 +66,10 @@ export default function SignupForm() {
     try {
       // TODO: Implement Firebase social signup
       console.log('Signup with:', provider);
-      
+
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Redirect to onboarding
       router.push('/onboarding');
     } catch (err: any) {
@@ -243,11 +243,7 @@ export default function SignupForm() {
             </label>
           </div>
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isLoading}
-          >
+          <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -11,7 +11,6 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import LanguageSwitcher from './LanguageSwitcher';
 
-
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -92,20 +91,23 @@ export default function Navigation() {
           <div className="flex items-center space-x-4">
             {/* Language Switcher */}
             <LanguageSwitcher />
-            
+
             {/* CTA Buttons */}
             <div className="hidden md:flex items-center space-x-3">
               {user ? (
                 <>
                   <Link href="/dashboard">
-                    <Button variant="ghost" className="text-white hover:text-orange hover:bg-white/10 hover-lift">
+                    <Button
+                      variant="ghost"
+                      className="text-white hover:text-orange hover:bg-white/10 hover-lift"
+                    >
                       <LayoutDashboard className="w-4 h-4 mr-2" />
                       {t('dashboard')}
                     </Button>
                   </Link>
-                  <Button 
+                  <Button
                     onClick={handleLogout}
-                    variant="ghost" 
+                    variant="ghost"
                     className="text-white hover:text-orange hover:bg-white/10 hover-lift"
                   >
                     <LogOut className="w-4 h-4 mr-2" />
@@ -115,7 +117,10 @@ export default function Navigation() {
               ) : (
                 <>
                   <Link href="/login">
-                    <Button variant="ghost" className="text-white hover:text-orange hover:bg-white/10 hover-lift">
+                    <Button
+                      variant="ghost"
+                      className="text-white hover:text-orange hover:bg-white/10 hover-lift"
+                    >
                       {t('signIn')}
                     </Button>
                   </Link>
@@ -135,7 +140,11 @@ export default function Navigation() {
               className="md:hidden"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? <X className="h-5 w-5 text-orange" /> : <Menu className="h-5 w-5 text-white" />}
+              {isMobileMenuOpen ? (
+                <X className="h-5 w-5 text-orange" />
+              ) : (
+                <Menu className="h-5 w-5 text-white" />
+              )}
             </Button>
           </div>
         </div>
@@ -171,17 +180,20 @@ export default function Navigation() {
                 {user ? (
                   <>
                     <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button variant="ghost" className="w-full justify-start text-white hover:text-orange hover:bg-white/10">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-white hover:text-orange hover:bg-white/10"
+                      >
                         <LayoutDashboard className="w-4 h-4 mr-2" />
                         {t('dashboard')}
                       </Button>
                     </Link>
-                    <Button 
+                    <Button
                       onClick={() => {
                         handleLogout();
                         setIsMobileMenuOpen(false);
                       }}
-                      variant="ghost" 
+                      variant="ghost"
                       className="w-full justify-start text-white hover:text-orange hover:bg-white/10"
                     >
                       <LogOut className="w-4 h-4 mr-2" />
@@ -191,15 +203,23 @@ export default function Navigation() {
                 ) : (
                   <>
                     <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button variant="ghost" className="w-full justify-start text-white hover:text-orange hover:bg-white/10">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-white hover:text-orange hover:bg-white/10"
+                      >
                         {t('signIn')}
                       </Button>
                     </Link>
-                    <Link href="/#quote" onClick={(e) => {
-                      handleGetStarted(e);
-                      setIsMobileMenuOpen(false);
-                    }}>
-                      <Button className="w-full bg-orange hover:bg-orange-600 text-white border-0">{t('getStarted')}</Button>
+                    <Link
+                      href="/#quote"
+                      onClick={(e) => {
+                        handleGetStarted(e);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <Button className="w-full bg-orange hover:bg-orange-600 text-white border-0">
+                        {t('getStarted')}
+                      </Button>
                     </Link>
                   </>
                 )}

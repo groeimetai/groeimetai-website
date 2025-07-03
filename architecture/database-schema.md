@@ -1,24 +1,26 @@
 # GroeimetAI Firestore Database Schema
 
 ## Overview
+
 This document defines the complete Firestore database schema for GroeimetAI platform, including collections, documents, fields, relationships, and security rules.
 
 ## Collections Schema
 
 ### 1. users
+
 User profiles and authentication data.
 
 ```typescript
 interface User {
   // Document ID: Firebase Auth UID
   uid: string;
-  
+
   // Basic Information
   email: string;
   displayName: string;
   photoURL?: string;
   phoneNumber?: string;
-  
+
   // Profile Details
   firstName: string;
   lastName: string;
@@ -27,17 +29,17 @@ interface User {
   company?: string;
   linkedinUrl?: string;
   website?: string;
-  
+
   // Role & Permissions
   role: 'admin' | 'consultant' | 'client' | 'guest';
   permissions: string[];
   isActive: boolean;
   isVerified: boolean;
-  
+
   // Organization
   organizationId?: string;
   organizationRole?: 'owner' | 'admin' | 'member';
-  
+
   // Preferences
   preferences: {
     language: string;
@@ -50,18 +52,18 @@ interface User {
     };
     theme: 'light' | 'dark' | 'system';
   };
-  
+
   // Metadata
   createdAt: Timestamp;
   updatedAt: Timestamp;
   lastLoginAt: Timestamp;
   lastActivityAt: Timestamp;
-  
+
   // Subscription
   subscriptionId?: string;
   subscriptionStatus?: 'active' | 'cancelled' | 'past_due' | 'trialing';
   subscriptionPlan?: 'free' | 'starter' | 'professional' | 'enterprise';
-  
+
   // Stats
   stats: {
     projectsCount: number;
@@ -72,19 +74,20 @@ interface User {
 }
 
 // Subcollections
-users/{uid}/sessions        // Login sessions
-users/{uid}/devices         // Registered devices
-users/{uid}/apiKeys        // Personal API keys
+users / { uid } / sessions; // Login sessions
+users / { uid } / devices; // Registered devices
+users / { uid } / apiKeys; // Personal API keys
 ```
 
 ### 2. organizations
+
 Company/organization accounts for team collaboration.
 
 ```typescript
 interface Organization {
   // Document ID: Auto-generated
   id: string;
-  
+
   // Basic Information
   name: string;
   displayName: string;
@@ -92,7 +95,7 @@ interface Organization {
   website?: string;
   industry?: string;
   size?: 'startup' | 'small' | 'medium' | 'enterprise';
-  
+
   // Contact Information
   email: string;
   phoneNumber?: string;
@@ -103,12 +106,12 @@ interface Organization {
     country: string;
     postalCode: string;
   };
-  
+
   // Billing Information
   billingEmail?: string;
   vatNumber?: string;
   billingAddress?: Address;
-  
+
   // Members
   ownerId: string;
   memberIds: string[];
@@ -119,13 +122,13 @@ interface Organization {
     invitedAt: Timestamp;
     token: string;
   }[];
-  
+
   // Subscription
   subscriptionId?: string;
   subscriptionPlan: 'team' | 'business' | 'enterprise';
   subscriptionStatus: string;
   seats: number;
-  
+
   // Settings
   settings: {
     allowedDomains: string[];
@@ -133,7 +136,7 @@ interface Organization {
     twoFactorRequired: boolean;
     dataRetentionDays: number;
   };
-  
+
   // Metadata
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -141,31 +144,32 @@ interface Organization {
 }
 
 // Subcollections
-organizations/{id}/audit_logs     // Organization activity logs
-organizations/{id}/integrations   // Third-party integrations
+organizations / { id } / audit_logs; // Organization activity logs
+organizations / { id } / integrations; // Third-party integrations
 ```
 
 ### 3. projects
+
 Client projects and engagements.
 
 ```typescript
 interface Project {
   // Document ID: Auto-generated
   id: string;
-  
+
   // Basic Information
   name: string;
   description: string;
   type: 'consultation' | 'implementation' | 'support' | 'training';
   status: 'draft' | 'active' | 'on_hold' | 'completed' | 'cancelled';
   priority: 'low' | 'medium' | 'high' | 'urgent';
-  
+
   // Ownership
-  clientId: string;          // User ID
-  organizationId?: string;   // Organization ID
-  consultantId: string;      // Assigned consultant
-  teamIds: string[];         // Team members
-  
+  clientId: string; // User ID
+  organizationId?: string; // Organization ID
+  consultantId: string; // Assigned consultant
+  teamIds: string[]; // Team members
+
   // Timeline
   startDate: Timestamp;
   endDate?: Timestamp;
@@ -173,7 +177,7 @@ interface Project {
   actualEndDate?: Timestamp;
   estimatedHours: number;
   actualHours: number;
-  
+
   // Budget
   budget: {
     amount: number;
@@ -181,7 +185,7 @@ interface Project {
     type: 'fixed' | 'hourly' | 'milestone';
     hourlyRate?: number;
   };
-  
+
   // Milestones
   milestones: {
     id: string;
@@ -197,19 +201,19 @@ interface Project {
       invoiceId?: string;
     };
   }[];
-  
+
   // Tags & Categories
   tags: string[];
   categories: string[];
   technologies: string[];
-  
+
   // Files & Documents
   documentIds: string[];
-  
+
   // Communication
   conversationId?: string;
   meetingIds: string[];
-  
+
   // Metadata
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -218,40 +222,41 @@ interface Project {
 }
 
 // Subcollections
-projects/{id}/tasks          // Project tasks
-projects/{id}/documents      // Project documents
-projects/{id}/time_entries   // Time tracking
-projects/{id}/notes          // Project notes
+projects / { id } / tasks; // Project tasks
+projects / { id } / documents; // Project documents
+projects / { id } / time_entries; // Time tracking
+projects / { id } / notes; // Project notes
 ```
 
 ### 4. consultations
+
 AI consultation sessions and history.
 
 ```typescript
 interface Consultation {
   // Document ID: Auto-generated
   id: string;
-  
+
   // Session Information
   userId: string;
   projectId?: string;
   title: string;
   type: 'chat' | 'document_analysis' | 'code_review' | 'strategy';
   status: 'active' | 'completed' | 'archived';
-  
+
   // AI Configuration
   model: 'gemini-pro' | 'gemini-pro-vision' | 'gemini-code';
   temperature: number;
   maxTokens: number;
   systemPrompt?: string;
-  
+
   // Context
   context: {
-    documents: string[];      // Document IDs
+    documents: string[]; // Document IDs
     previousSessions: string[]; // Related consultation IDs
-    knowledgeBase: string[];   // KB article IDs
+    knowledgeBase: string[]; // KB article IDs
   };
-  
+
   // Messages
   messages: {
     id: string;
@@ -265,12 +270,12 @@ interface Consultation {
       citations?: string[];
     };
   }[];
-  
+
   // Summary
   summary?: string;
   keyPoints?: string[];
   actionItems?: string[];
-  
+
   // Usage & Billing
   usage: {
     inputTokens: number;
@@ -278,14 +283,14 @@ interface Consultation {
     totalTokens: number;
     cost: number;
   };
-  
+
   // Feedback
   feedback?: {
     rating: number;
     comment?: string;
     helpful: boolean;
   };
-  
+
   // Metadata
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -294,18 +299,19 @@ interface Consultation {
 }
 
 // Subcollections
-consultations/{id}/attachments   // Uploaded files
-consultations/{id}/exports       // Exported versions
+consultations / { id } / attachments; // Uploaded files
+consultations / { id } / exports; // Exported versions
 ```
 
 ### 5. conversations
+
 Real-time messaging conversations.
 
 ```typescript
 interface Conversation {
   // Document ID: Auto-generated
   id: string;
-  
+
   // Participants
   participantIds: string[];
   participants: {
@@ -318,17 +324,17 @@ interface Conversation {
       unreadCount: number;
     };
   };
-  
+
   // Conversation Details
   type: 'direct' | 'group' | 'project' | 'support';
-  name?: string;              // For group chats
+  name?: string; // For group chats
   description?: string;
   avatar?: string;
-  
+
   // Related Entities
   projectId?: string;
   consultationId?: string;
-  
+
   // Last Message Preview
   lastMessage?: {
     id: string;
@@ -337,14 +343,14 @@ interface Conversation {
     timestamp: Timestamp;
     type: 'text' | 'file' | 'image';
   };
-  
+
   // Settings
   settings: {
     muted: { [userId: string]: boolean };
     archived: { [userId: string]: boolean };
     notifications: { [userId: string]: boolean };
   };
-  
+
   // Metadata
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -353,27 +359,28 @@ interface Conversation {
 }
 
 // Subcollections
-conversations/{id}/messages      // Chat messages
-conversations/{id}/typing       // Typing indicators
+conversations / { id } / messages; // Chat messages
+conversations / { id } / typing; // Typing indicators
 ```
 
 ### 6. messages
+
 Individual chat messages.
 
 ```typescript
 interface Message {
   // Document ID: Auto-generated with timestamp prefix
   id: string;
-  
+
   // Message Content
   content: string;
   type: 'text' | 'file' | 'image' | 'video' | 'audio' | 'system';
-  
+
   // Sender Information
   senderId: string;
   senderName: string;
   senderAvatar?: string;
-  
+
   // Rich Content
   attachments?: {
     id: string;
@@ -383,23 +390,23 @@ interface Message {
     size: number;
     thumbnailUrl?: string;
   }[];
-  
+
   // Mentions & References
-  mentions?: string[];         // User IDs
-  replyTo?: string;           // Message ID
+  mentions?: string[]; // User IDs
+  replyTo?: string; // Message ID
   forwarded?: boolean;
-  
+
   // Reactions
   reactions?: {
     [emoji: string]: string[]; // emoji -> user IDs
   };
-  
+
   // Status
   status: 'sending' | 'sent' | 'delivered' | 'read' | 'failed';
   readBy: {
     [userId: string]: Timestamp;
   };
-  
+
   // Edit History
   edited?: boolean;
   editedAt?: Timestamp;
@@ -407,7 +414,7 @@ interface Message {
     content: string;
     editedAt: Timestamp;
   }[];
-  
+
   // Metadata
   conversationId: string;
   timestamp: Timestamp;
@@ -417,6 +424,7 @@ interface Message {
 ```
 
 ### 7. quotes
+
 Quote requests and proposals.
 
 ```typescript
@@ -424,7 +432,7 @@ interface Quote {
   // Document ID: Auto-generated with prefix QT-
   id: string;
   quoteNumber: string;
-  
+
   // Client Information
   clientId: string;
   organizationId?: string;
@@ -433,13 +441,13 @@ interface Quote {
     email: string;
     phone?: string;
   };
-  
+
   // Quote Details
   title: string;
   description: string;
   type: 'project' | 'retainer' | 'hourly' | 'support';
   status: 'draft' | 'sent' | 'viewed' | 'accepted' | 'rejected' | 'expired';
-  
+
   // Services
   items: {
     id: string;
@@ -452,7 +460,7 @@ interface Quote {
     tax?: number;
     total: number;
   }[];
-  
+
   // Pricing
   pricing: {
     subtotal: number;
@@ -463,7 +471,7 @@ interface Quote {
     total: number;
     currency: string;
   };
-  
+
   // Terms
   terms: {
     paymentTerms: string;
@@ -472,19 +480,19 @@ interface Quote {
     warranty?: string;
     notes?: string;
   };
-  
+
   // Attachments
   attachments: string[];
-  
+
   // Tracking
   sentAt?: Timestamp;
   viewedAt?: Timestamp;
   respondedAt?: Timestamp;
-  
+
   // Conversion
   convertedToProject?: string;
   conversionRate?: number;
-  
+
   // Metadata
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -492,11 +500,12 @@ interface Quote {
 }
 
 // Subcollections
-quotes/{id}/versions        // Quote version history
-quotes/{id}/activities      // Quote activity log
+quotes / { id } / versions; // Quote version history
+quotes / { id } / activities; // Quote activity log
 ```
 
 ### 8. invoices
+
 Generated invoices and payment records.
 
 ```typescript
@@ -504,21 +513,21 @@ interface Invoice {
   // Document ID: Auto-generated with prefix INV-
   id: string;
   invoiceNumber: string;
-  
+
   // Billing Information
   clientId: string;
   organizationId?: string;
   billingAddress: Address;
-  
+
   // Related Entities
   projectId?: string;
   quoteId?: string;
   milestoneId?: string;
-  
+
   // Invoice Details
   status: 'draft' | 'sent' | 'viewed' | 'paid' | 'partial' | 'overdue' | 'cancelled';
   type: 'standard' | 'recurring' | 'credit_note';
-  
+
   // Line Items
   items: {
     id: string;
@@ -530,7 +539,7 @@ interface Invoice {
     projectId?: string;
     timeEntryIds?: string[];
   }[];
-  
+
   // Financial Details
   financial: {
     subtotal: number;
@@ -541,12 +550,12 @@ interface Invoice {
     balance: number;
     currency: string;
   };
-  
+
   // Dates
   issueDate: Timestamp;
   dueDate: Timestamp;
   paidDate?: Timestamp;
-  
+
   // Payment Information
   paymentMethod?: 'bank_transfer' | 'credit_card' | 'paypal' | 'stripe';
   paymentDetails?: {
@@ -554,43 +563,44 @@ interface Invoice {
     reference?: string;
     notes?: string;
   };
-  
+
   // Reminders
   reminders: {
     sentAt: Timestamp;
     type: 'due_soon' | 'overdue' | 'final_notice';
   }[];
-  
+
   // Metadata
   createdAt: Timestamp;
   updatedAt: Timestamp;
   createdBy: string;
-  
+
   // PDF
   pdfUrl?: string;
   pdfGeneratedAt?: Timestamp;
 }
 
 // Subcollections
-invoices/{id}/payments      // Payment history
-invoices/{id}/activities    // Invoice activity log
+invoices / { id } / payments; // Payment history
+invoices / { id } / activities; // Invoice activity log
 ```
 
 ### 9. services
+
 Service catalog and offerings.
 
 ```typescript
 interface Service {
   // Document ID: Auto-generated
   id: string;
-  
+
   // Service Information
   name: string;
   slug: string;
   description: string;
   longDescription?: string;
   category: 'ai_consulting' | 'development' | 'servicenow' | 'training' | 'support';
-  
+
   // Pricing
   pricing: {
     model: 'fixed' | 'hourly' | 'subscription' | 'custom';
@@ -599,37 +609,37 @@ interface Service {
     billingPeriod?: 'one_time' | 'monthly' | 'quarterly' | 'yearly';
     customPricing?: boolean;
   };
-  
+
   // Features
   features: string[];
   deliverables: string[];
   prerequisites?: string[];
-  
+
   // Duration
   estimatedDuration?: {
     min: number;
     max: number;
     unit: 'hours' | 'days' | 'weeks' | 'months';
   };
-  
+
   // Availability
   isActive: boolean;
   isPublic: boolean;
   availableFrom?: Timestamp;
   availableUntil?: Timestamp;
-  
+
   // Media
   icon?: string;
   images?: string[];
   brochureUrl?: string;
-  
+
   // SEO
   seo: {
     title?: string;
     description?: string;
     keywords?: string[];
   };
-  
+
   // Stats
   stats: {
     projectsCount: number;
@@ -637,7 +647,7 @@ interface Service {
     averageRating: number;
     completionRate: number;
   };
-  
+
   // Metadata
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -645,35 +655,36 @@ interface Service {
 }
 
 // Subcollections
-services/{id}/reviews       // Service reviews
-services/{id}/faqs         // Frequently asked questions
+services / { id } / reviews; // Service reviews
+services / { id } / faqs; // Frequently asked questions
 ```
 
 ### 10. knowledge_base
+
 Documentation and knowledge articles.
 
 ```typescript
 interface KnowledgeArticle {
   // Document ID: Auto-generated
   id: string;
-  
+
   // Article Information
   title: string;
   slug: string;
-  content: string;          // Markdown content
+  content: string; // Markdown content
   excerpt: string;
-  
+
   // Categorization
   category: string;
   subcategory?: string;
   tags: string[];
   type: 'guide' | 'tutorial' | 'faq' | 'troubleshooting' | 'reference';
-  
+
   // Access Control
   visibility: 'public' | 'authenticated' | 'private';
   allowedRoles?: string[];
   allowedUsers?: string[];
-  
+
   // SEO & Search
   seo: {
     title?: string;
@@ -681,17 +692,17 @@ interface KnowledgeArticle {
     keywords?: string[];
   };
   searchKeywords: string[];
-  
+
   // Versioning
   version: number;
   isDraft: boolean;
   publishedAt?: Timestamp;
-  
+
   // Related Content
   relatedArticles: string[];
   relatedProjects?: string[];
   prerequisites?: string[];
-  
+
   // Media
   featuredImage?: string;
   attachments?: {
@@ -700,16 +711,16 @@ interface KnowledgeArticle {
     url: string;
     type: string;
   }[];
-  
+
   // Analytics
   views: number;
   helpful: number;
   notHelpful: number;
-  
+
   // AI Enhancement
-  embedding?: number[];      // Vector embedding for similarity search
-  summary?: string;         // AI-generated summary
-  
+  embedding?: number[]; // Vector embedding for similarity search
+  summary?: string; // AI-generated summary
+
   // Metadata
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -718,35 +729,36 @@ interface KnowledgeArticle {
 }
 
 // Subcollections
-knowledge_base/{id}/revisions    // Article version history
-knowledge_base/{id}/feedback     // User feedback
+knowledge_base / { id } / revisions; // Article version history
+knowledge_base / { id } / feedback; // User feedback
 ```
 
 ### 11. transactions
+
 Payment and financial transactions.
 
 ```typescript
 interface Transaction {
   // Document ID: Auto-generated
   id: string;
-  
+
   // Transaction Details
   type: 'payment' | 'refund' | 'charge' | 'subscription' | 'fee';
   status: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
-  
+
   // Financial Information
   amount: number;
   currency: string;
   fee?: number;
   netAmount?: number;
-  
+
   // Related Entities
   userId: string;
   organizationId?: string;
   invoiceId?: string;
   projectId?: string;
   subscriptionId?: string;
-  
+
   // Payment Details
   paymentMethod: {
     type: 'card' | 'bank' | 'paypal' | 'stripe';
@@ -754,28 +766,28 @@ interface Transaction {
     brand?: string;
     funding?: string;
   };
-  
+
   // Gateway Information
   gateway: 'stripe' | 'paypal' | 'bank';
   gatewayTransactionId: string;
   gatewayResponse?: any;
-  
+
   // Description
   description: string;
   metadata?: Record<string, any>;
-  
+
   // Dates
   createdAt: Timestamp;
   processedAt?: Timestamp;
   failedAt?: Timestamp;
-  
+
   // Error Handling
   error?: {
     code: string;
     message: string;
     details?: any;
   };
-  
+
   // Reconciliation
   reconciled: boolean;
   reconciledAt?: Timestamp;
@@ -784,36 +796,37 @@ interface Transaction {
 ```
 
 ### 12. activity_logs
+
 System-wide audit trail.
 
 ```typescript
 interface ActivityLog {
   // Document ID: Auto-generated with timestamp
   id: string;
-  
+
   // Actor Information
   userId?: string;
   userEmail?: string;
   userRole?: string;
   impersonatedBy?: string;
-  
+
   // Activity Details
-  action: string;           // e.g., 'user.login', 'project.create'
+  action: string; // e.g., 'user.login', 'project.create'
   category: 'auth' | 'user' | 'project' | 'billing' | 'system';
   severity: 'info' | 'warning' | 'error' | 'critical';
-  
+
   // Target Entity
-  targetType?: string;      // e.g., 'user', 'project', 'invoice'
+  targetType?: string; // e.g., 'user', 'project', 'invoice'
   targetId?: string;
   targetName?: string;
-  
+
   // Changes
   changes?: {
     field: string;
     oldValue: any;
     newValue: any;
   }[];
-  
+
   // Context
   context: {
     ip?: string;
@@ -822,7 +835,7 @@ interface ActivityLog {
     device?: string;
     sessionId?: string;
   };
-  
+
   // Request Information
   request?: {
     method: string;
@@ -830,14 +843,14 @@ interface ActivityLog {
     query?: Record<string, any>;
     body?: Record<string, any>;
   };
-  
+
   // Response
   response?: {
     status: number;
     duration: number;
     error?: string;
   };
-  
+
   // Metadata
   timestamp: Timestamp;
   environment: 'development' | 'staging' | 'production';
@@ -845,23 +858,24 @@ interface ActivityLog {
 ```
 
 ### 13. system_config
+
 Platform configuration and settings.
 
 ```typescript
 interface SystemConfig {
   // Document ID: Setting key
   key: string;
-  
+
   // Configuration Value
   value: any;
   type: 'string' | 'number' | 'boolean' | 'object' | 'array';
-  
+
   // Metadata
   description?: string;
   category: string;
   isPublic: boolean;
   isEditable: boolean;
-  
+
   // Validation
   validation?: {
     required?: boolean;
@@ -870,7 +884,7 @@ interface SystemConfig {
     pattern?: string;
     enum?: any[];
   };
-  
+
   // Audit
   updatedAt: Timestamp;
   updatedBy: string;
@@ -881,6 +895,7 @@ interface SystemConfig {
 ## Indexes
 
 ### Composite Indexes
+
 ```
 # Users
 - users: (role, isActive, createdAt DESC)
@@ -911,6 +926,7 @@ interface SystemConfig {
 ## Security Rules
 
 ### Example Security Rules
+
 ```javascript
 // Users can read their own profile
 match /users/{userId} {
@@ -942,6 +958,7 @@ match /organizations/{orgId} {
 ## Data Relationships
 
 ### Entity Relationship Diagram
+
 ```
 users (1) ----< (N) projects
 users (1) ----< (N) consultations
@@ -962,6 +979,7 @@ organizations (1) ----< (N) users
 ## Migration Strategy
 
 ### Data Migration Plan
+
 1. Export existing data from current system
 2. Transform data to match new schema
 3. Validate data integrity

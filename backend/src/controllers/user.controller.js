@@ -22,13 +22,13 @@ export const UserController = {
         password,
         displayName,
         phoneNumber,
-        emailVerified: false
+        emailVerified: false,
       });
 
       // Set custom claims for role
-      await auth.setCustomUserClaims(userRecord.uid, { 
+      await auth.setCustomUserClaims(userRecord.uid, {
         roles: [role],
-        registeredAt: new Date().toISOString()
+        registeredAt: new Date().toISOString(),
       });
 
       // Create user document in Firestore
@@ -46,23 +46,23 @@ export const UserController = {
           skills: [],
           experience: '',
           linkedIn: '',
-          website: ''
+          website: '',
         },
         preferences: {
           notifications: {
             email: true,
             push: true,
-            sms: false
+            sms: false,
           },
           language: 'en',
-          timezone: 'UTC'
+          timezone: 'UTC',
         },
         metadata: {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           lastLoginAt: null,
-          loginCount: 0
-        }
+          loginCount: 0,
+        },
       };
 
       await db.collection(collections.users).doc(userRecord.uid).set(userData);
@@ -80,9 +80,9 @@ export const UserController = {
           email,
           displayName,
           role,
-          emailVerified: false
+          emailVerified: false,
         },
-        message: 'User registered successfully. Please check your email for verification.'
+        message: 'User registered successfully. Please check your email for verification.',
       });
     } catch (error) {
       log.error('User registration failed', error, { email });
@@ -111,10 +111,10 @@ export const UserController = {
     }
 
     const userData = userDoc.data();
-    
+
     res.json({
       success: true,
-      data: userData
+      data: userData,
     });
   }),
 
@@ -135,7 +135,7 @@ export const UserController = {
 
     // Prevent updating protected fields
     const protectedFields = ['uid', 'email', 'role', 'metadata.createdAt'];
-    protectedFields.forEach(field => {
+    protectedFields.forEach((field) => {
       delete updates[field];
     });
 
@@ -152,7 +152,7 @@ export const UserController = {
     // Update Firestore document
     const updateData = {
       ...updates,
-      'metadata.updatedAt': new Date().toISOString()
+      'metadata.updatedAt': new Date().toISOString(),
     };
 
     await db.collection(collections.users).doc(userId).update(updateData);
@@ -161,7 +161,7 @@ export const UserController = {
 
     res.json({
       success: true,
-      message: 'Profile updated successfully'
+      message: 'Profile updated successfully',
     });
   }),
 
@@ -190,29 +190,32 @@ export const UserController = {
         newRoles = [...new Set([...newRoles, ...addRoles])];
       }
       if (removeRoles) {
-        newRoles = newRoles.filter(r => !removeRoles.includes(r));
+        newRoles = newRoles.filter((r) => !removeRoles.includes(r));
       }
     }
 
     // Update custom claims
     await auth.setCustomUserClaims(userId, {
       ...user.customClaims,
-      roles: newRoles
+      roles: newRoles,
     });
 
     // Update Firestore
-    await db.collection(collections.users).doc(userId).update({
-      role: newRoles[0] || 'client', // Primary role
-      roles: newRoles,
-      'metadata.updatedAt': new Date().toISOString()
-    });
+    await db
+      .collection(collections.users)
+      .doc(userId)
+      .update({
+        role: newRoles[0] || 'client', // Primary role
+        roles: newRoles,
+        'metadata.updatedAt': new Date().toISOString(),
+      });
 
     log.info('User role updated', { userId, newRoles, adminId });
 
     res.json({
       success: true,
       data: { roles: newRoles },
-      message: 'User role updated successfully'
+      message: 'User role updated successfully',
     });
   }),
 
@@ -220,14 +223,14 @@ export const UserController = {
    * List users (admin only)
    */
   listUsers: asyncHandler(async (req, res) => {
-    const { 
-      page = 1, 
-      limit = 20, 
-      role, 
-      status, 
+    const {
+      page = 1,
+      limit = 20,
+      role,
+      status,
       search,
       orderBy = 'metadata.createdAt',
-      orderDirection = 'desc' 
+      orderDirection = 'desc',
     } = req.query;
 
     log.api('GET', '/users', req.user.uid, { page, limit, role, status, search });
@@ -252,7 +255,7 @@ export const UserController = {
     const snapshot = await query.get();
     const users = [];
 
-    snapshot.forEach(doc => {
+    snapshot.forEach((doc) => {
       const userData = doc.data();
       // Remove sensitive data
       delete userData.preferences;
@@ -263,7 +266,7 @@ export const UserController = {
     let countQuery = db.collection(collections.users);
     if (role) countQuery = countQuery.where('role', '==', role);
     if (status) countQuery = countQuery.where('status', '==', status);
-    
+
     const totalSnapshot = await countQuery.count().get();
     const total = totalSnapshot.data().count;
 
@@ -275,9 +278,9 @@ export const UserController = {
           page: parseInt(page),
           limit: parseInt(limit),
           total,
-          pages: Math.ceil(total / limit)
-        }
-      }
+          pages: Math.ceil(total / limit),
+        },
+      },
     });
   }),
 
@@ -299,7 +302,7 @@ export const UserController = {
     await db.collection(collections.users).doc(userId).update({
       status: 'deleted',
       'metadata.deletedAt': new Date().toISOString(),
-      'metadata.deletedBy': requestingUserId
+      'metadata.deletedBy': requestingUserId,
     });
 
     // Disable Firebase Auth account
@@ -311,7 +314,7 @@ export const UserController = {
 
     res.json({
       success: true,
-      message: 'User account deleted successfully'
+      message: 'User account deleted successfully',
     });
   }),
 
@@ -326,9 +329,10 @@ export const UserController = {
     // Get user counts by role
     const roleStats = {};
     const roles = ['client', 'consultant', 'admin'];
-    
+
     for (const role of roles) {
-      const snapshot = await db.collection(collections.users)
+      const snapshot = await db
+        .collection(collections.users)
         .where('role', '==', role)
         .where('status', '==', 'active')
         .count()
@@ -339,8 +343,9 @@ export const UserController = {
     // Get registration stats (last 30 days)
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    
-    const recentSnapshot = await db.collection(collections.users)
+
+    const recentSnapshot = await db
+      .collection(collections.users)
       .where('metadata.createdAt', '>=', thirtyDaysAgo.toISOString())
       .count()
       .get();
@@ -351,8 +356,8 @@ export const UserController = {
         totalUsers: Object.values(roleStats).reduce((a, b) => a + b, 0),
         byRole: roleStats,
         recentRegistrations: recentSnapshot.data().count,
-        period: '30_days'
-      }
+        period: '30_days',
+      },
     });
-  })
+  }),
 };

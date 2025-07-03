@@ -19,10 +19,10 @@ before(() => {
 beforeEach(() => {
   // Intercept common API calls
   cy.intercept('GET', '/api/health', { statusCode: 200 }).as('healthCheck');
-  
+
   // Set default viewport
   cy.viewport(1280, 720);
-  
+
   // Clear session storage
   cy.window().then((win) => {
     win.sessionStorage.clear();
@@ -34,7 +34,7 @@ afterEach(() => {
   // Take screenshot on failure
   if (Cypress.currentTest.state === 'failed') {
     cy.screenshot(`failed-${Cypress.currentTest.title}`, {
-      capture: 'fullPage'
+      capture: 'fullPage',
     });
   }
 });
@@ -43,13 +43,13 @@ afterEach(() => {
 Cypress.on('uncaught:exception', (err, runnable) => {
   // Log the error
   console.error('Uncaught exception:', err);
-  
+
   // Return false to prevent test failure on uncaught exceptions
   // in production code that don't affect the test
   if (err.message.includes('ResizeObserver loop limit exceeded')) {
     return false;
   }
-  
+
   return true;
 });
 
@@ -59,8 +59,8 @@ Cypress.on('fail', (error, runnable) => {
   console.error('Test failed:', {
     test: runnable.title,
     error: error.message,
-    stack: error.stack
+    stack: error.stack,
   });
-  
+
   throw error;
 });

@@ -2,11 +2,22 @@ import { Metadata } from 'next';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
-import { Cookie, Info, Shield, Settings, Globe, FileText, Mail, Phone, ExternalLink } from 'lucide-react';
+import {
+  Cookie,
+  Info,
+  Shield,
+  Settings,
+  Globe,
+  FileText,
+  Mail,
+  Phone,
+  ExternalLink,
+} from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Cookiebeleid - GroeimetAI',
-  description: 'Lees hoe GroeimetAI cookies gebruikt om uw ervaring te verbeteren en hoe u cookies kunt beheren.',
+  description:
+    'Lees hoe GroeimetAI cookies gebruikt om uw ervaring te verbeteren en hoe u cookies kunt beheren.',
   openGraph: {
     title: 'Cookiebeleid - GroeimetAI',
     description: 'Transparantie over ons cookiegebruik in overeenstemming met de AVG/GDPR.',
@@ -20,7 +31,7 @@ const sections = [
     icon: Cookie,
     content: `Cookies zijn kleine tekstbestanden die op uw computer of mobiele apparaat worden opgeslagen wanneer u een website bezoekt. Ze worden breed gebruikt om websites te laten werken of efficiënter te laten werken, evenals om informatie aan de eigenaren van de website te verstrekken.
 
-    Cookies maken het mogelijk dat een website uw acties of voorkeuren in de loop van de tijd onthoudt. Ze kunnen informatie bevatten over uw taalkeuze, lettergrootte en andere voorkeuren, zodat u deze niet telkens opnieuw hoeft in te voeren wanneer u de website bezoekt of van de ene pagina naar de andere navigeert.`
+    Cookies maken het mogelijk dat een website uw acties of voorkeuren in de loop van de tijd onthoudt. Ze kunnen informatie bevatten over uw taalkeuze, lettergrootte en andere voorkeuren, zodat u deze niet telkens opnieuw hoeft in te voeren wanneer u de website bezoekt of van de ene pagina naar de andere navigeert.`,
   },
   {
     id: 'how-we-use',
@@ -36,13 +47,13 @@ const sections = [
     • De effectiviteit van onze marketingcampagnes te meten
     • Fraude te voorkomen en de veiligheid te verbeteren
 
-    Wij respecteren uw privacy en zullen cookies alleen gebruiken zoals beschreven in dit beleid en in overeenstemming met de AVG/GDPR en de Nederlandse Telecommunicatiewet.`
+    Wij respecteren uw privacy en zullen cookies alleen gebruiken zoals beschreven in dit beleid en in overeenstemming met de AVG/GDPR en de Nederlandse Telecommunicatiewet.`,
   },
   {
     id: 'types-of-cookies',
     title: 'Soorten cookies die wij gebruiken',
     icon: Settings,
-    content: `Wij gebruiken de volgende categorieën cookies op onze website:`
+    content: `Wij gebruiken de volgende categorieën cookies op onze website:`,
   },
   {
     id: 'third-party',
@@ -57,26 +68,27 @@ const sections = [
     • Stripe - Voor veilige betalingsverwerking
     • Intercom - Voor klantenservice chat
 
-    Deze derden hebben hun eigen privacybeleid en cookiebeleid. Wij hebben geen controle over deze cookies en verwijzen u naar hun respectievelijke beleidsregels voor meer informatie.`
+    Deze derden hebben hun eigen privacybeleid en cookiebeleid. Wij hebben geen controle over deze cookies en verwijzen u naar hun respectievelijke beleidsregels voor meer informatie.`,
   },
   {
     id: 'cookie-management',
     title: 'Cookies beheren en verwijderen',
     icon: Shield,
-    content: `U heeft controle over cookies en kunt ze op verschillende manieren beheren:`
-  }
+    content: `U heeft controle over cookies en kunt ze op verschillende manieren beheren:`,
+  },
 ];
 
 const cookieTypes = [
   {
     name: 'Noodzakelijke cookies',
-    description: 'Deze cookies zijn essentieel voor het functioneren van de website en kunnen niet worden uitgeschakeld.',
+    description:
+      'Deze cookies zijn essentieel voor het functioneren van de website en kunnen niet worden uitgeschakeld.',
     examples: [
       'Authenticatie en beveiliging',
       'Winkelwagenfunctionaliteit',
       'Cookie-voorkeuren',
-      'Fraudepreventie'
-    ]
+      'Fraudepreventie',
+    ],
   },
   {
     name: 'Analytische cookies',
@@ -85,8 +97,8 @@ const cookieTypes = [
       'Google Analytics tracking',
       'Prestatiemetingen',
       'A/B testing cookies',
-      'Heatmap tracking'
-    ]
+      'Heatmap tracking',
+    ],
   },
   {
     name: 'Functionele cookies',
@@ -95,19 +107,20 @@ const cookieTypes = [
       'Taalvoorkeuren',
       'Regio-instellingen',
       'UI-thema voorkeuren',
-      'Laatst bekeken items'
-    ]
+      'Laatst bekeken items',
+    ],
   },
   {
     name: 'Marketing cookies',
-    description: 'Deze cookies worden gebruikt om de effectiviteit van advertenties te meten (alleen met toestemming).',
+    description:
+      'Deze cookies worden gebruikt om de effectiviteit van advertenties te meten (alleen met toestemming).',
     examples: [
       'Conversie tracking',
       'Remarketing pixels',
       'Social media pixels',
-      'Advertentie targeting'
-    ]
-  }
+      'Advertentie targeting',
+    ],
+  },
 ];
 
 const cookieTable = [
@@ -115,62 +128,62 @@ const cookieTable = [
     name: '__groeimet_session',
     purpose: 'Beheert gebruikerssessie en authenticatie',
     type: 'Noodzakelijk',
-    duration: 'Sessie'
+    duration: 'Sessie',
   },
   {
     name: '__groeimet_csrf',
     purpose: 'Beveiligt tegen Cross-Site Request Forgery aanvallen',
     type: 'Noodzakelijk',
-    duration: '24 uur'
+    duration: '24 uur',
   },
   {
     name: 'groeimet_cookie_consent',
     purpose: 'Slaat uw cookie-voorkeuren op',
     type: 'Noodzakelijk',
-    duration: '1 jaar'
+    duration: '1 jaar',
   },
   {
     name: 'groeimet_lang',
     purpose: 'Onthoudt uw taalvoorkeur',
     type: 'Functioneel',
-    duration: '1 jaar'
+    duration: '1 jaar',
   },
   {
     name: 'groeimet_theme',
     purpose: 'Onthoudt uw themavoorkeur (licht/donker)',
     type: 'Functioneel',
-    duration: '1 jaar'
+    duration: '1 jaar',
   },
   {
     name: '_ga',
     purpose: 'Google Analytics - Onderscheidt unieke gebruikers',
     type: 'Analytisch',
-    duration: '2 jaar'
+    duration: '2 jaar',
   },
   {
     name: '_gid',
     purpose: 'Google Analytics - Onderscheidt unieke gebruikers',
     type: 'Analytisch',
-    duration: '24 uur'
+    duration: '24 uur',
   },
   {
     name: '_gat',
     purpose: 'Google Analytics - Beperkt verzoeksnelheid',
     type: 'Analytisch',
-    duration: '1 minuut'
+    duration: '1 minuut',
   },
   {
     name: 'intercom-session-*',
     purpose: 'Intercom chat sessie',
     type: 'Functioneel',
-    duration: '7 dagen'
+    duration: '7 dagen',
   },
   {
     name: '__stripe_mid',
     purpose: 'Stripe fraudepreventie',
     type: 'Noodzakelijk',
-    duration: '1 jaar'
-  }
+    duration: '1 jaar',
+  },
 ];
 
 const browserInstructions = [
@@ -182,8 +195,8 @@ const browserInstructions = [
       'Selecteer "Instellingen"',
       'Klik op "Privacy en beveiliging"',
       'Klik op "Cookies en andere sitegegevens"',
-      'Pas uw voorkeuren aan'
-    ]
+      'Pas uw voorkeuren aan',
+    ],
   },
   {
     browser: 'Mozilla Firefox',
@@ -193,8 +206,8 @@ const browserInstructions = [
       'Selecteer "Instellingen"',
       'Ga naar "Privacy & Beveiliging"',
       'Scroll naar "Cookies en sitegegevens"',
-      'Beheer uw cookie-instellingen'
-    ]
+      'Beheer uw cookie-instellingen',
+    ],
   },
   {
     browser: 'Microsoft Edge',
@@ -204,8 +217,8 @@ const browserInstructions = [
       'Selecteer "Instellingen"',
       'Klik op "Privacy, zoeken en services"',
       'Onder "Browsing-gegevens wissen"',
-      'Kies wat u wilt verwijderen'
-    ]
+      'Kies wat u wilt verwijderen',
+    ],
   },
   {
     browser: 'Safari',
@@ -215,9 +228,9 @@ const browserInstructions = [
       'Klik op "Privacy"',
       'Klik op "Beheer websitegegevens"',
       'Selecteer websites en klik op "Verwijder"',
-      'Of klik op "Verwijder alles"'
-    ]
-  }
+      'Of klik op "Verwijder alles"',
+    ],
+  },
 ];
 
 export default function CookiesPage() {
@@ -237,9 +250,7 @@ export default function CookiesPage() {
             <p className="text-xl text-muted-foreground mb-4">
               Transparantie over hoe wij cookies gebruiken
             </p>
-            <p className="text-sm text-muted-foreground">
-              Laatst bijgewerkt: 2 juli 2025
-            </p>
+            <p className="text-sm text-muted-foreground">Laatst bijgewerkt: 2 juli 2025</p>
           </div>
         </div>
       </section>
@@ -273,7 +284,7 @@ export default function CookiesPage() {
                     <section.icon className="w-6 h-6 text-primary" />
                     <h2 className="text-2xl font-semibold">{section.title}</h2>
                   </div>
-                  
+
                   {section.id === 'types-of-cookies' ? (
                     <>
                       <p className="text-muted-foreground mb-8">{section.content}</p>
@@ -294,12 +305,15 @@ export default function CookiesPage() {
                   ) : section.id === 'cookie-management' ? (
                     <>
                       <p className="text-muted-foreground mb-6">{section.content}</p>
-                      
+
                       {/* Cookie Settings Button */}
                       <Card className="p-6 mb-6 bg-gradient-to-br from-primary/5 to-purple-600/5">
-                        <h3 className="text-lg font-semibold mb-2">Cookie-instellingen aanpassen</h3>
+                        <h3 className="text-lg font-semibold mb-2">
+                          Cookie-instellingen aanpassen
+                        </h3>
                         <p className="text-muted-foreground mb-4">
-                          U kunt uw cookie-voorkeuren op elk moment aanpassen via onze cookie-instellingen.
+                          U kunt uw cookie-voorkeuren op elk moment aanpassen via onze
+                          cookie-instellingen.
                         </p>
                         <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
                           Cookie-instellingen openen
@@ -309,7 +323,8 @@ export default function CookiesPage() {
                       {/* Browser Instructions */}
                       <h3 className="text-lg font-semibold mb-4">Browser-specifieke instructies</h3>
                       <p className="text-muted-foreground mb-6">
-                        U kunt cookies ook beheren via uw browserinstellingen. Hieronder vindt u instructies voor populaire browsers:
+                        U kunt cookies ook beheren via uw browserinstellingen. Hieronder vindt u
+                        instructies voor populaire browsers:
                       </p>
                       <div className="grid gap-4">
                         {browserInstructions.map((instruction) => (
@@ -338,8 +353,9 @@ export default function CookiesPage() {
                       {/* Warning about disabling cookies */}
                       <Card className="p-4 mt-6 border-orange-500/20 bg-orange-500/5">
                         <p className="text-sm text-muted-foreground">
-                          <strong>Let op:</strong> Het uitschakelen van cookies kan de functionaliteit van onze website beperken. 
-                          Sommige functies werken mogelijk niet correct zonder cookies.
+                          <strong>Let op:</strong> Het uitschakelen van cookies kan de
+                          functionaliteit van onze website beperken. Sommige functies werken
+                          mogelijk niet correct zonder cookies.
                         </p>
                       </Card>
                     </>
@@ -348,7 +364,7 @@ export default function CookiesPage() {
                       <p className="whitespace-pre-line">{section.content}</p>
                     </div>
                   )}
-                  
+
                   {index < sections.length - 1 && <Separator className="mt-8" />}
                 </div>
               ))}
@@ -356,13 +372,13 @@ export default function CookiesPage() {
 
             {/* Cookie Table */}
             <Separator className="my-12" />
-            
+
             <div>
               <h2 className="text-2xl font-semibold mb-6">Cookie overzicht</h2>
               <p className="text-muted-foreground mb-6">
                 Hieronder vindt u een gedetailleerd overzicht van alle cookies die wij gebruiken:
               </p>
-              
+
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead>
@@ -379,13 +395,15 @@ export default function CookiesPage() {
                         <td className="p-4 font-mono text-sm">{cookie.name}</td>
                         <td className="p-4 text-sm text-muted-foreground">{cookie.purpose}</td>
                         <td className="p-4">
-                          <span className={`text-xs px-2 py-1 rounded-full ${
-                            cookie.type === 'Noodzakelijk' 
-                              ? 'bg-green-500/10 text-green-500' 
-                              : cookie.type === 'Analytisch'
-                              ? 'bg-blue-500/10 text-blue-500'
-                              : 'bg-purple-500/10 text-purple-500'
-                          }`}>
+                          <span
+                            className={`text-xs px-2 py-1 rounded-full ${
+                              cookie.type === 'Noodzakelijk'
+                                ? 'bg-green-500/10 text-green-500'
+                                : cookie.type === 'Analytisch'
+                                  ? 'bg-blue-500/10 text-blue-500'
+                                  : 'bg-purple-500/10 text-purple-500'
+                            }`}
+                          >
                             {cookie.type}
                           </span>
                         </td>
@@ -408,10 +426,21 @@ export default function CookiesPage() {
                   Ons gebruik van cookies is gebaseerd op:
                 </p>
                 <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-                  <li><strong>Uw toestemming:</strong> Voor analytische en marketing cookies</li>
-                  <li><strong>Legitiem belang:</strong> Voor functionele cookies die de gebruikerservaring verbeteren</li>
-                  <li><strong>Contractuele noodzaak:</strong> Voor essentiële cookies die nodig zijn voor het leveren van onze diensten</li>
-                  <li><strong>Wettelijke verplichting:</strong> Voor cookies die nodig zijn voor beveiliging en fraudepreventie</li>
+                  <li>
+                    <strong>Uw toestemming:</strong> Voor analytische en marketing cookies
+                  </li>
+                  <li>
+                    <strong>Legitiem belang:</strong> Voor functionele cookies die de
+                    gebruikerservaring verbeteren
+                  </li>
+                  <li>
+                    <strong>Contractuele noodzaak:</strong> Voor essentiële cookies die nodig zijn
+                    voor het leveren van onze diensten
+                  </li>
+                  <li>
+                    <strong>Wettelijke verplichting:</strong> Voor cookies die nodig zijn voor
+                    beveiliging en fraudepreventie
+                  </li>
                 </ul>
               </div>
 
@@ -419,9 +448,10 @@ export default function CookiesPage() {
               <div>
                 <h2 className="text-2xl font-semibold mb-4">Wijzigingen in dit cookiebeleid</h2>
                 <p className="text-muted-foreground">
-                  Wij kunnen dit cookiebeleid van tijd tot tijd bijwerken om wijzigingen in onze praktijken of om andere 
-                  operationele, wettelijke of regelgevende redenen weer te geven. Wij zullen u op de hoogte stellen van 
-                  belangrijke wijzigingen door een kennisgeving op onze website te plaatsen.
+                  Wij kunnen dit cookiebeleid van tijd tot tijd bijwerken om wijzigingen in onze
+                  praktijken of om andere operationele, wettelijke of regelgevende redenen weer te
+                  geven. Wij zullen u op de hoogte stellen van belangrijke wijzigingen door een
+                  kennisgeving op onze website te plaatsen.
                 </p>
               </div>
 
@@ -452,10 +482,12 @@ export default function CookiesPage() {
 
             {/* Contact Section */}
             <Card className="p-8 mt-12 bg-gradient-to-br from-primary/5 to-purple-600/5">
-              <h2 className="text-2xl font-semibold mb-4">Contact voor cookie-gerelateerde vragen</h2>
+              <h2 className="text-2xl font-semibold mb-4">
+                Contact voor cookie-gerelateerde vragen
+              </h2>
               <p className="text-muted-foreground mb-6">
-                Als u vragen heeft over ons cookiebeleid of over hoe wij cookies gebruiken, 
-                neem dan contact met ons op:
+                Als u vragen heeft over ons cookiebeleid of over hoe wij cookies gebruiken, neem dan
+                contact met ons op:
               </p>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
@@ -478,14 +510,15 @@ export default function CookiesPage() {
                   </div>
                 </div>
               </div>
-              
+
               <Separator className="my-6" />
-              
+
               <div>
                 <h3 className="font-semibold mb-2">Autoriteit Persoonsgegevens</h3>
                 <p className="text-sm text-muted-foreground">
-                  U heeft het recht om een klacht in te dienen bij de Autoriteit Persoonsgegevens als u van mening bent 
-                  dat wij cookies gebruiken op een manier die niet in overeenstemming is met de wet.
+                  U heeft het recht om een klacht in te dienen bij de Autoriteit Persoonsgegevens
+                  als u van mening bent dat wij cookies gebruiken op een manier die niet in
+                  overeenstemming is met de wet.
                 </p>
               </div>
             </Card>

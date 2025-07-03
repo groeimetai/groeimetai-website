@@ -18,12 +18,21 @@ interface QualificationResult {
 
 export class LeadQualificationService {
   private leadInfo: LeadInfo = {};
-  
+
   // Keywords that indicate high intent
   private highIntentKeywords = [
-    'implement', 'deploy', 'urgent', 'asap', 'immediately',
-    'budget approved', 'decision maker', 'poc', 'pilot',
-    'enterprise', 'scale', 'production'
+    'implement',
+    'deploy',
+    'urgent',
+    'asap',
+    'immediately',
+    'budget approved',
+    'decision maker',
+    'poc',
+    'pilot',
+    'enterprise',
+    'scale',
+    'production',
   ];
 
   // Keywords for specific needs
@@ -32,7 +41,7 @@ export class LeadQualificationService {
     llm: ['llm', 'language model', 'gpt', 'claude', 'gemini', 'chatbot'],
     automation: ['automate', 'automation', 'workflow', 'process', 'efficiency'],
     servicenow: ['servicenow', 'itsm', 'service management', 'ticketing'],
-    consulting: ['strategy', 'roadmap', 'assessment', 'consulting', 'advisory']
+    consulting: ['strategy', 'roadmap', 'assessment', 'consulting', 'advisory'],
   };
 
   analyzeMessage(message: string): {
@@ -41,23 +50,21 @@ export class LeadQualificationService {
     extractedInfo: Partial<LeadInfo>;
   } {
     const lowerMessage = message.toLowerCase();
-    
+
     // Detect intent level
-    const hasHighIntent = this.highIntentKeywords.some(keyword => 
-      lowerMessage.includes(keyword)
-    );
-    
+    const hasHighIntent = this.highIntentKeywords.some((keyword) => lowerMessage.includes(keyword));
+
     // Detect topics
     const topics: string[] = [];
     Object.entries(this.needsKeywords).forEach(([topic, keywords]) => {
-      if (keywords.some(keyword => lowerMessage.includes(keyword))) {
+      if (keywords.some((keyword) => lowerMessage.includes(keyword))) {
         topics.push(topic);
       }
     });
 
     // Extract information
     const extractedInfo: Partial<LeadInfo> = {};
-    
+
     // Email extraction
     const emailMatch = message.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/);
     if (emailMatch) {
@@ -83,7 +90,7 @@ export class LeadQualificationService {
     return {
       intent: hasHighIntent ? 'high' : topics.length > 0 ? 'medium' : 'low',
       topics,
-      extractedInfo
+      extractedInfo,
     };
   }
 
@@ -103,7 +110,7 @@ export class LeadQualificationService {
     else missingInfo.push('company');
 
     if (this.leadInfo.industry) score += 5;
-    
+
     if (this.leadInfo.companySize) {
       score += 10;
       if (this.leadInfo.companySize === '1000+') score += 10;
@@ -147,54 +154,62 @@ export class LeadQualificationService {
       score,
       category,
       recommendedAction,
-      missingInfo
+      missingInfo,
     };
   }
 
   getQualifyingQuestions(): string[] {
     const questions: string[] = [];
-    
+
     if (!this.leadInfo.email) {
       questions.push("What's your email address so we can send you personalized recommendations?");
     }
-    
+
     if (!this.leadInfo.company) {
-      questions.push("Which company are you with?");
+      questions.push('Which company are you with?');
     }
-    
+
     if (!this.leadInfo.needs || this.leadInfo.needs.length === 0) {
-      questions.push("What specific AI challenges are you looking to solve?");
+      questions.push('What specific AI challenges are you looking to solve?');
     }
-    
+
     if (!this.leadInfo.timeline) {
-      questions.push("When are you looking to implement an AI solution?");
+      questions.push('When are you looking to implement an AI solution?');
     }
-    
+
     if (!this.leadInfo.companySize) {
-      questions.push("How large is your organization?");
+      questions.push('How large is your organization?');
     }
 
     return questions;
   }
 
-  generateContextualResponse(userMessage: string, analysis: ReturnType<typeof this.analyzeMessage>): string {
+  generateContextualResponse(
+    userMessage: string,
+    analysis: ReturnType<typeof this.analyzeMessage>
+  ): string {
     const { intent, topics, extractedInfo } = analysis;
-    
+
     // Update lead info with extracted data
     this.updateLeadInfo(extractedInfo);
-    
+
     // Generate response based on intent and topics
     if (intent === 'high' && topics.length > 0) {
       const topicResponses = {
         rag: "I see you're interested in RAG implementation. This is one of our specialties! We've helped numerous enterprises build powerful knowledge retrieval systems. Would you like to discuss your specific use case with one of our RAG experts?",
         llm: "Large Language Models are transforming businesses. We can help you implement and optimize LLMs for your specific needs, whether it's customer service, content generation, or analysis. What's your primary use case?",
-        automation: "AI-powered automation can significantly improve efficiency. We specialize in intelligent process automation that learns and adapts. What processes are you looking to automate?",
-        servicenow: "Our ServiceNow AI integration expertise can help you create intelligent workflows. We've implemented AI-powered ITSM solutions for many enterprises. Are you currently using ServiceNow?",
-        consulting: "Our AI strategy consulting helps organizations navigate their transformation journey. We'd love to understand your current state and desired outcomes. Shall we schedule a strategic assessment call?"
+        automation:
+          'AI-powered automation can significantly improve efficiency. We specialize in intelligent process automation that learns and adapts. What processes are you looking to automate?',
+        servicenow:
+          "Our ServiceNow AI integration expertise can help you create intelligent workflows. We've implemented AI-powered ITSM solutions for many enterprises. Are you currently using ServiceNow?",
+        consulting:
+          "Our AI strategy consulting helps organizations navigate their transformation journey. We'd love to understand your current state and desired outcomes. Shall we schedule a strategic assessment call?",
       };
 
-      return topicResponses[topics[0] as keyof typeof topicResponses] || 
-        "I'd be happy to help you with your AI needs. Can you tell me more about your specific requirements?";
+      return (
+        topicResponses[topics[0] as keyof typeof topicResponses] ||
+        "I'd be happy to help you with your AI needs. Can you tell me more about your specific requirements?"
+      );
     }
 
     // For medium intent, ask qualifying questions
@@ -211,15 +226,18 @@ export class LeadQualificationService {
 
   shouldEscalateToHuman(): boolean {
     const qualification = this.qualifyLead();
-    
+
     // Escalate hot leads or complex queries
-    return qualification.category === 'hot' || 
-           (this.leadInfo.needs && this.leadInfo.needs.length > 3) || false;
+    return (
+      qualification.category === 'hot' ||
+      (this.leadInfo.needs && this.leadInfo.needs.length > 3) ||
+      false
+    );
   }
 
   getLeadSummary(): string {
     const qualification = this.qualifyLead();
-    
+
     return `Lead Summary:
 - Score: ${qualification.score}/100 (${qualification.category})
 - Email: ${this.leadInfo.email || 'Not provided'}

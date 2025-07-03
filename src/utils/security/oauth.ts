@@ -7,14 +7,14 @@ export const oauthConfig = {
     clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     redirectUri: process.env.NEXT_PUBLIC_APP_URL + '/api/auth/callback/google',
-    scope: ['openid', 'email', 'profile']
+    scope: ['openid', 'email', 'profile'],
   },
   linkedin: {
     clientId: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID!,
     clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
     redirectUri: process.env.NEXT_PUBLIC_APP_URL + '/api/auth/callback/linkedin',
-    scope: ['openid', 'profile', 'email']
-  }
+    scope: ['openid', 'profile', 'email'],
+  },
 };
 
 // Google OAuth client
@@ -39,7 +39,7 @@ const oauthStates = new Map<string, { state: string; expiry: number }>();
 export function storeOAuthState(sessionId: string, state: string): void {
   const expiry = Date.now() + 10 * 60 * 1000; // 10 minutes
   oauthStates.set(sessionId, { state, expiry });
-  
+
   // Clean up expired states
   Array.from(oauthStates.entries()).forEach(([key, value]) => {
     if (value.expiry < Date.now()) {
@@ -53,23 +53,23 @@ export function storeOAuthState(sessionId: string, state: string): void {
  */
 export function verifyOAuthState(sessionId: string, state: string): boolean {
   const storedData = oauthStates.get(sessionId);
-  
+
   if (!storedData) {
     return false;
   }
-  
+
   // Check expiry
   if (storedData.expiry < Date.now()) {
     oauthStates.delete(sessionId);
     return false;
   }
-  
+
   // Verify state
   const isValid = storedData.state === state;
-  
+
   // Remove state after verification (one-time use)
   oauthStates.delete(sessionId);
-  
+
   return isValid;
 }
 
@@ -81,7 +81,7 @@ export function getGoogleAuthUrl(state: string): string {
     access_type: 'offline',
     scope: oauthConfig.google.scope,
     state: state,
-    prompt: 'consent'
+    prompt: 'consent',
   });
 }
 
@@ -92,21 +92,21 @@ export async function verifyGoogleToken(idToken: string) {
   try {
     const ticket = await googleClient.verifyIdToken({
       idToken: idToken,
-      audience: oauthConfig.google.clientId
+      audience: oauthConfig.google.clientId,
     });
-    
+
     const payload = ticket.getPayload();
-    
+
     if (!payload) {
       throw new Error('Invalid token payload');
     }
-    
+
     return {
       id: payload.sub,
       email: payload.email!,
       name: payload.name,
       picture: payload.picture,
-      emailVerified: payload.email_verified
+      emailVerified: payload.email_verified,
     };
   } catch (error) {
     console.error('Google token verification failed:', error);
@@ -120,17 +120,17 @@ export async function verifyGoogleToken(idToken: string) {
 export async function exchangeGoogleCode(code: string) {
   try {
     const { tokens } = await googleClient.getToken(code);
-    
+
     if (!tokens.id_token) {
       throw new Error('No ID token received');
     }
-    
+
     // Verify and decode the ID token
     const userInfo = await verifyGoogleToken(tokens.id_token);
-    
+
     return {
       tokens,
-      userInfo
+      userInfo,
     };
   } catch (error) {
     console.error('Google code exchange failed:', error);
@@ -147,9 +147,9 @@ export function getLinkedInAuthUrl(state: string): string {
     client_id: oauthConfig.linkedin.clientId,
     redirect_uri: oauthConfig.linkedin.redirectUri,
     state: state,
-    scope: oauthConfig.linkedin.scope.join(' ')
+    scope: oauthConfig.linkedin.scope.join(' '),
   });
-  
+
   return `https://www.linkedin.com/oauth/v2/authorization?${params.toString()}`;
 }
 
@@ -162,36 +162,36 @@ export async function exchangeLinkedInCode(code: string) {
     const tokenResponse = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
         grant_type: 'authorization_code',
         code: code,
         redirect_uri: oauthConfig.linkedin.redirectUri,
         client_id: oauthConfig.linkedin.clientId,
-        client_secret: oauthConfig.linkedin.clientSecret
-      })
+        client_secret: oauthConfig.linkedin.clientSecret,
+      }),
     });
-    
+
     if (!tokenResponse.ok) {
       throw new Error('Failed to exchange code for token');
     }
-    
+
     const tokens = await tokenResponse.json();
-    
+
     // Get user profile
     const profileResponse = await fetch('https://api.linkedin.com/v2/userinfo', {
       headers: {
-        'Authorization': `Bearer ${tokens.access_token}`
-      }
+        Authorization: `Bearer ${tokens.access_token}`,
+      },
     });
-    
+
     if (!profileResponse.ok) {
       throw new Error('Failed to fetch user profile');
     }
-    
+
     const profile = await profileResponse.json();
-    
+
     return {
       tokens,
       userInfo: {
@@ -199,8 +199,8 @@ export async function exchangeLinkedInCode(code: string) {
         email: profile.email,
         name: profile.name,
         picture: profile.picture,
-        emailVerified: profile.email_verified
-      }
+        emailVerified: profile.email_verified,
+      },
     };
   } catch (error) {
     console.error('LinkedIn code exchange failed:', error);
@@ -215,11 +215,11 @@ export function validateRedirectUri(uri: string, provider: 'google' | 'linkedin'
   const allowedUris = [
     oauthConfig[provider].redirectUri,
     // Add development URIs if needed
-    ...(process.env.NODE_ENV === 'development' ? [
-      'http://localhost:3000/api/auth/callback/' + provider
-    ] : [])
+    ...(process.env.NODE_ENV === 'development'
+      ? ['http://localhost:3000/api/auth/callback/' + provider]
+      : []),
   ];
-  
+
   return allowedUris.includes(uri);
 }
 
@@ -233,7 +233,7 @@ export const OAuthError = {
   EXCHANGE_FAILED: 'exchange_failed',
   PROFILE_FETCH_FAILED: 'profile_fetch_failed',
   EMAIL_NOT_VERIFIED: 'email_not_verified',
-  ACCOUNT_LINKING_FAILED: 'account_linking_failed'
+  ACCOUNT_LINKING_FAILED: 'account_linking_failed',
 } as const;
 
 /**
@@ -242,7 +242,7 @@ export const OAuthError = {
 export function createOAuthError(error: keyof typeof OAuthError, description?: string) {
   return {
     error: OAuthError[error],
-    error_description: description || getOAuthErrorDescription(error)
+    error_description: description || getOAuthErrorDescription(error),
   };
 }
 
@@ -257,8 +257,8 @@ function getOAuthErrorDescription(error: keyof typeof OAuthError): string {
     EXCHANGE_FAILED: 'Failed to exchange authorization code for tokens',
     PROFILE_FETCH_FAILED: 'Failed to fetch user profile from OAuth provider',
     EMAIL_NOT_VERIFIED: 'Email address is not verified by the OAuth provider',
-    ACCOUNT_LINKING_FAILED: 'Failed to link OAuth account with existing user'
+    ACCOUNT_LINKING_FAILED: 'Failed to link OAuth account with existing user',
   };
-  
+
   return descriptions[error] || 'An OAuth error occurred';
 }

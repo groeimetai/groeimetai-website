@@ -23,7 +23,9 @@ export const userSettingsService = {
   },
 
   // Update specific preference
-  async updatePreferences(preferences: Partial<UserSettings['preferences']>): Promise<UserSettings> {
+  async updatePreferences(
+    preferences: Partial<UserSettings['preferences']>
+  ): Promise<UserSettings> {
     const response = await api.patch<UserSettings>('/user-settings/me/preferences', preferences);
     if (!response.success || !response.data) {
       throw new Error('Failed to update preferences');
@@ -32,8 +34,13 @@ export const userSettingsService = {
   },
 
   // Update notification settings
-  async updateNotifications(notifications: Partial<UserSettings['notifications']>): Promise<UserSettings> {
-    const response = await api.patch<UserSettings>('/user-settings/me/notifications', notifications);
+  async updateNotifications(
+    notifications: Partial<UserSettings['notifications']>
+  ): Promise<UserSettings> {
+    const response = await api.patch<UserSettings>(
+      '/user-settings/me/notifications',
+      notifications
+    );
     if (!response.success || !response.data) {
       throw new Error('Failed to update notification settings');
     }
@@ -68,7 +75,9 @@ export const userSettingsService = {
   },
 
   // Update integration settings
-  async updateIntegrations(integrations: Partial<UserSettings['integrations']>): Promise<UserSettings> {
+  async updateIntegrations(
+    integrations: Partial<UserSettings['integrations']>
+  ): Promise<UserSettings> {
     const response = await api.patch<UserSettings>('/user-settings/me/integrations', integrations);
     if (!response.success || !response.data) {
       throw new Error('Failed to update integration settings');
@@ -120,7 +129,7 @@ export const userSettingsService = {
   // Update email signature
   async updateEmailSignature(signature: string): Promise<UserSettings> {
     const response = await api.patch<UserSettings>('/user-settings/me/email-signature', {
-      emailSignature: signature
+      emailSignature: signature,
     });
     if (!response.success || !response.data) {
       throw new Error('Failed to update email signature');
@@ -147,10 +156,10 @@ export const userSettingsService = {
   },
 
   // Reset settings to defaults
-  async resetToDefaults(category?: 'preferences' | 'notifications' | 'privacy' | 'display' | 'all'): Promise<UserSettings> {
-    const endpoint = category 
-      ? `/user-settings/me/reset/${category}`
-      : '/user-settings/me/reset';
+  async resetToDefaults(
+    category?: 'preferences' | 'notifications' | 'privacy' | 'display' | 'all'
+  ): Promise<UserSettings> {
+    const endpoint = category ? `/user-settings/me/reset/${category}` : '/user-settings/me/reset';
     const response = await api.post<UserSettings>(endpoint);
     if (!response.success || !response.data) {
       throw new Error('Failed to reset settings');
@@ -177,7 +186,9 @@ export const userSettingsService = {
   },
 
   // Test notification settings
-  async testNotification(type: 'email' | 'push' | 'sms'): Promise<{ success: boolean; message: string }> {
+  async testNotification(
+    type: 'email' | 'push' | 'sms'
+  ): Promise<{ success: boolean; message: string }> {
     const response = await api.post<{ success: boolean; message: string }>(
       `/user-settings/me/test-notification/${type}`
     );
@@ -206,7 +217,7 @@ export const userSettingsService = {
       throw new Error('Failed to validate theme');
     }
     return response.data;
-  }
+  },
 };
 
 // Helper function to get user settings with retry
@@ -217,14 +228,14 @@ export async function getUserSettingsWithRetry(userId?: string): Promise<UserSet
     shouldRetry: (error, attempt) => {
       // Retry on network errors or 5xx status codes
       return error.status >= 500 || error.code === 'NETWORK_ERROR';
-    }
+    },
   });
 }
 
 // Helper function to apply theme
 export function applyTheme(theme: string | UserSettings['preferences']['customTheme']): void {
   const root = document.documentElement;
-  
+
   if (typeof theme === 'string') {
     // Apply predefined theme
     root.setAttribute('data-theme', theme);
@@ -252,7 +263,7 @@ export function getDefaultSettings(): Partial<UserSettings> {
       currency: 'USD',
       startOfWeek: 'sunday',
       defaultView: 'dashboard',
-      theme: 'system'
+      theme: 'system',
     },
     notifications: {
       email: {
@@ -265,8 +276,8 @@ export function getDefaultSettings(): Partial<UserSettings> {
           mentions: true,
           deadlines: true,
           systemAlerts: true,
-          marketing: false
-        }
+          marketing: false,
+        },
       },
       push: {
         enabled: true,
@@ -277,8 +288,8 @@ export function getDefaultSettings(): Partial<UserSettings> {
           mentions: true,
           deadlines: true,
           systemAlerts: true,
-          marketing: false
-        }
+          marketing: false,
+        },
       },
       sms: {
         enabled: false,
@@ -289,8 +300,8 @@ export function getDefaultSettings(): Partial<UserSettings> {
           mentions: false,
           deadlines: true,
           systemAlerts: true,
-          marketing: false
-        }
+          marketing: false,
+        },
       },
       inApp: {
         enabled: true,
@@ -303,9 +314,9 @@ export function getDefaultSettings(): Partial<UserSettings> {
           mentions: true,
           deadlines: true,
           systemAlerts: true,
-          marketing: true
-        }
-      }
+          marketing: true,
+        },
+      },
     },
     privacy: {
       profileVisibility: 'team',
@@ -314,7 +325,7 @@ export function getDefaultSettings(): Partial<UserSettings> {
       showLocation: false,
       activityStatus: true,
       readReceipts: true,
-      typingIndicators: true
+      typingIndicators: true,
     },
     display: {
       density: 'comfortable',
@@ -322,11 +333,11 @@ export function getDefaultSettings(): Partial<UserSettings> {
       highContrast: false,
       reduceMotion: false,
       sidebarCollapsed: false,
-      showAvatars: true
+      showAvatars: true,
     },
     shortcuts: {
-      enabled: true
-    }
+      enabled: true,
+    },
   };
 }
 
@@ -341,10 +352,10 @@ export function mergeWithDefaults(settings: Partial<UserSettings>): UserSettings
       email: { ...defaults.notifications?.email, ...settings.notifications?.email },
       push: { ...defaults.notifications?.push, ...settings.notifications?.push },
       sms: { ...defaults.notifications?.sms, ...settings.notifications?.sms },
-      inApp: { ...defaults.notifications?.inApp, ...settings.notifications?.inApp }
+      inApp: { ...defaults.notifications?.inApp, ...settings.notifications?.inApp },
     },
     privacy: { ...defaults.privacy, ...settings.privacy },
     display: { ...defaults.display, ...settings.display },
-    shortcuts: { ...defaults.shortcuts, ...settings.shortcuts }
+    shortcuts: { ...defaults.shortcuts, ...settings.shortcuts },
   } as UserSettings;
 }

@@ -2,16 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Bot, 
-  Code, 
-  FileText, 
-  Database, 
+import {
+  Bot,
+  Code,
+  FileText,
+  Database,
   Blocks,
   Sparkles,
   GitBranch,
   Package,
-  BookOpen
+  BookOpen,
 } from 'lucide-react';
 
 export const MultiAgentDiagram: React.FC = () => {
@@ -19,18 +19,48 @@ export const MultiAgentDiagram: React.FC = () => {
   const [connections, setConnections] = useState<number[]>([1, 3, 5]);
 
   const agents = [
-    { name: 'Orchestrator', icon: Bot, role: 'Coordinates all agents', color: 'from-purple-500 to-purple-600' },
-    { name: 'Content Creator', icon: FileText, role: 'Generates course content', color: 'from-blue-500 to-blue-600' },
-    { name: 'Code Generator', icon: Code, role: 'Builds platform code', color: 'from-green-500 to-green-600' },
-    { name: 'Database Agent', icon: Database, role: 'Manages data structure', color: 'from-orange-500 to-orange-600' },
-    { name: 'Blockchain Agent', icon: Blocks, role: 'Certificate verification', color: 'from-red-500 to-red-600' },
-    { name: 'Quality Agent', icon: Sparkles, role: 'Ensures quality', color: 'from-yellow-500 to-yellow-600' },
+    {
+      name: 'Orchestrator',
+      icon: Bot,
+      role: 'Coordinates all agents',
+      color: 'from-purple-500 to-purple-600',
+    },
+    {
+      name: 'Content Creator',
+      icon: FileText,
+      role: 'Generates course content',
+      color: 'from-blue-500 to-blue-600',
+    },
+    {
+      name: 'Code Generator',
+      icon: Code,
+      role: 'Builds platform code',
+      color: 'from-green-500 to-green-600',
+    },
+    {
+      name: 'Database Agent',
+      icon: Database,
+      role: 'Manages data structure',
+      color: 'from-orange-500 to-orange-600',
+    },
+    {
+      name: 'Blockchain Agent',
+      icon: Blocks,
+      role: 'Certificate verification',
+      color: 'from-red-500 to-red-600',
+    },
+    {
+      name: 'Quality Agent',
+      icon: Sparkles,
+      role: 'Ensures quality',
+      color: 'from-yellow-500 to-yellow-600',
+    },
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveAgent((prev) => (prev + 1) % agents.length);
-      
+
       // Simulate agent communication
       const newConnections = [];
       for (let i = 0; i < 3; i++) {
@@ -84,7 +114,7 @@ export const MultiAgentDiagram: React.FC = () => {
               );
             })}
           </g>
-          
+
           {/* Active connections */}
           <AnimatePresence>
             {connections.map((targetIndex, i) => {
@@ -108,14 +138,14 @@ export const MultiAgentDiagram: React.FC = () => {
             })}
           </AnimatePresence>
         </svg>
-        
+
         {/* Central Orchestrator */}
         <motion.div
           className="absolute"
           style={{
             left: `${centerX}px`,
             top: `${centerY}px`,
-            transform: 'translate(-50%, -50%)'
+            transform: 'translate(-50%, -50%)',
           }}
           initial={{ scale: 1 }}
           animate={{
@@ -136,13 +166,15 @@ export const MultiAgentDiagram: React.FC = () => {
               }}
             />
           </div>
-          <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-sm text-white/70 whitespace-nowrap font-medium">Orchestrator</span>
+          <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-sm text-white/70 whitespace-nowrap font-medium">
+            Orchestrator
+          </span>
         </motion.div>
 
         {/* Surrounding Agents */}
         {agents.map((agent, index) => {
           const position = getAgentPosition(index);
-          
+
           return (
             <motion.div
               key={index}
@@ -176,13 +208,15 @@ export const MultiAgentDiagram: React.FC = () => {
                   />
                 )}
               </motion.div>
-              <div className="absolute w-36 text-center"
-                   style={{
-                     left: '50%',
-                     transform: 'translateX(-50%)',
-                     top: position.y > centerY ? '72px' : 'auto',
-                     bottom: position.y <= centerY ? '72px' : 'auto',
-                   }}>
+              <div
+                className="absolute w-36 text-center"
+                style={{
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  top: position.y > centerY ? '72px' : 'auto',
+                  bottom: position.y <= centerY ? '72px' : 'auto',
+                }}
+              >
                 <span className="text-xs text-white font-medium block">{agent.name}</span>
                 <span className="text-[10px] text-white/60 block">{agent.role}</span>
               </div>

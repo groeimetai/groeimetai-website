@@ -7,7 +7,7 @@ export class AppError extends Error {
     this.statusCode = statusCode;
     this.isOperational = isOperational;
     this.timestamp = new Date().toISOString();
-    
+
     Error.captureStackTrace(this, this.constructor);
   }
 }
@@ -23,7 +23,7 @@ export const ErrorTypes = {
   CONFLICT_ERROR: 'ConflictError',
   RATE_LIMIT_ERROR: 'RateLimitError',
   SERVER_ERROR: 'ServerError',
-  SERVICE_UNAVAILABLE: 'ServiceUnavailable'
+  SERVICE_UNAVAILABLE: 'ServiceUnavailable',
 };
 
 /**
@@ -36,49 +36,49 @@ export const createError = {
     error.details = details;
     return error;
   },
-  
+
   authentication: (message = 'Authentication required') => {
     const error = new AppError(message, 401);
     error.type = ErrorTypes.AUTHENTICATION_ERROR;
     return error;
   },
-  
+
   authorization: (message = 'Insufficient permissions') => {
     const error = new AppError(message, 403);
     error.type = ErrorTypes.AUTHORIZATION_ERROR;
     return error;
   },
-  
+
   notFound: (resource = 'Resource') => {
     const error = new AppError(`${resource} not found`, 404);
     error.type = ErrorTypes.NOT_FOUND_ERROR;
     return error;
   },
-  
+
   conflict: (message) => {
     const error = new AppError(message, 409);
     error.type = ErrorTypes.CONFLICT_ERROR;
     return error;
   },
-  
+
   rateLimit: (retryAfter = null) => {
     const error = new AppError('Too many requests', 429);
     error.type = ErrorTypes.RATE_LIMIT_ERROR;
     error.retryAfter = retryAfter;
     return error;
   },
-  
+
   server: (message = 'Internal server error') => {
     const error = new AppError(message, 500, false);
     error.type = ErrorTypes.SERVER_ERROR;
     return error;
   },
-  
+
   serviceUnavailable: (service = 'Service') => {
     const error = new AppError(`${service} temporarily unavailable`, 503);
     error.type = ErrorTypes.SERVICE_UNAVAILABLE;
     return error;
-  }
+  },
 };
 
 /**
@@ -91,22 +91,22 @@ export const formatErrorResponse = (error, includeStack = false) => {
       message: error.message || 'An error occurred',
       type: error.type || 'UnknownError',
       statusCode: error.statusCode || 500,
-      timestamp: error.timestamp || new Date().toISOString()
-    }
+      timestamp: error.timestamp || new Date().toISOString(),
+    },
   };
-  
+
   if (error.details) {
     response.error.details = error.details;
   }
-  
+
   if (error.retryAfter) {
     response.error.retryAfter = error.retryAfter;
   }
-  
+
   if (includeStack && error.stack) {
     response.error.stack = error.stack;
   }
-  
+
   return response;
 };
 
@@ -125,8 +125,8 @@ export const mapFirebaseError = (error) => {
     'not-found': createError.notFound(),
     'already-exists': createError.conflict('Resource already exists'),
     'resource-exhausted': createError.rateLimit(),
-    'unavailable': createError.serviceUnavailable()
+    unavailable: createError.serviceUnavailable(),
   };
-  
+
   return errorMap[error.code] || createError.server(error.message);
 };

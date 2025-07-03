@@ -14,7 +14,7 @@ export const AppShell: React.FC = () => {
           <div className="mr-4 flex">
             <div className="h-8 w-32 animate-pulse rounded bg-muted" />
           </div>
-          
+
           {/* Nav Skeleton */}
           <nav className="flex flex-1 items-center justify-between">
             <div className="flex items-center space-x-6">
@@ -22,7 +22,7 @@ export const AppShell: React.FC = () => {
                 <div key={i} className="h-4 w-16 animate-pulse rounded bg-muted" />
               ))}
             </div>
-            
+
             {/* Actions Skeleton */}
             <div className="flex items-center space-x-4">
               <div className="h-9 w-24 animate-pulse rounded-md bg-muted" />
@@ -31,7 +31,7 @@ export const AppShell: React.FC = () => {
           </nav>
         </div>
       </header>
-      
+
       {/* Main Content Skeleton */}
       <main className="flex-1">
         <div className="container py-6">
@@ -44,7 +44,7 @@ export const AppShell: React.FC = () => {
               <div className="h-11 w-32 animate-pulse rounded-md bg-muted" />
             </div>
           </div>
-          
+
           {/* Content Grid Skeleton */}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -61,7 +61,7 @@ export const AppShell: React.FC = () => {
           </div>
         </div>
       </main>
-      
+
       {/* Loading Indicator */}
       <div className="fixed bottom-4 right-4 z-50">
         <div className="flex items-center space-x-2 rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground shadow-lg">
@@ -88,7 +88,7 @@ export const AppShell: React.FC = () => {
           <span>Loading...</span>
         </div>
       </div>
-      
+
       <style jsx>{`
         @keyframes shimmer {
           0% {
@@ -98,7 +98,7 @@ export const AppShell: React.FC = () => {
             background-position: 1000px 0;
           }
         }
-        
+
         .animate-pulse {
           background: linear-gradient(
             90deg,
@@ -109,7 +109,7 @@ export const AppShell: React.FC = () => {
           background-size: 1000px 100%;
           animation: shimmer 2s infinite;
         }
-        
+
         @media (prefers-color-scheme: dark) {
           .animate-pulse {
             background: linear-gradient(
@@ -136,7 +136,7 @@ export const useHideAppShell = () => {
     if (appShell) {
       appShell.style.opacity = '0';
       appShell.style.transition = 'opacity 0.3s ease-out';
-      
+
       setTimeout(() => {
         appShell.style.display = 'none';
       }, 300);

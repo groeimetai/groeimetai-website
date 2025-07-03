@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   LayoutDashboard,
   Briefcase,
   Calendar,
@@ -17,7 +17,7 @@ import {
   ChevronLeft,
   AlertCircle,
   FolderOpen,
-  Loader2
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,18 +41,18 @@ export default function ProjectsPage() {
   // Fetch projects from API
   const fetchProjects = async () => {
     if (!user) return;
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const response = await projectService.list({
         status: statusFilter !== 'all' ? statusFilter : undefined,
         search: searchQuery || undefined,
         sort: 'createdAt',
-        order: 'desc'
+        order: 'desc',
       });
-      
+
       setProjects(response.items);
     } catch (err) {
       console.error('Error fetching projects:', err);
@@ -99,12 +99,18 @@ export default function ProjectsPage() {
 
   const getStatusColor = (status: ProjectStatus) => {
     switch (status) {
-      case 'active': return 'bg-green-500';
-      case 'completed': return 'bg-blue-500';
-      case 'on_hold': return 'bg-yellow-500';
-      case 'draft': return 'bg-gray-500';
-      case 'cancelled': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case 'active':
+        return 'bg-green-500';
+      case 'completed':
+        return 'bg-blue-500';
+      case 'on_hold':
+        return 'bg-yellow-500';
+      case 'draft':
+        return 'bg-gray-500';
+      case 'cancelled':
+        return 'bg-red-500';
+      default:
+        return 'bg-gray-500';
     }
   };
 
@@ -115,7 +121,7 @@ export default function ProjectsPage() {
   // Calculate actual progress based on milestones
   const calculateProgress = (project: Project): number => {
     if (!project.milestones || project.milestones.length === 0) return 0;
-    const completedMilestones = project.milestones.filter(m => m.status === 'completed').length;
+    const completedMilestones = project.milestones.filter((m) => m.status === 'completed').length;
     return Math.round((completedMilestones / project.milestones.length) * 100);
   };
 
@@ -125,9 +131,9 @@ export default function ProjectsPage() {
       style: 'currency',
       currency: budget.currency || 'EUR',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     });
-    
+
     if (budget.type === 'hourly' && budget.hourlyRate) {
       return `${formatter.format(budget.hourlyRate)}/hour`;
     }
@@ -139,17 +145,20 @@ export default function ProjectsPage() {
       <div className="container mx-auto px-4 py-8 mt-20">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/dashboard" className="inline-flex items-center text-white/60 hover:text-white mb-4">
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center text-white/60 hover:text-white mb-4"
+          >
             <ChevronLeft className="w-4 h-4 mr-1" />
             Back to Dashboard
           </Link>
-          
+
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold text-white">Your Projects</h1>
               <p className="text-white/60 mt-2">Manage and track all your projects in one place</p>
             </div>
-            
+
             <Link href="/contact?type=project">
               <Button className="bg-orange hover:bg-orange/90">
                 <Plus className="w-4 h-4 mr-2" />
@@ -171,7 +180,7 @@ export default function ProjectsPage() {
               className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/40"
             />
           </div>
-          
+
           <div className="flex gap-2 flex-wrap">
             <Button
               variant={statusFilter === 'all' ? 'default' : 'outline'}
@@ -222,7 +231,7 @@ export default function ProjectsPage() {
         {/* Projects Grid */}
         {!isLoading && projects.length > 0 && (
           <AnimatePresence mode="wait">
-            <motion.div 
+            <motion.div
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -243,7 +252,10 @@ export default function ProjectsPage() {
                       </div>
                       <div>
                         <h3 className="font-semibold text-white">{project.name}</h3>
-                        <Badge variant="outline" className={`${getStatusColor(project.status)} bg-opacity-20 border-0 mt-1`}>
+                        <Badge
+                          variant="outline"
+                          className={`${getStatusColor(project.status)} bg-opacity-20 border-0 mt-1`}
+                        >
                           {getStatusLabel(project.status)}
                         </Badge>
                       </div>
@@ -267,10 +279,10 @@ export default function ProjectsPage() {
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center text-white/60">
                         <Calendar className="w-4 h-4 mr-1" />
-                        {new Date(project.startDate).toLocaleDateString('en-US', { 
-                          year: 'numeric', 
-                          month: 'short', 
-                          day: 'numeric' 
+                        {new Date(project.startDate).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
                         })}
                       </div>
                       <div className="text-white/60">{formatBudget(project.budget)}</div>
@@ -305,7 +317,7 @@ export default function ProjectsPage() {
 
         {/* Empty State */}
         {!isLoading && projects.length === 0 && !error && (
-          <motion.div 
+          <motion.div
             className="text-center py-16"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -314,13 +326,13 @@ export default function ProjectsPage() {
               <div className="absolute inset-0 bg-orange/20 blur-3xl animate-pulse"></div>
               <FolderOpen className="w-24 h-24 text-white/20 mx-auto mb-6 relative" />
             </div>
-            
+
             <h3 className="text-xl font-semibold text-white mb-2">No Projects Yet</h3>
             <p className="text-white/60 mb-8 max-w-md mx-auto">
-              Start your journey with GroeimetAI by requesting a new project. 
-              We&apos;ll help you transform your business with cutting-edge AI solutions.
+              Start your journey with GroeimetAI by requesting a new project. We&apos;ll help you
+              transform your business with cutting-edge AI solutions.
             </p>
-            
+
             <Link href="/contact?type=project">
               <Button size="lg" className="bg-orange hover:bg-orange/90">
                 <Plus className="w-5 h-5 mr-2" />

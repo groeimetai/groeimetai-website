@@ -6,12 +6,26 @@ import { z } from 'zod';
  */
 export function sanitizeHtml(dirty: string, options?: any): string {
   const defaultOptions: any = {
-    ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre'],
+    ALLOWED_TAGS: [
+      'b',
+      'i',
+      'em',
+      'strong',
+      'a',
+      'p',
+      'br',
+      'ul',
+      'ol',
+      'li',
+      'blockquote',
+      'code',
+      'pre',
+    ],
     ALLOWED_ATTR: ['href', 'target', 'rel'],
     ALLOW_DATA_ATTR: false,
-    RETURN_TRUSTED_TYPE: false
+    RETURN_TRUSTED_TYPE: false,
   };
-  
+
   return DOMPurify.sanitize(dirty, { ...defaultOptions, ...options }) as unknown as string;
 }
 
@@ -22,16 +36,16 @@ export function sanitizeInput(input: string): string {
   if (typeof input !== 'string') {
     return '';
   }
-  
+
   // Remove null bytes
   let sanitized = input.replace(/\0/g, '');
-  
+
   // Trim whitespace
   sanitized = sanitized.trim();
-  
+
   // Escape HTML entities
   sanitized = escapeHtml(sanitized);
-  
+
   return sanitized;
 }
 
@@ -45,9 +59,9 @@ export function escapeHtml(text: string): string {
     '>': '&gt;',
     '"': '&quot;',
     "'": '&#x27;',
-    '/': '&#x2F;'
+    '/': '&#x2F;',
   };
-  
+
   return text.replace(/[&<>"'/]/g, (char) => map[char] || char);
 }
 
@@ -58,14 +72,16 @@ export function sanitizeSqlInput(input: string): string {
   if (typeof input !== 'string') {
     return '';
   }
-  
+
   // Remove dangerous SQL characters and keywords
   return input
     .replace(/['";\\]/g, '') // Remove quotes and backslashes
     .replace(/--/g, '') // Remove SQL comments
     .replace(/\/\*/g, '') // Remove multi-line comments
     .replace(/\*\//g, '')
-    .replace(/\b(DROP|DELETE|INSERT|UPDATE|ALTER|CREATE|EXEC|EXECUTE)\b/gi, ''); // Remove SQL keywords
+    .replace(/\b(DROP|DELETE|INSERT|UPDATE|ALTER|CREATE|EXEC|EXECUTE)\b/gi, '') // Remove SQL keywords
+    .replace(/\s+/g, ' ') // Normalize whitespace
+    .trim(); // Remove leading/trailing whitespace
 }
 
 /**
@@ -75,31 +91,31 @@ export function sanitizeFileName(fileName: string): string {
   if (typeof fileName !== 'string') {
     return '';
   }
-  
+
   // Remove path traversal attempts
   let sanitized = fileName.replace(/\.\./g, '');
-  
+
   // Remove special characters except dots and hyphens
   sanitized = sanitized.replace(/[^a-zA-Z0-9.-]/g, '_');
-  
+
   // Ensure it doesn't start with a dot (hidden file)
   if (sanitized.startsWith('.')) {
     sanitized = '_' + sanitized.substring(1);
   }
-  
+
   // Limit length
   if (sanitized.length > 255) {
     const extension = sanitized.substring(sanitized.lastIndexOf('.'));
     sanitized = sanitized.substring(0, 255 - extension.length) + extension;
   }
-  
+
   return sanitized;
 }
 
 /**
  * Validate and sanitize email
  */
-export const emailSchema = z.string().email().toLowerCase().trim();
+export const emailSchema = z.string().trim().toLowerCase().email();
 
 export function sanitizeEmail(email: string): string | null {
   try {
@@ -118,12 +134,12 @@ export function sanitizeUrl(url: string): string | null {
   try {
     const parsed = urlSchema.parse(url);
     const urlObj = new URL(parsed);
-    
+
     // Only allow HTTP(S) protocols
     if (!['http:', 'https:'].includes(urlObj.protocol)) {
       return null;
     }
-    
+
     // Prevent localhost and private IPs in production
     if (process.env.NODE_ENV === 'production') {
       const hostname = urlObj.hostname.toLowerCase();
@@ -137,7 +153,7 @@ export function sanitizeUrl(url: string): string | null {
         return null;
       }
     }
-    
+
     return urlObj.toString();
   } catch {
     return null;
@@ -147,11 +163,12 @@ export function sanitizeUrl(url: string): string | null {
 /**
  * Validate and sanitize phone number
  */
-export const phoneSchema = z.string()
+export const phoneSchema = z
+  .string()
   .regex(/^[\d\s+()-]+$/)
   .min(10)
   .max(20)
-  .transform(val => val.replace(/\D/g, ''));
+  .transform((val) => val.replace(/\D/g, ''));
 
 export function sanitizePhone(phone: string): string | null {
   try {
@@ -170,7 +187,7 @@ export const userInputSchema = z.object({
   phone: phoneSchema.optional(),
   message: z.string().max(1000).transform(sanitizeInput),
   company: z.string().max(100).transform(sanitizeInput).optional(),
-  role: z.string().max(50).transform(sanitizeInput).optional()
+  role: z.string().max(50).transform(sanitizeInput).optional(),
 });
 
 /**
@@ -180,19 +197,19 @@ export function sanitizeJson(json: any): any {
   if (json === null || json === undefined) {
     return json;
   }
-  
+
   if (typeof json === 'string') {
     return sanitizeInput(json);
   }
-  
+
   if (typeof json === 'number' || typeof json === 'boolean') {
     return json;
   }
-  
+
   if (Array.isArray(json)) {
     return json.map(sanitizeJson);
   }
-  
+
   if (typeof json === 'object') {
     const sanitized: Record<string, any> = {};
     for (const [key, value] of Object.entries(json)) {
@@ -203,7 +220,7 @@ export function sanitizeJson(json: any): any {
     }
     return sanitized;
   }
-  
+
   // For any other type, convert to string and sanitize
   return sanitizeInput(String(json));
 }
@@ -213,17 +230,17 @@ export function sanitizeJson(json: any): any {
  */
 export function sanitizeErrorMessage(error: any): string {
   const message = error?.message || 'An error occurred';
-  
+
   // Remove file paths
   let sanitized = message.replace(/\/[\w\/.-]+/g, '[path]');
-  
+
   // Remove stack traces
   sanitized = sanitized.split('\n')[0];
-  
+
   // Remove sensitive patterns
   sanitized = sanitized.replace(/\b\d{4,}\b/g, '[number]'); // Long numbers
   sanitized = sanitized.replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, '[email]'); // Emails
   sanitized = sanitized.replace(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g, '[ip]'); // IP addresses
-  
+
   return sanitized;
 }

@@ -5,38 +5,38 @@ import { Brain, Cpu, Shield, Zap, Code, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-  const services = [
-    {
-      key: 'strategy',
-      icon: Brain,
-      color: 'from-orange to-orange-100',
-    },
-    {
-      key: 'transformation',
-      icon: Cpu,
-      color: 'from-green-100 to-green',
-    },
-    {
-      key: 'governance',
-      icon: Shield,
-      color: 'from-orange-100 to-orange',
-    },
-    {
-      key: 'innovation',
-      icon: Zap,
-      color: 'from-green to-green-100',
-    },
-    {
-      key: 'advisory',
-      icon: Code,
-      color: 'from-orange to-orange-100',
-    },
-    {
-      key: 'adoption',
-      icon: Users,
-      color: 'from-green-100 to-green',
-    },
-  ];
+const services = [
+  {
+    key: 'strategy',
+    icon: Brain,
+    color: 'from-orange to-orange-100',
+  },
+  {
+    key: 'transformation',
+    icon: Cpu,
+    color: 'from-green-100 to-green',
+  },
+  {
+    key: 'governance',
+    icon: Shield,
+    color: 'from-orange-100 to-orange',
+  },
+  {
+    key: 'innovation',
+    icon: Zap,
+    color: 'from-green to-green-100',
+  },
+  {
+    key: 'advisory',
+    icon: Code,
+    color: 'from-orange to-orange-100',
+  },
+  {
+    key: 'adoption',
+    icon: Users,
+    color: 'from-green-100 to-green',
+  },
+];
 
 export default function ServicesShowcase() {
   const t = useTranslations('services');
@@ -44,7 +44,7 @@ export default function ServicesShowcase() {
     <section className="py-20 bg-black dark:bg-black relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-br from-orange/5 via-transparent to-green/5" />
-      
+
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -54,9 +54,7 @@ export default function ServicesShowcase() {
           className="text-center mb-16"
         >
           <h2 className="mb-4 text-white">{t('title')}</h2>
-          <p className="text-xl text-white/70 max-w-3xl mx-auto">
-            {t('subtitle')}
-          </p>
+          <p className="text-xl text-white/70 max-w-3xl mx-auto">{t('subtitle')}</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -73,10 +71,14 @@ export default function ServicesShowcase() {
                   {/* Card */}
                   <div className="relative h-full p-8 rounded-2xl border border-white/10 bg-black-50 hover-lift transition-all duration-300 overflow-hidden">
                     {/* Gradient overlay on hover */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
-                    
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
+                    />
+
                     {/* Icon */}
-                    <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${service.color} text-white mb-6`}>
+                    <div
+                      className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${service.color} text-white mb-6`}
+                    >
                       <service.icon className="w-6 h-6" />
                     </div>
 
@@ -84,9 +86,7 @@ export default function ServicesShowcase() {
                     <h3 className="text-xl font-semibold mb-3 text-white group-hover:text-orange transition-all duration-300">
                       {t(`items.${service.key}.title`)}
                     </h3>
-                    <p className="text-white/60 mb-6">
-                      {t(`items.${service.key}.description`)}
-                    </p>
+                    <p className="text-white/60 mb-6">{t(`items.${service.key}.description`)}</p>
 
                     {/* Features */}
                     <ul className="space-y-2">

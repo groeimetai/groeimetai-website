@@ -686,9 +686,7 @@
         "cleanup": 0,
         "deduplication": 0
       },
-      "indexOptimization": [
-        "Consider periodic index rebuilding for optimal performance"
-      ]
+      "indexOptimization": ["Consider periodic index rebuilding for optimal performance"]
     }
   }
 }

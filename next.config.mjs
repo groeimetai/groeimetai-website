@@ -14,41 +14,44 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   transpilePackages: ['firebase'],
-  
+
   // Image optimization
   images: {
     domains: [
-      'localhost', 
-      'storage.googleapis.com', 
+      'localhost',
+      'storage.googleapis.com',
       'firebasestorage.googleapis.com',
       'i.pravatar.cc',
       'ui-avatars.com',
-      'avatars.githubusercontent.com'
+      'avatars.githubusercontent.com',
     ],
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
   },
-  
+
   // Environment variables
   env: {
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
   },
-  
+
   // Performance optimizations
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production' ? {
-      exclude: ['error', 'warn'],
-    } : false,
+    removeConsole:
+      process.env.NODE_ENV === 'production'
+        ? {
+            exclude: ['error', 'warn'],
+          }
+        : false,
   },
-  
+
   // Experimental features for better performance
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-*', 'framer-motion'],
     webVitalsAttribution: ['CLS', 'LCP', 'FCP', 'FID', 'TTFB'],
   },
-  
+
   // Headers for caching and security
   async headers() {
     return [
@@ -57,28 +60,29 @@ const nextConfig = {
         headers: [
           {
             key: 'X-DNS-Prefetch-Control',
-            value: 'on'
+            value: 'on',
           },
           {
             key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains'
+            value: 'max-age=31536000; includeSubDomains',
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'SAMEORIGIN',
           },
           {
             key: 'X-Content-Type-Options',
-            value: 'nosniff'
+            value: 'nosniff',
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
+            value: 'origin-when-cross-origin',
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://apis.google.com https://www.google-analytics.com https://www.googletagmanager.com https://www.google.com https://www.gstatic.com https://*.firebaseapp.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://firebasestorage.googleapis.com https://*.googleapis.com https://identitytoolkit.googleapis.com https://firestore.googleapis.com https://www.googletagmanager.com https://*.firebaseio.com wss://*.firebaseio.com https://securetoken.googleapis.com; frame-src 'self' https://www.google.com https://*.firebaseapp.com;"
-          }
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://apis.google.com https://www.google-analytics.com https://www.googletagmanager.com https://www.google.com https://www.gstatic.com https://*.firebaseapp.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://firebasestorage.googleapis.com https://*.googleapis.com https://identitytoolkit.googleapis.com https://firestore.googleapis.com https://www.googletagmanager.com https://*.firebaseio.com wss://*.firebaseio.com https://securetoken.googleapis.com; frame-src 'self' https://www.google.com https://*.firebaseapp.com;",
+          },
         ],
       },
       {
@@ -110,7 +114,7 @@ const nextConfig = {
       },
     ];
   },
-  
+
   // Redirects
   async redirects() {
     return [
@@ -121,7 +125,7 @@ const nextConfig = {
       },
     ];
   },
-  
+
   // Rewrites for API proxy
   async rewrites() {
     return [
@@ -131,7 +135,7 @@ const nextConfig = {
       },
     ];
   },
-  
+
   // Webpack configuration
   webpack: (config, { isServer, dev }) => {
     // Optimize chunks
@@ -150,8 +154,7 @@ const nextConfig = {
           },
           lib: {
             test(module) {
-              return module.size() > 160000 &&
-                /node_modules[\\/]/.test(module.identifier());
+              return module.size() > 160000 && /node_modules[\\/]/.test(module.identifier());
             },
             name(module) {
               const hash = crypto.createHash('sha256');
@@ -184,33 +187,33 @@ const nextConfig = {
         maxInitialRequests: 30,
       };
     }
-    
+
     return config;
   },
-  
+
   // Output configuration
   output: 'standalone',
-  
+
   // PoweredByHeader
   poweredByHeader: false,
-  
+
   // Compression
   compress: true,
-  
+
   // Generate ETags
   generateEtags: true,
-  
+
   // Page extensions
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
-  
+
   // Trailing slash
   trailingSlash: false,
-  
+
   // Skip TypeScript errors in production build
   typescript: {
     ignoreBuildErrors: false,
   },
-  
+
   // Skip ESLint in production build
   eslint: {
     ignoreDuringBuilds: false,

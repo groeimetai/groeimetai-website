@@ -20,9 +20,9 @@ function getPerformanceRating(
   value: number
 ): 'good' | 'needs-improvement' | 'poor' {
   const threshold = PERFORMANCE_THRESHOLDS[metricName as keyof typeof PERFORMANCE_THRESHOLDS];
-  
+
   if (!threshold) return 'needs-improvement';
-  
+
   if (value <= threshold.good) return 'good';
   if (value <= threshold.poor) return 'needs-improvement';
   return 'poor';
@@ -70,7 +70,7 @@ function logMetric(metric: Metric) {
   if (process.env.NODE_ENV === 'development') {
     const rating = getPerformanceRating(metric.name, metric.value);
     const color = rating === 'good' ? 'green' : rating === 'needs-improvement' ? 'orange' : 'red';
-    
+
     console.group(`%c⚡ Web Vitals: ${metric.name}`, `color: ${color}`);
     console.log('Value:', metric.value);
     console.log('Rating:', rating);
@@ -88,10 +88,10 @@ export function reportWebVitals(onPerfEntry?: (metric: Metric) => void) {
   const handleMetric = (metric: Metric) => {
     // Log in development
     logMetric(metric);
-    
+
     // Send to analytics
     sendToAnalytics(metric);
-    
+
     // Call custom handler if provided
     if (onPerfEntry) {
       onPerfEntry(metric);
@@ -112,7 +112,7 @@ export function reportWebVitals(onPerfEntry?: (metric: Metric) => void) {
 export function getCurrentMetrics() {
   const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
   const paint = performance.getEntriesByType('paint');
-  
+
   return {
     // Navigation timing
     dns: navigation.domainLookupEnd - navigation.domainLookupStart,
@@ -122,17 +122,16 @@ export function getCurrentMetrics() {
     domProcessing: navigation.domComplete - navigation.domInteractive,
     domContentLoaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
     loadComplete: navigation.loadEventEnd - navigation.loadEventStart,
-    
+
     // Paint timing
-    firstPaint: paint.find(p => p.name === 'first-paint')?.startTime || 0,
-    firstContentfulPaint: paint.find(p => p.name === 'first-contentful-paint')?.startTime || 0,
-    
+    firstPaint: paint.find((p) => p.name === 'first-paint')?.startTime || 0,
+    firstContentfulPaint: paint.find((p) => p.name === 'first-contentful-paint')?.startTime || 0,
+
     // Resource timing
     resources: performance.getEntriesByType('resource').length,
-    totalResourceSize: performance.getEntriesByType('resource').reduce(
-      (total, resource: any) => total + (resource.transferSize || 0),
-      0
-    ),
+    totalResourceSize: performance
+      .getEntriesByType('resource')
+      .reduce((total, resource: any) => total + (resource.transferSize || 0), 0),
   };
 }
 
@@ -144,7 +143,7 @@ export function observeLongTasks(callback: (entries: PerformanceEntry[]) => void
     const observer = new PerformanceObserver((list) => {
       const entries = list.getEntries();
       callback(entries);
-      
+
       // Log long tasks in development
       if (process.env.NODE_ENV === 'development') {
         entries.forEach((entry) => {
@@ -156,11 +155,11 @@ export function observeLongTasks(callback: (entries: PerformanceEntry[]) => void
         });
       }
     });
-    
+
     observer.observe({ entryTypes: ['longtask'] });
     return observer;
   }
-  
+
   return null;
 }
 
@@ -169,7 +168,7 @@ export function observeLongTasks(callback: (entries: PerformanceEntry[]) => void
  */
 export function analyzeResourceTiming() {
   const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
-  
+
   const analysis = {
     total: resources.length,
     byType: {} as Record<string, number>,
@@ -179,21 +178,21 @@ export function analyzeResourceTiming() {
     totalTransferSize: 0,
     totalDecodedSize: 0,
   };
-  
+
   resources.forEach((resource) => {
     // Count by type
     const type = resource.initiatorType;
     analysis.byType[type] = (analysis.byType[type] || 0) + 1;
-    
+
     // Track sizes
     analysis.totalTransferSize += resource.transferSize || 0;
     analysis.totalDecodedSize += resource.decodedBodySize || 0;
-    
+
     // Check cache hits
     if (resource.transferSize === 0 && resource.decodedBodySize > 0) {
       analysis.cacheMisses++;
     }
-    
+
     // Track slowest resources
     const duration = resource.responseEnd - resource.startTime;
     analysis.slowest.push({
@@ -201,21 +200,21 @@ export function analyzeResourceTiming() {
       duration,
       size: resource.transferSize || 0,
     });
-    
+
     // Track largest transfers
     analysis.largestTransfer.push({
       name: resource.name,
       size: resource.transferSize || 0,
     });
   });
-  
+
   // Sort and limit results
   analysis.slowest.sort((a, b) => b.duration - a.duration);
   analysis.slowest = analysis.slowest.slice(0, 10);
-  
+
   analysis.largestTransfer.sort((a, b) => b.size - a.size);
   analysis.largestTransfer = analysis.largestTransfer.slice(0, 10);
-  
+
   return analysis;
 }
 
@@ -232,7 +231,7 @@ export function getMemoryUsage() {
       percentUsed: (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100,
     };
   }
-  
+
   return null;
 }
 
@@ -249,7 +248,7 @@ export function getNetworkInfo() {
       saveData: connection.saveData,
     };
   }
-  
+
   return null;
 }
 
@@ -271,17 +270,17 @@ export function measure(name: string, startMark: string, endMark?: string) {
       performance.measure(name, startMark, endMark);
       const measures = performance.getEntriesByName(name, 'measure');
       const latestMeasure = measures[measures.length - 1];
-      
+
       if (process.env.NODE_ENV === 'development' && latestMeasure) {
         console.log(`Performance measure "${name}":`, latestMeasure.duration.toFixed(2), 'ms');
       }
-      
+
       return latestMeasure?.duration || 0;
     } catch (error) {
       console.error('Performance measurement error:', error);
       return 0;
     }
   }
-  
+
   return 0;
 }

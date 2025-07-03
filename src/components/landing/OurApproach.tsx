@@ -4,24 +4,24 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-  const approachSteps = [
-    {
-      key: 'discovery',
-      number: '01',
-    },
-    {
-      key: 'mapping',
-      number: '02',
-    },
-    {
-      key: 'pilot',
-      number: '03',
-    },
-    {
-      key: 'scale',
-      number: '04',
-    }
-  ];
+const approachSteps = [
+  {
+    key: 'discovery',
+    number: '01',
+  },
+  {
+    key: 'mapping',
+    number: '02',
+  },
+  {
+    key: 'pilot',
+    number: '03',
+  },
+  {
+    key: 'scale',
+    number: '04',
+  },
+];
 
 export default function OurApproach() {
   const t = useTranslations('approach');
@@ -44,9 +44,7 @@ export default function OurApproach() {
           <h2 className="mb-4 text-white">
             {t('title')} <span className="text-orange-500">{t('subtitle')}</span>
           </h2>
-          <p className="text-xl text-white/70 max-w-3xl mx-auto">
-            {t('description')}
-          </p>
+          <p className="text-xl text-white/70 max-w-3xl mx-auto">{t('description')}</p>
         </motion.div>
 
         <div className="max-w-5xl mx-auto">
@@ -59,25 +57,31 @@ export default function OurApproach() {
               transition={{ duration: 0.6, delay: index * 0.2 }}
               className="relative mb-12 last:mb-0"
             >
-              <div className={`flex items-center gap-8 ${index % 2 === 1 ? 'flex-row-reverse' : ''}`}>
+              <div
+                className={`flex items-center gap-8 ${index % 2 === 1 ? 'flex-row-reverse' : ''}`}
+              >
                 {/* Step number */}
                 <div className="flex-shrink-0">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-orange to-orange-600 
+                  <div
+                    className="w-24 h-24 rounded-full bg-gradient-to-br from-orange to-orange-600 
                     flex items-center justify-center text-white font-bold text-2xl
-                    shadow-lg shadow-orange/30">
+                    shadow-lg shadow-orange/30"
+                  >
                     {step.number}
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className={`flex-1 ${index % 2 === 1 ? 'text-right' : ''}`}>
-                  <h3 className="text-2xl font-bold text-white mb-3">{t(`steps.${step.key}.title`)}</h3>
+                  <h3 className="text-2xl font-bold text-white mb-3">
+                    {t(`steps.${step.key}.title`)}
+                  </h3>
                   <p className="text-white/70 mb-4 text-lg">{t(`steps.${step.key}.description`)}</p>
-                  
+
                   {/* Outcomes */}
                   <div className={`flex flex-wrap gap-2 ${index % 2 === 1 ? 'justify-end' : ''}`}>
                     {(t.raw(`steps.${step.key}.outcomes`) as string[]).map((outcome, i) => (
-                      <span 
+                      <span
                         key={i}
                         className="px-3 py-1 bg-white/10 border border-white/20 rounded-full text-sm text-white/80"
                       >
@@ -104,17 +108,16 @@ export default function OurApproach() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-20 grid grid-cols-1 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
         >
-          {[
-            { key: 'time' },
-            { key: 'roi' },
-            { key: 'success' },
-            { key: 'sponsorship' }
-          ].map((item, index) => (
-            <div key={index} className="text-center">
-              <p className="text-3xl font-bold text-orange mb-2">{t(`metrics.${item.key}.value`)}</p>
-              <p className="text-white/60 text-sm">{t(`metrics.${item.key}.label`)}</p>
-            </div>
-          ))}
+          {[{ key: 'time' }, { key: 'roi' }, { key: 'success' }, { key: 'sponsorship' }].map(
+            (item, index) => (
+              <div key={index} className="text-center">
+                <p className="text-3xl font-bold text-orange mb-2">
+                  {t(`metrics.${item.key}.value`)}
+                </p>
+                <p className="text-white/60 text-sm">{t(`metrics.${item.key}.label`)}</p>
+              </div>
+            )
+          )}
         </motion.div>
       </div>
     </section>

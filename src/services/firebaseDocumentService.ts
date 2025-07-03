@@ -1,12 +1,12 @@
-import { 
-  collection, 
-  doc, 
-  setDoc, 
-  getDoc, 
-  getDocs, 
-  query, 
-  where, 
-  orderBy, 
+import {
+  collection,
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
   limit,
   serverTimestamp,
   updateDoc,
@@ -14,18 +14,24 @@ import {
   addDoc,
   QueryConstraint,
   startAfter,
-  DocumentSnapshot
+  DocumentSnapshot,
 } from 'firebase/firestore';
 import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
   deleteObject,
-  getMetadata
+  getMetadata,
 } from 'firebase/storage';
 import { db, storage, collections } from '@/lib/firebase';
 
-export type DocumentType = 'contract' | 'proposal' | 'report' | 'invoice' | 'presentation' | 'other';
+export type DocumentType =
+  | 'contract'
+  | 'proposal'
+  | 'report'
+  | 'invoice'
+  | 'presentation'
+  | 'other';
 
 export interface FirebaseDocument {
   id?: string;
@@ -59,20 +65,22 @@ export interface UploadProgress {
 const getDocumentType = (file: File): DocumentType => {
   const mimeType = file.type;
   const fileName = file.name.toLowerCase();
-  
+
   if (mimeType.includes('pdf') || fileName.endsWith('.pdf')) {
     if (fileName.includes('contract')) return 'contract';
     if (fileName.includes('proposal')) return 'proposal';
     if (fileName.includes('report')) return 'report';
     if (fileName.includes('invoice')) return 'invoice';
   }
-  
-  if (mimeType.includes('presentation') || 
-      fileName.endsWith('.ppt') || 
-      fileName.endsWith('.pptx')) {
+
+  if (
+    mimeType.includes('presentation') ||
+    fileName.endsWith('.ppt') ||
+    fileName.endsWith('.pptx')
+  ) {
     return 'presentation';
   }
-  
+
   return 'other';
 };
 
@@ -97,23 +105,24 @@ export const firebaseDocumentService = {
       const timestamp = Date.now();
       const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
       const storagePath = `documents/${userId}/${timestamp}_${sanitizedFileName}`;
-      
+
       // Create storage reference
       const storageRef = ref(storage, storagePath);
-      
+
       // Start upload
       const uploadTask = uploadBytesResumable(storageRef, file);
-      
+
       // Handle upload progress
       if (onProgress) {
-        uploadTask.on('state_changed', 
+        uploadTask.on(
+          'state_changed',
           (snapshot) => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             onProgress({
               progress,
               bytesTransferred: snapshot.bytesTransferred,
               totalBytes: snapshot.totalBytes,
-              state: snapshot.state as UploadProgress['state']
+              state: snapshot.state as UploadProgress['state'],
             });
           },
           (error) => {
@@ -122,13 +131,13 @@ export const firebaseDocumentService = {
           }
         );
       }
-      
+
       // Wait for upload to complete
       const snapshot = await uploadTask;
-      
+
       // Get download URL
       const downloadURL = await getDownloadURL(snapshot.ref);
-      
+
       // Create document metadata
       const documentData: FirebaseDocument = {
         name: file.name,
@@ -139,7 +148,7 @@ export const firebaseDocumentService = {
         uploadedBy: {
           uid: userId,
           email: userEmail,
-          name: userName
+          name: userName,
         },
         projectId: metadata?.projectId,
         projectName: metadata?.projectName,
@@ -147,15 +156,15 @@ export const firebaseDocumentService = {
         storagePath: storagePath,
         description: metadata?.description,
         tags: metadata?.tags,
-        isArchived: false
+        isArchived: false,
       };
-      
+
       // Add to Firestore
       const docRef = await addDoc(collection(db, collections.documents), documentData);
-      
+
       return {
         ...documentData,
-        id: docRef.id
+        id: docRef.id,
       };
     } catch (error) {
       console.error('Error uploading document:', error);
@@ -174,61 +183,62 @@ export const firebaseDocumentService = {
       pageSize?: number;
       lastDoc?: DocumentSnapshot;
     }
-  ): Promise<{ documents: FirebaseDocument[], lastDoc?: DocumentSnapshot }> {
+  ): Promise<{ documents: FirebaseDocument[]; lastDoc?: DocumentSnapshot }> {
     try {
       const constraints: QueryConstraint[] = [
         where('uploadedBy.uid', '==', userId),
-        orderBy('uploadedAt', 'desc')
+        orderBy('uploadedAt', 'desc'),
       ];
-      
+
       // Add filters
       if (filters?.projectId) {
         constraints.push(where('projectId', '==', filters.projectId));
       }
-      
+
       if (filters?.type) {
         constraints.push(where('type', '==', filters.type));
       }
-      
+
       if (filters?.isArchived !== undefined) {
         constraints.push(where('isArchived', '==', filters.isArchived));
       }
-      
+
       // Add pagination
       if (filters?.lastDoc) {
         constraints.push(startAfter(filters.lastDoc));
       }
-      
+
       if (filters?.pageSize) {
         constraints.push(limit(filters.pageSize));
       }
-      
+
       const q = query(collection(db, collections.documents), ...constraints);
       const querySnapshot = await getDocs(q);
-      
+
       const documents: FirebaseDocument[] = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data() as FirebaseDocument;
         documents.push({
           ...data,
-          id: doc.id
+          id: doc.id,
         });
       });
-      
+
       // Filter by search query if provided (client-side filtering for name)
       let filteredDocuments = documents;
       if (filters?.searchQuery) {
         const searchLower = filters.searchQuery.toLowerCase();
-        filteredDocuments = documents.filter(doc => 
-          doc.name.toLowerCase().includes(searchLower) ||
-          doc.projectName?.toLowerCase().includes(searchLower) ||
-          doc.description?.toLowerCase().includes(searchLower) ||
-          doc.tags?.some(tag => tag.toLowerCase().includes(searchLower))
+        filteredDocuments = documents.filter(
+          (doc) =>
+            doc.name.toLowerCase().includes(searchLower) ||
+            doc.projectName?.toLowerCase().includes(searchLower) ||
+            doc.description?.toLowerCase().includes(searchLower) ||
+            doc.tags?.some((tag) => tag.toLowerCase().includes(searchLower))
         );
       }
-      
+
       const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
-      
+
       return { documents: filteredDocuments, lastDoc };
     } catch (error) {
       console.error('Error getting user documents:', error);
@@ -241,14 +251,14 @@ export const firebaseDocumentService = {
     try {
       const docRef = doc(db, collections.documents, documentId);
       const docSnap = await getDoc(docRef);
-      
+
       if (docSnap.exists()) {
         return {
-          ...docSnap.data() as FirebaseDocument,
-          id: docSnap.id
+          ...(docSnap.data() as FirebaseDocument),
+          id: docSnap.id,
         };
       }
-      
+
       return null;
     } catch (error) {
       console.error('Error getting document:', error);
@@ -279,7 +289,7 @@ export const firebaseDocumentService = {
       // Delete from Storage
       const storageRef = ref(storage, storagePath);
       await deleteObject(storageRef);
-      
+
       // Delete from Firestore
       await deleteDoc(doc(db, collections.documents, documentId));
     } catch (error) {
@@ -294,7 +304,7 @@ export const firebaseDocumentService = {
       const docRef = doc(db, collections.documents, documentId);
       await updateDoc(docRef, {
         isArchived: isArchived,
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       });
     } catch (error) {
       console.error('Error toggling archive status:', error);
@@ -304,14 +314,14 @@ export const firebaseDocumentService = {
 
   // Update document metadata
   async updateDocument(
-    documentId: string, 
+    documentId: string,
     updates: Partial<Pick<FirebaseDocument, 'name' | 'description' | 'tags' | 'type'>>
   ): Promise<void> {
     try {
       const docRef = doc(db, collections.documents, documentId);
       await updateDoc(docRef, {
         ...updates,
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       });
     } catch (error) {
       console.error('Error updating document:', error);
@@ -325,26 +335,23 @@ export const firebaseDocumentService = {
     documentCount: number;
   }> {
     try {
-      const q = query(
-        collection(db, collections.documents),
-        where('uploadedBy.uid', '==', userId)
-      );
-      
+      const q = query(collection(db, collections.documents), where('uploadedBy.uid', '==', userId));
+
       const querySnapshot = await getDocs(q);
-      
+
       let totalBytes = 0;
       let documentCount = 0;
-      
+
       querySnapshot.forEach((doc) => {
         const data = doc.data() as FirebaseDocument;
         totalBytes += data.size || 0;
         documentCount++;
       });
-      
+
       return { totalBytes, documentCount };
     } catch (error) {
       console.error('Error getting storage usage:', error);
       throw error;
     }
-  }
+  },
 };

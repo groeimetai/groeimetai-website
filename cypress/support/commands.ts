@@ -15,21 +15,21 @@ Cypress.Commands.add('loginWithGoogle', () => {
   // Mock Google OAuth flow
   cy.intercept('GET', '/api/auth/providers', {
     statusCode: 200,
-    body: { google: true, linkedin: true }
+    body: { google: true, linkedin: true },
   });
-  
+
   cy.intercept('POST', '/api/auth/callback/google', {
     statusCode: 200,
-    body: { 
-      user: { 
+    body: {
+      user: {
         id: 'test-user-id',
         email: 'test@example.com',
-        name: 'Test User'
+        name: 'Test User',
       },
-      token: 'test-jwt-token'
-    }
+      token: 'test-jwt-token',
+    },
   });
-  
+
   cy.visit('/auth/login');
   cy.get('[data-testid="google-login-button"]').click();
 });
@@ -47,11 +47,11 @@ Cypress.Commands.add('apiRequest', (method: string, url: string, options?: any) 
       method,
       url,
       headers: {
-        'Authorization': cookie ? `Bearer ${cookie.value}` : undefined,
+        Authorization: cookie ? `Bearer ${cookie.value}` : undefined,
         'X-CSRF-Token': Cypress.env('CSRF_TOKEN'),
-        ...options?.headers
+        ...options?.headers,
       },
-      ...options
+      ...options,
     });
   });
 });
@@ -66,17 +66,21 @@ Cypress.Commands.add('checkA11y', (context?: any, options?: any) => {
 Cypress.Commands.add('measurePerformance', (name: string) => {
   cy.window().then((win) => {
     const performance = win.performance;
-    const navigationTiming = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    
+    const navigationTiming = performance.getEntriesByType(
+      'navigation'
+    )[0] as PerformanceNavigationTiming;
+
     const metrics = {
       name,
-      domContentLoaded: navigationTiming.domContentLoadedEventEnd - navigationTiming.domContentLoadedEventStart,
+      domContentLoaded:
+        navigationTiming.domContentLoadedEventEnd - navigationTiming.domContentLoadedEventStart,
       loadComplete: navigationTiming.loadEventEnd - navigationTiming.loadEventStart,
       firstPaint: performance.getEntriesByName('first-paint')[0]?.startTime || 0,
-      firstContentfulPaint: performance.getEntriesByName('first-contentful-paint')[0]?.startTime || 0,
-      totalTime: navigationTiming.loadEventEnd - navigationTiming.fetchStart
+      firstContentfulPaint:
+        performance.getEntriesByName('first-contentful-paint')[0]?.startTime || 0,
+      totalTime: navigationTiming.loadEventEnd - navigationTiming.fetchStart,
     };
-    
+
     cy.task('logPerformance', metrics);
   });
 });
@@ -86,7 +90,7 @@ Cypress.Commands.add('compareSnapshot', (name: string, options?: any) => {
   cy.screenshot(name, {
     capture: 'viewport',
     overwrite: true,
-    ...options
+    ...options,
   });
 });
 
@@ -125,17 +129,17 @@ Cypress.Commands.add('fillForm', (formData: Record<string, any>) => {
 declare global {
   namespace Cypress {
     interface Chainable {
-      login(email: string, password: string): Chainable<void>
-      loginWithGoogle(): Chainable<void>
-      logout(): Chainable<void>
-      apiRequest(method: string, url: string, options?: any): Chainable<Response<any>>
-      checkA11y(context?: any, options?: any): Chainable<void>
-      measurePerformance(name: string): Chainable<void>
-      compareSnapshot(name: string, options?: any): Chainable<void>
-      seedDatabase(data: any): Chainable<void>
-      cleanDatabase(): Chainable<void>
-      waitForApi(alias: string, timeout?: number): Chainable<void>
-      fillForm(formData: Record<string, any>): Chainable<void>
+      login(email: string, password: string): Chainable<void>;
+      loginWithGoogle(): Chainable<void>;
+      logout(): Chainable<void>;
+      apiRequest(method: string, url: string, options?: any): Chainable<Response<any>>;
+      checkA11y(context?: any, options?: any): Chainable<void>;
+      measurePerformance(name: string): Chainable<void>;
+      compareSnapshot(name: string, options?: any): Chainable<void>;
+      seedDatabase(data: any): Chainable<void>;
+      cleanDatabase(): Chainable<void>;
+      waitForApi(alias: string, timeout?: number): Chainable<void>;
+      fillForm(formData: Record<string, any>): Chainable<void>;
     }
   }
 }

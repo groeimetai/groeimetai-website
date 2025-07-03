@@ -11,14 +11,14 @@ interface GenerateMetadataParams {
 
 export function generateAlternateLinks(pathname: string) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://groeimetai.io';
-  
+
   // Remove locale prefix from pathname
   const pathWithoutLocale = pathname.replace(/^\/(nl|en)/, '');
-  
-  return locales.map(locale => ({
+
+  return locales.map((locale) => ({
     rel: 'alternate',
     hreflang: locale,
-    href: `${baseUrl}/${locale}${pathWithoutLocale}`
+    href: `${baseUrl}/${locale}${pathWithoutLocale}`,
   }));
 }
 
@@ -27,22 +27,22 @@ export function generateMetadataWithAlternates({
   pathname,
   title = 'GroeimetAI - AI Consultancy & Innovation',
   description = 'Transform your business with cutting-edge AI solutions. Expert consultancy in GenAI, LLM integration, RAG architecture, and ServiceNow implementation.',
-  image = '/og-image.png'
+  image = '/og-image.png',
 }: GenerateMetadataParams): Metadata {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://groeimetai.io';
   const url = `${baseUrl}${pathname}`;
-  
+
   return {
     title,
     description,
     alternates: {
       canonical: url,
       languages: Object.fromEntries(
-        locales.map(loc => [
+        locales.map((loc) => [
           loc === 'nl' ? 'nl-NL' : 'en',
-          `${baseUrl}/${loc}${pathname.replace(/^\/(nl|en)/, '')}`
+          `${baseUrl}/${loc}${pathname.replace(/^\/(nl|en)/, '')}`,
         ])
-      )
+      ),
     },
     openGraph: {
       title,
@@ -55,7 +55,7 @@ export function generateMetadataWithAlternates({
           width: 1200,
           height: 630,
           alt: title,
-        }
+        },
       ],
       locale: locale === 'nl' ? 'nl_NL' : 'en_US',
       alternateLocale: locale === 'nl' ? 'en_US' : 'nl_NL',

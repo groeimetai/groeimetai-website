@@ -408,7 +408,14 @@ export interface Invoice {
   pdfGeneratedAt?: Date;
 }
 
-export type InvoiceStatus = 'draft' | 'sent' | 'viewed' | 'paid' | 'partial' | 'overdue' | 'cancelled';
+export type InvoiceStatus =
+  | 'draft'
+  | 'sent'
+  | 'viewed'
+  | 'paid'
+  | 'partial'
+  | 'overdue'
+  | 'cancelled';
 export type InvoiceType = 'standard' | 'recurring' | 'credit_note';
 export type PaymentMethod = 'bank_transfer' | 'credit_card' | 'paypal' | 'stripe';
 
@@ -471,7 +478,12 @@ export interface Service {
   createdBy: string;
 }
 
-export type ServiceCategory = 'ai_consulting' | 'development' | 'servicenow' | 'training' | 'support';
+export type ServiceCategory =
+  | 'ai_consulting'
+  | 'development'
+  | 'servicenow'
+  | 'training'
+  | 'support';
 
 export interface ServicePricing {
   model: 'fixed' | 'hourly' | 'subscription' | 'custom';
@@ -562,9 +574,25 @@ export interface Document {
   deletedBy?: string;
 }
 
-export type DocumentType = 'document' | 'spreadsheet' | 'presentation' | 'pdf' | 'image' | 'video' | 'audio' | 'archive' | 'other';
+export type DocumentType =
+  | 'document'
+  | 'spreadsheet'
+  | 'presentation'
+  | 'pdf'
+  | 'image'
+  | 'video'
+  | 'audio'
+  | 'archive'
+  | 'other';
 export type DocumentStatus = 'draft' | 'published' | 'archived' | 'deleted';
-export type DocumentCategory = 'contract' | 'proposal' | 'report' | 'invoice' | 'presentation' | 'specification' | 'other';
+export type DocumentCategory =
+  | 'contract'
+  | 'proposal'
+  | 'report'
+  | 'invoice'
+  | 'presentation'
+  | 'specification'
+  | 'other';
 
 export interface DocumentVersion {
   id: string;
@@ -634,7 +662,14 @@ export interface Meeting {
   cancellationReason?: string;
 }
 
-export type MeetingType = 'consultation' | 'project_review' | 'standup' | 'workshop' | 'presentation' | 'interview' | 'other';
+export type MeetingType =
+  | 'consultation'
+  | 'project_review'
+  | 'standup'
+  | 'workshop'
+  | 'presentation'
+  | 'interview'
+  | 'other';
 export type MeetingStatus = 'scheduled' | 'in_progress' | 'completed' | 'cancelled' | 'rescheduled';
 export type MeetingPlatform = 'zoom' | 'teams' | 'meet' | 'in_person' | 'phone' | 'video' | 'other';
 

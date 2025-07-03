@@ -42,7 +42,7 @@ export default function ParticleBackground() {
       previousMouseRef.current = { ...mouseRef.current };
       mouseRef.current = {
         x: e.clientX - rect.left,
-        y: e.clientY - rect.top
+        y: e.clientY - rect.top,
       };
     }
   }, []);
@@ -53,7 +53,7 @@ export default function ParticleBackground() {
       previousMouseRef.current = { ...mouseRef.current };
       mouseRef.current = {
         x: e.touches[0].clientX - rect.left,
-        y: e.touches[0].clientY - rect.top
+        y: e.touches[0].clientY - rect.top,
       };
     }
   }, []);
@@ -80,14 +80,17 @@ export default function ParticleBackground() {
     const createParticles = () => {
       particles = [];
       // Detect mobile for performance optimization
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
-      const baseCount = Math.floor((window.innerWidth * window.innerHeight) / (isMobile ? 20000 : 12000));
+      const isMobile =
+        /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+      const baseCount = Math.floor(
+        (window.innerWidth * window.innerHeight) / (isMobile ? 20000 : 12000)
+      );
       const particleCount = Math.min(baseCount, isMobile ? 80 : 150); // Lower cap for mobile
-      
+
       for (let i = 0; i < particleCount; i++) {
         const depth = Math.random() * 0.8 + 0.2; // 0.2 to 1
         const baseRadius = (Math.random() * 2 + 1) * depth;
-        
+
         particles.push({
           x: Math.random() * window.innerWidth,
           y: Math.random() * window.innerHeight,
@@ -99,48 +102,49 @@ export default function ParticleBackground() {
           color: {
             r: 37 + Math.random() * 20,
             g: 99 + Math.random() * 20,
-            b: 235 + Math.random() * 20
+            b: 235 + Math.random() * 20,
           },
           depth,
-          mass: baseRadius * 0.5
+          mass: baseRadius * 0.5,
         });
       }
     };
 
     const updateTrail = () => {
       // Add new trail point
-      if (Math.abs(mouseRef.current.x - previousMouseRef.current.x) > 2 ||
-          Math.abs(mouseRef.current.y - previousMouseRef.current.y) > 2) {
+      if (
+        Math.abs(mouseRef.current.x - previousMouseRef.current.x) > 2 ||
+        Math.abs(mouseRef.current.y - previousMouseRef.current.y) > 2
+      ) {
         trailRef.current.push({
           x: mouseRef.current.x,
           y: mouseRef.current.y,
-          age: 0
+          age: 0,
         });
       }
 
       // Update and filter trail
       trailRef.current = trailRef.current
-        .map(point => ({ ...point, age: point.age + 1 }))
-        .filter(point => point.age < 20);
+        .map((point) => ({ ...point, age: point.age + 1 }))
+        .filter((point) => point.age < 20);
     };
 
     const drawGlowEffect = () => {
       const gradient = ctx.createRadialGradient(
-        mouseRef.current.x, mouseRef.current.y, 0,
-        mouseRef.current.x, mouseRef.current.y, 100
+        mouseRef.current.x,
+        mouseRef.current.y,
+        0,
+        mouseRef.current.x,
+        mouseRef.current.y,
+        100
       );
-      
+
       gradient.addColorStop(0, 'rgba(37, 99, 235, 0.1)');
       gradient.addColorStop(0.5, 'rgba(37, 99, 235, 0.05)');
       gradient.addColorStop(1, 'rgba(37, 99, 235, 0)');
-      
+
       ctx.fillStyle = gradient;
-      ctx.fillRect(
-        mouseRef.current.x - 100,
-        mouseRef.current.y - 100,
-        200,
-        200
-      );
+      ctx.fillRect(mouseRef.current.x - 100, mouseRef.current.y - 100, 200, 200);
     };
 
     const drawTrail = () => {
@@ -152,22 +156,23 @@ export default function ParticleBackground() {
       for (let i = 1; i < trailRef.current.length; i++) {
         const point = trailRef.current[i];
         const prevPoint = trailRef.current[i - 1];
-        
+
         const cp1x = (prevPoint.x + point.x) / 2;
         const cp1y = (prevPoint.y + point.y) / 2;
-        
+
         ctx.quadraticCurveTo(prevPoint.x, prevPoint.y, cp1x, cp1y);
       }
 
       const gradient = ctx.createLinearGradient(
-        trailRef.current[0].x, trailRef.current[0].y,
+        trailRef.current[0].x,
+        trailRef.current[0].y,
         trailRef.current[trailRef.current.length - 1].x,
         trailRef.current[trailRef.current.length - 1].y
       );
-      
+
       gradient.addColorStop(0, 'rgba(37, 99, 235, 0.3)');
       gradient.addColorStop(1, 'rgba(37, 99, 235, 0)');
-      
+
       ctx.strokeStyle = gradient;
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
@@ -191,9 +196,9 @@ export default function ParticleBackground() {
         // Dynamic color based on proximity to mouse
         const mouseDistance = Math.sqrt(
           Math.pow(particle.x - mouseRef.current.x, 2) +
-          Math.pow(particle.y - mouseRef.current.y, 2)
+            Math.pow(particle.y - mouseRef.current.y, 2)
         );
-        
+
         const colorIntensity = Math.max(0, 1 - mouseDistance / 300);
         const r = particle.color.r + colorIntensity * 50;
         const g = particle.color.g + colorIntensity * 50;
@@ -201,13 +206,17 @@ export default function ParticleBackground() {
 
         // Draw particle with glow
         const gradient = ctx.createRadialGradient(
-          particle.x, particle.y, 0,
-          particle.x, particle.y, particle.radius * 2
+          particle.x,
+          particle.y,
+          0,
+          particle.x,
+          particle.y,
+          particle.radius * 2
         );
-        
+
         gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${particle.opacity})`);
         gradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
-        
+
         ctx.fillStyle = gradient;
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.radius * 2, 0, Math.PI * 2);
@@ -217,16 +226,15 @@ export default function ParticleBackground() {
         for (let j = i + 1; j < sortedParticles.length; j++) {
           const otherParticle = sortedParticles[j];
           const distance = Math.sqrt(
-            Math.pow(particle.x - otherParticle.x, 2) +
-            Math.pow(particle.y - otherParticle.y, 2)
+            Math.pow(particle.x - otherParticle.x, 2) + Math.pow(particle.y - otherParticle.y, 2)
           );
 
           const maxDistance = 150 * ((particle.depth + otherParticle.depth) / 2);
-          
+
           if (distance < maxDistance) {
-            const opacity = (1 - distance / maxDistance) * 0.3 * 
-                          ((particle.depth + otherParticle.depth) / 2);
-            
+            const opacity =
+              (1 - distance / maxDistance) * 0.3 * ((particle.depth + otherParticle.depth) / 2);
+
             ctx.beginPath();
             ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${opacity})`;
             ctx.lineWidth = 0.5 * ((particle.depth + otherParticle.depth) / 2);
@@ -249,12 +257,12 @@ export default function ParticleBackground() {
         const dx = mouseRef.current.x - particle.x;
         const dy = mouseRef.current.y - particle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        
+
         if (distance > 0 && distance < 200 && !prefersReducedMotion.current) {
           const force = (particle.mass * 20) / (distance * distance);
           const ax = (dx / distance) * force;
           const ay = (dy / distance) * force;
-          
+
           particle.vx += ax * 0.02;
           particle.vy += ay * 0.02;
         }
@@ -262,15 +270,17 @@ export default function ParticleBackground() {
         // Apply velocity with damping
         particle.x += particle.vx * particle.depth;
         particle.y += particle.vy * particle.depth;
-        
+
         // Damping
         particle.vx *= 0.98;
         particle.vy *= 0.98;
 
         // Parallax effect based on depth
-        const parallaxX = (mouseRef.current.x - window.innerWidth / 2) * 0.02 * (1 - particle.depth);
-        const parallaxY = (mouseRef.current.y - window.innerHeight / 2) * 0.02 * (1 - particle.depth);
-        
+        const parallaxX =
+          (mouseRef.current.x - window.innerWidth / 2) * 0.02 * (1 - particle.depth);
+        const parallaxY =
+          (mouseRef.current.y - window.innerHeight / 2) * 0.02 * (1 - particle.depth);
+
         particle.x += parallaxX;
         particle.y += parallaxY;
 
@@ -292,7 +302,7 @@ export default function ParticleBackground() {
 
     const animate = (currentTime: number) => {
       frameCountRef.current++;
-      
+
       // Calculate FPS
       if (currentTime - performanceRef.current.lastTime > 1000) {
         performanceRef.current.fps = frameCountRef.current;
@@ -303,7 +313,7 @@ export default function ParticleBackground() {
       updateTrail();
       updateParticles();
       drawParticles();
-      
+
       animationFrameId = requestAnimationFrame(animate);
     };
 
@@ -333,9 +343,9 @@ export default function ParticleBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-auto"
-      style={{ 
+      style={{
         opacity: 0.8,
-        background: 'radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.5) 100%)'
+        background: 'radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.5) 100%)',
       }}
     />
   );

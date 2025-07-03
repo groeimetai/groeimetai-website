@@ -10,7 +10,7 @@ export const validateRequest = (schema) => {
       const toValidate = {
         body: req.body,
         query: req.query,
-        params: req.params
+        params: req.params,
       };
 
       const errors = {};
@@ -20,13 +20,13 @@ export const validateRequest = (schema) => {
         if (schema[key]) {
           const { error, value } = schema[key].validate(data, {
             abortEarly: false,
-            stripUnknown: true
+            stripUnknown: true,
           });
 
           if (error) {
-            errors[key] = error.details.map(detail => ({
+            errors[key] = error.details.map((detail) => ({
               field: detail.path.join('.'),
-              message: detail.message
+              message: detail.message,
             }));
           } else {
             // Replace with validated and sanitized data
@@ -101,7 +101,7 @@ export const customValidators = {
    * Validate array of strings
    */
   isStringArray: (value) => {
-    if (!Array.isArray(value) || !value.every(item => typeof item === 'string')) {
+    if (!Array.isArray(value) || !value.every((item) => typeof item === 'string')) {
       throw new Error('Must be an array of strings');
     }
     return value;
@@ -115,7 +115,7 @@ export const customValidators = {
       throw new Error(`Must be one of: ${validValues.join(', ')}`);
     }
     return value;
-  }
+  },
 };
 
 /**
@@ -148,5 +148,5 @@ export const sanitizers = {
    */
   sanitizeFileName: (value) => {
     return value?.replace(/[^a-zA-Z0-9.-]/g, '_');
-  }
+  },
 };

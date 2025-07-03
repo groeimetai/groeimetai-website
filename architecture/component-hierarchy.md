@@ -3,6 +3,7 @@
 ## Component Architecture Overview
 
 ### Design Principles
+
 - **Atomic Design Pattern**: Components organized as Atoms → Molecules → Organisms → Templates → Pages
 - **Server/Client Separation**: Clear distinction between Server Components (SC) and Client Components (CC)
 - **Composition over Inheritance**: Favor component composition for flexibility
@@ -293,6 +294,7 @@ utils/
 ## Component Communication Patterns
 
 ### 1. Props Flow
+
 ```
 Dashboard
   ├─→ StatsGrid (data)
@@ -304,6 +306,7 @@ Dashboard
 ```
 
 ### 2. Context Providers
+
 ```
 AuthContext
   ├── user: User | null
@@ -325,6 +328,7 @@ NotificationContext
 ```
 
 ### 3. State Management (Zustand)
+
 ```
 useProjectStore
   ├── projects: Project[]
@@ -346,6 +350,7 @@ useConsultationStore
 ## Performance Optimization
 
 ### 1. Code Splitting
+
 ```typescript
 // Lazy load heavy components
 const RichTextEditor = lazy(() => import('@/components/forms/RichTextEditor'));
@@ -354,6 +359,7 @@ const Analytics = lazy(() => import('@/components/features/analytics'));
 ```
 
 ### 2. Memoization
+
 ```typescript
 // Memoize expensive computations
 const ProjectStats = memo(({ projects }) => {
@@ -363,6 +369,7 @@ const ProjectStats = memo(({ projects }) => {
 ```
 
 ### 3. Suspense Boundaries
+
 ```typescript
 // Progressive loading with Suspense
 <Suspense fallback={<ProjectListSkeleton />}>
@@ -373,6 +380,7 @@ const ProjectStats = memo(({ projects }) => {
 ## Accessibility Considerations
 
 ### 1. ARIA Labels
+
 ```typescript
 <Button aria-label="Create new project" onClick={handleCreate}>
   <PlusIcon aria-hidden="true" />
@@ -380,6 +388,7 @@ const ProjectStats = memo(({ projects }) => {
 ```
 
 ### 2. Keyboard Navigation
+
 ```typescript
 <NavigationMenu onKeyDown={handleKeyboardNavigation}>
   {/* Tab-able items with proper focus management */}
@@ -387,6 +396,7 @@ const ProjectStats = memo(({ projects }) => {
 ```
 
 ### 3. Screen Reader Support
+
 ```typescript
 <Alert role="alert" aria-live="polite">
   Project created successfully
@@ -396,16 +406,19 @@ const ProjectStats = memo(({ projects }) => {
 ## Testing Strategy
 
 ### 1. Unit Tests
+
 - Test individual components in isolation
 - Mock dependencies and API calls
 - Test user interactions and state changes
 
 ### 2. Integration Tests
+
 - Test component interactions
 - Test data flow between components
 - Test context provider behavior
 
 ### 3. E2E Tests
+
 - Test complete user flows
 - Test critical business paths
 - Test error scenarios
@@ -413,6 +426,7 @@ const ProjectStats = memo(({ projects }) => {
 ## Component Documentation
 
 Each component should include:
+
 1. **JSDoc comments** describing purpose and usage
 2. **Props interface** with TypeScript types
 3. **Usage examples** in Storybook

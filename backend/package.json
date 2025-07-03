@@ -11,7 +11,12 @@
     "lint": "eslint src/**/*.js",
     "format": "prettier --write \"src/**/*.js\""
   },
-  "keywords": ["groeimetai", "consultation", "platform", "api"],
+  "keywords": [
+    "groeimetai",
+    "consultation",
+    "platform",
+    "api"
+  ],
   "author": "GroeimetAI Team",
   "license": "MIT",
   "dependencies": {

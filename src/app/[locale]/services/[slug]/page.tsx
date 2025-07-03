@@ -4,18 +4,18 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { 
-  Brain, 
-  Bot, 
-  Layers, 
-  Shield, 
-  Cloud, 
+import {
+  Brain,
+  Bot,
+  Layers,
+  Shield,
+  Cloud,
   LineChart,
   Workflow,
   Sparkles,
   ArrowRight,
   Check,
-  ArrowLeft
+  ArrowLeft,
 } from 'lucide-react';
 
 interface ServiceDetailData {
@@ -49,10 +49,7 @@ const iconMap = {
   'ai-security': Shield,
 };
 
-function getServiceDataFromTranslations(
-  slug: string,
-  t: any
-): ServiceDetailData | null {
+function getServiceDataFromTranslations(slug: string, t: any): ServiceDetailData | null {
   const serviceKey = {
     'genai-consultancy': 'genai',
     'llm-integration': 'llm',
@@ -84,19 +81,23 @@ function getServiceDataFromTranslations(
 export async function generateStaticParams() {
   const locales = ['en', 'nl'];
   const services = Object.keys(iconMap);
-  
-  return locales.flatMap(locale =>
-    services.map(slug => ({
+
+  return locales.flatMap((locale) =>
+    services.map((slug) => ({
       locale,
       slug,
     }))
   );
 }
 
-export async function generateMetadata({ params }: { params: { locale: string; slug: string } }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string; slug: string };
+}): Promise<Metadata> {
   const locale = params.locale as 'nl' | 'en';
   const messages = (await import(`@/translations/${locale}.json`)).default;
-  
+
   const serviceKey = {
     'genai-consultancy': 'genai',
     'llm-integration': 'llm',
@@ -108,7 +109,8 @@ export async function generateMetadata({ params }: { params: { locale: string; s
 
   if (!serviceKey) {
     return {
-      title: locale === 'nl' ? 'Service niet gevonden - GroeimetAI' : 'Service not found - GroeimetAI',
+      title:
+        locale === 'nl' ? 'Service niet gevonden - GroeimetAI' : 'Service not found - GroeimetAI',
     };
   }
 
@@ -125,7 +127,11 @@ export async function generateMetadata({ params }: { params: { locale: string; s
   };
 }
 
-export default function ServiceDetailPage({ params }: { params: { locale: string; slug: string } }) {
+export default function ServiceDetailPage({
+  params,
+}: {
+  params: { locale: string; slug: string };
+}) {
   const t = useTranslations('serviceDetails');
   const service = getServiceDataFromTranslations(params.slug, t);
 
@@ -141,7 +147,10 @@ export default function ServiceDetailPage({ params }: { params: { locale: string
       <section className="relative py-20 lg:py-32 overflow-hidden bg-black">
         <div className="absolute inset-0 bg-gradient-to-br from-orange/5 to-green/5" />
         <div className="container mx-auto px-4 relative z-10">
-          <Link href={`/${params.locale}/services`} className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8">
+          <Link
+            href={`/${params.locale}/services`}
+            className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8"
+          >
             <ArrowLeft className="w-4 h-4" />
             {t('backToServices')}
           </Link>
@@ -151,8 +160,10 @@ export default function ServiceDetailPage({ params }: { params: { locale: string
                 <Icon className="w-8 h-8 text-orange" />
               </div>
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold text-white px-6 py-3 inline-block" 
-                    style={{background: 'linear-gradient(135deg, #FF6600, #FF8833)'}}>
+                <h1
+                  className="text-4xl md:text-5xl font-bold text-white px-6 py-3 inline-block"
+                  style={{ background: 'linear-gradient(135deg, #FF6600, #FF8833)' }}
+                >
                   {service.title}
                 </h1>
                 <p className="text-xl text-white/70 mt-2">{service.subtitle}</p>
@@ -288,9 +299,7 @@ export default function ServiceDetailPage({ params }: { params: { locale: string
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               {t('readyToStart', { service: service.title })}
             </h2>
-            <p className="text-xl text-white/70 mb-8">
-              {t('letsRealize')}
-            </p>
+            <p className="text-xl text-white/70 mb-8">{t('letsRealize')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href={`/${params.locale}/contact`}>
                 <Button size="lg" className="shadow-premium hover-lift">

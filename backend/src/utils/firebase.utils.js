@@ -12,7 +12,7 @@ export const FirebaseUtils = {
       const docData = {
         ...data,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
 
       if (docId) {
@@ -51,7 +51,7 @@ export const FirebaseUtils = {
     try {
       const updateData = {
         ...updates,
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
       await db.collection(collection).doc(docId).update(updateData);
       return { id: docId, ...updateData };
@@ -82,7 +82,7 @@ export const FirebaseUtils = {
       let query = db.collection(collection);
 
       // Apply filters
-      filters.forEach(filter => {
+      filters.forEach((filter) => {
         query = query.where(filter.field, filter.operator, filter.value);
       });
 
@@ -98,7 +98,7 @@ export const FirebaseUtils = {
 
       const snapshot = await query.get();
       const documents = [];
-      snapshot.forEach(doc => {
+      snapshot.forEach((doc) => {
         documents.push({ id: doc.id, ...doc.data() });
       });
 
@@ -120,7 +120,7 @@ export const FirebaseUtils = {
       }
       const snapshot = await query.get();
       const documents = [];
-      snapshot.forEach(doc => {
+      snapshot.forEach((doc) => {
         documents.push({ id: doc.id, ...doc.data() });
       });
       return documents;
@@ -138,12 +138,12 @@ export const FirebaseUtils = {
       const batch = db.batch();
       const results = [];
 
-      documents.forEach(doc => {
+      documents.forEach((doc) => {
         const docRef = db.collection(collection).doc();
         const docData = {
           ...doc,
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         };
         batch.set(docRef, docData);
         results.push({ id: docRef.id, ...docData });
@@ -165,7 +165,7 @@ export const FirebaseUtils = {
       const docData = {
         ...data,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
 
       const docRef = await db
@@ -193,7 +193,7 @@ export const FirebaseUtils = {
         .get();
 
       const documents = [];
-      snapshot.forEach(doc => {
+      snapshot.forEach((doc) => {
         documents.push({ id: doc.id, ...doc.data() });
       });
 
@@ -208,13 +208,16 @@ export const FirebaseUtils = {
    * Listen to real-time changes
    */
   listenToDocument(collection, docId, callback) {
-    return db.collection(collection).doc(docId).onSnapshot(doc => {
-      if (doc.exists) {
-        callback({ id: doc.id, ...doc.data() });
-      } else {
-        callback(null);
-      }
-    });
+    return db
+      .collection(collection)
+      .doc(docId)
+      .onSnapshot((doc) => {
+        if (doc.exists) {
+          callback({ id: doc.id, ...doc.data() });
+        } else {
+          callback(null);
+        }
+      });
   },
 
   /**
@@ -222,19 +225,19 @@ export const FirebaseUtils = {
    */
   listenToCollection(collection, filters = [], callback) {
     let query = db.collection(collection);
-    
-    filters.forEach(filter => {
+
+    filters.forEach((filter) => {
       query = query.where(filter.field, filter.operator, filter.value);
     });
 
-    return query.onSnapshot(snapshot => {
+    return query.onSnapshot((snapshot) => {
       const documents = [];
-      snapshot.forEach(doc => {
+      snapshot.forEach((doc) => {
         documents.push({ id: doc.id, ...doc.data() });
       });
       callback(documents);
     });
-  }
+  },
 };
 
 export default FirebaseUtils;

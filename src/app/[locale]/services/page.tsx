@@ -3,23 +3,27 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { 
-  Brain, 
-  Bot, 
-  Layers, 
-  Shield, 
-  Cloud, 
+import {
+  Brain,
+  Bot,
+  Layers,
+  Shield,
+  Cloud,
   LineChart,
   Workflow,
   Sparkles,
   ArrowRight,
-  Check
+  Check,
 } from 'lucide-react';
 
-export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
   const locale = params.locale as 'nl' | 'en';
   const messages = (await import(`@/translations/${locale}.json`)).default;
-  
+
   return {
     title: `${messages.servicesPage.hero.title} - GroeimetAI`,
     description: messages.servicesPage.hero.description,
@@ -33,7 +37,7 @@ export async function generateMetadata({ params }: { params: { locale: string } 
 export default function ServicesPage() {
   const t = useTranslations('servicesPage');
   const tServiceDetails = useTranslations('serviceDetails');
-  
+
   const services = [
     {
       title: tServiceDetails('ai-strategy.title'),
@@ -161,7 +165,7 @@ export default function ServicesPage() {
       description: t('process.steps.optimization.description'),
     },
   ];
-  
+
   return (
     <main className="min-h-screen bg-black">
       {/* Hero Section */}
@@ -169,13 +173,13 @@ export default function ServicesPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-orange/5 to-green/5" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white px-8 py-4 inline-block" 
-                style={{background: 'linear-gradient(135deg, #FF6600, #FF8833)'}}>
+            <h1
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white px-8 py-4 inline-block"
+              style={{ background: 'linear-gradient(135deg, #FF6600, #FF8833)' }}
+            >
               {t('hero.title')}
             </h1>
-            <p className="text-xl text-white/80 mb-8">
-              {t('hero.description')}
-            </p>
+            <p className="text-xl text-white/80 mb-8">{t('hero.description')}</p>
             <Link href="/contact">
               <Button size="lg" className="shadow-premium hover-lift">
                 {t('cta.start')}
@@ -191,13 +195,16 @@ export default function ServicesPage() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <Card key={index} className="p-6 hover-lift hover:shadow-premium transition-all duration-300">
+              <Card
+                key={index}
+                className="p-6 hover-lift hover:shadow-premium transition-all duration-300"
+              >
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                   <service.icon className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
                 <p className="text-muted-foreground mb-4">{service.description}</p>
-                
+
                 <div className="space-y-2 mb-6">
                   {service.features.map((feature, idx) => (
                     <div key={idx} className="flex items-start gap-2">
@@ -206,7 +213,7 @@ export default function ServicesPage() {
                     </div>
                   ))}
                 </div>
-                
+
                 <div className="pt-4 border-t">
                   <div className="flex flex-wrap gap-2 mb-4">
                     {service.highlights.map((highlight, idx) => (
@@ -252,9 +259,7 @@ export default function ServicesPage() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              {t('whyUs.title')}
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{t('whyUs.title')}</h2>
             <div className="grid md:grid-cols-2 gap-12">
               <div>
                 <h3 className="text-xl font-semibold mb-4">{t('whyUs.expertise.title')}</h3>
@@ -307,12 +312,8 @@ export default function ServicesPage() {
       <section className="py-20 bg-gradient-to-br from-primary/10 to-purple-600/10">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              {t('readyToStart.title')}
-            </h2>
-            <p className="text-xl text-muted-foreground mb-8">
-              {t('readyToStart.description')}
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('readyToStart.title')}</h2>
+            <p className="text-xl text-muted-foreground mb-8">{t('readyToStart.description')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact">
                 <Button size="lg" className="shadow-premium hover-lift">

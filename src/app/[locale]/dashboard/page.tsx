@@ -6,10 +6,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import { 
-  LayoutDashboard, 
-  FileText, 
-  MessageSquare, 
+import {
+  LayoutDashboard,
+  FileText,
+  MessageSquare,
   Calendar,
   Settings,
   LogOut,
@@ -27,7 +27,7 @@ import {
   Briefcase,
   Target,
   Rocket,
-  Flag
+  Flag,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -47,7 +47,8 @@ export default function DashboardPage() {
     {
       id: '1',
       sender: 'GroeimetAI Team',
-      content: 'Welcome to GroeimetAI! We\'re excited to work with you on your AI transformation journey.',
+      content:
+        "Welcome to GroeimetAI! We're excited to work with you on your AI transformation journey.",
       timestamp: new Date().toISOString(),
       isGroeimetAI: true,
     },
@@ -57,46 +58,46 @@ export default function DashboardPage() {
       content: 'Thanks! Looking forward to getting started.',
       timestamp: new Date().toISOString(),
       isGroeimetAI: false,
-    }
+    },
   ]);
 
   const projectStages = [
-    { 
-      id: 1, 
-      name: 'Discovery', 
-      icon: Briefcase, 
+    {
+      id: 1,
+      name: 'Discovery',
+      icon: Briefcase,
       status: 'current',
       description: 'Understanding your needs',
-      progress: 0
+      progress: 0,
     },
-    { 
-      id: 2, 
-      name: 'Planning', 
-      icon: Target, 
+    {
+      id: 2,
+      name: 'Planning',
+      icon: Target,
       status: 'upcoming',
-      description: 'Defining project scope'
+      description: 'Defining project scope',
     },
-    { 
-      id: 3, 
-      name: 'Development', 
-      icon: Rocket, 
+    {
+      id: 3,
+      name: 'Development',
+      icon: Rocket,
       status: 'upcoming',
-      description: 'Building your solution'
+      description: 'Building your solution',
     },
-    { 
-      id: 4, 
-      name: 'Delivery', 
-      icon: Flag, 
+    {
+      id: 4,
+      name: 'Delivery',
+      icon: Flag,
       status: 'upcoming',
-      description: 'Final implementation'
-    }
+      description: 'Final implementation',
+    },
   ];
 
-  const currentStage = projectStages.find(stage => stage.status === 'current');
-  const completedCount = projectStages.filter(stage => stage.status === 'completed').length;
+  const currentStage = projectStages.find((stage) => stage.status === 'current');
+  const completedCount = projectStages.filter((stage) => stage.status === 'completed').length;
   // Calculate progress based on completed stages plus current stage progress
   const currentStageProgress = currentStage?.progress || 0;
-  const totalProgress = ((completedCount * 100) + currentStageProgress) / projectStages.length;
+  const totalProgress = (completedCount * 100 + currentStageProgress) / projectStages.length;
 
   useEffect(() => {
     if (!loading && !user) {
@@ -123,7 +124,7 @@ export default function DashboardPage() {
 
   const createUserProfile = async () => {
     if (!user) return;
-    
+
     try {
       const userProfile = {
         uid: user.uid,
@@ -136,7 +137,7 @@ export default function DashboardPage() {
         emailVerified: user.isVerified,
         createdAt: new Date(),
         updatedAt: new Date(),
-        lastLoginAt: new Date()
+        lastLoginAt: new Date(),
       };
 
       await setDoc(doc(db, 'users', user.uid), userProfile);
@@ -171,7 +172,7 @@ export default function DashboardPage() {
         timestamp: new Date().toISOString(),
         isGroeimetAI: true,
       };
-      setMessages(prev => [...prev, response]);
+      setMessages((prev) => [...prev, response]);
     }, 1000);
   };
 
@@ -197,26 +198,21 @@ export default function DashboardPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange mx-auto"></div>
           <p className="mt-4 text-white/60">Loading your profile...</p>
-          <p className="mt-2 text-sm text-white/40">If this takes too long, try refreshing the page.</p>
+          <p className="mt-2 text-sm text-white/40">
+            If this takes too long, try refreshing the page.
+          </p>
           <div className="mt-4 space-y-2">
-            <Button 
-              onClick={() => window.location.reload()} 
-              variant="outline"
-              className="mr-2"
-            >
+            <Button onClick={() => window.location.reload()} variant="outline" className="mr-2">
               Refresh Page
             </Button>
-            <Button 
-              onClick={createUserProfile} 
-              className="bg-orange hover:bg-orange/90"
-            >
+            <Button onClick={createUserProfile} className="bg-orange hover:bg-orange/90">
               Create Profile
             </Button>
           </div>
           {profileCheckCount > 0 && (
             <p className="mt-4 text-sm text-red-400">
-              Your profile doesn&apos;t exist in our database. 
-              Click &quot;Create Profile&quot; to set it up.
+              Your profile doesn&apos;t exist in our database. Click &quot;Create Profile&quot; to
+              set it up.
             </p>
           )}
         </div>
@@ -271,17 +267,23 @@ export default function DashboardPage() {
               {projectStages.map((stage, index) => (
                 <div key={stage.id} className="relative">
                   {index < projectStages.length - 1 && (
-                    <div className={`absolute left-5 top-10 bottom-0 w-0.5 ${
-                      stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
-                    }`} />
+                    <div
+                      className={`absolute left-5 top-10 bottom-0 w-0.5 ${
+                        stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
+                      }`}
+                    />
                   )}
-                  
+
                   <div className="flex items-start space-x-4">
-                    <div className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center ${
-                      stage.status === 'completed' ? 'bg-green-500' :
-                      stage.status === 'current' ? 'bg-orange' :
-                      'bg-white/20'
-                    }`}>
+                    <div
+                      className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center ${
+                        stage.status === 'completed'
+                          ? 'bg-green-500'
+                          : stage.status === 'current'
+                            ? 'bg-orange'
+                            : 'bg-white/20'
+                      }`}
+                    >
                       {stage.status === 'completed' ? (
                         <CheckCircle className="w-5 h-5 text-white" />
                       ) : stage.status === 'current' ? (
@@ -290,19 +292,23 @@ export default function DashboardPage() {
                         <stage.icon className="w-5 h-5 text-white/60" />
                       )}
                     </div>
-                    
+
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
-                        <h4 className={`font-medium ${
-                          stage.status === 'completed' ? 'text-white' :
-                          stage.status === 'current' ? 'text-white' :
-                          'text-white/60'
-                        }`}>
+                        <h4
+                          className={`font-medium ${
+                            stage.status === 'completed'
+                              ? 'text-white'
+                              : stage.status === 'current'
+                                ? 'text-white'
+                                : 'text-white/60'
+                          }`}
+                        >
                           {stage.name}
                         </h4>
                       </div>
                       <p className="text-sm text-white/60 mt-1">{stage.description}</p>
-                      
+
                       {stage.status === 'current' && stage.progress && (
                         <div className="mt-2">
                           <Progress value={stage.progress} className="h-1" />
@@ -363,17 +369,17 @@ export default function DashboardPage() {
                     className={`flex ${msg.isGroeimetAI ? 'justify-start' : 'justify-end'}`}
                   >
                     <div className={`max-w-[70%] ${msg.isGroeimetAI ? 'order-2' : 'order-1'}`}>
-                      <div className={`rounded-lg p-3 ${
-                        msg.isGroeimetAI 
-                          ? 'bg-white/10 text-white' 
-                          : 'bg-orange text-white'
-                      }`}>
+                      <div
+                        className={`rounded-lg p-3 ${
+                          msg.isGroeimetAI ? 'bg-white/10 text-white' : 'bg-orange text-white'
+                        }`}
+                      >
                         <p className="text-sm">{msg.content}</p>
                       </div>
                       <p className="text-xs text-white/40 mt-1 px-1">
-                        {new Date(msg.timestamp).toLocaleTimeString('en-US', { 
-                          hour: '2-digit', 
-                          minute: '2-digit' 
+                        {new Date(msg.timestamp).toLocaleTimeString('en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit',
                         })}
                       </p>
                     </div>
@@ -435,7 +441,7 @@ export default function DashboardPage() {
               </div>
             </div>
           </Link>
-          
+
           <Link href="/dashboard/documents" className="block">
             <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
               <div className="flex items-center justify-between">
@@ -447,7 +453,7 @@ export default function DashboardPage() {
               </div>
             </div>
           </Link>
-          
+
           <Link href="/dashboard/consultations" className="block">
             <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
               <div className="flex items-center justify-between">
@@ -459,7 +465,7 @@ export default function DashboardPage() {
               </div>
             </div>
           </Link>
-          
+
           <Link href="/dashboard/settings" className="block">
             <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
               <div className="flex items-center justify-between">

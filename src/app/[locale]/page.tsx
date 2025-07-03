@@ -26,12 +26,12 @@ export default function HomePage() {
       const url = new URL(window.location.href);
       url.searchParams.delete('accountDeleted');
       window.history.replaceState({}, '', url.pathname);
-      
+
       // Hide the message after 10 seconds
       const timer = setTimeout(() => {
         setShowDeleteSuccess(false);
       }, 10000);
-      
+
       return () => clearTimeout(timer);
     }
   }, [searchParams]);
@@ -52,26 +52,30 @@ export default function HomePage() {
               <Alert className="bg-green-500/10 border-green-500/50 backdrop-blur-lg">
                 <CheckCircle className="h-4 w-4 text-green-500" />
                 <AlertDescription className="text-green-500">
-                  Your account has been successfully deleted. We&apos;re sorry to see you go. If you change your mind, you&apos;re always welcome to create a new account.
+                  Your account has been successfully deleted. We&apos;re sorry to see you go. If you
+                  change your mind, you&apos;re always welcome to create a new account.
                 </AlertDescription>
               </Alert>
             </motion.div>
           )}
         </AnimatePresence>
-        
+
         <HeroSection />
         <ServicesShowcase />
         <Expertise />
         <WhyChooseUs />
         <OurApproach />
         <TestimonialsCarousel />
-        
+
         <section id="quote" className="py-20 bg-black relative overflow-hidden">
           <div className="absolute inset-0 opacity-20">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `radial-gradient(circle at 30% 30%, #FF6600 0%, transparent 40%),
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `radial-gradient(circle at 30% 30%, #FF6600 0%, transparent 40%),
                                radial-gradient(circle at 70% 70%, #0A4A0A 0%, transparent 40%)`,
-            }} />
+              }}
+            />
           </div>
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl mx-auto">

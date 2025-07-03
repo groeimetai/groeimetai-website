@@ -8,14 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  Mail, 
-  ArrowRight, 
-  ArrowLeft,
-  CheckCircle,
-  Loader2,
-  AlertCircle
-} from 'lucide-react';
+import { Mail, ArrowRight, ArrowLeft, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
@@ -29,7 +22,7 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
+
     try {
       await resetPassword(email);
       setIsSuccess(true);
@@ -59,7 +52,10 @@ export default function ForgotPasswordPage() {
           {!isSuccess ? (
             <>
               <div className="mb-8">
-                <Link href="/login" className="inline-flex items-center text-white/60 hover:text-orange mb-6 transition-colors">
+                <Link
+                  href="/login"
+                  className="inline-flex items-center text-white/60 hover:text-orange mb-6 transition-colors"
+                >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to login
                 </Link>
@@ -74,9 +70,11 @@ export default function ForgotPasswordPage() {
                     <p className="text-sm text-red-500">{error}</p>
                   </div>
                 )}
-                
+
                 <div>
-                  <Label htmlFor="email" className="text-white">Email Address</Label>
+                  <Label htmlFor="email" className="text-white">
+                    Email Address
+                  </Label>
                   <div className="relative mt-1">
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
                     <Input
@@ -122,7 +120,8 @@ export default function ForgotPasswordPage() {
               </div>
               <h2 className="text-2xl font-bold text-white mb-2">Check your email</h2>
               <p className="text-white/60 mb-6">
-                We&apos;ve sent password reset instructions to:<br />
+                We&apos;ve sent password reset instructions to:
+                <br />
                 <span className="text-white font-medium">{email}</span>
               </p>
               <Link href="/login">

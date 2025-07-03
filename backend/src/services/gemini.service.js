@@ -13,15 +13,15 @@ const modelConfigs = {
     maxTokens: 32768,
     temperature: 0.7,
     topP: 0.8,
-    topK: 40
+    topK: 40,
   },
   'gemini-pro-vision': {
     model: 'gemini-pro-vision',
     maxTokens: 16384,
     temperature: 0.4,
     topP: 0.8,
-    topK: 32
-  }
+    topK: 32,
+  },
 };
 
 /**
@@ -35,8 +35,8 @@ export const GeminiService = {
     try {
       log.service('Gemini', 'generateConsultationResponse', { context, userQuery });
 
-      const model = genAI.getGenerativeModel({ 
-        model: modelConfigs['gemini-pro'].model 
+      const model = genAI.getGenerativeModel({
+        model: modelConfigs['gemini-pro'].model,
       });
 
       const prompt = `
@@ -59,11 +59,11 @@ Response:`;
 
       const result = await model.generateContent(prompt);
       const response = await result.response;
-      
+
       return {
         content: response.text(),
         model: 'gemini-pro',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       log.error('Gemini consultation generation failed', error);
@@ -78,17 +78,22 @@ Response:`;
     try {
       log.service('Gemini', 'analyzeContent', { contentType, analysisType });
 
-      const model = genAI.getGenerativeModel({ 
-        model: contentType === 'image' ? 
-          modelConfigs['gemini-pro-vision'].model : 
-          modelConfigs['gemini-pro'].model 
+      const model = genAI.getGenerativeModel({
+        model:
+          contentType === 'image'
+            ? modelConfigs['gemini-pro-vision'].model
+            : modelConfigs['gemini-pro'].model,
       });
 
       const analysisPrompts = {
-        general: 'Analyze this content and provide a comprehensive summary of key points, insights, and recommendations.',
-        technical: 'Provide a technical analysis of this content, including architecture, technologies, best practices, and potential improvements.',
-        business: 'Analyze this from a business perspective, including value proposition, market fit, ROI potential, and strategic recommendations.',
-        requirements: 'Extract and structure all requirements, user stories, and specifications from this content.'
+        general:
+          'Analyze this content and provide a comprehensive summary of key points, insights, and recommendations.',
+        technical:
+          'Provide a technical analysis of this content, including architecture, technologies, best practices, and potential improvements.',
+        business:
+          'Analyze this from a business perspective, including value proposition, market fit, ROI potential, and strategic recommendations.',
+        requirements:
+          'Extract and structure all requirements, user stories, and specifications from this content.',
       };
 
       const prompt = analysisPrompts[analysisType] || analysisPrompts.general;
@@ -101,12 +106,12 @@ Response:`;
       }
 
       const response = await result.response;
-      
+
       return {
         analysis: response.text(),
         type: analysisType,
         model: contentType === 'image' ? 'gemini-pro-vision' : 'gemini-pro',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       log.error('Gemini content analysis failed', error);
@@ -125,8 +130,8 @@ Response:`;
       const cached = await cache.get(cacheKey);
       if (cached) return cached;
 
-      const model = genAI.getGenerativeModel({ 
-        model: modelConfigs['gemini-pro'].model 
+      const model = genAI.getGenerativeModel({
+        model: modelConfigs['gemini-pro'].model,
       });
 
       const prompt = `
@@ -154,12 +159,12 @@ Format the response in a clear, structured manner suitable for a professional pr
 
       const result = await model.generateContent(prompt);
       const response = await result.response;
-      
+
       const proposal = {
         content: response.text(),
         generatedAt: new Date().toISOString(),
         requirements,
-        version: '1.0'
+        version: '1.0',
       };
 
       // Cache for 1 hour
@@ -179,8 +184,8 @@ Format the response in a clear, structured manner suitable for a professional pr
     try {
       log.service('Gemini', 'generateTechnicalSolution', { problem, constraints });
 
-      const model = genAI.getGenerativeModel({ 
-        model: modelConfigs['gemini-pro'].model 
+      const model = genAI.getGenerativeModel({
+        model: modelConfigs['gemini-pro'].model,
       });
 
       const prompt = `
@@ -206,12 +211,12 @@ Focus on production-ready, scalable solutions using modern best practices.`;
 
       const result = await model.generateContent(prompt);
       const response = await result.response;
-      
+
       return {
         solution: response.text(),
         problem,
         constraints,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       log.error('Gemini technical solution generation failed', error);
@@ -226,13 +231,11 @@ Focus on production-ready, scalable solutions using modern best practices.`;
     try {
       log.service('Gemini', 'analyzeConversation', { messageCount: messages.length });
 
-      const model = genAI.getGenerativeModel({ 
-        model: modelConfigs['gemini-pro'].model 
+      const model = genAI.getGenerativeModel({
+        model: modelConfigs['gemini-pro'].model,
       });
 
-      const conversationText = messages
-        .map(m => `${m.role}: ${m.content}`)
-        .join('\n');
+      const conversationText = messages.map((m) => `${m.role}: ${m.content}`).join('\n');
 
       const prompt = `
 Analyze this customer conversation and provide insights:
@@ -254,14 +257,14 @@ Format as structured JSON.`;
 
       const result = await model.generateContent(prompt);
       const response = await result.response;
-      
+
       try {
         return JSON.parse(response.text());
       } catch {
         // If JSON parsing fails, return structured object
         return {
           analysis: response.text(),
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         };
       }
     } catch (error) {
@@ -277,8 +280,8 @@ Format as structured JSON.`;
     try {
       log.service('Gemini', 'generateEmailTemplate', { purpose, context });
 
-      const model = genAI.getGenerativeModel({ 
-        model: modelConfigs['gemini-pro'].model 
+      const model = genAI.getGenerativeModel({
+        model: modelConfigs['gemini-pro'].model,
       });
 
       const prompt = `
@@ -302,11 +305,11 @@ Format the response with:
 
       const result = await model.generateContent(prompt);
       const response = await result.response;
-      
+
       return {
         template: response.text(),
         purpose,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       log.error('Gemini email template generation failed', error);
@@ -319,26 +322,26 @@ Format the response with:
    */
   validateApiKey: async () => {
     try {
-      const model = genAI.getGenerativeModel({ 
-        model: modelConfigs['gemini-pro'].model 
+      const model = genAI.getGenerativeModel({
+        model: modelConfigs['gemini-pro'].model,
       });
-      
+
       const result = await model.generateContent('Hello, please respond with "API key is valid"');
       const response = await result.response;
-      
+
       return {
         valid: response.text().includes('valid'),
-        message: 'Gemini API key validated successfully'
+        message: 'Gemini API key validated successfully',
       };
     } catch (error) {
       log.error('Gemini API key validation failed', error);
       return {
         valid: false,
         message: 'Invalid Gemini API key',
-        error: error.message
+        error: error.message,
       };
     }
-  }
+  },
 };
 
 // Export model configurations for reference

@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/user.controller.js';
-import { 
-  authenticateUser, 
-  requireRole, 
+import {
+  authenticateUser,
+  requireRole,
   apiRateLimiter,
-  authRateLimiter 
+  authRateLimiter,
 } from '../middleware/auth.middleware.js';
 import { validateRequest } from '../middleware/validation.middleware.js';
 import { userValidation } from '../validations/user.validation.js';

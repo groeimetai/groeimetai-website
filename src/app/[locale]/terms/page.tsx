@@ -2,20 +2,20 @@
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
-import { 
-  FileText, 
-  Briefcase, 
-  UserCheck, 
-  CreditCard, 
-  Shield, 
-  Lock, 
+import {
+  FileText,
+  Briefcase,
+  UserCheck,
+  CreditCard,
+  Shield,
+  Lock,
   AlertTriangle,
   Brain,
   Globe,
   Gavel,
   Mail,
   Phone,
-  Building
+  Building,
 } from 'lucide-react';
 
 const sections = [
@@ -27,7 +27,7 @@ const sections = [
 
 These Terms constitute a legally binding agreement between you and GroeimetAI, registered in the Netherlands under Chamber of Commerce number [KvK number], with its registered office in Amsterdam.
 
-By using our services, you represent that you have the legal capacity to enter into this agreement and that you are at least 18 years of age or have obtained parental consent.`
+By using our services, you represent that you have the legal capacity to enter into this agreement and that you are at least 18 years of age or have obtained parental consent.`,
   },
   {
     id: 'services',
@@ -46,7 +46,7 @@ By using our services, you represent that you have the legal capacity to enter i
     • AI Governance and Ethics Consulting
     • Proof of Concept (PoC) Development
 
-All services are provided on a professional consultancy basis and may be subject to separate service agreements, statements of work, or project specifications.`
+All services are provided on a professional consultancy basis and may be subject to separate service agreements, statements of work, or project specifications.`,
   },
   {
     id: 'ai-content',
@@ -65,7 +65,7 @@ Model Training and Data Usage:
 Intellectual Property of AI Outputs:
     • AI-generated content created specifically for you during our engagement belongs to you, subject to payment of all fees.
     • Generic AI models, methodologies, and frameworks developed by GroeimetAI remain our intellectual property.
-    • You grant us a license to use anonymized insights from our engagement to improve our services, unless otherwise agreed.`
+    • You grant us a license to use anonymized insights from our engagement to improve our services, unless otherwise agreed.`,
   },
   {
     id: 'accounts',
@@ -88,7 +88,7 @@ Prohibited Uses:
     • Using our services for illegal, harmful, or unethical purposes.
     • Attempting to reverse engineer, decompile, or extract source code from our proprietary systems.
     • Using our services to develop competing AI consultancy services.
-    • Sharing access credentials or allowing unauthorized access to our platforms.`
+    • Sharing access credentials or allowing unauthorized access to our platforms.`,
   },
   {
     id: 'intellectual-property',
@@ -107,7 +107,7 @@ Client Property:
 Third-Party Components:
     • Our services may incorporate third-party AI models, libraries, or tools.
     • Such components are subject to their respective licenses and terms.
-    • We will inform you of any significant third-party dependencies and their licensing requirements.`
+    • We will inform you of any significant third-party dependencies and their licensing requirements.`,
   },
   {
     id: 'payment',
@@ -129,7 +129,7 @@ Refunds and Cancellations:
     • Due to the consultancy nature of our services, refunds are generally not provided for completed work.
     • Cancellation terms are specified in individual service agreements.
     • For subscription services, cancellation takes effect at the end of the current billing period.
-    • Disputes regarding fees must be raised within 30 days of invoice date.`
+    • Disputes regarding fees must be raised within 30 days of invoice date.`,
   },
   {
     id: 'liability',
@@ -150,7 +150,7 @@ Indemnification:
       - Your use of our services in violation of these Terms
       - Your violation of any laws or third-party rights
       - Content or data you provide to us
-      - Your deployment or use of AI solutions we help develop`
+      - Your deployment or use of AI solutions we help develop`,
   },
   {
     id: 'confidentiality',
@@ -172,7 +172,7 @@ Exceptions:
     • Information required to be disclosed by law or court order (with prompt notice to the other party).
 
 Duration:
-    • Confidentiality obligations survive termination of these Terms for a period of five (5) years.`
+    • Confidentiality obligations survive termination of these Terms for a period of five (5) years.`,
   },
   {
     id: 'data-protection',
@@ -191,7 +191,7 @@ Security Measures:
 Data Processing Agreement:
     • For services involving personal data processing, we will enter into a separate Data Processing Agreement (DPA).
     • You warrant that you have all necessary consents and legal bases for data processing.
-    • We will assist you in meeting your GDPR obligations related to our services.`
+    • We will assist you in meeting your GDPR obligations related to our services.`,
   },
   {
     id: 'termination',
@@ -210,7 +210,7 @@ Effects of Termination:
 
 Transition Assistance:
     • Upon request and for additional fees, we provide transition assistance for up to 90 days post-termination.
-    • This includes knowledge transfer, documentation, and technical handover support.`
+    • This includes knowledge transfer, documentation, and technical handover support.`,
   },
   {
     id: 'governing-law',
@@ -227,8 +227,8 @@ Dispute Resolution:
 
 Language:
     • These Terms are drafted in English. In case of translation, the English version prevails.
-    • All communication regarding these Terms shall be in English or Dutch, as mutually agreed.`
-  }
+    • All communication regarding these Terms shall be in English or Dutch, as mutually agreed.`,
+  },
 ];
 
 export default function TermsPage() {
@@ -285,8 +285,8 @@ export default function TermsPage() {
             {/* Terms Sections */}
             <div className="space-y-12">
               {sections.map((section, index) => (
-                <div 
-                  key={section.id} 
+                <div
+                  key={section.id}
                   id={section.id}
                   className="print:break-inside-avoid scroll-mt-20"
                 >
@@ -297,9 +297,7 @@ export default function TermsPage() {
                     </h2>
                   </div>
                   <div className="prose prose-lg dark:prose-invert max-w-none">
-                    <p className="whitespace-pre-line text-muted-foreground">
-                      {section.content}
-                    </p>
+                    <p className="whitespace-pre-line text-muted-foreground">{section.content}</p>
                   </div>
                   {index < sections.length - 1 && <Separator className="mt-8" />}
                 </div>
@@ -314,7 +312,8 @@ export default function TermsPage() {
               <div className="print:break-inside-avoid">
                 <h2 className="text-2xl font-semibold mb-4">Modifications to Terms</h2>
                 <p className="text-muted-foreground mb-4">
-                  We reserve the right to modify these Terms at any time. Material changes will be notified via:
+                  We reserve the right to modify these Terms at any time. Material changes will be
+                  notified via:
                 </p>
                 <ul className="list-disc pl-6 text-muted-foreground space-y-2">
                   <li>Email notification to your registered email address</li>
@@ -322,7 +321,8 @@ export default function TermsPage() {
                   <li>In-platform notifications for active clients</li>
                 </ul>
                 <p className="text-muted-foreground mt-4">
-                  Continued use of our services after notification constitutes acceptance of the modified Terms.
+                  Continued use of our services after notification constitutes acceptance of the
+                  modified Terms.
                 </p>
               </div>
 
@@ -330,9 +330,10 @@ export default function TermsPage() {
               <div className="print:break-inside-avoid">
                 <h2 className="text-2xl font-semibold mb-4">Severability</h2>
                 <p className="text-muted-foreground">
-                  If any provision of these Terms is found to be unenforceable or invalid by a court of competent 
-                  jurisdiction, that provision shall be limited or eliminated to the minimum extent necessary so that 
-                  these Terms shall otherwise remain in full force and effect and enforceable.
+                  If any provision of these Terms is found to be unenforceable or invalid by a court
+                  of competent jurisdiction, that provision shall be limited or eliminated to the
+                  minimum extent necessary so that these Terms shall otherwise remain in full force
+                  and effect and enforceable.
                 </p>
               </div>
 
@@ -340,9 +341,10 @@ export default function TermsPage() {
               <div className="print:break-inside-avoid">
                 <h2 className="text-2xl font-semibold mb-4">Entire Agreement</h2>
                 <p className="text-muted-foreground">
-                  These Terms, together with any applicable service agreements, statements of work, and our Privacy Policy, 
-                  constitute the entire agreement between you and GroeimetAI regarding the use of our services. 
-                  These Terms supersede any prior agreements or understandings, whether written or oral.
+                  These Terms, together with any applicable service agreements, statements of work,
+                  and our Privacy Policy, constitute the entire agreement between you and GroeimetAI
+                  regarding the use of our services. These Terms supersede any prior agreements or
+                  understandings, whether written or oral.
                 </p>
               </div>
 
@@ -350,9 +352,10 @@ export default function TermsPage() {
               <div className="print:break-inside-avoid">
                 <h2 className="text-2xl font-semibold mb-4">Assignment</h2>
                 <p className="text-muted-foreground">
-                  You may not assign or transfer these Terms or any rights granted hereunder without our prior written consent. 
-                  We may assign our rights and obligations under these Terms without restriction. Any attempted assignment 
-                  in violation of this provision is void.
+                  You may not assign or transfer these Terms or any rights granted hereunder without
+                  our prior written consent. We may assign our rights and obligations under these
+                  Terms without restriction. Any attempted assignment in violation of this provision
+                  is void.
                 </p>
               </div>
             </div>
@@ -391,15 +394,16 @@ export default function TermsPage() {
                   </div>
                 </div>
               </div>
-              
+
               <Separator className="my-6" />
-              
+
               <div>
                 <h3 className="font-semibold mb-2">Legal Notice</h3>
                 <p className="text-sm text-muted-foreground">
-                  By using our services, you acknowledge that you have read, understood, and agree to be bound by these 
-                  Terms of Service. If you are entering into these Terms on behalf of a company or other legal entity, 
-                  you represent that you have the authority to bind such entity to these Terms.
+                  By using our services, you acknowledge that you have read, understood, and agree
+                  to be bound by these Terms of Service. If you are entering into these Terms on
+                  behalf of a company or other legal entity, you represent that you have the
+                  authority to bind such entity to these Terms.
                 </p>
               </div>
             </Card>
@@ -420,32 +424,38 @@ export default function TermsPage() {
             -webkit-text-fill-color: black !important;
             background: none !important;
           }
-          
-          nav, footer {
+
+          nav,
+          footer {
             display: none !important;
           }
-          
+
           .print\\:break-inside-avoid {
             break-inside: avoid;
           }
-          
+
           a {
             color: inherit !important;
             text-decoration: underline !important;
           }
-          
+
           .bg-gradient-to-br {
             background: none !important;
           }
-          
+
           .dark\\:prose-invert {
             color: black !important;
           }
-          
-          h1, h2, h3, h4, h5, h6 {
+
+          h1,
+          h2,
+          h3,
+          h4,
+          h5,
+          h6 {
             color: black !important;
           }
-          
+
           .text-muted-foreground {
             color: #555 !important;
           }

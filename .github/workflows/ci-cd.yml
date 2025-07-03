@@ -19,22 +19,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run TypeScript check
         run: npm run typecheck
-      
+
       - name: Run ESLint
         run: npm run lint
-      
+
       - name: Run Prettier check
         run: npx prettier --check .
 
@@ -44,10 +44,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Run npm audit
         run: npm audit --audit-level=moderate
-      
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
@@ -55,7 +55,7 @@ jobs:
           scan-ref: '.'
           format: 'sarif'
           output: 'trivy-results.sarif'
-      
+
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
@@ -70,19 +70,19 @@ jobs:
         node-version: [18, 20]
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run unit tests
         run: npm test -- --coverage
-      
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
@@ -97,16 +97,16 @@ jobs:
     needs: [quality-check, unit-tests]
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build application
         run: npm run build
         env:
@@ -118,7 +118,7 @@ jobs:
           NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
           NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}
           NEXT_PUBLIC_GEMINI_API_KEY: ${{ secrets.NEXT_PUBLIC_GEMINI_API_KEY }}
-      
+
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
@@ -138,16 +138,16 @@ jobs:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
           service_account_key: ${{ env.GCP_SA_KEY }}
           project_id: ${{ env.GCP_PROJECT_ID }}
-      
+
       - name: Configure Docker for GCR
         run: gcloud auth configure-docker
-      
+
       - name: Build and push Docker image
         run: |
           docker build -t gcr.io/${{ env.GCP_PROJECT_ID }}/groeimetai-app:${{ github.sha }} \
@@ -161,7 +161,7 @@ jobs:
             --build-arg NEXT_PUBLIC_GEMINI_API_KEY=${{ secrets.NEXT_PUBLIC_GEMINI_API_KEY }} \
             .
           docker push gcr.io/${{ env.GCP_PROJECT_ID }}/groeimetai-app:${{ github.sha }}
-      
+
       - name: Deploy to Cloud Run (Staging)
         if: github.ref == 'refs/heads/develop'
         run: |
@@ -175,7 +175,7 @@ jobs:
             --min-instances 1 \
             --max-instances 10 \
             --set-env-vars NODE_ENV=staging
-      
+
       - name: Deploy to Cloud Run (Production)
         if: github.ref == 'refs/heads/main'
         run: |
@@ -189,13 +189,13 @@ jobs:
             --min-instances 2 \
             --max-instances 100 \
             --set-env-vars NODE_ENV=production
-      
+
       - name: Notify deployment status
         if: always()
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          text: 'Deployment to ${{ github.ref == ''refs/heads/main'' && ''Production'' || ''Staging'' }} ${{ job.status }}'
+          text: "Deployment to ${{ github.ref == 'refs/heads/main' && 'Production' || 'Staging' }} ${{ job.status }}"
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
 
   # Performance Testing
@@ -206,7 +206,7 @@ jobs:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
         with:

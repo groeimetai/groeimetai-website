@@ -33,22 +33,24 @@ const app = express();
 /**
  * Security middleware
  */
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", "https://api.gemini.com", "wss:"],
-      fontSrc: ["'self'"],
-      objectSrc: ["'none'"],
-      mediaSrc: ["'self'"],
-      frameSrc: ["'self'", "https://meet.google.com"],
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+        connectSrc: ["'self'", 'https://api.gemini.com', 'wss:'],
+        fontSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        mediaSrc: ["'self'"],
+        frameSrc: ["'self'", 'https://meet.google.com'],
+      },
     },
-  },
-  crossOriginEmbedderPolicy: false,
-}));
+    crossOriginEmbedderPolicy: false,
+  })
+);
 
 /**
  * CORS configuration
@@ -59,12 +61,12 @@ const corsOptions = {
       'http://localhost:3000',
       'http://localhost:3001',
       'https://groeimetai.com',
-      'https://www.groeimetai.com'
+      'https://www.groeimetai.com',
     ];
-    
+
     // Allow requests with no origin (like mobile apps or Postman)
     if (!origin) return callback(null, true);
-    
+
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -75,7 +77,7 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Service-Token'],
   exposedHeaders: ['X-RateLimit-Limit', 'X-RateLimit-Remaining', 'X-RateLimit-Reset'],
-  maxAge: 86400 // 24 hours
+  maxAge: 86400, // 24 hours
 };
 
 app.use(cors(corsOptions));
@@ -101,22 +103,22 @@ app.use(morgan('combined', { stream: logger.stream }));
  */
 app.use((req, res, next) => {
   req.requestTime = Date.now();
-  
+
   // Log request
   logger.http(`${req.method} ${req.originalUrl}`, {
     ip: req.ip,
-    userAgent: req.get('user-agent')
+    userAgent: req.get('user-agent'),
   });
-  
+
   // Log response
   res.on('finish', () => {
     const duration = Date.now() - req.requestTime;
     logger.http(`${req.method} ${req.originalUrl} ${res.statusCode}`, {
       duration: `${duration}ms`,
-      contentLength: res.get('content-length')
+      contentLength: res.get('content-length'),
     });
   });
-  
+
   next();
 });
 
@@ -128,7 +130,7 @@ app.get('/health', (req, res) => {
     status: 'healthy',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,
-    version: process.env.npm_package_version || '1.0.0'
+    version: process.env.npm_package_version || '1.0.0',
   });
 });
 
@@ -165,7 +167,7 @@ app.get(`${API_PREFIX}/docs`, (req, res) => {
         register: 'POST /api/v1/users/register',
         login: 'POST /api/v1/auth/login',
         logout: 'POST /api/v1/auth/logout',
-        refresh: 'POST /api/v1/auth/refresh'
+        refresh: 'POST /api/v1/auth/refresh',
       },
       users: {
         profile: 'GET /api/v1/users/me',
@@ -173,17 +175,17 @@ app.get(`${API_PREFIX}/docs`, (req, res) => {
         listUsers: 'GET /api/v1/users (admin)',
         getUser: 'GET /api/v1/users/:userId',
         updateUser: 'PUT /api/v1/users/:userId',
-        deleteUser: 'DELETE /api/v1/users/:userId'
+        deleteUser: 'DELETE /api/v1/users/:userId',
       },
       consultations: {
         create: 'POST /api/v1/consultations',
         list: 'GET /api/v1/consultations',
         get: 'GET /api/v1/consultations/:id',
         update: 'PUT /api/v1/consultations/:id',
-        cancel: 'DELETE /api/v1/consultations/:id'
+        cancel: 'DELETE /api/v1/consultations/:id',
       },
       // Add more endpoint documentation
-    }
+    },
   });
 });
 

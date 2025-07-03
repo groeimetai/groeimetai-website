@@ -2,15 +2,32 @@ import { Metadata } from 'next';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
-import { 
-  Shield, Lock, Eye, UserCheck, Globe, FileText, Mail, Phone, 
-  AlertCircle, Database, Brain, Cookie, Scale, Users, Calendar,
-  ShieldCheck, FileWarning, Building2, ExternalLink
+import {
+  Shield,
+  Lock,
+  Eye,
+  UserCheck,
+  Globe,
+  FileText,
+  Mail,
+  Phone,
+  AlertCircle,
+  Database,
+  Brain,
+  Cookie,
+  Scale,
+  Users,
+  Calendar,
+  ShieldCheck,
+  FileWarning,
+  Building2,
+  ExternalLink,
 } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Privacybeleid - GroeimetAI',
-  description: 'Lees hoe GroeimetAI uw persoonsgegevens beschermt en verwerkt in overeenstemming met de AVG/GDPR.',
+  description:
+    'Lees hoe GroeimetAI uw persoonsgegevens beschermt en verwerkt in overeenstemming met de AVG/GDPR.',
   openGraph: {
     title: 'Privacybeleid - GroeimetAI',
     description: 'Uw privacy is onze prioriteit. Lees ons uitgebreide privacybeleid.',
@@ -32,7 +49,7 @@ KvK-nummer: [KvK nummer]
 Vestigingsadres: [Adres], Amsterdam, Nederland
 Telefoon: +31 (0)20 123 4567
 E-mail: privacy@groeimetai.io
-Website: https://groeimetai.io`
+Website: https://groeimetai.io`,
   },
   {
     id: 'data-protection-officer',
@@ -45,7 +62,7 @@ Naam: [DPO Naam]
 E-mail: dpo@groeimetai.io
 Telefoon: +31 (0)20 123 4568
 
-U kunt contact opnemen met onze DPO voor alle vragen met betrekking tot de verwerking van uw persoonsgegevens en de uitoefening van uw rechten onder de AVG.`
+U kunt contact opnemen met onze DPO voor alle vragen met betrekking tot de verwerking van uw persoonsgegevens en de uitoefening van uw rechten onder de AVG.`,
   },
   {
     id: 'data-collection',
@@ -76,7 +93,7 @@ U kunt contact opnemen met onze DPO voor alle vragen met betrekking tot de verwe
 **3.4 Gegevens van derden:**
 • **Sociale media gegevens:** Als u zich aanmeldt via sociale media accounts
 • **Partner gegevens:** Informatie van onze zakelijke partners voor gezamenlijke projecten
-• **Openbare bronnen:** Publiek beschikbare bedrijfsinformatie voor B2B-diensten`
+• **Openbare bronnen:** Publiek beschikbare bedrijfsinformatie voor B2B-diensten`,
   },
   {
     id: 'legal-basis',
@@ -112,7 +129,7 @@ U kunt uw toestemming te allen tijde intrekken via privacy@groeimetai.io.
 • Anti-witwas controles (waar van toepassing)
 
 **4.5 Vitaal belang (Art. 6(1)(d) AVG):**
-• In noodsituaties waar bescherming van leven of gezondheid noodzakelijk is`
+• In noodsituaties waar bescherming van leven of gezondheid noodzakelijk is`,
   },
   {
     id: 'data-use',
@@ -154,7 +171,7 @@ U kunt uw toestemming te allen tijde intrekken via privacy@groeimetai.io.
 • Detectie en preventie van fraude
 • Monitoring van systeembeveiliging
 • Incident response en forensisch onderzoek
-• Toegangscontrole en authenticatie`
+• Toegangscontrole en authenticatie`,
   },
   {
     id: 'ai-specific',
@@ -186,7 +203,7 @@ U kunt uw toestemming te allen tijde intrekken via privacy@groeimetai.io.
 **6.5 Data Minimalisatie in AI:**
 • Wij verzamelen alleen data die noodzakelijk is voor de AI-functionaliteit
 • Automatische data-expiratie voor niet-essentiële AI-trainingsdata
-• Opt-in voor uitgebreide data collection voor verbeterde personalisatie`
+• Opt-in voor uitgebreide data collection voor verbeterde personalisatie`,
   },
   {
     id: 'data-sharing',
@@ -223,7 +240,7 @@ U kunt uw toestemming te allen tijde intrekken via privacy@groeimetai.io.
 Zie sectie 8 voor details over internationale gegevensoverdrachten.
 
 **7.4 Wij verkopen NOOIT uw gegevens:**
-GroeimetAI verkoopt, verhuurt of least uw persoonsgegevens niet aan derden voor marketing- of andere commerciële doeleinden.`
+GroeimetAI verkoopt, verhuurt of least uw persoonsgegevens niet aan derden voor marketing- of andere commerciële doeleinden.`,
   },
   {
     id: 'international-transfers',
@@ -251,7 +268,7 @@ GroeimetAI verkoopt, verhuurt of least uw persoonsgegevens niet aan derden voor 
 **8.3 Uw rechten bij internationale overdrachten:**
 • U kunt een kopie opvragen van de gebruikte waarborgen
 • U heeft het recht bezwaar te maken tegen specifieke overdrachten
-• Wij informeren u over significante nieuwe internationale overdrachten`
+• Wij informeren u over significante nieuwe internationale overdrachten`,
   },
   {
     id: 'data-security',
@@ -282,7 +299,7 @@ GroeimetAI verkoopt, verhuurt of least uw persoonsgegevens niet aan derden voor 
 **9.4 Compliance certificeringen:**
 • ISO 27001 (gepland voor Q3 2024)
 • SOC 2 Type II (in progress)
-• NEN 7510 voor healthcare klanten`
+• NEN 7510 voor healthcare klanten`,
   },
   {
     id: 'data-breach',
@@ -314,7 +331,7 @@ GroeimetAI verkoopt, verhuurt of least uw persoonsgegevens niet aan derden voor 
 **10.5 Communicatie:**
 • Dedicated pagina op website voor incident updates
 • Direct contact via e-mail/telefoon voor hoog-risico betrokkenen
-• Transparante communicatie over genomen stappen`
+• Transparante communicatie over genomen stappen`,
   },
   {
     id: 'retention',
@@ -356,7 +373,7 @@ GroeimetAI verkoopt, verhuurt of least uw persoonsgegevens niet aan derden voor 
 **11.3 Data verwijdering:**
 • Veilige verwijdering via crypto-shredding
 • Cascade delete in alle backup systemen
-• Verificatie van complete verwijdering`
+• Verificatie van complete verwijdering`,
   },
   {
     id: 'your-rights',
@@ -415,7 +432,7 @@ GroeimetAI verkoopt, verhuurt of least uw persoonsgegevens niet aan derden voor 
 **12.10 Responstijd:**
 • Wij reageren binnen 1 maand op uw verzoek
 • Verlenging met 2 maanden mogelijk bij complexe verzoeken
-• Kosteloos, tenzij verzoeken kennelijk ongegrond/buitensporig zijn`
+• Kosteloos, tenzij verzoeken kennelijk ongegrond/buitensporig zijn`,
   },
   {
     id: 'children',
@@ -445,7 +462,7 @@ GroeimetAI verkoopt, verhuurt of least uw persoonsgegevens niet aan derden voor 
 • Extra beveiligingsmaatregelen
 
 **13.5 Melden van kindergegevens:**
-Als u vermoedt dat wij onbedoeld gegevens van een kind hebben verzameld, neem dan onmiddellijk contact op via privacy@groeimetai.io`
+Als u vermoedt dat wij onbedoeld gegevens van een kind hebben verzameld, neem dan onmiddellijk contact op via privacy@groeimetai.io`,
   },
   {
     id: 'cookies',
@@ -490,7 +507,7 @@ Als u vermoedt dat wij onbedoeld gegevens van een kind hebben verzameld, neem da
 • Privacy-vriendelijke alternatieven (Plausible)
 • Geen fingerprinting technieken
 
-**Voor volledig cookie overzicht, zie onze [Cookie Policy](/cookies)**`
+**Voor volledig cookie overzicht, zie onze [Cookie Policy](/cookies)**`,
   },
   {
     id: 'third-party',
@@ -541,7 +558,7 @@ Als u vermoedt dat wij onbedoeld gegevens van een kind hebben verzameld, neem da
 • Jaarlijkse privacy review alle vendors
 • Data Processing Agreements met alle verwerkers
 • Exit strategieën voor vendor lock-in
-• Incident notification procedures`
+• Incident notification procedures`,
   },
   {
     id: 'changes',
@@ -583,7 +600,7 @@ Als u vermoedt dat wij onbedoeld gegevens van een kind hebben verzameld, neem da
 
 **Huidige versie:** 2.0
 **Laatst bijgewerkt:** 2 July 2025
-**Vorige versie:** [Link naar archief]`
+**Vorige versie:** [Link naar archief]`,
   },
   {
     id: 'contact',
@@ -629,8 +646,8 @@ Voor grensoverschrijdende klachten: ec.europa.eu/info/law/law-topic/data-protect
 Wij zijn aangesloten bij:
 • NLdigital (branchevereniging digitale economie)
 • Dutch AI Coalition
-[Klachten kunnen ook daar worden ingediend]`
-  }
+[Klachten kunnen ook daar worden ingediend]`,
+  },
 ];
 
 export default function PrivacyPage() {
@@ -666,29 +683,29 @@ export default function PrivacyPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-wrap justify-center gap-4">
-              <Link 
-                href="/cookies" 
+              <Link
+                href="/cookies"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors"
               >
                 <Cookie className="w-4 h-4" />
                 <span className="text-sm font-medium">Cookie Policy</span>
               </Link>
-              <Link 
-                href="#your-rights" 
+              <Link
+                href="#your-rights"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors"
               >
                 <FileText className="w-4 h-4" />
                 <span className="text-sm font-medium">Uw Rechten</span>
               </Link>
-              <Link 
-                href="#contact" 
+              <Link
+                href="#contact"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors"
               >
                 <Mail className="w-4 h-4" />
                 <span className="text-sm font-medium">Contact DPO</span>
               </Link>
-              <a 
-                href="https://autoriteitpersoonsgegevens.nl" 
+              <a
+                href="https://autoriteitpersoonsgegevens.nl"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors"
@@ -767,16 +784,16 @@ export default function PrivacyPage() {
                             </div>
                           );
                         }
-                        
+
                         // Handle headers with **
                         const processedParagraph = paragraph.replace(
                           /\*\*(.*?)\*\*/g,
                           '<strong class="text-foreground">$1</strong>'
                         );
-                        
+
                         return (
-                          <p 
-                            key={pIndex} 
+                          <p
+                            key={pIndex}
                             className="mb-6"
                             dangerouslySetInnerHTML={{ __html: processedParagraph }}
                           />
@@ -793,15 +810,15 @@ export default function PrivacyPage() {
             <Card className="p-8 mt-16 bg-gradient-to-br from-primary/5 to-purple-600/5">
               <h2 className="text-xl font-semibold mb-4">Documentopties</h2>
               <div className="flex flex-wrap gap-4">
-                <button 
-                  onClick={() => window.print()} 
+                <button
+                  onClick={() => window.print()}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                 >
                   <FileText className="w-5 h-5" />
                   Print deze pagina
                 </button>
-                <a 
-                  href="/privacy-policy-groeimetai.pdf" 
+                <a
+                  href="/privacy-policy-groeimetai.pdf"
                   download
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors"
                 >
@@ -810,7 +827,8 @@ export default function PrivacyPage() {
                 </a>
               </div>
               <p className="text-sm text-muted-foreground mt-4">
-                Voor een fysieke kopie van dit privacybeleid, stuur een e-mail naar privacy@groeimetai.io
+                Voor een fysieke kopie van dit privacybeleid, stuur een e-mail naar
+                privacy@groeimetai.io
               </p>
             </Card>
           </div>

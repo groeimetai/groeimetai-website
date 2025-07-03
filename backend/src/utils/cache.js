@@ -17,7 +17,7 @@ class CacheManager {
       ttl: 1000 * 60 * 60, // 1 hour default TTL
       updateAgeOnGet: true,
       updateAgeOnHas: true,
-      stale: true // Return stale value while fetching new one
+      stale: true, // Return stale value while fetching new one
     });
 
     // Track cache metrics
@@ -25,7 +25,7 @@ class CacheManager {
       hits: 0,
       misses: 0,
       sets: 0,
-      deletes: 0
+      deletes: 0,
     };
   }
 
@@ -35,13 +35,13 @@ class CacheManager {
   async get(key) {
     try {
       const value = this.cache.get(key);
-      
+
       if (value !== undefined) {
         this.metrics.hits++;
         log.debug('Cache hit', { key });
         return value;
       }
-      
+
       this.metrics.misses++;
       log.debug('Cache miss', { key });
       return null;
@@ -60,16 +60,16 @@ class CacheManager {
       if (ttlSeconds) {
         options.ttl = ttlSeconds * 1000;
       }
-      
+
       this.cache.set(key, value, options);
       this.metrics.sets++;
-      
-      log.debug('Cache set', { 
-        key, 
+
+      log.debug('Cache set', {
+        key,
         ttl: ttlSeconds || 'default',
-        size: JSON.stringify(value).length 
+        size: JSON.stringify(value).length,
       });
-      
+
       return true;
     } catch (error) {
       log.error('Cache set error', error, { key });
@@ -116,7 +116,7 @@ class CacheManager {
       ...this.metrics,
       size: this.cache.size,
       calculatedSize: this.cache.calculatedSize,
-      hitRate: this.metrics.hits / (this.metrics.hits + this.metrics.misses) || 0
+      hitRate: this.metrics.hits / (this.metrics.hits + this.metrics.misses) || 0,
     };
   }
 
@@ -141,14 +141,14 @@ class CacheManager {
   async getOrSet(key, fetchFunction, ttlSeconds = null) {
     try {
       let value = await this.get(key);
-      
+
       if (value === null) {
         value = await fetchFunction();
         if (value !== null && value !== undefined) {
           await this.set(key, value, ttlSeconds);
         }
       }
-      
+
       return value;
     } catch (error) {
       log.error('Cache getOrSet error', error, { key });
@@ -194,7 +194,7 @@ export const cacheKeys = {
   quote: (quoteId) => `quote:${quoteId}`,
   geminiResponse: (prompt) => `gemini:${Buffer.from(prompt).toString('base64').substring(0, 32)}`,
   analytics: (metric, period) => `analytics:${metric}:${period}`,
-  session: (sessionId) => `session:${sessionId}`
+  session: (sessionId) => `session:${sessionId}`,
 };
 
 /**
@@ -203,27 +203,27 @@ export const cacheKeys = {
 export function Cacheable(keyGenerator, ttlSeconds = 3600) {
   return function (target, propertyKey, descriptor) {
     const originalMethod = descriptor.value;
-    
+
     descriptor.value = async function (...args) {
       const key = keyGenerator(...args);
-      
+
       // Try to get from cache
       const cached = await cache.get(key);
       if (cached !== null) {
         return cached;
       }
-      
+
       // Execute original method
       const result = await originalMethod.apply(this, args);
-      
+
       // Cache the result
       if (result !== null && result !== undefined) {
         await cache.set(key, result, ttlSeconds);
       }
-      
+
       return result;
     };
-    
+
     return descriptor;
   };
 }

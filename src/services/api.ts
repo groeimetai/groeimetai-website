@@ -33,8 +33,8 @@ class ApiClient {
     this.baseURL = baseURL;
     this.defaultHeaders = {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'X-API-Version': API_VERSION
+      Accept: 'application/json',
+      'X-API-Version': API_VERSION,
     };
   }
 
@@ -42,7 +42,7 @@ class ApiClient {
   private async getAuthToken(): Promise<string | null> {
     const user = auth.currentUser;
     if (!user) return null;
-    
+
     try {
       return await user.getIdToken();
     } catch (error) {
@@ -54,7 +54,7 @@ class ApiClient {
   // Build URL with query parameters
   private buildURL(endpoint: string, params?: Record<string, any>): string {
     const url = new URL(`${this.baseURL}${endpoint}`, window.location.origin);
-    
+
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -62,35 +62,27 @@ class ApiClient {
         }
       });
     }
-    
+
     return url.toString();
   }
 
   // Make HTTP request
-  async request<T>(
-    endpoint: string,
-    config: RequestConfig = {}
-  ): Promise<ApiResponse<T>> {
-    const {
-      params,
-      timeout = 30000,
-      headers = {},
-      ...fetchConfig
-    } = config;
+  async request<T>(endpoint: string, config: RequestConfig = {}): Promise<ApiResponse<T>> {
+    const { params, timeout = 30000, headers = {}, ...fetchConfig } = config;
 
     // Get auth token
     const token = await this.getAuthToken();
-    
+
     // Build headers
     const requestHeaders: Record<string, string> = {
       ...this.defaultHeaders,
-      ...(headers as Record<string, string>)
+      ...(headers as Record<string, string>),
     };
-    
+
     if (token) {
       requestHeaders['Authorization'] = `Bearer ${token}`;
     }
-    
+
     // Generate request ID
     requestHeaders['X-Request-ID'] = this.generateRequestId();
 
@@ -105,7 +97,7 @@ class ApiClient {
       const response = await fetch(url, {
         ...fetchConfig,
         headers: requestHeaders,
-        signal: controller.signal
+        signal: controller.signal,
       });
 
       clearTimeout(timeoutId);
@@ -138,10 +130,7 @@ class ApiClient {
       }
 
       // Handle other errors
-      throw new ApiError(
-        'NETWORK_ERROR',
-        error.message || 'Network error occurred'
-      );
+      throw new ApiError('NETWORK_ERROR', error.message || 'Network error occurred');
     }
   }
 
@@ -159,7 +148,7 @@ class ApiClient {
     return this.request<T>(endpoint, {
       ...config,
       method: 'POST',
-      body: data ? JSON.stringify(data) : undefined
+      body: data ? JSON.stringify(data) : undefined,
     });
   }
 
@@ -167,7 +156,7 @@ class ApiClient {
     return this.request<T>(endpoint, {
       ...config,
       method: 'PUT',
-      body: data ? JSON.stringify(data) : undefined
+      body: data ? JSON.stringify(data) : undefined,
     });
   }
 
@@ -175,14 +164,14 @@ class ApiClient {
     return this.request<T>(endpoint, {
       ...config,
       method: 'PATCH',
-      body: data ? JSON.stringify(data) : undefined
+      body: data ? JSON.stringify(data) : undefined,
     });
   }
 
   async delete<T>(endpoint: string, config?: RequestConfig): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
       ...config,
-      method: 'DELETE'
+      method: 'DELETE',
     });
   }
 
@@ -194,19 +183,19 @@ class ApiClient {
   ): Promise<ApiResponse<T>> {
     const formData = new FormData();
     formData.append('file', file);
-    
+
     if (additionalData) {
       Object.entries(additionalData).forEach(([key, value]) => {
         formData.append(key, String(value));
       });
     }
-    
+
     return this.request<T>(endpoint, {
       method: 'POST',
       body: formData,
       headers: {
         // Remove Content-Type to let browser set it with boundary
-      }
+      },
     });
   }
 }
@@ -250,7 +239,7 @@ export function handleApiError(error: any): string {
         return error.message || 'An error occurred';
     }
   }
-  
+
   return error.message || 'An unexpected error occurred';
 }
 
@@ -263,34 +252,31 @@ interface RetryConfig {
 }
 
 // Helper function for retrying failed requests
-export async function withRetry<T>(
-  fn: () => Promise<T>,
-  config: RetryConfig = {}
-): Promise<T> {
+export async function withRetry<T>(fn: () => Promise<T>, config: RetryConfig = {}): Promise<T> {
   const {
     maxAttempts = 3,
     delay = 1000,
     backoffMultiplier = 2,
-    shouldRetry = (error) => error instanceof ApiError && (error.status ?? 0) >= 500
+    shouldRetry = (error) => error instanceof ApiError && (error.status ?? 0) >= 500,
   } = config;
 
   let lastError: any;
-  
+
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       return await fn();
     } catch (error) {
       lastError = error;
-      
+
       if (attempt === maxAttempts || !shouldRetry(error, attempt)) {
         throw error;
       }
-      
+
       // Calculate delay with exponential backoff
       const waitTime = delay * Math.pow(backoffMultiplier, attempt - 1);
-      await new Promise(resolve => setTimeout(resolve, waitTime));
+      await new Promise((resolve) => setTimeout(resolve, waitTime));
     }
   }
-  
+
   throw lastError;
 }

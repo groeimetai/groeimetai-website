@@ -1,6 +1,10 @@
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth } from 'firebase/auth';
-import { getFirestore, Firestore, serverTimestamp as firestoreServerTimestamp } from 'firebase/firestore';
+import {
+  getFirestore,
+  Firestore,
+  serverTimestamp as firestoreServerTimestamp,
+} from 'firebase/firestore';
 import { getStorage, FirebaseStorage } from 'firebase/storage';
 import { getAnalytics, Analytics, isSupported } from 'firebase/analytics';
 import { getPerformance, FirebasePerformance } from 'firebase/performance';
@@ -13,7 +17,7 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -58,9 +62,9 @@ export const isAuthenticated = () => !!auth.currentUser;
 export const getUserRole = async (): Promise<string | null> => {
   const user = auth.currentUser;
   if (!user) return null;
-  
+
   const idTokenResult = await user.getIdTokenResult();
-  return idTokenResult.claims.role as string || null;
+  return (idTokenResult.claims.role as string) || null;
 };
 
 // Firestore helper functions

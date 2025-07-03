@@ -1,6 +1,7 @@
 # GroeimetAI Data Flow Diagrams
 
 ## Overview
+
 This document illustrates the data flow patterns across different system components and user interactions within the GroeimetAI platform.
 
 ## 1. User Authentication Flow
@@ -13,11 +14,11 @@ sequenceDiagram
     participant CF as Cloud Function
     participant FS as Firestore
     participant S as Session Store
-    
+
     U->>F: Enter credentials
     F->>FB: Authenticate
     FB->>FB: Validate credentials
-    
+
     alt Valid credentials
         FB->>CF: Trigger onUserLogin
         CF->>FS: Update last login
@@ -39,33 +40,33 @@ flowchart TB
         UI[Chat Interface]
         UP[File Upload]
     end
-    
+
     subgraph API Gateway
         AG[API Gateway]
         RL[Rate Limiter]
         AUTH[Auth Validator]
     end
-    
+
     subgraph Processing Pipeline
         CF[Cloud Function]
         VAL[Input Validator]
         CTX[Context Builder]
         EMB[Embedding Service]
     end
-    
+
     subgraph AI Services
         VDB[(Vector DB)]
         RAG[RAG Pipeline]
         GEM[Gemini API]
         STREAM[Response Streamer]
     end
-    
+
     subgraph Data Storage
         FS[(Firestore)]
         CS[(Cloud Storage)]
         CACHE[(Redis Cache)]
     end
-    
+
     UI --> AG
     UP --> CS
     AG --> RL
@@ -79,7 +80,7 @@ flowchart TB
     RAG --> GEM
     GEM --> STREAM
     STREAM --> UI
-    
+
     CF --> FS
     CTX --> CACHE
     STREAM --> FS
@@ -96,18 +97,18 @@ sequenceDiagram
     participant MB as Message Broker
     participant FS as Firestore
     participant FCM as FCM Service
-    
+
     U1->>WS1: Send message
     WS1->>MB: Publish message
     MB->>FS: Store message
     MB->>WS2: Broadcast to recipients
     WS2->>U2: Deliver message
-    
+
     alt User 2 offline
         MB->>FCM: Send push notification
         FCM->>U2: Push notification
     end
-    
+
     U2->>WS2: Send read receipt
     WS2->>MB: Update read status
     MB->>FS: Update message status
@@ -125,44 +126,44 @@ flowchart LR
         AM[Add Milestone]
         UT[Upload Doc]
     end
-    
+
     subgraph API Layer
         API[REST API]
         VAL[Validation]
         AUTH[Authorization]
     end
-    
+
     subgraph Business Logic
         PS[Project Service]
         NS[Notification Service]
         AS[Analytics Service]
     end
-    
+
     subgraph Data Layer
         FS[(Firestore)]
         CS[(Cloud Storage)]
         PQ[Task Queue]
     end
-    
+
     subgraph Background Jobs
         EMAIL[Email Worker]
         REPORT[Report Generator]
     end
-    
+
     CA --> API
     UA --> API
     AM --> API
     UT --> API
-    
+
     API --> VAL
     VAL --> AUTH
     AUTH --> PS
-    
+
     PS --> FS
     PS --> NS
     PS --> AS
     UT --> CS
-    
+
     NS --> PQ
     PQ --> EMAIL
     AS --> REPORT
@@ -179,7 +180,7 @@ sequenceDiagram
     participant WH as Webhook Handler
     participant FS as Firestore
     participant INV as Invoice Service
-    
+
     C->>F: Initiate payment
     F->>API: Create payment intent
     API->>S: Create payment intent
@@ -187,7 +188,7 @@ sequenceDiagram
     API-->>F: Return client secret
     F->>S: Confirm payment (Stripe.js)
     S->>S: Process payment
-    
+
     alt Payment successful
         S->>WH: Payment webhook
         WH->>FS: Update payment status
@@ -211,7 +212,7 @@ flowchart TB
         VF[Validate File]
         SF[Scan File]
     end
-    
+
     subgraph Processing
         CS[(Cloud Storage)]
         CF[Cloud Function]
@@ -219,19 +220,19 @@ flowchart TB
         NLP[NLP Processor]
         CHK[Chunking Service]
     end
-    
+
     subgraph Embedding
         EMB[Embedding API]
         VEC[Vector Generator]
         IDX[Index Builder]
     end
-    
+
     subgraph Storage
         VDB[(Vector DB)]
         FS[(Firestore)]
         META[Metadata Store]
     end
-    
+
     U --> VF
     VF --> SF
     SF --> CS
@@ -257,35 +258,35 @@ flowchart LR
         DB[Database Changes]
         USR[User Actions]
     end
-    
+
     subgraph Collection
         GA[Google Analytics]
         CL[Cloud Logging]
         PS[Pub/Sub]
     end
-    
+
     subgraph Processing
         DF[Dataflow]
         BQ[(BigQuery)]
         AGG[Aggregation]
     end
-    
+
     subgraph Visualization
         DS[Data Studio]
         API2[Analytics API]
         DASH[Dashboard]
     end
-    
+
     APP --> GA
     API --> CL
     DB --> PS
     USR --> GA
-    
+
     GA --> BQ
     CL --> DF
     PS --> DF
     DF --> BQ
-    
+
     BQ --> AGG
     AGG --> DS
     AGG --> API2
@@ -305,13 +306,13 @@ stateDiagram-v2
     PaymentSetup --> Welcome
     Welcome --> Dashboard
     Dashboard --> [*]
-    
+
     Registration --> LoginExisting
     LoginExisting --> Dashboard
-    
+
     EmailVerification --> ResendEmail
     ResendEmail --> EmailVerification
-    
+
     PaymentSetup --> FreeTrial
     FreeTrial --> Welcome
 ```
@@ -324,24 +325,24 @@ flowchart TB
         B[Browser]
         C[Cache]
     end
-    
+
     subgraph CDN
         CF[Cloudflare]
         EC[Edge Cache]
     end
-    
+
     subgraph Origin
         V[Vercel]
         GS[Google Storage]
         API[API Server]
     end
-    
+
     subgraph Optimization
         IO[Image Optimizer]
         CO[Code Splitter]
         MO[Minifier]
     end
-    
+
     B --> C
     C -->|Cache Miss| CF
     CF --> EC
@@ -349,7 +350,7 @@ flowchart TB
     V --> IO
     V --> CO
     V --> MO
-    
+
     B -->|API Calls| API
     B -->|Static Assets| GS
     CF -->|Static Assets| GS
@@ -364,36 +365,36 @@ flowchart LR
         BE[Backend Error]
         TP[Third-party Error]
     end
-    
+
     subgraph Error Capture
         SEN[Sentry]
         LOG[Cloud Logging]
         MON[Monitoring]
     end
-    
+
     subgraph Processing
         ALT[Alert Manager]
         GRP[Error Grouping]
         PRI[Priority Assignment]
     end
-    
+
     subgraph Response
         DEV[Dev Team]
         USR[User Notification]
         REC[Auto Recovery]
     end
-    
+
     FE --> SEN
     BE --> LOG
     TP --> MON
-    
+
     SEN --> GRP
     LOG --> GRP
     MON --> GRP
-    
+
     GRP --> PRI
     PRI --> ALT
-    
+
     ALT --> DEV
     ALT --> USR
     ALT --> REC
@@ -409,11 +410,11 @@ sequenceDiagram
     participant ES as Elasticsearch
     participant ML as ML Service
     participant CACHE as Cache
-    
+
     U->>UI: Enter search query
     UI->>API: Search request
     API->>CACHE: Check cache
-    
+
     alt Cache hit
         CACHE-->>API: Return results
     else Cache miss
@@ -424,10 +425,10 @@ sequenceDiagram
         ML-->>API: Ranked results
         API->>CACHE: Store results
     end
-    
+
     API-->>UI: Return results
     UI-->>U: Display results
-    
+
     U->>UI: Click result
     UI->>API: Track interaction
     API->>ML: Update model
@@ -442,36 +443,36 @@ flowchart TB
         CS[(Cloud Storage)]
         CF[Cloud Functions]
     end
-    
+
     subgraph Backup Process
         SCHED[Scheduler]
         SNAP[Snapshot Service]
         EXP[Export Service]
     end
-    
+
     subgraph Backup Storage
         GCS[(Backup Storage)]
         ARCH[(Archive Storage)]
         REP[(Replica Region)]
     end
-    
+
     subgraph Recovery
         VAL[Validation]
         REST[Restore Service]
         VER[Verification]
     end
-    
+
     SCHED --> SNAP
     SNAP --> FS
     SNAP --> CS
-    
+
     FS --> EXP
     CS --> EXP
-    
+
     EXP --> GCS
     GCS --> ARCH
     GCS --> REP
-    
+
     GCS --> VAL
     VAL --> REST
     REST --> FS
@@ -482,21 +483,25 @@ flowchart TB
 ## Data Flow Security Considerations
 
 ### 1. Encryption Points
+
 - All data encrypted in transit (TLS 1.3)
 - Sensitive fields encrypted at application level
 - Encryption keys rotated quarterly
 
 ### 2. Access Control
+
 - Each data flow authenticated and authorized
 - Service accounts with minimal permissions
 - Audit logging at every access point
 
 ### 3. Data Validation
+
 - Input validation at entry points
 - Schema validation for data transformations
 - Output sanitization before display
 
 ### 4. Monitoring
+
 - Real-time monitoring of data flows
 - Anomaly detection for unusual patterns
 - Automatic alerting for failures
@@ -504,21 +509,25 @@ flowchart TB
 ## Performance Optimization
 
 ### 1. Caching Strategy
+
 - CDN caching for static assets
 - Redis caching for frequently accessed data
 - Browser caching with proper headers
 
 ### 2. Data Compression
+
 - Gzip compression for API responses
 - Image optimization and WebP conversion
 - Minification of JavaScript and CSS
 
 ### 3. Lazy Loading
+
 - Progressive data loading
 - Pagination for large datasets
 - On-demand resource loading
 
 ### 4. Connection Pooling
+
 - Database connection pooling
 - HTTP/2 multiplexing
 - WebSocket connection reuse

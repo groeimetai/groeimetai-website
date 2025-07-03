@@ -14,12 +14,12 @@ describe('Authentication', () => {
 
     it('should show validation errors for invalid input', () => {
       cy.visit('/auth/login');
-      
+
       // Submit empty form
       cy.get('button[type="submit"]').click();
       cy.get('[data-testid="email-error"]').should('contain', 'Email is required');
       cy.get('[data-testid="password-error"]').should('contain', 'Password is required');
-      
+
       // Invalid email format
       cy.get('input[name="email"]').type('invalid-email');
       cy.get('button[type="submit"]').click();
@@ -34,10 +34,10 @@ describe('Authentication', () => {
             id: '123',
             email: 'test@example.com',
             name: 'Test User',
-            role: 'user'
+            role: 'user',
           },
-          token: 'mock-jwt-token'
-        }
+          token: 'mock-jwt-token',
+        },
       }).as('login');
 
       cy.visit('/auth/login');
@@ -54,8 +54,8 @@ describe('Authentication', () => {
       cy.intercept('POST', '/api/auth/login', {
         statusCode: 401,
         body: {
-          error: 'Invalid credentials'
-        }
+          error: 'Invalid credentials',
+        },
       }).as('loginError');
 
       cy.visit('/auth/login');
@@ -71,14 +71,14 @@ describe('Authentication', () => {
     it('should redirect to requested page after login', () => {
       cy.visit('/dashboard', { failOnStatusCode: false });
       cy.url().should('include', '/auth/login?redirect=%2Fdashboard');
-      
+
       // Mock successful login
       cy.intercept('POST', '/api/auth/login', {
         statusCode: 200,
         body: {
           user: { id: '123', email: 'test@example.com' },
-          token: 'mock-jwt-token'
-        }
+          token: 'mock-jwt-token',
+        },
       });
 
       cy.get('input[name="email"]').type('test@example.com');
@@ -92,13 +92,13 @@ describe('Authentication', () => {
       cy.intercept('POST', '/api/auth/login', {
         statusCode: 429,
         headers: {
-          'Retry-After': '60'
+          'Retry-After': '60',
         },
         body: {
           error: 'Too Many Requests',
           message: 'Rate limit exceeded. Please try again later.',
-          retryAfter: 60
-        }
+          retryAfter: 60,
+        },
       }).as('rateLimited');
 
       cy.visit('/auth/login');
@@ -122,14 +122,14 @@ describe('Authentication', () => {
       cy.intercept('GET', '/api/auth/oauth/google', {
         statusCode: 200,
         body: {
-          authUrl: 'https://accounts.google.com/oauth/authorize?...'
-        }
+          authUrl: 'https://accounts.google.com/oauth/authorize?...',
+        },
       }).as('googleAuth');
 
       cy.visit('/auth/login');
       cy.get('[data-testid="google-login-button"]').click();
       cy.wait('@googleAuth');
-      
+
       // Verify redirect to Google (in real test, we'd mock the entire flow)
     });
   });
@@ -148,19 +148,19 @@ describe('Authentication', () => {
 
     it('should validate registration form', () => {
       cy.visit('/auth/register');
-      
+
       // Submit empty form
       cy.get('button[type="submit"]').click();
       cy.get('[data-testid="name-error"]').should('be.visible');
       cy.get('[data-testid="email-error"]').should('be.visible');
       cy.get('[data-testid="password-error"]').should('be.visible');
-      
+
       // Password mismatch
       cy.get('input[name="password"]').type('password123');
       cy.get('input[name="confirmPassword"]').type('password456');
       cy.get('button[type="submit"]').click();
       cy.get('[data-testid="confirmPassword-error"]').should('contain', 'Passwords do not match');
-      
+
       // Weak password
       cy.get('input[name="password"]').clear().type('weak');
       cy.get('[data-testid="password-strength"]').should('contain', 'Weak');
@@ -173,10 +173,10 @@ describe('Authentication', () => {
           user: {
             id: '123',
             email: 'newuser@example.com',
-            name: 'New User'
+            name: 'New User',
           },
-          message: 'Registration successful. Please check your email to verify your account.'
-        }
+          message: 'Registration successful. Please check your email to verify your account.',
+        },
       }).as('register');
 
       cy.visit('/auth/register');
@@ -185,7 +185,7 @@ describe('Authentication', () => {
         email: 'newuser@example.com',
         password: 'StrongPassword123!',
         confirmPassword: 'StrongPassword123!',
-        company: 'Test Company'
+        company: 'Test Company',
       });
       cy.get('select[name="role"]').select('user');
       cy.get('input[name="terms"]').check();
@@ -205,7 +205,7 @@ describe('Authentication', () => {
     it('should logout successfully', () => {
       cy.intercept('POST', '/api/auth/logout', {
         statusCode: 200,
-        body: { message: 'Logout successful' }
+        body: { message: 'Logout successful' },
       }).as('logout');
 
       cy.visit('/dashboard');
@@ -223,8 +223,8 @@ describe('Authentication', () => {
       cy.intercept('POST', '/api/auth/forgot-password', {
         statusCode: 200,
         body: {
-          message: 'Password reset email sent'
-        }
+          message: 'Password reset email sent',
+        },
       }).as('forgotPassword');
 
       cy.visit('/auth/forgot-password');
@@ -237,12 +237,12 @@ describe('Authentication', () => {
 
     it('should reset password with valid token', () => {
       const resetToken = 'valid-reset-token';
-      
+
       cy.intercept('POST', '/api/auth/reset-password', {
         statusCode: 200,
         body: {
-          message: 'Password reset successful'
-        }
+          message: 'Password reset successful',
+        },
       }).as('resetPassword');
 
       cy.visit(`/auth/reset-password?token=${resetToken}`);
@@ -262,12 +262,12 @@ describe('Authentication', () => {
         if (req.headers['authorization'] === 'Bearer old-token') {
           req.reply({
             statusCode: 401,
-            body: { error: 'Token expired' }
+            body: { error: 'Token expired' },
           });
         } else {
           req.reply({
             statusCode: 200,
-            body: { user: { id: '123', email: 'test@example.com' } }
+            body: { user: { id: '123', email: 'test@example.com' } },
           });
         }
       }).as('userProfile');
@@ -276,8 +276,8 @@ describe('Authentication', () => {
         statusCode: 200,
         body: {
           accessToken: 'new-token',
-          refreshToken: 'new-refresh-token'
-        }
+          refreshToken: 'new-refresh-token',
+        },
       }).as('refreshToken');
 
       // Set expired token
@@ -291,21 +291,21 @@ describe('Authentication', () => {
 
     it('should handle concurrent requests with expired token', () => {
       let refreshCount = 0;
-      
+
       cy.intercept('POST', '/api/auth/refresh', () => {
         refreshCount++;
         return {
           statusCode: 200,
           body: {
             accessToken: 'new-token',
-            refreshToken: 'new-refresh-token'
-          }
+            refreshToken: 'new-refresh-token',
+          },
         };
       }).as('refreshToken');
 
       // Set expired token
       cy.setCookie('auth-token', 'expired-token');
-      
+
       // Make multiple concurrent requests
       cy.visit('/dashboard');
       cy.apiRequest('GET', '/api/user/profile');
@@ -326,7 +326,7 @@ describe('Authentication', () => {
         expect(req.headers).to.have.property('x-csrf-token');
         req.reply({
           statusCode: 200,
-          body: { user: {}, token: 'mock-token' }
+          body: { user: {}, token: 'mock-token' },
         });
       }).as('loginWithCsrf');
 
@@ -343,8 +343,8 @@ describe('Authentication', () => {
         statusCode: 403,
         body: {
           error: 'CSRF token missing',
-          message: 'CSRF token is required for this request'
-        }
+          message: 'CSRF token is required for this request',
+        },
       }).as('csrfError');
 
       // Clear CSRF token

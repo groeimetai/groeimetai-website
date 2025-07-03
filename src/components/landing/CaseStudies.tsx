@@ -11,7 +11,8 @@ const caseStudies = [
     client: 'Fortune 500 Financial Institution',
     industry: 'Finance',
     challenge: 'Legacy systems causing 48-hour processing delays for loan applications',
-    solution: 'Implemented multi-agent AI system with RAG architecture for intelligent document processing',
+    solution:
+      'Implemented multi-agent AI system with RAG architecture for intelligent document processing',
     results: [
       { metric: '95%', label: 'Reduction in processing time' },
       { metric: '3.2x', label: 'Increase in application volume' },
@@ -26,7 +27,8 @@ const caseStudies = [
     client: 'Regional Healthcare Network',
     industry: 'Healthcare',
     challenge: 'Disconnected patient data across 23 facilities causing care coordination issues',
-    solution: 'ServiceNow integration with AI-powered patient data unification and predictive analytics',
+    solution:
+      'ServiceNow integration with AI-powered patient data unification and predictive analytics',
     results: [
       { metric: '87%', label: 'Improvement in care coordination' },
       { metric: '60%', label: 'Reduction in admin tasks' },
@@ -81,7 +83,9 @@ export default function CaseStudies() {
               <Link href={`/case-studies/${study.id}`}>
                 <div className="group h-full bg-card rounded-2xl overflow-hidden shadow-premium hover-lift transition-all duration-300">
                   {/* Image placeholder with gradient */}
-                  <div className={`h-48 bg-gradient-to-br ${study.gradient} relative overflow-hidden`}>
+                  <div
+                    className={`h-48 bg-gradient-to-br ${study.gradient} relative overflow-hidden`}
+                  >
                     <div className="absolute inset-0 bg-black/20" />
                     <div className="absolute bottom-4 left-4">
                       <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm">
@@ -112,7 +116,9 @@ export default function CaseStudies() {
                       {study.results.map((result, idx) => (
                         <div key={idx} className="flex items-center justify-between">
                           <span className="text-sm text-muted-foreground">{result.label}</span>
-                          <span className="text-lg font-semibold gradient-text">{result.metric}</span>
+                          <span className="text-lg font-semibold gradient-text">
+                            {result.metric}
+                          </span>
                         </div>
                       ))}
                     </div>

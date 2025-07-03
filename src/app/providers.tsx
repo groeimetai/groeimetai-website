@@ -20,7 +20,7 @@ export function Providers({ children }: ProvidersProps) {
     >
       <AuthProvider>
         {children}
-        <Toaster 
+        <Toaster
           position="top-right"
           toastOptions={{
             style: {

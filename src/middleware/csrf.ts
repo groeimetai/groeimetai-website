@@ -9,11 +9,7 @@ const csrfTokens = new Map<string, { token: string; expiry: number }>();
 const TOKEN_EXPIRY = 60 * 60 * 1000;
 
 // Excluded paths that don't need CSRF protection
-const excludedPaths = [
-  '/api/health',
-  '/api/status',
-  '/api/public'
-];
+const excludedPaths = ['/api/health', '/api/status', '/api/public'];
 
 /**
  * Generate a new CSRF token
@@ -31,14 +27,14 @@ function getSessionId(request: NextRequest): string {
   if (sessionCookie) {
     return sessionCookie.value;
   }
-  
+
   // Try to get from authorization header (for API clients)
   const authHeader = request.headers.get('authorization');
   if (authHeader) {
     // Extract session info from JWT (simplified)
     return crypto.createHash('sha256').update(authHeader).digest('hex');
   }
-  
+
   // Generate new session ID
   return crypto.randomUUID();
 }
@@ -63,59 +59,59 @@ setInterval(cleanupExpiredTokens, 5 * 60 * 1000);
  */
 export async function csrfMiddleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-  
+
   // Skip CSRF check for excluded paths
-  if (excludedPaths.some(path => pathname.startsWith(path))) {
+  if (excludedPaths.some((path) => pathname.startsWith(path))) {
     return NextResponse.next();
   }
-  
+
   // Skip for GET and HEAD requests
   if (request.method === 'GET' || request.method === 'HEAD') {
     return NextResponse.next();
   }
-  
+
   const sessionId = getSessionId(request);
-  
+
   // Get CSRF token from request
   const csrfTokenFromHeader = request.headers.get('x-csrf-token');
   const csrfTokenFromBody = await extractCsrfTokenFromBody(request);
   const csrfToken = csrfTokenFromHeader || csrfTokenFromBody;
-  
+
   // For API requests, require CSRF token
   if (pathname.startsWith('/api/')) {
     if (!csrfToken) {
       return NextResponse.json(
         {
           error: 'CSRF token missing',
-          message: 'CSRF token is required for this request'
+          message: 'CSRF token is required for this request',
         },
         { status: 403 }
       );
     }
-    
+
     // Validate CSRF token
     const storedData = csrfTokens.get(sessionId);
     if (!storedData || storedData.token !== csrfToken || storedData.expiry < Date.now()) {
       return NextResponse.json(
         {
           error: 'Invalid CSRF token',
-          message: 'The CSRF token is invalid or expired'
+          message: 'The CSRF token is invalid or expired',
         },
         { status: 403 }
       );
     }
-    
+
     // Token is valid, continue
     return NextResponse.next();
   }
-  
+
   // For form submissions, check double submit cookie pattern
   const csrfCookie = request.cookies.get('csrf-token');
   if (!csrfCookie || csrfCookie.value !== csrfToken) {
     // Redirect to error page for non-API requests
     return NextResponse.redirect(new URL('/error/csrf', request.url));
   }
-  
+
   return NextResponse.next();
 }
 
@@ -126,26 +122,26 @@ async function extractCsrfTokenFromBody(request: NextRequest): Promise<string | 
   try {
     // Clone the request to avoid consuming the body
     const clonedRequest = request.clone();
-    
+
     const contentType = request.headers.get('content-type');
-    
+
     if (contentType?.includes('application/json')) {
       const body = await clonedRequest.json();
       return body._csrf || body.csrfToken || null;
     }
-    
+
     if (contentType?.includes('application/x-www-form-urlencoded')) {
       const text = await clonedRequest.text();
       const params = new URLSearchParams(text);
       return params.get('_csrf') || params.get('csrfToken');
     }
-    
+
     if (contentType?.includes('multipart/form-data')) {
       // For multipart, we'd need to parse the form data
       // This is complex, so we'll rely on header for now
       return null;
     }
-    
+
     return null;
   } catch {
     return null;
@@ -158,9 +154,9 @@ async function extractCsrfTokenFromBody(request: NextRequest): Promise<string | 
 export function generateAndStoreCsrfToken(sessionId: string): string {
   const token = generateCsrfToken();
   const expiry = Date.now() + TOKEN_EXPIRY;
-  
+
   csrfTokens.set(sessionId, { token, expiry });
-  
+
   return token;
 }
 
@@ -170,18 +166,18 @@ export function generateAndStoreCsrfToken(sessionId: string): string {
 export async function getCsrfToken(request: NextRequest): Promise<NextResponse> {
   const sessionId = getSessionId(request);
   const token = generateAndStoreCsrfToken(sessionId);
-  
+
   const response = NextResponse.json({ csrfToken: token });
-  
+
   // Set CSRF cookie for double submit pattern
   response.cookies.set('csrf-token', token, {
     httpOnly: false, // Allow JavaScript access for AJAX requests
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
     maxAge: TOKEN_EXPIRY / 1000,
-    path: '/'
+    path: '/',
   });
-  
+
   // Set session cookie if not present
   if (!request.cookies.get('session-id')) {
     response.cookies.set('session-id', sessionId, {
@@ -189,9 +185,9 @@ export async function getCsrfToken(request: NextRequest): Promise<NextResponse> 
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 24 * 60 * 60, // 24 hours
-      path: '/'
+      path: '/',
     });
   }
-  
+
   return response;
 }

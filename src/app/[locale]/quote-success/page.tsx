@@ -6,15 +6,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  CheckCircle, 
-  ArrowRight, 
-  Home,
-  MessageSquare,
-  FileText,
-  Clock,
-  User
-} from 'lucide-react';
+import { CheckCircle, ArrowRight, Home, MessageSquare, FileText, Clock, User } from 'lucide-react';
 
 export default function QuoteSuccessPage() {
   const router = useRouter();
@@ -24,18 +16,18 @@ export default function QuoteSuccessPage() {
     {
       icon: Clock,
       title: 'Within 24 hours',
-      description: 'Our team will review your request and contact you'
+      description: 'Our team will review your request and contact you',
     },
     {
       icon: MessageSquare,
       title: 'Initial consultation',
-      description: 'We\'ll schedule a call to discuss your project in detail'
+      description: "We'll schedule a call to discuss your project in detail",
     },
     {
       icon: FileText,
       title: 'Tailored proposal',
-      description: 'You\'ll receive a customized solution and pricing'
-    }
+      description: "You'll receive a customized solution and pricing",
+    },
   ];
 
   return (
@@ -57,9 +49,7 @@ export default function QuoteSuccessPage() {
           </motion.div>
 
           {/* Success Message */}
-          <h1 className="text-4xl font-bold text-white mb-4">
-            Quote Request Submitted!
-          </h1>
+          <h1 className="text-4xl font-bold text-white mb-4">Quote Request Submitted!</h1>
           <p className="text-xl text-white/60 mb-8">
             Thank you for your interest in GroeimetAI. We&apos;ve received your request.
           </p>
@@ -112,10 +102,7 @@ export default function QuoteSuccessPage() {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link href="/">
-              <Button
-                variant="outline"
-                className="border-white/20 text-white hover:bg-white/10"
-              >
+              <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
                 <Home className="w-4 h-4 mr-2" />
                 Back to Home
               </Button>
@@ -145,7 +132,10 @@ export default function QuoteSuccessPage() {
             className="text-sm text-white/40 mt-8"
           >
             Need immediate assistance? Call us at{' '}
-            <a href="tel:+31612345678" className="text-orange hover:text-orange/80 transition-colors">
+            <a
+              href="tel:+31612345678"
+              className="text-orange hover:text-orange/80 transition-colors"
+            >
               +31 6 1234 5678
             </a>
           </motion.p>

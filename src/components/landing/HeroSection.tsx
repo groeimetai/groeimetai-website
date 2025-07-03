@@ -21,10 +21,10 @@ export default function HeroSection() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black dark:bg-black">
       {/* Animated particle background */}
       <ParticleBackground />
-      
+
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/95 to-black" />
-      
+
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-20 text-center">
         <motion.div
@@ -38,7 +38,7 @@ export default function HeroSection() {
             {t('badge')}
           </span>
         </motion.div>
-        
+
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -47,12 +47,14 @@ export default function HeroSection() {
         >
           {t('title')}
           <br />
-          <span className="text-white px-4 py-2 inline-block" 
-                style={{background: 'linear-gradient(135deg, #FF6600, #FF8833)'}}>
+          <span
+            className="text-white px-4 py-2 inline-block"
+            style={{ background: 'linear-gradient(135deg, #FF6600, #FF8833)' }}
+          >
             {t('subtitle')}
           </span>
         </motion.h1>
-        
+
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -61,7 +63,7 @@ export default function HeroSection() {
         >
           {t('description')}
         </motion.p>
-        
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -69,18 +71,25 @@ export default function HeroSection() {
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <Link href="/#quote" onClick={handleGetStarted}>
-            <Button size="lg" className="group bg-orange hover:bg-orange-600 text-white border-0 shadow-orange hover-lift">
+            <Button
+              size="lg"
+              className="group bg-orange hover:bg-orange-600 text-white border-0 shadow-orange hover-lift"
+            >
               {t('cta.consultation')}
               <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
           <Link href="/services">
-            <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 hover:border-orange hover:text-orange hover-lift">
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white/20 text-white hover:bg-white/10 hover:border-orange hover:text-orange hover-lift"
+            >
               {t('cta.services')}
             </Button>
           </Link>
         </motion.div>
-        
+
         {/* Animated scroll indicator */}
         <motion.div
           initial={{ opacity: 0 }}

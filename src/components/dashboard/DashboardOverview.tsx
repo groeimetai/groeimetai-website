@@ -1,17 +1,17 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { 
-  TrendingUp, 
-  MessageSquare, 
-  Calendar, 
+import {
+  TrendingUp,
+  MessageSquare,
+  Calendar,
   FileText,
   ArrowUpRight,
   ArrowDownRight,
   Clock,
   CheckCircle2,
   AlertCircle,
-  Users
+  Users,
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -149,7 +149,9 @@ export default function DashboardOverview() {
                   ) : (
                     <ArrowDownRight className="h-3 w-3 text-red-500 mr-1" />
                   )}
-                  <span className={stat.changeType === 'increase' ? 'text-green-500' : 'text-red-500'}>
+                  <span
+                    className={stat.changeType === 'increase' ? 'text-green-500' : 'text-red-500'}
+                  >
                     {stat.change}
                   </span>
                   <span className="ml-1">from last month</span>

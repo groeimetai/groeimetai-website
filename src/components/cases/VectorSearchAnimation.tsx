@@ -2,17 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Search, 
-  Database, 
-  Brain, 
-  Layers, 
+import {
+  Search,
+  Database,
+  Brain,
+  Layers,
   Target,
   MessageSquare,
   ArrowRight,
   CheckCircle,
   FileText,
-  Users
+  Users,
 } from 'lucide-react';
 
 export const VectorSearchAnimation: React.FC = () => {
@@ -26,7 +26,7 @@ export const VectorSearchAnimation: React.FC = () => {
     'Convert to vector',
     'Search vector space',
     'Generate follow-ups',
-    'Route to team'
+    'Route to team',
   ];
 
   const templates = [
@@ -42,7 +42,7 @@ export const VectorSearchAnimation: React.FC = () => {
     const interval = setInterval(() => {
       setCurrentStep((prev) => {
         const next = (prev + 1) % 5;
-        
+
         if (next === 0) {
           setSearchQuery('');
           setShowVectors(false);
@@ -54,7 +54,7 @@ export const VectorSearchAnimation: React.FC = () => {
         } else if (next === 3) {
           setMatchedTemplates([1, 3, 6]);
         }
-        
+
         return next;
       });
     }, 2500);
@@ -82,7 +82,9 @@ export const VectorSearchAnimation: React.FC = () => {
                   <span className="text-white text-sm font-bold">{index + 1}</span>
                 )}
               </motion.div>
-              <span className={`text-xs text-center ${index <= currentStep ? 'text-white' : 'text-white/50'}`}>
+              <span
+                className={`text-xs text-center ${index <= currentStep ? 'text-white' : 'text-white/50'}`}
+              >
                 {step}
               </span>
             </div>
@@ -127,14 +129,14 @@ export const VectorSearchAnimation: React.FC = () => {
           >
             {/* Vector Database Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange/10 to-orange/20 rounded-lg" />
-            
+
             {/* Template Vectors */}
             {templates.map((template, index) => {
               const angle = (index * 2 * Math.PI) / templates.length;
               const radius = 80 + template.vector[0] * 20;
               const x = 128 + radius * Math.cos(angle);
               const y = 128 + radius * Math.sin(angle);
-              
+
               return (
                 <motion.div
                   key={template.id}
@@ -148,9 +150,7 @@ export const VectorSearchAnimation: React.FC = () => {
                 >
                   <div
                     className={`w-full h-full rounded-full ${
-                      matchedTemplates.includes(template.id)
-                        ? 'bg-orange'
-                        : 'bg-white/40'
+                      matchedTemplates.includes(template.id) ? 'bg-orange' : 'bg-white/40'
                     }`}
                   />
                   {matchedTemplates.includes(template.id) && (
@@ -172,7 +172,7 @@ export const VectorSearchAnimation: React.FC = () => {
                 animate={{
                   rotate: showVectors ? 360 : 0,
                 }}
-                transition={{ duration: 2, ease: "linear" }}
+                transition={{ duration: 2, ease: 'linear' }}
               >
                 <Database className="w-12 h-12 text-orange" />
               </motion.div>
@@ -214,9 +214,7 @@ export const VectorSearchAnimation: React.FC = () => {
                     <Users className="w-4 h-4 text-orange" />
                     <span className="text-sm">Identity Team</span>
                   </div>
-                  <div className="text-xs text-white/60">
-                    94% confidence match
-                  </div>
+                  <div className="text-xs text-white/60">94% confidence match</div>
                 </div>
               </div>
             </motion.div>

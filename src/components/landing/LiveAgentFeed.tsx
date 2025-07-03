@@ -2,7 +2,16 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { Bot, Code, Search, Shield, GitBranch, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import {
+  Bot,
+  Code,
+  Search,
+  Shield,
+  GitBranch,
+  CheckCircle,
+  AlertCircle,
+  Loader2,
+} from 'lucide-react';
 
 interface AgentActivity {
   id: string;
@@ -77,14 +86,14 @@ export default function LiveAgentFeed() {
 
     // Add new activities periodically
     const interval = setInterval(() => {
-      setActivities(prev => {
+      setActivities((prev) => {
         const newActivity = generateActivity();
         const updated = [newActivity, ...prev].slice(0, 8);
         return updated;
       });
 
       // Update stats
-      setStats(prev => ({
+      setStats((prev) => ({
         tasksCompleted: prev.tasksCompleted + Math.floor(Math.random() * 3),
         activeAgents: 3 + Math.floor(Math.random() * 5),
         avgResponseTime: 80 + Math.floor(Math.random() * 30),
@@ -172,10 +181,10 @@ export default function LiveAgentFeed() {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center justify-between mb-1">
-                              <h4 className="font-medium text-white">
-                                {activity.agent} Agent
-                              </h4>
-                              <div className={`flex items-center gap-1 ${getStatusColor(activity.status)}`}>
+                              <h4 className="font-medium text-white">{activity.agent} Agent</h4>
+                              <div
+                                className={`flex items-center gap-1 ${getStatusColor(activity.status)}`}
+                              >
                                 {getStatusIcon(activity.status)}
                                 <span className="text-sm capitalize">{activity.status}</span>
                               </div>
@@ -204,7 +213,7 @@ export default function LiveAgentFeed() {
           >
             <div className="bg-black/80 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
               <h3 className="text-xl font-semibold text-white mb-6">Performance Metrics</h3>
-              
+
               <div className="space-y-6">
                 <div>
                   <div className="flex justify-between items-baseline mb-2">
@@ -226,9 +235,7 @@ export default function LiveAgentFeed() {
                 <div>
                   <div className="flex justify-between items-baseline mb-2">
                     <span className="text-white/60">Active Agents</span>
-                    <span className="text-2xl font-bold text-green-500">
-                      {stats.activeAgents}
-                    </span>
+                    <span className="text-2xl font-bold text-green-500">{stats.activeAgents}</span>
                   </div>
                   <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                     <motion.div
@@ -288,9 +295,10 @@ export default function LiveAgentFeed() {
                       key={agent.name}
                       className={`
                         flex items-center gap-2 p-3 rounded-lg border transition-all
-                        ${isActive 
-                          ? 'bg-white/10 border-white/20' 
-                          : 'bg-white/5 border-white/10 opacity-50'
+                        ${
+                          isActive
+                            ? 'bg-white/10 border-white/20'
+                            : 'bg-white/5 border-white/10 opacity-50'
                         }
                       `}
                     >

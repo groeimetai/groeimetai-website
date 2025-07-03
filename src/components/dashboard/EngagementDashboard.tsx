@@ -15,7 +15,7 @@ import {
   Zap,
   MessageSquare,
   FileText,
-  Video
+  Video,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -51,7 +51,7 @@ interface ConsultantMatch {
 
 export const EngagementDashboard: React.FC = () => {
   const [selectedConsultant, setSelectedConsultant] = useState<ConsultantMatch | null>(null);
-  
+
   // Mock data - will be replaced with real data
   const userProgress = {
     overallCompletion: 65,
@@ -169,17 +169,23 @@ export const EngagementDashboard: React.FC = () => {
 
   const getStatusColor = (status: Milestone['status']) => {
     switch (status) {
-      case 'completed': return 'text-green-600 bg-green-100';
-      case 'current': return 'text-blue-600 bg-blue-100';
-      case 'upcoming': return 'text-gray-400 bg-gray-100';
+      case 'completed':
+        return 'text-green-600 bg-green-100';
+      case 'current':
+        return 'text-blue-600 bg-blue-100';
+      case 'upcoming':
+        return 'text-gray-400 bg-gray-100';
     }
   };
 
   const getAvailabilityColor = (availability: ConsultantMatch['availability']) => {
     switch (availability) {
-      case 'available': return 'bg-green-500';
-      case 'busy': return 'bg-yellow-500';
-      case 'offline': return 'bg-gray-400';
+      case 'available':
+        return 'bg-green-500';
+      case 'busy':
+        return 'bg-yellow-500';
+      case 'offline':
+        return 'bg-gray-400';
     }
   };
 
@@ -193,7 +199,9 @@ export const EngagementDashboard: React.FC = () => {
             <p className="text-gray-600 mt-1">Track your progress and milestones</p>
           </div>
           <div className="text-right">
-            <div className="text-3xl font-bold text-blue-600">{userProgress.overallCompletion}%</div>
+            <div className="text-3xl font-bold text-blue-600">
+              {userProgress.overallCompletion}%
+            </div>
             <p className="text-sm text-gray-600">Complete</p>
           </div>
         </div>
@@ -213,7 +221,9 @@ export const EngagementDashboard: React.FC = () => {
             <p className="text-sm text-gray-600">Days Active</p>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900">{userProgress.consultationsCompleted}</div>
+            <div className="text-2xl font-bold text-gray-900">
+              {userProgress.consultationsCompleted}
+            </div>
             <p className="text-sm text-gray-600">Consultations</p>
           </div>
           <div className="text-center">
@@ -237,10 +247,12 @@ export const EngagementDashboard: React.FC = () => {
                 <div className="absolute left-6 top-12 bottom-0 w-0.5 bg-gray-200" />
               )}
               <div className="flex items-start space-x-4">
-                <div className={cn(
-                  'flex items-center justify-center h-12 w-12 rounded-full',
-                  getStatusColor(milestone.status)
-                )}>
+                <div
+                  className={cn(
+                    'flex items-center justify-center h-12 w-12 rounded-full',
+                    getStatusColor(milestone.status)
+                  )}
+                >
                   {milestone.status === 'completed' ? (
                     <CheckCircle className="h-6 w-6" />
                   ) : (
@@ -276,12 +288,14 @@ export const EngagementDashboard: React.FC = () => {
           {recommendations.map((rec) => (
             <div key={rec.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between mb-3">
-                <div className={cn(
-                  'p-2 rounded-lg',
-                  rec.type === 'resource' && 'bg-blue-100 text-blue-600',
-                  rec.type === 'service' && 'bg-purple-100 text-purple-600',
-                  rec.type === 'consultation' && 'bg-green-100 text-green-600'
-                )}>
+                <div
+                  className={cn(
+                    'p-2 rounded-lg',
+                    rec.type === 'resource' && 'bg-blue-100 text-blue-600',
+                    rec.type === 'service' && 'bg-purple-100 text-purple-600',
+                    rec.type === 'consultation' && 'bg-green-100 text-green-600'
+                  )}
+                >
                   {rec.icon}
                 </div>
                 <div className="flex items-center space-x-1">
@@ -321,13 +335,18 @@ export const EngagementDashboard: React.FC = () => {
                   <div className="relative">
                     <div className="h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center">
                       <span className="text-lg font-semibold text-gray-600">
-                        {consultant.name.split(' ').map(n => n[0]).join('')}
+                        {consultant.name
+                          .split(' ')
+                          .map((n) => n[0])
+                          .join('')}
                       </span>
                     </div>
-                    <div className={cn(
-                      'absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white',
-                      getAvailabilityColor(consultant.availability)
-                    )} />
+                    <div
+                      className={cn(
+                        'absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white',
+                        getAvailabilityColor(consultant.availability)
+                      )}
+                    />
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900">{consultant.name}</h4>
@@ -358,12 +377,14 @@ export const EngagementDashboard: React.FC = () => {
                 </div>
               </div>
               <div className="mt-4 flex items-center justify-between">
-                <span className={cn(
-                  'text-sm',
-                  consultant.availability === 'available' && 'text-green-600',
-                  consultant.availability === 'busy' && 'text-yellow-600',
-                  consultant.availability === 'offline' && 'text-gray-500'
-                )}>
+                <span
+                  className={cn(
+                    'text-sm',
+                    consultant.availability === 'available' && 'text-green-600',
+                    consultant.availability === 'busy' && 'text-yellow-600',
+                    consultant.availability === 'offline' && 'text-gray-500'
+                  )}
+                >
                   {consultant.availability === 'available' && '● Available now'}
                   {consultant.availability === 'busy' && '● In consultation'}
                   {consultant.availability === 'offline' && '● Offline'}
@@ -388,7 +409,8 @@ export const EngagementDashboard: React.FC = () => {
             <div>
               <h3 className="text-xl font-bold">Great Progress!</h3>
               <p className="text-blue-100 mt-1">
-                You&apos;re {100 - userProgress.overallCompletion}% away from completing your AI transformation journey
+                You&apos;re {100 - userProgress.overallCompletion}% away from completing your AI
+                transformation journey
               </p>
             </div>
           </div>

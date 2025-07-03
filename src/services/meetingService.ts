@@ -94,11 +94,14 @@ export const meetingService = {
   },
 
   // Reschedule meeting
-  async reschedule(id: string, data: {
-    startTime: Date;
-    endTime: Date;
-    notifyParticipants?: boolean;
-  }): Promise<Meeting> {
+  async reschedule(
+    id: string,
+    data: {
+      startTime: Date;
+      endTime: Date;
+      notifyParticipants?: boolean;
+    }
+  ): Promise<Meeting> {
     const response = await api.post<Meeting>(`/meetings/${id}/reschedule`, data);
     if (!response.success || !response.data) {
       throw new Error('Failed to reschedule meeting');
@@ -148,10 +151,9 @@ export const meetingService = {
       role: 'required' | 'optional';
     }>
   ): Promise<MeetingParticipant[]> {
-    const response = await api.post<MeetingParticipant[]>(
-      `/meetings/${meetingId}/participants`,
-      { participants }
-    );
+    const response = await api.post<MeetingParticipant[]>(`/meetings/${meetingId}/participants`, {
+      participants,
+    });
     if (!response.success || !response.data) {
       throw new Error('Failed to add participants');
     }
@@ -160,9 +162,7 @@ export const meetingService = {
 
   // Remove participant
   async removeParticipant(meetingId: string, participantId: string): Promise<void> {
-    const response = await api.delete(
-      `/meetings/${meetingId}/participants/${participantId}`
-    );
+    const response = await api.delete(`/meetings/${meetingId}/participants/${participantId}`);
     if (!response.success) {
       throw new Error('Failed to remove participant');
     }
@@ -188,10 +188,7 @@ export const meetingService = {
       priority: 'low' | 'medium' | 'high';
     }
   ): Promise<ActionItem> {
-    const response = await api.post<ActionItem>(
-      `/meetings/${meetingId}/action-items`,
-      actionItem
-    );
+    const response = await api.post<ActionItem>(`/meetings/${meetingId}/action-items`, actionItem);
     if (!response.success || !response.data) {
       throw new Error('Failed to add action item');
     }
@@ -215,10 +212,7 @@ export const meetingService = {
   },
 
   // Complete action item
-  async completeActionItem(
-    meetingId: string,
-    actionItemId: string
-  ): Promise<ActionItem> {
+  async completeActionItem(meetingId: string, actionItemId: string): Promise<ActionItem> {
     const response = await api.post<ActionItem>(
       `/meetings/${meetingId}/action-items/${actionItemId}/complete`
     );
@@ -230,9 +224,7 @@ export const meetingService = {
 
   // Delete action item
   async deleteActionItem(meetingId: string, actionItemId: string): Promise<void> {
-    const response = await api.delete(
-      `/meetings/${meetingId}/action-items/${actionItemId}`
-    );
+    const response = await api.delete(`/meetings/${meetingId}/action-items/${actionItemId}`);
     if (!response.success) {
       throw new Error('Failed to delete action item');
     }
@@ -240,10 +232,7 @@ export const meetingService = {
 
   // Upload meeting recording
   async uploadRecording(meetingId: string, file: File): Promise<{ url: string }> {
-    const response = await api.upload<{ url: string }>(
-      `/meetings/${meetingId}/recording`,
-      file
-    );
+    const response = await api.upload<{ url: string }>(`/meetings/${meetingId}/recording`, file);
     if (!response.success || !response.data) {
       throw new Error('Failed to upload recording');
     }
@@ -287,10 +276,13 @@ export const meetingService = {
   },
 
   // Send meeting invites
-  async sendInvites(meetingId: string, params?: {
-    participantIds?: string[];
-    message?: string;
-  }): Promise<void> {
+  async sendInvites(
+    meetingId: string,
+    params?: {
+      participantIds?: string[];
+      message?: string;
+    }
+  ): Promise<void> {
     const response = await api.post(`/meetings/${meetingId}/invite`, params);
     if (!response.success) {
       throw new Error('Failed to send invites');
@@ -298,10 +290,13 @@ export const meetingService = {
   },
 
   // Send reminders
-  async sendReminders(meetingId: string, params?: {
-    participantIds?: string[];
-    minutesBefore?: number;
-  }): Promise<void> {
+  async sendReminders(
+    meetingId: string,
+    params?: {
+      participantIds?: string[];
+      minutesBefore?: number;
+    }
+  ): Promise<void> {
     const response = await api.post(`/meetings/${meetingId}/remind`, params);
     if (!response.success) {
       throw new Error('Failed to send reminders');
@@ -309,7 +304,10 @@ export const meetingService = {
   },
 
   // Export meeting to calendar
-  async exportToCalendar(meetingId: string, format: 'ics' | 'google' | 'outlook'): Promise<Blob | string> {
+  async exportToCalendar(
+    meetingId: string,
+    format: 'ics' | 'google' | 'outlook'
+  ): Promise<Blob | string> {
     const response = await api.get<Blob | string>(`/meetings/${meetingId}/export`, { format });
     if (!response.success || !response.data) {
       throw new Error('Failed to export meeting');
@@ -354,12 +352,14 @@ export const meetingService = {
   },
 
   // Batch operations
-  async batchUpdate(updates: Array<{
-    id: string;
-    data: Partial<Meeting>;
-  }>): Promise<Meeting[]> {
+  async batchUpdate(
+    updates: Array<{
+      id: string;
+      data: Partial<Meeting>;
+    }>
+  ): Promise<Meeting[]> {
     const response = await api.post<Meeting[]>('/meetings/batch-update', {
-      updates
+      updates,
     });
     if (!response.success || !response.data) {
       throw new Error('Failed to batch update meetings');
@@ -375,13 +375,16 @@ export const meetingService = {
   },
 
   // Clone meeting
-  async clone(id: string, data: {
-    title: string;
-    startTime: Date;
-    endTime: Date;
-    includeAgenda?: boolean;
-    includeParticipants?: boolean;
-  }): Promise<Meeting> {
+  async clone(
+    id: string,
+    data: {
+      title: string;
+      startTime: Date;
+      endTime: Date;
+      includeAgenda?: boolean;
+      includeParticipants?: boolean;
+    }
+  ): Promise<Meeting> {
     const response = await api.post<Meeting>(`/meetings/${id}/clone`, data);
     if (!response.success || !response.data) {
       throw new Error('Failed to clone meeting');
@@ -399,21 +402,21 @@ export const meetingService = {
   },
 
   // Create meeting from template
-  async createFromTemplate(templateId: string, data: {
-    title: string;
-    startTime: Date;
-    endTime: Date;
-    participantIds: string[];
-  }): Promise<Meeting> {
-    const response = await api.post<Meeting>(
-      `/meetings/templates/${templateId}/create`,
-      data
-    );
+  async createFromTemplate(
+    templateId: string,
+    data: {
+      title: string;
+      startTime: Date;
+      endTime: Date;
+      participantIds: string[];
+    }
+  ): Promise<Meeting> {
+    const response = await api.post<Meeting>(`/meetings/templates/${templateId}/create`, data);
     if (!response.success || !response.data) {
       throw new Error('Failed to create meeting from template');
     }
     return response.data;
-  }
+  },
 };
 
 // Helper function to get meeting with retry
@@ -424,7 +427,7 @@ export async function getMeetingWithRetry(id: string): Promise<Meeting> {
     shouldRetry: (error, attempt) => {
       // Retry on network errors or 5xx status codes
       return error.status >= 500 || error.code === 'NETWORK_ERROR';
-    }
+    },
   });
 }
 
@@ -437,29 +440,29 @@ export async function canJoinMeeting(meetingId: string): Promise<{
   try {
     const meeting = await meetingService.get(meetingId);
     const now = new Date();
-    
+
     if (meeting.status === 'cancelled') {
       return { canJoin: false, reason: 'Meeting has been cancelled' };
     }
-    
+
     if (meeting.status === 'completed') {
       return { canJoin: false, reason: 'Meeting has already ended' };
     }
-    
+
     const startTime = new Date(meeting.startTime);
     const endTime = new Date(meeting.endTime);
-    
+
     if (now < startTime) {
       const minutesUntilStart = Math.floor((startTime.getTime() - now.getTime()) / 60000);
       if (minutesUntilStart > 15) {
         return { canJoin: false, reason: `Meeting starts in ${minutesUntilStart} minutes` };
       }
     }
-    
+
     if (now > endTime) {
       return { canJoin: false, reason: 'Meeting has ended' };
     }
-    
+
     return { canJoin: true, meetingLink: meeting.meetingLink };
   } catch (error) {
     return { canJoin: false, reason: 'Failed to check meeting status' };

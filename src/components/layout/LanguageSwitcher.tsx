@@ -15,13 +15,13 @@ export default function LanguageSwitcher() {
   const handleLanguageChange = () => {
     // Toggle between nl and en
     const newLocale = locale === 'nl' ? 'en' : 'nl';
-    
+
     // Set cookie for language preference
     document.cookie = `NEXT_LOCALE=${newLocale}; max-age=${365 * 24 * 60 * 60}; path=/; samesite=lax${process.env.NODE_ENV === 'production' ? '; secure' : ''}`;
-    
+
     // Remove the current locale from the pathname if it exists
     const pathWithoutLocale = pathname.replace(/^\/(nl|en)/, '');
-    
+
     // Navigate to the new locale path with transition
     startTransition(() => {
       router.push(`/${newLocale}${pathWithoutLocale}`);
