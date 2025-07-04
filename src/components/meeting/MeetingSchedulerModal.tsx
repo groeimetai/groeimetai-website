@@ -153,6 +153,33 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
       
       const meetingRef = await addDoc(collection(db, 'meetings'), meetingData);
       
+      // Send email notification to admin
+      try {
+        await fetch('/api/email/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'new-meeting-request',
+            data: {
+              requesterName: formData.name,
+              requesterEmail: formData.email,
+              company: formData.company,
+              topic: formData.topic,
+              date: format(meetingDateTime, 'PPP'),
+              time: format(meetingDateTime, 'p'),
+              meetingType: meetingType === 'in-person' ? 'In-Person' : meetingType === 'video' ? 'Video Call' : 'Phone Call',
+              description: formData.description,
+              meetingId: meetingRef.id,
+            },
+          }),
+        });
+      } catch (emailError) {
+        console.error('Failed to send email notification:', emailError);
+        // Don't fail the submission if email fails
+      }
+      
       // Create notification for admin
       await addDoc(collection(db, 'notifications'), {
         userId: 'admin', // This should be the actual admin user ID

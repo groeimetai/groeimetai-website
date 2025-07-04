@@ -282,6 +282,33 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
 
       const quoteRef = await addDoc(collection(db, 'quotes'), quoteData);
 
+      // Send email notification to admin
+      try {
+        await fetch('/api/email/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'new-project-request',
+            data: {
+              projectName: formData.projectName,
+              companyName: formData.company,
+              recipientName: formData.fullName,
+              recipientEmail: formData.email,
+              services: formData.services,
+              budget: formData.budget,
+              timeline: formData.timeline,
+              description: formData.projectDescription,
+              requestId: quoteRef.id,
+            },
+          }),
+        });
+      } catch (emailError) {
+        console.error('Failed to send email notification:', emailError);
+        // Don't fail the submission if email fails
+      }
+
       // Create a project only if user is logged in AND email is verified
       if ((userId || user?.uid) && firebaseUser?.emailVerified) {
         const projectData = {

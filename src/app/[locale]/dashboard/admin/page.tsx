@@ -136,10 +136,39 @@ export default function AdminDashboard() {
   // Update quote status
   const updateQuoteStatus = async (quoteId: string, newStatus: Quote['status']) => {
     try {
+      const quote = quotes.find(q => q.id === quoteId);
+      if (!quote) return;
+      
+      const oldStatus = quote.status;
+      
       await updateDoc(doc(db, 'quotes', quoteId), {
         status: newStatus,
         updatedAt: new Date(),
       });
+      
+      // Send email notification to client
+      try {
+        await fetch('/api/email/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'quote-status-change',
+            data: {
+              recipientName: quote.fullName,
+              recipientEmail: quote.email,
+              projectName: quote.projectName,
+              oldStatus: oldStatus,
+              newStatus: newStatus,
+              quoteId: quoteId,
+            },
+          }),
+        });
+      } catch (emailError) {
+        console.error('Failed to send email notification:', emailError);
+        // Don't fail the status update if email fails
+      }
       
       // Update local state
       setQuotes(quotes.map(quote => 
