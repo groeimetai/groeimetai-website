@@ -1427,7 +1427,18 @@ export default function SettingsPage() {
                                     placeholder="Enter your password"
                                     className="mt-2 bg-white/5 border-white/20 text-white"
                                   />
+                                  {deletePassword && deletePassword.length < 6 && (
+                                    <p className="text-xs text-red-400 mt-1">
+                                      Password must be at least 6 characters
+                                    </p>
+                                  )}
                                 </div>
+
+                                {deleteConfirmEmail && deleteConfirmEmail.toLowerCase() !== user.email?.toLowerCase() && (
+                                  <p className="text-xs text-red-400">
+                                    Email doesn&apos;t match. Please type exactly: {user.email}
+                                  </p>
+                                )}
 
                                 <DialogFooter className="mt-6">
                                   <Button
@@ -1441,8 +1452,9 @@ export default function SettingsPage() {
                                     onClick={handleAccountDeletion}
                                     disabled={
                                       isDeleting ||
-                                      deleteConfirmEmail !== user.email ||
-                                      !deletePassword
+                                      deleteConfirmEmail.toLowerCase() !== user.email?.toLowerCase() ||
+                                      !deletePassword ||
+                                      deletePassword.length < 6
                                     }
                                     className="bg-red-600 hover:bg-red-700 text-white"
                                   >
