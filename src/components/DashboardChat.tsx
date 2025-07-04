@@ -53,18 +53,20 @@ export default function DashboardChat() {
   // Subscribe to messages
   useEffect(() => {
     if (!user || !user.uid) {
+      console.log('DashboardChat: No user or user.uid, skipping initialization');
       setIsLoading(false);
       return;
     }
 
+    console.log('DashboardChat: Initializing for user:', user.uid);
     const chatChannelId = `support_${user.uid}`;
-    if (!chatChannelId) return;
-
+    
     let unsubscribe: (() => void) | undefined;
 
     // Create chat channel document if it doesn't exist
     const initializeChatChannel = async () => {
       try {
+        console.log('DashboardChat: Creating/checking channel:', chatChannelId);
         const channelRef = doc(db, 'supportChats', chatChannelId);
         const channelDoc = await getDoc(channelRef);
         
@@ -98,8 +100,14 @@ export default function DashboardChat() {
             setIsLoading(false);
           }
         );
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error initializing chat channel:', error);
+        console.error('Error details:', {
+          code: error?.code,
+          message: error?.message,
+          userId: user?.uid,
+          chatChannelId
+        });
         setIsLoading(false);
       }
     };

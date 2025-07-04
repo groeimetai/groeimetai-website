@@ -7,9 +7,11 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import ParticleBackground from './ParticleBackground';
 import { useTranslations } from 'next-intl';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function HeroSection() {
   const t = useTranslations('hero');
+  const { user } = useAuth();
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black dark:bg-black">
@@ -69,7 +71,7 @@ export default function HeroSection() {
             className="group bg-orange hover:bg-orange-600 text-white border-0 shadow-orange hover-lift"
             preselectedService="genai-consultancy"
           >
-            {t('cta.consultation')}
+            {user ? t('cta.dashboard') : t('cta.consultation')}
             <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
           </StartProjectButton>
           <Link href="/services">

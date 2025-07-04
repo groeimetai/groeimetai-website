@@ -125,10 +125,10 @@ export default function ProjectTimelineManager({ quoteId, projectName, onClose }
         const updates: Partial<ProjectStage> = { status: newStatus };
         
         if (newStatus === 'current' && !stage.startedAt) {
-          updates.startedAt = serverTimestamp();
+          updates.startedAt = new Date();
           updates.progress = 0;
         } else if (newStatus === 'completed' && !stage.completedAt) {
-          updates.completedAt = serverTimestamp();
+          updates.completedAt = new Date();
           updates.progress = 100;
         } else if (newStatus === 'upcoming') {
           updates.progress = undefined;
@@ -309,7 +309,7 @@ export default function ProjectTimelineManager({ quoteId, projectName, onClose }
         <Button 
           onClick={handleSave} 
           disabled={isSaving}
-          className="bg-orange hover:bg-orange/90"
+          className="bg-orange hover:bg-orange/90 text-white"
         >
           {isSaving ? (
             <>

@@ -20,7 +20,8 @@
     "description": "We guide executive teams through the complexity of AI adoption. Our strategic advisory focuses on business outcomes - process optimization, cost reduction, and revenue growth through intelligent AI implementation.",
     "cta": {
       "consultation": "Schedule Consultation",
-      "services": "Our Advisory Services"
+      "services": "Our Advisory Services",
+      "dashboard": "Go to Dashboard"
     }
   },
   "services": {
@@ -695,7 +696,7 @@
       "value": {
         "title": "Value-Driven Approach",
         "description": "Focus on business outcomes, not technology for technology's sake",
-        "metric": "1M+ tokens processed"
+        "metric": "1B+ tokens processed"
       },
       "speed": {
         "title": "Accelerated Time-to-Value",
@@ -866,6 +867,7 @@
         "userNotFound": "No account found with this email address.",
         "wrongPassword": "Incorrect password. Please try again.",
         "invalidEmail": "Please enter a valid email address.",
+        "emailNotVerified": "Please verify your email address first. We've sent you a new verification email.",
         "tooManyRequests": "Too many failed attempts. Please try again later.",
         "invalidCode": "Invalid verification code. Please try again.",
         "general": "An error occurred. Please try again."
@@ -2136,7 +2138,7 @@
         },
         "results": {
           "tokens": {
-            "metric": "1M+",
+            "metric": "1B+",
             "value": "Tokens Processed",
             "description": "Successfully processed over a million tokens"
           },
@@ -2375,9 +2377,52 @@
     }
   },
   "common": {
-    "startProject": "Start Project"
+    "startProject": "Start Project",
+    "goToDashboard": "Go to Dashboard"
   },
   "projectDialog": {
     "title": "Start Your AI Project"
+  },
+  "meetingScheduler": {
+    "title": "Schedule a Meeting",
+    "description": "Select a convenient time for your consultation",
+    "success": "Meeting request sent successfully!",
+    "error": "Failed to schedule meeting. Please try again.",
+    "next": "Next",
+    "back": "Back",
+    "scheduling": "Scheduling...",
+    "confirmSchedule": "Confirm Meeting",
+    "selectDateFirst": "Please select a date first",
+    "steps": {
+      "contact": {
+        "title": "Contact Information"
+      },
+      "datetime": {
+        "title": "Select Date & Time"
+      },
+      "confirm": {
+        "title": "Confirm Details"
+      }
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "company": "Company",
+      "phone": "Phone",
+      "topic": "Meeting Topic",
+      "topicPlaceholder": "What would you like to discuss?",
+      "description": "Additional Details",
+      "descriptionPlaceholder": "Any specific questions or areas you'd like to cover?",
+      "selectDate": "Select Date",
+      "selectTime": "Select Time",
+      "meetingType": "Meeting Type",
+      "date": "Date",
+      "time": "Time"
+    },
+    "meetingTypes": {
+      "video": "Video Call",
+      "phone": "Phone Call",
+      "inPerson": "In Person"
+    }
   }
 }

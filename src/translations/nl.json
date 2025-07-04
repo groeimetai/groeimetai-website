@@ -20,7 +20,8 @@
     "description": "Wij begeleiden directieteams door de complexiteit van AI-adoptie. Onze strategische advisory focust op bedrijfsresultaten - procesoptimalisatie, kostenreductie en omzetgroei door intelligente AI-implementatie.",
     "cta": {
       "consultation": "Consultatie Plannen",
-      "services": "Onze Advisory Services"
+      "services": "Onze Advisory Services",
+      "dashboard": "Ga naar Dashboard"
     }
   },
   "services": {
@@ -685,7 +686,7 @@
       "value": {
         "title": "Waardegedreven Aanpak",
         "description": "Focus op bedrijfsresultaten, niet technologie omwille van technologie",
-        "metric": "1M+ tokens verwerkt"
+        "metric": "1B+ tokens verwerkt"
       },
       "speed": {
         "title": "Versnelde Time-to-Value",
@@ -856,6 +857,7 @@
         "userNotFound": "Geen account gevonden met dit e-mailadres.",
         "wrongPassword": "Onjuist wachtwoord. Probeer het opnieuw.",
         "invalidEmail": "Voer een geldig e-mailadres in.",
+        "emailNotVerified": "Verifieer eerst uw e-mailadres. We hebben u een nieuwe verificatie-e-mail gestuurd.",
         "tooManyRequests": "Te veel mislukte pogingen. Probeer het later opnieuw.",
         "invalidCode": "Ongeldige verificatiecode. Probeer het opnieuw.",
         "general": "Er is een fout opgetreden. Probeer het opnieuw."
@@ -1920,7 +1922,7 @@
         },
         "results": {
           "tokens": {
-            "metric": "1M+",
+            "metric": "1B+",
             "value": "Verwerkte Tokens",
             "description": "Succesvol meer dan een miljoen tokens verwerkt"
           },
@@ -2499,9 +2501,52 @@
     }
   },
   "common": {
-    "startProject": "Start Project"
+    "startProject": "Start Project",
+    "goToDashboard": "Ga naar Dashboard"
   },
   "projectDialog": {
     "title": "Start Uw AI Project"
+  },
+  "meetingScheduler": {
+    "title": "Plan een Afspraak",
+    "description": "Selecteer een geschikt moment voor uw consultatie",
+    "success": "Afspraakverzoek succesvol verzonden!",
+    "error": "Afspraak plannen mislukt. Probeer het opnieuw.",
+    "next": "Volgende",
+    "back": "Terug",
+    "scheduling": "Plannen...",
+    "confirmSchedule": "Bevestig Afspraak",
+    "selectDateFirst": "Selecteer eerst een datum",
+    "steps": {
+      "contact": {
+        "title": "Contactgegevens"
+      },
+      "datetime": {
+        "title": "Selecteer Datum & Tijd"
+      },
+      "confirm": {
+        "title": "Bevestig Details"
+      }
+    },
+    "fields": {
+      "name": "Naam",
+      "email": "E-mail",
+      "company": "Bedrijf",
+      "phone": "Telefoon",
+      "topic": "Onderwerp Afspraak",
+      "topicPlaceholder": "Wat wilt u bespreken?",
+      "description": "Aanvullende Details",
+      "descriptionPlaceholder": "Specifieke vragen of onderwerpen die u wilt behandelen?",
+      "selectDate": "Selecteer Datum",
+      "selectTime": "Selecteer Tijd",
+      "meetingType": "Type Afspraak",
+      "date": "Datum",
+      "time": "Tijd"
+    },
+    "meetingTypes": {
+      "video": "Videogesprek",
+      "phone": "Telefoongesprek",
+      "inPerson": "Persoonlijk"
+    }
   }
 }

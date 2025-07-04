@@ -167,6 +167,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setError(null);
       const credential = await signInWithEmailAndPassword(auth, email, password);
+      
+      // Check if email is verified
+      if (!credential.user.emailVerified) {
+        // Send verification email again
+        await sendEmailVerification(credential.user);
+        // Sign out the user
+        await signOut(auth);
+        const error: any = new Error('Email not verified');
+        error.code = 'auth/email-not-verified';
+        throw error;
+      }
+      
       const userData = await createOrUpdateUserDoc(credential.user);
       setUser(userData);
     } catch (error: any) {
@@ -328,13 +340,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setFirebaseUser(firebaseUser);
 
       if (firebaseUser) {
-        const userData = await fetchUserData(firebaseUser.uid);
-        if (userData) {
-          setUser(userData);
+        // Only set user if email is verified (except for social logins which are pre-verified)
+        if (firebaseUser.emailVerified || 
+            firebaseUser.providerData.some(p => p.providerId === 'google.com' || p.providerId === 'linkedin.com')) {
+          const userData = await fetchUserData(firebaseUser.uid);
+          if (userData) {
+            setUser(userData);
+          } else {
+            // User exists in Firebase but not in Firestore, create document
+            const newUser = await createOrUpdateUserDoc(firebaseUser);
+            setUser(newUser);
+          }
         } else {
-          // User exists in Firebase but not in Firestore, create document
-          const newUser = await createOrUpdateUserDoc(firebaseUser);
-          setUser(newUser);
+          // User exists but email not verified
+          setUser(null);
         }
       } else {
         setUser(null);

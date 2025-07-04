@@ -243,7 +243,7 @@ export const TranscriptionFlow: React.FC = () => {
       {/* Stats */}
       <div className="mt-12 grid grid-cols-3 gap-8 text-center">
         <motion.div whileHover={{ scale: 1.05 }} className="bg-white/5 rounded-lg p-4">
-          <div className="text-3xl font-bold text-orange">1M+</div>
+          <div className="text-3xl font-bold text-orange">1B+</div>
           <span className="text-sm text-white/70">Tokens Processed</span>
         </motion.div>
         <motion.div whileHover={{ scale: 1.05 }} className="bg-white/5 rounded-lg p-4">

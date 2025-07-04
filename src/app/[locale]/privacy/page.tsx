@@ -821,10 +821,6 @@ export default function PrivacyPage() {
                   Download als PDF
                 </a>
               </div>
-              <p className="text-sm text-muted-foreground mt-4">
-                Voor een fysieke kopie van dit privacybeleid, stuur een e-mail naar
-                privacy@groeimetai.io
-              </p>
             </Card>
           </div>
         </div>

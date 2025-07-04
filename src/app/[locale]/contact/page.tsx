@@ -28,6 +28,8 @@ import {
 } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
+import MapSection from '@/components/contact/MapSection';
+import MeetingSchedulerModal from '@/components/meeting/MeetingSchedulerModal';
 
 // Metadata needs to be exported from a server component
 // This will be handled by creating a separate metadata export
@@ -42,6 +44,7 @@ const socialLinks = [
 
 export default function ContactPage() {
   const t = useTranslations('contact');
+  const [meetingModalOpen, setMeetingModalOpen] = useState(false);
 
   const contactInfo = [
     {
@@ -266,7 +269,7 @@ export default function ContactPage() {
                         {t.rich('form.privacyLabel', {
                           link: (chunks) => (
                             <Link href="/privacy" className="text-primary hover:underline">
-                              {chunks}
+                              {t('form.privacyLink')}
                             </Link>
                           ),
                         })}
@@ -342,12 +345,14 @@ export default function ContactPage() {
                   <p className="text-muted-foreground mb-4">
                     {t('additionalInfo.scheduleMeetingDescription')}
                   </p>
-                  <Link href="mailto:info@groeimetai.io?subject=Meeting%20Request%20-%20GroeimetAI">
-                    <Button className="w-full hover-lift" variant="outline">
-                      <Calendar className="mr-2 w-5 h-5" />
-                      {t('additionalInfo.scheduleMeetingButton')}
-                    </Button>
-                  </Link>
+                  <Button 
+                    className="w-full hover-lift" 
+                    variant="outline"
+                    onClick={() => setMeetingModalOpen(true)}
+                  >
+                    <Calendar className="mr-2 w-5 h-5" />
+                    {t('additionalInfo.scheduleMeetingButton')}
+                  </Button>
                 </Card>
 
                 {/* Social Links */}
@@ -400,19 +405,21 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Map Section (Placeholder) */}
+      {/* Map Section */}
       <section className="py-20 bg-gray-50 dark:bg-gray-900/50">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12">{t('location.title')}</h2>
-            <Card className="h-96 overflow-hidden">
-              <div className="w-full h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
-                <p className="text-muted-foreground">{t('location.mapPlaceholder')}</p>
-              </div>
-            </Card>
+            <MapSection className="shadow-lg" />
           </div>
         </div>
       </section>
+
+      {/* Meeting Scheduler Modal */}
+      <MeetingSchedulerModal 
+        open={meetingModalOpen} 
+        onOpenChange={setMeetingModalOpen} 
+      />
     </main>
   );
 }

@@ -243,20 +243,14 @@ service cloud.firestore {
       }
       
       // Users can read their own support chats
-      allow read: if isAuthenticated() && (
-        (isUserChat() && resource.data.userId == request.auth.uid) ||
-        isAdmin()
-      );
+      allow read: if isAuthenticated() && (isUserChat() || isAdmin());
       
       // Users can create their own support chats with correct ID
-      allow create: if isAuthenticated() && (
-        (isUserChat() && request.resource.data.userId == request.auth.uid) ||
-        isAdmin()
-      );
+      allow create: if isAuthenticated() && isUserChat();
       
       // Users and admins can update chats
       allow update: if isAuthenticated() && (
-        (isUserChat() && resource.data.userId == request.auth.uid) ||
+        isUserChat() ||
         isAdmin()
       );
       

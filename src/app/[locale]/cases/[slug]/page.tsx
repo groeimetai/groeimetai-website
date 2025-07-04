@@ -194,7 +194,7 @@ const caseDetails: Record<string, CaseDetail> = {
     },
     results: [
       {
-        metric: '1M+',
+        metric: '1B+',
         value: 'Tokens Processed',
         description: 'Successfully processed over a million tokens',
       },

@@ -72,6 +72,8 @@ export default function LoginPage() {
         setShow2FADialog(true);
         setIsLoading(false);
         return;
+      } else if (error.code === 'auth/email-not-verified') {
+        setError(t('errors.emailNotVerified'));
       } else {
         setError(t('errors.general'));
       }

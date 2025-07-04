@@ -39,7 +39,7 @@ const techPartners = [
 
 const achievements = [
   { metric: '€2.8M+', label: 'Annual Savings Delivered', icon: Building },
-  { metric: '1M+', label: 'Tokens Processed', icon: Code },
+  { metric: '1B+', label: 'Tokens Processed', icon: Code },
   { metric: '94%', label: 'Accuracy Rate', icon: Brain },
   { metric: '2 weeks', label: 'Fastest Deployment', icon: Zap },
 ];

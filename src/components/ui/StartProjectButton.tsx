@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { ProjectRequestDialog } from '@/components/dialogs/ProjectRequestDialog';
 import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from '@/i18n/routing';
 
 interface StartProjectButtonProps {
   variant?: 'default' | 'outline' | 'ghost';
@@ -23,6 +25,18 @@ export function StartProjectButton({
 }: StartProjectButtonProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const t = useTranslations('common');
+  const { user } = useAuth();
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (user) {
+      // If user is logged in, redirect to dashboard
+      router.push('/dashboard');
+    } else {
+      // If not logged in, show the project request dialog
+      setDialogOpen(true);
+    }
+  };
 
   return (
     <>
@@ -30,11 +44,11 @@ export function StartProjectButton({
         variant={variant}
         size={size}
         className={className}
-        onClick={() => setDialogOpen(true)}
+        onClick={handleClick}
       >
         {children || (
           <>
-            {t('startProject', { defaultMessage: 'Start Project' })}
+            {user ? t('goToDashboard', { defaultMessage: 'Go to Dashboard' }) : t('startProject', { defaultMessage: 'Start Project' })}
             <ArrowRight className="ml-2 w-4 h-4" />
           </>
         )}

@@ -26,7 +26,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Link } from '@/i18n/routing';
 import { collection, getDocs, query, orderBy, updateDoc, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, format } from 'date-fns';
 import {
   Dialog,
   DialogContent,
@@ -57,16 +57,41 @@ interface Quote {
   updatedAt: any;
 }
 
+interface Meeting {
+  id: string;
+  userId?: string | null;
+  type: string;
+  status: 'pending' | 'confirmed' | 'cancelled';
+  title: string;
+  description?: string;
+  startTime: any;
+  endTime: any;
+  location: {
+    type: 'physical' | 'virtual';
+    platform?: string;
+    address?: string;
+  };
+  requestedBy: {
+    name: string;
+    email: string;
+    company?: string;
+    phone?: string;
+  };
+  createdAt: any;
+}
+
 export default function AdminDashboard() {
   const router = useRouter();
   const { user, isAdmin, loading: authLoading } = useAuth();
   const [quotes, setQuotes] = useState<Quote[]>([]);
+  const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isTimelineOpen, setIsTimelineOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'quotes' | 'meetings'>('quotes');
 
   // Fetch all quotes
   const fetchQuotes = async () => {
@@ -88,6 +113,23 @@ export default function AdminDashboard() {
       setError('Failed to load project requests. Please try again.');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Fetch all meetings
+  const fetchMeetings = async () => {
+    try {
+      const meetingsQuery = query(collection(db, 'meetings'), orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(meetingsQuery);
+      
+      const meetingsData: Meeting[] = [];
+      snapshot.forEach((doc) => {
+        meetingsData.push({ id: doc.id, ...doc.data() } as Meeting);
+      });
+      
+      setMeetings(meetingsData);
+    } catch (err) {
+      console.error('Error fetching meetings:', err);
     }
   };
 
@@ -114,6 +156,7 @@ export default function AdminDashboard() {
       router.push('/dashboard');
     } else if (!authLoading && isAdmin) {
       fetchQuotes();
+      fetchMeetings();
     }
   }, [isAdmin, authLoading, router]);
 

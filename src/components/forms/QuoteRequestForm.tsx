@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { CustomRadioGroup, CustomRadioGroupItem } from '@/components/ui/custom-radio';
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase/config';
@@ -71,7 +71,7 @@ interface QuoteRequestFormProps {
 
 export default function QuoteRequestForm({ isDialog = false, onSuccess, preselectedService }: QuoteRequestFormProps) {
   const router = useRouter();
-  const { register, user } = useAuth();
+  const { register, user, firebaseUser } = useAuth();
   const t = useTranslations('auth.quoteRequest');
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -280,8 +280,8 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
 
       const quoteRef = await addDoc(collection(db, 'quotes'), quoteData);
 
-      // Create a project if user is logged in
-      if (userId || user?.uid) {
+      // Create a project only if user is logged in AND email is verified
+      if ((userId || user?.uid) && firebaseUser?.emailVerified) {
         const projectData = {
           userId: userId || user?.uid,
           quoteId: quoteRef.id,
@@ -301,6 +301,10 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
         };
 
         await addDoc(collection(db, 'projects'), projectData);
+      } else if ((userId || user?.uid) && !firebaseUser?.emailVerified) {
+        // User created account but email not verified yet
+        // Project will be created later when email is verified
+        console.log('Quote created, but project creation deferred until email verification');
       }
 
       // TODO: Upload attachments to Firebase Storage
@@ -378,14 +382,14 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
                 <p className="text-white/60">{t('getStartedDescription')}</p>
               </div>
 
-              <RadioGroup
+              <CustomRadioGroup
                 value={formData.accountType}
                 onValueChange={(value) => handleInputChange('accountType', value)}
                 className="space-y-4"
               >
                 <div className="border border-orange/30 rounded-lg p-6 hover:border-orange/50 transition-colors">
                   <div className="flex items-start space-x-3">
-                    <RadioGroupItem value="account" id="create-account" />
+                    <CustomRadioGroupItem value="account" id="create-account" />
                     <div className="flex-1">
                       <Label
                         htmlFor="create-account"
@@ -493,7 +497,7 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
 
                 <div className="border border-white/20 rounded-lg p-6 hover:border-white/30 transition-colors">
                   <div className="flex items-start space-x-3">
-                    <RadioGroupItem value="guest" id="continue-guest" />
+                    <CustomRadioGroupItem value="guest" id="continue-guest" />
                     <div className="flex-1">
                       <Label
                         htmlFor="continue-guest"
@@ -505,7 +509,7 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
                     </div>
                   </div>
                 </div>
-              </RadioGroup>
+              </CustomRadioGroup>
 
               <div className="bg-orange/10 border border-orange/20 rounded-lg p-4">
                 <div className="flex items-start space-x-3">
@@ -827,14 +831,14 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
 
               <div>
                 <Label className="text-white">{t('budgetLabel')}</Label>
-                <RadioGroup
+                <CustomRadioGroup
                   value={formData.budget}
                   onValueChange={(value) => handleInputChange('budget', value)}
                   className="mt-3 space-y-2"
                 >
                   {budgetRanges.map((range, index) => (
                     <div key={range} className="flex items-center space-x-2">
-                      <RadioGroupItem value={range} id={`budget-${index}`} />
+                      <CustomRadioGroupItem value={range} id={`budget-${index}`} />
                       <Label
                         htmlFor={`budget-${index}`}
                         className="font-normal cursor-pointer text-white"
@@ -843,19 +847,19 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
                       </Label>
                     </div>
                   ))}
-                </RadioGroup>
+                </CustomRadioGroup>
               </div>
 
               <div>
                 <Label className="text-white">{t('timelineLabel')}</Label>
-                <RadioGroup
+                <CustomRadioGroup
                   value={formData.timeline}
                   onValueChange={(value) => handleInputChange('timeline', value)}
                   className="mt-3 space-y-2"
                 >
                   {timelines.map((timeline, index) => (
                     <div key={timeline} className="flex items-center space-x-2">
-                      <RadioGroupItem value={timeline} id={`timeline-${index}`} />
+                      <CustomRadioGroupItem value={timeline} id={`timeline-${index}`} />
                       <Label
                         htmlFor={`timeline-${index}`}
                         className="font-normal cursor-pointer text-white"
@@ -864,7 +868,7 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
                       </Label>
                     </div>
                   ))}
-                </RadioGroup>
+                </CustomRadioGroup>
               </div>
 
               <div>

@@ -77,7 +77,7 @@ const caseStudies: CaseStudy[] = [
     solution:
       'GCP-based platform with Firebase, fully GDPR and EU AI Act compliant. Ingenious algorithm for long transcriptions within token limits.',
     results: [
-      { metric: 'Tokens Processed', value: '1M+', icon: BarChart3 },
+      { metric: 'Tokens Processed', value: '1B+', icon: BarChart3 },
       { metric: 'Hours Transcribed', value: '1500+', icon: Clock },
       { metric: 'Active Users', value: '500+', icon: Users },
     ],
@@ -187,7 +187,7 @@ export default function CasesPage() {
                   className="inline-flex flex-col items-center p-4"
                   style={{ background: 'linear-gradient(135deg, #FF6600, #FF8833)' }}
                 >
-                  <div className="text-3xl font-bold text-white">1M+</div>
+                  <div className="text-3xl font-bold text-white">1B+</div>
                   <div className="text-sm text-white/90">Tokens Processed</div>
                 </div>
               </div>
