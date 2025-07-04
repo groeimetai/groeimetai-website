@@ -23,7 +23,7 @@ const sections = [
     id: 'acceptance',
     title: 'Acceptance of Terms',
     icon: FileText,
-    content: `By accessing and using the services provided by GroeimetAI B.V. ("GroeimetAI", "we", "us", or "our"), you ("Client", "you", or "your") agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our services.
+    content: `By accessing and using the services provided by GroeimetAI ("GroeimetAI", "we", "us", or "our"), you ("Client", "you", or "your") agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our services.
 
 These Terms constitute a legally binding agreement between you and GroeimetAI, registered in the Netherlands under Chamber of Commerce number 90102304, with its registered office in Apeldoorn.
 
@@ -370,7 +370,7 @@ export default function TermsPage() {
                 <div className="flex items-center gap-3">
                   <Building className="w-5 h-5 text-primary" />
                   <div>
-                    <p className="font-semibold">GroeimetAI B.V.</p>
+                    <p className="font-semibold">GroeimetAI</p>
                     <p className="text-sm text-muted-foreground">Registered in the Netherlands</p>
                   </div>
                 </div>

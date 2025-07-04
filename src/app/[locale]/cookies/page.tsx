@@ -505,7 +505,7 @@ export default function CookiesPage() {
                 <div className="flex items-start gap-3">
                   <Globe className="w-5 h-5 text-primary mt-0.5" />
                   <div>
-                    <p>GroeimetAI B.V.</p>
+                    <p>GroeimetAI</p>
                     <p className="text-sm text-muted-foreground">Amsterdam, Nederland</p>
                   </div>
                 </div>

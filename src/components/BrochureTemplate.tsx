@@ -327,7 +327,7 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
         </View>
 
         <View style={[styles.footer, { position: 'relative', marginTop: 50 }]}>
-          <Text style={styles.footerText}>© 2024 GroeimetAI - {t.brochure.allRightsReserved}</Text>
+          <Text style={styles.footerText}>© 2025 GroeimetAI - {t.brochure.allRightsReserved}</Text>
           <Text style={[styles.footerText, { marginTop: 5 }]}>{t.brochure.strategicPartner}</Text>
         </View>
 

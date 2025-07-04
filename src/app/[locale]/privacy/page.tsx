@@ -40,12 +40,12 @@ const sections = [
     id: 'intro',
     title: '1. Introductie en identiteit verwerkingsverantwoordelijke',
     icon: Shield,
-    content: `GroeimetAI B.V. ("wij", "ons", "onze" of "GroeimetAI") respecteert uw privacy en is toegewijd aan het beschermen van uw persoonsgegevens. Dit privacybeleid informeert u over hoe wij omgaan met uw persoonsgegevens wanneer u onze website bezoekt, onze AI-diensten gebruikt, en vertelt u over uw privacyrechten en hoe de wet u beschermt.
+    content: `GroeimetAI ("wij", "ons", "onze" of "GroeimetAI") respecteert uw privacy en is toegewijd aan het beschermen van uw persoonsgegevens. Dit privacybeleid informeert u over hoe wij omgaan met uw persoonsgegevens wanneer u onze website bezoekt, onze AI-diensten gebruikt, en vertelt u over uw privacyrechten en hoe de wet u beschermt.
 
 Dit privacybeleid is van toepassing op alle persoonsgegevens die wij verwerken van onze klanten, leveranciers, partners, websitebezoekers en andere betrokkenen. Wij verwerken persoonsgegevens in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG/GDPR) en andere toepasselijke wet- en regelgeving.
 
 **Identiteit en contactgegevens:**
-GroeimetAI B.V.
+GroeimetAI
 KvK-nummer: 90102304
 Vestigingsadres: Apeldoorn, Nederland
 Telefoon: +31 (6)81 739 018
@@ -622,10 +622,10 @@ Telefoon: +31 (0)20 123 4568
 Voor: Complexe privacy vragen, rechten uitoefening, klachten
 
 **17.3 Postadres:**
-GroeimetAI B.V.
+GroeimetAI
 T.a.v. Privacy Office
-[Straat]
-[Postcode] Amsterdam
+Kweekweg 23
+7315AP Apeldoorn
 Nederland
 
 **17.4 Klachtenprocedure:**

@@ -817,7 +817,7 @@
       "legal": "Legal",
       "contact": "Contact"
     },
-    "copyright": "© {year} GroeimetAI B.V. All rights reserved.",
+    "copyright": "© {year} GroeimetAI All rights reserved.",
     "madeWith": "Made with",
     "in": "in Apeldoorn"
   },
@@ -1651,7 +1651,7 @@
       "sections": {
         "acceptance": {
           "title": "Acceptance of Terms",
-          "content": "By accessing and using the services provided by GroeimetAI B.V. (\"GroeimetAI\", \"we\", \"us\", or \"our\"), you (\"Client\", \"you\", or \"your\") agree to be bound by these Terms of Service (\"Terms\"). If you do not agree to these Terms, please do not use our services.\n\nThese Terms constitute a legally binding agreement between you and GroeimetAI, registered in the Netherlands under Chamber of Commerce number 90102304, with its registered office in Apeldoorn.\n\nBy using our services, you represent that you have the legal capacity to enter into this agreement and that you are at least 18 years of age or have obtained parental consent."
+          "content": "By accessing and using the services provided by GroeimetAI (\"GroeimetAI\", \"we\", \"us\", or \"our\"), you (\"Client\", \"you\", or \"your\") agree to be bound by these Terms of Service (\"Terms\"). If you do not agree to these Terms, please do not use our services.\n\nThese Terms constitute a legally binding agreement between you and GroeimetAI, registered in the Netherlands under Chamber of Commerce number 90102304, with its registered office in Apeldoorn.\n\nBy using our services, you represent that you have the legal capacity to enter into this agreement and that you are at least 18 years of age or have obtained parental consent."
         },
         "services": {
           "title": "Description of Services",
@@ -1715,7 +1715,7 @@
       "contact": {
         "title": "Contact Information",
         "description": "For questions about these Terms of Service or our services, please contact us:",
-        "company": "GroeimetAI B.V.",
+        "company": "GroeimetAI",
         "registeredIn": "Registered in the Netherlands",
         "legalEmail": "legal@groeimetai.io",
         "headquarters": "Headquarters",
@@ -1747,7 +1747,7 @@
       "sections": {
         "intro": {
           "title": "1. Introduction and Identity of Controller",
-          "content": "GroeimetAI B.V. (\"we\", \"us\", \"our\" or \"GroeimetAI\") respects your privacy and is committed to protecting your personal data. This privacy policy informs you about how we handle your personal data when you visit our website, use our AI services, and tells you about your privacy rights and how the law protects you.\n\nThis privacy policy applies to all personal data we process from our customers, suppliers, partners, website visitors and other data subjects. We process personal data in accordance with the General Data Protection Regulation (GDPR) and other applicable laws and regulations.\n\n**Identity and contact details:**\nGroeimetAI B.V.\nChamber of Commerce number: 90102304\nRegistered office: Apeldoorn, Netherlands\nPhone: +31 (6)81 739 018\nEmail: privacy@groeimetai.io\nWebsite: https://groeimetai.io"
+          "content": "GroeimetAI (\"we\", \"us\", \"our\" or \"GroeimetAI\") respects your privacy and is committed to protecting your personal data. This privacy policy informs you about how we handle your personal data when you visit our website, use our AI services, and tells you about your privacy rights and how the law protects you.\n\nThis privacy policy applies to all personal data we process from our customers, suppliers, partners, website visitors and other data subjects. We process personal data in accordance with the General Data Protection Regulation (GDPR) and other applicable laws and regulations.\n\n**Identity and contact details:**\nGroeimetAI\nChamber of Commerce number: 90102304\nRegistered office: Apeldoorn, Netherlands\nPhone: +31 (6)81 739 018\nEmail: privacy@groeimetai.io\nWebsite: https://groeimetai.io"
         },
         "dpo": {
           "title": "2. Data Protection Officer (DPO)",
@@ -1811,7 +1811,7 @@
         },
         "contact": {
           "title": "17. Contact and Complaints",
-          "content": "We are ready to answer all your privacy-related questions:\n\n**17.1 Primary contact point:**\n**Privacy Office GroeimetAI**\nEmail: privacy@groeimetai.io\nPhone: +31 (6)81 739 018\nResponse time: Within 2 business days\n\n**17.2 Data Protection Officer:**\n**[DPO Name]**\nEmail: dpo@groeimetai.io\nPhone: +31 (0)20 123 4568\nFor: Complex privacy questions, exercise of rights, complaints\n\n**17.3 Postal address:**\nGroeimetAI B.V.\nAttn: Privacy Office\n[Street]\n[Postal code] Apeldoorn\nNetherlands\n\n**17.4 Complaints procedure:**\n1. **Internal handling:** We strive to resolve all complaints within 30 days\n2. **Escalation:** To our DPO for complex matters\n3. **Mediation:** We offer free mediation for disputes\n4. **External complaint:** You can always contact the DPA\n\n**17.5 Dutch Data Protection Authority:**\nBezuidenhoutseweg 30\n2594 AV The Hague\nPhone: 0900 - 2001 201\nWebsite: www.autoriteitpersoonsgegevens.nl\n\n**17.6 European supervisory authorities:**\nFor cross-border complaints: ec.europa.eu/info/law/law-topic/data-protection\n\n**17.7 Trade associations:**\nWe are affiliated with:\n• NLdigital (digital economy trade association)\n• Dutch AI Coalition\n[Complaints can also be filed there]"
+          "content": "We are ready to answer all your privacy-related questions:\n\n**17.1 Primary contact point:**\n**Privacy Office GroeimetAI**\nEmail: privacy@groeimetai.io\nPhone: +31 (6)81 739 018\nResponse time: Within 2 business days\n\n**17.2 Data Protection Officer:**\n**[DPO Name]**\nEmail: dpo@groeimetai.io\nPhone: +31 (0)20 123 4568\nFor: Complex privacy questions, exercise of rights, complaints\n\n**17.3 Postal address:**\nGroeimetAI\nAttn: Privacy Office\n[Street]\n[Postal code] Apeldoorn\nNetherlands\n\n**17.4 Complaints procedure:**\n1. **Internal handling:** We strive to resolve all complaints within 30 days\n2. **Escalation:** To our DPO for complex matters\n3. **Mediation:** We offer free mediation for disputes\n4. **External complaint:** You can always contact the DPA\n\n**17.5 Dutch Data Protection Authority:**\nBezuidenhoutseweg 30\n2594 AV The Hague\nPhone: 0900 - 2001 201\nWebsite: www.autoriteitpersoonsgegevens.nl\n\n**17.6 European supervisory authorities:**\nFor cross-border complaints: ec.europa.eu/info/law/law-topic/data-protection\n\n**17.7 Trade associations:**\nWe are affiliated with:\n• NLdigital (digital economy trade association)\n• Dutch AI Coalition\n[Complaints can also be filed there]"
         }
       },
       "documentOptions": {
@@ -1971,7 +1971,7 @@
       "contactSection": {
         "title": "Contact for cookie-related questions",
         "description": "If you have questions about our cookie policy or how we use cookies, please contact us:",
-        "company": "GroeimetAI B.V.",
+        "company": "GroeimetAI",
         "location": "Apeldoorn, Netherlands",
         "authority": {
           "title": "Dutch Data Protection Authority",

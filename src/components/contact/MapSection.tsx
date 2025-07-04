@@ -92,7 +92,7 @@ export default function MapSection({ className }: MapSectionProps) {
     const infoWindow = new google.maps.InfoWindow({
       content: `
         <div style="color: #000; padding: 10px;">
-          <h3 style="margin: 0 0 5px 0; font-size: 16px; font-weight: bold;">GroeimetAI B.V.</h3>
+          <h3 style="margin: 0 0 5px 0; font-size: 16px; font-weight: bold;">GroeimetAI</h3>
           <p style="margin: 0; font-size: 14px;">Apeldoorn, Nederland</p>
           <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">
             <a href="https://maps.google.com/?q=GroeimetAI+Apeldoorn" target="_blank" style="color: #FF6600; text-decoration: none;">
