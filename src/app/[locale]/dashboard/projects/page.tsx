@@ -439,7 +439,7 @@ export default function ProjectsPage() {
           <DialogHeader>
             <DialogTitle>Cancel Project</DialogTitle>
             <DialogDescription>
-              Are you sure you want to cancel "{selectedProject?.name}"? This action cannot be undone.
+              Are you sure you want to cancel &ldquo;{selectedProject?.name}&rdquo;? This action cannot be undone.
               The project will be marked as cancelled and all associated tasks will be stopped.
             </DialogDescription>
           </DialogHeader>
@@ -475,7 +475,7 @@ export default function ProjectsPage() {
           <DialogHeader>
             <DialogTitle>Delete Project</DialogTitle>
             <DialogDescription>
-              Are you sure you want to permanently delete "{selectedProject?.name}"? 
+              Are you sure you want to permanently delete &ldquo;{selectedProject?.name}&rdquo;? 
               This action cannot be undone and all project data will be lost.
             </DialogDescription>
           </DialogHeader>
