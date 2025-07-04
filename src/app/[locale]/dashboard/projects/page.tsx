@@ -300,12 +300,13 @@ export default function ProjectsPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              {projects.map((project) => (
+              {projects.map((project, index) => (
                 <motion.div
                   key={project.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
+                  transition={{ delay: index * 0.1 }}
                   className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 p-6 hover:bg-white/10 transition-colors"
                 >
                   <div className="flex justify-between items-start mb-4">
@@ -325,29 +326,33 @@ export default function ProjectsPage() {
                     </div>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="text-white/60">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="text-white/60 hover:text-white focus:outline-none"
+                        >
                           <MoreVertical className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className="bg-black border-white/20">
                         {project.status !== 'completed' && project.status !== 'cancelled' && (
                           <DropdownMenuItem
-                            onClick={() => {
+                            onSelect={() => {
                               setSelectedProject(project);
                               setCancelDialogOpen(true);
                             }}
-                            className="text-yellow-600"
+                            className="text-yellow-600 cursor-pointer"
                           >
                             <XCircle className="w-4 h-4 mr-2" />
                             Cancel Project
                           </DropdownMenuItem>
                         )}
                         <DropdownMenuItem
-                          onClick={() => {
+                          onSelect={() => {
                             setSelectedProject(project);
                             setDeleteDialogOpen(true);
                           }}
-                          className="text-red-600"
+                          className="text-red-600 cursor-pointer"
                         >
                           <Trash2 className="w-4 h-4 mr-2" />
                           Delete Project
