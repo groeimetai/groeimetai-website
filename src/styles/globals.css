@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* React Day Picker styles */
+@import 'react-day-picker/dist/style.css';
+
 @layer base {
   :root {
     /* New color scheme: 80% Black, 10% Orange, 5% White, 5% Green */

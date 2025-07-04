@@ -81,7 +81,7 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   
   // Helper to determine if user is logged in
-  const isLoggedIn = isDialog && user;
+  const isLoggedIn = !!user;
 
   const steps = isLoggedIn
     ? [

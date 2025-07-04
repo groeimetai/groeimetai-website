@@ -124,10 +124,12 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
         startTime: meetingDateTime,
         endTime: addMinutes(meetingDateTime, 30),
         duration: 30,
-        location: {
-          type: meetingType === 'in-person' ? 'physical' : 'virtual',
-          platform: meetingType === 'video' ? 'video' : meetingType === 'phone' ? 'phone' : undefined,
-          address: meetingType === 'in-person' ? 'Apeldoorn, Nederland' : undefined,
+        location: meetingType === 'in-person' ? {
+          type: 'physical',
+          address: 'Apeldoorn, Nederland',
+        } : {
+          type: 'virtual',
+          platform: meetingType === 'video' ? 'video' : 'phone',
         },
         participantIds: [user?.uid || 'guest'],
         participants: [
