@@ -26,7 +26,7 @@ export const emailConfig = {
 
 // Create reusable transporter object using the default SMTP transport
 export const createTransporter = () => {
-  return nodemailer.createTransporter({
+  return nodemailer.createTransport({
     host: emailConfig.smtp.host,
     port: emailConfig.smtp.port,
     secure: emailConfig.smtp.secure,
