@@ -19,12 +19,14 @@ import {
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase/config';
 import { User, UserRole } from '@/types';
+import { isAdminEmail } from '@/lib/constants/adminEmails';
 
 interface AuthContextType {
   user: User | null;
   firebaseUser: FirebaseUser | null;
   loading: boolean;
   error: string | null;
+  isAdmin: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, userData: Partial<User>) => Promise<void>;
   logout: () => Promise<void>;
@@ -94,7 +96,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         jobTitle: additionalData?.jobTitle || '',
         title: additionalData?.jobTitle || '',
         phoneNumber: additionalData?.phoneNumber || '',
-        role: 'client' as UserRole,
+        role: (isAdminEmail(firebaseUser.email!) ? 'admin' : 'client') as UserRole,
         permissions: [],
         isActive: true,
         isVerified: firebaseUser.emailVerified,
@@ -349,6 +351,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     firebaseUser,
     loading,
     error,
+    isAdmin: user?.role === 'admin',
     login,
     register,
     logout,

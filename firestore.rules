@@ -36,13 +36,17 @@ service cloud.firestore {
       allow create: if true;
       
       // Users can read their own quotes, admins can read all
-      allow read: if (resource.data.userId == request.auth.uid) || 
+      allow read: if isAuthenticated() && (
+                    (resource.data.userId == request.auth.uid) || 
                     (resource.data.email == request.auth.token.email) ||
-                    isAdmin();
+                    isAdmin()
+                    );
       
       // Users can update their own quotes, admins can update all
-      allow update: if (resource.data.userId == request.auth.uid && isAuthenticated()) || 
-                      isAdmin();
+      allow update: if isAuthenticated() && (
+                      (resource.data.userId == request.auth.uid) || 
+                      isAdmin()
+                      );
       
       // Only admins can delete quotes
       allow delete: if isAdmin();
