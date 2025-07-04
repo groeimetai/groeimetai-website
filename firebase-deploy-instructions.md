@@ -8,6 +8,14 @@ To fix the permission errors, you need to deploy the updated Firebase rules and 
 firebase deploy --only firestore:rules,firestore:indexes
 ```
 
+## IMPORTANT: Deploy the rules immediately!
+
+The chat permission errors will be fixed once you deploy the updated rules:
+
+```bash
+firebase deploy --only firestore:rules
+```
+
 ## Or deploy separately:
 
 ### 1. Deploy Firestore Rules
