@@ -77,7 +77,7 @@ export default function ProjectDetailPage() {
     if (user && projectId) {
       fetchProject();
     }
-  }, [user, projectId]);
+  }, [user, projectId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!authLoading && !user) {

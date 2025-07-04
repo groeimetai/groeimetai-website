@@ -57,7 +57,7 @@ export default function ProjectsPage() {
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   // Fetch projects from API
   const fetchProjects = async () => {
@@ -101,6 +101,20 @@ export default function ProjectsPage() {
 
     return () => clearTimeout(timer);
   }, [searchQuery]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (activeDropdown) {
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [activeDropdown]);
 
   // Handle project cancellation
   const handleCancelProject = async () => {
@@ -325,46 +339,50 @@ export default function ProjectsPage() {
                         </Badge>
                       </div>
                     </div>
-                    <DropdownMenu 
-                      open={openDropdownId === project.id}
-                      onOpenChange={(open) => setOpenDropdownId(open ? project.id : null)}
-                    >
-                      <DropdownMenuTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="text-white/60 hover:text-white focus:outline-none"
-                        >
-                          <MoreVertical className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="bg-black/95 border-white/20 text-white">
-                        {project.status !== 'completed' && project.status !== 'cancelled' && (
-                          <DropdownMenuItem
-                            onSelect={() => {
-                              setSelectedProject(project);
-                              setCancelDialogOpen(true);
-                              setOpenDropdownId(null);
-                            }}
-                            className="text-yellow-600 cursor-pointer hover:bg-white/10"
-                          >
-                            <XCircle className="w-4 h-4 mr-2" />
-                            Cancel Project
-                          </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            setSelectedProject(project);
-                            setDeleteDialogOpen(true);
-                            setOpenDropdownId(null);
-                          }}
-                          className="text-red-600 cursor-pointer hover:bg-white/10"
-                        >
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Delete Project
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <div className="relative">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="text-white/60 hover:text-white focus:outline-none"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setActiveDropdown(activeDropdown === project.id ? null : project.id);
+                        }}
+                      >
+                        <MoreVertical className="w-4 h-4" />
+                      </Button>
+                      {activeDropdown === project.id && (
+                        <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-black/95 border border-white/20 z-50">
+                          <div className="py-1">
+                            {project.status !== 'completed' && project.status !== 'cancelled' && (
+                              <button
+                                onClick={() => {
+                                  setSelectedProject(project);
+                                  setCancelDialogOpen(true);
+                                  setActiveDropdown(null);
+                                }}
+                                className="flex items-center px-4 py-2 text-sm text-yellow-600 hover:bg-white/10 w-full text-left"
+                              >
+                                <XCircle className="w-4 h-4 mr-2" />
+                                Cancel Project
+                              </button>
+                            )}
+                            <button
+                              onClick={() => {
+                                setSelectedProject(project);
+                                setDeleteDialogOpen(true);
+                                setActiveDropdown(null);
+                              }}
+                              className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-white/10 w-full text-left"
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Delete Project
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <p className="text-sm text-white/60 mb-4 line-clamp-2">{project.description}</p>
