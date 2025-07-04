@@ -193,6 +193,13 @@ export default function AdminDashboard() {
               <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
               <p className="text-white/60 mt-2">Manage project requests and system overview</p>
             </div>
+            <Link
+              href="/dashboard/admin/support"
+              className="bg-orange hover:bg-orange/90 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+            >
+              <MessageSquare className="w-5 h-5" />
+              Support Chats
+            </Link>
           </div>
         </div>
 
