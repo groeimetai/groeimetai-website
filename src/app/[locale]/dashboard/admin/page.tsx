@@ -17,6 +17,7 @@ import {
   CheckCircle,
   Clock,
   XCircle,
+  MessageSquare,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,6 +26,13 @@ import { Link } from '@/i18n/routing';
 import { collection, getDocs, query, orderBy, updateDoc, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { formatDistanceToNow } from 'date-fns';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import QuoteChat from '@/components/QuoteChat';
 
 interface Quote {
   id: string;
@@ -54,6 +62,8 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   // Fetch all quotes
   const fetchQuotes = async () => {
@@ -364,6 +374,17 @@ export default function AdminDashboard() {
                     </div>
                     
                     <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          setSelectedQuote(quote);
+                          setIsChatOpen(true);
+                        }}
+                      >
+                        <MessageSquare className="w-4 h-4 mr-1" />
+                        Chat
+                      </Button>
                       {quote.status === 'pending' && (
                         <>
                           <Button
@@ -428,6 +449,24 @@ export default function AdminDashboard() {
           </div>
         )}
       </div>
+
+      {/* Chat Dialog */}
+      <Dialog open={isChatOpen} onOpenChange={setIsChatOpen}>
+        <DialogContent className="bg-black/95 border-white/20 text-white max-w-2xl h-[80vh]">
+          <DialogHeader>
+            <DialogTitle>Project Request Chat</DialogTitle>
+          </DialogHeader>
+          {selectedQuote && (
+            <div className="h-full flex flex-col">
+              <QuoteChat 
+                quoteId={selectedQuote.id} 
+                quoteName={selectedQuote.projectName}
+                userName={selectedQuote.fullName}
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }

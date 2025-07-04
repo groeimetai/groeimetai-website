@@ -50,6 +50,27 @@ service cloud.firestore {
       
       // Only admins can delete quotes
       allow delete: if isAdmin();
+      
+      // Messages subcollection
+      match /messages/{messageId} {
+        // Users can read messages if they can read the parent quote
+        allow read: if isAuthenticated() && (
+                      get(/databases/$(database)/documents/quotes/$(quoteId)).data.userId == request.auth.uid ||
+                      get(/databases/$(database)/documents/quotes/$(quoteId)).data.email == request.auth.token.email ||
+                      isAdmin()
+                      );
+        
+        // Users can create messages if they can read the parent quote
+        allow create: if isAuthenticated() && (
+                        get(/databases/$(database)/documents/quotes/$(quoteId)).data.userId == request.auth.uid ||
+                        get(/databases/$(database)/documents/quotes/$(quoteId)).data.email == request.auth.token.email ||
+                        isAdmin()
+                        );
+        
+        // No updates or deletes allowed
+        allow update: if false;
+        allow delete: if false;
+      }
     }
     
     // Projects collection
