@@ -25,7 +25,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Link } from '@/i18n/routing';
-import { projectService } from '@/services/projects';
+import { firestoreProjectService as projectService } from '@/services/firestore/projects';
 import { Project, ProjectStatus } from '@/types';
 
 export default function ProjectsPage() {
@@ -47,6 +47,7 @@ export default function ProjectsPage() {
 
     try {
       const response = await projectService.list({
+        userId: user.uid,
         status: statusFilter !== 'all' ? statusFilter : undefined,
         search: searchQuery || undefined,
         sort: 'createdAt',
