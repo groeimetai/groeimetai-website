@@ -53,7 +53,7 @@ export default function ContactPage() {
     {
       icon: Phone,
       title: t('infoCards.phone'),
-      value: '+31 (0)20 123 4567',
+      value: '+31 (6)81 739 018',
       action: 'tel:+31201234567',
     },
     {
@@ -322,7 +322,7 @@ export default function ContactPage() {
                       className="flex items-center gap-3 text-primary hover:underline"
                     >
                       <Phone className="w-5 h-5" />
-                      +31 (0)20 123 4567
+                      +31 (6)81 739 018
                     </a>
                     <a
                       href="mailto:info@groeimetai.io"

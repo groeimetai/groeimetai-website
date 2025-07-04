@@ -25,7 +25,7 @@ const sections = [
     icon: FileText,
     content: `By accessing and using the services provided by GroeimetAI B.V. ("GroeimetAI", "we", "us", or "our"), you ("Client", "you", or "your") agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our services.
 
-These Terms constitute a legally binding agreement between you and GroeimetAI, registered in the Netherlands under Chamber of Commerce number [KvK number], with its registered office in Amsterdam.
+These Terms constitute a legally binding agreement between you and GroeimetAI, registered in the Netherlands under Chamber of Commerce number 90102304, with its registered office in Apeldoorn.
 
 By using our services, you represent that you have the legal capacity to enter into this agreement and that you are at least 18 years of age or have obtained parental consent.`,
   },
@@ -383,14 +383,14 @@ export default function TermsPage() {
                 <div className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-primary" />
                   <a href="tel:+31201234567" className="text-primary hover:underline">
-                    +31 (0)20 123 4567
+                    +31 (6)81 739 018
                   </a>
                 </div>
                 <div className="flex items-start gap-3">
                   <Globe className="w-5 h-5 text-primary mt-0.5" />
                   <div>
                     <p>Headquarters</p>
-                    <p className="text-sm text-muted-foreground">Amsterdam, Netherlands</p>
+                    <p className="text-sm text-muted-foreground">Apeldoorn, Netherlands</p>
                   </div>
                 </div>
               </div>

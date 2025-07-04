@@ -46,9 +46,9 @@ Dit privacybeleid is van toepassing op alle persoonsgegevens die wij verwerken v
 
 **Identiteit en contactgegevens:**
 GroeimetAI B.V.
-KvK-nummer: [KvK nummer]
-Vestigingsadres: [Adres], Amsterdam, Nederland
-Telefoon: +31 (0)20 123 4567
+KvK-nummer: 90102304
+Vestigingsadres: Apeldoorn, Nederland
+Telefoon: +31 (6)81 739 018
 E-mail: privacy@groeimetai.io
 Website: https://groeimetai.io`,
   },
@@ -612,7 +612,7 @@ Als u vermoedt dat wij onbedoeld gegevens van een kind hebben verzameld, neem da
 **17.1 Primair contactpunt:**
 **Privacy Office GroeimetAI**
 E-mail: privacy@groeimetai.io
-Telefoon: +31 (0)20 123 4567
+Telefoon: +31 (6)81 739 018
 Responstijd: Binnen 2 werkdagen
 
 **17.2 Data Protection Officer:**

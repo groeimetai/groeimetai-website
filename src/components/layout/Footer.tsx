@@ -147,12 +147,12 @@ export default function Footer() {
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
                 <a href="tel:+31201234567" className="hover:text-white transition-colors">
-                  +31 (0)20 123 4567
+                  +31 (6)81 739 018
                 </a>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 mt-0.5" />
-                <span>Amsterdam, Nederland</span>
+                <span>Apeldoorn, Nederland</span>
               </li>
             </ul>
           </div>

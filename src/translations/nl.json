@@ -808,7 +808,7 @@
     },
     "copyright": "© {year} GroeimetAI B.V. Alle rechten voorbehouden.",
     "madeWith": "Gemaakt met",
-    "in": "in Amsterdam"
+    "in": "in Apeldoorn"
   },
   "auth": {
     "login": {
@@ -1043,7 +1043,7 @@
       "mapPlaceholder": "Interactieve kaart komt hier"
     },
     "values": {
-      "amsterdam": "Amsterdam, Nederland",
+      "amsterdam": "Apeldoorn, Nederland",
       "businessHours": "Ma-Vr: 9:00 - 18:00"
     }
   },
@@ -1077,7 +1077,7 @@
     "contactTitle": "Start Uw AI Reis",
     "contactDescription": "Klaar om uw bedrijf te transformeren met strategische AI? Ons team staat klaar om u te begeleiden bij elke stap van uw digitale transformatiereis.",
     "getInTouch": "Neem Contact Op",
-    "location": "Locatie: Amsterdam, Nederland",
+    "location": "Locatie: Apeldoorn, Nederland",
     "nextStepsTitle": "Volgende Stappen",
     "nextStep1": "Plan een gratis consultatie om uw AI-ambities te bespreken",
     "nextStep2": "Ontvang een op maat gemaakte strategische roadmap voor uw organisatie",
@@ -1450,7 +1450,7 @@
         "meetingLink": "Meeting Link *",
         "linkPlaceholder": "https://zoom.us/j/...",
         "address": "Meeting Adres *",
-        "addressPlaceholder": "Hoofdstraat 123, Amsterdam",
+        "addressPlaceholder": "Hoofdstraat 123, Apeldoorn",
         "agenda": "Meeting Agenda / Beschrijving",
         "agendaPlaceholder": "Beschrijf wat u wilt bespreken...",
         "rescheduling": "Opnieuw plannen...",
@@ -1737,7 +1737,7 @@
     "locations": {
       "video": "Video Gesprek (Zoom/Teams)",
       "phone": "Telefonisch",
-      "office": "In Persoon (Amsterdam Kantoor)"
+      "office": "In Persoon (Apeldoorn Kantoor)"
     },
     "actions": {
       "reschedule": "Verzetten",
@@ -2100,7 +2100,7 @@
       "sections": {
         "acceptance": {
           "title": "Aanvaarding van Voorwaarden",
-          "content": "Door toegang te verkrijgen tot en gebruik te maken van de diensten die worden aangeboden door GroeimetAI B.V. (\"GroeimetAI\", \"wij\", \"ons\" of \"onze\"), gaat u (\"Klant\", \"u\" of \"uw\") akkoord met deze Algemene Voorwaarden (\"Voorwaarden\"). Als u niet akkoord gaat met deze Voorwaarden, gelieve onze diensten niet te gebruiken.\n\nDeze Voorwaarden vormen een juridisch bindende overeenkomst tussen u en GroeimetAI, geregistreerd in Nederland onder Kamer van Koophandel nummer [KvK nummer], met maatschappelijke zetel te Amsterdam.\n\nDoor gebruik te maken van onze diensten, verklaart u dat u de wettelijke bevoegdheid heeft om deze overeenkomst aan te gaan en dat u ten minste 18 jaar oud bent of toestemming van uw ouders heeft verkregen."
+          "content": "Door toegang te verkrijgen tot en gebruik te maken van de diensten die worden aangeboden door GroeimetAI B.V. (\"GroeimetAI\", \"wij\", \"ons\" of \"onze\"), gaat u (\"Klant\", \"u\" of \"uw\") akkoord met deze Algemene Voorwaarden (\"Voorwaarden\"). Als u niet akkoord gaat met deze Voorwaarden, gelieve onze diensten niet te gebruiken.\n\nDeze Voorwaarden vormen een juridisch bindende overeenkomst tussen u en GroeimetAI, geregistreerd in Nederland onder Kamer van Koophandel nummer 90102304, met maatschappelijke zetel te Apeldoorn.\n\nDoor gebruik te maken van onze diensten, verklaart u dat u de wettelijke bevoegdheid heeft om deze overeenkomst aan te gaan en dat u ten minste 18 jaar oud bent of toestemming van uw ouders heeft verkregen."
         },
         "services": {
           "title": "Beschrijving van Diensten",
@@ -2140,7 +2140,7 @@
         },
         "governingLaw": {
           "title": "Toepasselijk Recht en Geschillen",
-          "content": "Toepasselijk Recht:\n    • Deze Voorwaarden worden beheerst door het recht van Nederland.\n    • Het Verdrag der Verenigde Naties inzake internationale koopovereenkomsten betreffende roerende zaken is niet van toepassing.\n\nGeschillenbeslechting:\n    • Geschillen die voortvloeien uit deze Voorwaarden worden eerst aangepakt door onderhandelingen te goeder trouw.\n    • Als onderhandelingen falen, worden geschillen voorgelegd aan mediation volgens de regels van het Nederlands Mediation Instituut.\n    • Als mediation faalt, worden geschillen beslecht door de bevoegde rechtbanken van Amsterdam, Nederland.\n\nTaal:\n    • Deze Voorwaarden zijn opgesteld in het Engels. In geval van vertaling prevaleert de Engelse versie.\n    • Alle communicatie met betrekking tot deze Voorwaarden zal in het Engels of Nederlands zijn, zoals wederzijds overeengekomen."
+          "content": "Toepasselijk Recht:\n    • Deze Voorwaarden worden beheerst door het recht van Nederland.\n    • Het Verdrag der Verenigde Naties inzake internationale koopovereenkomsten betreffende roerende zaken is niet van toepassing.\n\nGeschillenbeslechting:\n    • Geschillen die voortvloeien uit deze Voorwaarden worden eerst aangepakt door onderhandelingen te goeder trouw.\n    • Als onderhandelingen falen, worden geschillen voorgelegd aan mediation volgens de regels van het Nederlands Mediation Instituut.\n    • Als mediation faalt, worden geschillen beslecht door de bevoegde rechtbanken van Apeldoorn, Nederland.\n\nTaal:\n    • Deze Voorwaarden zijn opgesteld in het Engels. In geval van vertaling prevaleert de Engelse versie.\n    • Alle communicatie met betrekking tot deze Voorwaarden zal in het Engels of Nederlands zijn, zoals wederzijds overeengekomen."
         }
       },
       "additionalSections": {
@@ -2168,7 +2168,7 @@
         "registeredIn": "Geregistreerd in Nederland",
         "legalEmail": "legal@groeimetai.io",
         "headquarters": "Hoofdkantoor",
-        "location": "Amsterdam, Nederland",
+        "location": "Apeldoorn, Nederland",
         "legalNotice": {
           "title": "Juridische Kennisgeving",
           "content": "Door gebruik te maken van onze diensten, erkent u dat u deze Algemene Voorwaarden heeft gelezen, begrepen en ermee akkoord gaat om eraan gebonden te zijn. Als u deze Voorwaarden aangaat namens een bedrijf of andere juridische entiteit, verklaart u dat u de bevoegdheid heeft om die entiteit aan deze Voorwaarden te binden."
@@ -2196,7 +2196,7 @@
       "sections": {
         "intro": {
           "title": "1. Introductie en Identiteit van de Verwerkingsverantwoordelijke",
-          "content": "GroeimetAI B.V. (\"wij\", \"ons\", \"onze\" of \"GroeimetAI\") respecteert uw privacy en zet zich in voor de bescherming van uw persoonsgegevens. Dit privacybeleid informeert u over hoe wij uw persoonsgegevens behandelen wanneer u onze website bezoekt, onze AI-diensten gebruikt, en vertelt u over uw privacyrechten en hoe de wet u beschermt.\n\nDit privacybeleid is van toepassing op alle persoonsgegevens die wij verwerken van onze klanten, leveranciers, partners, websitebezoekers en andere betrokkenen. Wij verwerken persoonsgegevens in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG) en andere toepasselijke wet- en regelgeving.\n\n**Identiteit en contactgegevens:**\nGroeimetAI B.V.\nKamer van Koophandel nummer: [KvK nummer]\nMaatschappelijke zetel: [Adres], Amsterdam, Nederland\nTelefoon: +31 (0)20 123 4567\nE-mail: privacy@groeimetai.io\nWebsite: https://groeimetai.io"
+          "content": "GroeimetAI B.V. (\"wij\", \"ons\", \"onze\" of \"GroeimetAI\") respecteert uw privacy en zet zich in voor de bescherming van uw persoonsgegevens. Dit privacybeleid informeert u over hoe wij uw persoonsgegevens behandelen wanneer u onze website bezoekt, onze AI-diensten gebruikt, en vertelt u over uw privacyrechten en hoe de wet u beschermt.\n\nDit privacybeleid is van toepassing op alle persoonsgegevens die wij verwerken van onze klanten, leveranciers, partners, websitebezoekers en andere betrokkenen. Wij verwerken persoonsgegevens in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG) en andere toepasselijke wet- en regelgeving.\n\n**Identiteit en contactgegevens:**\nGroeimetAI B.V.\nKamer van Koophandel nummer: 90102304\nMaatschappelijke zetel: Apeldoorn, Nederland\nTelefoon: +31 (6)81 739 018\nE-mail: privacy@groeimetai.io\nWebsite: https://groeimetai.io"
         },
         "dpo": {
           "title": "2. Functionaris Gegevensbescherming (FG)",
@@ -2260,7 +2260,7 @@
         },
         "contact": {
           "title": "17. Contact en Klachten",
-          "content": "Wij staan klaar om al uw privacy-gerelateerde vragen te beantwoorden:\n\n**17.1 Primair contactpunt:**\n**Privacy Office GroeimetAI**\nE-mail: privacy@groeimetai.io\nTelefoon: +31 (0)20 123 4567\nReactietijd: Binnen 2 werkdagen\n\n**17.2 Functionaris Gegevensbescherming:**\n**[FG Naam]**\nE-mail: dpo@groeimetai.io\nTelefoon: +31 (0)20 123 4568\nVoor: Complexe privacyvragen, uitoefening van rechten, klachten\n\n**17.3 Postadres:**\nGroeimetAI B.V.\nt.a.v. Privacy Office\n[Straat]\n[Postcode] Amsterdam\nNederland\n\n**17.4 Klachtenprocedure:**\n1. **Interne afhandeling:** Wij streven ernaar alle klachten binnen 30 dagen op te lossen\n2. **Escalatie:** Naar onze FG voor complexe zaken\n3. **Mediation:** Wij bieden gratis mediation aan voor geschillen\n4. **Externe klacht:** U kunt altijd contact opnemen met de AP\n\n**17.5 Autoriteit Persoonsgegevens:**\nBezuidenhoutseweg 30\n2594 AV Den Haag\nTelefoon: 0900 - 2001 201\nWebsite: www.autoriteitpersoonsgegevens.nl\n\n**17.6 Europese toezichthoudende autoriteiten:**\nVoor grensoverschrijdende klachten: ec.europa.eu/info/law/law-topic/data-protection\n\n**17.7 Brancheverenigingen:**\nWij zijn aangesloten bij:\n• NLdigital (branchevereniging digitale economie)\n• Dutch AI Coalition\n[Klachten kunnen ook daar worden ingediend]"
+          "content": "Wij staan klaar om al uw privacy-gerelateerde vragen te beantwoorden:\n\n**17.1 Primair contactpunt:**\n**Privacy Office GroeimetAI**\nE-mail: privacy@groeimetai.io\nTelefoon: +31 (6)81 739 018\nReactietijd: Binnen 2 werkdagen\n\n**17.2 Functionaris Gegevensbescherming:**\n**[FG Naam]**\nE-mail: dpo@groeimetai.io\nTelefoon: +31 (0)20 123 4568\nVoor: Complexe privacyvragen, uitoefening van rechten, klachten\n\n**17.3 Postadres:**\nGroeimetAI B.V.\nt.a.v. Privacy Office\n[Straat]\n[Postcode] Apeldoorn\nNederland\n\n**17.4 Klachtenprocedure:**\n1. **Interne afhandeling:** Wij streven ernaar alle klachten binnen 30 dagen op te lossen\n2. **Escalatie:** Naar onze FG voor complexe zaken\n3. **Mediation:** Wij bieden gratis mediation aan voor geschillen\n4. **Externe klacht:** U kunt altijd contact opnemen met de AP\n\n**17.5 Autoriteit Persoonsgegevens:**\nBezuidenhoutseweg 30\n2594 AV Den Haag\nTelefoon: 0900 - 2001 201\nWebsite: www.autoriteitpersoonsgegevens.nl\n\n**17.6 Europese toezichthoudende autoriteiten:**\nVoor grensoverschrijdende klachten: ec.europa.eu/info/law/law-topic/data-protection\n\n**17.7 Brancheverenigingen:**\nWij zijn aangesloten bij:\n• NLdigital (branchevereniging digitale economie)\n• Dutch AI Coalition\n[Klachten kunnen ook daar worden ingediend]"
         }
       },
       "documentOptions": {
@@ -2421,7 +2421,7 @@
         "title": "Contact voor cookie-gerelateerde vragen",
         "description": "Als u vragen heeft over ons cookiebeleid of hoe wij cookies gebruiken, neem dan contact met ons op:",
         "company": "GroeimetAI B.V.",
-        "location": "Amsterdam, Nederland",
+        "location": "Apeldoorn, Nederland",
         "authority": {
           "title": "Autoriteit Persoonsgegevens",
           "content": "U heeft het recht om een klacht in te dienen bij de Autoriteit Persoonsgegevens als u van mening bent dat wij cookies gebruiken op een manier die niet in overeenstemming is met de wet."

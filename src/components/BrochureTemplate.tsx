@@ -312,7 +312,7 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
           <View style={{ marginTop: 30 }}>
             <Text style={styles.subtitle}>{t.brochure.getInTouch}</Text>
             <Text style={styles.contactInfo}>Email: info@groeimetai.io</Text>
-            <Text style={styles.contactInfo}>Tel: +31 (0)20 123 4567</Text>
+            <Text style={styles.contactInfo}>Tel: +31 (6)81 739 018</Text>
             <Text style={styles.contactInfo}>{t.brochure.location}</Text>
             <Text style={styles.contactInfo}>Website: www.groeimetai.io</Text>
           </View>

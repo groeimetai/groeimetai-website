@@ -818,7 +818,7 @@
     },
     "copyright": "© {year} GroeimetAI B.V. All rights reserved.",
     "madeWith": "Made with",
-    "in": "in Amsterdam"
+    "in": "in Apeldoorn"
   },
   "auth": {
     "login": {
@@ -1053,7 +1053,7 @@
       "mapPlaceholder": "Interactive map will be displayed here"
     },
     "values": {
-      "amsterdam": "Amsterdam, Netherlands",
+      "amsterdam": "Apeldoorn, Netherlands",
       "businessHours": "Mon-Fri: 9:00 AM - 6:00 PM"
     }
   },
@@ -1099,7 +1099,7 @@
     "contactTitle": "Let's Start Your AI Journey",
     "contactDescription": "Ready to transform your business with strategic AI? Our team is here to guide you through every step of your digital transformation journey.",
     "getInTouch": "Get in Touch",
-    "location": "Location: Amsterdam, Netherlands",
+    "location": "Location: Apeldoorn, Netherlands",
     "nextStepsTitle": "Next Steps",
     "nextStep1": "Schedule a free consultation to discuss your AI ambitions",
     "nextStep2": "Receive a tailored strategic roadmap for your organization",
@@ -1460,7 +1460,7 @@
         "meetingLink": "Meeting Link *",
         "linkPlaceholder": "https://zoom.us/j/...",
         "address": "Meeting Address *",
-        "addressPlaceholder": "123 Main St, Amsterdam",
+        "addressPlaceholder": "123 Main St, Apeldoorn",
         "agenda": "Meeting Agenda / Description",
         "agendaPlaceholder": "Please describe what you'd like to discuss...",
         "rescheduling": "Rescheduling...",
@@ -1642,7 +1642,7 @@
       "sections": {
         "acceptance": {
           "title": "Acceptance of Terms",
-          "content": "By accessing and using the services provided by GroeimetAI B.V. (\"GroeimetAI\", \"we\", \"us\", or \"our\"), you (\"Client\", \"you\", or \"your\") agree to be bound by these Terms of Service (\"Terms\"). If you do not agree to these Terms, please do not use our services.\n\nThese Terms constitute a legally binding agreement between you and GroeimetAI, registered in the Netherlands under Chamber of Commerce number [KvK number], with its registered office in Amsterdam.\n\nBy using our services, you represent that you have the legal capacity to enter into this agreement and that you are at least 18 years of age or have obtained parental consent."
+          "content": "By accessing and using the services provided by GroeimetAI B.V. (\"GroeimetAI\", \"we\", \"us\", or \"our\"), you (\"Client\", \"you\", or \"your\") agree to be bound by these Terms of Service (\"Terms\"). If you do not agree to these Terms, please do not use our services.\n\nThese Terms constitute a legally binding agreement between you and GroeimetAI, registered in the Netherlands under Chamber of Commerce number 90102304, with its registered office in Apeldoorn.\n\nBy using our services, you represent that you have the legal capacity to enter into this agreement and that you are at least 18 years of age or have obtained parental consent."
         },
         "services": {
           "title": "Description of Services",
@@ -1682,7 +1682,7 @@
         },
         "governingLaw": {
           "title": "Governing Law and Disputes",
-          "content": "Applicable Law:\n    • These Terms are governed by the laws of the Netherlands.\n    • The United Nations Convention on Contracts for the International Sale of Goods does not apply.\n\nDispute Resolution:\n    • Any disputes arising from these Terms shall first be addressed through good faith negotiations.\n    • If negotiations fail, disputes shall be submitted to mediation under the rules of the Netherlands Mediation Institute.\n    • If mediation fails, disputes shall be resolved by the competent courts of Amsterdam, the Netherlands.\n\nLanguage:\n    • These Terms are drafted in English. In case of translation, the English version prevails.\n    • All communication regarding these Terms shall be in English or Dutch, as mutually agreed."
+          "content": "Applicable Law:\n    • These Terms are governed by the laws of the Netherlands.\n    • The United Nations Convention on Contracts for the International Sale of Goods does not apply.\n\nDispute Resolution:\n    • Any disputes arising from these Terms shall first be addressed through good faith negotiations.\n    • If negotiations fail, disputes shall be submitted to mediation under the rules of the Netherlands Mediation Institute.\n    • If mediation fails, disputes shall be resolved by the competent courts of Apeldoorn, the Netherlands.\n\nLanguage:\n    • These Terms are drafted in English. In case of translation, the English version prevails.\n    • All communication regarding these Terms shall be in English or Dutch, as mutually agreed."
         }
       },
       "additionalSections": {
@@ -1710,7 +1710,7 @@
         "registeredIn": "Registered in the Netherlands",
         "legalEmail": "legal@groeimetai.io",
         "headquarters": "Headquarters",
-        "location": "Amsterdam, Netherlands",
+        "location": "Apeldoorn, Netherlands",
         "legalNotice": {
           "title": "Legal Notice",
           "content": "By using our services, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you are entering into these Terms on behalf of a company or other legal entity, you represent that you have the authority to bind such entity to these Terms."
@@ -1738,7 +1738,7 @@
       "sections": {
         "intro": {
           "title": "1. Introduction and Identity of Controller",
-          "content": "GroeimetAI B.V. (\"we\", \"us\", \"our\" or \"GroeimetAI\") respects your privacy and is committed to protecting your personal data. This privacy policy informs you about how we handle your personal data when you visit our website, use our AI services, and tells you about your privacy rights and how the law protects you.\n\nThis privacy policy applies to all personal data we process from our customers, suppliers, partners, website visitors and other data subjects. We process personal data in accordance with the General Data Protection Regulation (GDPR) and other applicable laws and regulations.\n\n**Identity and contact details:**\nGroeimetAI B.V.\nChamber of Commerce number: [KvK number]\nRegistered office: [Address], Amsterdam, Netherlands\nPhone: +31 (0)20 123 4567\nEmail: privacy@groeimetai.io\nWebsite: https://groeimetai.io"
+          "content": "GroeimetAI B.V. (\"we\", \"us\", \"our\" or \"GroeimetAI\") respects your privacy and is committed to protecting your personal data. This privacy policy informs you about how we handle your personal data when you visit our website, use our AI services, and tells you about your privacy rights and how the law protects you.\n\nThis privacy policy applies to all personal data we process from our customers, suppliers, partners, website visitors and other data subjects. We process personal data in accordance with the General Data Protection Regulation (GDPR) and other applicable laws and regulations.\n\n**Identity and contact details:**\nGroeimetAI B.V.\nChamber of Commerce number: 90102304\nRegistered office: Apeldoorn, Netherlands\nPhone: +31 (6)81 739 018\nEmail: privacy@groeimetai.io\nWebsite: https://groeimetai.io"
         },
         "dpo": {
           "title": "2. Data Protection Officer (DPO)",
@@ -1802,7 +1802,7 @@
         },
         "contact": {
           "title": "17. Contact and Complaints",
-          "content": "We are ready to answer all your privacy-related questions:\n\n**17.1 Primary contact point:**\n**Privacy Office GroeimetAI**\nEmail: privacy@groeimetai.io\nPhone: +31 (0)20 123 4567\nResponse time: Within 2 business days\n\n**17.2 Data Protection Officer:**\n**[DPO Name]**\nEmail: dpo@groeimetai.io\nPhone: +31 (0)20 123 4568\nFor: Complex privacy questions, exercise of rights, complaints\n\n**17.3 Postal address:**\nGroeimetAI B.V.\nAttn: Privacy Office\n[Street]\n[Postal code] Amsterdam\nNetherlands\n\n**17.4 Complaints procedure:**\n1. **Internal handling:** We strive to resolve all complaints within 30 days\n2. **Escalation:** To our DPO for complex matters\n3. **Mediation:** We offer free mediation for disputes\n4. **External complaint:** You can always contact the DPA\n\n**17.5 Dutch Data Protection Authority:**\nBezuidenhoutseweg 30\n2594 AV The Hague\nPhone: 0900 - 2001 201\nWebsite: www.autoriteitpersoonsgegevens.nl\n\n**17.6 European supervisory authorities:**\nFor cross-border complaints: ec.europa.eu/info/law/law-topic/data-protection\n\n**17.7 Trade associations:**\nWe are affiliated with:\n• NLdigital (digital economy trade association)\n• Dutch AI Coalition\n[Complaints can also be filed there]"
+          "content": "We are ready to answer all your privacy-related questions:\n\n**17.1 Primary contact point:**\n**Privacy Office GroeimetAI**\nEmail: privacy@groeimetai.io\nPhone: +31 (6)81 739 018\nResponse time: Within 2 business days\n\n**17.2 Data Protection Officer:**\n**[DPO Name]**\nEmail: dpo@groeimetai.io\nPhone: +31 (0)20 123 4568\nFor: Complex privacy questions, exercise of rights, complaints\n\n**17.3 Postal address:**\nGroeimetAI B.V.\nAttn: Privacy Office\n[Street]\n[Postal code] Apeldoorn\nNetherlands\n\n**17.4 Complaints procedure:**\n1. **Internal handling:** We strive to resolve all complaints within 30 days\n2. **Escalation:** To our DPO for complex matters\n3. **Mediation:** We offer free mediation for disputes\n4. **External complaint:** You can always contact the DPA\n\n**17.5 Dutch Data Protection Authority:**\nBezuidenhoutseweg 30\n2594 AV The Hague\nPhone: 0900 - 2001 201\nWebsite: www.autoriteitpersoonsgegevens.nl\n\n**17.6 European supervisory authorities:**\nFor cross-border complaints: ec.europa.eu/info/law/law-topic/data-protection\n\n**17.7 Trade associations:**\nWe are affiliated with:\n• NLdigital (digital economy trade association)\n• Dutch AI Coalition\n[Complaints can also be filed there]"
         }
       },
       "documentOptions": {
@@ -1963,7 +1963,7 @@
         "title": "Contact for cookie-related questions",
         "description": "If you have questions about our cookie policy or how we use cookies, please contact us:",
         "company": "GroeimetAI B.V.",
-        "location": "Amsterdam, Netherlands",
+        "location": "Apeldoorn, Netherlands",
         "authority": {
           "title": "Dutch Data Protection Authority",
           "content": "You have the right to file a complaint with the Dutch Data Protection Authority if you believe we are using cookies in a way that does not comply with the law."

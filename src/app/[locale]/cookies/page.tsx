@@ -499,7 +499,7 @@ export default function CookiesPage() {
                 <div className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-primary" />
                   <a href="tel:+31201234567" className="text-primary hover:underline">
-                    +31 (0)20 123 4567
+                    +31 (6)81 739 018
                   </a>
                 </div>
                 <div className="flex items-start gap-3">
