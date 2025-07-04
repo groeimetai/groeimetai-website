@@ -861,7 +861,11 @@
         "tooManyRequests": "Te veel mislukte pogingen. Probeer het later opnieuw.",
         "invalidCode": "Ongeldige verificatiecode. Probeer het opnieuw.",
         "general": "Er is een fout opgetreden. Probeer het opnieuw."
-      }
+      },
+      "orDivider": "OF",
+      "continueWithGoogle": "Ga verder met Google",
+      "signInWithGoogle": "Inloggen met Google",
+      "signUpWithGoogle": "Registreren met Google"
     },
     "quoteRequest": {
       "form": {
@@ -891,6 +895,9 @@
       "createAccount": "Account Aanmaken (Aanbevolen)",
       "continueAsGuest": "Doorgaan als Gast",
       "guestDescription": "Dien uw aanvraag in zonder een account aan te maken",
+      "orDivider": "OF",
+      "continueWithGoogle": "Ga verder met Google",
+      "loading": "Laden...",
       "accountBenefits": {
         "portal": {
           "title": "Project Portaal Toegang",

@@ -871,7 +871,11 @@
         "tooManyRequests": "Too many failed attempts. Please try again later.",
         "invalidCode": "Invalid verification code. Please try again.",
         "general": "An error occurred. Please try again."
-      }
+      },
+      "orDivider": "OR",
+      "continueWithGoogle": "Continue with Google",
+      "signInWithGoogle": "Sign in with Google",
+      "signUpWithGoogle": "Sign up with Google"
     },
     "quoteRequest": {
       "form": {
@@ -901,6 +905,9 @@
       "createAccount": "Create Account (Recommended)",
       "continueAsGuest": "Continue as Guest",
       "guestDescription": "Submit your request without creating an account",
+      "orDivider": "OR",
+      "continueWithGoogle": "Continue with Google",
+      "loading": "Loading...",
       "accountBenefits": {
         "portal": {
           "title": "Project Portal Access",
