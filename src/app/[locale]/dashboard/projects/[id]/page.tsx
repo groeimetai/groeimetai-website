@@ -17,6 +17,16 @@ import {
   Loader2,
   MessageSquare,
   Briefcase,
+  Download,
+  Upload,
+  Target,
+  GitBranch,
+  AlertTriangle,
+  TrendingUp,
+  History,
+  Link as LinkIcon,
+  Edit,
+  PlusCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -248,13 +258,120 @@ export default function ProjectDetailPage() {
         </Card>
 
         {/* Tabs */}
-        <Tabs defaultValue="milestones" className="space-y-6">
-          <TabsList className="bg-white/5 border-white/10">
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="bg-white/5 border-white/10 flex-wrap h-auto">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="milestones">Milestones</TabsTrigger>
-            <TabsTrigger value="services">Services</TabsTrigger>
+            <TabsTrigger value="deliverables">Deliverables</TabsTrigger>
+            <TabsTrigger value="documents">Documents</TabsTrigger>
             <TabsTrigger value="team">Team</TabsTrigger>
             <TabsTrigger value="activity">Activity</TabsTrigger>
           </TabsList>
+
+          {/* Overview Tab */}
+          <TabsContent value="overview">
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Project Details Card */}
+              <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6">
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <Target className="w-5 h-5 text-orange" />
+                  Project Details
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-white/60 text-sm">Services</p>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {project.categories.map((service, index) => (
+                        <Badge key={index} variant="outline" className="bg-orange/10 border-orange/30">
+                          {service}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-white/60 text-sm">Technologies</p>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {project.technologies.map((tech, index) => (
+                        <Badge key={index} variant="outline">
+                          {tech}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-white/60 text-sm">Budget Type</p>
+                    <p className="text-white font-semibold capitalize">{project.budget.type}</p>
+                  </div>
+                  <div>
+                    <p className="text-white/60 text-sm">Priority</p>
+                    <Badge className={`${
+                      project.priority === 'urgent' ? 'bg-red-500' :
+                      project.priority === 'high' ? 'bg-orange' :
+                      project.priority === 'medium' ? 'bg-yellow-500' :
+                      'bg-blue-500'
+                    }`}>
+                      {project.priority}
+                    </Badge>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Key Metrics Card */}
+              <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6">
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-orange" />
+                  Key Metrics
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white/5 rounded-lg p-4">
+                    <p className="text-white/60 text-sm">Milestones</p>
+                    <p className="text-2xl font-bold text-white">
+                      {project.milestones?.filter(m => m.status === 'completed').length || 0}/{project.milestones?.length || 0}
+                    </p>
+                  </div>
+                  <div className="bg-white/5 rounded-lg p-4">
+                    <p className="text-white/60 text-sm">Time Elapsed</p>
+                    <p className="text-2xl font-bold text-white">
+                      {project.startDate ? Math.floor((new Date().getTime() - new Date(project.startDate).getTime()) / (1000 * 60 * 60 * 24)) : 0}d
+                    </p>
+                  </div>
+                  <div className="bg-white/5 rounded-lg p-4">
+                    <p className="text-white/60 text-sm">Hours Used</p>
+                    <p className="text-2xl font-bold text-white">
+                      {((project.actualHours || 0) / (project.estimatedHours || 1) * 100).toFixed(0)}%
+                    </p>
+                  </div>
+                  <div className="bg-white/5 rounded-lg p-4">
+                    <p className="text-white/60 text-sm">Documents</p>
+                    <p className="text-2xl font-bold text-white">
+                      {project.documentIds?.length || 0}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Next Steps Card */}
+              <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6 md:col-span-2">
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <GitBranch className="w-5 h-5 text-orange" />
+                  Next Steps
+                </h3>
+                <div className="space-y-3">
+                  {project.milestones?.filter(m => m.status !== 'completed').slice(0, 3).map((milestone) => (
+                    <div key={milestone.id} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
+                      <Circle className="w-5 h-5 text-white/40" />
+                      <div className="flex-1">
+                        <p className="text-white font-medium">{milestone.name}</p>
+                        <p className="text-white/60 text-sm">Due: {format(new Date(milestone.dueDate), 'MMM dd, yyyy')}</p>
+                      </div>
+                    </div>
+                  )) || (
+                    <p className="text-white/60">No upcoming milestones</p>
+                  )}
+                </div>
+              </Card>
+            </div>
+          </TabsContent>
 
           {/* Milestones Tab */}
           <TabsContent value="milestones">
@@ -312,29 +429,104 @@ export default function ProjectDetailPage() {
             </Card>
           </TabsContent>
 
-          {/* Services Tab */}
-          <TabsContent value="services">
+          {/* Deliverables Tab */}
+          <TabsContent value="deliverables">
             <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Services Included</h3>
-              <div className="grid md:grid-cols-2 gap-4">
-                {project.categories.map((service, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <CheckCircle className="w-5 h-5 text-orange" />
-                    <span className="text-white">{service}</span>
-                  </div>
-                ))}
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-white">Project Deliverables</h3>
+                <Button variant="outline" size="sm">
+                  <PlusCircle className="w-4 h-4 mr-2" />
+                  Add Deliverable
+                </Button>
               </div>
               
-              {project.technologies.length > 0 && (
-                <div className="mt-6">
-                  <h4 className="font-semibold text-white mb-3">Technologies</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech, index) => (
-                      <Badge key={index} variant="outline" className="bg-orange/10 border-orange/30">
-                        {tech}
-                      </Badge>
-                    ))}
+              {project.milestones && project.milestones.length > 0 ? (
+                <div className="space-y-4">
+                  {project.milestones.map((milestone) => (
+                    <div key={milestone.id} className="border border-white/10 rounded-lg p-4">
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <h4 className="font-semibold text-white">{milestone.name}</h4>
+                          <p className="text-white/60 text-sm">Due: {format(new Date(milestone.dueDate), 'MMM dd, yyyy')}</p>
+                        </div>
+                        <Badge
+                          variant="outline"
+                          className={`${
+                            milestone.status === 'completed' 
+                              ? 'border-green-500 text-green-500' 
+                              : 'border-white/40 text-white/40'
+                          }`}
+                        >
+                          {milestone.status}
+                        </Badge>
+                      </div>
+                      <div className="space-y-2">
+                        {milestone.deliverables?.map((deliverable, idx) => (
+                          <div key={idx} className="flex items-center gap-2 text-sm">
+                            {milestone.status === 'completed' ? (
+                              <CheckCircle className="w-4 h-4 text-green-500" />
+                            ) : (
+                              <Circle className="w-4 h-4 text-white/40" />
+                            )}
+                            <span className="text-white/80">{deliverable}</span>
+                          </div>
+                        )) || (
+                          <p className="text-white/60 text-sm">No deliverables specified</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-white/60">No deliverables have been defined for this project yet.</p>
+              )}
+            </Card>
+          </TabsContent>
+
+          {/* Documents Tab */}
+          <TabsContent value="documents">
+            <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-white">Project Documents</h3>
+                <Button variant="outline" size="sm">
+                  <Upload className="w-4 h-4 mr-2" />
+                  Upload Document
+                </Button>
+              </div>
+              
+              {project.documentIds && project.documentIds.length > 0 ? (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {/* Mock documents for now */}
+                  <div className="border border-white/10 rounded-lg p-4 hover:bg-white/5 transition-colors cursor-pointer">
+                    <div className="flex items-start gap-3">
+                      <FileText className="w-8 h-8 text-orange" />
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-white">Project Proposal</h4>
+                        <p className="text-white/60 text-sm">PDF • 2.3 MB • Updated 2 days ago</p>
+                      </div>
+                      <Button variant="ghost" size="icon">
+                        <Download className="w-4 h-4 text-white/60" />
+                      </Button>
+                    </div>
                   </div>
+                  <div className="border border-white/10 rounded-lg p-4 hover:bg-white/5 transition-colors cursor-pointer">
+                    <div className="flex items-start gap-3">
+                      <FileText className="w-8 h-8 text-orange" />
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-white">Technical Specifications</h4>
+                        <p className="text-white/60 text-sm">DOCX • 1.7 MB • Updated 5 days ago</p>
+                      </div>
+                      <Button variant="ghost" size="icon">
+                        <Download className="w-4 h-4 text-white/60" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <FileText className="w-16 h-16 text-white/20 mx-auto mb-4" />
+                  <p className="text-white/60">No documents uploaded yet</p>
+                  <p className="text-white/40 text-sm mt-1">Upload project documents to keep everything in one place</p>
                 </div>
               )}
             </Card>
@@ -342,22 +534,135 @@ export default function ProjectDetailPage() {
 
           {/* Team Tab */}
           <TabsContent value="team">
-            <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Project Team</h3>
-              <div className="flex items-center gap-2 text-white/60">
-                <Users className="w-5 h-5" />
-                <span>Team information will be available soon</span>
-              </div>
-            </Card>
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6">
+                <h3 className="text-lg font-semibold text-white mb-4">Project Team</h3>
+                <div className="space-y-4">
+                  {/* Project Manager */}
+                  <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
+                    <div className="w-10 h-10 bg-orange/20 rounded-full flex items-center justify-center">
+                      <Users className="w-5 h-5 text-orange" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-white font-medium">Project Manager</p>
+                      <p className="text-white/60 text-sm">GroeimetAI Team</p>
+                    </div>
+                    <Badge variant="outline" className="text-orange border-orange/30">Lead</Badge>
+                  </div>
+                  
+                  {/* Tech Lead */}
+                  <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
+                    <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
+                      <Users className="w-5 h-5 text-blue-500" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-white font-medium">Technical Lead</p>
+                      <p className="text-white/60 text-sm">AI Engineering</p>
+                    </div>
+                    <Badge variant="outline">Tech</Badge>
+                  </div>
+                  
+                  {/* Client Contact */}
+                  <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
+                    <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
+                      <Users className="w-5 h-5 text-green-500" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-white font-medium">Client Contact</p>
+                      <p className="text-white/60 text-sm">{user?.displayName || 'You'}</p>
+                    </div>
+                    <Badge variant="outline" className="text-green-500 border-green-500/30">Client</Badge>
+                  </div>
+                </div>
+              </Card>
+              
+              <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6">
+                <h3 className="text-lg font-semibold text-white mb-4">Communication</h3>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <MessageSquare className="w-5 h-5 text-orange" />
+                      <span className="text-white">Project Chat</span>
+                    </div>
+                    <Button size="sm" variant="outline">
+                      Open Chat
+                    </Button>
+                  </div>
+                  
+                  <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <Calendar className="w-5 h-5 text-blue-500" />
+                      <span className="text-white">Schedule Meeting</span>
+                    </div>
+                    <Button size="sm" variant="outline">
+                      Book Time
+                    </Button>
+                  </div>
+                  
+                  <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <LinkIcon className="w-5 h-5 text-green-500" />
+                      <span className="text-white">Shared Links</span>
+                    </div>
+                    <Badge variant="outline">3 links</Badge>
+                  </div>
+                </div>
+              </Card>
+            </div>
           </TabsContent>
 
           {/* Activity Tab */}
           <TabsContent value="activity">
             <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Recent Activity</h3>
-              <div className="flex items-center gap-2 text-white/60">
-                <Clock className="w-5 h-5" />
-                <span>Activity feed will be available soon</span>
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <History className="w-5 h-5 text-orange" />
+                Recent Activity
+              </h3>
+              <div className="space-y-4">
+                {/* Recent activities - mock data */}
+                <div className="flex gap-3 pb-4 border-b border-white/10">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                  <div className="flex-1">
+                    <p className="text-white">Project created</p>
+                    <p className="text-white/60 text-sm">Project initialized with requirements and timeline</p>
+                    <p className="text-white/40 text-xs mt-1">
+                      {project.createdAt ? format(new Date(project.createdAt), 'MMM dd, yyyy at HH:mm') : 'Recently'}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-3 pb-4 border-b border-white/10">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                  <div className="flex-1">
+                    <p className="text-white">Team assigned</p>
+                    <p className="text-white/60 text-sm">Project manager and technical lead assigned</p>
+                    <p className="text-white/40 text-xs mt-1">2 days ago</p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-3 pb-4 border-b border-white/10">
+                  <div className="w-2 h-2 bg-orange rounded-full mt-2"></div>
+                  <div className="flex-1">
+                    <p className="text-white">Kickoff meeting scheduled</p>
+                    <p className="text-white/60 text-sm">Initial project meeting set for next week</p>
+                    <p className="text-white/40 text-xs mt-1">1 day ago</p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-3">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                  <div className="flex-1">
+                    <p className="text-white">Documents uploaded</p>
+                    <p className="text-white/60 text-sm">Project proposal and technical specs added</p>
+                    <p className="text-white/40 text-xs mt-1">Today at 14:30</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-6 pt-6 border-t border-white/10">
+                <Button variant="outline" className="w-full">
+                  View Full History
+                </Button>
               </div>
             </Card>
           </TabsContent>

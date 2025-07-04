@@ -57,6 +57,7 @@ export default function ProjectsPage() {
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
 
   // Fetch projects from API
   const fetchProjects = async () => {
@@ -324,7 +325,10 @@ export default function ProjectsPage() {
                         </Badge>
                       </div>
                     </div>
-                    <DropdownMenu>
+                    <DropdownMenu 
+                      open={openDropdownId === project.id}
+                      onOpenChange={(open) => setOpenDropdownId(open ? project.id : null)}
+                    >
                       <DropdownMenuTrigger asChild>
                         <Button 
                           variant="ghost" 
@@ -334,14 +338,15 @@ export default function ProjectsPage() {
                           <MoreVertical className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="bg-black border-white/20">
+                      <DropdownMenuContent align="end" className="bg-black/95 border-white/20 text-white">
                         {project.status !== 'completed' && project.status !== 'cancelled' && (
                           <DropdownMenuItem
                             onSelect={() => {
                               setSelectedProject(project);
                               setCancelDialogOpen(true);
+                              setOpenDropdownId(null);
                             }}
-                            className="text-yellow-600 cursor-pointer"
+                            className="text-yellow-600 cursor-pointer hover:bg-white/10"
                           >
                             <XCircle className="w-4 h-4 mr-2" />
                             Cancel Project
@@ -351,8 +356,9 @@ export default function ProjectsPage() {
                           onSelect={() => {
                             setSelectedProject(project);
                             setDeleteDialogOpen(true);
+                            setOpenDropdownId(null);
                           }}
-                          className="text-red-600 cursor-pointer"
+                          className="text-red-600 cursor-pointer hover:bg-white/10"
                         >
                           <Trash2 className="w-4 h-4 mr-2" />
                           Delete Project
