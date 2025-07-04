@@ -37,7 +37,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { CustomRadioGroup, CustomRadioGroupItem } from '@/components/ui/custom-radio';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -963,37 +963,37 @@ export default function SettingsPage() {
 
                 <div className="border-t border-white/10 pt-6">
                   <h3 className="font-medium text-white mb-4">Email Frequency</h3>
-                  <RadioGroup
+                  <CustomRadioGroup
                     value={emailFrequency}
                     onValueChange={(value: any) => setEmailFrequency(value)}
                   >
                     <div className="space-y-2">
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="instant" id="instant" />
+                        <CustomRadioGroupItem value="instant" id="instant" />
                         <Label htmlFor="instant" className="text-white cursor-pointer">
                           Instant
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="hourly" id="hourly" />
+                        <CustomRadioGroupItem value="hourly" id="hourly" />
                         <Label htmlFor="hourly" className="text-white cursor-pointer">
                           Hourly digest
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="daily" id="daily" />
+                        <CustomRadioGroupItem value="daily" id="daily" />
                         <Label htmlFor="daily" className="text-white cursor-pointer">
                           Daily digest
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="weekly" id="weekly" />
+                        <CustomRadioGroupItem value="weekly" id="weekly" />
                         <Label htmlFor="weekly" className="text-white cursor-pointer">
                           Weekly digest
                         </Label>
                       </div>
                     </div>
-                  </RadioGroup>
+                  </CustomRadioGroup>
                 </div>
 
                 <div className="flex justify-end mt-6">

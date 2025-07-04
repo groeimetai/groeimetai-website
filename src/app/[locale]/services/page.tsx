@@ -243,8 +243,10 @@ export default async function ServicesPage() {
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {processSteps.map((step, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-5xl font-bold gradient-text mb-4">{step.number}</div>
+                <div key={index} className="text-center group hover-lift">
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-orange to-orange/80 flex items-center justify-center shadow-lg group-hover:shadow-orange/20 transition-shadow">
+                    <span className="text-3xl font-bold text-white">{step.number}</span>
+                  </div>
                   <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
                   <p className="text-muted-foreground">{step.description}</p>
                 </div>

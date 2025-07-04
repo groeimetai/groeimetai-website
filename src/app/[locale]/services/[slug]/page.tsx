@@ -217,7 +217,27 @@ export default async function ServiceDetailPage({
             </div>
             <p className="text-lg text-white/80 mb-8">{service.longDescription}</p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <StartProjectButton size="lg" className="shadow-premium hover-lift">
+              <StartProjectButton 
+                size="lg" 
+                className="shadow-premium hover-lift"
+                preselectedService={
+                  {
+                    'strategy': 'genai-consultancy',
+                    'transformation': 'llm-integration',
+                    'governance': 'ai-security',
+                    'innovation': 'multi-agent',
+                    'advisory': 'rag-architecture',
+                    'adoption': 'servicenow-ai',
+                    // Legacy slugs already match
+                    'genai-consultancy': 'genai-consultancy',
+                    'llm-integration': 'llm-integration',
+                    'rag-architecture': 'rag-architecture',
+                    'servicenow-ai': 'servicenow-ai',
+                    'multi-agent-orchestration': 'multi-agent',
+                    'ai-security': 'ai-security',
+                  }[service.slug] || service.slug
+                }
+              >
                 {t('startProject')}
                 <ArrowRight className="ml-2 w-5 h-5" />
               </StartProjectButton>

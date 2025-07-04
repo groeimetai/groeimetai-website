@@ -18,12 +18,28 @@ import {
   AlertCircle,
   FolderOpen,
   Loader2,
+  Trash2,
+  XCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Link } from '@/i18n/routing';
 import { firestoreProjectService as projectService } from '@/services/firestore/projects';
 import { Project, ProjectStatus } from '@/types';
@@ -37,6 +53,10 @@ export default function ProjectsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showRequestModal, setShowRequestModal] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Fetch projects from API
   const fetchProjects = async () => {
@@ -80,6 +100,48 @@ export default function ProjectsPage() {
 
     return () => clearTimeout(timer);
   }, [searchQuery]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Handle project cancellation
+  const handleCancelProject = async () => {
+    if (!selectedProject) return;
+    
+    setIsDeleting(true);
+    try {
+      await projectService.update(selectedProject.id, {
+        status: 'cancelled' as ProjectStatus,
+      });
+      
+      // Refresh projects list
+      await fetchProjects();
+      setCancelDialogOpen(false);
+      setSelectedProject(null);
+    } catch (err) {
+      console.error('Error cancelling project:', err);
+      setError('Failed to cancel project. Please try again.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  // Handle project deletion
+  const handleDeleteProject = async () => {
+    if (!selectedProject) return;
+    
+    setIsDeleting(true);
+    try {
+      await projectService.delete(selectedProject.id);
+      
+      // Refresh projects list
+      await fetchProjects();
+      setDeleteDialogOpen(false);
+      setSelectedProject(null);
+    } catch (err) {
+      console.error('Error deleting project:', err);
+      setError('Failed to delete project. Please try again.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -261,9 +323,36 @@ export default function ProjectsPage() {
                         </Badge>
                       </div>
                     </div>
-                    <Button variant="ghost" size="icon" className="text-white/60">
-                      <MoreVertical className="w-4 h-4" />
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="text-white/60">
+                          <MoreVertical className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedProject(project);
+                            setCancelDialogOpen(true);
+                          }}
+                          className="text-yellow-600"
+                          disabled={project.status === 'completed' || project.status === 'cancelled'}
+                        >
+                          <XCircle className="w-4 h-4 mr-2" />
+                          Cancel Project
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedProject(project);
+                            setDeleteDialogOpen(true);
+                          }}
+                          className="text-red-600"
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Delete Project
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
 
                   <p className="text-sm text-white/60 mb-4 line-clamp-2">{project.description}</p>
@@ -343,6 +432,78 @@ export default function ProjectsPage() {
           </motion.div>
         )}
       </div>
+
+      {/* Cancel Project Dialog */}
+      <Dialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Cancel Project</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to cancel "{selectedProject?.name}"? This action cannot be undone.
+              The project will be marked as cancelled and all associated tasks will be stopped.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setCancelDialogOpen(false)}
+              disabled={isDeleting}
+            >
+              Keep Project
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleCancelProject}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Cancelling...
+                </>
+              ) : (
+                'Cancel Project'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Project Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Project</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to permanently delete "{selectedProject?.name}"? 
+              This action cannot be undone and all project data will be lost.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteProject}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                'Delete Project'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
