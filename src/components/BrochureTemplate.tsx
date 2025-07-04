@@ -10,23 +10,22 @@ import { Page, Text, View, Document, StyleSheet, Font, Image } from '@react-pdf/
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'column',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#000000',
     padding: 40,
   },
   header: {
     marginBottom: 30,
-    borderBottom: '2 solid #FF6600',
     paddingBottom: 20,
   },
   logo: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FF6600',
+    color: '#FFFFFF',
     marginBottom: 10,
   },
   tagline: {
     fontSize: 14,
-    color: '#666666',
+    color: '#CCCCCC',
     marginBottom: 5,
   },
   section: {
@@ -35,36 +34,48 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FF6600',
+    color: '#FFFFFF',
     marginBottom: 15,
-    paddingBottom: 5,
-    borderBottom: '1 solid #FF6600',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: '#FF6600',
+  },
+  gradientTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    backgroundColor: '#FF6600',
   },
   subtitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333333',
+    color: '#FFFFFF',
     marginBottom: 10,
   },
   text: {
     fontSize: 11,
-    color: '#333333',
+    color: '#CCCCCC',
     lineHeight: 1.6,
     marginBottom: 10,
     textAlign: 'justify',
   },
   bulletPoint: {
     fontSize: 11,
-    color: '#333333',
+    color: '#CCCCCC',
     marginBottom: 5,
     paddingLeft: 15,
   },
   serviceBox: {
-    backgroundColor: '#FFF5F0',
+    backgroundColor: '#1A0F00',
     padding: 15,
     marginBottom: 10,
     borderRadius: 5,
     borderLeft: '3 solid #FF6600',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 102, 0, 0.3)',
   },
   serviceTitle: {
     fontSize: 14,
@@ -74,7 +85,7 @@ const styles = StyleSheet.create({
   },
   serviceDescription: {
     fontSize: 10,
-    color: '#333333',
+    color: '#CCCCCC',
     lineHeight: 1.4,
   },
   stats: {
@@ -83,11 +94,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   statBox: {
-    backgroundColor: '#F0F0F0',
+    backgroundColor: '#0A0A0A',
     padding: 15,
     borderRadius: 5,
     width: '30%',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#333333',
   },
   statNumber: {
     fontSize: 24,
@@ -97,7 +110,7 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 10,
-    color: '#666666',
+    color: '#CCCCCC',
     textAlign: 'center',
   },
   footer: {
@@ -105,29 +118,31 @@ const styles = StyleSheet.create({
     bottom: 30,
     left: 40,
     right: 40,
-    borderTop: '1 solid #E0E0E0',
+    borderTop: '1 solid #333333',
     paddingTop: 20,
   },
   footerText: {
     fontSize: 10,
-    color: '#666666',
+    color: '#999999',
     textAlign: 'center',
   },
   contactInfo: {
     fontSize: 10,
-    color: '#333333',
+    color: '#CCCCCC',
     marginBottom: 3,
   },
   caseStudy: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#0A0A0A',
     padding: 15,
     marginBottom: 10,
     borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#333333',
   },
   caseStudyTitle: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: '#333333',
+    color: '#FFFFFF',
     marginBottom: 5,
   },
   caseStudyMetric: {
@@ -152,14 +167,16 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
       {/* Cover Page */}
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <Text style={styles.logo}>GroeimetAI</Text>
+          <View style={{ marginBottom: 10 }}>
+            <Text style={[styles.logo, { backgroundColor: '#FF6600', paddingHorizontal: 20, paddingVertical: 10 }]}>GroeimetAI</Text>
+          </View>
           <Text style={styles.tagline}>
             {locale === 'nl' ? 'Strategische AI Consultancy' : 'Strategic AI Consultancy'}
           </Text>
         </View>
 
         <View style={{ marginTop: 50, marginBottom: 50 }}>
-          <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#333333', marginBottom: 20 }}>
+          <Text style={styles.gradientTitle}>
             {t.brochure.coverTitle}
           </Text>
           <Text style={styles.text}>{t.brochure.coverDescription}</Text>
@@ -260,25 +277,25 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
 
           <View style={styles.caseStudy}>
             <Text style={styles.caseStudyTitle}>{t.brochure.case1Title}</Text>
-            <Text style={styles.text}>{t.brochure.case1Description}</Text>
+            <Text style={[styles.text, { color: '#CCCCCC' }]}>{t.brochure.case1Description}</Text>
             <Text style={styles.caseStudyMetric}>{t.brochure.case1Metrics}</Text>
           </View>
 
           <View style={styles.caseStudy}>
             <Text style={styles.caseStudyTitle}>{t.brochure.case2Title}</Text>
-            <Text style={styles.text}>{t.brochure.case2Description}</Text>
+            <Text style={[styles.text, { color: '#CCCCCC' }]}>{t.brochure.case2Description}</Text>
             <Text style={styles.caseStudyMetric}>{t.brochure.case2Metrics}</Text>
           </View>
 
           <View style={styles.caseStudy}>
             <Text style={styles.caseStudyTitle}>{t.brochure.case3Title}</Text>
-            <Text style={styles.text}>{t.brochure.case3Description}</Text>
+            <Text style={[styles.text, { color: '#CCCCCC' }]}>{t.brochure.case3Description}</Text>
             <Text style={styles.caseStudyMetric}>{t.brochure.case3Metrics}</Text>
           </View>
 
           <View style={styles.caseStudy}>
             <Text style={styles.caseStudyTitle}>{t.brochure.case4Title}</Text>
-            <Text style={styles.text}>{t.brochure.case4Description}</Text>
+            <Text style={[styles.text, { color: '#CCCCCC' }]}>{t.brochure.case4Description}</Text>
             <Text style={styles.caseStudyMetric}>{t.brochure.case4Metrics}</Text>
           </View>
         </View>
