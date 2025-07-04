@@ -2373,5 +2373,11 @@
       "startJourney": "Start Your AI Journey",
       "exploreServices": "Explore Our Services"
     }
+  },
+  "common": {
+    "startProject": "Start Project"
+  },
+  "projectDialog": {
+    "title": "Start Your AI Project"
   }
 }

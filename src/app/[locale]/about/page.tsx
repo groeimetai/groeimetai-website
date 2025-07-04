@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { StartProjectButton } from '@/components/ui/StartProjectButton';
 import { Card } from '@/components/ui/card';
 import { Link } from '@/i18n/routing';
 import { Award, Users, Target, Lightbulb, Building, Globe, Cloud } from 'lucide-react';
@@ -216,11 +217,9 @@ export default function AboutPage() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('cta.title')}</h2>
             <p className="text-xl text-white/70 mb-8">{t('cta.subtitle')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <Button size="lg" className="shadow-premium hover-lift">
-                  {t('cta.contactButton')}
-                </Button>
-              </Link>
+              <StartProjectButton size="lg" className="shadow-premium hover-lift">
+                {t('cta.contactButton')}
+              </StartProjectButton>
               <Link href="/services">
                 <Button size="lg" variant="outline" className="hover-lift">
                   {t('cta.servicesButton')}

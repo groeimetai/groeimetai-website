@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Bot, GitBranch, Brain, Shield, Sparkles, Gauge } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from '@/i18n/routing';
+import { StartProjectButton } from '@/components/ui/StartProjectButton';
 import { useTranslations } from 'next-intl';
 
 export default function AICapabilities() {
@@ -198,15 +199,16 @@ export default function AICapabilities() {
         >
           <p className="text-xl text-white/70 mb-8">{t('cta.question')}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer"
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <StartProjectButton
+                className="px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
               >
                 {t('cta.startJourney')}
-              </motion.div>
-            </Link>
+              </StartProjectButton>
+            </motion.div>
             <Link href="/services">
               <motion.div
                 whileHover={{ scale: 1.05 }}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase/config';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 import {
   User,
   Building,
@@ -63,23 +63,36 @@ const timelines = [
   'Long-term (6+ months)',
 ];
 
-export default function QuoteRequestForm() {
+interface QuoteRequestFormProps {
+  isDialog?: boolean;
+  onSuccess?: () => void;
+  preselectedService?: string;
+}
+
+export default function QuoteRequestForm({ isDialog = false, onSuccess, preselectedService }: QuoteRequestFormProps) {
   const router = useRouter();
-  const { register } = useAuth();
+  const { register, user } = useAuth();
   const t = useTranslations('auth.quoteRequest');
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [error, setError] = useState('');
 
-  const steps = [
-    { id: 1, title: t('form.accountSetup'), icon: Shield },
-    { id: 2, title: t('form.serviceSelection'), icon: Sparkles },
-    { id: 3, title: t('form.contactInfo'), icon: User },
-    { id: 4, title: t('form.projectDetails'), icon: FileText },
-    { id: 5, title: t('form.requirements'), icon: Building },
-    { id: 6, title: t('form.review'), icon: Check },
-  ];
+  const steps = isDialog && user
+    ? [
+        { id: 1, title: t('form.serviceSelection'), icon: Sparkles },
+        { id: 2, title: t('form.projectDetails'), icon: FileText },
+        { id: 3, title: t('form.requirements'), icon: Building },
+        { id: 4, title: t('form.review'), icon: Check },
+      ]
+    : [
+        { id: 1, title: t('form.accountSetup'), icon: Shield },
+        { id: 2, title: t('form.serviceSelection'), icon: Sparkles },
+        { id: 3, title: t('form.contactInfo'), icon: User },
+        { id: 4, title: t('form.projectDetails'), icon: FileText },
+        { id: 5, title: t('form.requirements'), icon: Building },
+        { id: 6, title: t('form.review'), icon: Check },
+      ];
 
   const [formData, setFormData] = useState({
     // Account Setup
@@ -88,15 +101,15 @@ export default function QuoteRequestForm() {
     confirmPassword: '',
 
     // Contact Information
-    fullName: '',
-    email: '',
+    fullName: user?.displayName || '',
+    email: user?.email || '',
     phone: '',
     company: '',
     jobTitle: '',
 
     // Project Details
     projectName: '',
-    services: [] as string[],
+    services: preselectedService ? [preselectedService] : [] as string[],
     projectDescription: '',
 
     // Requirements
@@ -107,6 +120,32 @@ export default function QuoteRequestForm() {
     // Files
     attachments: [] as File[],
   });
+
+  // Load user data if logged in
+  useEffect(() => {
+    const loadUserData = async () => {
+      if (user?.uid) {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setFormData(prev => ({
+              ...prev,
+              fullName: userData.displayName || user.displayName || '',
+              email: user.email || '',
+              phone: userData.phoneNumber || '',
+              company: userData.company || '',
+              jobTitle: userData.jobTitle || '',
+            }));
+          }
+        } catch (error) {
+          console.error('Error loading user data:', error);
+        }
+      }
+    };
+
+    loadUserData();
+  }, [user]);
 
   const handleInputChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -136,26 +175,41 @@ export default function QuoteRequestForm() {
   };
 
   const validateStep = () => {
-    switch (currentStep) {
-      case 1:
-        if (formData.accountType === 'account') {
-          return (
-            formData.password &&
-            formData.confirmPassword &&
-            formData.password === formData.confirmPassword
-          );
-        }
-        return true; // Guest can proceed
-      case 2:
-        return formData.services.length > 0; // At least one service must be selected
-      case 3:
-        return formData.fullName && formData.email && formData.company;
-      case 4:
-        return formData.projectName && formData.projectDescription;
-      case 5:
-        return formData.budget && formData.timeline;
-      default:
-        return true;
+    if (isDialog && user) {
+      // Simplified validation for logged-in users in dialog
+      switch (currentStep) {
+        case 1:
+          return formData.services.length > 0; // Service selection
+        case 2:
+          return formData.projectName && formData.projectDescription; // Project details
+        case 3:
+          return formData.budget && formData.timeline; // Requirements
+        default:
+          return true;
+      }
+    } else {
+      // Full validation for non-dialog or non-logged-in users
+      switch (currentStep) {
+        case 1:
+          if (formData.accountType === 'account') {
+            return (
+              formData.password &&
+              formData.confirmPassword &&
+              formData.password === formData.confirmPassword
+            );
+          }
+          return true; // Guest can proceed
+        case 2:
+          return formData.services.length > 0; // At least one service must be selected
+        case 3:
+          return formData.fullName && formData.email && formData.company;
+        case 4:
+          return formData.projectName && formData.projectDescription;
+        case 5:
+          return formData.budget && formData.timeline;
+        default:
+          return true;
+      }
     }
   };
 
@@ -227,12 +281,39 @@ export default function QuoteRequestForm() {
         updatedAt: serverTimestamp(),
       };
 
-      await addDoc(collection(db, 'quotes'), quoteData);
+      const quoteRef = await addDoc(collection(db, 'quotes'), quoteData);
+
+      // Create a project if user is logged in
+      if (userId || user?.uid) {
+        const projectData = {
+          userId: userId || user?.uid,
+          quoteId: quoteRef.id,
+          name: formData.projectName,
+          description: formData.projectDescription,
+          services: formData.services,
+          budget: formData.budget,
+          timeline: formData.timeline,
+          status: 'active',
+          progress: 0,
+          startDate: serverTimestamp(),
+          endDate: null,
+          tasks: [],
+          team: [],
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        };
+
+        await addDoc(collection(db, 'projects'), projectData);
+      }
 
       // TODO: Upload attachments to Firebase Storage
 
-      // Redirect to success page
-      router.push('/quote-success');
+      // Call success callback or redirect
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        router.push('/quote-success');
+      }
     } catch (error) {
       console.error('Failed to submit quote request:', error);
       setError(t('errors.submissionFailed'));

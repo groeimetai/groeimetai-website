@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { StartProjectButton } from '@/components/ui/StartProjectButton';
 import { Link } from '@/i18n/routing';
 import {
   ArrowLeft,
@@ -602,11 +603,9 @@ export default function CaseStudyPage({ params }: { params: { locale: string; sl
               Let&apos;s discuss how we can help you achieve similar results
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <Button size="lg" className="shadow-premium hover-lift">
-                  Start Your Project
-                </Button>
-              </Link>
+              <StartProjectButton size="lg" className="shadow-premium hover-lift">
+                Start Your Project
+              </StartProjectButton>
               <Link href="/services">
                 <Button size="lg" variant="outline" className="hover-lift">
                   Explore Our Services

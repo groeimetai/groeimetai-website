@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from '@/i18n/routing';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { StartProjectButton } from '@/components/ui/StartProjectButton';
 import { Menu, X, LogOut, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from '@/i18n/routing';
@@ -31,14 +32,6 @@ export default function Navigation() {
       router.push('/');
     } catch (error) {
       console.error('Error logging out:', error);
-    }
-  };
-
-  const handleGetStarted = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    const quoteSection = document.getElementById('quote');
-    if (quoteSection) {
-      quoteSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -124,11 +117,12 @@ export default function Navigation() {
                       {t('signIn')}
                     </Button>
                   </Link>
-                  <Link href="/#quote" onClick={handleGetStarted}>
-                    <Button className="bg-orange hover:bg-orange-600 text-white border-0 shadow-orange hover-lift">
-                      {t('getStarted')}
-                    </Button>
-                  </Link>
+                  <StartProjectButton 
+                    className="bg-orange hover:bg-orange-600 text-white border-0 shadow-orange hover-lift"
+                    preselectedService="genai-consultancy"
+                  >
+                    {t('getStarted')}
+                  </StartProjectButton>
                 </>
               )}
             </div>
@@ -210,17 +204,14 @@ export default function Navigation() {
                         {t('signIn')}
                       </Button>
                     </Link>
-                    <Link
-                      href="/#quote"
-                      onClick={(e) => {
-                        handleGetStarted(e);
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <Button className="w-full bg-orange hover:bg-orange-600 text-white border-0">
+                    <div onClick={() => setIsMobileMenuOpen(false)}>
+                      <StartProjectButton 
+                        className="w-full bg-orange hover:bg-orange-600 text-white border-0"
+                        preselectedService="genai-consultancy"
+                      >
                         {t('getStarted')}
-                      </Button>
-                    </Link>
+                      </StartProjectButton>
+                    </div>
                   </>
                 )}
               </div>

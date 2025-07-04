@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { StartProjectButton } from '@/components/ui/StartProjectButton';
 import { Link } from '@/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { locales } from '@/i18n';
@@ -216,12 +217,10 @@ export default async function ServiceDetailPage({
             </div>
             <p className="text-lg text-white/80 mb-8">{service.longDescription}</p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/contact">
-                <Button size="lg" className="shadow-premium hover-lift">
-                  {t('startProject')}
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
+              <StartProjectButton size="lg" className="shadow-premium hover-lift">
+                {t('startProject')}
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </StartProjectButton>
               <BrochureDownloadButton locale={params.locale as 'en' | 'nl'} />
             </div>
           </div>
@@ -344,11 +343,9 @@ export default async function ServiceDetailPage({
             </h2>
             <p className="text-xl text-white/70 mb-8">{t('letsRealize')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <Button size="lg" className="shadow-premium hover-lift">
-                  {tServicesPage('cta.consultation')}
-                </Button>
-              </Link>
+              <StartProjectButton size="lg" className="shadow-premium hover-lift" preselectedService="genai-consultancy">
+                {tServicesPage('cta.consultation')}
+              </StartProjectButton>
               <Link href="/cases">
                 <Button size="lg" variant="outline" className="hover-lift">
                   {tServicesPage('cta.caseStudies')}

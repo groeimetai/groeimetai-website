@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { StartProjectButton } from '@/components/ui/StartProjectButton';
 import { Link } from '@/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import {
@@ -180,12 +181,10 @@ export default async function ServicesPage() {
               {t('hero.title')}
             </h1>
             <p className="text-xl text-white/80 mb-8">{t('hero.description')}</p>
-            <Link href="/contact">
-              <Button size="lg" className="shadow-premium hover-lift">
-                {t('cta.start')}
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
+            <StartProjectButton size="lg" className="shadow-premium hover-lift">
+              {t('cta.start')}
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </StartProjectButton>
           </div>
         </div>
       </section>
@@ -315,11 +314,9 @@ export default async function ServicesPage() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('readyToStart.title')}</h2>
             <p className="text-xl text-muted-foreground mb-8">{t('readyToStart.description')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <Button size="lg" className="shadow-premium hover-lift">
-                  {t('cta.consultation')}
-                </Button>
-              </Link>
+              <StartProjectButton size="lg" className="shadow-premium hover-lift" preselectedService="genai-consultancy">
+                {t('cta.consultation')}
+              </StartProjectButton>
               <Link href="/cases">
                 <Button size="lg" variant="outline" className="hover-lift">
                   {t('cta.caseStudies')}

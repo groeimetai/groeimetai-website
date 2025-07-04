@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { StartProjectButton } from '@/components/ui/StartProjectButton';
 import { Link } from '@/i18n/routing';
 import {
   ArrowRight,
@@ -443,11 +444,9 @@ export default function CasesPage() {
             </h2>
             <p className="text-xl text-white/70 mb-8">Let&apos;s bring your AI ambitions to life</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <Button size="lg" className="shadow-premium hover-lift">
-                  Start Your Project
-                </Button>
-              </Link>
+              <StartProjectButton size="lg" className="shadow-premium hover-lift">
+                Start Your Project
+              </StartProjectButton>
               <Link href="/services">
                 <Button size="lg" variant="outline" className="hover-lift">
                   Explore Our Services

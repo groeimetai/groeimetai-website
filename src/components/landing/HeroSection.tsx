@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { StartProjectButton } from '@/components/ui/StartProjectButton';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import ParticleBackground from './ParticleBackground';
@@ -9,13 +10,6 @@ import { useTranslations } from 'next-intl';
 
 export default function HeroSection() {
   const t = useTranslations('hero');
-  const handleGetStarted = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    const quoteSection = document.getElementById('quote');
-    if (quoteSection) {
-      quoteSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black dark:bg-black">
@@ -70,15 +64,14 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <Link href="/#quote" onClick={handleGetStarted}>
-            <Button
-              size="lg"
-              className="group bg-orange hover:bg-orange-600 text-white border-0 shadow-orange hover-lift"
-            >
-              {t('cta.consultation')}
-              <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
+          <StartProjectButton
+            size="lg"
+            className="group bg-orange hover:bg-orange-600 text-white border-0 shadow-orange hover-lift"
+            preselectedService="genai-consultancy"
+          >
+            {t('cta.consultation')}
+            <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
+          </StartProjectButton>
           <Link href="/services">
             <Button
               size="lg"

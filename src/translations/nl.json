@@ -2497,5 +2497,11 @@
       "startJourney": "Start Uw AI-reis",
       "exploreServices": "Ontdek Onze Diensten"
     }
+  },
+  "common": {
+    "startProject": "Start Project"
+  },
+  "projectDialog": {
+    "title": "Start Uw AI Project"
   }
 }
