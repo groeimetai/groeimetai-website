@@ -22,6 +22,8 @@ This script will:
 - Update their role to 'admin' in Firestore
 - Create user documents if they don't exist
 
+**Note**: Users must first sign up with these email addresses before running the script. The script can only update existing Firebase Auth users.
+
 ## How It Works
 
 1. **Automatic Role Assignment**: When a user signs up with one of the admin email addresses, they are automatically assigned the 'admin' role.

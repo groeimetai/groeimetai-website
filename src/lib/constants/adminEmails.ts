@@ -9,3 +9,8 @@ export const ADMIN_EMAILS = [
 export const isAdminEmail = (email: string): boolean => {
   return ADMIN_EMAILS.includes(email.toLowerCase() as any);
 };
+
+// For CommonJS compatibility in scripts
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { ADMIN_EMAILS, isAdminEmail };
+}

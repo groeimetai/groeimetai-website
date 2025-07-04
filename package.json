@@ -11,7 +11,7 @@
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "websocket": "node server/websocket.js",
-    "setup-admin": "ts-node scripts/setup-admin-accounts.ts"
+    "setup-admin": "node scripts/setup-admin-accounts.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.5.0",

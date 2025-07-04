@@ -1,11 +1,17 @@
-import { initializeApp, cert } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
-import { getAuth } from 'firebase-admin/auth';
-import { ADMIN_EMAILS } from '../src/lib/constants/adminEmails';
-import * as dotenv from 'dotenv';
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
+const { getAuth } = require('firebase-admin/auth');
+const dotenv = require('dotenv');
 
 // Load environment variables
 dotenv.config({ path: '.env' });
+
+// Define admin emails directly here to avoid module issues
+const ADMIN_EMAILS = [
+  'info@groeimetai.io',
+  'niels@groeimetai.io',
+  'admin@groeimetai.io',
+];
 
 // Initialize Firebase Admin SDK
 const app = initializeApp({
@@ -49,8 +55,10 @@ async function setupAdminAccounts() {
         // Create user document with admin role
         await userRef.set({
           uid: user.uid,
-          email: user.email!,
+          email: user.email,
           displayName: user.displayName || '',
+          firstName: '',
+          lastName: '',
           role: 'admin',
           permissions: [],
           isActive: true,
@@ -84,7 +92,8 @@ async function setupAdminAccounts() {
     }
   }
 
-  console.log('Admin setup complete!');
+  console.log('\nAdmin setup complete!');
+  console.log('Note: Users need to sign up/login first before they can be made admin.');
   process.exit(0);
 }
 
