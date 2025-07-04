@@ -165,3 +165,4 @@ dist
 # Google Cloud
 gcp-sa-key.json
 service-account-key.json
+temp-service-account.json
