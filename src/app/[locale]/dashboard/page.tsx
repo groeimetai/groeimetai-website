@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
-import { doc, setDoc, getDoc, onSnapshot, collection, query, where, orderBy, limit } from 'firebase/firestore';
+import { doc, setDoc, getDoc, getDocs, onSnapshot, collection, query, where, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
   LayoutDashboard,
@@ -149,64 +149,104 @@ export default function DashboardPage() {
       return;
     }
 
-    // First, find the user's most recent approved quote
-    const quotesQuery = query(
-      collection(db, 'quotes'),
-      where('userId', '==', user.uid),
-      where('status', '==', 'approved'),
-      orderBy('createdAt', 'desc'),
-      limit(1)
-    );
+    let unsubscribeTimeline: (() => void) | undefined;
 
-    const unsubscribeQuotes = onSnapshot(quotesQuery, async (snapshot) => {
-      if (!snapshot.empty) {
-        const quoteDoc = snapshot.docs[0];
-        const quoteId = quoteDoc.id;
-        setUserQuoteId(quoteId);
-        
-        // Now subscribe to the timeline for this quote
-        const timelineRef = doc(db, 'projectTimelines', quoteId);
-        const unsubscribeTimeline = onSnapshot(timelineRef, (doc) => {
-          if (doc.exists()) {
-            const data = doc.data() as TimelineData;
-            setTimelineData(data);
-          }
-          setIsLoadingTimeline(false);
-        });
-
-        return () => unsubscribeTimeline();
-      } else {
-        // No approved quote found, check for pending quotes
-        const pendingQuotesQuery = query(
+    // Try to fetch quotes by userId first
+    const fetchQuotesByUserId = async () => {
+      try {
+        const quotesQuery = query(
           collection(db, 'quotes'),
           where('userId', '==', user.uid),
-          orderBy('createdAt', 'desc'),
-          limit(1)
+          orderBy('createdAt', 'desc')
         );
 
-        onSnapshot(pendingQuotesQuery, (pendingSnapshot) => {
-          if (!pendingSnapshot.empty) {
-            const quoteDoc = pendingSnapshot.docs[0];
-            const quoteId = quoteDoc.id;
-            setUserQuoteId(quoteId);
-            
-            // Check if there's a timeline for pending quote
-            const timelineRef = doc(db, 'projectTimelines', quoteId);
-            onSnapshot(timelineRef, (doc) => {
+        const snapshot = await getDocs(quotesQuery);
+        return snapshot;
+      } catch (error) {
+        console.log('Error fetching by userId, trying by email:', error);
+        return null;
+      }
+    };
+
+    // If no quotes by userId, try by email
+    const fetchQuotesByEmail = async () => {
+      if (!user.email) return null;
+      
+      try {
+        const quotesQuery = query(
+          collection(db, 'quotes'),
+          where('email', '==', user.email),
+          orderBy('createdAt', 'desc')
+        );
+
+        const snapshot = await getDocs(quotesQuery);
+        return snapshot;
+      } catch (error) {
+        console.error('Error fetching by email:', error);
+        return null;
+      }
+    };
+
+    // Main fetch logic
+    const fetchQuotes = async () => {
+      let snapshot = await fetchQuotesByUserId();
+      
+      if (!snapshot || snapshot.empty) {
+        snapshot = await fetchQuotesByEmail();
+      }
+
+      if (snapshot && !snapshot.empty) {
+        // Find the first approved quote
+        let approvedQuote = null;
+        let latestQuote = null;
+        
+        for (const doc of snapshot.docs) {
+          const data = doc.data();
+          if (!latestQuote) {
+            latestQuote = { id: doc.id, ...data };
+          }
+          if (data.status === 'approved' && !approvedQuote) {
+            approvedQuote = { id: doc.id, ...data };
+            break;
+          }
+        }
+
+        // Use approved quote if available, otherwise use latest quote
+        const selectedQuote = approvedQuote || latestQuote;
+        if (selectedQuote) {
+          setUserQuoteId(selectedQuote.id);
+          
+          // Subscribe to the timeline for this quote
+          const timelineRef = doc(db, 'projectTimelines', selectedQuote.id);
+          unsubscribeTimeline = onSnapshot(
+            timelineRef, 
+            (doc) => {
               if (doc.exists()) {
                 const data = doc.data() as TimelineData;
                 setTimelineData(data);
               }
               setIsLoadingTimeline(false);
-            });
-          } else {
-            setIsLoadingTimeline(false);
-          }
-        });
+            },
+            (error) => {
+              console.log('Timeline not found or no permission:', error);
+              setIsLoadingTimeline(false);
+            }
+          );
+        } else {
+          setIsLoadingTimeline(false);
+        }
+      } else {
+        setIsLoadingTimeline(false);
       }
-    });
+    };
 
-    return () => unsubscribeQuotes();
+    fetchQuotes();
+
+    return () => {
+      if (unsubscribeTimeline) {
+        unsubscribeTimeline();
+      }
+    };
   }, [user]);
 
   const handleLogout = async () => {
