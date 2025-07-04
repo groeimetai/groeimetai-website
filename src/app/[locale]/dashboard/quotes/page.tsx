@@ -274,7 +274,7 @@ export default function QuotesPage() {
             <FileText className="w-24 h-24 text-white/20 mx-auto mb-6" />
             <h3 className="text-xl font-semibold text-white mb-2">No Project Requests Yet</h3>
             <p className="text-white/60 mb-8 max-w-md mx-auto">
-              Start your journey with GroeimetAI by requesting a new project. We'll help you
+              Start your journey with GroeimetAI by requesting a new project. We&apos;ll help you
               transform your business with cutting-edge AI solutions.
             </p>
             <Link href="/contact?type=project">
