@@ -18,6 +18,7 @@ import {
   Clock,
   XCircle,
   MessageSquare,
+  GitBranch,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -33,6 +34,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import QuoteChat from '@/components/QuoteChat';
+import ProjectTimelineManager from '@/components/ProjectTimelineManager';
 
 interface Quote {
   id: string;
@@ -64,6 +66,7 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isTimelineOpen, setIsTimelineOpen] = useState(false);
 
   // Fetch all quotes
   const fetchQuotes = async () => {
@@ -385,6 +388,17 @@ export default function AdminDashboard() {
                         <MessageSquare className="w-4 h-4 mr-1" />
                         Chat
                       </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          setSelectedQuote(quote);
+                          setIsTimelineOpen(true);
+                        }}
+                      >
+                        <GitBranch className="w-4 h-4 mr-1" />
+                        Timeline
+                      </Button>
                       {quote.status === 'pending' && (
                         <>
                           <Button
@@ -464,6 +478,22 @@ export default function AdminDashboard() {
                 userName={selectedQuote.fullName}
               />
             </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Timeline Dialog */}
+      <Dialog open={isTimelineOpen} onOpenChange={setIsTimelineOpen}>
+        <DialogContent className="bg-black/95 border-white/20 text-white max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Manage Project Timeline</DialogTitle>
+          </DialogHeader>
+          {selectedQuote && (
+            <ProjectTimelineManager 
+              quoteId={selectedQuote.id} 
+              projectName={selectedQuote.projectName}
+              onClose={() => setIsTimelineOpen(false)}
+            />
           )}
         </DialogContent>
       </Dialog>

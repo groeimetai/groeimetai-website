@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, onSnapshot, collection, query, where, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
   LayoutDashboard,
@@ -38,6 +38,25 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Link } from '@/i18n/routing';
+import DashboardChat from '@/components/DashboardChat';
+
+interface ProjectStage {
+  id: number;
+  name: string;
+  icon: string;
+  status: 'completed' | 'current' | 'upcoming';
+  description: string;
+  progress?: number;
+  completedAt?: any;
+  startedAt?: any;
+  estimatedCompletion?: string;
+}
+
+interface TimelineData {
+  stages: ProjectStage[];
+  milestone: string;
+  projectName: string;
+}
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -45,6 +64,9 @@ export default function DashboardPage() {
   const userProfile = user; // For now, treat user as userProfile
   const [message, setMessage] = useState('');
   const [profileCheckCount, setProfileCheckCount] = useState(0);
+  const [timelineData, setTimelineData] = useState<TimelineData | null>(null);
+  const [isLoadingTimeline, setIsLoadingTimeline] = useState(true);
+  const [userQuoteId, setUserQuoteId] = useState<string | null>(null);
   const [messages, setMessages] = useState([
     {
       id: '1',
@@ -63,37 +85,42 @@ export default function DashboardPage() {
     },
   ]);
 
-  const projectStages = [
+  const defaultProjectStages: ProjectStage[] = [
     {
       id: 1,
       name: 'Discovery',
-      icon: Briefcase,
-      status: 'current',
+      icon: 'briefcase',
+      status: 'upcoming',
       description: 'Understanding your needs',
-      progress: 0,
+      progress: undefined,
     },
     {
       id: 2,
       name: 'Planning',
-      icon: Target,
+      icon: 'target',
       status: 'upcoming',
       description: 'Defining project scope',
+      progress: undefined,
     },
     {
       id: 3,
       name: 'Development',
-      icon: Rocket,
+      icon: 'rocket',
       status: 'upcoming',
       description: 'Building your solution',
+      progress: undefined,
     },
     {
       id: 4,
       name: 'Delivery',
-      icon: Flag,
+      icon: 'flag',
       status: 'upcoming',
       description: 'Final implementation',
+      progress: undefined,
     },
   ];
+
+  const projectStages = timelineData?.stages || defaultProjectStages;
 
   const currentStage = projectStages.find((stage) => stage.status === 'current');
   const completedCount = projectStages.filter((stage) => stage.status === 'completed').length;
@@ -114,6 +141,73 @@ export default function DashboardPage() {
       setProfileCheckCount(1);
     }
   }, [user, loading, profileCheckCount]);
+
+  // Fetch user's quote and timeline data
+  useEffect(() => {
+    if (!user) {
+      setIsLoadingTimeline(false);
+      return;
+    }
+
+    // First, find the user's most recent approved quote
+    const quotesQuery = query(
+      collection(db, 'quotes'),
+      where('userId', '==', user.uid),
+      where('status', '==', 'approved'),
+      orderBy('createdAt', 'desc'),
+      limit(1)
+    );
+
+    const unsubscribeQuotes = onSnapshot(quotesQuery, async (snapshot) => {
+      if (!snapshot.empty) {
+        const quoteDoc = snapshot.docs[0];
+        const quoteId = quoteDoc.id;
+        setUserQuoteId(quoteId);
+        
+        // Now subscribe to the timeline for this quote
+        const timelineRef = doc(db, 'projectTimelines', quoteId);
+        const unsubscribeTimeline = onSnapshot(timelineRef, (doc) => {
+          if (doc.exists()) {
+            const data = doc.data() as TimelineData;
+            setTimelineData(data);
+          }
+          setIsLoadingTimeline(false);
+        });
+
+        return () => unsubscribeTimeline();
+      } else {
+        // No approved quote found, check for pending quotes
+        const pendingQuotesQuery = query(
+          collection(db, 'quotes'),
+          where('userId', '==', user.uid),
+          orderBy('createdAt', 'desc'),
+          limit(1)
+        );
+
+        onSnapshot(pendingQuotesQuery, (pendingSnapshot) => {
+          if (!pendingSnapshot.empty) {
+            const quoteDoc = pendingSnapshot.docs[0];
+            const quoteId = quoteDoc.id;
+            setUserQuoteId(quoteId);
+            
+            // Check if there's a timeline for pending quote
+            const timelineRef = doc(db, 'projectTimelines', quoteId);
+            onSnapshot(timelineRef, (doc) => {
+              if (doc.exists()) {
+                const data = doc.data() as TimelineData;
+                setTimelineData(data);
+              }
+              setIsLoadingTimeline(false);
+            });
+          } else {
+            setIsLoadingTimeline(false);
+          }
+        });
+      }
+    });
+
+    return () => unsubscribeQuotes();
+  }, [user]);
 
   const handleLogout = async () => {
     try {
@@ -266,34 +360,44 @@ export default function DashboardPage() {
 
             {/* Timeline */}
             <div className="space-y-6">
-              {projectStages.map((stage, index) => (
-                <div key={stage.id} className="relative">
-                  {index < projectStages.length - 1 && (
-                    <div
-                      className={`absolute left-5 top-10 bottom-0 w-0.5 ${
-                        stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
-                      }`}
-                    />
-                  )}
+              {projectStages.map((stage, index) => {
+                // Map icon strings to components
+                const stageIcons = {
+                  briefcase: Briefcase,
+                  target: Target,
+                  rocket: Rocket,
+                  flag: Flag,
+                };
+                const StageIcon = stageIcons[stage.icon as keyof typeof stageIcons] || Briefcase;
 
-                  <div className="flex items-start space-x-4">
-                    <div
-                      className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center ${
-                        stage.status === 'completed'
-                          ? 'bg-green-500'
-                          : stage.status === 'current'
-                            ? 'bg-orange'
-                            : 'bg-white/20'
-                      }`}
-                    >
-                      {stage.status === 'completed' ? (
-                        <CheckCircle className="w-5 h-5 text-white" />
-                      ) : stage.status === 'current' ? (
-                        <Circle className="w-5 h-5 text-white animate-pulse" />
-                      ) : (
-                        <stage.icon className="w-5 h-5 text-white/60" />
-                      )}
-                    </div>
+                return (
+                  <div key={stage.id} className="relative">
+                    {index < projectStages.length - 1 && (
+                      <div
+                        className={`absolute left-5 top-10 bottom-0 w-0.5 ${
+                          stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
+                        }`}
+                      />
+                    )}
+
+                    <div className="flex items-start space-x-4">
+                      <div
+                        className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center ${
+                          stage.status === 'completed'
+                            ? 'bg-green-500'
+                            : stage.status === 'current'
+                              ? 'bg-orange'
+                              : 'bg-white/20'
+                        }`}
+                      >
+                        {stage.status === 'completed' ? (
+                          <CheckCircle className="w-5 h-5 text-white" />
+                        ) : stage.status === 'current' ? (
+                          <Circle className="w-5 h-5 text-white animate-pulse" />
+                        ) : (
+                          <StageIcon className="w-5 h-5 text-white/60" />
+                        )}
+                      </div>
 
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
@@ -319,109 +423,34 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Next Milestone */}
-            <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
-              <div className="flex items-center space-x-2">
-                <Target className="w-5 h-5 text-orange" />
-                <div>
-                  <p className="text-sm font-medium text-white">Next Milestone</p>
-                  <p className="text-xs text-white/60">MVP deployment scheduled for next week</p>
+            {(timelineData?.milestone || !isLoadingTimeline) && (
+              <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
+                <div className="flex items-center space-x-2">
+                  <Target className="w-5 h-5 text-orange" />
+                  <div>
+                    <p className="text-sm font-medium text-white">Next Milestone</p>
+                    <p className="text-xs text-white/60">
+                      {timelineData?.milestone || 'Your project timeline will be updated once your request is approved'}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </motion.div>
 
-          {/* Messaging Widget */}
+          {/* Support Chat Widget */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 flex flex-col h-[600px]"
           >
-            {/* Chat Header */}
-            <div className="p-4 border-b border-white/10">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <Avatar>
-                    <AvatarImage src="/groeimet-ai-logo.svg" alt="GroeimetAI" />
-                    <AvatarFallback className="bg-orange text-white">GA</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h3 className="font-semibold text-white">GroeimetAI Team</h3>
-                    <p className="text-xs text-white/60">Usually responds within 2 hours</p>
-                  </div>
-                </div>
-                <Button variant="ghost" size="icon" className="text-white/60">
-                  <MoreVertical className="w-5 h-5" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Messages Area */}
-            <ScrollArea className="flex-1 p-4">
-              <div className="space-y-4">
-                {messages.map((msg) => (
-                  <motion.div
-                    key={msg.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`flex ${msg.isGroeimetAI ? 'justify-start' : 'justify-end'}`}
-                  >
-                    <div className={`max-w-[70%] ${msg.isGroeimetAI ? 'order-2' : 'order-1'}`}>
-                      <div
-                        className={`rounded-lg p-3 ${
-                          msg.isGroeimetAI ? 'bg-white/10 text-white' : 'bg-orange text-white'
-                        }`}
-                      >
-                        <p className="text-sm">{msg.content}</p>
-                      </div>
-                      <p className="text-xs text-white/40 mt-1 px-1">
-                        {new Date(msg.timestamp).toLocaleTimeString('en-US', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </p>
-                    </div>
-                    {msg.isGroeimetAI && (
-                      <Avatar className="w-8 h-8 mr-2 order-1">
-                        <AvatarFallback className="bg-orange text-white text-xs">GA</AvatarFallback>
-                      </Avatar>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-            </ScrollArea>
-
-            {/* Message Input */}
-            <form onSubmit={handleSendMessage} className="p-4 border-t border-white/10">
-              <div className="flex items-center space-x-2">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="text-white/60 hover:text-white"
-                >
-                  <Paperclip className="w-5 h-5" />
-                </Button>
-                <Input
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Type your message..."
-                  className="flex-1 bg-white/5 border-white/20 text-white placeholder:text-white/40"
-                />
-                <Button
-                  type="submit"
-                  size="icon"
-                  className="bg-orange hover:bg-orange/90"
-                  disabled={!message.trim()}
-                >
-                  <Send className="w-5 h-5" />
-                </Button>
-              </div>
-            </form>
+            <DashboardChat />
           </motion.div>
         </div>
 

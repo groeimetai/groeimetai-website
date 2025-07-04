@@ -219,5 +219,63 @@ service cloud.firestore {
       // Users can delete their own settings
       allow delete: if isOwner(userId);
     }
+    
+    // Project Timelines collection
+    match /projectTimelines/{quoteId} {
+      // Users can read timelines for their quotes
+      allow read: if isAuthenticated() && (
+        get(/databases/$(database)/documents/quotes/$(quoteId)).data.userId == request.auth.uid ||
+        get(/databases/$(database)/documents/quotes/$(quoteId)).data.email == request.auth.token.email ||
+        isAdmin()
+      );
+      
+      // Only admins can create/update timelines
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Support Chats collection
+    match /supportChats/{chatId} {
+      // Users can read their own support chats
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Users can create their own support chats
+      allow create: if isAuthenticated() && (
+        request.resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Users and admins can update chats
+      allow update: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Only admins can delete support chats
+      allow delete: if isAdmin();
+      
+      // Messages subcollection
+      match /messages/{messageId} {
+        // Users can read messages in their support chats
+        allow read: if isAuthenticated() && (
+          get(/databases/$(database)/documents/supportChats/$(chatId)).data.userId == request.auth.uid ||
+          isAdmin()
+        );
+        
+        // Users can create messages in their support chats
+        allow create: if isAuthenticated() && (
+          get(/databases/$(database)/documents/supportChats/$(chatId)).data.userId == request.auth.uid ||
+          isAdmin()
+        );
+        
+        // No updates or deletes allowed
+        allow update: if false;
+        allow delete: if false;
+      }
+    }
   }
 }
