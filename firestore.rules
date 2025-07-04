@@ -237,21 +237,26 @@ service cloud.firestore {
     
     // Support Chats collection
     match /supportChats/{chatId} {
+      // Check if the chatId matches the expected format for the user
+      function isUserChat() {
+        return chatId == ('support_' + request.auth.uid);
+      }
+      
       // Users can read their own support chats
       allow read: if isAuthenticated() && (
-        resource.data.userId == request.auth.uid ||
+        (isUserChat() && resource.data.userId == request.auth.uid) ||
         isAdmin()
       );
       
-      // Users can create their own support chats
+      // Users can create their own support chats with correct ID
       allow create: if isAuthenticated() && (
-        request.resource.data.userId == request.auth.uid ||
+        (isUserChat() && request.resource.data.userId == request.auth.uid) ||
         isAdmin()
       );
       
       // Users and admins can update chats
       allow update: if isAuthenticated() && (
-        resource.data.userId == request.auth.uid ||
+        (isUserChat() && resource.data.userId == request.auth.uid) ||
         isAdmin()
       );
       
@@ -260,15 +265,15 @@ service cloud.firestore {
       
       // Messages subcollection
       match /messages/{messageId} {
-        // Users can read messages in their support chats
+        // Simplified rules - if user can access parent chat, they can access messages
         allow read: if isAuthenticated() && (
-          get(/databases/$(database)/documents/supportChats/$(chatId)).data.userId == request.auth.uid ||
+          isUserChat() ||
           isAdmin()
         );
         
-        // Users can create messages in their support chats
+        // Users can create messages in their own chats
         allow create: if isAuthenticated() && (
-          get(/databases/$(database)/documents/supportChats/$(chatId)).data.userId == request.auth.uid ||
+          isUserChat() ||
           isAdmin()
         );
         

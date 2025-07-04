@@ -52,44 +52,65 @@ export default function DashboardChat() {
 
   // Subscribe to messages
   useEffect(() => {
-    if (!user) return;
+    if (!user || !user.uid) {
+      setIsLoading(false);
+      return;
+    }
 
     const chatChannelId = `support_${user.uid}`;
     if (!chatChannelId) return;
 
+    let unsubscribe: (() => void) | undefined;
+
     // Create chat channel document if it doesn't exist
     const initializeChatChannel = async () => {
-      const channelRef = doc(db, 'supportChats', chatChannelId);
-      const channelDoc = await getDoc(channelRef);
-      
-      if (!channelDoc.exists()) {
-        await setDoc(channelRef, {
-          userId: user.uid,
-          userName: user.displayName || user.email,
-          userEmail: user.email,
-          createdAt: serverTimestamp(),
-          lastMessageAt: serverTimestamp(),
-          status: 'active'
-        });
+      try {
+        const channelRef = doc(db, 'supportChats', chatChannelId);
+        const channelDoc = await getDoc(channelRef);
+        
+        if (!channelDoc.exists()) {
+          await setDoc(channelRef, {
+            userId: user.uid,
+            userName: user.displayName || user.email,
+            userEmail: user.email,
+            createdAt: serverTimestamp(),
+            lastMessageAt: serverTimestamp(),
+            status: 'active'
+          });
+        }
+
+        // Subscribe to messages only after channel exists
+        const messagesRef = collection(db, 'supportChats', chatChannelId, 'messages');
+        const q = query(messagesRef, orderBy('createdAt', 'asc'));
+
+        unsubscribe = onSnapshot(
+          q, 
+          (snapshot) => {
+            const newMessages: Message[] = [];
+            snapshot.forEach((doc) => {
+              newMessages.push({ id: doc.id, ...doc.data() } as Message);
+            });
+            setMessages(newMessages);
+            setIsLoading(false);
+          },
+          (error) => {
+            console.error('Error subscribing to messages:', error);
+            setIsLoading(false);
+          }
+        );
+      } catch (error) {
+        console.error('Error initializing chat channel:', error);
+        setIsLoading(false);
       }
     };
 
     initializeChatChannel();
 
-    // Subscribe to messages
-    const messagesRef = collection(db, 'supportChats', chatChannelId, 'messages');
-    const q = query(messagesRef, orderBy('createdAt', 'asc'));
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const newMessages: Message[] = [];
-      snapshot.forEach((doc) => {
-        newMessages.push({ id: doc.id, ...doc.data() } as Message);
-      });
-      setMessages(newMessages);
-      setIsLoading(false);
-    });
-
-    return () => unsubscribe();
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, [user, isAdmin]);
 
   const sendMessage = async (e: React.FormEvent) => {
