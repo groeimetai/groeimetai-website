@@ -330,17 +330,18 @@ export default function ProjectsPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          onClick={() => {
-                            setSelectedProject(project);
-                            setCancelDialogOpen(true);
-                          }}
-                          className="text-yellow-600"
-                          disabled={project.status === 'completed' || project.status === 'cancelled'}
-                        >
-                          <XCircle className="w-4 h-4 mr-2" />
-                          Cancel Project
-                        </DropdownMenuItem>
+                        {project.status !== 'completed' && project.status !== 'cancelled' && (
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setSelectedProject(project);
+                              setCancelDialogOpen(true);
+                            }}
+                            className="text-yellow-600"
+                          >
+                            <XCircle className="w-4 h-4 mr-2" />
+                            Cancel Project
+                          </DropdownMenuItem>
+                        )}
                         <DropdownMenuItem
                           onClick={() => {
                             setSelectedProject(project);
