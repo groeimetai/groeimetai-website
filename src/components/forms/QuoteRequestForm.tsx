@@ -77,26 +77,34 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [error, setError] = useState('');
+  
+  // Helper to determine if user is logged in
+  const isLoggedIn = isDialog && user;
 
-  const steps = isDialog && user
+  const steps = isLoggedIn
     ? [
-        { id: 1, title: t('form.serviceSelection'), icon: Sparkles },
-        { id: 2, title: t('form.projectDetails'), icon: FileText },
-        { id: 3, title: t('form.requirements'), icon: Building },
-        { id: 4, title: t('form.review'), icon: Check },
+        { id: 1, title: t('form.serviceSelection'), icon: Sparkles, type: 'service' },
+        { id: 2, title: t('form.projectDetails'), icon: FileText, type: 'project' },
+        { id: 3, title: t('form.requirements'), icon: Building, type: 'requirements' },
+        { id: 4, title: t('form.review'), icon: Check, type: 'review' },
       ]
     : [
-        { id: 1, title: t('form.accountSetup'), icon: Shield },
-        { id: 2, title: t('form.serviceSelection'), icon: Sparkles },
-        { id: 3, title: t('form.contactInfo'), icon: User },
-        { id: 4, title: t('form.projectDetails'), icon: FileText },
-        { id: 5, title: t('form.requirements'), icon: Building },
-        { id: 6, title: t('form.review'), icon: Check },
+        { id: 1, title: t('form.accountSetup'), icon: Shield, type: 'account' },
+        { id: 2, title: t('form.serviceSelection'), icon: Sparkles, type: 'service' },
+        { id: 3, title: t('form.contactInfo'), icon: User, type: 'contact' },
+        { id: 4, title: t('form.projectDetails'), icon: FileText, type: 'project' },
+        { id: 5, title: t('form.requirements'), icon: Building, type: 'requirements' },
+        { id: 6, title: t('form.review'), icon: Check, type: 'review' },
       ];
+      
+  // Helper to get current step type
+  const getCurrentStepType = () => {
+    return steps.find(step => step.id === currentStep)?.type || '';
+  };
 
   const [formData, setFormData] = useState({
     // Account Setup
-    accountType: 'account', // 'account' or 'guest'
+    accountType: isLoggedIn ? 'account' : 'account', // 'account' or 'guest'
     password: '',
     confirmPassword: '',
 
@@ -175,41 +183,30 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
   };
 
   const validateStep = () => {
-    if (isDialog && user) {
-      // Simplified validation for logged-in users in dialog
-      switch (currentStep) {
-        case 1:
-          return formData.services.length > 0; // Service selection
-        case 2:
-          return formData.projectName && formData.projectDescription; // Project details
-        case 3:
-          return formData.budget && formData.timeline; // Requirements
-        default:
-          return true;
-      }
-    } else {
-      // Full validation for non-dialog or non-logged-in users
-      switch (currentStep) {
-        case 1:
-          if (formData.accountType === 'account') {
-            return (
-              formData.password &&
-              formData.confirmPassword &&
-              formData.password === formData.confirmPassword
-            );
-          }
-          return true; // Guest can proceed
-        case 2:
-          return formData.services.length > 0; // At least one service must be selected
-        case 3:
-          return formData.fullName && formData.email && formData.company;
-        case 4:
-          return formData.projectName && formData.projectDescription;
-        case 5:
-          return formData.budget && formData.timeline;
-        default:
-          return true;
-      }
+    const stepType = getCurrentStepType();
+    
+    switch (stepType) {
+      case 'account':
+        if (formData.accountType === 'account') {
+          return (
+            formData.password &&
+            formData.confirmPassword &&
+            formData.password === formData.confirmPassword
+          );
+        }
+        return true; // Guest can proceed
+      case 'service':
+        return formData.services.length > 0; // At least one service must be selected
+      case 'contact':
+        return formData.fullName && formData.email && formData.company;
+      case 'project':
+        return formData.projectName && formData.projectDescription;
+      case 'requirements':
+        return formData.budget && formData.timeline;
+      case 'review':
+        return true;
+      default:
+        return true;
     }
   };
 
@@ -228,10 +225,10 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
     setError('');
 
     try {
-      let userId = null;
+      let userId = user?.uid || null;
 
-      // Create account if requested
-      if (formData.accountType === 'account') {
+      // Create account if requested (only for non-logged in users)
+      if (!isLoggedIn && formData.accountType === 'account') {
         try {
           await register(formData.email, formData.password, {
             displayName: formData.fullName,
@@ -245,7 +242,7 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
 
           // Get the current user ID after registration
           const auth = await import('firebase/auth').then((m) => m.getAuth());
-          userId = auth.currentUser?.uid;
+          userId = auth.currentUser?.uid || null;
         } catch (authError: any) {
           console.error('Failed to create account:', authError);
           if (authError.code === 'auth/email-already-in-use') {
@@ -366,8 +363,8 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
 
         {/* Form Steps */}
         <AnimatePresence mode="wait">
-          {/* Step 1: Account Setup */}
-          {currentStep === 1 && (
+          {/* Account Setup (only for non-logged in users) */}
+          {getCurrentStepType() === 'account' && (
             <motion.div
               key="step1"
               initial={{ opacity: 0, x: 20 }}
@@ -522,8 +519,8 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
             </motion.div>
           )}
 
-          {/* Step 2: Service Selection */}
-          {currentStep === 2 && (
+          {/* Service Selection */}
+          {getCurrentStepType() === 'service' && (
             <motion.div
               key="step2"
               initial={{ opacity: 0, x: 20 }}
@@ -635,8 +632,8 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
             </motion.div>
           )}
 
-          {/* Step 3: Contact Information */}
-          {currentStep === 3 && (
+          {/* Contact Information (only for non-logged in users) */}
+          {getCurrentStepType() === 'contact' && (
             <motion.div
               key="step2"
               initial={{ opacity: 0, x: 20 }}
@@ -735,8 +732,8 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
             </motion.div>
           )}
 
-          {/* Step 4: Project Details */}
-          {currentStep === 4 && (
+          {/* Project Details */}
+          {getCurrentStepType() === 'project' && (
             <motion.div
               key="step3"
               initial={{ opacity: 0, x: 20 }}
@@ -813,8 +810,8 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
             </motion.div>
           )}
 
-          {/* Step 5: Requirements */}
-          {currentStep === 5 && (
+          {/* Requirements */}
+          {getCurrentStepType() === 'requirements' && (
             <motion.div
               key="step4"
               initial={{ opacity: 0, x: 20 }}
@@ -921,8 +918,8 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
             </motion.div>
           )}
 
-          {/* Step 6: Review & Submit */}
-          {currentStep === 6 && (
+          {/* Review & Submit */}
+          {getCurrentStepType() === 'review' && (
             <motion.div
               key="step5"
               initial={{ opacity: 0, x: 20 }}
@@ -937,7 +934,7 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
               </div>
 
               <div className="space-y-4">
-                {formData.accountType === 'account' && (
+                {!isLoggedIn && formData.accountType === 'account' && (
                   <div className="p-4 bg-orange/10 rounded-lg">
                     <h3 className="font-semibold mb-2 text-white">{t('accountDetailsTitle')}</h3>
                     <div className="text-sm">
