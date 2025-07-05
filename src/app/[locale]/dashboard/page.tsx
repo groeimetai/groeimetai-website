@@ -40,6 +40,7 @@ import { Progress } from '@/components/ui/progress';
 import { Link } from '@/i18n/routing';
 import DashboardChat from '@/components/DashboardChat';
 import ChatManagement from '@/components/admin/ChatManagement';
+import OnboardingFlow from '@/components/OnboardingFlow';
 
 interface ProjectStage {
   id: number;
@@ -68,6 +69,8 @@ export default function DashboardPage() {
   const [timelineData, setTimelineData] = useState<TimelineData | null>(null);
   const [isLoadingTimeline, setIsLoadingTimeline] = useState(true);
   const [userQuoteId, setUserQuoteId] = useState<string | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [checkingOnboarding, setCheckingOnboarding] = useState(true);
   const [messages, setMessages] = useState([
     {
       id: '1',
@@ -134,6 +137,31 @@ export default function DashboardPage() {
       router.push('/login');
     }
   }, [user, loading, router]);
+
+  // Check if user needs onboarding
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      if (!user || loading || isAdmin) {
+        setCheckingOnboarding(false);
+        return;
+      }
+
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        const userData = userDoc.data();
+        
+        if (userData && !userData.onboardingCompleted) {
+          setShowOnboarding(true);
+        }
+      } catch (error) {
+        console.error('Error checking onboarding status:', error);
+      } finally {
+        setCheckingOnboarding(false);
+      }
+    };
+
+    checkOnboardingStatus();
+  }, [user, loading, isAdmin]);
 
   // Debug profile loading - only check once
   useEffect(() => {
@@ -357,8 +385,19 @@ export default function DashboardPage() {
     );
   }
 
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false);
+    // Optionally refresh the page or update user data
+    window.location.reload();
+  };
+
   return (
     <main className="min-h-screen bg-black">
+      {/* Onboarding Flow */}
+      {showOnboarding && !checkingOnboarding && (
+        <OnboardingFlow onComplete={handleOnboardingComplete} />
+      )}
+      
       <div className="container mx-auto px-4 py-8 mt-20">
         {/* Welcome Section */}
         <motion.div
