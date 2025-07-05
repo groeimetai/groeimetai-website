@@ -1,7 +1,6 @@
 # Claude Code Configuration
 
 ## Build Commands
-
 - `npm run build`: Build the project
 - `npm run test`: Run the full test suite
 - `npm run lint`: Run ESLint and format checks
@@ -11,26 +10,22 @@
 ## Claude-Flow Complete Command Reference
 
 ### Core System Commands
-
 - `./claude-flow start [--ui] [--port 3000] [--host localhost]`: Start orchestration system with optional web UI
 - `./claude-flow status`: Show comprehensive system status
 - `./claude-flow monitor`: Real-time system monitoring dashboard
 - `./claude-flow config <subcommand>`: Configuration management (show, get, set, init, validate)
 
 ### Agent Management
-
 - `./claude-flow agent spawn <type> [--name <name>]`: Create AI agents (researcher, coder, analyst, etc.)
 - `./claude-flow agent list`: List all active agents
 - `./claude-flow spawn <type>`: Quick agent spawning (alias for agent spawn)
 
 ### Task Orchestration
-
 - `./claude-flow task create <type> [description]`: Create and manage tasks
 - `./claude-flow task list`: View active task queue
 - `./claude-flow workflow <file>`: Execute workflow automation files
 
 ### Memory Management
-
 - `./claude-flow memory store <key> <data>`: Store persistent data across sessions
 - `./claude-flow memory get <key>`: Retrieve stored information
 - `./claude-flow memory list`: List all memory keys
@@ -40,7 +35,6 @@
 - `./claude-flow memory cleanup`: Clean unused memory entries
 
 ### SPARC Development Modes
-
 - `./claude-flow sparc "<task>"`: Run orchestrator mode (default)
 - `./claude-flow sparc run <mode> "<task>"`: Run specific SPARC mode
 - `./claude-flow sparc tdd "<feature>"`: Test-driven development mode
@@ -49,7 +43,6 @@
 Available SPARC modes: orchestrator, coder, researcher, tdd, architect, reviewer, debugger, tester, analyzer, optimizer, documenter, designer, innovator, swarm-coordinator, memory-manager, batch-executor, workflow-manager
 
 ### Swarm Coordination
-
 - `./claude-flow swarm "<objective>" [options]`: Multi-agent swarm coordination
 - `--strategy`: research, development, analysis, testing, optimization, maintenance
 - `--mode`: centralized, distributed, hierarchical, mesh, hybrid
@@ -59,24 +52,20 @@ Available SPARC modes: orchestrator, coder, researcher, tdd, architect, reviewer
 - `--output <format>`: json, sqlite, csv, html
 
 ### MCP Server Integration
-
 - `./claude-flow mcp start [--port 3000] [--host localhost]`: Start MCP server
 - `./claude-flow mcp status`: Show MCP server status
 - `./claude-flow mcp tools`: List available MCP tools
 
 ### Claude Integration
-
 - `./claude-flow claude auth`: Authenticate with Claude API
 - `./claude-flow claude models`: List available Claude models
 - `./claude-flow claude chat`: Interactive chat mode
 
 ### Session Management
-
 - `./claude-flow session`: Manage terminal sessions
 - `./claude-flow repl`: Start interactive REPL mode
 
 ### Enterprise Features
-
 - `./claude-flow project <subcommand>`: Project management (Enterprise)
 - `./claude-flow deploy <subcommand>`: Deployment operations (Enterprise)
 - `./claude-flow cloud <subcommand>`: Cloud infrastructure management (Enterprise)
@@ -84,14 +73,12 @@ Available SPARC modes: orchestrator, coder, researcher, tdd, architect, reviewer
 - `./claude-flow analytics <subcommand>`: Analytics and insights (Enterprise)
 
 ### Project Initialization
-
 - `./claude-flow init`: Initialize Claude-Flow project
 - `./claude-flow init --sparc`: Initialize with full SPARC development environment
 
 ## Quick Start Workflows
 
 ### Research Workflow
-
 ```bash
 # Start a research swarm with distributed coordination
 ./claude-flow swarm "Research modern web frameworks" --strategy research --mode distributed --parallel --monitor
@@ -104,7 +91,6 @@ Available SPARC modes: orchestrator, coder, researcher, tdd, architect, reviewer
 ```
 
 ### Development Workflow
-
 ```bash
 # Start orchestration system with web UI
 ./claude-flow start --ui --port 3000
@@ -120,7 +106,6 @@ Available SPARC modes: orchestrator, coder, researcher, tdd, architect, reviewer
 ```
 
 ### Analysis Workflow
-
 ```bash
 # Analyze codebase performance
 ./claude-flow sparc run analyzer "Identify performance bottlenecks in current codebase"
@@ -133,7 +118,6 @@ Available SPARC modes: orchestrator, coder, researcher, tdd, architect, reviewer
 ```
 
 ### Maintenance Workflow
-
 ```bash
 # System maintenance with safety controls
 ./claude-flow swarm "Update dependencies and security patches" --strategy maintenance --mode centralized --monitor
@@ -148,7 +132,6 @@ Available SPARC modes: orchestrator, coder, researcher, tdd, architect, reviewer
 ## Integration Patterns
 
 ### Memory-Driven Coordination
-
 Use Memory to coordinate information across multiple SPARC modes and swarm operations:
 
 ```bash
@@ -161,7 +144,6 @@ Use Memory to coordinate information across multiple SPARC modes and swarm opera
 ```
 
 ### Multi-Stage Development
-
 Coordinate complex development through staged execution:
 
 ```bash
@@ -179,7 +161,6 @@ Coordinate complex development through staged execution:
 ```
 
 ### Enterprise Integration
-
 For enterprise environments with additional tooling:
 
 ```bash
@@ -199,47 +180,44 @@ For enterprise environments with additional tooling:
 ## Advanced Batch Tool Patterns
 
 ### TodoWrite Coordination
-
 Always use TodoWrite for complex task coordination:
 
 ```javascript
 TodoWrite([
   {
-    id: 'architecture_design',
-    content: 'Design system architecture and component interfaces',
-    status: 'pending',
-    priority: 'high',
+    id: "architecture_design",
+    content: "Design system architecture and component interfaces",
+    status: "pending",
+    priority: "high",
     dependencies: [],
-    estimatedTime: '60min',
-    assignedAgent: 'architect',
+    estimatedTime: "60min",
+    assignedAgent: "architect"
   },
   {
-    id: 'frontend_development',
-    content: 'Develop React components and user interface',
-    status: 'pending',
-    priority: 'medium',
-    dependencies: ['architecture_design'],
-    estimatedTime: '120min',
-    assignedAgent: 'frontend_team',
-  },
+    id: "frontend_development", 
+    content: "Develop React components and user interface",
+    status: "pending",
+    priority: "medium",
+    dependencies: ["architecture_design"],
+    estimatedTime: "120min",
+    assignedAgent: "frontend_team"
+  }
 ]);
 ```
 
 ### Task and Memory Integration
-
 Launch coordinated agents with shared memory:
 
 ```javascript
 // Store architecture in memory
-Task('System Architect', 'Design architecture and store specs in Memory');
+Task("System Architect", "Design architecture and store specs in Memory");
 
 // Other agents use memory for coordination
-Task('Frontend Team', 'Develop UI using Memory architecture specs');
-Task('Backend Team', 'Implement APIs according to Memory specifications');
+Task("Frontend Team", "Develop UI using Memory architecture specs");
+Task("Backend Team", "Implement APIs according to Memory specifications");
 ```
 
 ## Code Style Preferences
-
 - Use ES modules (import/export) syntax
 - Destructure imports when possible
 - Use TypeScript for all new code
@@ -249,7 +227,6 @@ Task('Backend Team', 'Implement APIs according to Memory specifications');
 - Prefer const/let over var
 
 ## Workflow Guidelines
-
 - Always run typecheck after making code changes
 - Run tests before committing changes
 - Use meaningful commit messages
@@ -257,7 +234,6 @@ Task('Backend Team', 'Implement APIs according to Memory specifications');
 - Ensure all tests pass before merging
 
 ## Important Notes
-
 - **Use TodoWrite extensively** for all complex task coordination
 - **Leverage Task tool** for parallel agent execution on independent work
 - **Store all important information in Memory** for cross-agent coordination

@@ -78,6 +78,7 @@ export const collections = {
   notifications: 'notifications',
   consultations: 'consultations',
   documents: 'documents',
+  activityLogs: 'activityLogs',
 };
 
 // User profile interface

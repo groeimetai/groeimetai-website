@@ -23,7 +23,9 @@ import {
   deleteObject,
   getMetadata,
 } from 'firebase/storage';
-import { db, storage, collections } from '@/lib/firebase';
+import { db, storage, auth } from '@/lib/firebase/config';
+import { collections } from '@/lib/firebase';
+import { logResourceActivity, logErrorActivity } from './activityLogger';
 
 export type DocumentType =
   | 'contract'
@@ -162,12 +164,52 @@ export const firebaseDocumentService = {
       // Add to Firestore
       const docRef = await addDoc(collection(db, collections.documents), documentData);
 
-      return {
+      const result = {
         ...documentData,
         id: docRef.id,
       };
-    } catch (error) {
+
+      // Log activity
+      await logResourceActivity(
+        'file.upload',
+        'file',
+        docRef.id,
+        file.name,
+        {
+          uid: userId,
+          email: userEmail,
+          displayName: userName,
+        },
+        {
+          fileSize: file.size,
+          fileType: file.type,
+          documentType: result.type,
+          projectId: metadata?.projectId,
+          projectName: metadata?.projectName,
+        }
+      );
+
+      return result;
+    } catch (error: any) {
       console.error('Error uploading document:', error);
+      
+      // Log error
+      await logErrorActivity(
+        'file.upload',
+        error,
+        {
+          uid: userId,
+          email: userEmail,
+          displayName: userName,
+        },
+        {
+          fileName: file.name,
+          fileSize: file.size,
+          fileType: file.type,
+          projectId: metadata?.projectId,
+        }
+      );
+      
       throw error;
     }
   },
@@ -277,8 +319,51 @@ export const firebaseDocumentService = {
       window.document.body.appendChild(a);
       a.click();
       window.document.body.removeChild(a);
-    } catch (error) {
+      
+      // Log activity
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        await logResourceActivity(
+          'file.download',
+          'file',
+          documentData.id || '',
+          documentData.name,
+          {
+            uid: currentUser.uid,
+            email: currentUser.email || '',
+            displayName: currentUser.displayName || undefined,
+          },
+          {
+            fileSize: documentData.size,
+            fileType: documentData.mimeType,
+            documentType: documentData.type,
+            projectId: documentData.projectId,
+            projectName: documentData.projectName,
+            uploadedBy: documentData.uploadedBy.email,
+          }
+        );
+      }
+    } catch (error: any) {
       console.error('Error downloading document:', error);
+      
+      // Log error
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        await logErrorActivity(
+          'file.download',
+          error,
+          {
+            uid: currentUser.uid,
+            email: currentUser.email || '',
+            displayName: currentUser.displayName || undefined,
+          },
+          {
+            documentId: documentData.id,
+            fileName: documentData.name,
+          }
+        );
+      }
+      
       throw error;
     }
   },
@@ -286,14 +371,62 @@ export const firebaseDocumentService = {
   // Delete document
   async deleteDocument(documentId: string, storagePath: string): Promise<void> {
     try {
+      // Get document info before deleting
+      const docRef = doc(db, collections.documents, documentId);
+      const docSnap = await getDoc(docRef);
+      const documentData = docSnap.exists() ? { ...docSnap.data(), id: docSnap.id } as FirebaseDocument : null;
+
       // Delete from Storage
       const storageRef = ref(storage, storagePath);
       await deleteObject(storageRef);
 
       // Delete from Firestore
       await deleteDoc(doc(db, collections.documents, documentId));
-    } catch (error) {
+      
+      // Log activity if we have document data and current user
+      const currentUser = auth.currentUser;
+      if (documentData && currentUser) {
+        await logResourceActivity(
+          'file.delete',
+          'file',
+          documentId,
+          documentData.name,
+          {
+            uid: currentUser.uid,
+            email: currentUser.email || '',
+            displayName: currentUser.displayName || undefined,
+          },
+          {
+            fileSize: documentData.size,
+            fileType: documentData.mimeType,
+            documentType: documentData.type,
+            projectId: documentData.projectId,
+            projectName: documentData.projectName,
+            uploadedBy: documentData.uploadedBy.email,
+          }
+        );
+      }
+    } catch (error: any) {
       console.error('Error deleting document:', error);
+      
+      // Log error
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        await logErrorActivity(
+          'file.delete',
+          error,
+          {
+            uid: currentUser.uid,
+            email: currentUser.email || '',
+            displayName: currentUser.displayName || undefined,
+          },
+          {
+            documentId,
+            storagePath,
+          }
+        );
+      }
+      
       throw error;
     }
   },

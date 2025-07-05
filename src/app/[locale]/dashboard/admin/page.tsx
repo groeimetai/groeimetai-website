@@ -14,7 +14,8 @@ import {
   Timestamp,
   onSnapshot,
   updateDoc,
-  doc
+  doc,
+  serverTimestamp
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
@@ -67,6 +68,9 @@ import {
 } from '@/components/ui/dialog';
 import QuoteChat from '@/components/QuoteChat';
 import ProjectTimelineManager from '@/components/ProjectTimelineManager';
+import { notificationService } from '@/services/notificationService';
+import { BulkActions, SelectableListItem, useBulkSelection } from '@/components/admin/BulkActions';
+import type { BulkActionType } from '@/components/admin/BulkActions';
 
 interface Metric {
   title: string;
@@ -139,6 +143,7 @@ export default function AdminDashboard() {
   const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([]);
   const [isLoadingMetrics, setIsLoadingMetrics] = useState(true);
   const [activeUsers, setActiveUsers] = useState(0);
+  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const [activeProjects, setActiveProjects] = useState(0);
   const [pendingQuotes, setPendingQuotes] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
@@ -152,6 +157,14 @@ export default function AdminDashboard() {
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isTimelineOpen, setIsTimelineOpen] = useState(false);
+  
+  // Bulk selection state
+  const {
+    selectedIds,
+    setSelectedIds,
+    toggleSelection,
+    clearSelection,
+  } = useBulkSelection(quotes);
 
   // Redirect if not admin
   useEffect(() => {
@@ -299,13 +312,55 @@ export default function AdminDashboard() {
     fetchMetrics();
   }, [user, isAdmin, timeRange]);
 
-  // Real-time active users (mock for now)
+  // Real-time active users tracking
   useEffect(() => {
+    if (!user || !isAdmin) return;
+
+    // Track this admin as online
+    const markUserOnline = async () => {
+      if (user) {
+        await updateDoc(doc(db, 'users', user.uid), {
+          lastActive: serverTimestamp(),
+          isOnline: true
+        });
+      }
+    };
+
+    // Query for online users (active in last 5 minutes)
+    const checkOnlineUsers = async () => {
+      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+      const onlineQuery = query(
+        collection(db, 'users'),
+        where('lastActive', '>=', Timestamp.fromDate(fiveMinutesAgo))
+      );
+      
+      const snapshot = await getDocs(onlineQuery);
+      const onlineUserIds = snapshot.docs.map(doc => doc.id);
+      setOnlineUsers(onlineUserIds);
+      setActiveUsers(onlineUserIds.length);
+    };
+
+    // Mark user as online initially
+    markUserOnline();
+    checkOnlineUsers();
+
+    // Update online status periodically
     const interval = setInterval(() => {
-      setActiveUsers(Math.floor(Math.random() * 20) + 5);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+      markUserOnline();
+      checkOnlineUsers();
+    }, 30000); // Check every 30 seconds
+
+    // Mark user as offline on unmount
+    return () => {
+      clearInterval(interval);
+      if (user) {
+        updateDoc(doc(db, 'users', user.uid), {
+          isOnline: false,
+          lastActive: serverTimestamp()
+        }).catch(console.error);
+      }
+    };
+  }, [user, isAdmin]);
 
   // Fetch all meetings
   const fetchMeetings = async () => {
@@ -361,6 +416,18 @@ export default function AdminDashboard() {
         // Don't fail the status update if email fails
       }
       
+      // Send in-app notification if user has an account
+      if (quote.userId) {
+        try {
+          await notificationService.sendToUser(
+            quote.userId,
+            notificationService.templates.quoteStatusUpdate(quote.projectName, newStatus)
+          );
+        } catch (notifError) {
+          console.error('Failed to send notification:', notifError);
+        }
+      }
+      
       // Update local state
       setQuotes(quotes.map(quote => 
         quote.id === quoteId ? { ...quote, status: newStatus } : quote
@@ -368,6 +435,78 @@ export default function AdminDashboard() {
     } catch (err) {
       console.error('Error updating quote status:', err);
       setError('Failed to update status. Please try again.');
+    }
+  };
+
+  // Handle bulk actions
+  const handleBulkAction = async (action: BulkActionType, data?: any) => {
+    try {
+      switch (action) {
+        case 'delete':
+          // Delete selected quotes
+          for (const quoteId of data.ids) {
+            await updateDoc(doc(db, 'quotes', quoteId), {
+              status: 'rejected',
+              updatedAt: new Date(),
+            });
+          }
+          setQuotes(quotes.filter(q => !data.ids.includes(q.id)));
+          break;
+
+        case 'updateStatus':
+          // Update status for selected quotes
+          for (const quoteId of data.ids) {
+            await updateQuoteStatus(quoteId, data.status);
+          }
+          break;
+
+        case 'export':
+          // Export selected quotes
+          const selectedQuotes = quotes.filter(q => data.ids.includes(q.id));
+          const csv = [
+            ['ID', 'Project Name', 'Company', 'Full Name', 'Email', 'Status', 'Budget', 'Timeline', 'Created At'],
+            ...selectedQuotes.map(q => [
+              q.id,
+              q.projectName,
+              q.company,
+              q.fullName,
+              q.email,
+              q.status,
+              q.budget,
+              q.timeline,
+              q.createdAt.toDate().toISOString(),
+            ]),
+          ]
+            .map(row => row.join(','))
+            .join('\n');
+
+          // Download CSV
+          const blob = new Blob([csv], { type: 'text/csv' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `quotes-export-${new Date().toISOString().split('T')[0]}.csv`;
+          a.click();
+          URL.revokeObjectURL(url);
+          break;
+
+        case 'archive':
+          // Archive selected quotes
+          for (const quoteId of data.ids) {
+            await updateDoc(doc(db, 'quotes', quoteId), {
+              status: 'archived',
+              archivedAt: new Date(),
+              updatedAt: new Date(),
+            });
+          }
+          break;
+      }
+
+      clearSelection();
+    } catch (error) {
+      console.error('Error executing bulk action:', error);
+      setError(`Failed to ${action} quotes. Please try again.`);
+      throw error;
     }
   };
 
@@ -625,6 +764,18 @@ export default function AdminDashboard() {
                         Database
                       </Button>
                     </Link>
+                    <Link href="/dashboard/admin/workflows">
+                      <Button variant="outline" className="w-full justify-start">
+                        <GitBranch className="w-4 h-4 mr-2" />
+                        Workflows
+                      </Button>
+                    </Link>
+                    <Link href="/dashboard/admin/activity">
+                      <Button variant="outline" className="w-full justify-start">
+                        <Activity className="w-4 h-4 mr-2" />
+                        Activity Logs
+                      </Button>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
@@ -647,6 +798,21 @@ export default function AdminDashboard() {
           {/* Quotes Tab */}
           <TabsContent value="quotes">
             <div className="space-y-4">
+              {/* Bulk Actions */}
+              <BulkActions
+                items={quotes}
+                selectedIds={selectedIds}
+                onSelectionChange={setSelectedIds}
+                onAction={handleBulkAction}
+                actions={['updateStatus', 'export', 'archive', 'delete']}
+                statusOptions={[
+                  { value: 'pending', label: 'Pending' },
+                  { value: 'reviewed', label: 'Reviewed' },
+                  { value: 'approved', label: 'Approved' },
+                  { value: 'rejected', label: 'Rejected' },
+                ]}
+              />
+              
               {/* Filter */}
               <div className="flex gap-2">
                 <Button
@@ -693,8 +859,13 @@ export default function AdminDashboard() {
                     const StatusIcon = getStatusIcon(quote.status);
                     
                     return (
-                      <Card key={quote.id} className="bg-white/5 border-white/10">
-                        <CardContent className="p-6">
+                      <SelectableListItem
+                        key={quote.id}
+                        id={quote.id}
+                        isSelected={selectedIds.has(quote.id)}
+                        onSelect={toggleSelection}
+                        className="bg-white/5 border border-white/10 rounded-lg mb-4"
+                      >
                           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div className="flex-1">
                               <div className="flex items-center gap-3 mb-2">
@@ -799,8 +970,7 @@ export default function AdminDashboard() {
                               )}
                             </div>
                           </div>
-                        </CardContent>
-                      </Card>
+                      </SelectableListItem>
                     );
                   })}
                 </div>
@@ -851,7 +1021,7 @@ export default function AdminDashboard() {
               <CardContent>
                 <div className="text-center py-12 text-white/40">
                   <Users className="w-16 h-16 mx-auto mb-4" />
-                  <p>User management interface coming soon</p>
+                  <p>Comprehensive user management is now available</p>
                   <Link href="/dashboard/admin/users">
                     <Button className="mt-4 bg-orange hover:bg-orange/90">
                       Go to User Management

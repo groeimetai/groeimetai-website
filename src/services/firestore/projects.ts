@@ -16,6 +16,8 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { Project, ProjectStatus, PaginatedResponse } from '@/types';
+import { logResourceActivity, logErrorActivity } from '@/services/activityLogger';
+import { auth } from '@/lib/firebase/config';
 
 // Convert Firestore timestamp to Date
 const timestampToDate = (timestamp: any): Date => {
@@ -188,9 +190,50 @@ export const firestoreProjectService = {
       const docRef = await addDoc(collection(db, 'projects'), projectData);
       
       // Fetch the created project
-      return await this.get(docRef.id);
-    } catch (error) {
+      const project = await this.get(docRef.id);
+      
+      // Log activity
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        await logResourceActivity(
+          'project.create',
+          'project',
+          docRef.id,
+          project.name,
+          {
+            uid: currentUser.uid,
+            email: currentUser.email || '',
+            displayName: currentUser.displayName || undefined,
+          },
+          {
+            projectType: project.type,
+            budget: project.budget.amount,
+            currency: project.budget.currency,
+          }
+        );
+      }
+      
+      return project;
+    } catch (error: any) {
       console.error('Error creating project:', error);
+      
+      // Log error
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        await logErrorActivity(
+          'project.create',
+          error,
+          {
+            uid: currentUser.uid,
+            email: currentUser.email || '',
+            displayName: currentUser.displayName || undefined,
+          },
+          {
+            projectData: data,
+          }
+        );
+      }
+      
       throw new Error('Failed to create project');
     }
   },
@@ -200,15 +243,77 @@ export const firestoreProjectService = {
     try {
       const docRef = doc(db, 'projects', id);
       
+      // Get the project name for logging
+      const existingProject = await this.get(id);
+      
       await updateDoc(docRef, {
         ...data,
         updatedAt: serverTimestamp(),
       });
       
       // Fetch the updated project
-      return await this.get(id);
-    } catch (error) {
+      const updatedProject = await this.get(id);
+      
+      // Log activity
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        // Check if status changed
+        if (data.status && data.status !== existingProject.status) {
+          await logResourceActivity(
+            'project.status_change',
+            'project',
+            id,
+            updatedProject.name,
+            {
+              uid: currentUser.uid,
+              email: currentUser.email || '',
+              displayName: currentUser.displayName || undefined,
+            },
+            {
+              oldStatus: existingProject.status,
+              newStatus: data.status,
+            }
+          );
+        } else {
+          await logResourceActivity(
+            'project.update',
+            'project',
+            id,
+            updatedProject.name,
+            {
+              uid: currentUser.uid,
+              email: currentUser.email || '',
+              displayName: currentUser.displayName || undefined,
+            },
+            {
+              updatedFields: Object.keys(data),
+            }
+          );
+        }
+      }
+      
+      return updatedProject;
+    } catch (error: any) {
       console.error('Error updating project:', error);
+      
+      // Log error
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        await logErrorActivity(
+          'project.update',
+          error,
+          {
+            uid: currentUser.uid,
+            email: currentUser.email || '',
+            displayName: currentUser.displayName || undefined,
+          },
+          {
+            projectId: id,
+            updateData: data,
+          }
+        );
+      }
+      
       throw new Error('Failed to update project');
     }
   },
@@ -216,10 +321,51 @@ export const firestoreProjectService = {
   // Delete project
   async delete(id: string): Promise<void> {
     try {
+      // Get project info before deleting
+      const project = await this.get(id);
+      
       const docRef = doc(db, 'projects', id);
       await deleteDoc(docRef);
-    } catch (error) {
+      
+      // Log activity
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        await logResourceActivity(
+          'project.delete',
+          'project',
+          id,
+          project.name,
+          {
+            uid: currentUser.uid,
+            email: currentUser.email || '',
+            displayName: currentUser.displayName || undefined,
+          },
+          {
+            projectType: project.type,
+            projectStatus: project.status,
+          }
+        );
+      }
+    } catch (error: any) {
       console.error('Error deleting project:', error);
+      
+      // Log error
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        await logErrorActivity(
+          'project.delete',
+          error,
+          {
+            uid: currentUser.uid,
+            email: currentUser.email || '',
+            displayName: currentUser.displayName || undefined,
+          },
+          {
+            projectId: id,
+          }
+        );
+      }
+      
       throw new Error('Failed to delete project');
     }
   },

@@ -3,7 +3,7 @@
   "project": {
     "name": "groeimetai_multiple_agent_orchestration",
     "type": "claude-flow",
-    "created": "2025-07-01T14:02:48.203Z"
+    "created": "2025-07-05T12:13:05.352Z"
   },
   "features": {
     "swarm": true,

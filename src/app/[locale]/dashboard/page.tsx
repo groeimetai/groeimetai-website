@@ -30,6 +30,7 @@ import {
   Flag,
   Shield,
   ClipboardList,
+  Receipt,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,6 +42,10 @@ import { Link } from '@/i18n/routing';
 import DashboardChat from '@/components/DashboardChat';
 import ChatManagement from '@/components/admin/ChatManagement';
 import OnboardingFlow from '@/components/OnboardingFlow';
+import DashboardWidgets from '@/components/dashboard/DashboardWidgets';
+import { HelpProvider, HelpTrigger } from '@/components/HelpSystem';
+import CommandPalette from '@/components/CommandPalette';
+import QuickActions from '@/components/QuickActions';
 
 interface ProjectStage {
   id: number;
@@ -71,6 +76,7 @@ export default function DashboardPage() {
   const [userQuoteId, setUserQuoteId] = useState<string | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       id: '1',
@@ -341,6 +347,25 @@ export default function DashboardPage() {
     }, 1000);
   };
 
+  // Handle command palette keyboard shortcut
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false);
+    // Optionally refresh the page or update user data
+    window.location.reload();
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -385,20 +410,15 @@ export default function DashboardPage() {
     );
   }
 
-  const handleOnboardingComplete = () => {
-    setShowOnboarding(false);
-    // Optionally refresh the page or update user data
-    window.location.reload();
-  };
-
   return (
-    <main className="min-h-screen bg-black">
-      {/* Onboarding Flow */}
-      {showOnboarding && !checkingOnboarding && (
-        <OnboardingFlow onComplete={handleOnboardingComplete} />
-      )}
-      
-      <div className="container mx-auto px-4 py-8 mt-20">
+    <HelpProvider>
+      <main className="min-h-screen bg-black" data-help="dashboard-main">
+        {/* Onboarding Flow */}
+        {showOnboarding && !checkingOnboarding && (
+          <OnboardingFlow onComplete={handleOnboardingComplete} />
+        )}
+        
+        <div className="container mx-auto px-4 py-8 mt-20">
         {/* Welcome Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -406,7 +426,7 @@ export default function DashboardPage() {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <h2 className="text-3xl font-bold text-white mb-2">
+          <h2 className="text-3xl font-bold text-white mb-2" data-help="welcome-header">
             Welcome back, {userProfile.firstName || userProfile.displayName}!
           </h2>
           <p className="text-white/60">
@@ -414,6 +434,21 @@ export default function DashboardPage() {
           </p>
         </motion.div>
 
+        {/* Dashboard Widgets for regular users */}
+        {!isAdmin && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mb-8"
+            data-help="dashboard-widgets"
+          >
+            <DashboardWidgets />
+          </motion.div>
+        )}
+
+        {/* Original Layout for Admin or users without widgets */}
+        {isAdmin && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Project Timeline Widget */}
           <motion.div
@@ -421,6 +456,7 @@ export default function DashboardPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 p-6"
+            data-help="project-timeline"
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold text-white">Project Timeline</h3>
@@ -529,19 +565,22 @@ export default function DashboardPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 flex flex-col h-[600px]"
+            data-help="chat-widget"
           >
             {isAdmin ? <ChatManagement /> : <DashboardChat />}
           </motion.div>
         </div>
+        )}
 
         {/* Quick Actions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4"
+          className="mt-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"
+          data-help="quick-actions"
         >
-          <Link href="/dashboard/projects" className="block">
+          <Link href="/dashboard/projects" className="block" data-help="projects-link">
             <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
@@ -565,24 +604,48 @@ export default function DashboardPage() {
             </div>
           </Link>
 
-          <Link href="/dashboard/quotes" className="block">
+          <Link href="/dashboard/consultations" className="block">
             <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <ClipboardList className="w-5 h-5 text-orange" />
-                  <span className="text-white">Project Requests</span>
+                  <Calendar className="w-5 h-5 text-orange" />
+                  <span className="text-white">Consultations</span>
                 </div>
                 <ChevronRight className="w-4 h-4 text-white/60" />
               </div>
             </div>
           </Link>
 
-          <Link href="/dashboard/consultations" className="block">
+          <Link href="/dashboard/messages" className="block">
             <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <Calendar className="w-5 h-5 text-orange" />
-                  <span className="text-white">Schedule Meeting</span>
+                  <MessageSquare className="w-5 h-5 text-orange" />
+                  <span className="text-white">Messages</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/60" />
+              </div>
+            </div>
+          </Link>
+
+          <Link href="/dashboard/invoices" className="block">
+            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Receipt className="w-5 h-5 text-orange" />
+                  <span className="text-white">Invoices</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/60" />
+              </div>
+            </div>
+          </Link>
+
+          <Link href="/dashboard/quotes" className="block">
+            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <ClipboardList className="w-5 h-5 text-orange" />
+                  <span className="text-white">Project Requests</span>
                 </div>
                 <ChevronRight className="w-4 h-4 text-white/60" />
               </div>
@@ -616,6 +679,16 @@ export default function DashboardPage() {
           )}
         </motion.div>
       </div>
+      
+      {/* Command Palette */}
+      <CommandPalette 
+        isOpen={isCommandPaletteOpen} 
+        onClose={() => setIsCommandPaletteOpen(false)} 
+      />
+      
+      {/* Quick Actions FAB */}
+      <QuickActions onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
     </main>
+    </HelpProvider>
   );
 }

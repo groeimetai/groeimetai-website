@@ -5,27 +5,30 @@
 /* React Day Picker styles */
 @import 'react-day-picker/dist/style.css';
 
+/* ReactFlow styles */
+@import 'reactflow/dist/style.css';
+
 @layer base {
   :root {
     /* New color scheme: 80% Black, 10% Orange, 5% White, 5% Green */
-    --background: 0 0% 100%; /* White background for light mode */
-    --foreground: 0 0% 0%; /* Black text */
-    --card: 0 0% 97%;
-    --card-foreground: 0 0% 0%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
+    --background: 0 0% 0%; /* Black background as default */
+    --foreground: 0 0% 100%; /* White text as default */
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 100%;
     --primary: 20 100% 50%; /* Orange */
     --primary-foreground: 0 0% 100%;
-    --secondary: 120 30% 25%; /* Green */
+    --secondary: 120 30% 30%; /* Green */
     --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 30%;
-    --accent: 120 30% 25%; /* Green accent */
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 0 0% 15%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
     --ring: 20 100% 50%; /* Orange ring */
     --radius: 0.75rem;
 

@@ -19,6 +19,7 @@ import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase/config';
 import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
+import { logResourceActivity, logErrorActivity } from '@/services/activityLogger';
 import {
   User,
   Building,
@@ -282,6 +283,25 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
 
       const quoteRef = await addDoc(collection(db, 'quotes'), quoteData);
 
+      // Log activity
+      await logResourceActivity(
+        'quote.create',
+        'quote',
+        quoteRef.id,
+        formData.projectName,
+        {
+          uid: userId || 'guest',
+          email: formData.email,
+          displayName: formData.fullName,
+        },
+        {
+          services: formData.services,
+          budget: formData.budget,
+          timeline: formData.timeline,
+          accountType: formData.accountType,
+        }
+      );
+
       // Send email notification to admin
       try {
         await fetch('/api/email/send', {
@@ -344,9 +364,27 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
       } else {
         router.push('/quote-success');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to submit quote request:', error);
       setError(t('errors.submissionFailed'));
+      
+      // Log error
+      await logErrorActivity(
+        'quote.create',
+        error,
+        {
+          uid: user?.uid || 'guest',
+          email: formData.email,
+          displayName: formData.fullName,
+        },
+        {
+          formData: {
+            projectName: formData.projectName,
+            services: formData.services,
+            budget: formData.budget,
+          },
+        }
+      );
     } finally {
       setIsSubmitting(false);
     }

@@ -11,6 +11,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import LanguageSwitcher from './LanguageSwitcher';
+import NotificationCenter from '@/components/NotificationCenter';
+import { CommandPaletteButton } from '@/components/CommandPalette';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -89,6 +91,8 @@ export default function Navigation() {
             <div className="hidden md:flex items-center space-x-3">
               {user ? (
                 <>
+                  <CommandPaletteButton />
+                  <NotificationCenter />
                   <Link href="/dashboard">
                     <Button
                       variant="ghost"
@@ -173,6 +177,10 @@ export default function Navigation() {
                 <hr className="border-white/20" />
                 {user ? (
                   <>
+                    <div className="px-4 flex items-center justify-between">
+                      <span className="text-white/60 text-sm">Notifications</span>
+                      <NotificationCenter />
+                    </div>
                     <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
                       <Button
                         variant="ghost"
