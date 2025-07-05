@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyIdToken } from '@/lib/firebase/admin';
-import { invoiceService } from '@/services/invoiceService';
 
 // POST /api/invoices/[id]/send
 export async function POST(
@@ -27,15 +26,20 @@ export async function POST(
       );
     }
 
-    // Get invoice to check permissions
-    const invoice = await invoiceService.getInvoice(params.id);
+    // Get invoice to check permissions using dynamic import
+    const { getDoc, doc } = await import('firebase/firestore');
+    const { db, collections } = await import('@/lib/firebase');
     
-    if (!invoice) {
+    const invoiceDoc = await getDoc(doc(db, collections.invoices, params.id));
+    
+    if (!invoiceDoc.exists()) {
       return NextResponse.json(
         { error: 'Invoice not found' },
         { status: 404 }
       );
     }
+    
+    const invoice = { id: invoiceDoc.id, ...invoiceDoc.data() } as any;
 
     // Check permissions: admin, consultant, or the client who owns the invoice
     const hasPermission = 
@@ -77,7 +81,8 @@ export async function POST(
       name = client.fullName || client.displayName || undefined;
     }
 
-    // Send the invoice
+    // Send the invoice using dynamic import
+    const { invoiceService } = await import('@/services/invoiceService');
     await invoiceService.sendInvoice(params.id, email, name);
 
     return NextResponse.json(

@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyIdToken } from '@/lib/firebase/admin';
-import { paymentService } from '@/services/paymentService';
-import { invoiceService } from '@/services/invoiceService';
 
 // POST /api/payments/create
 export async function POST(request: NextRequest) {
@@ -36,15 +34,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get invoice to check permissions
-    const invoice = await invoiceService.getInvoice(body.invoiceId);
+    // Get invoice to check permissions using dynamic imports
+    const { getDoc, doc } = await import('firebase/firestore');
+    const { db, collections } = await import('@/lib/firebase');
     
-    if (!invoice) {
+    const invoiceDoc = await getDoc(doc(db, collections.invoices, body.invoiceId));
+    
+    if (!invoiceDoc.exists()) {
       return NextResponse.json(
         { error: 'Invoice not found' },
         { status: 404 }
       );
     }
+    
+    const invoice = { id: invoiceDoc.id, ...invoiceDoc.data() } as any;
 
     // Check permissions: anyone can pay their own invoice, admin/consultant can create payment links for any invoice
     const hasPermission = 
@@ -73,7 +76,8 @@ export async function POST(request: NextRequest) {
     const cancelUrl = body.cancelUrl || `${baseUrl}/dashboard/invoices/${body.invoiceId}`;
     const webhookUrl = `${baseUrl}/api/webhooks/mollie`;
 
-    // Create payment
+    // Create payment using dynamic import
+    const { paymentService } = await import('@/services/paymentService');
     const payment = await paymentService.createPayment({
       invoiceId: body.invoiceId,
       redirectUrl,

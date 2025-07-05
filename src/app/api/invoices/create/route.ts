@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyIdToken } from '@/lib/firebase/admin';
-import { invoiceService } from '@/services/invoiceService';
 import { InvoiceItem, InvoiceType } from '@/types';
 
 // POST /api/invoices/create
@@ -86,7 +85,8 @@ export async function POST(request: NextRequest) {
       timeEntryIds: item.timeEntryIds
     }));
 
-    // Create invoice
+    // Create invoice using dynamic import
+    const { invoiceService } = await import('@/services/invoiceService');
     const invoice = await invoiceService.createInvoice({
       clientId: body.clientId,
       organizationId: body.organizationId,

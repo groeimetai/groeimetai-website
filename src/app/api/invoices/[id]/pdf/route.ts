@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyIdToken } from '@/lib/firebase/admin';
-import { invoiceService } from '@/services/invoiceService';
-import { invoicePdfService } from '@/services/invoicePdfService';
 
 // GET /api/invoices/[id]/pdf
 export async function GET(
@@ -29,14 +27,20 @@ export async function GET(
     }
 
     // Get invoice
-    const invoice = await invoiceService.getInvoice(params.id);
+    // Get invoice using dynamic imports
+    const { getDoc, doc } = await import('firebase/firestore');
+    const { db, collections } = await import('@/lib/firebase');
     
-    if (!invoice) {
+    const invoiceDoc = await getDoc(doc(db, collections.invoices, params.id));
+    
+    if (!invoiceDoc.exists()) {
       return NextResponse.json(
         { error: 'Invoice not found' },
         { status: 404 }
       );
     }
+    
+    const invoice = { id: invoiceDoc.id, ...invoiceDoc.data() } as any;
 
     // Check permissions: admin, consultant, or the client who owns the invoice
     const hasPermission = 
@@ -66,7 +70,8 @@ export async function GET(
       );
     }
 
-    // Generate PDF buffer for direct download
+    // Generate PDF buffer for direct download using dynamic import
+    const { invoicePdfService } = await import('@/services/invoicePdfService');
     const pdfBuffer = Buffer.from(await invoicePdfService.generateInvoicePDF(invoice), 'base64');
 
     // Return PDF as response

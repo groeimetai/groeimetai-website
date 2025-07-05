@@ -19,6 +19,9 @@ class EmailService {
     }
 
     const transporter = createTransporter();
+    if (!transporter) {
+      throw new Error('Email transporter not available');
+    }
     
     try {
       const info = await transporter.sendMail({

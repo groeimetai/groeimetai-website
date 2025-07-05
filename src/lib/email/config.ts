@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-// Email configuration
+// Email configuration with lazy evaluation
 export const emailConfig = {
   // Use info@groeimetai.io as the "from" address
   // But authenticate with niels@groeimetai.io (since info@ is an alias)
@@ -12,20 +12,27 @@ export const emailConfig = {
   // Admin emails that should receive notifications
   adminEmails: ['niels@groeimetai.io'],
   
-  // SMTP configuration (to be set via environment variables)
-  smtp: {
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: process.env.SMTP_USER || '', // niels@groeimetai.io
-      pass: process.env.SMTP_PASS || '', // App password
-    },
+  // SMTP configuration getter to evaluate environment variables at runtime
+  get smtp() {
+    return {
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: process.env.SMTP_USER || '', // niels@groeimetai.io
+        pass: process.env.SMTP_PASS || '', // App password
+      },
+    };
   },
 };
 
 // Create reusable transporter object using the default SMTP transport
 export const createTransporter = () => {
+  // Check if we're in a build environment
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    console.log('Skipping email transporter creation during build');
+    return null;
+  }
   return nodemailer.createTransport({
     host: emailConfig.smtp.host,
     port: emailConfig.smtp.port,
@@ -40,6 +47,10 @@ export const createTransporter = () => {
 // Verify SMTP connection configuration
 export const verifyEmailConnection = async () => {
   const transporter = createTransporter();
+  if (!transporter) {
+    console.log('Email transporter not available (build time)');
+    return false;
+  }
   try {
     await transporter.verify();
     console.log('Email server is ready to send messages');
