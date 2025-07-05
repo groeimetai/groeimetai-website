@@ -47,6 +47,7 @@ import {
 import { db } from '@/lib/firebase/config';
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from '@/i18n/routing';
+import { ProjectRequestDialog } from '@/components/dialogs/ProjectRequestDialog';
 
 interface Widget {
   id: string;
@@ -86,6 +87,7 @@ export default function DashboardWidgets() {
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [showAddWidget, setShowAddWidget] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [projectDialogOpen, setProjectDialogOpen] = useState(false);
 
   // Load user's widget preferences
   useEffect(() => {
@@ -309,12 +311,15 @@ export default function DashboardWidgets() {
         case 'quickActions':
           return (
             <div className="space-y-2">
-              <Link href="/contact?type=project">
-                <Button variant="outline" className="w-full justify-start" size="sm">
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Project
-                </Button>
-              </Link>
+              <Button 
+                variant="outline" 
+                className="w-full justify-start" 
+                size="sm"
+                onClick={() => setProjectDialogOpen(true)}
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                New Project
+              </Button>
               <Link href="/dashboard/consultations">
                 <Button variant="outline" className="w-full justify-start" size="sm">
                   <Calendar className="w-4 h-4 mr-2" />
@@ -547,6 +552,12 @@ export default function DashboardWidgets() {
           </Button>
         </div>
       )}
+      
+      {/* Project Request Dialog */}
+      <ProjectRequestDialog 
+        open={projectDialogOpen} 
+        onOpenChange={setProjectDialogOpen} 
+      />
     </div>
   );
 }

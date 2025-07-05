@@ -97,10 +97,10 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
     },
     {
       id: 'new-quote',
-      label: 'Create Quote Request',
+      label: 'View Quote Requests',
       icon: FileText,
       action: () => {
-        navigateTo('/quotation');
+        navigateTo('/dashboard/quotes');
         trackAction('new-quote');
         setIsOpen(false);
       },
@@ -111,10 +111,10 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
     // Document Actions
     {
       id: 'upload-document',
-      label: 'Upload Documents',
+      label: 'View Documents',
       icon: Upload,
       action: () => {
-        navigateTo('/dashboard/documents?action=upload');
+        navigateTo('/dashboard/documents');
         trackAction('upload-document');
         setIsOpen(false);
       },
@@ -125,10 +125,10 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
     // Communication Actions
     {
       id: 'schedule-meeting',
-      label: 'Schedule Meeting',
+      label: 'View Consultations',
       icon: Calendar,
       action: () => {
-        navigateTo('/dashboard/consultations?action=schedule');
+        navigateTo('/dashboard/consultations');
         trackAction('schedule-meeting');
         setIsOpen(false);
       },
@@ -140,7 +140,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       label: 'Contact Support',
       icon: MessageSquare,
       action: () => {
-        // Find and open chat widget or navigate to support
+        // Find and open chat widget
         const chatWidget = document.querySelector('[data-help="chat-widget"]');
         if (chatWidget) {
           chatWidget.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -148,7 +148,8 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
           const button = chatWidget.querySelector('button');
           if (button) button.click();
         } else {
-          navigateTo('/dashboard/support');
+          // If no chat widget found, navigate to messages
+          navigateTo('/dashboard/messages');
         }
         trackAction('contact-support');
         setIsOpen(false);
