@@ -400,6 +400,11 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
 
   const progress = (currentStep / steps.length) * 100;
 
+  // Don't render until mounted to avoid SSR issues
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <div className="max-w-3xl mx-auto">
       <motion.div

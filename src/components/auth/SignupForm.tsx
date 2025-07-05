@@ -89,6 +89,11 @@ export default function SignupForm() {
     }
   };
 
+  // Don't render until mounted to avoid SSR issues
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <div className="w-full max-w-md">
       <motion.div

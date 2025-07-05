@@ -55,6 +55,11 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Don't render until mounted to avoid SSR issues
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <motion.nav
       initial={{ y: -100 }}

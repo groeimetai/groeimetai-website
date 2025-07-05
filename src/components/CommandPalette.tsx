@@ -301,9 +301,19 @@ function CommandPaletteInternal() {
 
 // Standalone component that uses props
 function CommandPaletteStandalone({ isOpen, onClose }: CommandPaletteProps) {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
   const setOpen = (value: boolean) => {
     if (!value) onClose();
   };
+  
+  if (!mounted) {
+    return null;
+  }
   
   return (
     <CommandPaletteBase 
@@ -347,9 +357,9 @@ function CommandPaletteBase({
     setMounted(true);
   }, []);
 
-  // Safe navigation helper
+  // Safe navigation helper - only use router when mounted
   const navigateTo = useCallback((path: string) => {
-    if (mounted) {
+    if (mounted && router) {
       router.push(path);
     }
   }, [mounted, router]);

@@ -30,6 +30,11 @@ export default function LanguageSwitcher() {
     }
   };
 
+  // Don't render until mounted to avoid SSR issues
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <Button
       variant="ghost"
