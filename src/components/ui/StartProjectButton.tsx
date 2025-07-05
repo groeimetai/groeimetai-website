@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ProjectRequestDialog } from '@/components/dialogs/ProjectRequestDialog';
 import { ArrowRight } from 'lucide-react';
@@ -24,14 +24,22 @@ export function StartProjectButton({
   preselectedService
 }: StartProjectButtonProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const t = useTranslations('common');
   const { user } = useAuth();
   const router = useRouter();
 
+  // Ensure we're on the client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const handleClick = () => {
     if (user) {
       // If user is logged in, redirect to dashboard
-      router.push('/dashboard');
+      if (mounted) {
+        router.push('/dashboard');
+      }
     } else {
       // If not logged in, show the project request dialog
       setDialogOpen(true);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from '@/i18n/routing';
 import { Link } from '@/i18n/routing';
@@ -23,6 +23,12 @@ export default function SignupForm() {
     confirmPassword: '',
   });
   const [error, setError] = useState('');
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure we're on the client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -51,7 +57,9 @@ export default function SignupForm() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Redirect to onboarding
-      router.push('/onboarding');
+      if (mounted) {
+        router.push('/onboarding');
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to create account');
     } finally {
@@ -71,7 +79,9 @@ export default function SignupForm() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Redirect to onboarding
-      router.push('/onboarding');
+      if (mounted) {
+        router.push('/onboarding');
+      }
     } catch (err: any) {
       setError(err.message || `Failed to sign up with ${provider}`);
     } finally {

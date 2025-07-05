@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from '@/i18n/routing';
 import { Link } from '@/i18n/routing';
@@ -18,6 +18,12 @@ export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure we're on the client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +38,9 @@ export default function LoginForm() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Redirect to dashboard
-      router.push('/dashboard');
+      if (mounted) {
+        router.push('/dashboard');
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to login');
     } finally {
@@ -52,7 +60,9 @@ export default function LoginForm() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Redirect to dashboard
-      router.push('/dashboard');
+      if (mounted) {
+        router.push('/dashboard');
+      }
     } catch (err: any) {
       setError(err.message || `Failed to login with ${provider}`);
     } finally {

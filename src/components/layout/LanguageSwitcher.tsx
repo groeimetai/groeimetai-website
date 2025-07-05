@@ -4,22 +4,30 @@ import { useRouter, usePathname } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 import { Globe } from 'lucide-react';
 import { useLocale } from 'next-intl';
-import { useTransition } from 'react';
+import { useTransition, useState, useEffect } from 'react';
 
 export default function LanguageSwitcher() {
   const router = useRouter();
   const pathname = usePathname();
   const locale = useLocale();
   const [isPending, startTransition] = useTransition();
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure we're on the client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLanguageChange = () => {
     // Toggle between nl and en
     const newLocale = locale === 'nl' ? 'en' : 'nl';
 
     // Navigate to the new locale with transition
-    startTransition(() => {
-      router.replace(pathname, { locale: newLocale });
-    });
+    if (mounted) {
+      startTransition(() => {
+        router.replace(pathname, { locale: newLocale });
+      });
+    }
   };
 
   return (

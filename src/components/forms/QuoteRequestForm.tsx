@@ -80,6 +80,12 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [error, setError] = useState('');
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure we're on the client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   // Helper to determine if user is logged in
   const isLoggedIn = !!user;
@@ -362,7 +368,9 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
       if (onSuccess) {
         onSuccess();
       } else {
-        router.push('/quote-success');
+        if (mounted) {
+          router.push('/quote-success');
+        }
       }
     } catch (error: any) {
       console.error('Failed to submit quote request:', error);
