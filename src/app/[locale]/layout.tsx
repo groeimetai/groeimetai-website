@@ -1,10 +1,16 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import Navigation from '@/components/layout/Navigation';
+import dynamic from 'next/dynamic';
 import Footer from '@/components/layout/Footer';
 import type { RootLayoutProps } from '@/types/layout';
 import { locales } from '@/i18n';
+
+// Dynamically import Navigation to avoid SSR issues with router
+const Navigation = dynamic(() => import('@/components/layout/Navigation'), {
+  ssr: false,
+  loading: () => <div className="h-20" /> // Placeholder to prevent layout shift
+});
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));

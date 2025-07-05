@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus,
@@ -49,10 +49,23 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
   const [isOpen, setIsOpen] = useState(false);
   const [recentActionIds, setRecentActionIds] = useState<string[]>([]);
   const [hoveredAction, setHoveredAction] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
   const fabRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
   const { user } = useAuth();
+
+  // Ensure we're on the client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Safe navigation helper
+  const navigateTo = useCallback((path: string) => {
+    if (mounted) {
+      router.push(path);
+    }
+  }, [mounted, router]);
 
   // Define all available quick actions
   const allActions: QuickAction[] = [
@@ -62,7 +75,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       label: 'Create New Project',
       icon: Briefcase,
       action: () => {
-        router.push('/dashboard/projects/new');
+        navigateTo('/dashboard/projects/new');
         trackAction('create-project');
         setIsOpen(false);
       },
@@ -74,7 +87,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       label: 'View All Projects',
       icon: ClipboardList,
       action: () => {
-        router.push('/dashboard/projects');
+        navigateTo('/dashboard/projects');
         trackAction('view-projects');
         setIsOpen(false);
       },
@@ -85,7 +98,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       label: 'Create Quote Request',
       icon: FileText,
       action: () => {
-        router.push('/quotation');
+        navigateTo('/quotation');
         trackAction('new-quote');
         setIsOpen(false);
       },
@@ -99,7 +112,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       label: 'Upload Documents',
       icon: Upload,
       action: () => {
-        router.push('/dashboard/documents?action=upload');
+        navigateTo('/dashboard/documents?action=upload');
         trackAction('upload-document');
         setIsOpen(false);
       },
@@ -113,7 +126,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       label: 'Schedule Meeting',
       icon: Calendar,
       action: () => {
-        router.push('/dashboard/consultations?action=schedule');
+        navigateTo('/dashboard/consultations?action=schedule');
         trackAction('schedule-meeting');
         setIsOpen(false);
       },
@@ -133,7 +146,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
           const button = chatWidget.querySelector('button');
           if (button) button.click();
         } else {
-          router.push('/dashboard/support');
+          navigateTo('/dashboard/support');
         }
         trackAction('contact-support');
         setIsOpen(false);
@@ -148,7 +161,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       label: 'View Analytics',
       icon: BarChart3,
       action: () => {
-        router.push('/dashboard/analytics');
+        navigateTo('/dashboard/analytics');
         trackAction('view-analytics');
         setIsOpen(false);
       },
@@ -161,7 +174,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       label: 'Admin Dashboard',
       icon: Shield,
       action: () => {
-        router.push('/dashboard/admin');
+        navigateTo('/dashboard/admin');
         trackAction('admin-dashboard');
         setIsOpen(false);
       },
@@ -173,7 +186,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       label: 'Manage Users',
       icon: Users,
       action: () => {
-        router.push('/dashboard/admin/users');
+        navigateTo('/dashboard/admin/users');
         trackAction('manage-users');
         setIsOpen(false);
       },
@@ -185,7 +198,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       label: 'System Settings',
       icon: Settings,
       action: () => {
-        router.push('/dashboard/admin/settings');
+        navigateTo('/dashboard/admin/settings');
         trackAction('system-settings');
         setIsOpen(false);
       },
@@ -197,7 +210,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       label: 'Export Data',
       icon: Database,
       action: () => {
-        router.push('/dashboard/admin/export');
+        navigateTo('/dashboard/admin/export');
         trackAction('data-export');
         setIsOpen(false);
       },
@@ -361,6 +374,11 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
   }, [isOpen]);
 
   const actionGroups = groupedActions();
+
+  // Don't render until mounted to avoid SSR issues
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-6 right-6 z-40" ref={fabRef}>

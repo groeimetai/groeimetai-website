@@ -204,38 +204,50 @@ export function CommandPaletteProvider({ children }: { children: React.ReactNode
   const [open, setOpen] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [recentActions, setRecentActions] = useState<string[]>([]);
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure we're on the client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Load recent items from localStorage
   useEffect(() => {
+    if (!mounted) return;
+    
     const savedSearches = localStorage.getItem('commandPalette:recentSearches');
     const savedActions = localStorage.getItem('commandPalette:recentActions');
     
     if (savedSearches) setRecentSearches(JSON.parse(savedSearches));
     if (savedActions) setRecentActions(JSON.parse(savedActions));
-  }, []);
+  }, [mounted]);
 
   const toggle = useCallback(() => setOpen(prev => !prev), []);
 
   const addRecentSearch = useCallback((search: string) => {
-    if (!search.trim()) return;
+    if (!search.trim() || !mounted) return;
     
     setRecentSearches(prev => {
       const updated = [search, ...prev.filter(s => s !== search)].slice(0, 5);
       localStorage.setItem('commandPalette:recentSearches', JSON.stringify(updated));
       return updated;
     });
-  }, []);
+  }, [mounted]);
 
   const addRecentAction = useCallback((actionId: string) => {
+    if (!mounted) return;
+    
     setRecentActions(prev => {
       const updated = [actionId, ...prev.filter(id => id !== actionId)].slice(0, 10);
       localStorage.setItem('commandPalette:recentActions', JSON.stringify(updated));
       return updated;
     });
-  }, []);
+  }, [mounted]);
 
   // Global keyboard shortcut
   useEffect(() => {
+    if (!mounted) return;
+    
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
@@ -245,7 +257,7 @@ export function CommandPaletteProvider({ children }: { children: React.ReactNode
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [toggle]);
+  }, [toggle, mounted]);
 
   return (
     <CommandPaletteContext.Provider 
@@ -260,7 +272,7 @@ export function CommandPaletteProvider({ children }: { children: React.ReactNode
       }}
     >
       {children}
-      <CommandPaletteInternal />
+      {mounted && <CommandPaletteInternal />}
     </CommandPaletteContext.Provider>
   );
 }
@@ -334,6 +346,13 @@ function CommandPaletteBase({
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Safe navigation helper
+  const navigateTo = useCallback((path: string) => {
+    if (mounted) {
+      router.push(path);
+    }
+  }, [mounted, router]);
 
   // Mock data - In a real app, this would come from your API
   const mockProjects: Project[] = useMemo(() => [
@@ -463,7 +482,7 @@ function CommandPaletteBase({
       icon: <Plus className="w-4 h-4" />,
       keywords: ['new', 'create', 'project', 'start'],
       action: () => {
-        router.push('/quote-request');
+        navigateTo('/quote-request');
         setOpen(false);
       },
       shortcut: 'N',
@@ -496,7 +515,7 @@ function CommandPaletteBase({
       icon: <Calendar className="w-4 h-4" />,
       keywords: ['meeting', 'schedule', 'book', 'consultation', 'calendar'],
       action: () => {
-        router.push('/dashboard/consultations');
+        navigateTo('/dashboard/consultations');
         setOpen(false);
       },
       shortcut: 'M'
@@ -543,7 +562,7 @@ function CommandPaletteBase({
       icon: <Home className="w-4 h-4" />,
       keywords: ['dashboard', 'home', 'overview'],
       action: () => {
-        router.push('/dashboard');
+        navigateTo('/dashboard');
         setOpen(false);
       }
     });
@@ -557,7 +576,7 @@ function CommandPaletteBase({
       icon: <ProjectIcon className="w-4 h-4" />,
       keywords: ['projects', 'work', 'tasks'],
       action: () => {
-        router.push('/dashboard/projects');
+        navigateTo('/dashboard/projects');
         setOpen(false);
       }
     });
@@ -571,7 +590,7 @@ function CommandPaletteBase({
       icon: <DollarSign className="w-4 h-4" />,
       keywords: ['invoices', 'billing', 'payments', 'money'],
       action: () => {
-        router.push('/dashboard/invoices');
+        navigateTo('/dashboard/invoices');
         setOpen(false);
       }
     });
@@ -585,7 +604,7 @@ function CommandPaletteBase({
       icon: <BarChart className="w-4 h-4" />,
       keywords: ['analytics', 'stats', 'reports', 'data'],
       action: () => {
-        router.push('/dashboard/analytics');
+        navigateTo('/dashboard/analytics');
         setOpen(false);
       },
       isPro: true
@@ -606,7 +625,7 @@ function CommandPaletteBase({
         icon: statusIcon,
         keywords: [...project.tags, ...project.technologies, project.type],
         action: () => {
-          router.push(`/dashboard/projects/${project.id}`);
+          navigateTo(`/dashboard/projects/${project.id}`);
           setOpen(false);
         },
         badge: project.priority === 'high' ? 'High Priority' : undefined,
@@ -626,7 +645,7 @@ function CommandPaletteBase({
         icon: <UserIcon className="w-4 h-4" />,
         keywords: [user.email, user.firstName, user.lastName, user.jobTitle || ''],
         action: () => {
-          router.push(`/dashboard/users/${user.uid}`);
+          navigateTo(`/dashboard/users/${user.uid}`);
           setOpen(false);
         },
         metadata: user
@@ -677,7 +696,7 @@ function CommandPaletteBase({
       icon: <UserIcon className="w-4 h-4" />,
       keywords: ['profile', 'account', 'settings', 'edit'],
       action: () => {
-        router.push('/dashboard/settings/profile');
+        navigateTo('/dashboard/settings/profile');
         setOpen(false);
       }
     });
@@ -691,7 +710,7 @@ function CommandPaletteBase({
       icon: <Bell className="w-4 h-4" />,
       keywords: ['notifications', 'alerts', 'settings'],
       action: () => {
-        router.push('/dashboard/settings/notifications');
+        navigateTo('/dashboard/settings/notifications');
         setOpen(false);
       }
     });
@@ -705,7 +724,7 @@ function CommandPaletteBase({
       icon: <Shield className="w-4 h-4" />,
       keywords: ['security', 'privacy', 'password', '2fa'],
       action: () => {
-        router.push('/dashboard/settings/security');
+        navigateTo('/dashboard/settings/security');
         setOpen(false);
       }
     });
@@ -719,7 +738,7 @@ function CommandPaletteBase({
       icon: <Palette className="w-4 h-4" />,
       keywords: ['theme', 'dark', 'light', 'appearance', 'display'],
       action: () => {
-        router.push('/dashboard/settings/appearance');
+        navigateTo('/dashboard/settings/appearance');
         setOpen(false);
       }
     });
@@ -733,7 +752,7 @@ function CommandPaletteBase({
       icon: <Keyboard className="w-4 h-4" />,
       keywords: ['keyboard', 'shortcuts', 'hotkeys'],
       action: () => {
-        router.push('/dashboard/settings/shortcuts');
+        navigateTo('/dashboard/settings/shortcuts');
         setOpen(false);
       }
     });
@@ -749,7 +768,7 @@ function CommandPaletteBase({
         icon: <Shield className="w-4 h-4" />,
         keywords: ['admin', 'management', 'control'],
         action: () => {
-          router.push('/dashboard/admin');
+          navigateTo('/dashboard/admin');
           setOpen(false);
         },
         isAdmin: true,
@@ -766,7 +785,7 @@ function CommandPaletteBase({
         icon: <Users className="w-4 h-4" />,
         keywords: ['users', 'management', 'admin'],
         action: () => {
-          router.push('/dashboard/admin/users');
+          navigateTo('/dashboard/admin/users');
           setOpen(false);
         },
         isAdmin: true
@@ -781,7 +800,7 @@ function CommandPaletteBase({
         icon: <Activity className="w-4 h-4" />,
         keywords: ['analytics', 'metrics', 'system', 'admin'],
         action: () => {
-          router.push('/dashboard/admin/analytics');
+          navigateTo('/dashboard/admin/analytics');
           setOpen(false);
         },
         isAdmin: true
@@ -800,14 +819,14 @@ function CommandPaletteBase({
         keywords: ['logout', 'signout', 'exit'],
         action: () => {
           // Handle logout
-          router.push('/logout');
+          navigateTo('/logout');
           setOpen(false);
         }
       });
     }
 
     return items;
-  }, [user, router, setOpen, openHelpCenter, startTutorial, mockProjects, mockUsers]);
+  }, [user, navigateTo, setOpen, openHelpCenter, startTutorial, mockProjects, mockUsers]);
 
   // Filter items based on search
   const filteredItems = useMemo(() => {

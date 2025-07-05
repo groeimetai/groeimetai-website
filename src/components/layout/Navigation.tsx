@@ -13,13 +13,20 @@ import { useTranslations } from 'next-intl';
 import LanguageSwitcher from './LanguageSwitcher';
 import NotificationCenter from '@/components/NotificationCenter';
 import { CommandPaletteButton } from '@/components/CommandPalette';
+import ClientOnly from '@/components/ClientOnly';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { user, logout } = useAuth();
   const router = useRouter();
   const t = useTranslations('navigation');
+
+  // Ensure we're on the client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const navItems = [
     { label: t('services'), href: '/services' },
@@ -31,7 +38,9 @@ export default function Navigation() {
   const handleLogout = async () => {
     try {
       await logout();
-      router.push('/');
+      if (mounted) {
+        router.push('/');
+      }
     } catch (error) {
       console.error('Error logging out:', error);
     }
@@ -91,7 +100,9 @@ export default function Navigation() {
             <div className="hidden md:flex items-center space-x-3">
               {user ? (
                 <>
-                  <CommandPaletteButton />
+                  <ClientOnly>
+                    <CommandPaletteButton />
+                  </ClientOnly>
                   <NotificationCenter />
                   <Link href="/dashboard">
                     <Button
@@ -102,14 +113,16 @@ export default function Navigation() {
                       {t('dashboard')}
                     </Button>
                   </Link>
-                  <Button
-                    onClick={handleLogout}
-                    variant="ghost"
-                    className="text-white hover:text-orange hover:bg-white/10 hover-lift"
-                  >
-                    <LogOut className="w-4 h-4 mr-2" />
-                    {t('logout')}
-                  </Button>
+                  <ClientOnly>
+                    <Button
+                      onClick={handleLogout}
+                      variant="ghost"
+                      className="text-white hover:text-orange hover:bg-white/10 hover-lift"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      {t('logout')}
+                    </Button>
+                  </ClientOnly>
                 </>
               ) : (
                 <>
@@ -190,17 +203,19 @@ export default function Navigation() {
                         {t('dashboard')}
                       </Button>
                     </Link>
-                    <Button
-                      onClick={() => {
-                        handleLogout();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      variant="ghost"
-                      className="w-full justify-start text-white hover:text-orange hover:bg-white/10"
-                    >
-                      <LogOut className="w-4 h-4 mr-2" />
-                      {t('logout')}
-                    </Button>
+                    <ClientOnly>
+                      <Button
+                        onClick={() => {
+                          handleLogout();
+                          setIsMobileMenuOpen(false);
+                        }}
+                        variant="ghost"
+                        className="w-full justify-start text-white hover:text-orange hover:bg-white/10"
+                      >
+                        <LogOut className="w-4 h-4 mr-2" />
+                        {t('logout')}
+                      </Button>
+                    </ClientOnly>
                   </>
                 ) : (
                   <>
