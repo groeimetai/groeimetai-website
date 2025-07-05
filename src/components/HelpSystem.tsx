@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, useEffect, createContext, useContext, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   HelpCircle,
@@ -37,6 +37,7 @@ import {
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Progress } from '@/components/ui/progress';
 
 interface HelpTooltip {
   id: string;
@@ -245,6 +246,26 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [hasSeenTooltips, setHasSeenTooltips] = useState<string[]>([]);
 
+  const hideTooltip = useCallback((tooltipId: string) => {
+    setActiveTooltips(prev => prev.filter(id => id !== tooltipId));
+  }, []);
+
+  const showTooltip = useCallback((tooltipId: string) => {
+    setActiveTooltips(prev => [...prev, tooltipId]);
+    
+    // Mark as seen
+    if (!hasSeenTooltips.includes(tooltipId)) {
+      const newSeen = [...hasSeenTooltips, tooltipId];
+      setHasSeenTooltips(newSeen);
+      localStorage.setItem('seenHelpTooltips', JSON.stringify(newSeen));
+    }
+
+    // Auto-hide after 10 seconds
+    setTimeout(() => {
+      hideTooltip(tooltipId);
+    }, 10000);
+  }, [hasSeenTooltips, hideTooltip]);
+
   // Load seen tooltips from localStorage
   useEffect(() => {
     const seen = localStorage.getItem('seenHelpTooltips');
@@ -266,27 +287,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
         });
       }, 2000);
     }
-  }, [hasSeenTooltips]);
-
-  const showTooltip = (tooltipId: string) => {
-    setActiveTooltips(prev => [...prev, tooltipId]);
-    
-    // Mark as seen
-    if (!hasSeenTooltips.includes(tooltipId)) {
-      const newSeen = [...hasSeenTooltips, tooltipId];
-      setHasSeenTooltips(newSeen);
-      localStorage.setItem('seenHelpTooltips', JSON.stringify(newSeen));
-    }
-
-    // Auto-hide after 10 seconds
-    setTimeout(() => {
-      hideTooltip(tooltipId);
-    }, 10000);
-  };
-
-  const hideTooltip = (tooltipId: string) => {
-    setActiveTooltips(prev => prev.filter(id => id !== tooltipId));
-  };
+  }, [hasSeenTooltips, showTooltip]);
 
   const startTutorial = (tutorialId: string) => {
     const tutorial = TUTORIALS.find(t => t.id === tutorialId);
@@ -652,18 +653,6 @@ export function HelpTrigger({
       >
         <HelpCircle className="w-3 h-3 text-orange" />
       </button>
-    </div>
-  );
-}
-
-// Progress component import was missing
-function Progress({ value, className }: { value: number; className?: string }) {
-  return (
-    <div className={`w-full bg-white/10 rounded-full overflow-hidden ${className}`}>
-      <div 
-        className="bg-orange h-full transition-all duration-300"
-        style={{ width: `${value}%` }}
-      />
     </div>
   );
 }

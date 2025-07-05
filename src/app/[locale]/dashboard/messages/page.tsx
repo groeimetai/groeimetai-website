@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -94,7 +94,7 @@ export default function MessagesPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Mock data - replace with Firebase queries
-  const mockConversations: Conversation[] = [
+  const mockConversations: Conversation[] = useMemo(() => [
     {
       id: '1',
       participants: [
@@ -185,7 +185,7 @@ export default function MessagesPage() {
       projectName: 'Data Analytics Dashboard',
       subject: 'API Integration Complete',
     },
-  ];
+  ], []);
 
   // Load conversations
   useEffect(() => {
@@ -198,7 +198,7 @@ export default function MessagesPage() {
         setIsLoading(false);
       }, 1000);
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, mockConversations]);
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {

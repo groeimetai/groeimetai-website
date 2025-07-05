@@ -325,9 +325,15 @@ function CommandPaletteBase({
 }: CommandPaletteBaseProps) {
   const [search, setSearch] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const { user } = useAuth();
   const { openHelpCenter, startTutorial } = useHelp();
+
+  // Ensure we're on the client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Mock data - In a real app, this would come from your API
   const mockProjects: Project[] = useMemo(() => [
@@ -801,7 +807,7 @@ function CommandPaletteBase({
     }
 
     return items;
-  }, [user, router, setOpen, openHelpCenter, startTutorial]);
+  }, [user, router, setOpen, openHelpCenter, startTutorial, mockProjects, mockUsers]);
 
   // Filter items based on search
   const filteredItems = useMemo(() => {
@@ -876,6 +882,11 @@ function CommandPaletteBase({
     }
     item.action();
   }, [addRecentAction, addRecentSearch, search]);
+
+  // Don't render until mounted to avoid SSR issues
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

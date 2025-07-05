@@ -33,7 +33,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
-import { useToast } from '@/components/ui/toaster';
+import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 
 // Types
@@ -111,20 +111,7 @@ export function BulkActions({
     [selectedIds, onSelectionChange]
   );
 
-  // Handle actions
-  const handleAction = useCallback(
-    async (action: BulkActionType, data?: any) => {
-      if (action === 'delete' || action === 'archive') {
-        setPendingAction(action);
-        setActionData(data);
-        setIsConfirmOpen(true);
-      } else {
-        await executeAction(action, data);
-      }
-    },
-    []
-  );
-
+  // Execute action
   const executeAction = useCallback(
     async (action: BulkActionType, data?: any) => {
       setIsProcessing(true);
@@ -178,6 +165,20 @@ export function BulkActions({
       }
     },
     [selectedIds, onAction, onSelectionChange, toast]
+  );
+
+  // Handle actions
+  const handleAction = useCallback(
+    async (action: BulkActionType, data?: any) => {
+      if (action === 'delete' || action === 'archive') {
+        setPendingAction(action);
+        setActionData(data);
+        setIsConfirmOpen(true);
+      } else {
+        await executeAction(action, data);
+      }
+    },
+    [executeAction]
   );
 
   // Keyboard navigation

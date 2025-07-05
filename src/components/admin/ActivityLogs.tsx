@@ -164,7 +164,7 @@ export function ActivityLogs() {
     loadLogs(true);
     loadStats();
     loadSuspiciousActivities();
-  }, [filters]);
+  }, [filters, loadLogs, loadStats, loadSuspiciousActivities]);
 
   // Export to CSV
   const handleExport = async () => {

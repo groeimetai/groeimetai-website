@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -99,7 +99,7 @@ export default function InvoicesPage() {
   });
 
   // Mock data - replace with Firebase queries
-  const mockInvoices: Invoice[] = [
+  const mockInvoices: Invoice[] = useMemo(() => [
     {
       id: '1',
       invoiceNumber: 'INV-2025-001',
@@ -192,7 +192,7 @@ export default function InvoicesPage() {
       taxRate: 21,
       notes: 'Please process payment as soon as possible',
     },
-  ];
+  ], []);
 
   // Load invoices
   useEffect(() => {
@@ -224,7 +224,7 @@ export default function InvoicesPage() {
         setIsLoading(false);
       }, 1000);
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, mockInvoices]);
 
   // Filter invoices
   useEffect(() => {
