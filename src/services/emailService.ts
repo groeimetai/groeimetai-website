@@ -114,6 +114,58 @@ class EmailService {
   async sendGenericEmail(options: EmailOptions) {
     await this.sendEmail(options);
   }
+
+  // Send invoice email to customer
+  async sendInvoiceEmail(data: {
+    recipientName?: string;
+    recipientEmail: string;
+    invoice: any;
+    pdfUrl?: string;
+  }) {
+    const template = emailTemplates.sendInvoice(data);
+    
+    await this.sendEmail({
+      to: data.recipientEmail,
+      subject: template.subject,
+      html: template.html,
+      text: template.text,
+    });
+  }
+
+  // Send invoice reminder email
+  async sendInvoiceReminderEmail(data: {
+    recipientName?: string;
+    recipientEmail: string;
+    invoice: any;
+    reminderType: 'due_soon' | 'overdue' | 'final_notice';
+  }) {
+    const template = emailTemplates.sendInvoiceReminder(data);
+    
+    await this.sendEmail({
+      to: data.recipientEmail,
+      subject: template.subject,
+      html: template.html,
+      text: template.text,
+    });
+  }
+
+  // Send payment confirmation email
+  async sendPaymentConfirmationEmail(data: {
+    recipientName?: string;
+    recipientEmail: string;
+    invoice: any;
+    paymentMethod: string;
+    transactionId: string;
+  }) {
+    const template = emailTemplates.sendPaymentConfirmation(data);
+    
+    await this.sendEmail({
+      to: data.recipientEmail,
+      subject: template.subject,
+      html: template.html,
+      text: template.text,
+    });
+  }
 }
 
 // Export singleton instance

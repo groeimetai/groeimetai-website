@@ -111,13 +111,27 @@ class ActivityLogger {
     activity: Omit<ActivityLog, 'id' | 'timestamp'>
   ): Promise<void> {
     try {
+      // Build log object without undefined values
       const log: Omit<ActivityLog, 'id'> = {
         ...activity,
         timestamp: serverTimestamp() as Timestamp,
-        ip: this.getClientIP(),
-        userAgent: this.getUserAgent(),
-        location: await this.getLocation(),
       };
+
+      // Only add optional fields if they have values
+      const ip = this.getClientIP();
+      if (ip !== undefined) {
+        log.ip = ip;
+      }
+
+      const userAgent = this.getUserAgent();
+      if (userAgent !== undefined) {
+        log.userAgent = userAgent;
+      }
+
+      const location = await this.getLocation();
+      if (location !== undefined) {
+        log.location = location;
+      }
 
       // Add to batch queue
       this.batchQueue.logs.push(log);

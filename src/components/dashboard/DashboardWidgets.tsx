@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import {
   Calendar,
   TrendingUp,
@@ -74,7 +74,6 @@ const WIDGET_TYPES = [
   { type: 'projectProgress', title: 'Project Progress', icon: Target, description: 'Track project completion' },
   { type: 'upcomingMeetings', title: 'Upcoming Meetings', icon: Calendar, description: 'Your scheduled meetings' },
   { type: 'quickActions', title: 'Quick Actions', icon: Plus, description: 'Common actions shortcuts' },
-  { type: 'revenue', title: 'Revenue Overview', icon: DollarSign, description: 'Financial metrics' },
   { type: 'tasks', title: 'Tasks & To-Do', icon: FileText, description: 'Your pending tasks' },
 ];
 
@@ -83,6 +82,8 @@ export default function DashboardWidgets() {
   const [widgets, setWidgets] = useState<Widget[]>(DEFAULT_WIDGETS);
   const [widgetData, setWidgetData] = useState<WidgetData>({});
   const [isDragging, setIsDragging] = useState<string | null>(null);
+  const [draggedWidget, setDraggedWidget] = useState<Widget | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [showAddWidget, setShowAddWidget] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -108,7 +109,7 @@ export default function DashboardWidgets() {
   }, [user]);
 
   // Save widget preferences
-  const saveWidgetPreferences = async () => {
+  const saveWidgetPreferences = async (updatedWidgets?: Widget[]) => {
     if (!user) return;
 
     try {
@@ -117,7 +118,7 @@ export default function DashboardWidgets() {
       
       if (!userSnapshot.empty) {
         await updateDoc(userSnapshot.docs[0].ref, {
-          dashboardWidgets: widgets,
+          dashboardWidgets: updatedWidgets || widgets,
           updatedAt: new Date()
         });
       }
@@ -213,15 +214,28 @@ export default function DashboardWidgets() {
   };
 
   const removeWidget = (widgetId: string) => {
-    setWidgets(widgets.filter(w => w.id !== widgetId));
+    const updatedWidgets = widgets.filter(w => w.id !== widgetId);
+    setWidgets(updatedWidgets);
+    saveWidgetPreferences(updatedWidgets);
   };
 
   const toggleWidgetSize = (widgetId: string) => {
-    setWidgets(widgets.map(w => 
+    const updatedWidgets = widgets.map(w => 
       w.id === widgetId 
         ? { ...w, isExpanded: !w.isExpanded }
         : w
-    ));
+    );
+    setWidgets(updatedWidgets);
+    saveWidgetPreferences(updatedWidgets);
+  };
+
+  const handleReorder = (newOrder: Widget[]) => {
+    const updatedWidgets = newOrder.map((w, index) => ({
+      ...w,
+      position: { x: index % 3, y: Math.floor(index / 3) }
+    }));
+    setWidgets(updatedWidgets);
+    saveWidgetPreferences(updatedWidgets);
   };
 
   const renderWidget = (widget: Widget) => {
@@ -340,19 +354,6 @@ export default function DashboardWidgets() {
             </div>
           );
 
-        case 'revenue':
-          return (
-            <div className="space-y-4">
-              <div className="text-center">
-                <p className="text-white/60 text-sm">Total Revenue</p>
-                <p className="text-3xl font-bold text-white">€12,450</p>
-                <p className="text-green-500 text-sm mt-1">+15% from last month</p>
-              </div>
-              <div className="h-32 flex items-center justify-center text-white/40">
-                <TrendingUp className="w-16 h-16" />
-              </div>
-            </div>
-          );
 
         case 'tasks':
           return (
@@ -390,33 +391,14 @@ export default function DashboardWidgets() {
           : 'col-span-1';
 
     return (
-      <motion.div
+      <div
         key={widget.id}
-        layout
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
         className={`${widgetSizeClass}`}
-        draggable={isEditMode}
-        onDragStart={() => setIsDragging(widget.id)}
-        onDragEnd={() => {
-          setIsDragging(null);
-          saveWidgetPreferences();
-        }}
       >
-        <Card className={`bg-white/5 border-white/10 h-full ${isDragging === widget.id ? 'opacity-50' : ''}`}>
+        <Card className={`bg-white/5 border-white/10 h-full ${isDragging === widget.id ? 'opacity-50 cursor-grabbing' : isEditMode ? 'cursor-grab' : ''}`}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">{widget.title}</CardTitle>
             <div className="flex items-center gap-1">
-              {isEditMode && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 cursor-move"
-                >
-                  <GripVertical className="h-4 w-4" />
-                </Button>
-              )}
               <Button
                 variant="ghost"
                 size="icon"
@@ -445,7 +427,7 @@ export default function DashboardWidgets() {
             <WidgetContent />
           </CardContent>
         </Card>
-      </motion.div>
+      </div>
     );
   };
 
@@ -510,11 +492,45 @@ export default function DashboardWidgets() {
       </div>
 
       {/* Widgets Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-help="dashboard-widgets">
-        <AnimatePresence>
-          {widgets.map(widget => renderWidget(widget))}
-        </AnimatePresence>
-      </div>
+      {isEditMode ? (
+        <Reorder.Group
+          axis="y"
+          values={widgets}
+          onReorder={handleReorder}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          data-help="dashboard-widgets"
+        >
+          {widgets.map(widget => (
+            <Reorder.Item
+              key={widget.id}
+              value={widget}
+              dragListener={true}
+              dragControls={undefined}
+              whileDrag={{ scale: 1.05, opacity: 0.8 }}
+              onDragStart={() => setIsDragging(widget.id)}
+              onDragEnd={() => setIsDragging(null)}
+            >
+              {renderWidget(widget)}
+            </Reorder.Item>
+          ))}
+        </Reorder.Group>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-help="dashboard-widgets">
+          <AnimatePresence>
+            {widgets.map(widget => (
+              <motion.div
+                key={widget.id}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+              >
+                {renderWidget(widget)}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      )}
 
       {/* Empty State */}
       {widgets.length === 0 && (

@@ -79,6 +79,8 @@ export const collections = {
   consultations: 'consultations',
   documents: 'documents',
   activityLogs: 'activityLogs',
+  invoices: 'invoices',
+  payments: 'payments',
 };
 
 // User profile interface

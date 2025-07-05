@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -24,6 +24,7 @@ import {
   Send,
   Printer,
   Euro,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -43,34 +44,20 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Link } from '@/i18n/routing';
-import { format, formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow, isAfter } from 'date-fns';
 import { toast } from 'react-hot-toast';
-
-interface Invoice {
-  id: string;
-  invoiceNumber: string;
-  projectName: string;
-  projectId?: string;
-  amount: number;
-  currency: 'EUR' | 'USD';
-  status: 'paid' | 'pending' | 'overdue' | 'cancelled';
-  issueDate: Date;
-  dueDate: Date;
-  paidDate?: Date;
-  description: string;
-  items: Array<{
-    description: string;
-    quantity: number;
-    rate: number;
-    amount: number;
-  }>;
-  subtotal: number;
-  tax: number;
-  taxRate: number;
-  paymentMethod?: string;
-  paymentReference?: string;
-  notes?: string;
-}
+import { invoiceService } from '@/services/invoiceService';
+import { PaymentButton } from '@/components/invoice/PaymentButton';
+import { Invoice, InvoiceStatus } from '@/types';
+import { 
+  collection, 
+  query, 
+  where, 
+  orderBy, 
+  onSnapshot,
+  Timestamp
+} from 'firebase/firestore';
+import { db, collections } from '@/lib/firebase';
 
 interface InvoiceStats {
   totalPaid: number;
@@ -86,10 +73,11 @@ export default function InvoicesPage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'paid' | 'pending' | 'overdue'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | InvoiceStatus>('all');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [showInvoiceDialog, setShowInvoiceDialog] = useState(false);
+  const [downloadingInvoiceId, setDownloadingInvoiceId] = useState<string | null>(null);
   const [stats, setStats] = useState<InvoiceStats>({
     totalPaid: 0,
     totalPending: 0,
@@ -98,133 +86,103 @@ export default function InvoicesPage() {
     averagePaymentTime: 7,
   });
 
-  // Mock data - replace with Firebase queries
-  const mockInvoices: Invoice[] = useMemo(() => [
-    {
-      id: '1',
-      invoiceNumber: 'INV-2025-001',
-      projectName: 'E-commerce AI Integration',
-      projectId: 'proj-1',
-      amount: 15000,
-      currency: 'EUR',
-      status: 'paid',
-      issueDate: new Date('2025-01-01'),
-      dueDate: new Date('2025-01-15'),
-      paidDate: new Date('2025-01-10'),
-      description: 'Initial payment for AI integration project',
-      items: [
-        {
-          description: 'AI Model Development',
-          quantity: 1,
-          rate: 10000,
-          amount: 10000,
-        },
-        {
-          description: 'Integration Services',
-          quantity: 20,
-          rate: 250,
-          amount: 5000,
-        },
-      ],
-      subtotal: 15000,
-      tax: 3150,
-      taxRate: 21,
-      paymentMethod: 'Bank Transfer',
-      paymentReference: 'REF-2025-001',
-    },
-    {
-      id: '2',
-      invoiceNumber: 'INV-2025-002',
-      projectName: 'Corporate Website Redesign',
-      projectId: 'proj-2',
-      amount: 8500,
-      currency: 'EUR',
-      status: 'pending',
-      issueDate: new Date('2025-01-15'),
-      dueDate: new Date('2025-01-30'),
-      description: 'Website redesign milestone 1',
-      items: [
-        {
-          description: 'UI/UX Design',
-          quantity: 1,
-          rate: 5000,
-          amount: 5000,
-        },
-        {
-          description: 'Frontend Development',
-          quantity: 14,
-          rate: 250,
-          amount: 3500,
-        },
-      ],
-      subtotal: 8500,
-      tax: 1785,
-      taxRate: 21,
-      notes: 'Payment due upon completion of design phase',
-    },
-    {
-      id: '3',
-      invoiceNumber: 'INV-2024-048',
-      projectName: 'Data Analytics Dashboard',
-      projectId: 'proj-3',
-      amount: 12000,
-      currency: 'EUR',
-      status: 'overdue',
-      issueDate: new Date('2024-12-01'),
-      dueDate: new Date('2024-12-15'),
-      description: 'Final payment for analytics dashboard',
-      items: [
-        {
-          description: 'Dashboard Development',
-          quantity: 1,
-          rate: 8000,
-          amount: 8000,
-        },
-        {
-          description: 'Data Pipeline Setup',
-          quantity: 1,
-          rate: 4000,
-          amount: 4000,
-        },
-      ],
-      subtotal: 12000,
-      tax: 2520,
-      taxRate: 21,
-      notes: 'Please process payment as soon as possible',
-    },
-  ], []);
-
-  // Load invoices
+  // Load invoices with real-time updates
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
-    } else if (user) {
-      // Simulate loading invoices
-      setTimeout(() => {
-        setInvoices(mockInvoices);
-        setFilteredInvoices(mockInvoices);
-        
-        // Calculate stats
-        const paidInvoices = mockInvoices.filter(inv => inv.status === 'paid');
-        const pendingInvoices = mockInvoices.filter(inv => inv.status === 'pending');
-        const overdueInvoices = mockInvoices.filter(inv => inv.status === 'overdue');
-        
-        setStats({
-          totalPaid: paidInvoices.reduce((sum, inv) => sum + inv.amount, 0),
-          totalPending: pendingInvoices.reduce((sum, inv) => sum + inv.amount, 0),
-          totalOverdue: overdueInvoices.reduce((sum, inv) => sum + inv.amount, 0),
-          recentPayments: paidInvoices.filter(inv => {
-            const paidDate = inv.paidDate || new Date();
-            const daysSincePaid = (Date.now() - paidDate.getTime()) / (1000 * 60 * 60 * 24);
-            return daysSincePaid <= 30;
-          }).length,
-          averagePaymentTime: 7,
-        });
-        
-        setIsLoading(false);
-      }, 1000);
+      return;
     }
-  }, [user, loading, router, mockInvoices]);
+
+    if (!user) return;
+
+    // Create real-time listener for user's invoices
+    const q = query(
+      collection(db, collections.invoices || 'invoices'),
+      where('clientId', '==', user.uid),
+      orderBy('createdAt', 'desc')
+    );
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const invoicesData = snapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            ...data,
+            // Convert Firestore timestamps to Date objects
+            issueDate: data.issueDate instanceof Timestamp ? data.issueDate.toDate() : new Date(data.issueDate),
+            dueDate: data.dueDate instanceof Timestamp ? data.dueDate.toDate() : new Date(data.dueDate),
+            paidDate: data.paidDate instanceof Timestamp ? data.paidDate.toDate() : data.paidDate ? new Date(data.paidDate) : undefined,
+            createdAt: data.createdAt instanceof Timestamp ? data.createdAt.toDate() : new Date(data.createdAt),
+            updatedAt: data.updatedAt instanceof Timestamp ? data.updatedAt.toDate() : new Date(data.updatedAt),
+          } as Invoice;
+        });
+
+        // Check for overdue invoices
+        const now = new Date();
+        const updatedInvoices = invoicesData.map(invoice => {
+          if (
+            invoice.status !== 'paid' && 
+            invoice.status !== 'cancelled' && 
+            isAfter(now, invoice.dueDate)
+          ) {
+            return { ...invoice, status: 'overdue' as InvoiceStatus };
+          }
+          return invoice;
+        });
+
+        setInvoices(updatedInvoices);
+        setFilteredInvoices(updatedInvoices);
+        calculateStats(updatedInvoices);
+        setIsLoading(false);
+      },
+      (error) => {
+        console.error('Error loading invoices:', error);
+        toast.error('Failed to load invoices');
+        setIsLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, [user, loading, router]);
+
+  // Calculate stats
+  const calculateStats = (invoicesList: Invoice[]) => {
+    const paidInvoices = invoicesList.filter(inv => inv.status === 'paid');
+    const pendingInvoices = invoicesList.filter(inv => 
+      inv.status === 'sent' || inv.status === 'viewed' || inv.status === 'partial'
+    );
+    const overdueInvoices = invoicesList.filter(inv => inv.status === 'overdue');
+    
+    // Calculate average payment time for paid invoices
+    let totalPaymentDays = 0;
+    let paymentCount = 0;
+    
+    paidInvoices.forEach(inv => {
+      if (inv.paidDate) {
+        const daysToPay = Math.floor(
+          (inv.paidDate.getTime() - inv.issueDate.getTime()) / (1000 * 60 * 60 * 24)
+        );
+        totalPaymentDays += daysToPay;
+        paymentCount++;
+      }
+    });
+    
+    const avgPaymentTime = paymentCount > 0 ? Math.round(totalPaymentDays / paymentCount) : 0;
+    
+    setStats({
+      totalPaid: paidInvoices.reduce((sum, inv) => sum + inv.financial.total, 0),
+      totalPending: pendingInvoices.reduce((sum, inv) => sum + inv.financial.total, 0),
+      totalOverdue: overdueInvoices.reduce((sum, inv) => sum + inv.financial.total, 0),
+      recentPayments: paidInvoices.filter(inv => {
+        const paidDate = inv.paidDate || new Date();
+        const daysSincePaid = (Date.now() - paidDate.getTime()) / (1000 * 60 * 60 * 24);
+        return daysSincePaid <= 30;
+      }).length,
+      averagePaymentTime: avgPaymentTime,
+    });
+  };
 
   // Filter invoices
   useEffect(() => {
@@ -238,64 +196,151 @@ export default function InvoicesPage() {
     // Apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        inv =>
-          inv.invoiceNumber.toLowerCase().includes(query) ||
-          inv.projectName.toLowerCase().includes(query) ||
-          inv.description.toLowerCase().includes(query)
-      );
+      filtered = filtered.filter(inv => {
+        // Search in invoice number
+        if (inv.invoiceNumber.toLowerCase().includes(query)) return true;
+        
+        // Search in project name if available
+        if (inv.projectId) {
+          // You might want to fetch project name from projects collection
+          // For now, we'll search in items descriptions
+          return inv.items.some(item => 
+            item.description.toLowerCase().includes(query)
+          );
+        }
+        
+        return false;
+      });
     }
 
     setFilteredInvoices(filtered);
   }, [invoices, searchQuery, statusFilter]);
 
-  const getStatusColor = (status: Invoice['status']) => {
+  const getStatusColor = (status: InvoiceStatus) => {
     switch (status) {
       case 'paid':
         return 'bg-green-500/20 text-green-500 border-green-500/30';
-      case 'pending':
+      case 'sent':
+      case 'viewed':
+        return 'bg-blue-500/20 text-blue-500 border-blue-500/30';
+      case 'partial':
         return 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30';
       case 'overdue':
         return 'bg-red-500/20 text-red-500 border-red-500/30';
       case 'cancelled':
+        return 'bg-gray-500/20 text-gray-500 border-gray-500/30';
+      case 'draft':
         return 'bg-gray-500/20 text-gray-500 border-gray-500/30';
       default:
         return 'bg-white/20 text-white border-white/30';
     }
   };
 
-  const getStatusIcon = (status: Invoice['status']) => {
+  const getStatusIcon = (status: InvoiceStatus) => {
     switch (status) {
       case 'paid':
         return <CheckCircle className="w-4 h-4" />;
-      case 'pending':
+      case 'sent':
+      case 'viewed':
         return <Clock className="w-4 h-4" />;
+      case 'partial':
+        return <AlertCircle className="w-4 h-4" />;
       case 'overdue':
         return <AlertCircle className="w-4 h-4" />;
       case 'cancelled':
         return <XCircle className="w-4 h-4" />;
+      case 'draft':
+        return <FileText className="w-4 h-4" />;
       default:
         return null;
     }
   };
 
-  const formatCurrency = (amount: number, currency: 'EUR' | 'USD') => {
-    const symbol = currency === 'EUR' ? '€' : '$';
-    return `${symbol}${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const formatCurrency = (amount: number, currency: string = 'EUR') => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
   };
 
-  const handleDownloadInvoice = (invoice: Invoice) => {
-    // Simulate PDF download
-    toast.success(`Downloading invoice ${invoice.invoiceNumber}...`);
+  const handleDownloadInvoice = async (invoice: Invoice) => {
+    setDownloadingInvoiceId(invoice.id);
+    try {
+      // For now, show a message that PDF generation is coming soon
+      // The PDF API requires proper authentication setup which needs to be configured
+      toast('PDF download will be available soon', {
+        icon: '📄',
+      });
+      
+      // When authentication is properly set up, use this code:
+      /*
+      const idToken = await user?.getIdToken();
+      const response = await fetch(`/api/invoices/${invoice.id}/pdf`, {
+        headers: {
+          'Authorization': `Bearer ${idToken}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to download invoice');
+      }
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${invoice.invoiceNumber}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      toast.success(`Downloaded invoice ${invoice.invoiceNumber}`);
+      */
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+      toast.error('Failed to download invoice');
+    } finally {
+      setDownloadingInvoiceId(null);
+    }
   };
 
-  const handleSendReminder = (invoice: Invoice) => {
-    toast.success(`Payment reminder sent for invoice ${invoice.invoiceNumber}`);
+  const handleSendReminder = async (invoice: Invoice) => {
+    try {
+      await invoiceService.sendReminder(
+        invoice.id,
+        invoice.status === 'overdue' ? 'overdue' : 'due_soon'
+      );
+      toast.success(`Payment reminder sent for invoice ${invoice.invoiceNumber}`);
+    } catch (error) {
+      console.error('Error sending reminder:', error);
+      toast.error('Failed to send payment reminder');
+    }
   };
 
   const handlePrintInvoice = (invoice: Invoice) => {
-    window.print();
-    toast.success(`Preparing invoice ${invoice.invoiceNumber} for printing...`);
+    // For now, show a message that printing is coming soon
+    toast('Invoice printing will be available soon', {
+      icon: '🖨️',
+    });
+    
+    // When authentication is properly set up, use this code:
+    // window.open(`/api/invoices/${invoice.id}/pdf`, '_blank');
+  };
+
+  const getStatusDisplayName = (status: InvoiceStatus): string => {
+    switch (status) {
+      case 'draft': return 'Draft';
+      case 'sent': return 'Sent';
+      case 'viewed': return 'Viewed';
+      case 'paid': return 'Paid';
+      case 'partial': return 'Partial';
+      case 'overdue': return 'Overdue';
+      case 'cancelled': return 'Cancelled';
+      default: return status;
+    }
   };
 
   if (loading || isLoading) {
@@ -448,11 +493,11 @@ export default function InvoicesPage() {
               Paid
             </Button>
             <Button
-              variant={statusFilter === 'pending' ? 'default' : 'outline'}
-              onClick={() => setStatusFilter('pending')}
-              className={statusFilter === 'pending' ? 'bg-orange' : ''}
+              variant={statusFilter === 'sent' ? 'default' : 'outline'}
+              onClick={() => setStatusFilter('sent')}
+              className={statusFilter === 'sent' ? 'bg-orange' : ''}
             >
-              Pending
+              Sent
             </Button>
             <Button
               variant={statusFilter === 'overdue' ? 'default' : 'outline'}
@@ -473,12 +518,21 @@ export default function InvoicesPage() {
           >
             <div className="text-center">
               <Receipt className="w-16 h-16 text-white/20 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">No invoices found</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">
+                {invoices.length === 0 ? 'No invoices yet' : 'No invoices found'}
+              </h3>
               <p className="text-white/60">
                 {searchQuery || statusFilter !== 'all'
                   ? 'Try adjusting your search or filters'
-                  : 'Your invoices will appear here once generated'}
+                  : 'Your invoices will appear here once you receive your first invoice.'}
               </p>
+              {invoices.length === 0 && (
+                <Link href="/dashboard">
+                  <Button className="mt-4 bg-orange hover:bg-orange/90">
+                    Back to Dashboard
+                  </Button>
+                </Link>
+              )}
             </div>
           </motion.div>
         ) : (
@@ -517,21 +571,32 @@ export default function InvoicesPage() {
                           </div>
                         </td>
                         <td className="p-4">
-                          <p className="text-white">{invoice.projectName}</p>
+                          <div>
+                            <p className="text-white">
+                              {invoice.items.length > 0 
+                                ? invoice.items[0].description 
+                                : 'Invoice'}
+                            </p>
+                            {invoice.items.length > 1 && (
+                              <p className="text-sm text-white/60">
+                                +{invoice.items.length - 1} more items
+                              </p>
+                            )}
+                          </div>
                         </td>
                         <td className="p-4">
                           <p className="text-white font-medium">
-                            {formatCurrency(invoice.amount + invoice.tax, invoice.currency)}
+                            {formatCurrency(invoice.financial.total, invoice.financial.currency)}
                           </p>
                           <p className="text-sm text-white/60">
-                            + {formatCurrency(invoice.tax, invoice.currency)} tax
+                            incl. {formatCurrency(invoice.financial.tax, invoice.financial.currency)} tax
                           </p>
                         </td>
                         <td className="p-4">
                           <Badge className={`${getStatusColor(invoice.status)} w-fit`}>
                             <span className="flex items-center gap-1">
                               {getStatusIcon(invoice.status)}
-                              {invoice.status}
+                              {getStatusDisplayName(invoice.status)}
                             </span>
                           </Badge>
                         </td>
@@ -547,6 +612,17 @@ export default function InvoicesPage() {
                         </td>
                         <td className="p-4">
                           <div className="flex items-center justify-end gap-2">
+                            {invoice.status !== 'paid' && invoice.status !== 'cancelled' && (
+                              <PaymentButton
+                                invoiceId={invoice.id}
+                                amount={invoice.financial.total}
+                                currency={invoice.financial.currency}
+                                status={invoice.status}
+                                onPaymentInitiated={() => {
+                                  toast.success('Redirecting to payment page...');
+                                }}
+                              />
+                            )}
                             <Button
                               variant="ghost"
                               size="icon"
@@ -555,6 +631,7 @@ export default function InvoicesPage() {
                                 setShowInvoiceDialog(true);
                               }}
                               className="text-white/60 hover:text-white"
+                              title="View invoice details"
                             >
                               <Eye className="w-4 h-4" />
                             </Button>
@@ -562,9 +639,15 @@ export default function InvoicesPage() {
                               variant="ghost"
                               size="icon"
                               onClick={() => handleDownloadInvoice(invoice)}
+                              disabled={downloadingInvoiceId === invoice.id}
                               className="text-white/60 hover:text-white"
+                              title="Download PDF"
                             >
-                              <Download className="w-4 h-4" />
+                              {downloadingInvoiceId === invoice.id ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <Download className="w-4 h-4" />
+                              )}
                             </Button>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
@@ -584,13 +667,7 @@ export default function InvoicesPage() {
                                   <Printer className="w-4 h-4 mr-2" />
                                   Print Invoice
                                 </DropdownMenuItem>
-                                {invoice.status === 'pending' && (
-                                  <DropdownMenuItem className="text-white hover:bg-white/10">
-                                    <CreditCard className="w-4 h-4 mr-2" />
-                                    Pay Now
-                                  </DropdownMenuItem>
-                                )}
-                                {(invoice.status === 'pending' || invoice.status === 'overdue') && (
+                                {(invoice.status === 'sent' || invoice.status === 'viewed' || invoice.status === 'overdue') && (
                                   <DropdownMenuItem
                                     onClick={() => handleSendReminder(invoice)}
                                     className="text-white hover:bg-white/10"
@@ -630,7 +707,7 @@ export default function InvoicesPage() {
                 <Badge className={`${getStatusColor(selectedInvoice.status)} w-fit`}>
                   <span className="flex items-center gap-1">
                     {getStatusIcon(selectedInvoice.status)}
-                    {selectedInvoice.status}
+                    {getStatusDisplayName(selectedInvoice.status)}
                   </span>
                 </Badge>
                 <div className="text-right text-sm">
@@ -642,12 +719,17 @@ export default function InvoicesPage() {
                 </div>
               </div>
 
-              {/* Project Info */}
-              <div>
-                <h3 className="text-sm font-medium text-white/60 mb-2">Project</h3>
-                <p className="text-white">{selectedInvoice.projectName}</p>
-                <p className="text-sm text-white/60 mt-1">{selectedInvoice.description}</p>
-              </div>
+              {/* Billing Address */}
+              {selectedInvoice.billingAddress && (
+                <div>
+                  <h3 className="text-sm font-medium text-white/60 mb-2">Billing Address</h3>
+                  <div className="text-white">
+                    <p>{selectedInvoice.billingAddress.street}</p>
+                    <p>{selectedInvoice.billingAddress.city}, {selectedInvoice.billingAddress.state} {selectedInvoice.billingAddress.postalCode}</p>
+                    <p>{selectedInvoice.billingAddress.country}</p>
+                  </div>
+                </div>
+              )}
 
               {/* Invoice Items */}
               <div>
@@ -658,20 +740,20 @@ export default function InvoicesPage() {
                       <tr className="border-b border-white/10">
                         <th className="text-left p-3 text-white/60 text-sm">Description</th>
                         <th className="text-center p-3 text-white/60 text-sm">Qty</th>
-                        <th className="text-right p-3 text-white/60 text-sm">Rate</th>
+                        <th className="text-right p-3 text-white/60 text-sm">Unit Price</th>
                         <th className="text-right p-3 text-white/60 text-sm">Amount</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {selectedInvoice.items.map((item, index) => (
-                        <tr key={index} className="border-b border-white/5">
+                      {selectedInvoice.items.map((item) => (
+                        <tr key={item.id} className="border-b border-white/5">
                           <td className="p-3 text-white">{item.description}</td>
                           <td className="p-3 text-center text-white">{item.quantity}</td>
                           <td className="p-3 text-right text-white">
-                            {formatCurrency(item.rate, selectedInvoice.currency)}
+                            {formatCurrency(item.unitPrice, selectedInvoice.financial.currency)}
                           </td>
                           <td className="p-3 text-right text-white">
-                            {formatCurrency(item.amount, selectedInvoice.currency)}
+                            {formatCurrency(item.total, selectedInvoice.financial.currency)}
                           </td>
                         </tr>
                       ))}
@@ -684,16 +766,34 @@ export default function InvoicesPage() {
               <div className="space-y-2">
                 <div className="flex justify-between text-white/60">
                   <span>Subtotal</span>
-                  <span>{formatCurrency(selectedInvoice.subtotal, selectedInvoice.currency)}</span>
+                  <span>{formatCurrency(selectedInvoice.financial.subtotal, selectedInvoice.financial.currency)}</span>
                 </div>
+                {selectedInvoice.financial.discount > 0 && (
+                  <div className="flex justify-between text-white/60">
+                    <span>Discount</span>
+                    <span>-{formatCurrency(selectedInvoice.financial.discount, selectedInvoice.financial.currency)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-white/60">
-                  <span>Tax ({selectedInvoice.taxRate}%)</span>
-                  <span>{formatCurrency(selectedInvoice.tax, selectedInvoice.currency)}</span>
+                  <span>Tax</span>
+                  <span>{formatCurrency(selectedInvoice.financial.tax, selectedInvoice.financial.currency)}</span>
                 </div>
                 <div className="flex justify-between text-white font-medium text-lg pt-2 border-t border-white/10">
                   <span>Total</span>
-                  <span>{formatCurrency(selectedInvoice.amount + selectedInvoice.tax, selectedInvoice.currency)}</span>
+                  <span>{formatCurrency(selectedInvoice.financial.total, selectedInvoice.financial.currency)}</span>
                 </div>
+                {selectedInvoice.financial.paid > 0 && selectedInvoice.financial.paid < selectedInvoice.financial.total && (
+                  <>
+                    <div className="flex justify-between text-green-400">
+                      <span>Paid</span>
+                      <span>{formatCurrency(selectedInvoice.financial.paid, selectedInvoice.financial.currency)}</span>
+                    </div>
+                    <div className="flex justify-between text-orange font-medium">
+                      <span>Balance Due</span>
+                      <span>{formatCurrency(selectedInvoice.financial.balance, selectedInvoice.financial.currency)}</span>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Payment Info */}
@@ -701,17 +801,12 @@ export default function InvoicesPage() {
                 <div>
                   <h3 className="text-sm font-medium text-white/60 mb-2">Payment Information</h3>
                   <p className="text-white">Method: {selectedInvoice.paymentMethod}</p>
-                  {selectedInvoice.paymentReference && (
-                    <p className="text-white">Reference: {selectedInvoice.paymentReference}</p>
+                  {selectedInvoice.paymentDetails?.transactionId && (
+                    <p className="text-white">Transaction ID: {selectedInvoice.paymentDetails.transactionId}</p>
                   )}
-                </div>
-              )}
-
-              {/* Notes */}
-              {selectedInvoice.notes && (
-                <div>
-                  <h3 className="text-sm font-medium text-white/60 mb-2">Notes</h3>
-                  <p className="text-white/80">{selectedInvoice.notes}</p>
+                  {selectedInvoice.paymentDetails?.reference && (
+                    <p className="text-white">Reference: {selectedInvoice.paymentDetails.reference}</p>
+                  )}
                 </div>
               )}
 
@@ -719,16 +814,32 @@ export default function InvoicesPage() {
               <div className="flex gap-2">
                 <Button
                   onClick={() => handleDownloadInvoice(selectedInvoice)}
+                  disabled={downloadingInvoiceId === selectedInvoice.id}
                   className="flex-1 bg-orange hover:bg-orange/90"
                 >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download PDF
+                  {downloadingInvoiceId === selectedInvoice.id ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Downloading...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-4 h-4 mr-2" />
+                      Download PDF
+                    </>
+                  )}
                 </Button>
-                {selectedInvoice.status === 'pending' && (
-                  <Button variant="outline" className="flex-1">
-                    <CreditCard className="w-4 h-4 mr-2" />
-                    Pay Now
-                  </Button>
+                {selectedInvoice.status !== 'paid' && selectedInvoice.status !== 'cancelled' && (
+                  <PaymentButton
+                    invoiceId={selectedInvoice.id}
+                    amount={selectedInvoice.financial.total}
+                    currency={selectedInvoice.financial.currency}
+                    status={selectedInvoice.status}
+                    onPaymentInitiated={() => {
+                      setShowInvoiceDialog(false);
+                      toast.success('Redirecting to payment page...');
+                    }}
+                  />
                 )}
               </div>
             </div>

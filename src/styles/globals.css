@@ -486,6 +486,12 @@
   }
 }
 
+/* React Hot Toast Fixes */
+.toaster-container > div {
+  position: fixed !important;
+  z-index: 9999 !important;
+}
+
 /* Loading skeleton animation */
 @keyframes skeleton-loading {
   0% {
