@@ -43,6 +43,7 @@ import {
 import { Link } from '@/i18n/routing';
 import { firestoreProjectService as projectService } from '@/services/firestore/projects';
 import { Project, ProjectStatus } from '@/types';
+import { ProjectRequestDialog } from '@/components/dialogs/ProjectRequestDialog';
 
 export default function ProjectsPage() {
   const router = useRouter();
@@ -58,6 +59,7 @@ export default function ProjectsPage() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [projectDialogOpen, setProjectDialogOpen] = useState(false);
 
   // Fetch projects from API
   const fetchProjects = async () => {
@@ -453,12 +455,14 @@ export default function ProjectsPage() {
               transform your business with cutting-edge AI solutions.
             </p>
 
-            <Link href="/contact?type=project">
-              <Button size="lg" className="bg-orange hover:bg-orange/90">
-                <Plus className="w-5 h-5 mr-2" />
-                Request Your First Project
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              className="bg-orange hover:bg-orange/90"
+              onClick={() => setProjectDialogOpen(true)}
+            >
+              <Plus className="w-5 h-5 mr-2" />
+              Request Your First Project
+            </Button>
           </motion.div>
         )}
       </div>
@@ -534,6 +538,12 @@ export default function ProjectsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Project Request Dialog */}
+      <ProjectRequestDialog 
+        open={projectDialogOpen} 
+        onOpenChange={setProjectDialogOpen} 
+      />
     </main>
   );
 }
