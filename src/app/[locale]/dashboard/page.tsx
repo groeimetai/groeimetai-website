@@ -39,6 +39,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Link } from '@/i18n/routing';
 import DashboardChat from '@/components/DashboardChat';
+import ChatManagement from '@/components/admin/ChatManagement';
 
 interface ProjectStage {
   id: number;
@@ -483,14 +484,14 @@ export default function DashboardPage() {
             )}
           </motion.div>
 
-          {/* Support Chat Widget */}
+          {/* Support Chat Widget / Chat Management */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 flex flex-col h-[600px]"
           >
-            <DashboardChat />
+            {isAdmin ? <ChatManagement /> : <DashboardChat />}
           </motion.div>
         </div>
 
