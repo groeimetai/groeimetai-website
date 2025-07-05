@@ -26,7 +26,7 @@ export function PaymentButton({
     setIsLoading(true);
 
     try {
-      // The API expects [invoiceId] not [id] in the route
+      // Create payment link for the invoice
       const response = await fetch(`/api/invoices/${invoiceId}/create-payment`, {
         method: 'POST',
         headers: {

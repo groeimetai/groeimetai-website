@@ -77,9 +77,9 @@ import { format, formatDistanceToNow, addDays, isAfter } from 'date-fns';
 import { BulkActions, useBulkSelection } from '@/components/admin/BulkActions';
 import type { BulkActionType } from '@/components/admin/BulkActions';
 import { notificationService } from '@/services/notificationService';
-import { invoiceService } from '@/services/invoiceService';
-import { paymentService } from '@/services/paymentService';
+// Invoice and payment operations are handled through API routes
 import { Invoice, InvoiceItem, InvoiceStatus, User } from '@/types';
+import { updateDoc } from 'firebase/firestore';
 import { toast } from 'react-hot-toast';
 import { auth } from '@/lib/firebase/config';
 
@@ -335,29 +335,48 @@ export default function AdminInvoicesPage() {
         return;
       }
 
-      const invoice = await invoiceService.createInvoice({
-        clientId: formData.clientId,
-        billingAddress: {
-          street: selectedClient.company || '',
-          city: '',
-          state: '',
-          country: 'Netherlands',
-          postalCode: '',
+      const currentUser = auth.currentUser;
+      if (!currentUser) throw new Error('No authenticated user');
+      
+      const token = await currentUser.getIdToken();
+      if (!token) throw new Error('No authentication token');
+
+      const response = await fetch('/api/invoices/create', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-        projectId: formData.projectId,
-        type: 'standard',
-        items: formData.items.filter(item => item.description && item.total > 0),
-        dueDate: formData.dueDate,
-        issueDate: new Date(),
-        createdBy: user.uid,
+        body: JSON.stringify({
+          clientId: formData.clientId,
+          billingAddress: {
+            street: selectedClient.company || '',
+            city: '',
+            state: '',
+            country: 'Netherlands',
+            postalCode: '',
+          },
+          projectId: formData.projectId,
+          type: 'standard',
+          items: formData.items.filter(item => item.description && item.total > 0),
+          dueDate: formData.dueDate,
+          issueDate: new Date(),
+          sendEmail: false,
+        }),
       });
 
-      toast.success('Invoice created successfully');
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create invoice');
+      }
+
+      const { data: invoice } = await response.json();
+      toast.success(`Invoice ${invoice.invoiceNumber} created successfully`);
       setIsCreateDialogOpen(false);
       resetForm();
     } catch (error) {
       console.error('Error creating invoice:', error);
-      toast.error('Failed to create invoice');
+      toast.error(error instanceof Error ? error.message : 'Failed to create invoice');
     }
   };
 
@@ -413,8 +432,30 @@ export default function AdminInvoicesPage() {
   const sendPaymentReminder = async (invoice: InvoiceWithClient) => {
     setSendingReminder(true);
     try {
+      const currentUser = auth.currentUser;
+      if (!currentUser) throw new Error('No authenticated user');
+      
+      const token = await currentUser.getIdToken();
+      if (!token) throw new Error('No authentication token');
+
       const reminderType = invoice.status === 'overdue' ? 'overdue' : 'due_soon';
-      await invoiceService.sendReminder(invoice.id, reminderType);
+      const response = await fetch(`/api/invoices/${invoice.id}/send`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          recipientEmail: invoice.clientEmail,
+          recipientName: invoice.clientName,
+          reminderType: reminderType,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send reminder');
+      }
+
       toast.success('Payment reminder sent successfully');
     } catch (error) {
       console.error('Error sending reminder:', error);
@@ -428,22 +469,40 @@ export default function AdminInvoicesPage() {
   const createPaymentLink = async (invoice: InvoiceWithClient) => {
     setCreatingPaymentLink(true);
     try {
+      const currentUser = auth.currentUser;
+      if (!currentUser) throw new Error('No authenticated user');
+      
+      const token = await currentUser.getIdToken();
+      if (!token) throw new Error('No authentication token');
+
       const baseUrl = window.location.origin;
-      const payment = await paymentService.createPayment({
-        invoiceId: invoice.id,
-        redirectUrl: `${baseUrl}/payment/success?invoiceId=${invoice.id}`,
-        webhookUrl: `${baseUrl}/api/webhooks/mollie`,
-        cancelUrl: `${baseUrl}/payment/cancelled?invoiceId=${invoice.id}`,
+      const response = await fetch('/api/payments/create', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          invoiceId: invoice.id,
+          redirectUrl: `${baseUrl}/payment/success?invoiceId=${invoice.id}`,
+          cancelUrl: `${baseUrl}/payment/cancelled?invoiceId=${invoice.id}`,
+        }),
       });
 
-      if (payment.checkoutUrl) {
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create payment link');
+      }
+
+      const { data } = await response.json();
+      if (data.checkoutUrl) {
         // Copy payment link to clipboard
-        await navigator.clipboard.writeText(payment.checkoutUrl);
+        await navigator.clipboard.writeText(data.checkoutUrl);
         toast.success('Payment link copied to clipboard');
       }
     } catch (error) {
       console.error('Error creating payment link:', error);
-      toast.error('Failed to create payment link');
+      toast.error(error instanceof Error ? error.message : 'Failed to create payment link');
     } finally {
       setCreatingPaymentLink(false);
     }
@@ -511,7 +570,10 @@ export default function AdminInvoicesPage() {
 
         case 'updateStatus':
           for (const invoiceId of data.ids) {
-            await invoiceService.updateInvoice(invoiceId, { status: data.status });
+            await updateDoc(doc(db, collections.invoices || 'invoices', invoiceId), {
+              status: data.status,
+              updatedAt: Timestamp.now(),
+            });
           }
           toast.success(`${data.ids.length} invoices updated`);
           break;

@@ -14,7 +14,7 @@ import {
 } from 'firebase/firestore';
 import { Invoice, InvoiceStatus, InvoiceType, InvoiceItem, InvoiceFinancial } from '@/types';
 import { emailService } from './emailService';
-import { pdfService } from './pdfService';
+// PDF generation is handled by invoicePdfService when needed
 
 class InvoiceService {
   /**
@@ -167,7 +167,8 @@ class InvoiceService {
       
       // Generate PDF if not already generated
       if (!invoice.pdfUrl) {
-        const pdfUrl = await pdfService.generateInvoicePdf(invoice);
+        // PDF is generated on-demand via the API endpoint
+        const pdfUrl = `/api/invoices/${invoice.id}/pdf`;
         await this.updateInvoice(invoiceId, { 
           pdfUrl,
           pdfGeneratedAt: new Date()
@@ -185,8 +186,7 @@ class InvoiceService {
       
       // Update invoice status
       await this.updateInvoice(invoiceId, {
-        status: 'sent',
-        sentAt: new Date()
+        status: 'sent'
       });
     } catch (error) {
       console.error('Error sending invoice:', error);

@@ -46,7 +46,7 @@ import {
 import { Link } from '@/i18n/routing';
 import { format, formatDistanceToNow, isAfter } from 'date-fns';
 import { toast } from 'react-hot-toast';
-import { invoiceService } from '@/services/invoiceService';
+// Invoice operations are handled through API routes
 import { PaymentButton } from '@/components/invoice/PaymentButton';
 import { Invoice, InvoiceStatus } from '@/types';
 import { 
@@ -309,11 +309,16 @@ export default function InvoicesPage() {
 
   const handleSendReminder = async (invoice: Invoice) => {
     try {
-      await invoiceService.sendReminder(
+      // TODO: Implement reminder API endpoint
+      toast('Reminder functionality coming soon', {
+        icon: '📧',
+      });
+      return;
+      /*await invoiceService.sendReminder(
         invoice.id,
         invoice.status === 'overdue' ? 'overdue' : 'due_soon'
       );
-      toast.success(`Payment reminder sent for invoice ${invoice.invoiceNumber}`);
+      toast.success(`Payment reminder sent for invoice ${invoice.invoiceNumber}`);*/
     } catch (error) {
       console.error('Error sending reminder:', error);
       toast.error('Failed to send payment reminder');

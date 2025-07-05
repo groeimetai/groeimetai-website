@@ -50,17 +50,21 @@ export type PaymentStatus =
   | 'expired';
 
 class PaymentService {
-  private mollieClient;
+  private mollieClient: any = null;
 
   constructor() {
-    // Initialize Mollie client
-    const apiKey = process.env.MOLLIE_API_KEY;
-    if (!apiKey) {
-      console.error('MOLLIE_API_KEY is not configured');
-      throw new Error('Payment service not configured');
+    // Mollie client is initialized lazily when needed
+  }
+
+  private getMollieClient() {
+    if (!this.mollieClient) {
+      const apiKey = process.env.MOLLIE_API_KEY;
+      if (!apiKey) {
+        throw new Error('MOLLIE_API_KEY is not configured. Please add it to your environment variables.');
+      }
+      this.mollieClient = createMollieClient({ apiKey });
     }
-    
-    this.mollieClient = createMollieClient({ apiKey });
+    return this.mollieClient;
   }
 
   /**
@@ -91,7 +95,8 @@ class PaymentService {
       }
 
       // Create Mollie payment
-      const molliePayment = await this.mollieClient.payments.create({
+      const mollieClient = this.getMollieClient();
+      const molliePayment = await mollieClient.payments.create({
         amount: {
           value: invoice.financial.balance.toFixed(2),
           currency: invoice.financial.currency || 'EUR'
@@ -105,9 +110,7 @@ class PaymentService {
           clientId: invoice.clientId,
           organizationId: invoice.organizationId || ''
         },
-        locale: client.preferences?.language === 'nl' ? 'nl_NL' : 'en_US',
-        customerName: client.fullName || client.email,
-        billingEmail: client.email
+        locale: (client.preferences?.language === 'nl' ? 'nl_NL' : 'en_US') as any
       });
 
       // Create payment record
@@ -141,12 +144,12 @@ class PaymentService {
         updatedAt: serverTimestamp()
       });
 
-      // Update invoice with payment ID
+      // Update invoice with payment details
       await invoiceService.updateInvoice(invoice.id, {
-        paymentId: payment.id,
         paymentDetails: {
-          paymentId: payment.id,
-          transactionId: molliePayment.id
+          transactionId: molliePayment.id,
+          reference: molliePayment.getCheckoutUrl() || '',
+          notes: `Mollie payment: ${molliePayment.status}`
         }
       });
 
@@ -163,7 +166,8 @@ class PaymentService {
   async handleWebhook(paymentId: string): Promise<void> {
     try {
       // Get payment from Mollie
-      const molliePayment = await this.mollieClient.payments.get(paymentId);
+      const mollieClient = this.getMollieClient();
+      const molliePayment = await mollieClient.payments.get(paymentId);
       
       // Find payment in database by Mollie payment ID
       const paymentDoc = await this.getPaymentByMollieId(molliePayment.id);
@@ -306,7 +310,8 @@ class PaymentService {
 
       // Otherwise, check with Mollie
       if (payment.molliePaymentId) {
-        const molliePayment = await this.mollieClient.payments.get(payment.molliePaymentId);
+        const mollieClient = this.getMollieClient();
+        const molliePayment = await mollieClient.payments.get(payment.molliePaymentId);
         const newStatus = this.mapMollieStatus(molliePayment.status);
         
         // Update local status if different

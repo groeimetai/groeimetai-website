@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { mollieService, InvoiceData } from '@/services/mollieService';
-import { firebaseDocumentService } from '@/services/firebaseDocumentService';
+import { getMollieService, type InvoiceData } from '@/services/mollieService';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { getServerSession } from 'next-auth';
+import { Invoice } from '@/types';
 
 /**
- * POST /api/invoices/[invoiceId]/create-payment
+ * POST /api/invoices/[id]/create-payment
  * Create a Mollie payment link for an invoice
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { invoiceId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     // Check authentication
@@ -21,20 +23,20 @@ export async function POST(
       );
     }
 
-    const { invoiceId } = params;
+    const invoiceId = params.id;
 
     // Fetch invoice from Firebase
-    const invoice = await firebaseDocumentService.getDocument({
-      collection: 'invoices',
-      docId: invoiceId,
-    });
+    const invoiceRef = doc(db, 'invoices', invoiceId);
+    const invoiceSnap = await getDoc(invoiceRef);
 
-    if (!invoice) {
+    if (!invoiceSnap.exists()) {
       return NextResponse.json(
         { error: 'Invoice not found' },
         { status: 404 }
       );
     }
+
+    const invoice = { id: invoiceSnap.id, ...invoiceSnap.data() } as Invoice;
 
     // Check if invoice is already paid
     if (invoice.status === 'paid') {
@@ -44,7 +46,9 @@ export async function POST(
       );
     }
 
-    // Check if invoice has a pending payment
+    // TODO: Check if invoice has a pending payment once we add Mollie payment tracking to the Invoice model
+    // For now, always create a new payment link
+    /*
     if (invoice.paymentDetails?.paymentId && invoice.paymentDetails?.status === 'open') {
       // Check if the existing payment is still valid
       try {
@@ -64,42 +68,38 @@ export async function POST(
         console.log('Could not fetch existing payment, creating new one');
       }
     }
+    */
 
     // Prepare invoice data for Mollie
     const invoiceData: InvoiceData = {
       id: invoiceId,
-      customerId: invoice.customerId || session.user?.id || 'unknown',
-      customerName: invoice.customerName || session.user?.name || 'Customer',
-      amount: invoice.totalAmount || invoice.amount,
-      currency: invoice.currency || 'EUR',
-      description: invoice.description,
-      items: invoice.items?.map((item: any) => ({
-        description: item.description || item.name,
-        quantity: item.quantity || 1,
-        price: item.price || item.amount,
+      customerId: invoice.clientId,
+      customerName: 'Customer', // TODO: Fetch customer name from users collection
+      amount: invoice.financial.total,
+      currency: invoice.financial.currency || 'EUR',
+      description: `Invoice ${invoice.invoiceNumber}`,
+      items: invoice.items?.map((item) => ({
+        description: item.description,
+        quantity: item.quantity,
+        price: item.unitPrice,
       })),
     };
 
     // Create payment
+    const mollieService = getMollieService();
     const paymentResult = await mollieService.createPayment(invoiceData);
 
     // Update invoice with payment details
-    await firebaseDocumentService.updateDocument({
-      collection: 'invoices',
-      docId: invoiceId,
-      data: {
-        paymentDetails: {
-          paymentId: paymentResult.paymentId,
-          checkoutUrl: paymentResult.checkoutUrl,
-          status: paymentResult.status,
-          createdAt: new Date().toISOString(),
-        },
-        status: 'pending_payment',
-        updatedAt: new Date().toISOString(),
-      },
+    const { updateDoc, Timestamp } = await import('firebase/firestore');
+    await updateDoc(invoiceRef, {
+      'paymentDetails.transactionId': paymentResult.paymentId,
+      'paymentDetails.reference': paymentResult.checkoutUrl,
+      'paymentDetails.notes': `Payment status: ${paymentResult.status}`,
+      updatedAt: Timestamp.now(),
     });
 
-    // Log activity
+    // TODO: Log activity once activity logs collection is set up
+    /*
     await firebaseDocumentService.createDocument({
       collection: 'activityLogs',
       data: {
@@ -116,6 +116,7 @@ export async function POST(
         timestamp: new Date().toISOString(),
       },
     });
+    */
 
     return NextResponse.json({
       success: true,
@@ -156,20 +157,20 @@ export async function GET(
     const { invoiceId } = params;
 
     // Fetch invoice from Firebase
-    const invoice = await firebaseDocumentService.getDocument({
-      collection: 'invoices',
-      docId: invoiceId,
-    });
+    const invoiceRef = doc(db, 'invoices', invoiceId);
+    const invoiceSnap = await getDoc(invoiceRef);
 
-    if (!invoice) {
+    if (!invoiceSnap.exists()) {
       return NextResponse.json(
         { error: 'Invoice not found' },
         { status: 404 }
       );
     }
 
+    const invoice = { id: invoiceSnap.id, ...invoiceSnap.data() } as Invoice;
+
     // Check if invoice has payment details
-    if (!invoice.paymentDetails?.paymentId) {
+    if (!invoice.paymentDetails?.transactionId) {
       return NextResponse.json({
         status: 'no_payment',
         message: 'No payment has been created for this invoice',
@@ -177,12 +178,13 @@ export async function GET(
     }
 
     // Get payment status from Mollie
-    const payment = await mollieService.getPayment(invoice.paymentDetails.paymentId);
+    const mollieServiceInstance = getMollieService();
+    const payment = await mollieServiceInstance.getPayment(invoice.paymentDetails.transactionId);
 
     return NextResponse.json({
       paymentId: payment.id,
       status: payment.status,
-      statusText: mollieService.getPaymentStatusText(payment.status),
+      statusText: mollieServiceInstance.getPaymentStatusText(payment.status),
       amount: payment.amount,
       paidAt: payment.paidAt,
       method: payment.method,

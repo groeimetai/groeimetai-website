@@ -193,8 +193,9 @@ class MollieService {
       const payment = await this.getPayment(body.id);
 
       // Extract metadata
-      const invoiceId = payment.metadata?.invoiceId as string;
-      const customerId = payment.metadata?.customerId as string;
+      const metadata = payment.metadata as { invoiceId?: string; customerId?: string } | undefined;
+      const invoiceId = metadata?.invoiceId;
+      const customerId = metadata?.customerId;
 
       if (!invoiceId || !customerId) {
         throw new Error('Missing invoice or customer ID in payment metadata');
@@ -283,8 +284,20 @@ class MollieService {
   }
 }
 
-// Export singleton instance
-export const mollieService = new MollieService();
+// Check if API key is configured
+const MOLLIE_API_KEY = process.env.MOLLIE_API_KEY || '';
+if (!MOLLIE_API_KEY) {
+  console.warn('MOLLIE_API_KEY is not configured');
+}
+
+// Export a function to get the service instance
+// This prevents errors during build time
+export function getMollieService() {
+  if (!MOLLIE_API_KEY) {
+    throw new Error('Payment service not configured');
+  }
+  return new MollieService();
+}
 
 // Export types for use in other modules
 export type { PaymentRequest, InvoiceData, PaymentResult };

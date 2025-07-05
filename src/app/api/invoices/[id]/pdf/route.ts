@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyIdToken } from '@/lib/firebase/admin';
 import { invoiceService } from '@/services/invoiceService';
-import { pdfService } from '@/services/pdfService';
+import { invoicePdfService } from '@/services/invoicePdfService';
 
 // GET /api/invoices/[id]/pdf
 export async function GET(
@@ -67,7 +67,7 @@ export async function GET(
     }
 
     // Generate PDF buffer for direct download
-    const pdfBuffer = await pdfService.generateInvoicePdfBuffer(invoice);
+    const pdfBuffer = Buffer.from(await invoicePdfService.generateInvoicePDF(invoice), 'base64');
 
     // Return PDF as response
     return new NextResponse(pdfBuffer, {
