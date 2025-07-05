@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import Footer from '@/components/layout/Footer';
 import type { RootLayoutProps } from '@/types/layout';
 import { locales } from '@/i18n';
+import { LocaleProviders } from '@/components/LocaleProviders';
 
 // Dynamically import Navigation to avoid SSR issues with router
 const Navigation = dynamic(() => import('@/components/layout/Navigation'), {
@@ -32,9 +33,11 @@ export default async function LocaleLayout({ children, params: { locale } }: Roo
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <Navigation />
-      {children}
-      <Footer />
+      <LocaleProviders>
+        <Navigation />
+        {children}
+        <Footer />
+      </LocaleProviders>
     </NextIntlClientProvider>
   );
 }

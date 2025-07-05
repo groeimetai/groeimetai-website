@@ -4,8 +4,6 @@ import { ReactNode } from 'react';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from 'react-hot-toast';
-import { CommandPaletteProvider } from '@/components/CommandPalette';
-import { HelpProvider } from '@/components/HelpSystem';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -21,11 +19,7 @@ export function Providers({ children }: ProvidersProps) {
       forcedTheme="dark"
     >
       <AuthProvider>
-        <HelpProvider>
-          <CommandPaletteProvider>
-            {children}
-          </CommandPaletteProvider>
-        </HelpProvider>
+        {children}
         <Toaster
           position="top-right"
           toastOptions={{
