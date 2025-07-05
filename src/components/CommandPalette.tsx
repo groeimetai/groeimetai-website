@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/contexts/AuthContext';
 import { useHelp } from '@/components/HelpSystem';
+import { ProjectRequestDialog } from '@/components/dialogs/ProjectRequestDialog';
 import {
   Search,
   FileText,
@@ -348,8 +349,9 @@ function CommandPaletteBase({
   const [search, setSearch] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [projectDialogOpen, setProjectDialogOpen] = useState(false);
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { openHelpCenter, startTutorial } = useHelp();
 
   // Ensure we're on the client side
@@ -363,120 +365,6 @@ function CommandPaletteBase({
       router.push(path);
     }
   }, [mounted, router]);
-
-  // Mock data - In a real app, this would come from your API
-  const mockProjects: Project[] = useMemo(() => [
-    {
-      id: '1',
-      name: 'AI Chatbot Development',
-      description: 'Custom chatbot for customer service',
-      type: 'implementation',
-      status: 'active',
-      priority: 'high',
-      clientId: user?.uid || '',
-      consultantId: 'consultant1',
-      teamIds: [],
-      startDate: new Date(),
-      estimatedHours: 200,
-      actualHours: 120,
-      budget: { amount: 50000, currency: 'USD', type: 'fixed' },
-      milestones: [],
-      tags: ['ai', 'chatbot', 'nlp'],
-      categories: ['development'],
-      technologies: ['Python', 'TensorFlow', 'React'],
-      documentIds: [],
-      meetingIds: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      createdBy: 'system'
-    },
-    {
-      id: '2',
-      name: 'ServiceNow Integration',
-      description: 'ServiceNow workflow automation',
-      type: 'consultation',
-      status: 'completed',
-      priority: 'medium',
-      clientId: user?.uid || '',
-      consultantId: 'consultant2',
-      teamIds: [],
-      startDate: new Date(),
-      estimatedHours: 80,
-      actualHours: 75,
-      budget: { amount: 300, currency: 'USD', type: 'hourly', hourlyRate: 300 },
-      milestones: [],
-      tags: ['servicenow', 'automation'],
-      categories: ['integration'],
-      technologies: ['ServiceNow', 'JavaScript'],
-      documentIds: [],
-      meetingIds: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      createdBy: 'system',
-      completedAt: new Date()
-    }
-  ], [user]);
-
-  const mockUsers: User[] = useMemo(() => [
-    {
-      uid: 'consultant1',
-      email: 'john.doe@groeimetai.com',
-      displayName: 'John Doe',
-      firstName: 'John',
-      lastName: 'Doe',
-      role: 'consultant',
-      permissions: ['manage_projects', 'view_analytics'],
-      isActive: true,
-      isVerified: true,
-      preferences: {
-        language: 'en',
-        timezone: 'UTC',
-        theme: 'dark',
-        notifications: { email: true, push: true, sms: false, inApp: true }
-      },
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      lastLoginAt: new Date(),
-      lastActivityAt: new Date(),
-      stats: {
-        projectsCount: 15,
-        consultationsCount: 45,
-        messagesCount: 320,
-        totalSpent: 0
-      },
-      jobTitle: 'Senior AI Consultant',
-      photoURL: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John'
-    },
-    {
-      uid: 'consultant2',
-      email: 'jane.smith@groeimetai.com',
-      displayName: 'Jane Smith',
-      firstName: 'Jane',
-      lastName: 'Smith',
-      role: 'consultant',
-      permissions: ['manage_projects', 'view_analytics'],
-      isActive: true,
-      isVerified: true,
-      preferences: {
-        language: 'en',
-        timezone: 'UTC',
-        theme: 'light',
-        notifications: { email: true, push: true, sms: true, inApp: true }
-      },
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      lastLoginAt: new Date(),
-      lastActivityAt: new Date(),
-      stats: {
-        projectsCount: 23,
-        consultationsCount: 67,
-        messagesCount: 456,
-        totalSpent: 0
-      },
-      jobTitle: 'ServiceNow Specialist',
-      photoURL: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jane'
-    }
-  ], []);
 
   // Create command items
   const createCommandItems = useCallback((): CommandItem[] => {
@@ -492,7 +380,7 @@ function CommandPaletteBase({
       icon: <Plus className="w-4 h-4" />,
       keywords: ['new', 'create', 'project', 'start'],
       action: () => {
-        navigateTo('/quote-request');
+        setProjectDialogOpen(true);
         setOpen(false);
       },
       shortcut: 'N',
@@ -605,62 +493,7 @@ function CommandPaletteBase({
       }
     });
 
-    items.push({
-      id: 'nav-analytics',
-      type: 'navigation',
-      category: 'Navigation',
-      title: 'Analytics',
-      description: 'View project analytics',
-      icon: <BarChart className="w-4 h-4" />,
-      keywords: ['analytics', 'stats', 'reports', 'data'],
-      action: () => {
-        navigateTo('/dashboard/analytics');
-        setOpen(false);
-      },
-      isPro: true
-    });
 
-    // Projects
-    mockProjects.forEach(project => {
-      const statusIcon = project.status === 'active' ? <CircleDot className="w-4 h-4 text-green-500" /> :
-                       project.status === 'completed' ? <CheckCircle className="w-4 h-4 text-blue-500" /> :
-                       <AlertCircle className="w-4 h-4 text-yellow-500" />;
-      
-      items.push({
-        id: `project-${project.id}`,
-        type: 'project',
-        category: 'Projects',
-        title: project.name,
-        description: project.description,
-        icon: statusIcon,
-        keywords: [...project.tags, ...project.technologies, project.type],
-        action: () => {
-          navigateTo(`/dashboard/projects/${project.id}`);
-          setOpen(false);
-        },
-        badge: project.priority === 'high' ? 'High Priority' : undefined,
-        badgeVariant: project.priority === 'high' ? 'destructive' : 'default',
-        metadata: project
-      });
-    });
-
-    // Users
-    mockUsers.forEach(user => {
-      items.push({
-        id: `user-${user.uid}`,
-        type: 'user',
-        category: 'Users',
-        title: user.displayName,
-        description: user.jobTitle,
-        icon: <UserIcon className="w-4 h-4" />,
-        keywords: [user.email, user.firstName, user.lastName, user.jobTitle || ''],
-        action: () => {
-          navigateTo(`/dashboard/users/${user.uid}`);
-          setOpen(false);
-        },
-        metadata: user
-      });
-    });
 
     // Help Articles - In a real app, this would come from your API or context
     const helpArticles = [
@@ -698,71 +531,15 @@ function CommandPaletteBase({
 
     // Settings
     items.push({
-      id: 'settings-profile',
+      id: 'settings-main',
       type: 'setting',
       category: 'Settings',
-      title: 'Edit Profile',
-      description: 'Update your profile information',
-      icon: <UserIcon className="w-4 h-4" />,
-      keywords: ['profile', 'account', 'settings', 'edit'],
+      title: 'Settings',
+      description: 'Manage your account settings',
+      icon: <Settings className="w-4 h-4" />,
+      keywords: ['settings', 'preferences', 'account', 'profile'],
       action: () => {
-        navigateTo('/dashboard/settings/profile');
-        setOpen(false);
-      }
-    });
-
-    items.push({
-      id: 'settings-notifications',
-      type: 'setting',
-      category: 'Settings',
-      title: 'Notification Settings',
-      description: 'Configure notification preferences',
-      icon: <Bell className="w-4 h-4" />,
-      keywords: ['notifications', 'alerts', 'settings'],
-      action: () => {
-        navigateTo('/dashboard/settings/notifications');
-        setOpen(false);
-      }
-    });
-
-    items.push({
-      id: 'settings-security',
-      type: 'setting',
-      category: 'Settings',
-      title: 'Security Settings',
-      description: 'Manage security and privacy',
-      icon: <Shield className="w-4 h-4" />,
-      keywords: ['security', 'privacy', 'password', '2fa'],
-      action: () => {
-        navigateTo('/dashboard/settings/security');
-        setOpen(false);
-      }
-    });
-
-    items.push({
-      id: 'settings-appearance',
-      type: 'setting',
-      category: 'Settings',
-      title: 'Appearance',
-      description: 'Customize theme and display',
-      icon: <Palette className="w-4 h-4" />,
-      keywords: ['theme', 'dark', 'light', 'appearance', 'display'],
-      action: () => {
-        navigateTo('/dashboard/settings/appearance');
-        setOpen(false);
-      }
-    });
-
-    items.push({
-      id: 'settings-shortcuts',
-      type: 'setting',
-      category: 'Settings',
-      title: 'Keyboard Shortcuts',
-      description: 'View and customize shortcuts',
-      icon: <Keyboard className="w-4 h-4" />,
-      keywords: ['keyboard', 'shortcuts', 'hotkeys'],
-      action: () => {
-        navigateTo('/dashboard/settings/shortcuts');
+        navigateTo('/dashboard/settings');
         setOpen(false);
       }
     });
@@ -827,16 +604,15 @@ function CommandPaletteBase({
         description: 'Sign out of your account',
         icon: <LogOut className="w-4 h-4" />,
         keywords: ['logout', 'signout', 'exit'],
-        action: () => {
-          // Handle logout
-          navigateTo('/logout');
+        action: async () => {
           setOpen(false);
+          await logout();
         }
       });
     }
 
     return items;
-  }, [user, navigateTo, setOpen, openHelpCenter, startTutorial, mockProjects, mockUsers]);
+  }, [user, navigateTo, setOpen, openHelpCenter, startTutorial, logout, setProjectDialogOpen]);
 
   // Filter items based on search
   const filteredItems = useMemo(() => {
@@ -869,7 +645,7 @@ function CommandPaletteBase({
     
     // Sort groups by priority
     const sortedGroups: CommandGroup[] = [];
-    const categoryOrder = ['Actions', 'Navigation', 'Projects', 'Users', 'Help', 'Settings', 'Admin'];
+    const categoryOrder = ['Actions', 'Navigation', 'Help', 'Settings', 'Admin'];
     
     categoryOrder.forEach(category => {
       if (groups[category]) {
@@ -918,9 +694,10 @@ function CommandPaletteBase({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="overflow-hidden p-0 max-w-2xl bg-black/95 border-white/20">
-        <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-white/60 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
+    <>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="overflow-hidden p-0 max-w-2xl bg-black/95 border-white/20">
+          <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-white/60 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
           <div className="flex items-center border-b border-white/20 px-3">
             <CommandIcon className="mr-2 h-4 w-4 shrink-0 text-white/60" />
             <Command.Input
@@ -1001,6 +778,11 @@ function CommandPaletteBase({
         </Command>
       </DialogContent>
     </Dialog>
+    <ProjectRequestDialog 
+      open={projectDialogOpen} 
+      onOpenChange={setProjectDialogOpen} 
+    />
+    </>
   );
 }
 

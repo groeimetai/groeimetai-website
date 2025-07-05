@@ -18,7 +18,7 @@ import {
   Search,
   ClipboardList,
   Shield,
-  Database,
+  Activity,
   ChevronRight,
 } from 'lucide-react';
 import { useRouter } from '@/i18n/routing';
@@ -26,6 +26,7 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { ProjectRequestDialog } from '@/components/dialogs/ProjectRequestDialog';
 
 interface QuickAction {
   id: string;
@@ -50,6 +51,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
   const [recentActionIds, setRecentActionIds] = useState<string[]>([]);
   const [hoveredAction, setHoveredAction] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [projectDialogOpen, setProjectDialogOpen] = useState(false);
   const fabRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
@@ -75,7 +77,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       label: 'Create New Project',
       icon: Briefcase,
       action: () => {
-        navigateTo('/dashboard/projects/new');
+        setProjectDialogOpen(true);
         trackAction('create-project');
         setIsOpen(false);
       },
@@ -155,18 +157,6 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       category: 'communication',
     },
 
-    // Analytics Actions
-    {
-      id: 'view-analytics',
-      label: 'View Analytics',
-      icon: BarChart3,
-      action: () => {
-        navigateTo('/dashboard/analytics');
-        trackAction('view-analytics');
-        setIsOpen(false);
-      },
-      category: 'analytics',
-    },
 
     // Admin Actions
     {
@@ -206,12 +196,12 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       category: 'admin',
     },
     {
-      id: 'data-export',
-      label: 'Export Data',
-      icon: Database,
+      id: 'admin-analytics',
+      label: 'System Analytics',
+      icon: Activity,
       action: () => {
-        navigateTo('/dashboard/admin/export');
-        trackAction('data-export');
+        navigateTo('/dashboard/admin/analytics');
+        trackAction('admin-analytics');
         setIsOpen(false);
       },
       requiredRole: ['admin'],
@@ -537,6 +527,10 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
           </motion.div>
         )}
       </AnimatePresence>
+      <ProjectRequestDialog 
+        open={projectDialogOpen} 
+        onOpenChange={setProjectDialogOpen} 
+      />
     </div>
   );
 }
