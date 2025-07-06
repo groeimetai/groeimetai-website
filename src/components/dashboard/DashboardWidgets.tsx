@@ -36,6 +36,7 @@ import {
   Save,
   User,
   Mail,
+  ExternalLink,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -2296,7 +2297,15 @@ export default function DashboardWidgets() {
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">{widget.title}</CardTitle>
-            <div className="flex items-center gap-1"></div>
+            <div className="flex items-center gap-1">
+              {widget.type === 'messages' && (
+                <Link href="/dashboard/messages" title="Open full messages page">
+                  <Button variant="ghost" size="icon" className="h-6 w-6 text-white/60 hover:text-white">
+                    <ExternalLink className="h-3 w-3" />
+                  </Button>
+                </Link>
+              )}
+            </div>
           </CardHeader>
           <CardContent
             className={`flex-1 ${widget.type === 'messages' ? 'p-0 overflow-hidden' : ''}`}

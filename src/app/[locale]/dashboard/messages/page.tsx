@@ -1,3 +1,11 @@
+import MessagesPageFirebase from './MessagesPageFirebase';
+
+export default function MessagesPage() {
+  return <MessagesPageFirebase />;
+}
+
+// Original mock implementation commented out for reference
+/*
 'use client';
 
 import { useState, useEffect, useRef, useMemo } from 'react';
@@ -80,7 +88,7 @@ interface Conversation {
   subject?: string;
 }
 
-export default function MessagesPage() {
+export default function MessagesPageMock() {
   const router = useRouter();
   const { user, loading } = useAuth();
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -677,3 +685,4 @@ export default function MessagesPage() {
     </main>
   );
 }
+*/
