@@ -738,10 +738,10 @@ export default function MessagesPageFirebase() {
                         <MoreVertical className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-gray-900 border-white/10">
+                    <DropdownMenuContent className="bg-gray-900 border border-white/10 z-50" align="end" sideOffset={5}>
                       <DropdownMenuItem
                         onClick={() => archiveConversation(selectedConversation.id)}
-                        className="text-white hover:bg-white/10"
+                        className="text-white hover:bg-white/10 cursor-pointer px-3 py-2"
                       >
                         <Archive className="w-4 h-4 mr-2" />
                         {selectedConversation.isArchived ? 'Unarchive' : 'Archive'}
