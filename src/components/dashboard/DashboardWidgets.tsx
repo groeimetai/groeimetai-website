@@ -477,7 +477,7 @@ const MessagingWidget = ({
   };
 
   return (
-    <div className="flex h-full min-h-[600px] bg-black/20 rounded-lg overflow-hidden">
+    <div className="flex h-full overflow-hidden">
       {/* Chat List - 1/3 width */}
       <div className="w-1/3 border-r border-white/10 flex flex-col">
         <div className="p-3 border-b border-white/10">
@@ -1756,7 +1756,7 @@ export default function DashboardWidgets() {
       switch (widget.type) {
         case 'stats':
           return (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 overflow-y-auto h-full">
               {isAdmin ? (
                 // Admin stats - more comprehensive business metrics
                 <>
@@ -1804,7 +1804,7 @@ export default function DashboardWidgets() {
 
         case 'recentActivity':
           return (
-            <div className="space-y-3">
+            <div className="space-y-3 overflow-y-auto h-full">
               {widgetData.recentActivity?.length > 0 ? (
                 widgetData.recentActivity.map((activity: any) => (
                   <div
@@ -2193,22 +2193,6 @@ export default function DashboardWidgets() {
                   </div>
                 </div>
               )}
-
-              {/* Next Milestone */}
-              {(widgetData.milestone || !widgetData.timelineStages) && (
-                <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
-                  <div className="flex items-center space-x-2">
-                    <Target className="w-5 h-5 text-orange" />
-                    <div>
-                      <p className="text-sm font-medium text-white">Next Milestone</p>
-                      <p className="text-xs text-white/60">
-                        {widgetData.milestone ||
-                          'Your project timeline will be updated once your request is approved'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           );
 
@@ -2248,7 +2232,7 @@ export default function DashboardWidgets() {
 
         case 'revenue':
           return (
-            <div className="space-y-4">
+            <div className="space-y-4 overflow-y-auto h-full">
               <div className="text-center">
                 <p className="text-3xl font-bold text-white">
                   €{widgetData.totalRevenue?.toLocaleString() || '0'}
@@ -2289,7 +2273,7 @@ export default function DashboardWidgets() {
       : widget.isExpanded
         ? 'col-span-full'
         : widget.size === 'small'
-          ? 'col-span-1'
+          ? 'col-span-1 h-[200px]' // Fixed height for small widgets
           : widget.size === 'large'
             ? 'col-span-2 row-span-2'
             : widget.size === 'xlarge'
@@ -2299,7 +2283,7 @@ export default function DashboardWidgets() {
     return (
       <div key={widget.id} className={`${widgetSizeClass}`}>
         <Card
-          className={`bg-white/5 border-white/10 h-full ${isTopWidget ? 'min-h-[450px]' : ''} ${isDragging === widget.id ? 'opacity-50 cursor-grabbing' : isEditMode ? 'cursor-grab' : ''}`}
+          className={`bg-white/5 border-white/10 h-full flex flex-col ${isTopWidget ? 'min-h-[450px]' : ''} ${isDragging === widget.id ? 'opacity-50 cursor-grabbing' : isEditMode ? 'cursor-grab' : ''}`}
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">{widget.title}</CardTitle>
@@ -2330,7 +2314,7 @@ export default function DashboardWidgets() {
               )}
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className={`flex-1 ${widget.type === 'messages' ? 'p-0' : ''}`}>
             <WidgetContent />
           </CardContent>
         </Card>
