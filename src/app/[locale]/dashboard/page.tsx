@@ -434,21 +434,19 @@ export default function DashboardPage() {
           </p>
         </motion.div>
 
-        {/* Dashboard Widgets for regular users */}
-        {!isAdmin && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mb-8"
-            data-help="dashboard-widgets"
-          >
-            <DashboardWidgets />
-          </motion.div>
-        )}
+        {/* Dashboard Widgets - now for everyone */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-8"
+          data-help="dashboard-widgets"
+        >
+          <DashboardWidgets />
+        </motion.div>
 
-        {/* Original Layout for Admin or users without widgets */}
-        {isAdmin && (
+        {/* Legacy support chat - only shown if user has no widgets */}
+        {false && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Project Timeline Widget */}
           <motion.div

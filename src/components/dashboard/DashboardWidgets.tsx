@@ -42,7 +42,8 @@ import {
   getDocs,
   doc,
   updateDoc,
-  onSnapshot
+  onSnapshot,
+  getDoc
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { formatDistanceToNow } from 'date-fns';
@@ -62,25 +63,39 @@ interface WidgetData {
   [key: string]: any;
 }
 
-const DEFAULT_WIDGETS: Widget[] = [
-  { id: '1', type: 'stats', title: 'Quick Stats', size: 'medium', position: { x: 0, y: 0 } },
-  { id: '2', type: 'projectProgress', title: 'Project Progress', size: 'medium', position: { x: 1, y: 0 } },
-  { id: '3', type: 'recentActivity', title: 'Recent Activity', size: 'large', position: { x: 0, y: 1 } },
-  { id: '4', type: 'quickActions', title: 'Quick Actions', size: 'small', position: { x: 2, y: 0 } },
+// Different default widgets for users vs admins
+const DEFAULT_USER_WIDGETS: Widget[] = [
+  { id: '1', type: 'projectTimeline', title: 'Project Timeline', size: 'large', position: { x: 0, y: 0 } },
+  { id: '2', type: 'messages', title: 'Messages & Communication', size: 'medium', position: { x: 2, y: 0 } },
+  { id: '3', type: 'upcomingMeetings', title: 'Upcoming Consultations', size: 'medium', position: { x: 0, y: 1 } },
+  { id: '4', type: 'quickActions', title: 'Quick Actions', size: 'small', position: { x: 1, y: 1 } },
+  { id: '5', type: 'documents', title: 'Recent Documents', size: 'medium', position: { x: 2, y: 1 } },
+];
+
+const DEFAULT_ADMIN_WIDGETS: Widget[] = [
+  { id: '1', type: 'stats', title: 'Business Metrics', size: 'medium', position: { x: 0, y: 0 } },
+  { id: '2', type: 'messages', title: 'Client Communications', size: 'large', position: { x: 1, y: 0 } },
+  { id: '3', type: 'projectProgress', title: 'Active Projects', size: 'medium', position: { x: 0, y: 1 } },
+  { id: '4', type: 'tasks', title: 'Team Tasks', size: 'medium', position: { x: 1, y: 1 } },
+  { id: '5', type: 'revenue', title: 'Revenue Overview', size: 'medium', position: { x: 2, y: 1 } },
 ];
 
 const WIDGET_TYPES = [
-  { type: 'stats', title: 'Quick Stats', icon: BarChart3, description: 'Overview of your key metrics' },
-  { type: 'recentActivity', title: 'Recent Activity', icon: Activity, description: 'Your latest updates' },
-  { type: 'projectProgress', title: 'Project Progress', icon: Target, description: 'Track project completion' },
-  { type: 'upcomingMeetings', title: 'Upcoming Meetings', icon: Calendar, description: 'Your scheduled meetings' },
-  { type: 'quickActions', title: 'Quick Actions', icon: Plus, description: 'Common actions shortcuts' },
-  { type: 'tasks', title: 'Tasks & To-Do', icon: FileText, description: 'Your pending tasks' },
+  { type: 'stats', title: 'Business Metrics', icon: BarChart3, description: 'Key business performance indicators' },
+  { type: 'recentActivity', title: 'Recent Activity', icon: Activity, description: 'Latest updates and changes' },
+  { type: 'projectProgress', title: 'Active Projects', icon: Target, description: 'Overview of all active projects' },
+  { type: 'projectTimeline', title: 'Project Timeline', icon: Clock, description: 'Your project milestones and progress' },
+  { type: 'upcomingMeetings', title: 'Upcoming Consultations', icon: Calendar, description: 'Scheduled meetings with consultants' },
+  { type: 'quickActions', title: 'Quick Actions', icon: Plus, description: 'Common actions and shortcuts' },
+  { type: 'tasks', title: 'Team Tasks', icon: FileText, description: 'Task management for team' },
+  { type: 'messages', title: 'Messages', icon: MessageSquare, description: 'All your conversations in one place' },
+  { type: 'documents', title: 'Documents', icon: FileText, description: 'Recent contracts and deliverables' },
+  { type: 'revenue', title: 'Revenue', icon: DollarSign, description: 'Financial performance metrics' },
 ];
 
 export default function DashboardWidgets() {
-  const { user } = useAuth();
-  const [widgets, setWidgets] = useState<Widget[]>(DEFAULT_WIDGETS);
+  const { user, isAdmin } = useAuth();
+  const [widgets, setWidgets] = useState<Widget[]>(isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS);
   const [widgetData, setWidgetData] = useState<WidgetData>({});
   const [isDragging, setIsDragging] = useState<string | null>(null);
   const [draggedWidget, setDraggedWidget] = useState<Widget | null>(null);
@@ -136,59 +151,166 @@ export default function DashboardWidgets() {
     const fetchWidgetData = async () => {
       const data: WidgetData = {};
 
-      // Fetch stats
       try {
-        const projectsQuery = query(
-          collection(db, 'projects'),
-          where('clientId', '==', user.uid)
-        );
-        const projectsSnapshot = await getDocs(projectsQuery);
-        
-        const quotesQuery = query(
-          collection(db, 'quotes'),
-          where('userId', '==', user.uid)
-        );
-        const quotesSnapshot = await getDocs(quotesQuery);
-
-        data.stats = {
-          projects: projectsSnapshot.size,
-          activeProjects: projectsSnapshot.docs.filter(doc => doc.data().status === 'active').length,
-          quotes: quotesSnapshot.size,
-          pendingQuotes: quotesSnapshot.docs.filter(doc => doc.data().status === 'pending').length,
-        };
-
-        // Fetch recent activity
-        const activities: Array<{
-          id: string;
-          type: string;
-          title: string;
-          time: Date;
-        }> = [];
-        projectsSnapshot.docs.slice(0, 5).forEach(doc => {
-          const project = doc.data();
-          activities.push({
-            id: doc.id,
-            type: 'project',
-            title: `Project ${project.name} updated`,
-            time: project.updatedAt?.toDate() || new Date(),
-          });
-        });
-
-        data.recentActivity = activities.sort((a, b) => b.time.getTime() - a.time.getTime()).slice(0, 5);
-
-        // Fetch project progress
-        data.projectProgress = projectsSnapshot.docs.slice(0, 3).map(doc => {
-          const project = doc.data();
-          const progress = project.milestones
-            ? (project.milestones.filter((m: any) => m.status === 'completed').length / project.milestones.length) * 100
-            : 0;
-          return {
-            id: doc.id,
-            name: project.name,
-            progress: Math.round(progress),
-            status: project.status,
+        if (isAdmin) {
+          // Admin data fetching
+          // Fetch all projects for stats
+          const allProjectsSnapshot = await getDocs(collection(db, 'projects'));
+          const allQuotesSnapshot = await getDocs(collection(db, 'quotes'));
+          const allInvoicesSnapshot = await getDocs(collection(db, 'invoices'));
+          
+          data.stats = {
+            projects: allProjectsSnapshot.size,
+            activeProjects: allProjectsSnapshot.docs.filter(doc => doc.data().status === 'active').length,
+            quotes: allQuotesSnapshot.size,
+            pendingQuotes: allQuotesSnapshot.docs.filter(doc => doc.data().status === 'pending').length,
+            totalClients: new Set(allProjectsSnapshot.docs.map(doc => doc.data().clientId)).size,
+            revenue: allInvoicesSnapshot.docs
+              .filter(doc => doc.data().status === 'paid')
+              .reduce((sum, doc) => sum + (doc.data().amount || 0), 0),
           };
-        });
+
+          // Fetch active chats for messages widget
+          const chatsSnapshot = await getDocs(
+            query(collection(db, 'supportChats'), orderBy('lastMessageAt', 'desc'))
+          );
+          
+          data.activeChats = chatsSnapshot.docs.map(doc => {
+            const chatData = doc.data();
+            return {
+              id: doc.id,
+              userName: chatData.userName,
+              projectName: chatData.projectName,
+              lastMessage: chatData.lastMessage,
+              lastMessageAt: chatData.lastMessageAt,
+              unreadCount: 0, // TODO: Implement unread count
+            };
+          });
+
+          // Fetch revenue data
+          const paidInvoices = allInvoicesSnapshot.docs.filter(doc => doc.data().status === 'paid');
+          const currentMonth = new Date().getMonth();
+          const monthlyInvoices = paidInvoices.filter(doc => {
+            const date = doc.data().paidAt?.toDate();
+            return date && date.getMonth() === currentMonth;
+          });
+          
+          data.totalRevenue = paidInvoices.reduce((sum, doc) => sum + (doc.data().amount || 0), 0);
+          data.monthlyRevenue = monthlyInvoices.reduce((sum, doc) => sum + (doc.data().amount || 0), 0);
+          data.pendingRevenue = allInvoicesSnapshot.docs
+            .filter(doc => doc.data().status === 'pending')
+            .reduce((sum, doc) => sum + (doc.data().amount || 0), 0);
+          
+          // Calculate revenue growth
+          const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+          const lastMonthInvoices = paidInvoices.filter(doc => {
+            const date = doc.data().paidAt?.toDate();
+            return date && date.getMonth() === lastMonth;
+          });
+          const lastMonthRevenue = lastMonthInvoices.reduce((sum, doc) => sum + (doc.data().amount || 0), 0);
+          data.revenueGrowth = lastMonthRevenue > 0 
+            ? Math.round(((data.monthlyRevenue - lastMonthRevenue) / lastMonthRevenue) * 100)
+            : 0;
+
+        } else {
+          // User data fetching
+          const projectsQuery = query(
+            collection(db, 'projects'),
+            where('clientId', '==', user.uid)
+          );
+          const projectsSnapshot = await getDocs(projectsQuery);
+          
+          const quotesQuery = query(
+            collection(db, 'quotes'),
+            where('userId', '==', user.uid)
+          );
+          const quotesSnapshot = await getDocs(quotesQuery);
+
+          // For project timeline widget
+          if (projectsSnapshot.docs.length > 0) {
+            const latestProject = projectsSnapshot.docs[0].data();
+            const timelineRef = doc(db, 'projectTimelines', projectsSnapshot.docs[0].id);
+            const timelineDoc = await getDoc(timelineRef);
+            
+            if (timelineDoc.exists()) {
+              const timelineData = timelineDoc.data();
+              data.timelineStages = timelineData.stages || [];
+              data.timelineProgress = timelineData.stages 
+                ? Math.round((timelineData.stages.filter((s: any) => s.status === 'completed').length / timelineData.stages.length) * 100)
+                : 0;
+            }
+          }
+
+          // For messages widget
+          data.supportUnread = 0; // TODO: Implement unread count
+          data.projectChats = projectsSnapshot.docs.map(doc => ({
+            id: doc.id,
+            projectId: doc.id,
+            projectName: doc.data().name,
+            unreadCount: 0, // TODO: Implement unread count
+          }));
+
+          // For documents widget
+          const documentsQuery = query(
+            collection(db, 'documents'),
+            where('userId', '==', user.uid),
+            orderBy('createdAt', 'desc'),
+            limit(5)
+          );
+          const documentsSnapshot = await getDocs(documentsQuery);
+          
+          data.recentDocuments = documentsSnapshot.docs.map(doc => {
+            const docData = doc.data();
+            return {
+              id: doc.id,
+              name: docData.name,
+              type: docData.type,
+              date: docData.createdAt?.toDate().toLocaleDateString() || 'Unknown',
+            };
+          });
+
+          // Stats for users (simplified)
+          data.stats = {
+            projects: projectsSnapshot.size,
+            activeProjects: projectsSnapshot.docs.filter(doc => doc.data().status === 'active').length,
+            quotes: quotesSnapshot.size,
+            documents: documentsSnapshot.size,
+          };
+
+          // Recent activity
+          const activities: Array<{
+            id: string;
+            type: string;
+            title: string;
+            time: Date;
+          }> = [];
+          
+          projectsSnapshot.docs.slice(0, 5).forEach(doc => {
+            const project = doc.data();
+            activities.push({
+              id: doc.id,
+              type: 'project',
+              title: `Project ${project.name} updated`,
+              time: project.updatedAt?.toDate() || new Date(),
+            });
+          });
+
+          data.recentActivity = activities.sort((a, b) => b.time.getTime() - a.time.getTime()).slice(0, 5);
+
+          // Project progress
+          data.projectProgress = projectsSnapshot.docs.slice(0, 3).map(doc => {
+            const project = doc.data();
+            const progress = project.milestones
+              ? (project.milestones.filter((m: any) => m.status === 'completed').length / project.milestones.length) * 100
+              : 0;
+            return {
+              id: doc.id,
+              name: project.name,
+              progress: Math.round(progress),
+              status: project.status,
+            };
+          });
+        }
 
         setWidgetData(data);
       } catch (error) {
@@ -246,22 +368,38 @@ export default function DashboardWidgets() {
         case 'stats':
           return (
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/5 rounded-lg p-4">
-                <p className="text-white/60 text-sm">Total Projects</p>
-                <p className="text-2xl font-bold text-white">{widgetData.stats?.projects || 0}</p>
-              </div>
-              <div className="bg-white/5 rounded-lg p-4">
-                <p className="text-white/60 text-sm">Active</p>
-                <p className="text-2xl font-bold text-green-500">{widgetData.stats?.activeProjects || 0}</p>
-              </div>
-              <div className="bg-white/5 rounded-lg p-4">
-                <p className="text-white/60 text-sm">Quotes</p>
-                <p className="text-2xl font-bold text-white">{widgetData.stats?.quotes || 0}</p>
-              </div>
-              <div className="bg-white/5 rounded-lg p-4">
-                <p className="text-white/60 text-sm">Pending</p>
-                <p className="text-2xl font-bold text-yellow-500">{widgetData.stats?.pendingQuotes || 0}</p>
-              </div>
+              {isAdmin ? (
+                // Admin stats - more comprehensive business metrics
+                <>
+                  <div className="bg-white/5 rounded-lg p-4">
+                    <p className="text-white/60 text-sm">Active Projects</p>
+                    <p className="text-2xl font-bold text-green-500">{widgetData.stats?.activeProjects || 0}</p>
+                  </div>
+                  <div className="bg-white/5 rounded-lg p-4">
+                    <p className="text-white/60 text-sm">Total Clients</p>
+                    <p className="text-2xl font-bold text-white">{widgetData.stats?.totalClients || 0}</p>
+                  </div>
+                  <div className="bg-white/5 rounded-lg p-4">
+                    <p className="text-white/60 text-sm">Revenue</p>
+                    <p className="text-2xl font-bold text-orange">€{(widgetData.stats?.revenue || 0).toLocaleString()}</p>
+                  </div>
+                  <div className="bg-white/5 rounded-lg p-4">
+                    <p className="text-white/60 text-sm">Pending Quotes</p>
+                    <p className="text-2xl font-bold text-yellow-500">{widgetData.stats?.pendingQuotes || 0}</p>
+                  </div>
+                </>
+              ) : (
+                // User stats - simplified view focused on their projects
+                <>
+                  <div className="bg-white/5 rounded-lg p-4 col-span-2">
+                    <p className="text-white/60 text-sm mb-1">Your Active Projects</p>
+                    <p className="text-3xl font-bold text-green-500">{widgetData.stats?.activeProjects || 0}</p>
+                    <p className="text-white/40 text-xs mt-1">
+                      {widgetData.stats?.projects || 0} total projects with GroeimetAI
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           );
 
@@ -311,33 +449,66 @@ export default function DashboardWidgets() {
         case 'quickActions':
           return (
             <div className="space-y-2">
-              <Button 
-                variant="outline" 
-                className="w-full justify-start" 
-                size="sm"
-                onClick={() => setProjectDialogOpen(true)}
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                New Project
-              </Button>
-              <Link href="/dashboard/consultations">
-                <Button variant="outline" className="w-full justify-start" size="sm">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  Schedule Meeting
-                </Button>
-              </Link>
-              <Link href="/dashboard/documents">
-                <Button variant="outline" className="w-full justify-start" size="sm">
-                  <FileText className="w-4 h-4 mr-2" />
-                  View Documents
-                </Button>
-              </Link>
-              <Link href="/dashboard/messages">
-                <Button variant="outline" className="w-full justify-start" size="sm">
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Messages
-                </Button>
-              </Link>
+              {isAdmin ? (
+                // Admin quick actions
+                <>
+                  <Link href="/dashboard/admin/quotes">
+                    <Button variant="outline" className="w-full justify-start" size="sm">
+                      <FileText className="w-4 h-4 mr-2" />
+                      Review Quotes
+                    </Button>
+                  </Link>
+                  <Link href="/dashboard/admin/projects">
+                    <Button variant="outline" className="w-full justify-start" size="sm">
+                      <Target className="w-4 h-4 mr-2" />
+                      Manage Projects
+                    </Button>
+                  </Link>
+                  <Link href="/dashboard/admin/users">
+                    <Button variant="outline" className="w-full justify-start" size="sm">
+                      <Users className="w-4 h-4 mr-2" />
+                      Client Management
+                    </Button>
+                  </Link>
+                  <Link href="/dashboard/admin/invoices">
+                    <Button variant="outline" className="w-full justify-start" size="sm">
+                      <DollarSign className="w-4 h-4 mr-2" />
+                      Invoices
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+                // User quick actions - focused on requesting services
+                <>
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start" 
+                    size="sm"
+                    onClick={() => setProjectDialogOpen(true)}
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Request New Project
+                  </Button>
+                  <Link href="/dashboard/consultations">
+                    <Button variant="outline" className="w-full justify-start" size="sm">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Book Consultation
+                    </Button>
+                  </Link>
+                  <Link href="/dashboard/documents">
+                    <Button variant="outline" className="w-full justify-start" size="sm">
+                      <FileText className="w-4 h-4 mr-2" />
+                      View Deliverables
+                    </Button>
+                  </Link>
+                  <Link href="/dashboard/invoices">
+                    <Button variant="outline" className="w-full justify-start" size="sm">
+                      <DollarSign className="w-4 h-4 mr-2" />
+                      View Invoices
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           );
 
@@ -379,6 +550,177 @@ export default function DashboardWidgets() {
                 <Plus className="w-4 h-4 mr-2" />
                 Add Task
               </Button>
+            </div>
+          );
+
+        case 'projectTimeline':
+          return (
+            <div className="space-y-4">
+              <div className="mb-4">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-white/60">Overall Progress</span>
+                  <span className="text-sm font-medium text-white">
+                    {widgetData.timelineProgress || 0}%
+                  </span>
+                </div>
+                <Progress value={widgetData.timelineProgress || 0} className="h-2" />
+              </div>
+              
+              {widgetData.timelineStages?.map((stage: any, index: number) => (
+                <div key={index} className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    stage.status === 'completed' ? 'bg-green-500' : 
+                    stage.status === 'current' ? 'bg-orange' : 'bg-white/20'
+                  }`}>
+                    {stage.status === 'completed' ? '✓' : index + 1}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-white text-sm font-medium">{stage.name}</p>
+                    <p className="text-white/60 text-xs">{stage.description}</p>
+                  </div>
+                </div>
+              ))}
+              
+              <Link href="/dashboard/projects">
+                <Button variant="outline" className="w-full mt-4" size="sm">
+                  View Full Timeline
+                </Button>
+              </Link>
+            </div>
+          );
+
+        case 'messages':
+          return (
+            <div className="space-y-3">
+              {isAdmin ? (
+                // Admin view: Show all active chats with client names
+                widgetData.activeChats?.map((chat: any) => (
+                  <Link key={chat.id} href={`/dashboard/admin?chat=${chat.id}`}>
+                    <div className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-orange/20 flex items-center justify-center">
+                            {chat.userName?.charAt(0).toUpperCase() || 'U'}
+                          </div>
+                          <div>
+                            <p className="text-white text-sm font-medium">{chat.userName}</p>
+                            <p className="text-white/60 text-xs">{chat.projectName || 'General Support'}</p>
+                          </div>
+                        </div>
+                        {chat.unreadCount > 0 && (
+                          <Badge className="bg-orange text-white">{chat.unreadCount}</Badge>
+                        )}
+                      </div>
+                      {chat.lastMessage && (
+                        <p className="text-white/60 text-xs mt-2 truncate">{chat.lastMessage}</p>
+                      )}
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                // User view: Show support chat and project chats
+                <>
+                  <Link href="/dashboard">
+                    <div className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <MessageSquare className="w-5 h-5 text-orange" />
+                          <div>
+                            <p className="text-white text-sm font-medium">Support Chat</p>
+                            <p className="text-white/60 text-xs">Chat with our team</p>
+                          </div>
+                        </div>
+                        {widgetData.supportUnread > 0 && (
+                          <Badge className="bg-orange text-white">{widgetData.supportUnread}</Badge>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                  
+                  {widgetData.projectChats?.map((chat: any) => (
+                    <Link key={chat.id} href={`/dashboard/projects/${chat.projectId}`}>
+                      <div className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <FileText className="w-5 h-5 text-orange" />
+                            <div>
+                              <p className="text-white text-sm font-medium">{chat.projectName}</p>
+                              <p className="text-white/60 text-xs">Project Discussion</p>
+                            </div>
+                          </div>
+                          {chat.unreadCount > 0 && (
+                            <Badge className="bg-orange text-white">{chat.unreadCount}</Badge>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </>
+              )}
+              
+              {(!widgetData.activeChats?.length && !widgetData.projectChats?.length) && (
+                <p className="text-white/60 text-sm text-center py-4">No active conversations</p>
+              )}
+            </div>
+          );
+
+        case 'documents':
+          return (
+            <div className="space-y-3">
+              {widgetData.recentDocuments?.map((doc: any) => (
+                <div key={doc.id} className="p-3 bg-white/5 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <FileText className="w-5 h-5 text-orange" />
+                      <div>
+                        <p className="text-white text-sm font-medium">{doc.name}</p>
+                        <p className="text-white/60 text-xs">{doc.type} • {doc.date}</p>
+                      </div>
+                    </div>
+                    <Button variant="ghost" size="icon" className="h-6 w-6">
+                      <FileText className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+              
+              <Link href="/dashboard/documents">
+                <Button variant="outline" className="w-full" size="sm">
+                  View All Documents
+                </Button>
+              </Link>
+            </div>
+          );
+
+        case 'revenue':
+          return (
+            <div className="space-y-4">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-white">
+                  €{widgetData.totalRevenue?.toLocaleString() || '0'}
+                </p>
+                <p className="text-white/60 text-sm">Total Revenue</p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center">
+                  <p className="text-xl font-semibold text-green-400">
+                    €{widgetData.monthlyRevenue?.toLocaleString() || '0'}
+                  </p>
+                  <p className="text-white/60 text-xs">This Month</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-xl font-semibold text-orange">
+                    €{widgetData.pendingRevenue?.toLocaleString() || '0'}
+                  </p>
+                  <p className="text-white/60 text-xs">Pending</p>
+                </div>
+              </div>
+              
+              <Progress value={widgetData.revenueGrowth || 0} className="h-2" />
+              <p className="text-white/60 text-xs text-center">
+                {widgetData.revenueGrowth || 0}% growth vs last month
+              </p>
             </div>
           );
 
@@ -440,7 +782,9 @@ export default function DashboardWidgets() {
     <div className="space-y-6">
       {/* Widget Controls */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white">Your Dashboard</h2>
+        <h2 className="text-2xl font-bold text-white">
+          {isAdmin ? 'Operations Dashboard' : 'Your Project Dashboard'}
+        </h2>
         <div className="flex items-center gap-3">
           <Button
             variant="outline"
