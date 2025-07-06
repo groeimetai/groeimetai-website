@@ -1858,7 +1858,7 @@ export default function DashboardWidgets() {
 
         case 'quickActions':
           return (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {isAdmin ? (
                 // Admin quick actions
                 <>
@@ -2277,7 +2277,7 @@ export default function DashboardWidgets() {
     return (
       <div key={widget.id} className={`${widgetSizeClass}`}>
         <Card
-          className={`bg-white/5 border-white/10 h-full flex flex-col ${isTopWidget ? 'min-h-[500px] max-h-[500px]' : ''}`}
+          className={`bg-white/5 border-white/10 h-full flex flex-col ${isTopWidget ? 'min-h-[600px] max-h-[600px]' : ''}`}
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">{widget.title}</CardTitle>
