@@ -595,7 +595,7 @@ const MessagingWidget = ({
       </div>
 
       {/* Chat Area - 2/3 width */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col overflow-hidden">
         {selectedChat ? (
           <>
             {/* Chat Header */}
