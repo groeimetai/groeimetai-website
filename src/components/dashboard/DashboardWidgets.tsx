@@ -1076,35 +1076,35 @@ const DEFAULT_USER_WIDGETS: Widget[] = [
     type: 'messages',
     title: 'Messages & Communication',
     size: 'large',
-    position: { x: 2, y: 0 },
+    position: { x: 1, y: 0 },
   },
   {
     id: '3',
     type: 'quickActions',
     title: 'Quick Actions',
     size: 'small',
-    position: { x: 0, y: 2 },
+    position: { x: 0, y: 1 },
   },
   {
     id: '4',
     type: 'documents',
     title: 'Recent Documents',
     size: 'small',
-    position: { x: 1, y: 2 },
+    position: { x: 1, y: 1 },
   },
   {
     id: '5',
     type: 'upcomingMeetings',
     title: 'Upcoming Consultations',
     size: 'small',
-    position: { x: 2, y: 2 },
+    position: { x: 2, y: 1 },
   },
   {
     id: '6',
     type: 'recentActivity',
     title: 'Recent Activity',
     size: 'small',
-    position: { x: 3, y: 2 },
+    position: { x: 3, y: 1 },
   },
 ];
 
@@ -1121,35 +1121,35 @@ const DEFAULT_ADMIN_WIDGETS: Widget[] = [
     type: 'messages',
     title: 'Client Communications',
     size: 'large',
-    position: { x: 2, y: 0 },
+    position: { x: 1, y: 0 },
   },
   {
     id: '3',
     type: 'stats',
     title: 'Business Metrics',
     size: 'small',
-    position: { x: 0, y: 2 },
+    position: { x: 0, y: 1 },
   },
   {
     id: '4',
     type: 'revenue',
     title: 'Revenue Overview',
     size: 'small',
-    position: { x: 1, y: 2 },
+    position: { x: 1, y: 1 },
   },
   {
     id: '5',
     type: 'tasks',
     title: 'Team Tasks',
     size: 'small',
-    position: { x: 2, y: 2 },
+    position: { x: 2, y: 1 },
   },
   {
     id: '6',
     type: 'recentActivity',
     title: 'Recent Activity',
     size: 'small',
-    position: { x: 3, y: 2 },
+    position: { x: 3, y: 1 },
   },
 ];
 
@@ -1751,7 +1751,7 @@ export default function DashboardWidgets() {
     }
   };
 
-  const renderWidget = (widget: Widget) => {
+  const renderWidget = (widget: Widget, isTopWidget: boolean = false) => {
     const WidgetContent = () => {
       switch (widget.type) {
         case 'stats':
@@ -2286,37 +2286,42 @@ export default function DashboardWidgets() {
       }
     };
 
-    const widgetSizeClass = widget.isExpanded
-      ? 'col-span-full'
-      : widget.size === 'small'
-        ? 'col-span-1'
-        : widget.size === 'large'
-          ? 'col-span-2 row-span-2'
-          : widget.size === 'xlarge'
-            ? 'col-span-3 row-span-3'
-            : 'col-span-1';
+    // Top widgets (project/messages) always span full width in their container
+    const widgetSizeClass = isTopWidget
+      ? 'col-span-1' // Full width in 2-column grid
+      : widget.isExpanded
+        ? 'col-span-full'
+        : widget.size === 'small'
+          ? 'col-span-1'
+          : widget.size === 'large'
+            ? 'col-span-2 row-span-2'
+            : widget.size === 'xlarge'
+              ? 'col-span-3 row-span-3'
+              : 'col-span-1';
 
     return (
       <div key={widget.id} className={`${widgetSizeClass}`}>
         <Card
-          className={`bg-white/5 border-white/10 h-full ${isDragging === widget.id ? 'opacity-50 cursor-grabbing' : isEditMode ? 'cursor-grab' : ''}`}
+          className={`bg-white/5 border-white/10 h-full ${isTopWidget ? 'min-h-[450px]' : ''} ${isDragging === widget.id ? 'opacity-50 cursor-grabbing' : isEditMode ? 'cursor-grab' : ''}`}
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">{widget.title}</CardTitle>
             <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-                onClick={() => toggleWidgetSize(widget.id)}
-              >
-                {widget.isExpanded ? (
-                  <Minimize2 className="h-3 w-3" />
-                ) : (
-                  <Maximize2 className="h-3 w-3" />
-                )}
-              </Button>
-              {isEditMode && (
+              {!isTopWidget && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6"
+                  onClick={() => toggleWidgetSize(widget.id)}
+                >
+                  {widget.isExpanded ? (
+                    <Minimize2 className="h-3 w-3" />
+                  ) : (
+                    <Maximize2 className="h-3 w-3" />
+                  )}
+                </Button>
+              )}
+              {isEditMode && !isTopWidget && (
                 <Button
                   variant="ghost"
                   size="icon"
@@ -2434,56 +2439,100 @@ export default function DashboardWidgets() {
       </div>
 
       {/* Widgets Grid */}
-      {isEditMode ? (
-        <div className="relative">
-          {hasUnsavedChanges && (
-            <div className="absolute -top-8 right-0 text-orange text-sm flex items-center gap-2">
-              <AlertCircle className="w-4 h-4" />
-              Unsaved changes
+      {(() => {
+        // Separate top widgets (project/messages) from other widgets
+        const topWidgetTypes = isAdmin ? ['projectProgress', 'messages'] : ['projectTimeline', 'messages'];
+        const topWidgets = widgets.filter(w => topWidgetTypes.includes(w.type));
+        const otherWidgets = widgets.filter(w => !topWidgetTypes.includes(w.type));
+
+        if (isEditMode) {
+          return (
+            <div className="relative">
+              {hasUnsavedChanges && (
+                <div className="absolute -top-8 right-0 text-orange text-sm flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4" />
+                  Unsaved changes
+                </div>
+              )}
+              <div className="space-y-6">
+                {/* Top row - Project and Messages (non-draggable in edit mode) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {topWidgets.map((widget) => (
+                    <div key={widget.id} className="opacity-60 pointer-events-none">
+                      {renderWidget(widget)}
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Other widgets (draggable) */}
+                <Reorder.Group
+                  axis="y"
+                  values={otherWidgets}
+                  onReorder={(newOrder) => {
+                    // Combine with top widgets when reordering
+                    const reorderedWidgets = [...topWidgets, ...newOrder];
+                    handleReorder(reorderedWidgets);
+                  }}
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                  data-help="dashboard-widgets-edit"
+                >
+                  {otherWidgets.map((widget) => (
+                    <Reorder.Item
+                      key={widget.id}
+                      value={widget}
+                      dragListener={true}
+                      dragControls={undefined}
+                      whileDrag={{ scale: 1.05, opacity: 0.8 }}
+                      onDragStart={() => setIsDragging(widget.id)}
+                      onDragEnd={() => setIsDragging(null)}
+                    >
+                      {renderWidget(widget)}
+                    </Reorder.Item>
+                  ))}
+                </Reorder.Group>
+              </div>
             </div>
-          )}
-          <Reorder.Group
-            axis="y"
-            values={widgets}
-            onReorder={handleReorder}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-            data-help="dashboard-widgets-edit"
-          >
-            {widgets.map((widget) => (
-              <Reorder.Item
-                key={widget.id}
-                value={widget}
-                dragListener={true}
-                dragControls={undefined}
-                whileDrag={{ scale: 1.05, opacity: 0.8 }}
-                onDragStart={() => setIsDragging(widget.id)}
-                onDragEnd={() => setIsDragging(null)}
-              >
-                {renderWidget(widget)}
-              </Reorder.Item>
-            ))}
-          </Reorder.Group>
-        </div>
-      ) : (
-        <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-          data-help="dashboard-widgets-grid"
-        >
-          <AnimatePresence>
-            {widgets.map((widget) => (
-              <motion.div
-                key={widget.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-              >
-                {renderWidget(widget)}
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-      )}
+          );
+        } else {
+          return (
+            <div className="space-y-6" data-help="dashboard-widgets-grid">
+              {/* Top row - Project and Messages */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <AnimatePresence>
+                  {topWidgets.map((widget) => (
+                    <motion.div
+                      key={widget.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                    >
+                      {renderWidget(widget, true)}
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+              
+              {/* Other widgets */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <AnimatePresence>
+                  {otherWidgets.map((widget) => (
+                    <motion.div
+                      key={widget.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                    >
+                      {renderWidget(widget, false)}
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            </div>
+          );
+        }
+      })()}
 
       {/* Empty State */}
       {widgets.length === 0 && (
