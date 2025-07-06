@@ -140,14 +140,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
       - name: Setup Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
-        with:
-          service_account_key: ${{ env.GCP_SA_KEY }}
-          project_id: ${{ env.GCP_PROJECT_ID }}
 
       - name: Configure Docker for GCR
-        run: gcloud auth configure-docker
+        run: gcloud auth configure-docker gcr.io
 
       - name: Build and push Docker image
         run: |
@@ -191,13 +193,6 @@ jobs:
             --max-instances 100 \
             --set-env-vars NODE_ENV=production
 
-      - name: Notify deployment status
-        if: always()
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          text: "Deployment to ${{ github.ref == 'refs/heads/main' && 'Production' || 'Staging' }} ${{ job.status }}"
-          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
 
   # Performance Testing
   performance-test:
