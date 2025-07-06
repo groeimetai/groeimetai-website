@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import {
@@ -19,7 +19,14 @@ import {
   X,
   GripVertical,
   Maximize2,
-  Minimize2
+  Minimize2,
+  AlertCircle,
+  Send,
+  Check,
+  CheckCheck,
+  Video,
+  MapPin,
+  Loader2
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -43,12 +50,20 @@ import {
   doc,
   updateDoc,
   onSnapshot,
-  getDoc
+  getDoc,
+  Timestamp,
+  addDoc,
+  serverTimestamp,
+  setDoc
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, format, isToday, isTomorrow, isThisWeek, startOfDay, endOfDay } from 'date-fns';
 import { Link } from '@/i18n/routing';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
 import { ProjectRequestDialog } from '@/components/dialogs/ProjectRequestDialog';
+import toast from 'react-hot-toast';
 
 interface Widget {
   id: string;
@@ -63,18 +78,457 @@ interface WidgetData {
   [key: string]: any;
 }
 
+// Messaging Widget Component
+interface Message {
+  id: string;
+  senderId: string;
+  senderName: string;
+  senderRole: 'user' | 'admin';
+  content: string;
+  createdAt: Timestamp | null;
+  isRead?: boolean;
+}
+
+interface ChatChannel {
+  id: string;
+  userId?: string;
+  userName: string;
+  userEmail?: string;
+  projectId?: string;
+  projectName?: string;
+  type: 'support' | 'project';
+  lastMessage?: string;
+  lastMessageAt: Timestamp | null;
+  unreadCount?: number;
+}
+
+const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widgetData: any; user: any }) => {
+  const [selectedChat, setSelectedChat] = useState<ChatChannel | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [chats, setChats] = useState<ChatChannel[]>([]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  // Load chats based on user role
+  useEffect(() => {
+    if (!user) return;
+
+    const loadChats = async () => {
+      try {
+        const chatsList: ChatChannel[] = [];
+
+        if (isAdmin) {
+          // Admin: Load all support chats and project chats
+          const supportChatsSnapshot = await getDocs(
+            query(collection(db, 'supportChats'), orderBy('lastMessageAt', 'desc'))
+          );
+          
+          supportChatsSnapshot.forEach(doc => {
+            const data = doc.data();
+            chatsList.push({
+              id: doc.id,
+              userId: data.userId,
+              userName: data.userName || 'Unknown User',
+              userEmail: data.userEmail,
+              type: 'support',
+              lastMessage: data.lastMessage,
+              lastMessageAt: data.lastMessageAt,
+              unreadCount: 0 // TODO: Implement unread count
+            });
+          });
+
+          // Also load project chats
+          const projectsSnapshot = await getDocs(collection(db, 'projects'));
+          for (const projectDoc of projectsSnapshot.docs) {
+            const projectData = projectDoc.data();
+            const chatId = `project_${projectDoc.id}`;
+            const chatRef = doc(db, 'projectChats', chatId);
+            const chatDoc = await getDoc(chatRef);
+            
+            if (chatDoc.exists()) {
+              const chatData = chatDoc.data();
+              chatsList.push({
+                id: chatId,
+                projectId: projectDoc.id,
+                projectName: projectData.name,
+                userName: projectData.clientName || 'Project Chat',
+                type: 'project',
+                lastMessage: chatData.lastMessage,
+                lastMessageAt: chatData.lastMessageAt,
+                unreadCount: 0
+              });
+            }
+          }
+        } else {
+          // User: Load their support chat and project chats
+          const supportChatId = `support_${user.uid}`;
+          const supportRef = doc(db, 'supportChats', supportChatId);
+          const supportDoc = await getDoc(supportRef);
+          
+          if (supportDoc.exists()) {
+            const data = supportDoc.data();
+            chatsList.push({
+              id: supportChatId,
+              userName: 'GroeimetAI Support',
+              type: 'support',
+              lastMessage: data.lastMessage,
+              lastMessageAt: data.lastMessageAt,
+              unreadCount: 0
+            });
+          } else {
+            // Create support chat if it doesn't exist
+            chatsList.push({
+              id: supportChatId,
+              userName: 'GroeimetAI Support',
+              type: 'support',
+              lastMessage: 'Start a conversation with our support team',
+              lastMessageAt: null,
+              unreadCount: 0
+            });
+          }
+
+          // Load user's project chats
+          const userProjectsSnapshot = await getDocs(
+            query(collection(db, 'projects'), where('clientId', '==', user.uid))
+          );
+          
+          for (const projectDoc of userProjectsSnapshot.docs) {
+            const projectData = projectDoc.data();
+            const chatId = `project_${projectDoc.id}`;
+            const chatRef = doc(db, 'projectChats', chatId);
+            const chatDoc = await getDoc(chatRef);
+            
+            if (chatDoc.exists()) {
+              const chatData = chatDoc.data();
+              chatsList.push({
+                id: chatId,
+                projectId: projectDoc.id,
+                projectName: projectData.name,
+                userName: `${projectData.name} Team`,
+                type: 'project',
+                lastMessage: chatData.lastMessage,
+                lastMessageAt: chatData.lastMessageAt,
+                unreadCount: 0
+              });
+            }
+          }
+        }
+
+        setChats(chatsList);
+        
+        // Auto-select first chat if none selected
+        if (chatsList.length > 0 && !selectedChat) {
+          setSelectedChat(chatsList[0]);
+        }
+      } catch (error) {
+        console.error('Error loading chats:', error);
+      }
+    };
+
+    loadChats();
+  }, [user, isAdmin]);
+
+  // Subscribe to messages for selected chat
+  useEffect(() => {
+    if (!selectedChat || !user) return;
+
+    setIsLoading(true);
+    let unsubscribe: (() => void) | undefined;
+
+    const loadMessages = async () => {
+      try {
+        const collectionName = selectedChat.type === 'support' ? 'supportChats' : 'projectChats';
+        const messagesRef = collection(db, collectionName, selectedChat.id, 'messages');
+        const q = query(messagesRef, orderBy('createdAt', 'asc'));
+
+        unsubscribe = onSnapshot(
+          q,
+          (snapshot) => {
+            const newMessages: Message[] = [];
+            snapshot.forEach((doc) => {
+              newMessages.push({ id: doc.id, ...doc.data() } as Message);
+            });
+            setMessages(newMessages);
+            setIsLoading(false);
+          },
+          (error) => {
+            console.error('Error loading messages:', error);
+            setIsLoading(false);
+          }
+        );
+      } catch (error) {
+        console.error('Error setting up message listener:', error);
+        setIsLoading(false);
+      }
+    };
+
+    loadMessages();
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [selectedChat, user]);
+
+  const sendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newMessage.trim() || !selectedChat || !user) return;
+
+    setIsSending(true);
+    try {
+      const collectionName = selectedChat.type === 'support' ? 'supportChats' : 'projectChats';
+      
+      // Ensure chat document exists
+      const chatRef = doc(db, collectionName, selectedChat.id);
+      const chatDoc = await getDoc(chatRef);
+      
+      if (!chatDoc.exists()) {
+        // Create chat document for new chats
+        await setDoc(chatRef, {
+          userId: selectedChat.userId || user.uid,
+          userName: selectedChat.userName,
+          projectId: selectedChat.projectId,
+          projectName: selectedChat.projectName,
+          createdAt: serverTimestamp(),
+          lastMessageAt: serverTimestamp(),
+          status: 'active'
+        });
+      }
+
+      // Add message
+      const messagesRef = collection(db, collectionName, selectedChat.id, 'messages');
+      await addDoc(messagesRef, {
+        senderId: user.uid,
+        senderName: isAdmin ? 'GroeimetAI Support' : (user.displayName || user.email),
+        senderRole: isAdmin ? 'admin' : 'user',
+        content: newMessage.trim(),
+        createdAt: serverTimestamp(),
+      });
+
+      // Update last message
+      await setDoc(chatRef, {
+        lastMessageAt: serverTimestamp(),
+        lastMessage: newMessage.trim(),
+        lastMessageBy: user.uid
+      }, { merge: true });
+
+      setNewMessage('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+      toast.error('Failed to send message');
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const formatMessageTime = (timestamp: Timestamp | null) => {
+    if (!timestamp) return '';
+    try {
+      return formatDistanceToNow(timestamp.toDate(), { addSuffix: true });
+    } catch {
+      return '';
+    }
+  };
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  return (
+    <div className="flex h-[500px] bg-black/20 rounded-lg overflow-hidden">
+      {/* Chat List - 1/3 width */}
+      <div className="w-1/3 border-r border-white/10 flex flex-col">
+        <div className="p-3 border-b border-white/10">
+          <h3 className="text-sm font-medium text-white">Conversations</h3>
+        </div>
+        <ScrollArea className="flex-1">
+          <div className="p-2 space-y-1">
+            {chats.map((chat) => (
+              <button
+                key={chat.id}
+                onClick={() => setSelectedChat(chat)}
+                className={`w-full p-2 rounded-lg text-left transition-colors ${
+                  selectedChat?.id === chat.id
+                    ? 'bg-white/10'
+                    : 'hover:bg-white/5'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Avatar className="w-8 h-8">
+                    <AvatarFallback className={`${
+                      chat.type === 'support' ? 'bg-green/20 text-green' : 'bg-orange/20 text-orange'
+                    } text-xs`}>
+                      {getInitials(chat.userName)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-white truncate">
+                      {chat.userName}
+                    </p>
+                    {chat.lastMessage && (
+                      <p className="text-xs text-white/60 truncate">
+                        {chat.lastMessage}
+                      </p>
+                    )}
+                  </div>
+                  {chat.unreadCount > 0 && (
+                    <Badge className="bg-orange text-white text-xs h-5 min-w-[20px] px-1">
+                      {chat.unreadCount}
+                    </Badge>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
+
+      {/* Chat Area - 2/3 width */}
+      <div className="flex-1 flex flex-col">
+        {selectedChat ? (
+          <>
+            {/* Chat Header */}
+            <div className="p-3 border-b border-white/10">
+              <div className="flex items-center gap-2">
+                <Avatar className="w-8 h-8">
+                  <AvatarFallback className={`${
+                    selectedChat.type === 'support' ? 'bg-green/20 text-green' : 'bg-orange/20 text-orange'
+                  } text-xs`}>
+                    {getInitials(selectedChat.userName)}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-sm font-medium text-white">{selectedChat.userName}</p>
+                  {selectedChat.type === 'project' && selectedChat.projectName && (
+                    <p className="text-xs text-white/60">{selectedChat.projectName}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Messages */}
+            <ScrollArea className="flex-1 p-3">
+              <div className="space-y-3">
+                {isLoading && (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="w-5 h-5 animate-spin text-orange" />
+                  </div>
+                )}
+                
+                {!isLoading && messages.length === 0 && (
+                  <div className="text-center text-white/40 py-8">
+                    <p className="text-sm">No messages yet</p>
+                    <p className="text-xs mt-1">Start the conversation!</p>
+                  </div>
+                )}
+
+                {messages.map((msg) => {
+                  const isOwnMessage = msg.senderId === user?.uid;
+                  
+                  return (
+                    <div
+                      key={msg.id}
+                      className={`flex ${
+                        isOwnMessage ? 'justify-end' : 'justify-start'
+                      }`}
+                    >
+                      <div className={`flex items-end gap-2 max-w-[70%] ${
+                        isOwnMessage ? 'flex-row-reverse' : ''
+                      }`}>
+                        <Avatar className="w-6 h-6 flex-shrink-0">
+                          <AvatarFallback className={`text-xs ${
+                            msg.senderRole === 'admin' ? 'bg-green/20 text-green' : 'bg-orange/20 text-orange'
+                          }`}>
+                            {getInitials(msg.senderName)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div
+                          className={`rounded-lg px-3 py-2 ${
+                            isOwnMessage
+                              ? 'bg-orange text-white'
+                              : 'bg-white/10 text-white'
+                          }`}
+                        >
+                          <p className="text-sm break-words">{msg.content}</p>
+                          <p className={`text-xs mt-1 ${
+                            isOwnMessage ? 'text-white/70' : 'text-white/50'
+                          }`}>
+                            {formatMessageTime(msg.createdAt)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+                <div ref={messagesEndRef} />
+              </div>
+            </ScrollArea>
+
+            {/* Message Input */}
+            <form onSubmit={sendMessage} className="p-3 border-t border-white/10">
+              <div className="flex gap-2">
+                <Input
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="Type a message..."
+                  className="flex-1 bg-white/5 border-white/20 text-white placeholder:text-white/40 text-sm"
+                  disabled={isSending}
+                />
+                <Button
+                  type="submit"
+                  size="sm"
+                  className="bg-orange hover:bg-orange/90"
+                  disabled={!newMessage.trim() || isSending}
+                >
+                  {isSending ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
+                </Button>
+              </div>
+            </form>
+          </>
+        ) : (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <MessageSquare className="w-12 h-12 text-white/20 mx-auto mb-3" />
+              <p className="text-white/60 text-sm">Select a conversation to start messaging</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // Different default widgets for users vs admins
 const DEFAULT_USER_WIDGETS: Widget[] = [
   { id: '1', type: 'projectTimeline', title: 'Project Timeline', size: 'large', position: { x: 0, y: 0 } },
-  { id: '2', type: 'messages', title: 'Messages & Communication', size: 'medium', position: { x: 2, y: 0 } },
-  { id: '3', type: 'upcomingMeetings', title: 'Upcoming Consultations', size: 'medium', position: { x: 0, y: 1 } },
-  { id: '4', type: 'quickActions', title: 'Quick Actions', size: 'small', position: { x: 1, y: 1 } },
-  { id: '5', type: 'documents', title: 'Recent Documents', size: 'medium', position: { x: 2, y: 1 } },
+  { id: '2', type: 'messages', title: 'Messages & Communication', size: 'large', position: { x: 1, y: 0 } },
+  { id: '3', type: 'quickActions', title: 'Quick Actions', size: 'small', position: { x: 0, y: 2 } },
+  { id: '4', type: 'documents', title: 'Recent Documents', size: 'medium', position: { x: 1, y: 2 } },
 ];
 
 const DEFAULT_ADMIN_WIDGETS: Widget[] = [
   { id: '1', type: 'stats', title: 'Business Metrics', size: 'medium', position: { x: 0, y: 0 } },
-  { id: '2', type: 'messages', title: 'Client Communications', size: 'large', position: { x: 1, y: 0 } },
+  { id: '2', type: 'messages', title: 'Client Communications', size: 'large', position: { x: 2, y: 0 } },
   { id: '3', type: 'projectProgress', title: 'Active Projects', size: 'medium', position: { x: 0, y: 1 } },
   { id: '4', type: 'tasks', title: 'Team Tasks', size: 'medium', position: { x: 1, y: 1 } },
   { id: '5', type: 'revenue', title: 'Revenue Overview', size: 'medium', position: { x: 2, y: 1 } },
@@ -103,39 +557,54 @@ export default function DashboardWidgets() {
   const [showAddWidget, setShowAddWidget] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [projectDialogOpen, setProjectDialogOpen] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [originalWidgets, setOriginalWidgets] = useState<Widget[]>([]);
 
-  // Load user's widget preferences
-  useEffect(() => {
+  // Load user's widget preferences function (defined outside useEffect for reusability)
+  const loadWidgetPreferences = async () => {
     if (!user) return;
-
-    const loadWidgetPreferences = async () => {
-      try {
-        const userDoc = await getDocs(query(collection(db, 'users'), where('uid', '==', user.uid)));
-        if (!userDoc.empty) {
-          const userData = userDoc.docs[0].data();
-          if (userData.dashboardWidgets) {
-            setWidgets(userData.dashboardWidgets);
-          } else {
-            // No saved preferences, use role-based defaults
-            setWidgets(isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS);
-          }
+    
+    setIsLoading(true);
+    try {
+      const userDoc = await getDocs(query(collection(db, 'users'), where('uid', '==', user.uid)));
+      if (!userDoc.empty) {
+        const userData = userDoc.docs[0].data();
+        if (userData.dashboardWidgets) {
+          setWidgets(userData.dashboardWidgets);
+          setOriginalWidgets(userData.dashboardWidgets);
         } else {
-          // No user doc, use role-based defaults
-          setWidgets(isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS);
+          // No saved preferences, use role-based defaults
+          const defaultWidgets = isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS;
+          setWidgets(defaultWidgets);
+          setOriginalWidgets(defaultWidgets);
         }
-      } catch (error) {
-        console.error('Error loading widget preferences:', error);
-        // On error, use role-based defaults
-        setWidgets(isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS);
+      } else {
+        // No user doc, use role-based defaults
+        const defaultWidgets = isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS;
+        setWidgets(defaultWidgets);
+        setOriginalWidgets(defaultWidgets);
       }
-    };
+    } catch (error) {
+      console.error('Error loading widget preferences:', error);
+      toast.error('Failed to load dashboard preferences');
+      // On error, use role-based defaults
+      const defaultWidgets = isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS;
+      setWidgets(defaultWidgets);
+      setOriginalWidgets(defaultWidgets);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  // Load preferences on mount
+  useEffect(() => {
     loadWidgetPreferences();
   }, [user, isAdmin]);
 
-  // Save widget preferences
+  // Save widget preferences with proper error handling
   const saveWidgetPreferences = async (updatedWidgets?: Widget[]) => {
-    if (!user) return;
+    if (!user) return false;
 
     try {
       const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
@@ -146,9 +615,17 @@ export default function DashboardWidgets() {
           dashboardWidgets: updatedWidgets || widgets,
           updatedAt: new Date()
         });
+        // Update original widgets to reflect saved state
+        setOriginalWidgets(updatedWidgets || widgets);
+        return true;
+      } else {
+        toast.error('User profile not found. Please contact support.');
+        return false;
       }
     } catch (error) {
       console.error('Error saving widget preferences:', error);
+      toast.error('Failed to save dashboard preferences. Please try again.');
+      return false;
     }
   };
 
@@ -220,6 +697,32 @@ export default function DashboardWidgets() {
             ? Math.round(((data.monthlyRevenue - lastMonthRevenue) / lastMonthRevenue) * 100)
             : 0;
 
+          // Fetch upcoming meetings for admins
+          const meetingsQuery = query(
+            collection(db, 'meetings'),
+            where('status', 'in', ['scheduled', 'rescheduled']),
+            where('startTime', '>', Timestamp.now()),
+            orderBy('startTime', 'asc'),
+            limit(5)
+          );
+          const meetingsSnapshot = await getDocs(meetingsQuery);
+          
+          data.upcomingMeetings = meetingsSnapshot.docs.map(doc => {
+            const meeting = doc.data();
+            return {
+              id: doc.id,
+              title: meeting.title,
+              type: meeting.type,
+              startTime: meeting.startTime.toDate(),
+              endTime: meeting.endTime.toDate(),
+              location: meeting.location,
+              platform: meeting.platform,
+              meetingLink: meeting.meetingLink,
+              participants: meeting.participants || [],
+              clientName: meeting.participants?.find((p: any) => p.role !== 'organizer')?.name || 'Unknown Client',
+            };
+          });
+
         } else {
           // User data fetching
           const projectsQuery = query(
@@ -285,6 +788,32 @@ export default function DashboardWidgets() {
             documents: documentsSnapshot.size,
           };
 
+          // Fetch upcoming meetings for users
+          const meetingsQuery = query(
+            collection(db, 'meetings'),
+            where('participantIds', 'array-contains', user.uid),
+            where('status', 'in', ['scheduled', 'rescheduled']),
+            where('startTime', '>', Timestamp.now()),
+            orderBy('startTime', 'asc'),
+            limit(5)
+          );
+          const meetingsSnapshot = await getDocs(meetingsQuery);
+          
+          data.upcomingMeetings = meetingsSnapshot.docs.map(doc => {
+            const meeting = doc.data();
+            return {
+              id: doc.id,
+              title: meeting.title,
+              type: meeting.type,
+              startTime: meeting.startTime.toDate(),
+              endTime: meeting.endTime.toDate(),
+              location: meeting.location,
+              platform: meeting.platform,
+              meetingLink: meeting.meetingLink,
+              participants: meeting.participants || [],
+            };
+          });
+
           // Recent activity
           const activities: Array<{
             id: string;
@@ -341,24 +870,35 @@ export default function DashboardWidgets() {
       position: { x: widgets.length % 3, y: Math.floor(widgets.length / 3) },
     };
 
-    setWidgets([...widgets, newWidget]);
+    const updatedWidgets = [...widgets, newWidget];
+    setWidgets(updatedWidgets);
     setShowAddWidget(false);
+    setHasUnsavedChanges(true);
   };
 
   const removeWidget = (widgetId: string) => {
     const updatedWidgets = widgets.filter(w => w.id !== widgetId);
     setWidgets(updatedWidgets);
-    saveWidgetPreferences(updatedWidgets);
+    setHasUnsavedChanges(true);
   };
 
-  const toggleWidgetSize = (widgetId: string) => {
+  const toggleWidgetSize = async (widgetId: string) => {
     const updatedWidgets = widgets.map(w => 
       w.id === widgetId 
         ? { ...w, isExpanded: !w.isExpanded }
         : w
     );
     setWidgets(updatedWidgets);
-    saveWidgetPreferences(updatedWidgets);
+    if (!isEditMode) {
+      // Auto-save size changes when not in edit mode
+      const saved = await saveWidgetPreferences(updatedWidgets);
+      if (!saved) {
+        // Revert on failure
+        setWidgets(widgets);
+      }
+    } else {
+      setHasUnsavedChanges(true);
+    }
   };
 
   const handleReorder = (newOrder: Widget[]) => {
@@ -367,7 +907,51 @@ export default function DashboardWidgets() {
       position: { x: index % 3, y: Math.floor(index / 3) }
     }));
     setWidgets(updatedWidgets);
-    saveWidgetPreferences(updatedWidgets);
+    setHasUnsavedChanges(true);
+  };
+
+  // Auto-save when exiting edit mode with unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges && isEditMode) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasUnsavedChanges, isEditMode]);
+
+  const handleSaveChanges = async () => {
+    const saved = await saveWidgetPreferences(widgets);
+    if (saved) {
+      setHasUnsavedChanges(false);
+      setIsEditMode(false);
+      toast.success('Dashboard saved successfully');
+    }
+  };
+
+  const handleCancelEdit = () => {
+    if (hasUnsavedChanges) {
+      if (confirm('You have unsaved changes. Are you sure you want to cancel?')) {
+        // Restore original widgets
+        setWidgets(originalWidgets);
+        setIsEditMode(false);
+        setHasUnsavedChanges(false);
+      }
+    } else {
+      setIsEditMode(false);
+    }
+  };
+
+  const resetToDefault = async () => {
+    if (confirm('Are you sure you want to reset to default layout? This will remove all your customizations.')) {
+      const defaultWidgets = isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS;
+      setWidgets(defaultWidgets);
+      setHasUnsavedChanges(true);
+      toast('Dashboard reset to default. Save to apply changes.', { icon: 'ℹ️' });
+    }
   };
 
   const renderWidget = (widget: Widget) => {
@@ -521,54 +1105,93 @@ export default function DashboardWidgets() {
           );
 
         case 'upcomingMeetings':
+          const meetings = widgetData.upcomingMeetings || [];
+          
+          const formatMeetingTime = (startTime: Date, endTime: Date) => {
+            return `${format(startTime, 'h:mm a')} - ${format(endTime, 'h:mm a')}`;
+          };
+
+          const getMeetingBadge = (startTime: Date) => {
+            if (isToday(startTime)) return 'Today';
+            if (isTomorrow(startTime)) return 'Tomorrow';
+            if (isThisWeek(startTime)) return format(startTime, 'EEEE');
+            return format(startTime, 'MMM d');
+          };
+
+          const getMeetingIcon = (platform?: string) => {
+            if (platform === 'video' || platform === 'zoom' || platform === 'teams' || platform === 'meet') {
+              return <Video className="w-3 h-3" />;
+            }
+            if (platform === 'in_person') {
+              return <MapPin className="w-3 h-3" />;
+            }
+            return <Calendar className="w-3 h-3" />;
+          };
+
           return (
             <div className="space-y-3">
-              {!isAdmin ? (
-                // User view - consultations with GroeimetAI consultants
-                <>
-                  <div className="p-3 bg-white/5 rounded-lg">
+              {meetings.length > 0 ? (
+                meetings.map((meeting: any) => (
+                  <div key={meeting.id} className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-white text-sm font-medium">AI Strategy Consultation</h4>
-                      <Badge variant="outline" className="text-xs">Tomorrow</Badge>
+                      <h4 className="text-white text-sm font-medium flex items-center gap-2">
+                        {getMeetingIcon(meeting.platform)}
+                        {meeting.title}
+                      </h4>
+                      <Badge variant="outline" className="text-xs">
+                        {getMeetingBadge(meeting.startTime)}
+                      </Badge>
                     </div>
-                    <p className="text-white/60 text-xs">10:00 AM - 11:00 AM</p>
-                    <p className="text-white/40 text-xs mt-1">With: Senior AI Consultant</p>
+                    <p className="text-white/60 text-xs">
+                      {formatMeetingTime(meeting.startTime, meeting.endTime)}
+                    </p>
+                    {meeting.location?.type === 'physical' && meeting.location.roomName && (
+                      <p className="text-white/40 text-xs mt-1">
+                        Location: {meeting.location.roomName}
+                      </p>
+                    )}
+                    {isAdmin && meeting.clientName && (
+                      <p className="text-white/40 text-xs mt-1">
+                        Client: {meeting.clientName}
+                      </p>
+                    )}
+                    {!isAdmin && meeting.participants.length > 0 && (
+                      <p className="text-white/40 text-xs mt-1">
+                        With: {meeting.participants.find((p: any) => p.role === 'organizer')?.name || 'GroeimetAI Team'}
+                      </p>
+                    )}
+                    {meeting.meetingLink && (
+                      <a 
+                        href={meeting.meetingLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-orange text-xs mt-2 inline-flex items-center gap-1 hover:underline"
+                      >
+                        Join Meeting
+                        <Video className="w-3 h-3" />
+                      </a>
+                    )}
                   </div>
-                  <div className="p-3 bg-white/5 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-white text-sm font-medium">Project Review</h4>
-                      <Badge variant="outline" className="text-xs">This Week</Badge>
-                    </div>
-                    <p className="text-white/60 text-xs">Friday 2:00 PM - 3:00 PM</p>
-                    <p className="text-white/40 text-xs mt-1">With: Project Manager</p>
-                  </div>
-                </>
+                ))
               ) : (
-                // Admin view - meetings with clients
-                <>
-                  <div className="p-3 bg-white/5 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-white text-sm font-medium">Acme Corp - Kickoff</h4>
-                      <Badge variant="outline" className="text-xs">Today</Badge>
-                    </div>
-                    <p className="text-white/60 text-xs">3:00 PM - 4:30 PM</p>
-                    <p className="text-white/40 text-xs mt-1">Client: John Doe (CEO)</p>
-                  </div>
-                  <div className="p-3 bg-white/5 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-white text-sm font-medium">TechStart - Progress Review</h4>
-                      <Badge variant="outline" className="text-xs">Tomorrow</Badge>
-                    </div>
-                    <p className="text-white/60 text-xs">11:00 AM - 12:00 PM</p>
-                    <p className="text-white/40 text-xs mt-1">Client: Sarah Chen (CTO)</p>
-                  </div>
-                </>
+                <div className="text-center py-8">
+                  <Calendar className="w-12 h-12 text-white/20 mx-auto mb-3" />
+                  <p className="text-white/60 text-sm mb-4">No upcoming meetings scheduled</p>
+                  <Link href="/dashboard/consultations">
+                    <Button variant="outline" size="sm">
+                      {isAdmin ? 'Schedule Meeting' : 'Book Consultation'}
+                    </Button>
+                  </Link>
+                </div>
               )}
-              <Link href="/dashboard/consultations">
-                <Button variant="outline" className="w-full" size="sm">
-                  {isAdmin ? 'View All Client Meetings' : 'Book Consultation'}
-                </Button>
-              </Link>
+              
+              {meetings.length > 0 && (
+                <Link href="/dashboard/consultations">
+                  <Button variant="outline" className="w-full" size="sm">
+                    {isAdmin ? 'View All Meetings' : 'View All Consultations'}
+                  </Button>
+                </Link>
+              )}
             </div>
           );
 
@@ -820,6 +1443,14 @@ export default function DashboardWidgets() {
     );
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Widget Controls */}
@@ -828,15 +1459,41 @@ export default function DashboardWidgets() {
           {isAdmin ? 'Operations Dashboard' : 'Your Project Dashboard'}
         </h2>
         <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            onClick={() => setIsEditMode(!isEditMode)}
-            className={isEditMode ? 'bg-orange/20 border-orange' : ''}
-            data-help="customize-dashboard"
-          >
-            <Settings className="w-4 h-4 mr-2" />
-            {isEditMode ? 'Done Editing' : 'Customize'}
-          </Button>
+          {!isEditMode ? (
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsEditMode(true);
+                setOriginalWidgets([...widgets]); // Save current state as original
+              }}
+              data-help="customize-dashboard"
+            >
+              <Settings className="w-4 h-4 mr-2" />
+              Customize
+            </Button>
+          ) : (
+            <>
+              <Button
+                variant="ghost"
+                onClick={handleCancelEdit}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="outline"
+                onClick={resetToDefault}
+              >
+                Reset to Default
+              </Button>
+              <Button
+                className="bg-orange hover:bg-orange/90"
+                onClick={handleSaveChanges}
+                disabled={!hasUnsavedChanges}
+              >
+                {hasUnsavedChanges ? 'Save Changes' : 'Saved'}
+              </Button>
+            </>
+          )}
           {isEditMode && (
             <Dialog open={showAddWidget} onOpenChange={setShowAddWidget}>
               <DialogTrigger asChild>
@@ -891,12 +1548,19 @@ export default function DashboardWidgets() {
 
       {/* Widgets Grid */}
       {isEditMode ? (
-        <Reorder.Group
-          axis="y"
-          values={widgets}
-          onReorder={handleReorder}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          data-help="dashboard-widgets"
+        <div className="relative">
+          {hasUnsavedChanges && (
+            <div className="absolute -top-8 right-0 text-orange text-sm flex items-center gap-2">
+              <AlertCircle className="w-4 h-4" />
+              Unsaved changes
+            </div>
+          )}
+          <Reorder.Group
+            axis="y"
+            values={widgets}
+            onReorder={handleReorder}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            data-help="dashboard-widgets"
         >
           {widgets.map(widget => (
             <Reorder.Item
@@ -912,6 +1576,7 @@ export default function DashboardWidgets() {
             </Reorder.Item>
           ))}
         </Reorder.Group>
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-help="dashboard-widgets">
           <AnimatePresence>
