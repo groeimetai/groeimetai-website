@@ -551,7 +551,7 @@ const MessagingWidget = ({
             </div>
 
             {/* Messages */}
-            <ScrollArea className="flex-1 p-3" style={{ maxHeight: '350px' }}>
+            <ScrollArea className="flex-1 p-3">
               <div className="space-y-3">
                 {isLoading && (
                   <div className="flex items-center justify-center py-8">
@@ -2113,7 +2113,7 @@ export default function DashboardWidgets() {
               </div>
 
               {/* Timeline Stages */}
-              <div className="flex-1 space-y-6 overflow-y-auto">
+              <div className="flex-1 space-y-4 overflow-y-auto">
                 {stages.map((stage: any, index: number) => {
                   const StageIcon = stageIcons[stage.icon as keyof typeof stageIcons] || Briefcase;
 
@@ -2180,7 +2180,7 @@ export default function DashboardWidgets() {
 
               {/* Next Milestone */}
               {(widgetData.milestone || !widgetData.timelineStages) && (
-                <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
+                <div className="mt-4 p-4 bg-orange/10 rounded-lg border border-orange/20">
                   <div className="flex items-center space-x-2">
                     <Target className="w-5 h-5 text-orange" />
                     <div>
