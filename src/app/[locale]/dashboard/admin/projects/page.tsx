@@ -14,6 +14,7 @@ import {
   doc,
   deleteDoc,
   Timestamp,
+  onSnapshot,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
@@ -149,60 +150,122 @@ export default function AdminProjectsPage() {
   useEffect(() => {
     if (!user || !isAdmin) return;
 
-    const fetchProjects = async () => {
-      setIsLoading(true);
-      try {
-        // Get all projects
-        const projectsQuery = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
-        const projectsSnapshot = await getDocs(projectsQuery);
-
-        const projectsData: Project[] = [];
-
-        // Get all user data for client information
-        const usersQuery = query(collection(db, 'users'));
-        const usersSnapshot = await getDocs(usersQuery);
-        const usersMap = new Map();
-        usersSnapshot.forEach((doc) => {
-          usersMap.set(doc.id, doc.data());
-        });
-
-        projectsSnapshot.forEach((doc) => {
-          const data = doc.data();
-          const clientData = usersMap.get(data.clientId || data.userId);
-
-          projectsData.push({
-            id: doc.id,
-            name: data.name || data.projectName || 'Untitled Project',
-            clientId: data.clientId || data.userId || '',
-            clientName: clientData?.displayName || clientData?.fullName || 'Unknown Client',
-            clientEmail: clientData?.email || '',
-            status: data.status || 'active',
-            type: data.type || 'consultation',
-            assignedTo: data.assignedTo || [],
-            startDate: data.startDate?.toDate() || data.createdAt?.toDate() || new Date(),
-            endDate: data.endDate?.toDate(),
-            budget: data.budget || {
-              amount: 0,
-              currency: 'EUR',
-              type: 'fixed',
-            },
-            progress: data.progress || 0,
-            milestones: data.milestones || [],
-            services: data.services || data.technologies || [],
-            createdAt: data.createdAt?.toDate() || new Date(),
-            updatedAt: data.updatedAt?.toDate() || new Date(),
-          });
-        });
-
-        setProjects(projectsData);
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-      } finally {
-        setIsLoading(false);
-      }
+    setIsLoading(true);
+    
+    // First, get all user data for client information
+    const fetchUsersData = async () => {
+      const usersQuery = query(collection(db, 'users'));
+      const usersSnapshot = await getDocs(usersQuery);
+      const usersMap = new Map();
+      usersSnapshot.forEach((doc) => {
+        usersMap.set(doc.id, doc.data());
+      });
+      return usersMap;
     };
 
-    fetchProjects();
+    fetchUsersData().then((usersMap) => {
+      const unsubscribes: (() => void)[] = [];
+      const allProjects: { [key: string]: Project } = {};
+
+      // Listen to projects collection
+      const projectsQuery = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
+      const unsubscribeProjects = onSnapshot(
+        projectsQuery,
+        (snapshot) => {
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            const clientData = usersMap.get(data.clientId || data.userId);
+
+            allProjects[doc.id] = {
+              id: doc.id,
+              name: data.name || data.projectName || 'Untitled Project',
+              clientId: data.clientId || data.userId || '',
+              clientName: clientData?.displayName || clientData?.fullName || 'Unknown Client',
+              clientEmail: clientData?.email || '',
+              status: data.status || 'active',
+              type: data.type || 'consultation',
+              assignedTo: data.assignedTo || [],
+              startDate: data.startDate?.toDate() || data.createdAt?.toDate() || new Date(),
+              endDate: data.endDate?.toDate(),
+              budget: data.budget || {
+                amount: 0,
+                currency: 'EUR',
+                type: 'fixed',
+              },
+              progress: data.progress || 0,
+              milestones: data.milestones || [],
+              services: data.services || data.technologies || [],
+              createdAt: data.createdAt?.toDate() || new Date(),
+              updatedAt: data.updatedAt?.toDate() || new Date(),
+            };
+          });
+
+          // Also listen to approved quotes (which are projects)
+          const quotesQuery = query(
+            collection(db, 'quotes'),
+            where('status', '==', 'approved'),
+            orderBy('createdAt', 'desc')
+          );
+          
+          const unsubscribeQuotes = onSnapshot(
+            quotesQuery,
+            (quotesSnapshot) => {
+              quotesSnapshot.forEach((doc) => {
+                const data = doc.data();
+                const clientData = usersMap.get(data.userId);
+
+                // Only add if not already in projects collection
+                if (!allProjects[doc.id]) {
+                  allProjects[doc.id] = {
+                    id: doc.id,
+                    name: data.projectName || 'Untitled Project',
+                    clientId: data.userId || '',
+                    clientName: data.fullName || data.userName || clientData?.displayName || 'Unknown Client',
+                    clientEmail: data.email || clientData?.email || '',
+                    status: 'active',
+                    type: data.projectType || 'consultation',
+                    assignedTo: [],
+                    startDate: data.startDate?.toDate() || data.createdAt?.toDate() || new Date(),
+                    endDate: data.endDate?.toDate(),
+                    budget: data.budget || {
+                      amount: 0,
+                      currency: 'EUR',
+                      type: 'fixed',
+                    },
+                    progress: 0,
+                    milestones: data.milestones || [],
+                    services: data.services || [],
+                    createdAt: data.createdAt?.toDate() || new Date(),
+                    updatedAt: data.updatedAt?.toDate() || new Date(),
+                  };
+                }
+              });
+
+              // Update projects state
+              setProjects(Object.values(allProjects));
+              setIsLoading(false);
+            },
+            (error) => {
+              console.error('Error listening to quotes:', error);
+              setIsLoading(false);
+            }
+          );
+          
+          unsubscribes.push(unsubscribeQuotes);
+        },
+        (error) => {
+          console.error('Error listening to projects:', error);
+          setIsLoading(false);
+        }
+      );
+
+      unsubscribes.push(unsubscribeProjects);
+
+      // Cleanup function
+      return () => {
+        unsubscribes.forEach(unsubscribe => unsubscribe());
+      };
+    });
   }, [user, isAdmin]);
 
   // Filter and sort projects

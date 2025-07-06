@@ -42,8 +42,10 @@ import {
 } from '@/components/ui/dialog';
 import { Link } from '@/i18n/routing';
 import { firestoreProjectService as projectService } from '@/services/firestore/projects';
-import { Project, ProjectStatus } from '@/types';
+import { Project, ProjectStatus, ProjectPriority } from '@/types';
 import { ProjectRequestDialog } from '@/components/dialogs/ProjectRequestDialog';
+import { db } from '@/lib/firebase/config';
+import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 
 export default function ProjectsPage() {
   const router = useRouter();
@@ -61,48 +63,123 @@ export default function ProjectsPage() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [projectDialogOpen, setProjectDialogOpen] = useState(false);
 
-  // Fetch projects from API
-  const fetchProjects = async () => {
+  // Subscribe to real-time project updates
+  useEffect(() => {
     if (!user) return;
 
     setIsLoading(true);
     setError(null);
 
-    try {
-      const response = await projectService.list({
-        userId: user.uid,
-        status: statusFilter !== 'all' ? statusFilter : undefined,
-        search: searchQuery || undefined,
-        sort: 'createdAt',
-        order: 'desc',
-      });
+    // Build queries for both quotes and projects collections
+    const queries = [];
 
-      setProjects(response.items);
-    } catch (err) {
-      console.error('Error fetching projects:', err);
-      setError('Failed to load projects. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    // Query for approved quotes (these are projects)
+    const quotesQuery = query(
+      collection(db, 'quotes'),
+      where('userId', '==', user.uid),
+      where('status', '==', 'approved'),
+      orderBy('createdAt', 'desc')
+    );
+    queries.push({ query: quotesQuery, type: 'quote' });
 
-  // Fetch projects when component mounts or filters change
-  useEffect(() => {
-    if (user) {
-      fetchProjects();
-    }
-  }, [user, statusFilter]); // eslint-disable-line react-hooks/exhaustive-deps
+    // Query for projects collection
+    const projectsQuery = query(
+      collection(db, 'projects'),
+      where('clientId', '==', user.uid),
+      orderBy('createdAt', 'desc')
+    );
+    queries.push({ query: projectsQuery, type: 'project' });
 
-  // Debounced search
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (user) {
-        fetchProjects();
-      }
-    }, 500);
+    const unsubscribes: (() => void)[] = [];
+    const allProjects: { [key: string]: Project } = {};
 
-    return () => clearTimeout(timer);
-  }, [searchQuery]); // eslint-disable-line react-hooks/exhaustive-deps
+    queries.forEach(({ query: q, type }) => {
+      const unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            
+            if (type === 'quote') {
+              // Transform quote to project format
+              const project: Project = {
+                id: doc.id,
+                name: data.projectName || 'Untitled Project',
+                description: data.projectDetails || '',
+                type: 'consultation' as const,
+                status: 'active' as const,
+                priority: (data.priority || 'medium') as ProjectPriority,
+                clientId: data.userId,
+                consultantId: '',
+                teamIds: [],
+                startDate: data.startDate?.toDate?.() || new Date(),
+                endDate: data.endDate?.toDate?.(),
+                estimatedHours: data.estimatedHours || 0,
+                actualHours: 0,
+                budget: data.budget || { amount: 0, currency: 'EUR', type: 'fixed' },
+                milestones: data.milestones || [],
+                tags: [],
+                categories: data.services || [],
+                technologies: data.technologies || [],
+                documentIds: [],
+                meetingIds: [],
+                createdAt: data.createdAt?.toDate?.() || new Date(),
+                updatedAt: data.updatedAt?.toDate?.() || new Date(),
+                createdBy: data.userId || '',
+              };
+              allProjects[doc.id] = project;
+            } else {
+              // Direct project format
+              allProjects[doc.id] = {
+                id: doc.id,
+                ...data,
+                startDate: data.startDate?.toDate?.() || new Date(),
+                endDate: data.endDate?.toDate?.(),
+                createdAt: data.createdAt?.toDate?.() || new Date(),
+                updatedAt: data.updatedAt?.toDate?.() || new Date(),
+              } as Project;
+            }
+          });
+
+          // Update projects list
+          let projectsList = Object.values(allProjects);
+
+          // Apply filters
+          if (statusFilter !== 'all') {
+            projectsList = projectsList.filter(p => p.status === statusFilter);
+          }
+
+          if (searchQuery) {
+            const query = searchQuery.toLowerCase();
+            projectsList = projectsList.filter(p => 
+              p.name.toLowerCase().includes(query) ||
+              p.description?.toLowerCase().includes(query) ||
+              p.categories.some(c => c.toLowerCase().includes(query))
+            );
+          }
+
+          // Sort by date
+          projectsList.sort((a, b) => 
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+
+          setProjects(projectsList);
+          setIsLoading(false);
+        },
+        (error) => {
+          console.error('Error listening to projects:', error);
+          setError('Failed to load projects. Please try again.');
+          setIsLoading(false);
+        }
+      );
+      unsubscribes.push(unsubscribe);
+    });
+
+    // Cleanup
+    return () => {
+      unsubscribes.forEach(unsubscribe => unsubscribe());
+    };
+  }, [user, statusFilter, searchQuery]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -128,8 +205,7 @@ export default function ProjectsPage() {
         status: 'cancelled' as ProjectStatus,
       });
 
-      // Refresh projects list
-      await fetchProjects();
+      // Projects list will auto-update via real-time listener
       setCancelDialogOpen(false);
       setSelectedProject(null);
     } catch (err) {
@@ -148,8 +224,7 @@ export default function ProjectsPage() {
     try {
       await projectService.delete(selectedProject.id);
 
-      // Refresh projects list
-      await fetchProjects();
+      // Projects list will auto-update via real-time listener
       setDeleteDialogOpen(false);
       setSelectedProject(null);
     } catch (err) {

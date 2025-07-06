@@ -35,8 +35,10 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from '@/i18n/routing';
 import { firestoreProjectService as projectService } from '@/services/firestore/projects';
-import { Project, ProjectStatus } from '@/types';
+import { Project, ProjectStatus, ProjectPriority } from '@/types';
 import { format } from 'date-fns';
+import { db } from '@/lib/firebase/config';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -48,35 +50,117 @@ export default function ProjectDetailPage() {
 
   const projectId = params.id as string;
 
-  // Fetch project details
-  const fetchProject = async () => {
+  // Subscribe to real-time project updates
+  useEffect(() => {
     if (!user || !projectId) return;
 
     setIsLoading(true);
     setError(null);
 
-    try {
-      const projectData = await projectService.get(projectId);
+    // First, check if the project exists in quotes collection
+    const quoteRef = doc(db, 'quotes', projectId);
+    const projectRef = doc(db, 'projects', projectId);
 
-      // Verify user has access to this project
-      if (projectData.clientId !== user.uid && user.role !== 'admin') {
-        setError('You do not have permission to view this project');
-        return;
+    // Try both collections since projects can be stored in either
+    let unsubscribeQuote: (() => void) | undefined;
+    let unsubscribeProject: (() => void) | undefined;
+
+    // Listen to quotes collection
+    unsubscribeQuote = onSnapshot(
+      quoteRef,
+      (docSnapshot) => {
+        if (docSnapshot.exists() && docSnapshot.data().status === 'approved') {
+          const data = docSnapshot.data();
+          
+          // Verify user has access
+          if (data.userId !== user.uid && user.role !== 'admin') {
+            setError('You do not have permission to view this project');
+            setIsLoading(false);
+            return;
+          }
+
+          // Transform quote data to project format
+          const projectData: Project = {
+            id: docSnapshot.id,
+            name: data.projectName || 'Untitled Project',
+            description: data.projectDetails || '',
+            type: 'consultation' as const,
+            status: 'active' as const,
+            priority: (data.priority || 'medium') as ProjectPriority,
+            clientId: data.userId,
+            consultantId: '',
+            teamIds: [],
+            startDate: data.startDate?.toDate?.() || new Date(),
+            endDate: data.endDate?.toDate?.(),
+            estimatedHours: data.estimatedHours || 0,
+            actualHours: 0,
+            budget: data.budget || { amount: 0, currency: 'EUR', type: 'fixed' },
+            milestones: data.milestones || [],
+            tags: [],
+            categories: data.services || [],
+            technologies: data.technologies || [],
+            documentIds: [],
+            meetingIds: [],
+            createdAt: data.createdAt?.toDate?.() || new Date(),
+            updatedAt: data.updatedAt?.toDate?.() || new Date(),
+            createdBy: data.userId || '',
+          };
+
+          setProject(projectData);
+          setIsLoading(false);
+        }
+      },
+      (error) => {
+        console.error('Error listening to quote:', error);
       }
+    );
 
-      setProject(projectData);
-    } catch (err) {
-      console.error('Error fetching project:', err);
-      setError('Failed to load project details. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    // Also listen to projects collection
+    unsubscribeProject = onSnapshot(
+      projectRef,
+      (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          
+          // Verify user has access
+          if (data.clientId !== user.uid && user.role !== 'admin') {
+            setError('You do not have permission to view this project');
+            setIsLoading(false);
+            return;
+          }
 
-  useEffect(() => {
-    if (user && projectId) {
-      fetchProject();
-    }
+          const projectData: Project = {
+            id: docSnapshot.id,
+            ...data,
+            startDate: data.startDate?.toDate?.() || new Date(),
+            endDate: data.endDate?.toDate?.(),
+            createdAt: data.createdAt?.toDate?.() || new Date(),
+            updatedAt: data.updatedAt?.toDate?.() || new Date(),
+          } as Project;
+
+          setProject(projectData);
+          setIsLoading(false);
+        } else {
+          // If not found in projects collection, rely on quotes collection
+          if (!project) {
+            setIsLoading(false);
+          }
+        }
+      },
+      (error) => {
+        console.error('Error listening to project:', error);
+        if (!project) {
+          setError('Failed to load project details. Please try again.');
+          setIsLoading(false);
+        }
+      }
+    );
+
+    // Cleanup function
+    return () => {
+      if (unsubscribeQuote) unsubscribeQuote();
+      if (unsubscribeProject) unsubscribeProject();
+    };
   }, [user, projectId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {

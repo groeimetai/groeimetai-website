@@ -1397,6 +1397,7 @@ export default function DashboardWidgets() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [originalWidgets, setOriginalWidgets] = useState<Widget[]>([]);
+  const timelineUnsubscribes = useRef<(() => void)[]>([]);
 
   // Load user's widget preferences function (defined outside useEffect for reusability)
   const loadWidgetPreferences = async () => {
@@ -1633,33 +1634,45 @@ export default function DashboardWidgets() {
             const latestProject = projectsSnapshot.docs[0].data();
             data.projectName = latestProject.name || 'My AI Project';
 
+            // Set up real-time listener for timeline
             const timelineRef = doc(db, 'projectTimelines', projectsSnapshot.docs[0].id);
-            const timelineDoc = await getDoc(timelineRef);
+            
+            // Store unsubscribe function
+            const unsubscribeTimeline = onSnapshot(timelineRef, (timelineDoc) => {
+              if (timelineDoc.exists()) {
+                const timelineData = timelineDoc.data();
+                
+                setWidgetData((prevData) => {
+                  const newData = { ...prevData };
+                  newData.timelineStages = timelineData.stages || [];
+                  
+                  // Calculate overall progress
+                  if (timelineData.stages) {
+                    const completedStages = timelineData.stages.filter(
+                      (s: any) => s.status === 'completed'
+                    ).length;
+                    const currentStage = timelineData.stages.find((s: any) => s.status === 'current');
+                    const currentProgress = currentStage?.progress || 0;
 
-            if (timelineDoc.exists()) {
-              const timelineData = timelineDoc.data();
-              data.timelineStages = timelineData.stages || [];
+                    // Overall progress includes partial progress of current stage
+                    newData.timelineProgress = Math.round(
+                      (completedStages * 100 + currentProgress) / timelineData.stages.length
+                    );
+                  } else {
+                    newData.timelineProgress = 0;
+                  }
 
-              // Calculate overall progress
-              if (timelineData.stages) {
-                const completedStages = timelineData.stages.filter(
-                  (s: any) => s.status === 'completed'
-                ).length;
-                const currentStage = timelineData.stages.find((s: any) => s.status === 'current');
-                const currentProgress = currentStage?.progress || 0;
-
-                // Overall progress includes partial progress of current stage
-                data.timelineProgress = Math.round(
-                  (completedStages * 100 + currentProgress) / timelineData.stages.length
-                );
-              } else {
-                data.timelineProgress = 0;
+                  // Add milestone and estimated completion
+                  newData.milestone = timelineData.milestone || null;
+                  newData.estimatedCompletion = latestProject.estimatedCompletion || null;
+                  
+                  return newData;
+                });
               }
-
-              // Add milestone and estimated completion
-              data.nextMilestone = timelineData.milestone || null;
-              data.estimatedCompletion = latestProject.estimatedCompletion || null;
-            }
+            });
+            
+            // Store unsubscribe function for cleanup
+            timelineUnsubscribes.current.push(unsubscribeTimeline);
           }
 
           // For messages widget - get unread message counts from notifications
@@ -1818,6 +1831,12 @@ export default function DashboardWidgets() {
     };
 
     fetchWidgetData();
+    
+    // Cleanup timeline listeners when component unmounts
+    return () => {
+      timelineUnsubscribes.current.forEach(unsubscribe => unsubscribe());
+      timelineUnsubscribes.current = [];
+    };
   }, [user, widgets, isAdmin]);
 
   const addWidget = (type: string) => {
