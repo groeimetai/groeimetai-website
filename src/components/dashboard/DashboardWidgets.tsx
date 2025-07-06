@@ -1707,7 +1707,7 @@ export default function DashboardWidgets() {
             values={widgets}
             onReorder={handleReorder}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            data-help="dashboard-widgets"
+            data-help="dashboard-widgets-edit"
         >
           {widgets.map(widget => (
             <Reorder.Item
@@ -1725,7 +1725,7 @@ export default function DashboardWidgets() {
         </Reorder.Group>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-help="dashboard-widgets">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-help="dashboard-widgets-grid">
           <AnimatePresence>
             {widgets.map(widget => (
               <motion.div

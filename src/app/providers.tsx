@@ -22,15 +22,23 @@ export function Providers({ children }: ProvidersProps) {
         {children}
         <Toaster
           position="top-right"
+          reverseOrder={false}
+          gutter={8}
+          containerStyle={{
+            position: 'fixed',
+            top: '80px',
+            right: '20px',
+            zIndex: 9999,
+          }}
           toastOptions={{
+            duration: 4000,
             style: {
               background: '#1a1a1a',
               color: '#fff',
               border: '1px solid rgba(255, 255, 255, 0.1)',
-              marginTop: '80px',
-              marginRight: '20px',
-              zIndex: 9999,
               maxWidth: '400px',
+              padding: '16px',
+              borderRadius: '8px',
             },
             success: {
               iconTheme: {

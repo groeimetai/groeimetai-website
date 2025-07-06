@@ -93,7 +93,7 @@ export const useHelp = () => {
 const HELP_TOOLTIPS: HelpTooltip[] = [
   {
     id: 'dashboard-widgets',
-    targetElement: '[data-help="dashboard-widgets"]',
+    targetElement: '[data-help="dashboard-main-widgets"]',
     title: 'Customize Your Dashboard',
     content: 'Click the customize button to add, remove, or rearrange widgets to suit your workflow.',
     position: 'bottom',
@@ -157,7 +157,7 @@ const TUTORIALS: Tutorial[] = [
       {
         title: 'Customize Your Experience',
         content: 'You can customize your dashboard by adding widgets that matter most to you.',
-        targetElement: '[data-help="dashboard-widgets"]'
+        targetElement: '[data-help="dashboard-main-widgets"]'
       },
       {
         title: 'Stay Connected',

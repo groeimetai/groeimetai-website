@@ -440,7 +440,7 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-8"
-          data-help="dashboard-widgets"
+          data-help="dashboard-main-widgets"
         >
           <DashboardWidgets />
         </motion.div>
