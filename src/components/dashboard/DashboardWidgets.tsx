@@ -1808,7 +1808,10 @@ export default function DashboardWidgets() {
         setWidgetData(data);
       } catch (error) {
         // Only log actual errors, not permission issues that are already handled
-        if (error instanceof Error && !error.message.includes('Missing or insufficient permissions')) {
+        if (
+          error instanceof Error &&
+          !error.message.includes('Missing or insufficient permissions')
+        ) {
           console.error('Error fetching widget data:', error);
         }
       }
