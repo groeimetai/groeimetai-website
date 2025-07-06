@@ -26,7 +26,12 @@ import {
   CheckCheck,
   Video,
   MapPin,
-  Loader2
+  Loader2,
+  Briefcase,
+  Rocket,
+  Flag,
+  CheckCircle,
+  Circle
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -1353,100 +1358,117 @@ export default function DashboardWidgets() {
           );
 
         case 'projectTimeline':
+          // Default timeline stages with proper icons
+          const defaultStages = [
+            { id: 1, name: 'Discovery', icon: 'briefcase', status: 'upcoming', description: 'Understanding your needs' },
+            { id: 2, name: 'Planning', icon: 'target', status: 'upcoming', description: 'Defining project scope' },
+            { id: 3, name: 'Development', icon: 'rocket', status: 'upcoming', description: 'Building your solution' },
+            { id: 4, name: 'Delivery', icon: 'flag', status: 'upcoming', description: 'Final implementation' }
+          ];
+          
+          const stages = widgetData.timelineStages?.length > 0 ? widgetData.timelineStages : defaultStages;
+          const currentStage = stages.find((stage: any) => stage.status === 'current');
+          const completedCount = stages.filter((stage: any) => stage.status === 'completed').length;
+          const currentStageProgress = currentStage?.progress || 0;
+          const totalProgress = (completedCount * 100 + currentStageProgress) / stages.length;
+          
+          // Map icon strings to components
+          const stageIcons = {
+            briefcase: Briefcase,
+            target: Target,
+            rocket: Rocket,
+            flag: Flag,
+          };
+          
           return (
             <div className="h-full flex flex-col">
               {/* Project Header */}
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  {widgetData.projectName || 'Your Project Timeline'}
-                </h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-white/60">Overall Progress</span>
-                    <span className="text-sm font-medium text-white">
-                      {widgetData.timelineProgress || 0}%
-                    </span>
-                  </div>
-                  <Progress value={widgetData.timelineProgress || 0} className="h-3" />
-                  {widgetData.estimatedCompletion && (
-                    <p className="text-xs text-white/60">
-                      Estimated completion: {widgetData.estimatedCompletion}
-                    </p>
-                  )}
+                <h3 className="text-xl font-semibold text-white">Project Timeline</h3>
+                <Badge variant="outline" className="text-orange border-orange mt-2">
+                  {currentStage?.name || 'Planning'}
+                </Badge>
+              </div>
+              
+              {/* Overall Progress */}
+              <div className="mb-8">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-white/60">Overall Progress</span>
+                  <span className="text-sm font-medium text-white">{Math.round(totalProgress)}%</span>
                 </div>
+                <Progress value={totalProgress} className="h-2" />
               </div>
               
               {/* Timeline Stages */}
-              <div className="flex-1 space-y-4 overflow-y-auto">
-                {widgetData.timelineStages?.length > 0 ? (
-                  widgetData.timelineStages.map((stage: any, index: number) => (
-                    <div key={index} className="relative">
+              <div className="flex-1 space-y-6 overflow-y-auto">
+                {stages.map((stage: any, index: number) => {
+                  const StageIcon = stageIcons[stage.icon as keyof typeof stageIcons] || Briefcase;
+                  
+                  return (
+                    <div key={stage.id || index} className="relative">
                       {/* Connection Line */}
-                      {index < widgetData.timelineStages.length - 1 && (
-                        <div className={`absolute left-4 top-10 bottom-0 w-0.5 ${
+                      {index < stages.length - 1 && (
+                        <div className={`absolute left-5 top-10 bottom-0 w-0.5 ${
                           stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
                         }`} />
                       )}
                       
-                      <div className="flex items-start gap-4">
+                      <div className="flex items-start space-x-4">
                         {/* Stage Icon */}
-                        <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        <div className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center ${
                           stage.status === 'completed' ? 'bg-green-500' : 
-                          stage.status === 'current' ? 'bg-orange animate-pulse' : 'bg-white/20'
+                          stage.status === 'current' ? 'bg-orange' : 'bg-white/20'
                         }`}>
                           {stage.status === 'completed' ? (
-                            <Check className="w-4 h-4 text-white" />
+                            <CheckCircle className="w-5 h-5 text-white" />
                           ) : stage.status === 'current' ? (
-                            <Clock className="w-4 h-4 text-white" />
+                            <Circle className="w-5 h-5 text-white animate-pulse" />
                           ) : (
-                            <span className="text-xs text-white">{index + 1}</span>
+                            <StageIcon className="w-5 h-5 text-white/60" />
                           )}
                         </div>
                         
                         {/* Stage Details */}
-                        <div className="flex-1 pb-6">
-                          <div className="flex items-center justify-between mb-1">
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
                             <h4 className={`font-medium ${
-                              stage.status === 'current' ? 'text-white' : 
-                              stage.status === 'completed' ? 'text-white/80' : 'text-white/60'
+                              stage.status === 'completed' ? 'text-white' : 
+                              stage.status === 'current' ? 'text-white' : 'text-white/60'
                             }`}>
                               {stage.name}
                             </h4>
-                            {stage.status === 'current' && stage.progress && (
-                              <span className="text-xs text-orange">{stage.progress}%</span>
-                            )}
                           </div>
-                          <p className="text-sm text-white/60 mb-2">{stage.description}</p>
+                          <p className="text-sm text-white/60 mt-1">{stage.description}</p>
                           
                           {/* Stage Progress Bar (for current stage) */}
                           {stage.status === 'current' && stage.progress && (
-                            <Progress value={stage.progress} className="h-1 mb-2" />
+                            <div className="mt-2">
+                              <Progress value={stage.progress} className="h-1" />
+                            </div>
                           )}
-                          
-                          {/* Stage Dates */}
-                          <div className="flex gap-4 text-xs text-white/40">
-                            {stage.startedAt && (
-                              <span>Started: {new Date(stage.startedAt.toDate()).toLocaleDateString()}</span>
-                            )}
-                            {stage.completedAt && (
-                              <span>Completed: {new Date(stage.completedAt.toDate()).toLocaleDateString()}</span>
-                            )}
-                            {stage.estimatedCompletion && stage.status !== 'completed' && (
-                              <span>Est: {stage.estimatedCompletion}</span>
-                            )}
-                          </div>
                         </div>
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <div className="text-center py-8">
-                    <Target className="w-12 h-12 text-white/20 mx-auto mb-3" />
-                    <p className="text-white/60">Project timeline will appear here</p>
-                    <p className="text-white/40 text-sm mt-1">Once your project request is approved</p>
-                  </div>
-                )}
+                  );
+                })}
               </div>
+              
+              {/* Next Milestone */}
+              {(widgetData.milestone || !widgetData.timelineStages) && (
+                <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
+                  <div className="flex items-center space-x-2">
+                    <Target className="w-5 h-5 text-orange" />
+                    <div>
+                      <p className="text-sm font-medium text-white">Next Milestone</p>
+                      <p className="text-xs text-white/60">
+                        {widgetData.milestone || 'Your project timeline will be updated once your request is approved'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
               
               {/* Next Milestone */}
               {widgetData.nextMilestone && (

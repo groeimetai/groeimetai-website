@@ -271,7 +271,11 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
       }
     }
     
-    setActiveTooltips(prev => [...prev, tooltipId]);
+    // Prevent duplicate tooltips
+    setActiveTooltips(prev => {
+      if (prev.includes(tooltipId)) return prev;
+      return [...prev, tooltipId];
+    });
     
     // Mark as seen
     if (!hasSeenTooltips.includes(tooltipId)) {
@@ -305,6 +309,8 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     
+    // Temporarily disable auto-showing tooltips to prevent duplicates
+    /*
     const firstVisitTooltips = HELP_TOOLTIPS.filter(
       tooltip => tooltip.showOnFirstVisit && !hasSeenTooltips.includes(tooltip.id)
     );
@@ -320,6 +326,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
         });
       }, 2000);
     }
+    */
   }, [hasSeenTooltips, showTooltip, pathname]);
 
   const startTutorial = (tutorialId: string) => {
