@@ -663,11 +663,11 @@ interface ProjectStage {
   estimatedCompletion?: string;
 }
 
-const AdminProjectProgress = ({ 
-  projects, 
-  onRefresh 
-}: { 
-  projects: any[]; 
+const AdminProjectProgress = ({
+  projects,
+  onRefresh,
+}: {
+  projects: any[];
   onRefresh: () => void;
 }) => {
   const [selectedProject, setSelectedProject] = useState<any>(null);
@@ -741,7 +741,7 @@ const AdminProjectProgress = ({
         onSnapshot(timelineRef, (timelineDoc: any) => {
           if (timelineDoc.exists()) {
             timelines[docSnapshot.id] = timelineDoc.data();
-            setProjectTimelines(prev => ({ ...prev, [docSnapshot.id]: timelineDoc.data() }));
+            setProjectTimelines((prev) => ({ ...prev, [docSnapshot.id]: timelineDoc.data() }));
           }
         });
       }
@@ -830,10 +830,10 @@ const AdminProjectProgress = ({
   };
 
   const calculateProjectProgress = (stages: ProjectStage[]) => {
-    const completedStages = stages.filter(s => s.status === 'completed').length;
-    const currentStage = stages.find(s => s.status === 'current');
+    const completedStages = stages.filter((s) => s.status === 'completed').length;
+    const currentStage = stages.find((s) => s.status === 'current');
     const currentProgress = currentStage?.progress || 0;
-    return ((completedStages * 100) + currentProgress) / stages.length;
+    return (completedStages * 100 + currentProgress) / stages.length;
   };
 
   return (
@@ -897,55 +897,57 @@ const AdminProjectProgress = ({
               </div>
 
               <div className="space-y-3">
-                {(projectTimelines[selectedProject.id]?.stages || defaultStages).map((stage: ProjectStage) => {
-                  const StageIcon = getStageIcon(stage.icon);
-                  return (
-                    <div
-                      key={stage.id}
-                      className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                              stage.status === 'completed'
-                                ? 'bg-green-500'
-                                : stage.status === 'current'
-                                  ? 'bg-orange'
-                                  : 'bg-white/20'
-                            }`}
+                {(projectTimelines[selectedProject.id]?.stages || defaultStages).map(
+                  (stage: ProjectStage) => {
+                    const StageIcon = getStageIcon(stage.icon);
+                    return (
+                      <div
+                        key={stage.id}
+                        className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                stage.status === 'completed'
+                                  ? 'bg-green-500'
+                                  : stage.status === 'current'
+                                    ? 'bg-orange'
+                                    : 'bg-white/20'
+                              }`}
+                            >
+                              {stage.status === 'completed' ? (
+                                <CheckCircle className="w-5 h-5 text-white" />
+                              ) : (
+                                <StageIcon className="w-5 h-5 text-white" />
+                              )}
+                            </div>
+                            <div>
+                              <h4 className="text-white font-medium">{stage.name}</h4>
+                              <p className="text-white/60 text-sm">{stage.description}</p>
+                              {stage.status === 'current' && stage.progress !== undefined && (
+                                <div className="mt-2 flex items-center gap-2">
+                                  <Progress value={stage.progress} className="h-1 flex-1" />
+                                  <span className="text-white/60 text-xs">{stage.progress}%</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditStage(stage);
+                            }}
                           >
-                            {stage.status === 'completed' ? (
-                              <CheckCircle className="w-5 h-5 text-white" />
-                            ) : (
-                              <StageIcon className="w-5 h-5 text-white" />
-                            )}
-                          </div>
-                          <div>
-                            <h4 className="text-white font-medium">{stage.name}</h4>
-                            <p className="text-white/60 text-sm">{stage.description}</p>
-                            {stage.status === 'current' && stage.progress !== undefined && (
-                              <div className="mt-2 flex items-center gap-2">
-                                <Progress value={stage.progress} className="h-1 flex-1" />
-                                <span className="text-white/60 text-xs">{stage.progress}%</span>
-                              </div>
-                            )}
-                          </div>
+                            <Edit className="w-4 h-4" />
+                          </Button>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEditStage(stage);
-                          }}
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  }
+                )}
               </div>
             </div>
           )}
@@ -956,9 +958,7 @@ const AdminProjectProgress = ({
       <Dialog open={isEditingStage} onOpenChange={setIsEditingStage}>
         <DialogContent className="bg-black/95 border-white/20">
           <DialogHeader>
-            <DialogTitle className="text-white">
-              Edit Stage: {editingStage?.name}
-            </DialogTitle>
+            <DialogTitle className="text-white">Edit Stage: {editingStage?.name}</DialogTitle>
           </DialogHeader>
 
           {editingStage && (
@@ -1443,7 +1443,7 @@ export default function DashboardWidgets() {
             orderBy('createdAt', 'desc')
           );
           const allApprovedQuotesSnapshot = await getDocs(allQuotesQuery);
-          
+
           data.allProjects = allApprovedQuotesSnapshot.docs.map((doc) => {
             const quote = doc.data();
             return {
@@ -1853,10 +1853,7 @@ export default function DashboardWidgets() {
 
           // Admin version with clickable projects and timeline editing
           return (
-            <AdminProjectProgress
-              projects={widgetData.allProjects || []}
-              onRefresh={() => {}}
-            />
+            <AdminProjectProgress projects={widgetData.allProjects || []} onRefresh={() => {}} />
           );
 
         case 'quickActions':
@@ -2441,9 +2438,11 @@ export default function DashboardWidgets() {
       {/* Widgets Grid */}
       {(() => {
         // Separate top widgets (project/messages) from other widgets
-        const topWidgetTypes = isAdmin ? ['projectProgress', 'messages'] : ['projectTimeline', 'messages'];
-        const topWidgets = widgets.filter(w => topWidgetTypes.includes(w.type));
-        const otherWidgets = widgets.filter(w => !topWidgetTypes.includes(w.type));
+        const topWidgetTypes = isAdmin
+          ? ['projectProgress', 'messages']
+          : ['projectTimeline', 'messages'];
+        const topWidgets = widgets.filter((w) => topWidgetTypes.includes(w.type));
+        const otherWidgets = widgets.filter((w) => !topWidgetTypes.includes(w.type));
 
         if (isEditMode) {
           return (
@@ -2463,7 +2462,7 @@ export default function DashboardWidgets() {
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Other widgets (draggable) */}
                 <Reorder.Group
                   axis="y"
@@ -2512,7 +2511,7 @@ export default function DashboardWidgets() {
                   ))}
                 </AnimatePresence>
               </div>
-              
+
               {/* Other widgets */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <AnimatePresence>

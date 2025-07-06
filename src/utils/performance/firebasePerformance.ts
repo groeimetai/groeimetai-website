@@ -52,10 +52,7 @@ export function configurePerformanceMonitoring() {
 /**
  * Measure a function's performance
  */
-export async function measurePerformance<T>(
-  traceName: string,
-  fn: () => Promise<T>
-): Promise<T> {
+export async function measurePerformance<T>(traceName: string, fn: () => Promise<T>): Promise<T> {
   const trace = createTrace(traceName);
   if (!trace) return fn();
 

@@ -45,7 +45,7 @@ if (typeof window !== 'undefined') {
     if (supported) {
       analytics = getAnalytics(app);
       performance = getPerformance(app);
-      
+
       // Disable automatic instrumentation to prevent CSS class attribute errors
       if (performance) {
         try {
