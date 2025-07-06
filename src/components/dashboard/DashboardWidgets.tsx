@@ -1702,24 +1702,29 @@ export default function DashboardWidgets() {
             })
           );
 
-          // For documents widget
-          const documentsQuery = query(
-            collection(db, 'documents'),
-            where('uploadedBy.uid', '==', user.uid),
-            orderBy('createdAt', 'desc'),
-            limit(5)
-          );
-          const documentsSnapshot = await getDocs(documentsQuery);
+          // For documents widget - wrapped in try/catch to handle permissions
+          try {
+            const documentsQuery = query(
+              collection(db, 'documents'),
+              where('uploadedBy.uid', '==', user.uid),
+              orderBy('createdAt', 'desc'),
+              limit(5)
+            );
+            const documentsSnapshot = await getDocs(documentsQuery);
 
-          data.recentDocuments = documentsSnapshot.docs.map((doc) => {
-            const docData = doc.data();
-            return {
-              id: doc.id,
-              name: docData.name,
-              type: docData.type,
-              date: docData.createdAt?.toDate().toLocaleDateString() || 'Unknown',
-            };
-          });
+            data.recentDocuments = documentsSnapshot.docs.map((doc) => {
+              const docData = doc.data();
+              return {
+                id: doc.id,
+                name: docData.name,
+                type: docData.type,
+                date: docData.createdAt?.toDate().toLocaleDateString() || 'Unknown',
+              };
+            });
+          } catch (documentsError) {
+            console.log('Documents collection not accessible or empty, skipping...');
+            data.recentDocuments = [];
+          }
 
           // Stats for users (simplified)
           data.stats = {
@@ -1727,34 +1732,39 @@ export default function DashboardWidgets() {
             activeProjects: projectsSnapshot.docs.filter((doc) => doc.data().status === 'active')
               .length,
             quotes: quotesSnapshot.size,
-            documents: documentsSnapshot.size,
+            documents: data.recentDocuments?.length || 0,
           };
 
-          // Fetch upcoming meetings for users
-          const meetingsQuery = query(
-            collection(db, 'meetings'),
-            where('participantIds', 'array-contains', user.uid),
-            where('status', 'in', ['scheduled', 'rescheduled']),
-            where('startTime', '>', Timestamp.now()),
-            orderBy('startTime', 'asc'),
-            limit(5)
-          );
-          const meetingsSnapshot = await getDocs(meetingsQuery);
+          // Fetch upcoming meetings for users - wrapped in try/catch to handle permissions
+          try {
+            const meetingsQuery = query(
+              collection(db, 'meetings'),
+              where('participantIds', 'array-contains', user.uid),
+              where('status', 'in', ['scheduled', 'rescheduled']),
+              where('startTime', '>', Timestamp.now()),
+              orderBy('startTime', 'asc'),
+              limit(5)
+            );
+            const meetingsSnapshot = await getDocs(meetingsQuery);
 
-          data.upcomingMeetings = meetingsSnapshot.docs.map((doc) => {
-            const meeting = doc.data();
-            return {
-              id: doc.id,
-              title: meeting.title,
-              type: meeting.type,
-              startTime: meeting.startTime.toDate(),
-              endTime: meeting.endTime.toDate(),
-              location: meeting.location,
-              platform: meeting.platform,
-              meetingLink: meeting.meetingLink,
-              participants: meeting.participants || [],
-            };
-          });
+            data.upcomingMeetings = meetingsSnapshot.docs.map((doc) => {
+              const meeting = doc.data();
+              return {
+                id: doc.id,
+                title: meeting.title,
+                type: meeting.type,
+                startTime: meeting.startTime.toDate(),
+                endTime: meeting.endTime.toDate(),
+                location: meeting.location,
+                platform: meeting.platform,
+                meetingLink: meeting.meetingLink,
+                participants: meeting.participants || [],
+              };
+            });
+          } catch (meetingsError) {
+            console.log('Meetings collection not accessible or empty, skipping...');
+            data.upcomingMeetings = [];
+          }
 
           // Recent activity
           const activities: Array<{
@@ -1797,7 +1807,10 @@ export default function DashboardWidgets() {
 
         setWidgetData(data);
       } catch (error) {
-        console.error('Error fetching widget data:', error);
+        // Only log actual errors, not permission issues that are already handled
+        if (error instanceof Error && !error.message.includes('Missing or insufficient permissions')) {
+          console.error('Error fetching widget data:', error);
+        }
       }
     };
 
