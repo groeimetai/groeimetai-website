@@ -170,7 +170,9 @@ const MessagingWidget = ({
 
   const scrollToBottom = () => {
     if (scrollAreaRef.current) {
-      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      const scrollContainer = scrollAreaRef.current.querySelector(
+        '[data-radix-scroll-area-viewport]'
+      );
       if (scrollContainer) {
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
       }
@@ -625,89 +627,89 @@ const MessagingWidget = ({
             <div className="flex-1 min-h-0 overflow-hidden">
               <ScrollArea ref={scrollAreaRef} className="h-full p-3 pb-0">
                 <div className="space-y-3">
-                {isLoading && (
-                  <div className="flex items-center justify-center py-8">
-                    <Loader2 className="w-5 h-5 animate-spin text-orange" />
-                  </div>
-                )}
+                  {isLoading && (
+                    <div className="flex items-center justify-center py-8">
+                      <Loader2 className="w-5 h-5 animate-spin text-orange" />
+                    </div>
+                  )}
 
-                {!isLoading && messages.length === 0 && (
-                  <div className="text-center text-white/40 py-8">
-                    <p className="text-sm">No messages yet</p>
-                    <p className="text-xs mt-1">Start the conversation!</p>
-                  </div>
-                )}
+                  {!isLoading && messages.length === 0 && (
+                    <div className="text-center text-white/40 py-8">
+                      <p className="text-sm">No messages yet</p>
+                      <p className="text-xs mt-1">Start the conversation!</p>
+                    </div>
+                  )}
 
-                {messages.map((msg) => {
-                  const isOwnMessage = msg.senderId === user?.uid;
+                  {messages.map((msg) => {
+                    const isOwnMessage = msg.senderId === user?.uid;
 
-                  return (
-                    <div
-                      key={msg.id}
-                      className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
-                    >
+                    return (
                       <div
-                        className={`flex items-end gap-2 max-w-[70%] ${
-                          isOwnMessage ? 'flex-row-reverse' : ''
-                        }`}
+                        key={msg.id}
+                        className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
                       >
-                        <Avatar className="w-6 h-6 flex-shrink-0">
-                          <AvatarFallback
-                            className={`text-xs ${
-                              msg.senderRole === 'admin'
-                                ? 'bg-green/20 text-green'
-                                : 'bg-orange/20 text-orange'
-                            }`}
-                          >
-                            {getInitials(msg.senderName)}
-                          </AvatarFallback>
-                        </Avatar>
                         <div
-                          className={`rounded-lg px-3 py-2 ${
-                            isOwnMessage ? 'bg-orange text-white' : 'bg-white/10 text-white'
+                          className={`flex items-end gap-2 max-w-[70%] ${
+                            isOwnMessage ? 'flex-row-reverse' : ''
                           }`}
                         >
-                          {msg.content && <p className="text-sm break-words">{msg.content}</p>}
-                          {msg.attachments && msg.attachments.length > 0 && (
-                            <div className="mt-2 space-y-1">
-                              {msg.attachments.map((attachment, idx) => (
-                                <div
-                                  key={idx}
-                                  className="flex items-center justify-between bg-white/10 rounded px-2 py-1"
-                                >
-                                  <div className="flex items-center gap-2 text-xs min-w-0">
-                                    {attachment.type.startsWith('image/') ? (
-                                      <ImageIcon className="w-3 h-3 flex-shrink-0" />
-                                    ) : (
-                                      <FileText className="w-3 h-3 flex-shrink-0" />
-                                    )}
-                                    <span className="truncate">{attachment.name}</span>
-                                  </div>
-                                  <a
-                                    href={attachment.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-white/60 hover:text-white ml-2 flex-shrink-0"
-                                  >
-                                    <Download className="w-3 h-3" />
-                                  </a>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                          <p
-                            className={`text-xs mt-1 ${
-                              isOwnMessage ? 'text-white/70' : 'text-white/50'
+                          <Avatar className="w-6 h-6 flex-shrink-0">
+                            <AvatarFallback
+                              className={`text-xs ${
+                                msg.senderRole === 'admin'
+                                  ? 'bg-green/20 text-green'
+                                  : 'bg-orange/20 text-orange'
+                              }`}
+                            >
+                              {getInitials(msg.senderName)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div
+                            className={`rounded-lg px-3 py-2 ${
+                              isOwnMessage ? 'bg-orange text-white' : 'bg-white/10 text-white'
                             }`}
                           >
-                            {formatMessageTime(msg.createdAt)}
-                          </p>
+                            {msg.content && <p className="text-sm break-words">{msg.content}</p>}
+                            {msg.attachments && msg.attachments.length > 0 && (
+                              <div className="mt-2 space-y-1">
+                                {msg.attachments.map((attachment, idx) => (
+                                  <div
+                                    key={idx}
+                                    className="flex items-center justify-between bg-white/10 rounded px-2 py-1"
+                                  >
+                                    <div className="flex items-center gap-2 text-xs min-w-0">
+                                      {attachment.type.startsWith('image/') ? (
+                                        <ImageIcon className="w-3 h-3 flex-shrink-0" />
+                                      ) : (
+                                        <FileText className="w-3 h-3 flex-shrink-0" />
+                                      )}
+                                      <span className="truncate">{attachment.name}</span>
+                                    </div>
+                                    <a
+                                      href={attachment.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-white/60 hover:text-white ml-2 flex-shrink-0"
+                                    >
+                                      <Download className="w-3 h-3" />
+                                    </a>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            <p
+                              className={`text-xs mt-1 ${
+                                isOwnMessage ? 'text-white/70' : 'text-white/50'
+                              }`}
+                            >
+                              {formatMessageTime(msg.createdAt)}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-                <div ref={messagesEndRef} style={{ height: 1 }} />
+                    );
+                  })}
+                  <div ref={messagesEndRef} style={{ height: 1 }} />
                 </div>
               </ScrollArea>
             </div>
@@ -2447,7 +2449,11 @@ export default function DashboardWidgets() {
             <div className="flex items-center gap-1">
               {widget.type === 'messages' && (
                 <Link href="/dashboard/messages" title="Open full messages page">
-                  <Button variant="ghost" size="icon" className="h-6 w-6 text-white/60 hover:text-white">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 text-white/60 hover:text-white"
+                  >
                     <ExternalLink className="h-3 w-3" />
                   </Button>
                 </Link>

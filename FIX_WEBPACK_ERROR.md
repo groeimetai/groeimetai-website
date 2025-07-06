@@ -5,12 +5,14 @@
 1. **Stop your development server** (Ctrl+C in terminal)
 
 2. **Clear all caches**:
+
 ```bash
 rm -rf .next
 rm -rf node_modules/.cache
 ```
 
 3. **Restart the development server**:
+
 ```bash
 npm run dev
 ```
@@ -30,6 +32,7 @@ npm run dev
 
 1. Check the browser console for more specific errors
 2. Try deleting `node_modules` and reinstalling:
+
    ```bash
    rm -rf node_modules package-lock.json
    npm install

@@ -61,7 +61,7 @@ const DropdownMenuContent = React.forwardRef<HTMLDivElement, DropdownMenuContent
     if (!context) throw new Error('DropdownMenuContent must be used within DropdownMenu');
 
     const contentRef = React.useRef<HTMLDivElement>(null);
-    
+
     React.useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
         if (contentRef.current && !contentRef.current.contains(event.target as Node)) {
@@ -114,7 +114,7 @@ const DropdownMenuItem = React.forwardRef<
   }
 >(({ className, inset, onClick, ...props }, ref) => {
   const context = React.useContext(DropdownMenuContext);
-  
+
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     onClick?.(e);
     if (context && !e.defaultPrevented) {

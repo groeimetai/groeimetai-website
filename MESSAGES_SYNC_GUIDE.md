@@ -3,6 +3,7 @@
 ## Overview
 
 The messages functionality is now synchronized between:
+
 1. Dashboard widget (compact view)
 2. Full messages page (/dashboard/messages)
 
@@ -11,11 +12,13 @@ Both use the same Firebase collections and real-time sync.
 ## Data Structure
 
 ### Collections Used
+
 - `supportChats`: Support conversations between users and GroeimetAI team
 - `projectChats`: Project-specific conversations
 - `notifications`: For unread count tracking
 
 ### Chat Document Structure
+
 ```javascript
 {
   id: string,              // Format: "support_${userId}" or "project_${projectId}"
@@ -34,6 +37,7 @@ Both use the same Firebase collections and real-time sync.
 ```
 
 ### Message Subcollection Structure
+
 ```javascript
 {
   id: string,
@@ -49,6 +53,7 @@ Both use the same Firebase collections and real-time sync.
 ## Features
 
 ### Dashboard Widget
+
 - Compact chat list (1/3 width)
 - Real-time message updates
 - Unread count indicators
@@ -56,6 +61,7 @@ Both use the same Firebase collections and real-time sync.
 - Link to full messages page
 
 ### Full Messages Page
+
 - Complete chat management
 - Star conversations
 - Archive functionality
@@ -66,13 +72,17 @@ Both use the same Firebase collections and real-time sync.
 ## Implementation Details
 
 ### Real-time Sync
+
 Both interfaces use Firestore `onSnapshot` listeners for real-time updates:
+
 - New messages appear instantly
 - Unread counts update automatically
 - Last message updates in both views
 
 ### Notifications
+
 When a message is sent:
+
 1. Message added to appropriate chat subcollection
 2. Notification created for recipient(s)
 3. Last message info updated on chat document
@@ -81,10 +91,12 @@ When a message is sent:
 ### Admin vs User Experience
 
 **Users see:**
+
 - Their support chat
 - Their project chats
 
 **Admins see:**
+
 - All support chats from all users
 - All project chats
 - Can respond to any conversation

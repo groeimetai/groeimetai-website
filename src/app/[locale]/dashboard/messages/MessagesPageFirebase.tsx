@@ -402,11 +402,12 @@ export default function MessagesPageFirebase() {
 
   // Send message
   const handleSendMessage = async () => {
-    if ((!newMessage.trim() && selectedFiles.length === 0) || !selectedConversation || !user) return;
+    if ((!newMessage.trim() && selectedFiles.length === 0) || !selectedConversation || !user)
+      return;
 
     setIsSending(true);
     setIsUploading(selectedFiles.length > 0);
-    
+
     try {
       const collectionName =
         selectedConversation.type === 'support' ? 'supportChats' : 'projectChats';
@@ -433,8 +434,8 @@ export default function MessagesPageFirebase() {
       if (selectedFiles.length > 0) {
         const uploadPromises = selectedFiles.map((file) =>
           uploadFile(
-            file, 
-            user.uid, 
+            file,
+            user.uid,
             user.displayName || user.email || 'Unknown User',
             user.email || '',
             selectedConversation.projectId
@@ -791,7 +792,11 @@ export default function MessagesPageFirebase() {
                         <MoreVertical className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-gray-900 border border-white/10 z-50" align="end" sideOffset={5}>
+                    <DropdownMenuContent
+                      className="bg-gray-900 border border-white/10 z-50"
+                      align="end"
+                      sideOffset={5}
+                    >
                       <DropdownMenuItem
                         onClick={() => archiveConversation(selectedConversation.id)}
                         className="text-white hover:bg-white/10 cursor-pointer px-3 py-2"
@@ -945,7 +950,11 @@ export default function MessagesPageFirebase() {
                     disabled={(!newMessage.trim() && selectedFiles.length === 0) || isSending}
                     className="bg-orange hover:bg-orange/90"
                   >
-                    {isSending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                    {isSending ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <Send className="w-5 h-5" />
+                    )}
                   </Button>
                 </div>
               </div>
