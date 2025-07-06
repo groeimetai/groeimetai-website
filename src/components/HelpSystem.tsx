@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, createContext, useContext, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   HelpCircle,
@@ -239,6 +240,7 @@ You'll receive notifications at each milestone completion.
 ];
 
 export function HelpProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const [activeTooltips, setActiveTooltips] = useState<string[]>([]);
   const [activeTutorial, setActiveTutorial] = useState<Tutorial | null>(null);
   const [tutorialStep, setTutorialStep] = useState(0);
@@ -274,8 +276,17 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Show first-visit tooltips
+  // Show first-visit tooltips only on dashboard
   useEffect(() => {
+    // Only show tooltips on the main dashboard page
+    const isDashboardPage = pathname === '/dashboard' || pathname === '/nl/dashboard' || pathname === '/en/dashboard';
+    
+    if (!isDashboardPage) {
+      // Clear any active tooltips when navigating away from dashboard
+      setActiveTooltips([]);
+      return;
+    }
+    
     const firstVisitTooltips = HELP_TOOLTIPS.filter(
       tooltip => tooltip.showOnFirstVisit && !hasSeenTooltips.includes(tooltip.id)
     );
@@ -283,11 +294,15 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
     if (firstVisitTooltips.length > 0) {
       setTimeout(() => {
         firstVisitTooltips.forEach(tooltip => {
-          showTooltip(tooltip.id);
+          // Check if the target element exists on the page
+          const targetElement = document.querySelector(tooltip.targetElement);
+          if (targetElement) {
+            showTooltip(tooltip.id);
+          }
         });
       }, 2000);
     }
-  }, [hasSeenTooltips, showTooltip]);
+  }, [hasSeenTooltips, showTooltip, pathname]);
 
   const startTutorial = (tutorialId: string) => {
     const tutorial = TUTORIALS.find(t => t.id === tutorialId);
