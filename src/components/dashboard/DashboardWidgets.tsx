@@ -75,7 +75,7 @@ interface Widget {
   id: string;
   type: 'stats' | 'recentActivity' | 'projectProgress' | 'upcomingMeetings' | 'quickActions' | 'revenue' | 'tasks' | 'projectTimeline' | 'messages' | 'documents';
   title: string;
-  size: 'small' | 'medium' | 'large';
+  size: 'small' | 'medium' | 'large' | 'xlarge';
   position: { x: number; y: number };
   isExpanded?: boolean;
 }
@@ -427,7 +427,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
   };
 
   return (
-    <div className="flex h-[500px] bg-black/20 rounded-lg overflow-hidden">
+    <div className="flex h-full min-h-[600px] bg-black/20 rounded-lg overflow-hidden">
       {/* Chat List - 1/3 width */}
       <div className="w-1/3 border-r border-white/10 flex flex-col">
         <div className="p-3 border-b border-white/10">
@@ -597,14 +597,14 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
 // Different default widgets for users vs admins
 const DEFAULT_USER_WIDGETS: Widget[] = [
   { id: '1', type: 'projectTimeline', title: 'Project Timeline', size: 'large', position: { x: 0, y: 0 } },
-  { id: '2', type: 'messages', title: 'Messages & Communication', size: 'large', position: { x: 1, y: 0 } },
+  { id: '2', type: 'messages', title: 'Messages & Communication', size: 'xlarge', position: { x: 1, y: 0 } },
   { id: '3', type: 'quickActions', title: 'Quick Actions', size: 'small', position: { x: 0, y: 2 } },
   { id: '4', type: 'documents', title: 'Recent Documents', size: 'medium', position: { x: 1, y: 2 } },
 ];
 
 const DEFAULT_ADMIN_WIDGETS: Widget[] = [
   { id: '1', type: 'stats', title: 'Business Metrics', size: 'medium', position: { x: 0, y: 0 } },
-  { id: '2', type: 'messages', title: 'Client Communications', size: 'large', position: { x: 2, y: 0 } },
+  { id: '2', type: 'messages', title: 'Client Communications', size: 'xlarge', position: { x: 2, y: 0 } },
   { id: '3', type: 'projectProgress', title: 'Active Projects', size: 'medium', position: { x: 0, y: 1 } },
   { id: '4', type: 'tasks', title: 'Team Tasks', size: 'medium', position: { x: 1, y: 1 } },
   { id: '5', type: 'revenue', title: 'Revenue Overview', size: 'medium', position: { x: 2, y: 1 } },
@@ -1001,11 +1001,21 @@ export default function DashboardWidgets() {
     const widgetType = WIDGET_TYPES.find(w => w.type === type);
     if (!widgetType) return;
 
+    // Determine size based on widget type
+    let widgetSize: Widget['size'] = 'medium';
+    if (type === 'messages') {
+      widgetSize = 'xlarge';
+    } else if (type === 'projectTimeline') {
+      widgetSize = 'large';
+    } else if (type === 'quickActions') {
+      widgetSize = 'small';
+    }
+
     const newWidget: Widget = {
       id: Date.now().toString(),
       type: type as Widget['type'],
       title: widgetType.title,
-      size: 'medium',
+      size: widgetSize,
       position: { x: widgets.length % 3, y: Math.floor(widgets.length / 3) },
     };
 
@@ -1467,29 +1477,20 @@ export default function DashboardWidgets() {
                   </div>
                 </div>
               )}
-            </div>
-          );
               
               {/* Next Milestone */}
-              {widgetData.nextMilestone && (
-                <div className="mt-4 p-3 bg-orange/10 rounded-lg border border-orange/20">
-                  <div className="flex items-center gap-2">
-                    <Target className="w-4 h-4 text-orange" />
+              {(widgetData.milestone || !widgetData.timelineStages) && (
+                <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
+                  <div className="flex items-center space-x-2">
+                    <Target className="w-5 h-5 text-orange" />
                     <div>
                       <p className="text-sm font-medium text-white">Next Milestone</p>
-                      <p className="text-xs text-white/60">{widgetData.nextMilestone}</p>
+                      <p className="text-xs text-white/60">
+                        {widgetData.milestone || 'Your project timeline will be updated once your request is approved'}
+                      </p>
                     </div>
                   </div>
                 </div>
-              )}
-              
-              {/* View Full Timeline Button */}
-              {widgetData.timelineStages?.length > 0 && (
-                <Link href="/dashboard/projects" className="mt-4">
-                  <Button variant="outline" className="w-full" size="sm">
-                    View Full Project Details
-                  </Button>
-                </Link>
               )}
             </div>
           );
@@ -1569,7 +1570,9 @@ export default function DashboardWidgets() {
         ? 'col-span-1' 
         : widget.size === 'large' 
           ? 'col-span-2 row-span-2' 
-          : 'col-span-1';
+          : widget.size === 'xlarge'
+            ? 'col-span-3 row-span-3'
+            : 'col-span-1';
 
     return (
       <div
@@ -1728,7 +1731,7 @@ export default function DashboardWidgets() {
             axis="y"
             values={widgets}
             onReorder={handleReorder}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
             data-help="dashboard-widgets-edit"
         >
           {widgets.map(widget => (
@@ -1747,7 +1750,7 @@ export default function DashboardWidgets() {
         </Reorder.Group>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-help="dashboard-widgets-grid">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-help="dashboard-widgets-grid">
           <AnimatePresence>
             {widgets.map(widget => (
               <motion.div

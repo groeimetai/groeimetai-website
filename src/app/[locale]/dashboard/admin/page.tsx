@@ -67,7 +67,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import QuoteChat from '@/components/QuoteChat';
-import ProjectTimelineManager from '@/components/ProjectTimelineManager';
+import ProjectTimelineManager from '@/components/admin/ProjectTimelineManager';
 import { notificationService } from '@/services/notificationService';
 import { BulkActions, SelectableListItem, useBulkSelection } from '@/components/admin/BulkActions';
 import type { BulkActionType } from '@/components/admin/BulkActions';
@@ -156,7 +156,6 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isTimelineOpen, setIsTimelineOpen] = useState(false);
   
   // Bulk selection state
   const {
@@ -671,6 +670,7 @@ export default function AdminDashboard() {
           <TabsList className="bg-white/5 border-white/10">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="quotes">Quotes</TabsTrigger>
+            <TabsTrigger value="timelines">Timelines</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="chats">Support Chats</TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
@@ -914,17 +914,6 @@ export default function AdminDashboard() {
                                 <MessageSquare className="w-4 h-4 mr-1" />
                                 Chat
                               </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => {
-                                  setSelectedQuote(quote);
-                                  setIsTimelineOpen(true);
-                                }}
-                              >
-                                <GitBranch className="w-4 h-4 mr-1" />
-                                Timeline
-                              </Button>
                               {quote.status === 'pending' && (
                                 <>
                                   <Button
@@ -983,6 +972,11 @@ export default function AdminDashboard() {
                 </Card>
               )}
             </div>
+          </TabsContent>
+
+          {/* Timelines Tab */}
+          <TabsContent value="timelines">
+            <ProjectTimelineManager />
           </TabsContent>
 
           {/* Projects Tab */}
@@ -1072,21 +1066,6 @@ export default function AdminDashboard() {
         </DialogContent>
       </Dialog>
 
-      {/* Timeline Dialog */}
-      <Dialog open={isTimelineOpen} onOpenChange={setIsTimelineOpen}>
-        <DialogContent className="bg-black/95 border-white/20 text-white max-w-3xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Manage Project Timeline</DialogTitle>
-          </DialogHeader>
-          {selectedQuote && (
-            <ProjectTimelineManager 
-              quoteId={selectedQuote.id} 
-              projectName={selectedQuote.projectName}
-              onClose={() => setIsTimelineOpen(false)}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
     </main>
   );
 }
