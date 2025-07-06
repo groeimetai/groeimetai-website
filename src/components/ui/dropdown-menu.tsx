@@ -83,9 +83,14 @@ const DropdownMenuContent = React.forwardRef<HTMLDivElement, DropdownMenuContent
     return (
       <div
         ref={(node) => {
-          contentRef.current = node;
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
+          if (node) {
+            (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          }
+          if (typeof ref === 'function') {
+            ref(node);
+          } else if (ref && 'current' in ref) {
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          }
         }}
         className={cn(
           'absolute z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md',

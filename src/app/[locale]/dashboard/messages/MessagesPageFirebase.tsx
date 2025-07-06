@@ -59,6 +59,7 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
+import { uploadFile, formatFileSize, FileAttachment } from '@/utils/fileUpload';
 
 interface Message {
   id: string;
@@ -68,6 +69,7 @@ interface Message {
   content: string;
   createdAt: Timestamp | null;
   isRead?: boolean;
+  attachments?: FileAttachment[];
 }
 
 interface ChatChannel {
@@ -98,6 +100,9 @@ export default function MessagesPageFirebase() {
   const [filter, setFilter] = useState<'all' | 'unread' | 'starred' | 'archived'>('all');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Load conversations
   useEffect(() => {
@@ -372,11 +377,36 @@ export default function MessagesPageFirebase() {
     }
   });
 
+  // Handle file selection
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    // Limit file size to 10MB
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const validFiles = files.filter((file) => {
+      if (file.size > maxSize) {
+        toast.error(`${file.name} is too large. Maximum size is 10MB.`);
+        return false;
+      }
+      return true;
+    });
+
+    setSelectedFiles((prev) => [...prev, ...validFiles]);
+  };
+
+  // Remove selected file
+  const removeSelectedFile = (index: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
   // Send message
   const handleSendMessage = async () => {
-    if (!newMessage.trim() || !selectedConversation || !user) return;
+    if ((!newMessage.trim() && selectedFiles.length === 0) || !selectedConversation || !user) return;
 
     setIsSending(true);
+    setIsUploading(selectedFiles.length > 0);
+    
     try {
       const collectionName =
         selectedConversation.type === 'support' ? 'supportChats' : 'projectChats';
@@ -398,15 +428,34 @@ export default function MessagesPageFirebase() {
         });
       }
 
+      // Upload files if any
+      let attachments: FileAttachment[] = [];
+      if (selectedFiles.length > 0) {
+        const uploadPromises = selectedFiles.map((file) =>
+          uploadFile(
+            file, 
+            user.uid, 
+            user.displayName || user.email || 'Unknown User',
+            user.email || '',
+            selectedConversation.projectId
+          )
+        );
+        attachments = await Promise.all(uploadPromises);
+      }
+
       // Add message
       const messagesRef = collection(db, collectionName, selectedConversation.id, 'messages');
-      const messageData = {
+      const messageData: any = {
         senderId: user.uid,
         senderName: isAdmin ? 'GroeimetAI Support' : user.displayName || user.email,
         senderRole: isAdmin ? 'admin' : 'user',
         content: newMessage.trim(),
         createdAt: serverTimestamp(),
       };
+
+      if (attachments.length > 0) {
+        messageData.attachments = attachments;
+      }
 
       await addDoc(messagesRef, messageData);
 
@@ -458,6 +507,10 @@ export default function MessagesPageFirebase() {
       );
 
       setNewMessage('');
+      setSelectedFiles([]);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
       toast.success('Message sent!');
     } catch (error) {
       console.error('Error sending message:', error);
@@ -782,7 +835,39 @@ export default function MessagesPageFirebase() {
                               {formatMessageTime(message.createdAt)}
                             </span>
                           </div>
-                          <p className="text-white/90">{message.content}</p>
+                          {message.content && <p className="text-white/90">{message.content}</p>}
+                          {message.attachments && message.attachments.length > 0 && (
+                            <div className="mt-3 space-y-2">
+                              {message.attachments.map((attachment, idx) => (
+                                <div
+                                  key={idx}
+                                  className="flex items-center justify-between bg-white/5 rounded p-2"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    {attachment.type.startsWith('image/') ? (
+                                      <ImageIcon className="w-4 h-4 text-white/60" />
+                                    ) : (
+                                      <FileText className="w-4 h-4 text-white/60" />
+                                    )}
+                                    <div>
+                                      <p className="text-sm text-white">{attachment.name}</p>
+                                      <p className="text-xs text-white/40">
+                                        {formatFileSize(attachment.size)}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <a
+                                    href={attachment.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-white/60 hover:text-white"
+                                  >
+                                    <Download className="w-3 h-3" />
+                                  </a>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </motion.div>
                     );
@@ -793,7 +878,55 @@ export default function MessagesPageFirebase() {
 
               {/* Message Input */}
               <div className="p-4 border-t border-white/10">
+                {/* Selected Files Preview */}
+                {selectedFiles.length > 0 && (
+                  <div className="mb-3 space-y-2">
+                    {selectedFiles.map((file, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between bg-white/5 rounded p-2"
+                      >
+                        <div className="flex items-center gap-2">
+                          {file.type.startsWith('image/') ? (
+                            <ImageIcon className="w-4 h-4 text-white/60" />
+                          ) : (
+                            <FileText className="w-4 h-4 text-white/60" />
+                          )}
+                          <div>
+                            <p className="text-sm text-white">{file.name}</p>
+                            <p className="text-xs text-white/40">{formatFileSize(file.size)}</p>
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeSelectedFile(index)}
+                          className="text-white/60 hover:text-white h-6 w-6"
+                        >
+                          <X className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 <div className="flex items-end gap-2">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    onChange={handleFileSelect}
+                    className="hidden"
+                    accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="text-white/60 hover:text-white"
+                    disabled={isSending}
+                  >
+                    <Paperclip className="w-5 h-5" />
+                  </Button>
                   <Textarea
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
@@ -809,7 +942,7 @@ export default function MessagesPageFirebase() {
                   />
                   <Button
                     onClick={handleSendMessage}
-                    disabled={!newMessage.trim() || isSending}
+                    disabled={(!newMessage.trim() && selectedFiles.length === 0) || isSending}
                     className="bg-orange hover:bg-orange/90"
                   >
                     {isSending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}

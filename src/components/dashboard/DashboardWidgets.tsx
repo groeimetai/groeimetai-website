@@ -37,6 +37,9 @@ import {
   User,
   Mail,
   ExternalLink,
+  Paperclip,
+  Image as ImageIcon,
+  Download,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -93,6 +96,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { DialogFooter } from '@/components/ui/dialog';
+import { uploadFile, formatFileSize, FileAttachment } from '@/utils/fileUpload';
 
 interface Widget {
   id: string;
@@ -126,6 +130,7 @@ interface Message {
   content: string;
   createdAt: Timestamp | null;
   isRead?: boolean;
+  attachments?: FileAttachment[];
 }
 
 interface ChatChannel {
@@ -159,6 +164,9 @@ const MessagingWidget = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   const scrollToBottom = () => {
     if (scrollAreaRef.current) {
@@ -378,11 +386,35 @@ const MessagingWidget = ({
     };
   }, [selectedChat, user]);
 
+  // Handle file selection
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    // Limit file size to 10MB
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const validFiles = files.filter((file) => {
+      if (file.size > maxSize) {
+        toast.error(`${file.name} is too large. Maximum size is 10MB.`);
+        return false;
+      }
+      return true;
+    });
+
+    setSelectedFiles((prev) => [...prev, ...validFiles]);
+  };
+
+  // Remove selected file
+  const removeSelectedFile = (index: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || !selectedChat || !user) return;
+    if ((!newMessage.trim() && selectedFiles.length === 0) || !selectedChat || !user) return;
 
     setIsSending(true);
+    setIsUploading(selectedFiles.length > 0);
     try {
       const collectionName = selectedChat.type === 'support' ? 'supportChats' : 'projectChats';
 
@@ -403,15 +435,34 @@ const MessagingWidget = ({
         });
       }
 
+      // Upload files if any
+      let attachments: FileAttachment[] = [];
+      if (selectedFiles.length > 0) {
+        const uploadPromises = selectedFiles.map((file) =>
+          uploadFile(
+            file,
+            user.uid,
+            user.displayName || user.email || 'Unknown User',
+            user.email || '',
+            selectedChat.projectId
+          )
+        );
+        attachments = await Promise.all(uploadPromises);
+      }
+
       // Add message
       const messagesRef = collection(db, collectionName, selectedChat.id, 'messages');
-      const messageData = {
+      const messageData: any = {
         senderId: user.uid,
         senderName: isAdmin ? 'GroeimetAI Support' : user.displayName || user.email,
         senderRole: isAdmin ? 'admin' : 'user',
         content: newMessage.trim(),
         createdAt: serverTimestamp(),
       };
+
+      if (attachments.length > 0) {
+        messageData.attachments = attachments;
+      }
 
       await addDoc(messagesRef, messageData);
 
@@ -463,6 +514,10 @@ const MessagingWidget = ({
       );
 
       setNewMessage('');
+      setSelectedFiles([]);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
       // Scroll to bottom after sending
       setTimeout(scrollToBottom, 100);
     } catch (error) {
@@ -470,6 +525,7 @@ const MessagingWidget = ({
       toast.error('Failed to send message');
     } finally {
       setIsSending(false);
+      setIsUploading(false);
     }
   };
 
@@ -610,7 +666,34 @@ const MessagingWidget = ({
                             isOwnMessage ? 'bg-orange text-white' : 'bg-white/10 text-white'
                           }`}
                         >
-                          <p className="text-sm break-words">{msg.content}</p>
+                          {msg.content && <p className="text-sm break-words">{msg.content}</p>}
+                          {msg.attachments && msg.attachments.length > 0 && (
+                            <div className="mt-2 space-y-1">
+                              {msg.attachments.map((attachment, idx) => (
+                                <div
+                                  key={idx}
+                                  className="flex items-center justify-between bg-white/10 rounded px-2 py-1"
+                                >
+                                  <div className="flex items-center gap-2 text-xs min-w-0">
+                                    {attachment.type.startsWith('image/') ? (
+                                      <ImageIcon className="w-3 h-3 flex-shrink-0" />
+                                    ) : (
+                                      <FileText className="w-3 h-3 flex-shrink-0" />
+                                    )}
+                                    <span className="truncate">{attachment.name}</span>
+                                  </div>
+                                  <a
+                                    href={attachment.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-white/60 hover:text-white ml-2 flex-shrink-0"
+                                  >
+                                    <Download className="w-3 h-3" />
+                                  </a>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                           <p
                             className={`text-xs mt-1 ${
                               isOwnMessage ? 'text-white/70' : 'text-white/50'
@@ -629,7 +712,57 @@ const MessagingWidget = ({
 
             {/* Message Input */}
             <form onSubmit={sendMessage} className="p-3 border-t border-white/10">
+              {/* Selected Files Preview */}
+              {selectedFiles.length > 0 && (
+                <div className="mb-2 space-y-1">
+                  {selectedFiles.map((file, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between bg-white/5 rounded p-1.5 text-xs"
+                    >
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        {file.type.startsWith('image/') ? (
+                          <ImageIcon className="w-3 h-3 text-white/60 flex-shrink-0" />
+                        ) : (
+                          <FileText className="w-3 h-3 text-white/60 flex-shrink-0" />
+                        )}
+                        <div className="min-w-0">
+                          <p className="text-white truncate">{file.name}</p>
+                          <p className="text-white/40">{formatFileSize(file.size)}</p>
+                        </div>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeSelectedFile(index)}
+                        className="text-white/60 hover:text-white h-5 w-5 p-0"
+                      >
+                        <X className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className="flex gap-2">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  onChange={handleFileSelect}
+                  className="hidden"
+                  accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="text-white/60 hover:text-white"
+                  disabled={isSending}
+                >
+                  <Paperclip className="w-4 h-4" />
+                </Button>
                 <Input
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
@@ -641,10 +774,14 @@ const MessagingWidget = ({
                   type="submit"
                   size="sm"
                   className="bg-orange hover:bg-orange/90"
-                  disabled={!newMessage.trim() || isSending}
+                  disabled={(!newMessage.trim() && selectedFiles.length === 0) || isSending}
                 >
                   {isSending ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    isUploading ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    )
                   ) : (
                     <Send className="w-4 h-4" />
                   )}
