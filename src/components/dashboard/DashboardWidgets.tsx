@@ -52,7 +52,7 @@ import { ProjectRequestDialog } from '@/components/dialogs/ProjectRequestDialog'
 
 interface Widget {
   id: string;
-  type: 'stats' | 'recentActivity' | 'projectProgress' | 'upcomingMeetings' | 'quickActions' | 'revenue' | 'tasks';
+  type: 'stats' | 'recentActivity' | 'projectProgress' | 'upcomingMeetings' | 'quickActions' | 'revenue' | 'tasks' | 'projectTimeline' | 'messages' | 'documents';
   title: string;
   size: 'small' | 'medium' | 'large';
   position: { x: number; y: number };
@@ -327,7 +327,7 @@ export default function DashboardWidgets() {
     };
 
     fetchWidgetData();
-  }, [user, widgets]);
+  }, [user, widgets, isAdmin]);
 
   const addWidget = (type: string) => {
     const widgetType = WIDGET_TYPES.find(w => w.type === type);
