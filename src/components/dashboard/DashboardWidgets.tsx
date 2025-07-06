@@ -622,7 +622,7 @@ const MessagingWidget = ({
             </div>
 
             {/* Messages */}
-            <ScrollArea ref={scrollAreaRef} className="flex-1 p-3" style={{ height: 'calc(100% - 140px)' }}>
+            <ScrollArea ref={scrollAreaRef} className="flex-1 p-3">
               <div className="space-y-3">
                 {isLoading && (
                   <div className="flex items-center justify-center py-8">
