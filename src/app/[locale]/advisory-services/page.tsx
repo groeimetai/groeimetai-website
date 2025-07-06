@@ -196,7 +196,7 @@ export default async function AdvisoryServicesPage() {
               Ready to Transform Your Business with AI?
             </h2>
             <p className="text-xl text-white/80 mb-8">
-              Let's discuss how our advisory services can accelerate your AI journey
+              Let&apos;s discuss how our advisory services can accelerate your AI journey
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <StartProjectButton size="lg" className="shadow-premium hover-lift">

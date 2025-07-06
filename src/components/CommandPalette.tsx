@@ -621,7 +621,7 @@ function CommandPaletteBase({
     }
 
     return items;
-  }, [user, navigateTo, setOpen, openHelpCenter, startTutorial, logout, setProjectDialogOpen]);
+  }, [user, navigateTo, setOpen, openHelpCenter, startTutorial, logout, setProjectDialogOpen, mounted]);
 
   // Filter items based on search
   const filteredItems = useMemo(() => {
