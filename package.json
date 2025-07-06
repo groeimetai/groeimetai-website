@@ -8,8 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest",
-    "typecheck": "tsc --noEmit",
+    "test": "jest --passWithNoTests",
+    "typecheck": "tsc --noEmit --skipLibCheck",
     "websocket": "node server/websocket.js",
     "setup-admin": "node scripts/setup-admin-accounts.js",
     "build:search-index": "tsx scripts/build-search-index.ts"

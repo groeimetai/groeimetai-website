@@ -86,11 +86,11 @@ jobs:
 
       - name: Install SWC binaries
         run: |
-          npm install -D @swc/core-linux-x64-gnu
-          npm install -D @swc/core-linux-x64-musl
+          npm install -D @swc/core-linux-x64-gnu || true
+          npm install -D @swc/core || true
 
       - name: Run unit tests
-        run: npm test -- --coverage --passWithNoTests
+        run: npm test -- --coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

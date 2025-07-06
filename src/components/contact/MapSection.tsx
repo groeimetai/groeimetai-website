@@ -3,6 +3,13 @@
 import { useEffect, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 
+// Add Google Maps types
+declare global {
+  interface Window {
+    google: typeof google;
+  }
+}
+
 interface MapSectionProps {
   className?: string;
 }
