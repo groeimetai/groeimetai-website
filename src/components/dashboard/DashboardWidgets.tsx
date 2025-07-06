@@ -2281,10 +2281,11 @@ export default function DashboardWidgets() {
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">{widget.title}</CardTitle>
-            <div className="flex items-center gap-1">
-            </div>
+            <div className="flex items-center gap-1"></div>
           </CardHeader>
-          <CardContent className={`flex-1 ${widget.type === 'messages' ? 'p-0 overflow-hidden' : ''}`}>
+          <CardContent
+            className={`flex-1 ${widget.type === 'messages' ? 'p-0 overflow-hidden' : ''}`}
+          >
             <WidgetContent />
           </CardContent>
         </Card>
@@ -2307,9 +2308,7 @@ export default function DashboardWidgets() {
         <h2 className="text-2xl font-bold text-white">
           {isAdmin ? 'Operations Dashboard' : 'Your Project Dashboard'}
         </h2>
-        <div className="flex items-center gap-3">
-          {/* Customization removed - static layout */}
-        </div>
+        <div className="flex items-center gap-3">{/* Customization removed - static layout */}</div>
       </div>
 
       {/* Widgets Grid */}

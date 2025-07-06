@@ -193,7 +193,6 @@ jobs:
             --max-instances 100 \
             --set-env-vars NODE_ENV=production
 
-
   # Performance Testing
   performance-test:
     name: Performance Testing
