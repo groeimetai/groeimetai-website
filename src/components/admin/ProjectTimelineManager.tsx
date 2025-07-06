@@ -84,6 +84,14 @@ interface UserProject {
   milestone?: string;
 }
 
+// Default stages template - moved outside component to avoid dependency issues
+const defaultStages: ProjectStage[] = [
+  { id: 1, name: 'Discovery', icon: 'briefcase', status: 'upcoming', description: 'Understanding your needs' },
+  { id: 2, name: 'Planning', icon: 'target', status: 'upcoming', description: 'Defining project scope' },
+  { id: 3, name: 'Development', icon: 'rocket', status: 'upcoming', description: 'Building your solution' },
+  { id: 4, name: 'Delivery', icon: 'flag', status: 'upcoming', description: 'Final implementation' },
+];
+
 export default function ProjectTimelineManager() {
   const { user, isAdmin } = useAuth();
   const [projects, setProjects] = useState<UserProject[]>([]);
@@ -91,14 +99,6 @@ export default function ProjectTimelineManager() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingStage, setEditingStage] = useState<ProjectStage | null>(null);
   const [loading, setLoading] = useState(true);
-
-  // Default stages template
-  const defaultStages: ProjectStage[] = [
-    { id: 1, name: 'Discovery', icon: 'briefcase', status: 'upcoming', description: 'Understanding your needs' },
-    { id: 2, name: 'Planning', icon: 'target', status: 'upcoming', description: 'Defining project scope' },
-    { id: 3, name: 'Development', icon: 'rocket', status: 'upcoming', description: 'Building your solution' },
-    { id: 4, name: 'Delivery', icon: 'flag', status: 'upcoming', description: 'Final implementation' },
-  ];
 
   // Icon components mapping
   const stageIcons = {
@@ -207,7 +207,7 @@ export default function ProjectTimelineManager() {
     return (
       <div className="text-center py-8">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <p className="text-white/60">You don't have permission to access this page.</p>
+        <p className="text-white/60">You don&apos;t have permission to access this page.</p>
       </div>
     );
   }
