@@ -548,7 +548,7 @@ const MessagingWidget = ({
   };
 
   return (
-    <div className="flex h-full overflow-hidden" style={{ maxHeight: '100%' }}>
+    <div className="flex h-full overflow-hidden" style={{ height: '550px' }}>
       {/* Chat List - 1/3 width */}
       <div className="w-1/3 border-r border-white/10 flex flex-col">
         <div className="p-3 border-b border-white/10">
@@ -595,7 +595,7 @@ const MessagingWidget = ({
       </div>
 
       {/* Chat Area - 2/3 width */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden h-full">
         {selectedChat ? (
           <>
             {/* Chat Header */}
@@ -622,8 +622,9 @@ const MessagingWidget = ({
             </div>
 
             {/* Messages */}
-            <ScrollArea ref={scrollAreaRef} className="flex-1 p-3 pb-0 min-h-0">
-              <div className="space-y-3">
+            <div className="flex-1 min-h-0 overflow-hidden">
+              <ScrollArea ref={scrollAreaRef} className="h-full p-3 pb-0">
+                <div className="space-y-3">
                 {isLoading && (
                   <div className="flex items-center justify-center py-8">
                     <Loader2 className="w-5 h-5 animate-spin text-orange" />
@@ -707,12 +708,13 @@ const MessagingWidget = ({
                   );
                 })}
                 <div ref={messagesEndRef} style={{ height: 1 }} />
-              </div>
-            </ScrollArea>
+                </div>
+              </ScrollArea>
+            </div>
 
             {/* Message Input */}
-            <div className="mt-auto">
-              <form onSubmit={sendMessage} className="p-3 border-t border-white/10">
+            <div className="border-t border-white/10">
+              <form onSubmit={sendMessage} className="p-3">
                 {/* Selected Files Preview */}
                 {selectedFiles.length > 0 && (
                   <ScrollArea className="max-h-[80px] mb-2">
@@ -2355,7 +2357,11 @@ export default function DashboardWidgets() {
 
         case 'messages':
           // Use a component for complex messaging widget
-          return <MessagingWidget isAdmin={isAdmin} widgetData={widgetData} user={user} />;
+          return (
+            <div className="h-full">
+              <MessagingWidget isAdmin={isAdmin} widgetData={widgetData} user={user} />
+            </div>
+          );
 
         case 'documents':
           return (
