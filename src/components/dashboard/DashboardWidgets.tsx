@@ -722,6 +722,7 @@ const AdminProjectProgress = ({
       const projectsList = [];
       const timelines: { [key: string]: any } = {};
 
+      // Process each approved quote document
       for (const docSnapshot of snapshot.docs) {
         const data = docSnapshot.data();
         const project = {
