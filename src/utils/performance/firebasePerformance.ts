@@ -1,23 +1,23 @@
 import { performance } from '@/lib/firebase/config';
-import { trace as firebaseTrace, Trace } from 'firebase/performance';
+import { trace as firebaseTrace, PerformanceTrace } from 'firebase/performance';
 
 /**
  * Creates a performance trace with attribute value sanitization
  * to prevent Firebase Performance errors with long Tailwind CSS classes
  */
-export function createTrace(name: string): Trace | null {
+export function createTrace(name: string): PerformanceTrace | null {
   if (!performance) return null;
 
   try {
     const trace = firebaseTrace(performance, name);
 
-    // Override setAttribute to sanitize long values
-    const originalSetAttribute = trace.setAttribute.bind(trace);
-    trace.setAttribute = (attrName: string, value: string) => {
+    // Override putAttribute to sanitize long values
+    const originalPutAttribute = trace.putAttribute.bind(trace);
+    trace.putAttribute = (attrName: string, value: string) => {
       try {
         // Truncate long attribute values to prevent errors (Firebase limit is 100 chars)
         const sanitizedValue = value.length > 100 ? value.substring(0, 97) + '...' : value;
-        originalSetAttribute(attrName, sanitizedValue);
+        originalPutAttribute(attrName, sanitizedValue);
       } catch (error) {
         // Silently ignore attribute errors to prevent disrupting the app
         console.debug('Firebase Performance attribute error:', error);

@@ -722,10 +722,10 @@ const AdminProjectProgress = ({
       const projectsList = [];
       const timelines: { [key: string]: any } = {};
 
-      for (const doc of snapshot.docs) {
-        const data = doc.data();
+      for (const docSnapshot of snapshot.docs) {
+        const data = docSnapshot.data();
         const project = {
-          id: doc.id,
+          id: docSnapshot.id,
           userId: data.userId,
           userName: data.fullName || data.userName || 'Unknown User',
           userEmail: data.email,
@@ -736,11 +736,11 @@ const AdminProjectProgress = ({
         projectsList.push(project);
 
         // Set up real-time listener for each project's timeline
-        const timelineRef = doc(db, 'projectTimelines', doc.id);
-        onSnapshot(timelineRef, (timelineDoc) => {
+        const timelineRef = doc(db, 'projectTimelines', docSnapshot.id);
+        onSnapshot(timelineRef, (timelineDoc: any) => {
           if (timelineDoc.exists()) {
-            timelines[doc.id] = timelineDoc.data();
-            setProjectTimelines(prev => ({ ...prev, [doc.id]: timelineDoc.data() }));
+            timelines[docSnapshot.id] = timelineDoc.data();
+            setProjectTimelines(prev => ({ ...prev, [docSnapshot.id]: timelineDoc.data() }));
           }
         });
       }
@@ -1854,7 +1854,7 @@ export default function DashboardWidgets() {
           return (
             <AdminProjectProgress
               projects={widgetData.allProjects || []}
-              onRefresh={() => fetchWidgetData(widget)}
+              onRefresh={() => {}}
             />
           );
 
