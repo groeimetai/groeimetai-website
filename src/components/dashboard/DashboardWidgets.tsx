@@ -81,16 +81,16 @@ const DEFAULT_ADMIN_WIDGETS: Widget[] = [
 ];
 
 const WIDGET_TYPES = [
-  { type: 'stats', title: 'Business Metrics', icon: BarChart3, description: 'Key business performance indicators' },
+  { type: 'stats', title: 'Business Metrics', icon: BarChart3, description: 'Key business performance indicators', adminOnly: true },
   { type: 'recentActivity', title: 'Recent Activity', icon: Activity, description: 'Latest updates and changes' },
-  { type: 'projectProgress', title: 'Active Projects', icon: Target, description: 'Overview of all active projects' },
-  { type: 'projectTimeline', title: 'Project Timeline', icon: Clock, description: 'Your project milestones and progress' },
+  { type: 'projectProgress', title: 'Active Projects', icon: Target, description: 'Overview of all active projects', adminOnly: true },
+  { type: 'projectTimeline', title: 'Project Timeline', icon: Clock, description: 'Your project milestones and progress', userOnly: true },
   { type: 'upcomingMeetings', title: 'Upcoming Consultations', icon: Calendar, description: 'Scheduled meetings with consultants' },
   { type: 'quickActions', title: 'Quick Actions', icon: Plus, description: 'Common actions and shortcuts' },
-  { type: 'tasks', title: 'Team Tasks', icon: FileText, description: 'Task management for team' },
+  { type: 'tasks', title: 'Team Tasks', icon: FileText, description: 'Task management for team', adminOnly: true },
   { type: 'messages', title: 'Messages', icon: MessageSquare, description: 'All your conversations in one place' },
-  { type: 'documents', title: 'Documents', icon: FileText, description: 'Recent contracts and deliverables' },
-  { type: 'revenue', title: 'Revenue', icon: DollarSign, description: 'Financial performance metrics' },
+  { type: 'documents', title: 'Documents', icon: FileText, description: 'Recent contracts and deliverables', userOnly: true },
+  { type: 'revenue', title: 'Revenue', icon: DollarSign, description: 'Financial performance metrics', adminOnly: true },
 ];
 
 export default function DashboardWidgets() {
@@ -115,15 +115,23 @@ export default function DashboardWidgets() {
           const userData = userDoc.docs[0].data();
           if (userData.dashboardWidgets) {
             setWidgets(userData.dashboardWidgets);
+          } else {
+            // No saved preferences, use role-based defaults
+            setWidgets(isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS);
           }
+        } else {
+          // No user doc, use role-based defaults
+          setWidgets(isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS);
         }
       } catch (error) {
         console.error('Error loading widget preferences:', error);
+        // On error, use role-based defaults
+        setWidgets(isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS);
       }
     };
 
     loadWidgetPreferences();
-  }, [user]);
+  }, [user, isAdmin]);
 
   // Save widget preferences
   const saveWidgetPreferences = async (updatedWidgets?: Widget[]) => {
@@ -515,16 +523,50 @@ export default function DashboardWidgets() {
         case 'upcomingMeetings':
           return (
             <div className="space-y-3">
-              <div className="p-3 bg-white/5 rounded-lg">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="text-white text-sm font-medium">Strategy Session</h4>
-                  <Badge variant="outline" className="text-xs">Tomorrow</Badge>
-                </div>
-                <p className="text-white/60 text-xs">10:00 AM - 11:00 AM</p>
-              </div>
+              {!isAdmin ? (
+                // User view - consultations with GroeimetAI consultants
+                <>
+                  <div className="p-3 bg-white/5 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-white text-sm font-medium">AI Strategy Consultation</h4>
+                      <Badge variant="outline" className="text-xs">Tomorrow</Badge>
+                    </div>
+                    <p className="text-white/60 text-xs">10:00 AM - 11:00 AM</p>
+                    <p className="text-white/40 text-xs mt-1">With: Senior AI Consultant</p>
+                  </div>
+                  <div className="p-3 bg-white/5 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-white text-sm font-medium">Project Review</h4>
+                      <Badge variant="outline" className="text-xs">This Week</Badge>
+                    </div>
+                    <p className="text-white/60 text-xs">Friday 2:00 PM - 3:00 PM</p>
+                    <p className="text-white/40 text-xs mt-1">With: Project Manager</p>
+                  </div>
+                </>
+              ) : (
+                // Admin view - meetings with clients
+                <>
+                  <div className="p-3 bg-white/5 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-white text-sm font-medium">Acme Corp - Kickoff</h4>
+                      <Badge variant="outline" className="text-xs">Today</Badge>
+                    </div>
+                    <p className="text-white/60 text-xs">3:00 PM - 4:30 PM</p>
+                    <p className="text-white/40 text-xs mt-1">Client: John Doe (CEO)</p>
+                  </div>
+                  <div className="p-3 bg-white/5 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-white text-sm font-medium">TechStart - Progress Review</h4>
+                      <Badge variant="outline" className="text-xs">Tomorrow</Badge>
+                    </div>
+                    <p className="text-white/60 text-xs">11:00 AM - 12:00 PM</p>
+                    <p className="text-white/40 text-xs mt-1">Client: Sarah Chen (CTO)</p>
+                  </div>
+                </>
+              )}
               <Link href="/dashboard/consultations">
                 <Button variant="outline" className="w-full" size="sm">
-                  View All Meetings
+                  {isAdmin ? 'View All Client Meetings' : 'Book Consultation'}
                 </Button>
               </Link>
             </div>
@@ -811,28 +853,35 @@ export default function DashboardWidgets() {
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid grid-cols-1 gap-3 mt-4">
-                  {WIDGET_TYPES.map((widgetType) => {
-                    const Icon = widgetType.icon;
-                    const isAdded = widgets.some(w => w.type === widgetType.type);
-                    return (
-                      <Button
-                        key={widgetType.type}
-                        variant="outline"
-                        className="justify-start h-auto p-4"
-                        onClick={() => !isAdded && addWidget(widgetType.type)}
-                        disabled={isAdded}
-                      >
-                        <Icon className="w-5 h-5 mr-3" />
-                        <div className="text-left">
-                          <p className="font-medium">{widgetType.title}</p>
-                          <p className="text-xs text-white/60">{widgetType.description}</p>
-                        </div>
-                        {isAdded && (
-                          <Badge variant="outline" className="ml-auto">Added</Badge>
-                        )}
-                      </Button>
-                    );
-                  })}
+                  {WIDGET_TYPES
+                    .filter((widgetType: any) => {
+                      // Filter widgets based on user role
+                      if (widgetType.adminOnly && !isAdmin) return false;
+                      if (widgetType.userOnly && isAdmin) return false;
+                      return true;
+                    })
+                    .map((widgetType) => {
+                      const Icon = widgetType.icon;
+                      const isAdded = widgets.some(w => w.type === widgetType.type);
+                      return (
+                        <Button
+                          key={widgetType.type}
+                          variant="outline"
+                          className="justify-start h-auto p-4"
+                          onClick={() => !isAdded && addWidget(widgetType.type)}
+                          disabled={isAdded}
+                        >
+                          <Icon className="w-5 h-5 mr-3" />
+                          <div className="text-left">
+                            <p className="font-medium">{widgetType.title}</p>
+                            <p className="text-xs text-white/60">{widgetType.description}</p>
+                          </div>
+                          {isAdded && (
+                            <Badge variant="outline" className="ml-auto">Added</Badge>
+                          )}
+                        </Button>
+                      );
+                    })}
                 </div>
               </DialogContent>
             </Dialog>
