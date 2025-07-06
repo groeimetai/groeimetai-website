@@ -551,7 +551,7 @@ const MessagingWidget = ({
             </div>
 
             {/* Messages */}
-            <ScrollArea className="flex-1 p-3">
+            <ScrollArea className="flex-1 p-3" style={{ maxHeight: '350px' }}>
               <div className="space-y-3">
                 {isLoading && (
                   <div className="flex items-center justify-center py-8">
@@ -1858,7 +1858,7 @@ export default function DashboardWidgets() {
 
         case 'quickActions':
           return (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {isAdmin ? (
                 // Admin quick actions
                 <>
@@ -2270,51 +2270,21 @@ export default function DashboardWidgets() {
     // Top widgets (project/messages) always span full width in their container
     const widgetSizeClass = isTopWidget
       ? 'col-span-1' // Full width in 2-column grid
-      : widget.isExpanded
-        ? 'col-span-full'
-        : widget.size === 'small'
-          ? 'col-span-1 h-[200px]' // Fixed height for small widgets
-          : widget.size === 'large'
-            ? 'col-span-2 row-span-2'
-            : widget.size === 'xlarge'
-              ? 'col-span-3 row-span-3'
-              : 'col-span-1';
+      : widget.size === 'small'
+        ? 'col-span-1 h-[250px]' // Fixed height for small widgets
+        : 'col-span-1';
 
     return (
       <div key={widget.id} className={`${widgetSizeClass}`}>
         <Card
-          className={`bg-white/5 border-white/10 h-full flex flex-col ${isTopWidget ? 'min-h-[450px]' : ''} ${isDragging === widget.id ? 'opacity-50 cursor-grabbing' : isEditMode ? 'cursor-grab' : ''}`}
+          className={`bg-white/5 border-white/10 h-full flex flex-col ${isTopWidget ? 'min-h-[500px] max-h-[500px]' : ''}`}
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">{widget.title}</CardTitle>
             <div className="flex items-center gap-1">
-              {!isTopWidget && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6"
-                  onClick={() => toggleWidgetSize(widget.id)}
-                >
-                  {widget.isExpanded ? (
-                    <Minimize2 className="h-3 w-3" />
-                  ) : (
-                    <Maximize2 className="h-3 w-3" />
-                  )}
-                </Button>
-              )}
-              {isEditMode && !isTopWidget && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6"
-                  onClick={() => removeWidget(widget.id)}
-                >
-                  <X className="h-3 w-3" />
-                </Button>
-              )}
             </div>
           </CardHeader>
-          <CardContent className={`flex-1 ${widget.type === 'messages' ? 'p-0' : ''}`}>
+          <CardContent className={`flex-1 ${widget.type === 'messages' ? 'p-0 overflow-hidden' : ''}`}>
             <WidgetContent />
           </CardContent>
         </Card>
@@ -2338,84 +2308,7 @@ export default function DashboardWidgets() {
           {isAdmin ? 'Operations Dashboard' : 'Your Project Dashboard'}
         </h2>
         <div className="flex items-center gap-3">
-          {!isEditMode ? (
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsEditMode(true);
-                setOriginalWidgets([...widgets]); // Save current state as original
-              }}
-              data-help="customize-dashboard"
-            >
-              <Settings className="w-4 h-4 mr-2" />
-              Customize
-            </Button>
-          ) : (
-            <>
-              <Button variant="ghost" onClick={handleCancelEdit}>
-                Cancel
-              </Button>
-              <Button variant="outline" onClick={resetToDefault}>
-                Reset to Default
-              </Button>
-              <Button
-                className="bg-orange hover:bg-orange/90"
-                onClick={handleSaveChanges}
-                disabled={!hasUnsavedChanges}
-              >
-                {hasUnsavedChanges ? 'Save Changes' : 'Saved'}
-              </Button>
-            </>
-          )}
-          {isEditMode && (
-            <Dialog open={showAddWidget} onOpenChange={setShowAddWidget}>
-              <DialogTrigger asChild>
-                <Button className="bg-orange hover:bg-orange/90" data-help="add-widget">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Widget
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-black/95 border-white/20">
-                <DialogHeader>
-                  <DialogTitle className="text-white">Add Widget</DialogTitle>
-                  <DialogDescription className="text-white/60">
-                    Choose a widget to add to your dashboard
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid grid-cols-1 gap-3 mt-4">
-                  {WIDGET_TYPES.filter((widgetType: any) => {
-                    // Filter widgets based on user role
-                    if (widgetType.adminOnly && !isAdmin) return false;
-                    if (widgetType.userOnly && isAdmin) return false;
-                    return true;
-                  }).map((widgetType) => {
-                    const Icon = widgetType.icon;
-                    const isAdded = widgets.some((w) => w.type === widgetType.type);
-                    return (
-                      <Button
-                        key={widgetType.type}
-                        variant="outline"
-                        className="justify-start h-auto p-4"
-                        onClick={() => !isAdded && addWidget(widgetType.type)}
-                        disabled={isAdded}
-                      >
-                        <Icon className="w-5 h-5 mr-3" />
-                        <div className="text-left">
-                          <p className="font-medium">{widgetType.title}</p>
-                          <p className="text-xs text-white/60">{widgetType.description}</p>
-                        </div>
-                        {isAdded && (
-                          <Badge variant="outline" className="ml-auto">
-                            Added
-                          </Badge>
-                        )}
-                      </Button>
-                    );
-                  })}
-                </div>
-              </DialogContent>
-            </Dialog>
-          )}
+          {/* Customization removed - static layout */}
         </div>
       </div>
 
@@ -2428,107 +2321,46 @@ export default function DashboardWidgets() {
         const topWidgets = widgets.filter((w) => topWidgetTypes.includes(w.type));
         const otherWidgets = widgets.filter((w) => !topWidgetTypes.includes(w.type));
 
-        if (isEditMode) {
-          return (
-            <div className="relative">
-              {hasUnsavedChanges && (
-                <div className="absolute -top-8 right-0 text-orange text-sm flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4" />
-                  Unsaved changes
-                </div>
-              )}
-              <div className="space-y-6">
-                {/* Top row - Project and Messages (non-draggable in edit mode) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {topWidgets.map((widget) => (
-                    <div key={widget.id} className="opacity-60 pointer-events-none">
-                      {renderWidget(widget)}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Other widgets (draggable) */}
-                <Reorder.Group
-                  axis="y"
-                  values={otherWidgets}
-                  onReorder={(newOrder) => {
-                    // Combine with top widgets when reordering
-                    const reorderedWidgets = [...topWidgets, ...newOrder];
-                    handleReorder(reorderedWidgets);
-                  }}
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-                  data-help="dashboard-widgets-edit"
-                >
-                  {otherWidgets.map((widget) => (
-                    <Reorder.Item
-                      key={widget.id}
-                      value={widget}
-                      dragListener={true}
-                      dragControls={undefined}
-                      whileDrag={{ scale: 1.05, opacity: 0.8 }}
-                      onDragStart={() => setIsDragging(widget.id)}
-                      onDragEnd={() => setIsDragging(null)}
-                    >
-                      {renderWidget(widget)}
-                    </Reorder.Item>
-                  ))}
-                </Reorder.Group>
-              </div>
+        return (
+          <div className="space-y-6" data-help="dashboard-widgets-grid">
+            {/* Top row - Project and Messages */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <AnimatePresence>
+                {topWidgets.map((widget) => (
+                  <motion.div
+                    key={widget.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                  >
+                    {renderWidget(widget, true)}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
-          );
-        } else {
-          return (
-            <div className="space-y-6" data-help="dashboard-widgets-grid">
-              {/* Top row - Project and Messages */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <AnimatePresence>
-                  {topWidgets.map((widget) => (
-                    <motion.div
-                      key={widget.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                    >
-                      {renderWidget(widget, true)}
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
 
-              {/* Other widgets */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <AnimatePresence>
-                  {otherWidgets.map((widget) => (
-                    <motion.div
-                      key={widget.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                    >
-                      {renderWidget(widget, false)}
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
+            {/* Other widgets */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <AnimatePresence>
+                {otherWidgets.map((widget) => (
+                  <motion.div
+                    key={widget.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                  >
+                    {renderWidget(widget, false)}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
-          );
-        }
+          </div>
+        );
       })()}
 
       {/* Empty State */}
-      {widgets.length === 0 && (
-        <div className="text-center py-12">
-          <Settings className="w-16 h-16 text-white/20 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-white mb-2">No widgets added</h3>
-          <p className="text-white/60 mb-6">Add widgets to customize your dashboard</p>
-          <Button className="bg-orange hover:bg-orange/90" onClick={() => setShowAddWidget(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Your First Widget
-          </Button>
-        </div>
-      )}
 
       {/* Project Request Dialog */}
       <ProjectRequestDialog open={projectDialogOpen} onOpenChange={setProjectDialogOpen} />
