@@ -156,14 +156,26 @@ const MessagingWidget = ({
   const [isSending, setIsSending] = useState(false);
   const [chats, setChats] = useState<ChatChannel[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (scrollAreaRef.current) {
+      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollContainer) {
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+      }
+    }
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    // Only scroll to bottom on new messages, not on initial load
+    if (messages.length > 0 && hasScrolledToBottom) {
+      scrollToBottom();
+    } else if (messages.length > 0 && !hasScrolledToBottom) {
+      setHasScrolledToBottom(true);
+    }
+  }, [messages.length, hasScrolledToBottom]);
 
   // Load chats based on user role
   useEffect(() => {
@@ -450,6 +462,8 @@ const MessagingWidget = ({
       );
 
       setNewMessage('');
+      // Scroll to bottom after sending
+      setTimeout(scrollToBottom, 100);
     } catch (error) {
       console.error('Error sending message:', error);
       toast.error('Failed to send message');
@@ -477,7 +491,7 @@ const MessagingWidget = ({
   };
 
   return (
-    <div className="flex h-full overflow-hidden">
+    <div className="flex h-full overflow-hidden" style={{ maxHeight: '100%' }}>
       {/* Chat List - 1/3 width */}
       <div className="w-1/3 border-r border-white/10 flex flex-col">
         <div className="p-3 border-b border-white/10">
@@ -551,7 +565,7 @@ const MessagingWidget = ({
             </div>
 
             {/* Messages */}
-            <ScrollArea className="flex-1 p-3">
+            <ScrollArea ref={scrollAreaRef} className="flex-1 p-3" style={{ maxHeight: '400px' }}>
               <div className="space-y-3">
                 {isLoading && (
                   <div className="flex items-center justify-center py-8">
@@ -608,7 +622,7 @@ const MessagingWidget = ({
                     </div>
                   );
                 })}
-                <div ref={messagesEndRef} />
+                <div ref={messagesEndRef} style={{ height: 1 }} />
               </div>
             </ScrollArea>
 
