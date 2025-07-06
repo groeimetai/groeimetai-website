@@ -16,6 +16,7 @@ import {
   setDoc
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
+import { notificationService } from '@/services/notificationService';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -143,6 +144,16 @@ export default function ChatManagement() {
         lastMessage: newMessage.trim(),
         lastMessageBy: user.uid
       }, { merge: true });
+
+      // Send notification to the user
+      const notificationData = notificationService.templates.newMessage(
+        user.displayName || 'Support Team'
+      );
+      
+      await notificationService.sendToUser(selectedChannel.userId, {
+        ...notificationData,
+        link: '/dashboard'
+      });
 
       setNewMessage('');
     } catch (error) {

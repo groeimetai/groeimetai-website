@@ -57,6 +57,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { formatDistanceToNow } from 'date-fns';
+import toast from 'react-hot-toast';
 
 export interface Notification {
   id: string;
@@ -87,12 +88,24 @@ interface NotificationPreferences {
   };
 }
 
+// Notification sound function
+const playNotificationSound = () => {
+  try {
+    const audio = new Audio('/notification-sound.mp3');
+    audio.volume = 0.5;
+    audio.play().catch(err => console.log('Could not play notification sound:', err));
+  } catch (error) {
+    console.log('Notification sound not available');
+  }
+};
+
 export default function NotificationCenter() {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState<'all' | 'unread' | 'actionRequired'>('all');
+  const [previousNotificationCount, setPreviousNotificationCount] = useState(0);
   const [preferences, setPreferences] = useState<NotificationPreferences>({
     email: {
       messages: true,
@@ -125,12 +138,51 @@ export default function NotificationCenter() {
         notificationData.push({ id: doc.id, ...doc.data() } as Notification);
       });
       
+      // Check for new notifications
+      if (notificationData.length > previousNotificationCount && previousNotificationCount > 0) {
+        // Play sound for new notification
+        playNotificationSound();
+        
+        // Show browser notification if permissions granted
+        if ('Notification' in window && Notification.permission === 'granted') {
+          const newNotification = notificationData[0]; // Most recent
+          new Notification(newNotification.title, {
+            body: newNotification.description,
+            icon: '/icon-192x192.png',
+            tag: newNotification.id,
+            requireInteraction: newNotification.actionRequired || false
+          });
+        }
+        
+        // Show toast notification
+        const newNotification = notificationData[0];
+        const toastMessage = `${newNotification.title}: ${newNotification.description}`;
+        
+        if (newNotification.priority === 'high') {
+          toast.error(toastMessage, {
+            duration: 5000,
+            icon: '🔴'
+          });
+        } else if (newNotification.type === 'message') {
+          toast.success(toastMessage, {
+            duration: 4000,
+            icon: '💬'
+          });
+        } else {
+          toast(toastMessage, {
+            duration: 4000,
+            icon: '🔔'
+          });
+        }
+      }
+      
+      setPreviousNotificationCount(notificationData.length);
       setNotifications(notificationData);
       setUnreadCount(notificationData.filter(n => !n.read).length);
     });
 
     return () => unsubscribe();
-  }, [user]);
+  }, [user, previousNotificationCount]);
 
   // Mark as read
   const markAsRead = async (notificationId: string) => {
@@ -411,12 +463,24 @@ export default function NotificationCenter() {
                   <Switch
                     id="push-enabled"
                     checked={preferences.push.enabled}
-                    onCheckedChange={(checked) =>
+                    onCheckedChange={async (checked) => {
+                      if (checked && 'Notification' in window) {
+                        // Request permission if not granted
+                        if (Notification.permission === 'default') {
+                          const permission = await Notification.requestPermission();
+                          if (permission !== 'granted') {
+                            return; // Don't enable if permission denied
+                          }
+                        } else if (Notification.permission === 'denied') {
+                          alert('Please enable notifications in your browser settings');
+                          return;
+                        }
+                      }
                       setPreferences(prev => ({
                         ...prev,
                         push: { ...prev.push, enabled: checked }
                       }))
-                    }
+                    }}
                   />
                 </div>
                 {preferences.push.enabled && (

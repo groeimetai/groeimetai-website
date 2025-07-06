@@ -12,9 +12,12 @@ import {
   Timestamp,
   doc,
   setDoc,
-  getDoc
+  getDoc,
+  getDocs,
+  where
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
+import { notificationService } from '@/services/notificationService';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -147,6 +150,41 @@ export default function DashboardChat() {
         lastMessage: newMessage.trim(),
         lastMessageBy: user.uid
       }, { merge: true });
+
+      // Send notification
+      if (!isAdmin) {
+        // User sending message - notify all admins
+        const adminsSnapshot = await getDocs(
+          query(collection(db, 'users'), where('role', '==', 'admin'))
+        );
+        
+        const notificationData = notificationService.templates.newMessage(
+          user.displayName || user.email || 'User'
+        );
+        
+        const notificationPromises = adminsSnapshot.docs.map(adminDoc =>
+          notificationService.sendToUser(adminDoc.id, {
+            ...notificationData,
+            link: '/dashboard/admin'
+          })
+        );
+        
+        await Promise.all(notificationPromises);
+      } else {
+        // Admin sending message - notify the specific user
+        // Extract user ID from channel ID (format: support_userId)
+        const targetUserId = chatChannelId.replace('support_', '');
+        if (targetUserId && targetUserId !== user.uid) {
+          const notificationData = notificationService.templates.newMessage(
+            user.displayName || 'Support Team'
+          );
+          
+          await notificationService.sendToUser(targetUserId, {
+            ...notificationData,
+            link: '/dashboard'
+          });
+        }
+      }
 
       setNewMessage('');
     } catch (error) {
