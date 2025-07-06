@@ -111,7 +111,7 @@ function extractContentFromHtml(html: string): {
   cleanHtml = cleanHtml.replace(/<header\b[^<]*(?:(?!<\/header>)<[^<]*)*<\/header>/gi, '');
   
   // Extract text from main content area if possible
-  const mainMatch = cleanHtml.match(/<main\b[^>]*>(.*?)<\/main>/is);
+  const mainMatch = cleanHtml.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
   const contentHtml = mainMatch ? mainMatch[1] : cleanHtml;
   
   // Convert HTML to text
