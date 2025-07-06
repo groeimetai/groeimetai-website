@@ -32,6 +32,10 @@ import {
   Flag,
   CheckCircle,
   Circle,
+  Edit,
+  Save,
+  User,
+  Mail,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -78,6 +82,16 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { ProjectRequestDialog } from '@/components/dialogs/ProjectRequestDialog';
 import toast from 'react-hot-toast';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { DialogFooter } from '@/components/ui/dialog';
 
 interface Widget {
   id: string;
@@ -636,6 +650,417 @@ const MessagingWidget = ({
   );
 };
 
+// Admin Project Progress Component with Timeline Editing
+interface ProjectStage {
+  id: number;
+  name: string;
+  icon: string;
+  status: 'completed' | 'current' | 'upcoming';
+  description: string;
+  progress?: number;
+  completedAt?: Timestamp;
+  startedAt?: Timestamp;
+  estimatedCompletion?: string;
+}
+
+const AdminProjectProgress = ({ 
+  projects, 
+  onRefresh 
+}: { 
+  projects: any[]; 
+  onRefresh: () => void;
+}) => {
+  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingStage, setEditingStage] = useState<ProjectStage | null>(null);
+  const [isEditingStage, setIsEditingStage] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [allProjects, setAllProjects] = useState<any[]>([]);
+  const [projectTimelines, setProjectTimelines] = useState<{ [key: string]: any }>({});
+
+  // Default stages template
+  const defaultStages: ProjectStage[] = [
+    {
+      id: 1,
+      name: 'Discovery',
+      icon: 'briefcase',
+      status: 'upcoming',
+      description: 'Understanding your needs',
+    },
+    {
+      id: 2,
+      name: 'Planning',
+      icon: 'target',
+      status: 'upcoming',
+      description: 'Defining project scope',
+    },
+    {
+      id: 3,
+      name: 'Development',
+      icon: 'rocket',
+      status: 'upcoming',
+      description: 'Building your solution',
+    },
+    {
+      id: 4,
+      name: 'Delivery',
+      icon: 'flag',
+      status: 'upcoming',
+      description: 'Final implementation',
+    },
+  ];
+
+  // Fetch all approved quotes and their timelines with real-time updates
+  useEffect(() => {
+    const q = query(
+      collection(db, 'quotes'),
+      where('status', '==', 'approved'),
+      orderBy('createdAt', 'desc')
+    );
+
+    const unsubscribe = onSnapshot(q, async (snapshot) => {
+      const projectsList = [];
+      const timelines: { [key: string]: any } = {};
+
+      for (const doc of snapshot.docs) {
+        const data = doc.data();
+        const project = {
+          id: doc.id,
+          userId: data.userId,
+          userName: data.fullName || data.userName || 'Unknown User',
+          userEmail: data.email,
+          projectName: data.projectName,
+          status: data.status,
+          createdAt: data.createdAt,
+        };
+        projectsList.push(project);
+
+        // Set up real-time listener for each project's timeline
+        const timelineRef = doc(db, 'projectTimelines', doc.id);
+        onSnapshot(timelineRef, (timelineDoc) => {
+          if (timelineDoc.exists()) {
+            timelines[doc.id] = timelineDoc.data();
+            setProjectTimelines(prev => ({ ...prev, [doc.id]: timelineDoc.data() }));
+          }
+        });
+      }
+
+      setAllProjects(projectsList);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleProjectClick = (project: any) => {
+    setSelectedProject(project);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleEditStage = (stage: ProjectStage) => {
+    setEditingStage(stage);
+    setIsEditingStage(true);
+  };
+
+  const handleSaveStage = async () => {
+    if (!selectedProject || !editingStage) return;
+
+    setIsSaving(true);
+    try {
+      const timeline = projectTimelines[selectedProject.id] || {
+        stages: defaultStages,
+        milestone: '',
+        projectName: selectedProject.projectName,
+      };
+
+      const updatedStages = timeline.stages.map((stage: ProjectStage) =>
+        stage.id === editingStage.id ? editingStage : stage
+      );
+
+      // Update stage statuses based on the current stage
+      if (editingStage.status === 'current') {
+        updatedStages.forEach((stage: ProjectStage) => {
+          if (stage.id < editingStage.id) {
+            stage.status = 'completed';
+            if (!stage.completedAt) {
+              stage.completedAt = Timestamp.now();
+            }
+          } else if (stage.id > editingStage.id) {
+            stage.status = 'upcoming';
+          }
+        });
+      } else if (editingStage.status === 'completed') {
+        updatedStages.forEach((stage: ProjectStage) => {
+          if (stage.id <= editingStage.id) {
+            stage.status = 'completed';
+            if (!stage.completedAt && stage.id === editingStage.id) {
+              stage.completedAt = Timestamp.now();
+            }
+          }
+        });
+      }
+
+      await setDoc(doc(db, 'projectTimelines', selectedProject.id), {
+        stages: updatedStages,
+        milestone: timeline.milestone || '',
+        projectName: selectedProject.projectName,
+        updatedAt: Timestamp.now(),
+      });
+
+      toast.success('Stage updated successfully');
+      setIsEditingStage(false);
+      setEditingStage(null);
+    } catch (error) {
+      console.error('Error updating stage:', error);
+      toast.error('Failed to update stage');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const getStageIcon = (icon: string) => {
+    const icons: { [key: string]: any } = {
+      briefcase: Briefcase,
+      target: Target,
+      rocket: Rocket,
+      flag: Flag,
+    };
+    const Icon = icons[icon] || Circle;
+    return Icon;
+  };
+
+  const calculateProjectProgress = (stages: ProjectStage[]) => {
+    const completedStages = stages.filter(s => s.status === 'completed').length;
+    const currentStage = stages.find(s => s.status === 'current');
+    const currentProgress = currentStage?.progress || 0;
+    return ((completedStages * 100) + currentProgress) / stages.length;
+  };
+
+  return (
+    <div className="space-y-3">
+      {allProjects.length > 0 ? (
+        <ScrollArea className="h-[400px]">
+          {allProjects.map((project) => {
+            const timeline = projectTimelines[project.id];
+            const stages = timeline?.stages || defaultStages;
+            const progress = calculateProjectProgress(stages);
+            const currentStage = stages.find((s: ProjectStage) => s.status === 'current');
+
+            return (
+              <div
+                key={project.id}
+                className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer mb-2"
+                onClick={() => handleProjectClick(project)}
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <h4 className="text-white text-sm font-medium">{project.projectName}</h4>
+                    <p className="text-white/60 text-xs flex items-center gap-1 mt-1">
+                      <User className="w-3 h-3" />
+                      {project.userName}
+                    </p>
+                  </div>
+                  <Badge variant="outline" className="text-xs">
+                    {currentStage?.name || 'Planning'}
+                  </Badge>
+                </div>
+                <Progress value={progress} className="h-2" />
+                <p className="text-white/60 text-xs text-right mt-1">{Math.round(progress)}%</p>
+              </div>
+            );
+          })}
+        </ScrollArea>
+      ) : (
+        <div className="text-center py-8">
+          <Target className="w-12 h-12 text-white/20 mx-auto mb-3" />
+          <p className="text-white/60 text-sm">No approved projects yet</p>
+        </div>
+      )}
+
+      {/* Timeline Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="bg-black/95 border-white/20 max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-white">
+              Edit Project Timeline: {selectedProject?.projectName}
+            </DialogTitle>
+            <DialogDescription className="text-white/60">
+              Update the project stages and track progress
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedProject && (
+            <div className="space-y-4">
+              <div className="bg-white/5 p-3 rounded-lg">
+                <p className="text-white/60 text-sm">Client: {selectedProject.userName}</p>
+                <p className="text-white/60 text-sm">Email: {selectedProject.userEmail}</p>
+              </div>
+
+              <div className="space-y-3">
+                {(projectTimelines[selectedProject.id]?.stages || defaultStages).map((stage: ProjectStage) => {
+                  const StageIcon = getStageIcon(stage.icon);
+                  return (
+                    <div
+                      key={stage.id}
+                      className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                              stage.status === 'completed'
+                                ? 'bg-green-500'
+                                : stage.status === 'current'
+                                  ? 'bg-orange'
+                                  : 'bg-white/20'
+                            }`}
+                          >
+                            {stage.status === 'completed' ? (
+                              <CheckCircle className="w-5 h-5 text-white" />
+                            ) : (
+                              <StageIcon className="w-5 h-5 text-white" />
+                            )}
+                          </div>
+                          <div>
+                            <h4 className="text-white font-medium">{stage.name}</h4>
+                            <p className="text-white/60 text-sm">{stage.description}</p>
+                            {stage.status === 'current' && stage.progress !== undefined && (
+                              <div className="mt-2 flex items-center gap-2">
+                                <Progress value={stage.progress} className="h-1 flex-1" />
+                                <span className="text-white/60 text-xs">{stage.progress}%</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditStage(stage);
+                          }}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Stage Edit Dialog */}
+      <Dialog open={isEditingStage} onOpenChange={setIsEditingStage}>
+        <DialogContent className="bg-black/95 border-white/20">
+          <DialogHeader>
+            <DialogTitle className="text-white">
+              Edit Stage: {editingStage?.name}
+            </DialogTitle>
+          </DialogHeader>
+
+          {editingStage && (
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="status">Status</Label>
+                <Select
+                  value={editingStage.status}
+                  onValueChange={(value) =>
+                    setEditingStage({ ...editingStage, status: value as any })
+                  }
+                >
+                  <SelectTrigger id="status">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="upcoming">Upcoming</SelectItem>
+                    <SelectItem value="current">Current</SelectItem>
+                    <SelectItem value="completed">Completed</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  value={editingStage.description}
+                  onChange={(e) =>
+                    setEditingStage({ ...editingStage, description: e.target.value })
+                  }
+                  className="bg-white/10 border-white/20"
+                />
+              </div>
+
+              {editingStage.status === 'current' && (
+                <div>
+                  <Label htmlFor="progress">Progress (%)</Label>
+                  <Input
+                    id="progress"
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={editingStage.progress || 0}
+                    onChange={(e) =>
+                      setEditingStage({
+                        ...editingStage,
+                        progress: parseInt(e.target.value) || 0,
+                      })
+                    }
+                    className="bg-white/10 border-white/20"
+                  />
+                </div>
+              )}
+
+              {editingStage.status !== 'upcoming' && (
+                <div>
+                  <Label htmlFor="estimatedCompletion">Estimated Completion</Label>
+                  <Input
+                    id="estimatedCompletion"
+                    type="date"
+                    value={editingStage.estimatedCompletion || ''}
+                    onChange={(e) =>
+                      setEditingStage({
+                        ...editingStage,
+                        estimatedCompletion: e.target.value,
+                      })
+                    }
+                    className="bg-white/10 border-white/20"
+                  />
+                </div>
+              )}
+
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsEditingStage(false)}>
+                  Cancel
+                </Button>
+                <Button
+                  className="bg-orange hover:bg-orange/90"
+                  onClick={handleSaveStage}
+                  disabled={isSaving}
+                >
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 mr-2" />
+                      Save Changes
+                    </>
+                  )}
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
 // Different default widgets for users vs admins
 const DEFAULT_USER_WIDGETS: Widget[] = [
   {
@@ -649,8 +1074,8 @@ const DEFAULT_USER_WIDGETS: Widget[] = [
     id: '2',
     type: 'messages',
     title: 'Messages & Communication',
-    size: 'xlarge',
-    position: { x: 1, y: 0 },
+    size: 'large',
+    position: { x: 2, y: 0 },
   },
   {
     id: '3',
@@ -663,29 +1088,68 @@ const DEFAULT_USER_WIDGETS: Widget[] = [
     id: '4',
     type: 'documents',
     title: 'Recent Documents',
-    size: 'medium',
+    size: 'small',
     position: { x: 1, y: 2 },
+  },
+  {
+    id: '5',
+    type: 'upcomingMeetings',
+    title: 'Upcoming Consultations',
+    size: 'small',
+    position: { x: 2, y: 2 },
+  },
+  {
+    id: '6',
+    type: 'recentActivity',
+    title: 'Recent Activity',
+    size: 'small',
+    position: { x: 3, y: 2 },
   },
 ];
 
 const DEFAULT_ADMIN_WIDGETS: Widget[] = [
-  { id: '1', type: 'stats', title: 'Business Metrics', size: 'medium', position: { x: 0, y: 0 } },
+  {
+    id: '1',
+    type: 'projectProgress',
+    title: 'All Projects',
+    size: 'large',
+    position: { x: 0, y: 0 },
+  },
   {
     id: '2',
     type: 'messages',
     title: 'Client Communications',
-    size: 'xlarge',
+    size: 'large',
     position: { x: 2, y: 0 },
   },
   {
     id: '3',
-    type: 'projectProgress',
-    title: 'Active Projects',
-    size: 'medium',
-    position: { x: 0, y: 1 },
+    type: 'stats',
+    title: 'Business Metrics',
+    size: 'small',
+    position: { x: 0, y: 2 },
   },
-  { id: '4', type: 'tasks', title: 'Team Tasks', size: 'medium', position: { x: 1, y: 1 } },
-  { id: '5', type: 'revenue', title: 'Revenue Overview', size: 'medium', position: { x: 2, y: 1 } },
+  {
+    id: '4',
+    type: 'revenue',
+    title: 'Revenue Overview',
+    size: 'small',
+    position: { x: 1, y: 2 },
+  },
+  {
+    id: '5',
+    type: 'tasks',
+    title: 'Team Tasks',
+    size: 'small',
+    position: { x: 2, y: 2 },
+  },
+  {
+    id: '6',
+    type: 'recentActivity',
+    title: 'Recent Activity',
+    size: 'small',
+    position: { x: 3, y: 2 },
+  },
 ];
 
 const WIDGET_TYPES = [
@@ -968,6 +1432,27 @@ export default function DashboardWidgets() {
               clientName:
                 meeting.participants?.find((p: any) => p.role !== 'organizer')?.name ||
                 'Unknown Client',
+            };
+          });
+
+          // Fetch all projects for admin projectProgress widget
+          const allQuotesQuery = query(
+            collection(db, 'quotes'),
+            where('status', '==', 'approved'),
+            orderBy('createdAt', 'desc')
+          );
+          const allApprovedQuotesSnapshot = await getDocs(allQuotesQuery);
+          
+          data.allProjects = allApprovedQuotesSnapshot.docs.map((doc) => {
+            const quote = doc.data();
+            return {
+              id: doc.id,
+              userId: quote.userId,
+              userName: quote.fullName || quote.userName || 'Unknown User',
+              userEmail: quote.email,
+              projectName: quote.projectName,
+              status: quote.status,
+              createdAt: quote.createdAt,
             };
           });
         } else {
@@ -1341,25 +1826,36 @@ export default function DashboardWidgets() {
           );
 
         case 'projectProgress':
-          return (
-            <div className="space-y-3">
-              {widgetData.projectProgress?.length > 0 ? (
-                widgetData.projectProgress.map((project: any) => (
-                  <div key={project.id} className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <h4 className="text-white text-sm font-medium">{project.name}</h4>
-                      <Badge variant="outline" className="text-xs">
-                        {project.status}
-                      </Badge>
+          if (!isAdmin) {
+            // For non-admin users, show simple project list
+            return (
+              <div className="space-y-3">
+                {widgetData.projectProgress?.length > 0 ? (
+                  widgetData.projectProgress.map((project: any) => (
+                    <div key={project.id} className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <h4 className="text-white text-sm font-medium">{project.name}</h4>
+                        <Badge variant="outline" className="text-xs">
+                          {project.status}
+                        </Badge>
+                      </div>
+                      <Progress value={project.progress} className="h-2" />
+                      <p className="text-white/60 text-xs text-right">{project.progress}%</p>
                     </div>
-                    <Progress value={project.progress} className="h-2" />
-                    <p className="text-white/60 text-xs text-right">{project.progress}%</p>
-                  </div>
-                ))
-              ) : (
-                <p className="text-white/60 text-center py-4">No projects yet</p>
-              )}
-            </div>
+                  ))
+                ) : (
+                  <p className="text-white/60 text-center py-4">No projects yet</p>
+                )}
+              </div>
+            );
+          }
+
+          // Admin version with clickable projects and timeline editing
+          return (
+            <AdminProjectProgress
+              projects={widgetData.allProjects || []}
+              onRefresh={() => fetchWidgetData(widget)}
+            />
           );
 
         case 'quickActions':
