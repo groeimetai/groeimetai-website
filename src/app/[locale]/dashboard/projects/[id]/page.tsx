@@ -71,7 +71,7 @@ export default function ProjectDetailPage() {
       (docSnapshot) => {
         if (docSnapshot.exists() && docSnapshot.data().status === 'approved') {
           const data = docSnapshot.data();
-          
+
           // Verify user has access
           if (data.userId !== user.uid && user.role !== 'admin') {
             setError('You do not have permission to view this project');
@@ -121,7 +121,7 @@ export default function ProjectDetailPage() {
       (docSnapshot) => {
         if (docSnapshot.exists()) {
           const data = docSnapshot.data();
-          
+
           // Verify user has access
           if (data.clientId !== user.uid && user.role !== 'admin') {
             setError('You do not have permission to view this project');

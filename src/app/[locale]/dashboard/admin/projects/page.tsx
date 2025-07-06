@@ -151,7 +151,7 @@ export default function AdminProjectsPage() {
     if (!user || !isAdmin) return;
 
     setIsLoading(true);
-    
+
     // First, get all user data for client information
     const fetchUsersData = async () => {
       const usersQuery = query(collection(db, 'users'));
@@ -206,7 +206,7 @@ export default function AdminProjectsPage() {
             where('status', '==', 'approved'),
             orderBy('createdAt', 'desc')
           );
-          
+
           const unsubscribeQuotes = onSnapshot(
             quotesQuery,
             (quotesSnapshot) => {
@@ -220,7 +220,8 @@ export default function AdminProjectsPage() {
                     id: doc.id,
                     name: data.projectName || 'Untitled Project',
                     clientId: data.userId || '',
-                    clientName: data.fullName || data.userName || clientData?.displayName || 'Unknown Client',
+                    clientName:
+                      data.fullName || data.userName || clientData?.displayName || 'Unknown Client',
                     clientEmail: data.email || clientData?.email || '',
                     status: 'active',
                     type: data.projectType || 'consultation',
@@ -250,7 +251,7 @@ export default function AdminProjectsPage() {
               setIsLoading(false);
             }
           );
-          
+
           unsubscribes.push(unsubscribeQuotes);
         },
         (error) => {
@@ -263,7 +264,7 @@ export default function AdminProjectsPage() {
 
       // Cleanup function
       return () => {
-        unsubscribes.forEach(unsubscribe => unsubscribe());
+        unsubscribes.forEach((unsubscribe) => unsubscribe());
       };
     });
   }, [user, isAdmin]);

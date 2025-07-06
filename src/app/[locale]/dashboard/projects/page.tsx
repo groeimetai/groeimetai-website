@@ -99,7 +99,7 @@ export default function ProjectsPage() {
         (snapshot) => {
           snapshot.forEach((doc) => {
             const data = doc.data();
-            
+
             if (type === 'quote') {
               // Transform quote to project format
               const project: Project = {
@@ -146,21 +146,22 @@ export default function ProjectsPage() {
 
           // Apply filters
           if (statusFilter !== 'all') {
-            projectsList = projectsList.filter(p => p.status === statusFilter);
+            projectsList = projectsList.filter((p) => p.status === statusFilter);
           }
 
           if (searchQuery) {
             const query = searchQuery.toLowerCase();
-            projectsList = projectsList.filter(p => 
-              p.name.toLowerCase().includes(query) ||
-              p.description?.toLowerCase().includes(query) ||
-              p.categories.some(c => c.toLowerCase().includes(query))
+            projectsList = projectsList.filter(
+              (p) =>
+                p.name.toLowerCase().includes(query) ||
+                p.description?.toLowerCase().includes(query) ||
+                p.categories.some((c) => c.toLowerCase().includes(query))
             );
           }
 
           // Sort by date
-          projectsList.sort((a, b) => 
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          projectsList.sort(
+            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
 
           setProjects(projectsList);
@@ -177,7 +178,7 @@ export default function ProjectsPage() {
 
     // Cleanup
     return () => {
-      unsubscribes.forEach(unsubscribe => unsubscribe());
+      unsubscribes.forEach((unsubscribe) => unsubscribe());
     };
   }, [user, statusFilter, searchQuery]); // eslint-disable-line react-hooks/exhaustive-deps
 

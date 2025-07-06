@@ -1636,22 +1636,24 @@ export default function DashboardWidgets() {
 
             // Set up real-time listener for timeline
             const timelineRef = doc(db, 'projectTimelines', projectsSnapshot.docs[0].id);
-            
+
             // Store unsubscribe function
             const unsubscribeTimeline = onSnapshot(timelineRef, (timelineDoc) => {
               if (timelineDoc.exists()) {
                 const timelineData = timelineDoc.data();
-                
+
                 setWidgetData((prevData) => {
                   const newData = { ...prevData };
                   newData.timelineStages = timelineData.stages || [];
-                  
+
                   // Calculate overall progress
                   if (timelineData.stages) {
                     const completedStages = timelineData.stages.filter(
                       (s: any) => s.status === 'completed'
                     ).length;
-                    const currentStage = timelineData.stages.find((s: any) => s.status === 'current');
+                    const currentStage = timelineData.stages.find(
+                      (s: any) => s.status === 'current'
+                    );
                     const currentProgress = currentStage?.progress || 0;
 
                     // Overall progress includes partial progress of current stage
@@ -1665,12 +1667,12 @@ export default function DashboardWidgets() {
                   // Add milestone and estimated completion
                   newData.milestone = timelineData.milestone || null;
                   newData.estimatedCompletion = latestProject.estimatedCompletion || null;
-                  
+
                   return newData;
                 });
               }
             });
-            
+
             // Store unsubscribe function for cleanup
             timelineUnsubscribes.current.push(unsubscribeTimeline);
           }
@@ -1831,10 +1833,10 @@ export default function DashboardWidgets() {
     };
 
     fetchWidgetData();
-    
+
     // Cleanup timeline listeners when component unmounts
     return () => {
-      timelineUnsubscribes.current.forEach(unsubscribe => unsubscribe());
+      timelineUnsubscribes.current.forEach((unsubscribe) => unsubscribe());
       timelineUnsubscribes.current = [];
     };
   }, [user, widgets, isAdmin]);
