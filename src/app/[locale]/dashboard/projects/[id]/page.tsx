@@ -45,7 +45,7 @@ export default function ProjectDetailPage() {
   const [project, setProject] = useState<Project | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   const projectId = params.id as string;
 
   // Fetch project details
@@ -57,13 +57,13 @@ export default function ProjectDetailPage() {
 
     try {
       const projectData = await projectService.get(projectId);
-      
+
       // Verify user has access to this project
       if (projectData.clientId !== user.uid && user.role !== 'admin') {
         setError('You do not have permission to view this project');
         return;
       }
-      
+
       setProject(projectData);
     } catch (err) {
       console.error('Error fetching project:', err);
@@ -231,12 +231,14 @@ export default function ProjectDetailPage() {
               </div>
               <Progress value={calculateProgress(project)} className="h-3" />
             </div>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
               <div>
                 <p className="text-white/60 text-sm">Start Date</p>
                 <p className="text-white font-semibold">
-                  {project.startDate ? format(new Date(project.startDate), 'MMM dd, yyyy') : 'Not set'}
+                  {project.startDate
+                    ? format(new Date(project.startDate), 'MMM dd, yyyy')
+                    : 'Not set'}
                 </p>
               </div>
               <div>
@@ -284,7 +286,11 @@ export default function ProjectDetailPage() {
                     <p className="text-white/60 text-sm">Services</p>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {project.categories.map((service, index) => (
-                        <Badge key={index} variant="outline" className="bg-orange/10 border-orange/30">
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="bg-orange/10 border-orange/30"
+                        >
                           {service}
                         </Badge>
                       ))}
@@ -306,12 +312,17 @@ export default function ProjectDetailPage() {
                   </div>
                   <div>
                     <p className="text-white/60 text-sm">Priority</p>
-                    <Badge className={`${
-                      project.priority === 'urgent' ? 'bg-red-500' :
-                      project.priority === 'high' ? 'bg-orange' :
-                      project.priority === 'medium' ? 'bg-yellow-500' :
-                      'bg-blue-500'
-                    }`}>
+                    <Badge
+                      className={`${
+                        project.priority === 'urgent'
+                          ? 'bg-red-500'
+                          : project.priority === 'high'
+                            ? 'bg-orange'
+                            : project.priority === 'medium'
+                              ? 'bg-yellow-500'
+                              : 'bg-blue-500'
+                      }`}
+                    >
                       {project.priority}
                     </Badge>
                   </div>
@@ -328,19 +339,29 @@ export default function ProjectDetailPage() {
                   <div className="bg-white/5 rounded-lg p-4">
                     <p className="text-white/60 text-sm">Milestones</p>
                     <p className="text-2xl font-bold text-white">
-                      {project.milestones?.filter(m => m.status === 'completed').length || 0}/{project.milestones?.length || 0}
+                      {project.milestones?.filter((m) => m.status === 'completed').length || 0}/
+                      {project.milestones?.length || 0}
                     </p>
                   </div>
                   <div className="bg-white/5 rounded-lg p-4">
                     <p className="text-white/60 text-sm">Time Elapsed</p>
                     <p className="text-2xl font-bold text-white">
-                      {project.startDate ? Math.floor((new Date().getTime() - new Date(project.startDate).getTime()) / (1000 * 60 * 60 * 24)) : 0}d
+                      {project.startDate
+                        ? Math.floor(
+                            (new Date().getTime() - new Date(project.startDate).getTime()) /
+                              (1000 * 60 * 60 * 24)
+                          )
+                        : 0}
+                      d
                     </p>
                   </div>
                   <div className="bg-white/5 rounded-lg p-4">
                     <p className="text-white/60 text-sm">Hours Used</p>
                     <p className="text-2xl font-bold text-white">
-                      {((project.actualHours || 0) / (project.estimatedHours || 1) * 100).toFixed(0)}%
+                      {(((project.actualHours || 0) / (project.estimatedHours || 1)) * 100).toFixed(
+                        0
+                      )}
+                      %
                     </p>
                   </div>
                   <div className="bg-white/5 rounded-lg p-4">
@@ -359,17 +380,23 @@ export default function ProjectDetailPage() {
                   Next Steps
                 </h3>
                 <div className="space-y-3">
-                  {project.milestones?.filter(m => m.status !== 'completed').slice(0, 3).map((milestone) => (
-                    <div key={milestone.id} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
-                      <Circle className="w-5 h-5 text-white/40" />
-                      <div className="flex-1">
-                        <p className="text-white font-medium">{milestone.name}</p>
-                        <p className="text-white/60 text-sm">Due: {format(new Date(milestone.dueDate), 'MMM dd, yyyy')}</p>
+                  {project.milestones
+                    ?.filter((m) => m.status !== 'completed')
+                    .slice(0, 3)
+                    .map((milestone) => (
+                      <div
+                        key={milestone.id}
+                        className="flex items-center gap-3 p-3 bg-white/5 rounded-lg"
+                      >
+                        <Circle className="w-5 h-5 text-white/40" />
+                        <div className="flex-1">
+                          <p className="text-white font-medium">{milestone.name}</p>
+                          <p className="text-white/60 text-sm">
+                            Due: {format(new Date(milestone.dueDate), 'MMM dd, yyyy')}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  )) || (
-                    <p className="text-white/60">No upcoming milestones</p>
-                  )}
+                    )) || <p className="text-white/60">No upcoming milestones</p>}
                 </div>
               </Card>
             </div>
@@ -399,11 +426,11 @@ export default function ProjectDetailPage() {
                           <Badge
                             variant="outline"
                             className={`ml-4 ${
-                              milestone.status === 'completed' 
-                                ? 'border-green-500 text-green-500' 
+                              milestone.status === 'completed'
+                                ? 'border-green-500 text-green-500'
                                 : milestone.status === 'in_progress'
-                                ? 'border-yellow-500 text-yellow-500'
-                                : 'border-white/40 text-white/40'
+                                  ? 'border-yellow-500 text-yellow-500'
+                                  : 'border-white/40 text-white/40'
                             }`}
                           >
                             {milestone.status.replace('_', ' ')}
@@ -416,8 +443,7 @@ export default function ProjectDetailPage() {
                           </span>
                           {milestone.payment && (
                             <span className="flex items-center gap-1">
-                              <DollarSign className="w-4 h-4" />
-                              €{milestone.payment.amount}
+                              <DollarSign className="w-4 h-4" />€{milestone.payment.amount}
                             </span>
                           )}
                         </div>
@@ -441,7 +467,7 @@ export default function ProjectDetailPage() {
                   Add Deliverable
                 </Button>
               </div>
-              
+
               {project.milestones && project.milestones.length > 0 ? (
                 <div className="space-y-4">
                   {project.milestones.map((milestone) => (
@@ -449,13 +475,15 @@ export default function ProjectDetailPage() {
                       <div className="flex justify-between items-start mb-3">
                         <div>
                           <h4 className="font-semibold text-white">{milestone.name}</h4>
-                          <p className="text-white/60 text-sm">Due: {format(new Date(milestone.dueDate), 'MMM dd, yyyy')}</p>
+                          <p className="text-white/60 text-sm">
+                            Due: {format(new Date(milestone.dueDate), 'MMM dd, yyyy')}
+                          </p>
                         </div>
                         <Badge
                           variant="outline"
                           className={`${
-                            milestone.status === 'completed' 
-                              ? 'border-green-500 text-green-500' 
+                            milestone.status === 'completed'
+                              ? 'border-green-500 text-green-500'
                               : 'border-white/40 text-white/40'
                           }`}
                         >
@@ -472,15 +500,15 @@ export default function ProjectDetailPage() {
                             )}
                             <span className="text-white/80">{deliverable}</span>
                           </div>
-                        )) || (
-                          <p className="text-white/60 text-sm">No deliverables specified</p>
-                        )}
+                        )) || <p className="text-white/60 text-sm">No deliverables specified</p>}
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-white/60">No deliverables have been defined for this project yet.</p>
+                <p className="text-white/60">
+                  No deliverables have been defined for this project yet.
+                </p>
               )}
             </Card>
           </TabsContent>
@@ -495,7 +523,7 @@ export default function ProjectDetailPage() {
                   Upload Document
                 </Button>
               </div>
-              
+
               {project.documentIds && project.documentIds.length > 0 ? (
                 <div className="grid md:grid-cols-2 gap-4">
                   {/* Mock documents for now */}
@@ -528,7 +556,9 @@ export default function ProjectDetailPage() {
                 <div className="text-center py-8">
                   <FileText className="w-16 h-16 text-white/20 mx-auto mb-4" />
                   <p className="text-white/60">No documents uploaded yet</p>
-                  <p className="text-white/40 text-sm mt-1">Upload project documents to keep everything in one place</p>
+                  <p className="text-white/40 text-sm mt-1">
+                    Upload project documents to keep everything in one place
+                  </p>
                 </div>
               )}
             </Card>
@@ -549,9 +579,11 @@ export default function ProjectDetailPage() {
                       <p className="text-white font-medium">Project Manager</p>
                       <p className="text-white/60 text-sm">GroeimetAI Team</p>
                     </div>
-                    <Badge variant="outline" className="text-orange border-orange/30">Lead</Badge>
+                    <Badge variant="outline" className="text-orange border-orange/30">
+                      Lead
+                    </Badge>
                   </div>
-                  
+
                   {/* Tech Lead */}
                   <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
                     <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
@@ -563,7 +595,7 @@ export default function ProjectDetailPage() {
                     </div>
                     <Badge variant="outline">Tech</Badge>
                   </div>
-                  
+
                   {/* Client Contact */}
                   <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
                     <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
@@ -573,11 +605,13 @@ export default function ProjectDetailPage() {
                       <p className="text-white font-medium">Client Contact</p>
                       <p className="text-white/60 text-sm">{user?.displayName || 'You'}</p>
                     </div>
-                    <Badge variant="outline" className="text-green-500 border-green-500/30">Client</Badge>
+                    <Badge variant="outline" className="text-green-500 border-green-500/30">
+                      Client
+                    </Badge>
                   </div>
                 </div>
               </Card>
-              
+
               <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6">
                 <h3 className="text-lg font-semibold text-white mb-4">Communication</h3>
                 <div className="space-y-4">
@@ -592,7 +626,7 @@ export default function ProjectDetailPage() {
                       </Button>
                     </Link>
                   </div>
-                  
+
                   <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
                     <div className="flex items-center gap-3">
                       <Calendar className="w-5 h-5 text-blue-500" />
@@ -602,7 +636,7 @@ export default function ProjectDetailPage() {
                       Book Time
                     </Button>
                   </div>
-                  
+
                   <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
                     <div className="flex items-center gap-3">
                       <LinkIcon className="w-5 h-5 text-green-500" />
@@ -628,41 +662,51 @@ export default function ProjectDetailPage() {
                   <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                   <div className="flex-1">
                     <p className="text-white">Project created</p>
-                    <p className="text-white/60 text-sm">Project initialized with requirements and timeline</p>
+                    <p className="text-white/60 text-sm">
+                      Project initialized with requirements and timeline
+                    </p>
                     <p className="text-white/40 text-xs mt-1">
-                      {project.createdAt ? format(new Date(project.createdAt), 'MMM dd, yyyy at HH:mm') : 'Recently'}
+                      {project.createdAt
+                        ? format(new Date(project.createdAt), 'MMM dd, yyyy at HH:mm')
+                        : 'Recently'}
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-3 pb-4 border-b border-white/10">
                   <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                   <div className="flex-1">
                     <p className="text-white">Team assigned</p>
-                    <p className="text-white/60 text-sm">Project manager and technical lead assigned</p>
+                    <p className="text-white/60 text-sm">
+                      Project manager and technical lead assigned
+                    </p>
                     <p className="text-white/40 text-xs mt-1">2 days ago</p>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-3 pb-4 border-b border-white/10">
                   <div className="w-2 h-2 bg-orange rounded-full mt-2"></div>
                   <div className="flex-1">
                     <p className="text-white">Kickoff meeting scheduled</p>
-                    <p className="text-white/60 text-sm">Initial project meeting set for next week</p>
+                    <p className="text-white/60 text-sm">
+                      Initial project meeting set for next week
+                    </p>
                     <p className="text-white/40 text-xs mt-1">1 day ago</p>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-3">
                   <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
                   <div className="flex-1">
                     <p className="text-white">Documents uploaded</p>
-                    <p className="text-white/60 text-sm">Project proposal and technical specs added</p>
+                    <p className="text-white/60 text-sm">
+                      Project proposal and technical specs added
+                    </p>
                     <p className="text-white/40 text-xs mt-1">Today at 14:30</p>
                   </div>
                 </div>
               </div>
-              
+
               <div className="mt-6 pt-6 border-t border-white/10">
                 <Button variant="outline" className="w-full">
                   View Full History

@@ -4,7 +4,18 @@ import { useEffect, useState } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
-import { doc, setDoc, getDoc, getDocs, onSnapshot, collection, query, where, orderBy, limit } from 'firebase/firestore';
+import {
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  collection,
+  query,
+  where,
+  orderBy,
+  limit,
+} from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
   LayoutDashboard,
@@ -155,7 +166,7 @@ export default function DashboardPage() {
       try {
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         const userData = userDoc.data();
-        
+
         if (userData && !userData.onboardingCompleted) {
           setShowOnboarding(true);
         }
@@ -206,7 +217,7 @@ export default function DashboardPage() {
     // If no quotes by userId, try by email
     const fetchQuotesByEmail = async () => {
       if (!user.email) return null;
-      
+
       try {
         const quotesQuery = query(
           collection(db, 'quotes'),
@@ -225,7 +236,7 @@ export default function DashboardPage() {
     // Main fetch logic
     const fetchQuotes = async () => {
       let snapshot = await fetchQuotesByUserId();
-      
+
       if (!snapshot || snapshot.empty) {
         snapshot = await fetchQuotesByEmail();
       }
@@ -234,7 +245,7 @@ export default function DashboardPage() {
         // Find the first approved quote
         let approvedQuote = null;
         let latestQuote = null;
-        
+
         for (const doc of snapshot.docs) {
           const data = doc.data();
           if (!latestQuote) {
@@ -250,11 +261,11 @@ export default function DashboardPage() {
         const selectedQuote = approvedQuote || latestQuote;
         if (selectedQuote) {
           setUserQuoteId(selectedQuote.id);
-          
+
           // Subscribe to the timeline for this quote
           const timelineRef = doc(db, 'projectTimelines', selectedQuote.id);
           unsubscribeTimeline = onSnapshot(
-            timelineRef, 
+            timelineRef,
             (doc) => {
               if (doc.exists()) {
                 const data = doc.data() as TimelineData;
@@ -417,276 +428,280 @@ export default function DashboardPage() {
         {showOnboarding && !checkingOnboarding && (
           <OnboardingFlow onComplete={handleOnboardingComplete} />
         )}
-        
+
         <div className="container mx-auto px-4 py-8 mt-20">
-        {/* Welcome Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8"
-        >
-          <h2 className="text-3xl font-bold text-white mb-2" data-help="welcome-header">
-            Welcome back, {userProfile.firstName || userProfile.displayName}!
-          </h2>
-          <p className="text-white/60">
-            Track your project progress and communicate with our team.
-          </p>
-        </motion.div>
-
-        {/* Dashboard Widgets - now for everyone */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-8"
-          data-help="dashboard-main-widgets"
-        >
-          <DashboardWidgets />
-        </motion.div>
-
-        {/* Legacy support chat - only shown if user has no widgets */}
-        {false && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Project Timeline Widget */}
+          {/* Welcome Section */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 p-6"
-            data-help="project-timeline"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-8"
           >
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-white">Project Timeline</h3>
-              <Badge variant="outline" className="text-orange border-orange">
-                {currentStage?.name || 'Planning'}
-              </Badge>
-            </div>
+            <h2 className="text-3xl font-bold text-white mb-2" data-help="welcome-header">
+              Welcome back, {userProfile.firstName || userProfile.displayName}!
+            </h2>
+            <p className="text-white/60">
+              Track your project progress and communicate with our team.
+            </p>
+          </motion.div>
 
-            {/* Overall Progress */}
-            <div className="mb-8">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-white/60">Overall Progress</span>
-                <span className="text-sm font-medium text-white">{Math.round(totalProgress)}%</span>
-              </div>
-              <Progress value={totalProgress} className="h-2" />
-            </div>
+          {/* Dashboard Widgets - now for everyone */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mb-8"
+            data-help="dashboard-main-widgets"
+          >
+            <DashboardWidgets />
+          </motion.div>
 
-            {/* Timeline */}
-            <div className="space-y-6">
-              {projectStages.map((stage, index) => {
-                // Map icon strings to components
-                const stageIcons = {
-                  briefcase: Briefcase,
-                  target: Target,
-                  rocket: Rocket,
-                  flag: Flag,
-                };
-                const StageIcon = stageIcons[stage.icon as keyof typeof stageIcons] || Briefcase;
+          {/* Legacy support chat - only shown if user has no widgets */}
+          {false && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Project Timeline Widget */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 p-6"
+                data-help="project-timeline"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-semibold text-white">Project Timeline</h3>
+                  <Badge variant="outline" className="text-orange border-orange">
+                    {currentStage?.name || 'Planning'}
+                  </Badge>
+                </div>
 
-                return (
-                  <div key={stage.id} className="relative">
-                    {index < projectStages.length - 1 && (
-                      <div
-                        className={`absolute left-5 top-10 bottom-0 w-0.5 ${
-                          stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
-                        }`}
-                      />
-                    )}
+                {/* Overall Progress */}
+                <div className="mb-8">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-white/60">Overall Progress</span>
+                    <span className="text-sm font-medium text-white">
+                      {Math.round(totalProgress)}%
+                    </span>
+                  </div>
+                  <Progress value={totalProgress} className="h-2" />
+                </div>
 
-                    <div className="flex items-start space-x-4">
-                      <div
-                        className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center ${
-                          stage.status === 'completed'
-                            ? 'bg-green-500'
-                            : stage.status === 'current'
-                              ? 'bg-orange'
-                              : 'bg-white/20'
-                        }`}
-                      >
-                        {stage.status === 'completed' ? (
-                          <CheckCircle className="w-5 h-5 text-white" />
-                        ) : stage.status === 'current' ? (
-                          <Circle className="w-5 h-5 text-white animate-pulse" />
-                        ) : (
-                          <StageIcon className="w-5 h-5 text-white/60" />
+                {/* Timeline */}
+                <div className="space-y-6">
+                  {projectStages.map((stage, index) => {
+                    // Map icon strings to components
+                    const stageIcons = {
+                      briefcase: Briefcase,
+                      target: Target,
+                      rocket: Rocket,
+                      flag: Flag,
+                    };
+                    const StageIcon =
+                      stageIcons[stage.icon as keyof typeof stageIcons] || Briefcase;
+
+                    return (
+                      <div key={stage.id} className="relative">
+                        {index < projectStages.length - 1 && (
+                          <div
+                            className={`absolute left-5 top-10 bottom-0 w-0.5 ${
+                              stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
+                            }`}
+                          />
                         )}
-                      </div>
 
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <h4
-                          className={`font-medium ${
-                            stage.status === 'completed'
-                              ? 'text-white'
-                              : stage.status === 'current'
-                                ? 'text-white'
-                                : 'text-white/60'
-                          }`}
-                        >
-                          {stage.name}
-                        </h4>
-                      </div>
-                      <p className="text-sm text-white/60 mt-1">{stage.description}</p>
+                        <div className="flex items-start space-x-4">
+                          <div
+                            className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center ${
+                              stage.status === 'completed'
+                                ? 'bg-green-500'
+                                : stage.status === 'current'
+                                  ? 'bg-orange'
+                                  : 'bg-white/20'
+                            }`}
+                          >
+                            {stage.status === 'completed' ? (
+                              <CheckCircle className="w-5 h-5 text-white" />
+                            ) : stage.status === 'current' ? (
+                              <Circle className="w-5 h-5 text-white animate-pulse" />
+                            ) : (
+                              <StageIcon className="w-5 h-5 text-white/60" />
+                            )}
+                          </div>
 
-                      {stage.status === 'current' && stage.progress && (
-                        <div className="mt-2">
-                          <Progress value={stage.progress} className="h-1" />
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <h4
+                                className={`font-medium ${
+                                  stage.status === 'completed'
+                                    ? 'text-white'
+                                    : stage.status === 'current'
+                                      ? 'text-white'
+                                      : 'text-white/60'
+                                }`}
+                              >
+                                {stage.name}
+                              </h4>
+                            </div>
+                            <p className="text-sm text-white/60 mt-1">{stage.description}</p>
+
+                            {stage.status === 'current' && stage.progress && (
+                              <div className="mt-2">
+                                <Progress value={stage.progress} className="h-1" />
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Next Milestone */}
+                {(timelineData?.milestone || !isLoadingTimeline) && (
+                  <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
+                    <div className="flex items-center space-x-2">
+                      <Target className="w-5 h-5 text-orange" />
+                      <div>
+                        <p className="text-sm font-medium text-white">Next Milestone</p>
+                        <p className="text-xs text-white/60">
+                          {timelineData?.milestone ||
+                            'Your project timeline will be updated once your request is approved'}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                );
-              })}
+                )}
+              </motion.div>
+
+              {/* Support Chat Widget / Chat Management */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 flex flex-col h-[600px]"
+                data-help="chat-widget"
+              >
+                {isAdmin ? <ChatManagement /> : <DashboardChat />}
+              </motion.div>
             </div>
+          )}
 
-            {/* Next Milestone */}
-            {(timelineData?.milestone || !isLoadingTimeline) && (
-              <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
-                <div className="flex items-center space-x-2">
-                  <Target className="w-5 h-5 text-orange" />
-                  <div>
-                    <p className="text-sm font-medium text-white">Next Milestone</p>
-                    <p className="text-xs text-white/60">
-                      {timelineData?.milestone || 'Your project timeline will be updated once your request is approved'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-          </motion.div>
-
-          {/* Support Chat Widget / Chat Management */}
+          {/* Quick Actions */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 flex flex-col h-[600px]"
-            data-help="chat-widget"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mt-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"
+            data-help="quick-actions"
           >
-            {isAdmin ? <ChatManagement /> : <DashboardChat />}
-          </motion.div>
-        </div>
-        )}
-
-        {/* Quick Actions */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"
-          data-help="quick-actions"
-        >
-          <Link href="/dashboard/projects" className="block" data-help="projects-link">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <LayoutDashboard className="w-5 h-5 text-orange" />
-                  <span className="text-white">View All Projects</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/dashboard/documents" className="block">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <FileText className="w-5 h-5 text-orange" />
-                  <span className="text-white">Documents</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/dashboard/consultations" className="block">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <Calendar className="w-5 h-5 text-orange" />
-                  <span className="text-white">Consultations</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/dashboard/messages" className="block">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <MessageSquare className="w-5 h-5 text-orange" />
-                  <span className="text-white">Messages</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/dashboard/invoices" className="block">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <Receipt className="w-5 h-5 text-orange" />
-                  <span className="text-white">Invoices</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/dashboard/quotes" className="block">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <ClipboardList className="w-5 h-5 text-orange" />
-                  <span className="text-white">Project Requests</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/dashboard/settings" className="block">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <Settings className="w-5 h-5 text-orange" />
-                  <span className="text-white">Settings</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
-              </div>
-            </div>
-          </Link>
-
-          {isAdmin && (
-            <Link href="/dashboard/admin" className="block">
+            <Link href="/dashboard/projects" className="block" data-help="projects-link">
               <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <Shield className="w-5 h-5 text-orange" />
-                    <span className="text-white">Admin Panel</span>
+                    <LayoutDashboard className="w-5 h-5 text-orange" />
+                    <span className="text-white">View All Projects</span>
                   </div>
                   <ChevronRight className="w-4 h-4 text-white/60" />
                 </div>
               </div>
             </Link>
-          )}
-        </motion.div>
-      </div>
-      
-      {/* Command Palette */}
-      <CommandPalette 
-        isOpen={isCommandPaletteOpen} 
-        onClose={() => setIsCommandPaletteOpen(false)} 
-      />
-      
-      {/* Quick Actions FAB */}
-      <QuickActions onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
-    </main>
+
+            <Link href="/dashboard/documents" className="block">
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <FileText className="w-5 h-5 text-orange" />
+                    <span className="text-white">Documents</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-white/60" />
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/dashboard/consultations" className="block">
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Calendar className="w-5 h-5 text-orange" />
+                    <span className="text-white">Consultations</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-white/60" />
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/dashboard/messages" className="block">
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <MessageSquare className="w-5 h-5 text-orange" />
+                    <span className="text-white">Messages</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-white/60" />
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/dashboard/invoices" className="block">
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Receipt className="w-5 h-5 text-orange" />
+                    <span className="text-white">Invoices</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-white/60" />
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/dashboard/quotes" className="block">
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <ClipboardList className="w-5 h-5 text-orange" />
+                    <span className="text-white">Project Requests</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-white/60" />
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/dashboard/settings" className="block">
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Settings className="w-5 h-5 text-orange" />
+                    <span className="text-white">Settings</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-white/60" />
+                </div>
+              </div>
+            </Link>
+
+            {isAdmin && (
+              <Link href="/dashboard/admin" className="block">
+                <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <Shield className="w-5 h-5 text-orange" />
+                      <span className="text-white">Admin Panel</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-white/60" />
+                  </div>
+                </div>
+              </Link>
+            )}
+          </motion.div>
+        </div>
+
+        {/* Command Palette */}
+        <CommandPalette
+          isOpen={isCommandPaletteOpen}
+          onClose={() => setIsCommandPaletteOpen(false)}
+        />
+
+        {/* Quick Actions FAB */}
+        <QuickActions onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
+      </main>
     </HelpProvider>
   );
 }

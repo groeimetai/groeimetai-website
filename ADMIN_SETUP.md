@@ -5,6 +5,7 @@ This guide explains how to set up and manage admin accounts for GroeimetAI.
 ## Admin Email Addresses
 
 The following email addresses are configured as admin accounts:
+
 - info@groeimetai.io
 - niels@groeimetai.io
 - admin@groeimetai.io
@@ -18,6 +19,7 @@ npm run setup-admin
 ```
 
 This script will:
+
 - Look for existing users with the admin email addresses
 - Update their role to 'admin' in Firestore
 - Create user documents if they don't exist
@@ -37,12 +39,14 @@ This script will:
 Admins have access to:
 
 ### 1. Admin Dashboard (`/dashboard/admin`)
+
 - View all project requests (quotes)
 - Filter by status: pending, reviewed, approved, rejected
 - Update request status
 - See statistics overview
 
 ### 2. Enhanced Permissions
+
 - Read all project requests
 - Update any project request status
 - Access to all user projects
@@ -51,6 +55,7 @@ Admins have access to:
 ## Firebase Security Rules
 
 The Firebase security rules are configured to:
+
 - Allow admins to read all quotes
 - Allow admins to update any quote
 - Only allow admins to delete quotes
@@ -61,6 +66,7 @@ The Firebase security rules are configured to:
 To add a new admin email:
 
 1. Update `/src/lib/constants/adminEmails.ts`:
+
 ```typescript
 export const ADMIN_EMAILS = [
   'info@groeimetai.io',
@@ -71,6 +77,7 @@ export const ADMIN_EMAILS = [
 ```
 
 2. Run the setup script:
+
 ```bash
 npm run setup-admin
 ```
@@ -89,13 +96,14 @@ npm run setup-admin
 If an admin user can't access the admin panel:
 
 1. Check if they're logged in with the correct email
-2. Verify their role in Firestore: 
+2. Verify their role in Firestore:
    - Go to Firebase Console > Firestore
    - Check the `users` collection
    - Find the user by email
    - Ensure `role` field is set to 'admin'
 
 3. If needed, manually update their role in Firestore or run:
+
 ```bash
 npm run setup-admin
 ```

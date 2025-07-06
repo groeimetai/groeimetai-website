@@ -19,7 +19,7 @@ import {
   Filter,
   Archive,
   Trash2,
-  BellOff
+  BellOff,
 } from 'lucide-react';
 import {
   Sheet,
@@ -53,7 +53,7 @@ import {
   deleteDoc,
   getDocs,
   Timestamp,
-  writeBatch
+  writeBatch,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { formatDistanceToNow } from 'date-fns';
@@ -93,7 +93,7 @@ const playNotificationSound = () => {
   try {
     const audio = new Audio('/notification-sound.mp3');
     audio.volume = 0.5;
-    audio.play().catch(err => console.log('Could not play notification sound:', err));
+    audio.play().catch((err) => console.log('Could not play notification sound:', err));
   } catch (error) {
     console.log('Notification sound not available');
   }
@@ -119,7 +119,7 @@ export default function NotificationCenter() {
       messages: true,
       quotes: true,
       projects: true,
-    }
+    },
   });
 
   // Subscribe to notifications
@@ -137,12 +137,12 @@ export default function NotificationCenter() {
       snapshot.forEach((doc) => {
         notificationData.push({ id: doc.id, ...doc.data() } as Notification);
       });
-      
+
       // Check for new notifications
       if (notificationData.length > previousNotificationCount && previousNotificationCount > 0) {
         // Play sound for new notification
         playNotificationSound();
-        
+
         // Show browser notification if permissions granted
         if ('Notification' in window && Notification.permission === 'granted') {
           const newNotification = notificationData[0]; // Most recent
@@ -150,35 +150,35 @@ export default function NotificationCenter() {
             body: newNotification.description,
             icon: '/icon-192x192.png',
             tag: newNotification.id,
-            requireInteraction: newNotification.actionRequired || false
+            requireInteraction: newNotification.actionRequired || false,
           });
         }
-        
+
         // Show toast notification
         const newNotification = notificationData[0];
         const toastMessage = `${newNotification.title}: ${newNotification.description}`;
-        
+
         if (newNotification.priority === 'high') {
           toast.error(toastMessage, {
             duration: 5000,
-            icon: '🔴'
+            icon: '🔴',
           });
         } else if (newNotification.type === 'message') {
           toast.success(toastMessage, {
             duration: 4000,
-            icon: '💬'
+            icon: '💬',
           });
         } else {
           toast(toastMessage, {
             duration: 4000,
-            icon: '🔔'
+            icon: '🔔',
           });
         }
       }
-      
+
       setPreviousNotificationCount(notificationData.length);
       setNotifications(notificationData);
-      setUnreadCount(notificationData.filter(n => !n.read).length);
+      setUnreadCount(notificationData.filter((n) => !n.read).length);
     });
 
     return () => unsubscribe();
@@ -189,7 +189,7 @@ export default function NotificationCenter() {
     try {
       await updateDoc(doc(db, 'notifications', notificationId), {
         read: true,
-        readAt: new Date()
+        readAt: new Date(),
       });
     } catch (error) {
       console.error('Error marking notification as read:', error);
@@ -200,14 +200,14 @@ export default function NotificationCenter() {
   const markAllAsRead = async () => {
     const batch = writeBatch(db);
     notifications
-      .filter(n => !n.read)
-      .forEach(notification => {
+      .filter((n) => !n.read)
+      .forEach((notification) => {
         batch.update(doc(db, 'notifications', notification.id), {
           read: true,
-          readAt: new Date()
+          readAt: new Date(),
         });
       });
-    
+
     try {
       await batch.commit();
     } catch (error) {
@@ -228,16 +228,16 @@ export default function NotificationCenter() {
   const archiveOldNotifications = async () => {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    
+
     const oldNotifications = notifications.filter(
-      n => n.createdAt.toDate() < thirtyDaysAgo && n.read
+      (n) => n.createdAt.toDate() < thirtyDaysAgo && n.read
     );
-    
+
     const batch = writeBatch(db);
-    oldNotifications.forEach(notification => {
+    oldNotifications.forEach((notification) => {
       batch.delete(doc(db, 'notifications', notification.id));
     });
-    
+
     try {
       await batch.commit();
     } catch (error) {
@@ -284,7 +284,7 @@ export default function NotificationCenter() {
   };
 
   // Filter notifications
-  const filteredNotifications = notifications.filter(notification => {
+  const filteredNotifications = notifications.filter((notification) => {
     if (filter === 'unread') return !notification.read;
     if (filter === 'actionRequired') return notification.actionRequired;
     return true;
@@ -381,7 +381,9 @@ export default function NotificationCenter() {
                         >
                           <div className="flex items-start gap-3">
                             <div className={`p-2 rounded-lg bg-white/5`}>
-                              <Icon className={`w-4 h-4 ${getNotificationColor(notification.type)}`} />
+                              <Icon
+                                className={`w-4 h-4 ${getNotificationColor(notification.type)}`}
+                              />
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-start justify-between gap-2">
@@ -393,7 +395,10 @@ export default function NotificationCenter() {
                                     <AlertCircle className="w-3 h-3 text-red-500" />
                                   )}
                                   {notification.actionRequired && (
-                                    <Badge variant="outline" className="text-xs bg-orange/20 border-orange">
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs bg-orange/20 border-orange"
+                                    >
                                       Action
                                     </Badge>
                                   )}
@@ -404,7 +409,9 @@ export default function NotificationCenter() {
                               </p>
                               <div className="flex items-center justify-between mt-2">
                                 <span className="text-white/40 text-xs">
-                                  {formatDistanceToNow(notification.createdAt.toDate(), { addSuffix: true })}
+                                  {formatDistanceToNow(notification.createdAt.toDate(), {
+                                    addSuffix: true,
+                                  })}
                                 </span>
                                 <Button
                                   variant="ghost"
@@ -442,9 +449,9 @@ export default function NotificationCenter() {
                       id={`email-${key}`}
                       checked={value}
                       onCheckedChange={(checked) =>
-                        setPreferences(prev => ({
+                        setPreferences((prev) => ({
                           ...prev,
-                          email: { ...prev.email, [key]: checked }
+                          email: { ...prev.email, [key]: checked },
                         }))
                       }
                     />
@@ -476,10 +483,10 @@ export default function NotificationCenter() {
                           return;
                         }
                       }
-                      setPreferences(prev => ({
+                      setPreferences((prev) => ({
                         ...prev,
-                        push: { ...prev.push, enabled: checked }
-                      }))
+                        push: { ...prev.push, enabled: checked },
+                      }));
                     }}
                   />
                 </div>
@@ -496,9 +503,9 @@ export default function NotificationCenter() {
                             id={`push-${key}`}
                             checked={value}
                             onCheckedChange={(checked) =>
-                              setPreferences(prev => ({
+                              setPreferences((prev) => ({
                                 ...prev,
-                                push: { ...prev.push, [key]: checked }
+                                push: { ...prev.push, [key]: checked },
                               }))
                             }
                           />
@@ -510,11 +517,7 @@ export default function NotificationCenter() {
             </div>
 
             <div className="pt-4 border-t border-white/10">
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={archiveOldNotifications}
-              >
+              <Button variant="outline" className="w-full" onClick={archiveOldNotifications}>
                 <Archive className="w-4 h-4 mr-2" />
                 Archive old notifications
               </Button>

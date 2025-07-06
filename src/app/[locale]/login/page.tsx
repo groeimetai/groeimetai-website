@@ -111,7 +111,7 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
     setError('');
-    
+
     try {
       await loginWithGoogle();
       // Redirect to dashboard

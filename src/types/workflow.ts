@@ -1,6 +1,6 @@
 export type TriggerType = 'time-based' | 'event-based' | 'conditional' | 'manual';
 
-export type ActionType = 
+export type ActionType =
   | 'send-email'
   | 'send-notification'
   | 'create-task'

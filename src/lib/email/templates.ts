@@ -107,7 +107,7 @@ export const emailTemplates = {
               <div class="field">
                 <span class="label">Services Requested:</span>
                 <div class="services">
-                  ${data.services.map(service => `• ${service}`).join('<br>')}
+                  ${data.services.map((service) => `• ${service}`).join('<br>')}
                 </div>
               </div>
               
@@ -144,7 +144,7 @@ Budget: ${data.budget}
 Timeline: ${data.timeline}
 
 Services Requested:
-${data.services.map(service => `• ${service}`).join('\n')}
+${data.services.map((service) => `• ${service}`).join('\n')}
 
 Project Description:
 ${data.description}
@@ -189,18 +189,28 @@ Apeldoorn, Nederland | KVK: 90102304
               
               <p>Status changed from <span class="status status-${data.oldStatus}">${data.oldStatus}</span> to <span class="status status-${data.newStatus}">${data.newStatus}</span></p>
               
-              ${data.message ? `
+              ${
+                data.message
+                  ? `
               <p><strong>Message from our team:</strong></p>
               <p style="background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #FF6600;">
                 ${data.message}
               </p>
-              ` : ''}
+              `
+                  : ''
+              }
               
-              ${data.newStatus === 'approved' ? `
+              ${
+                data.newStatus === 'approved'
+                  ? `
               <p>Great news! Your project has been approved. Our team will contact you shortly to discuss the next steps.</p>
-              ` : data.newStatus === 'reviewed' ? `
+              `
+                  : data.newStatus === 'reviewed'
+                    ? `
               <p>Your project request is currently being reviewed by our team. We'll update you soon with our decision.</p>
-              ` : ''}
+              `
+                    : ''
+              }
               
               <p>
                 <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" class="button">
@@ -226,7 +236,7 @@ Status changed from ${data.oldStatus} to ${data.newStatus}
 
 ${data.message ? `Message from our team:\n${data.message}\n` : ''}
 
-${data.newStatus === 'approved' ? 'Great news! Your project has been approved. Our team will contact you shortly to discuss the next steps.' : data.newStatus === 'reviewed' ? 'Your project request is currently being reviewed by our team. We\'ll update you soon with our decision.' : ''}
+${data.newStatus === 'approved' ? 'Great news! Your project has been approved. Our team will contact you shortly to discuss the next steps.' : data.newStatus === 'reviewed' ? "Your project request is currently being reviewed by our team. We'll update you soon with our decision." : ''}
 
 View in Dashboard: ${process.env.NEXT_PUBLIC_APP_URL}/dashboard
 
@@ -286,19 +296,27 @@ info@groeimetai.io | groeimetai.io
                   <span class="value">${data.requesterName} (${data.requesterEmail})</span>
                 </div>
                 
-                ${data.company ? `
+                ${
+                  data.company
+                    ? `
                 <div class="field">
                   <span class="label">Company:</span>
                   <span class="value">${data.company}</span>
                 </div>
-                ` : ''}
+                `
+                    : ''
+                }
                 
-                ${data.description ? `
+                ${
+                  data.description
+                    ? `
                 <div class="field">
                   <span class="label">Description:</span>
                   <div style="margin-top: 5px;">${data.description}</div>
                 </div>
-                ` : ''}
+                `
+                    : ''
+                }
               </div>
               
               <p>
@@ -404,11 +422,15 @@ Apeldoorn, Nederland | KVK: 90102304
                 <a href="${process.env.NEXT_PUBLIC_APP_URL}/pay/${data.invoice.id}" class="button">
                   Pay Invoice Online
                 </a>
-                ${data.pdfUrl ? `
+                ${
+                  data.pdfUrl
+                    ? `
                 <a href="${data.pdfUrl}" class="button button-secondary">
                   Download PDF
                 </a>
-                ` : ''}
+                `
+                    : ''
+                }
               </p>
               
               <p>If you have any questions about this invoice, please don't hesitate to contact us.</p>
@@ -454,18 +476,18 @@ info@groeimetai.io | groeimetai.io
       due_soon: {
         subject: `Payment Reminder: Invoice ${data.invoice.invoiceNumber} due soon`,
         intro: 'This is a friendly reminder that your invoice is due soon.',
-        urgency: 'Please ensure payment is made by the due date to avoid any late fees.'
+        urgency: 'Please ensure payment is made by the due date to avoid any late fees.',
       },
       overdue: {
         subject: `Overdue Notice: Invoice ${data.invoice.invoiceNumber}`,
         intro: 'We notice that your invoice is now overdue.',
-        urgency: 'Please make payment as soon as possible to avoid further action.'
+        urgency: 'Please make payment as soon as possible to avoid further action.',
       },
       final_notice: {
         subject: `Final Notice: Invoice ${data.invoice.invoiceNumber}`,
         intro: 'This is a final notice regarding your overdue invoice.',
-        urgency: 'Immediate payment is required to avoid collection proceedings.'
-      }
+        urgency: 'Immediate payment is required to avoid collection proceedings.',
+      },
     };
 
     const message = reminderMessages[data.reminderType];

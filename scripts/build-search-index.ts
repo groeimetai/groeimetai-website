@@ -33,22 +33,22 @@ const PAGES_TO_INDEX = [
 async function buildSearchIndex() {
   const environment = process.env.INDEX_ENVIRONMENT || 'development';
   const baseUrl = process.env.BASE_URL; // Set by Cloud Build for live crawling
-  
+
   console.log(`🔍 Building search index for GroeimetAI website (${environment})...`);
   if (baseUrl) {
     console.log(`🌐 Crawling live website at: ${baseUrl}`);
   } else {
     console.log(`📁 Using local files for development`);
   }
-  
+
   let allContent: IndexableContent[] = [];
   const locales: ('en' | 'nl')[] = ['en', 'nl'];
-  
+
   try {
     // Always clear existing index for fresh data
     console.log('Clearing existing index...');
     const pineconeIndex = getIndex();
-    
+
     for (const locale of locales) {
       const namespace = `${environment}-${locale}`; // e.g., production-en, staging-nl
       try {
@@ -58,7 +58,7 @@ async function buildSearchIndex() {
         console.log(`  - Namespace ${namespace} doesn't exist yet, will be created`);
       }
     }
-    
+
     // Extract content based on environment
     if (baseUrl) {
       // Crawl live website for production/staging
@@ -67,35 +67,35 @@ async function buildSearchIndex() {
       // Use local files for development
       for (const locale of locales) {
         console.log(`\n📄 Extracting content for locale: ${locale}`);
-        
+
         // Extract regular pages
         for (const page of PAGES_TO_INDEX) {
           console.log(`  - Extracting ${page}`);
           const pageContent = await extractPageContent(page, locale);
           allContent.push(...pageContent);
         }
-        
+
         // Extract blog posts
         console.log(`  - Extracting blog posts`);
         const blogContent = await extractBlogPosts(locale);
         allContent.push(...blogContent);
-        
+
         // Add environment to all content metadata
-        allContent.forEach(item => {
+        allContent.forEach((item) => {
           item.metadata.environment = environment;
         });
       }
     }
-    
+
     console.log(`\n📊 Total content items to index: ${allContent.length}`);
-    
+
     // Index all content
     console.log('\n🚀 Indexing content to Pinecone...');
     await indexContent(allContent);
-    
+
     console.log('\n✅ Search index built successfully!');
     console.log(`   Total items indexed: ${allContent.length}`);
-    
+
     // Verify index stats
     const statsIndex = getIndex();
     for (const locale of locales) {
@@ -103,7 +103,6 @@ async function buildSearchIndex() {
       const stats = await statsIndex.namespace(namespace).describeIndexStats();
       console.log(`   ${namespace}: ${stats.totalRecordCount || 0} vectors`);
     }
-    
   } catch (error) {
     console.error('\n❌ Error building search index:', error);
     process.exit(1);

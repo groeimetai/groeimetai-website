@@ -2,19 +2,19 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  collection, 
-  query, 
-  orderBy, 
-  onSnapshot, 
-  addDoc, 
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  addDoc,
   serverTimestamp,
   Timestamp,
   doc,
   setDoc,
   getDoc,
   getDocs,
-  where
+  where,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { notificationService } from '@/services/notificationService';
@@ -63,7 +63,7 @@ export default function DashboardChat() {
 
     console.log('DashboardChat: Initializing for user:', user.uid);
     const chatChannelId = `support_${user.uid}`;
-    
+
     let unsubscribe: (() => void) | undefined;
 
     // Create chat channel document if it doesn't exist
@@ -72,7 +72,7 @@ export default function DashboardChat() {
         console.log('DashboardChat: Creating/checking channel:', chatChannelId);
         const channelRef = doc(db, 'supportChats', chatChannelId);
         const channelDoc = await getDoc(channelRef);
-        
+
         if (!channelDoc.exists()) {
           await setDoc(channelRef, {
             userId: user.uid,
@@ -80,7 +80,7 @@ export default function DashboardChat() {
             userEmail: user.email,
             createdAt: serverTimestamp(),
             lastMessageAt: serverTimestamp(),
-            status: 'active'
+            status: 'active',
           });
         }
 
@@ -89,7 +89,7 @@ export default function DashboardChat() {
         const q = query(messagesRef, orderBy('createdAt', 'asc'));
 
         unsubscribe = onSnapshot(
-          q, 
+          q,
           (snapshot) => {
             const newMessages: Message[] = [];
             snapshot.forEach((doc) => {
@@ -109,7 +109,7 @@ export default function DashboardChat() {
           code: error?.code,
           message: error?.message,
           userId: user?.uid,
-          chatChannelId
+          chatChannelId,
         });
         setIsLoading(false);
       }
@@ -145,11 +145,15 @@ export default function DashboardChat() {
 
       // Update last message timestamp
       const channelRef = doc(db, 'supportChats', chatChannelId);
-      await setDoc(channelRef, {
-        lastMessageAt: serverTimestamp(),
-        lastMessage: newMessage.trim(),
-        lastMessageBy: user.uid
-      }, { merge: true });
+      await setDoc(
+        channelRef,
+        {
+          lastMessageAt: serverTimestamp(),
+          lastMessage: newMessage.trim(),
+          lastMessageBy: user.uid,
+        },
+        { merge: true }
+      );
 
       // Send notification
       if (!isAdmin) {
@@ -157,18 +161,18 @@ export default function DashboardChat() {
         const adminsSnapshot = await getDocs(
           query(collection(db, 'users'), where('role', '==', 'admin'))
         );
-        
+
         const notificationData = notificationService.templates.newMessage(
           user.displayName || user.email || 'User'
         );
-        
-        const notificationPromises = adminsSnapshot.docs.map(adminDoc =>
+
+        const notificationPromises = adminsSnapshot.docs.map((adminDoc) =>
           notificationService.sendToUser(adminDoc.id, {
             ...notificationData,
-            link: '/dashboard/admin'
+            link: '/dashboard/admin',
           })
         );
-        
+
         await Promise.all(notificationPromises);
       } else {
         // Admin sending message - notify the specific user
@@ -178,10 +182,10 @@ export default function DashboardChat() {
           const notificationData = notificationService.templates.newMessage(
             user.displayName || 'Support Team'
           );
-          
+
           await notificationService.sendToUser(targetUserId, {
             ...notificationData,
-            link: '/dashboard'
+            link: '/dashboard',
           });
         }
       }
@@ -206,7 +210,7 @@ export default function DashboardChat() {
   const getInitials = (name: string) => {
     return name
       .split(' ')
-      .map(n => n[0])
+      .map((n) => n[0])
       .join('')
       .toUpperCase()
       .slice(0, 2);
@@ -226,19 +230,19 @@ export default function DashboardChat() {
               <Loader2 className="w-6 h-6 animate-spin text-orange" />
             </div>
           )}
-          
+
           {!isLoading && messages.length === 0 && (
             <div className="text-center text-white/40 py-8">
               <p>Start a conversation with our support team!</p>
               <p className="text-sm mt-2">We typically respond within a few hours.</p>
             </div>
           )}
-          
+
           <AnimatePresence initial={false}>
             {messages.map((msg) => {
               const isOwnMessage = msg.senderId === user?.uid;
               const isAdminMessage = msg.senderRole === 'admin';
-              
+
               return (
                 <motion.div
                   key={msg.id}
@@ -251,30 +255,30 @@ export default function DashboardChat() {
                   }`}
                 >
                   <Avatar className="w-8 h-8">
-                    <AvatarFallback className={isAdminMessage ? 'bg-green/20 text-green' : 'bg-orange/20 text-orange'}>
+                    <AvatarFallback
+                      className={
+                        isAdminMessage ? 'bg-green/20 text-green' : 'bg-orange/20 text-orange'
+                      }
+                    >
                       {isAdminMessage ? 'AI' : getInitials(msg.senderName)}
                     </AvatarFallback>
                   </Avatar>
-                  
+
                   <div className={`flex-1 ${isOwnMessage ? 'flex justify-end' : ''}`}>
                     <div
                       className={`inline-block rounded-lg p-3 max-w-[80%] ${
                         isOwnMessage
                           ? 'bg-orange text-white'
                           : isAdminMessage
-                          ? 'bg-green/20 text-white border border-green/30'
-                          : 'bg-white/10 text-white'
+                            ? 'bg-green/20 text-white border border-green/30'
+                            : 'bg-white/10 text-white'
                       }`}
                     >
                       {!isOwnMessage && (
-                        <p className="text-xs font-medium mb-1 opacity-80">
-                          {msg.senderName}
-                        </p>
+                        <p className="text-xs font-medium mb-1 opacity-80">{msg.senderName}</p>
                       )}
                       <p className="text-sm">{msg.content}</p>
-                      <p className="text-xs mt-1 opacity-60">
-                        {formatMessageTime(msg.createdAt)}
-                      </p>
+                      <p className="text-xs mt-1 opacity-60">{formatMessageTime(msg.createdAt)}</p>
                     </div>
                   </div>
                 </motion.div>

@@ -21,23 +21,10 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Link } from '@/i18n/routing';
-import { 
-  collection, 
-  query, 
-  orderBy, 
-  onSnapshot,
-  doc,
-  getDoc,
-  Timestamp
-} from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, doc, getDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { formatDistanceToNow } from 'date-fns';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import AdminSupportChat from '@/components/AdminSupportChat';
 
 interface SupportChat {
@@ -78,14 +65,11 @@ export default function AdminSupportPage() {
     setError(null);
 
     try {
-      const chatsQuery = query(
-        collection(db, 'supportChats'), 
-        orderBy('lastMessageAt', 'desc')
-      );
+      const chatsQuery = query(collection(db, 'supportChats'), orderBy('lastMessageAt', 'desc'));
 
       const unsubscribe = onSnapshot(chatsQuery, async (snapshot) => {
         const chatsData: ChatWithUser[] = [];
-        
+
         // Fetch user details for each chat
         for (const chatDoc of snapshot.docs) {
           const chatData = { id: chatDoc.id, ...chatDoc.data() } as SupportChat;
@@ -105,7 +89,7 @@ export default function AdminSupportPage() {
 
           chatsData.push(chatWithUser);
         }
-        
+
         setChats(chatsData);
         setIsLoading(false);
       });
@@ -154,22 +138,23 @@ export default function AdminSupportPage() {
     }
   };
 
-  const filteredChats = chats.filter(chat => {
-    const matchesSearch = searchTerm === '' || 
+  const filteredChats = chats.filter((chat) => {
+    const matchesSearch =
+      searchTerm === '' ||
       chat.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       chat.userEmail.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchesStatus = statusFilter === 'all' || chat.status === statusFilter;
-    
+
     return matchesSearch && matchesStatus;
   });
 
   // Stats
   const stats = {
     total: chats.length,
-    active: chats.filter(c => c.status === 'active').length,
-    waiting: chats.filter(c => c.status === 'waiting').length,
-    resolved: chats.filter(c => c.status === 'resolved').length,
+    active: chats.filter((c) => c.status === 'active').length,
+    waiting: chats.filter((c) => c.status === 'waiting').length,
+    resolved: chats.filter((c) => c.status === 'resolved').length,
   };
 
   return (
@@ -267,7 +252,7 @@ export default function AdminSupportPage() {
               className="pl-10 bg-white/5 border-white/20 text-white"
             />
           </div>
-          
+
           <div className="flex gap-2">
             <Button
               variant={statusFilter === 'all' ? 'default' : 'outline'}
@@ -352,14 +337,14 @@ export default function AdminSupportPage() {
                   </div>
 
                   {chat.lastMessage && (
-                    <p className="text-sm text-white/80 line-clamp-2 mb-3">
-                      {chat.lastMessage}
-                    </p>
+                    <p className="text-sm text-white/80 line-clamp-2 mb-3">{chat.lastMessage}</p>
                   )}
 
                   <div className="flex items-center justify-between text-xs text-white/40">
                     <span>
-                      Last activity: {chat.lastMessageAt && formatDistanceToNow(chat.lastMessageAt.toDate(), { addSuffix: true })}
+                      Last activity:{' '}
+                      {chat.lastMessageAt &&
+                        formatDistanceToNow(chat.lastMessageAt.toDate(), { addSuffix: true })}
                     </span>
                     {chat.unreadCount && chat.unreadCount > 0 && (
                       <Badge className="bg-orange text-white">{chat.unreadCount}</Badge>
@@ -377,7 +362,7 @@ export default function AdminSupportPage() {
             <MessageSquare className="w-24 h-24 text-white/20 mx-auto mb-6" />
             <h3 className="text-xl font-semibold text-white mb-2">No support chats found</h3>
             <p className="text-white/60">
-              {searchTerm || statusFilter !== 'all' 
+              {searchTerm || statusFilter !== 'all'
                 ? 'Try adjusting your search or filters'
                 : 'No support conversations have been started yet.'}
             </p>
@@ -389,13 +374,11 @@ export default function AdminSupportPage() {
       <Dialog open={isChatOpen} onOpenChange={setIsChatOpen}>
         <DialogContent className="bg-black/95 border-white/20 text-white max-w-2xl h-[80vh]">
           <DialogHeader>
-            <DialogTitle>
-              Support Chat - {selectedChat?.userName}
-            </DialogTitle>
+            <DialogTitle>Support Chat - {selectedChat?.userName}</DialogTitle>
           </DialogHeader>
           {selectedChat && (
             <div className="h-full flex flex-col">
-              <AdminSupportChat 
+              <AdminSupportChat
                 chatId={selectedChat.id}
                 userId={selectedChat.userId}
                 userName={selectedChat.userName}

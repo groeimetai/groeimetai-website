@@ -27,7 +27,9 @@ const EXECUTIONS_COLLECTION = 'workflow_executions';
 
 export class WorkflowService {
   // Create a new workflow
-  static async createWorkflow(workflow: Omit<Workflow, 'id' | 'createdAt' | 'updatedAt' | 'executionCount' | 'errorCount'>): Promise<string> {
+  static async createWorkflow(
+    workflow: Omit<Workflow, 'id' | 'createdAt' | 'updatedAt' | 'executionCount' | 'errorCount'>
+  ): Promise<string> {
     const workflowRef = doc(collection(db, WORKFLOWS_COLLECTION));
     const newWorkflow = {
       ...workflow,
@@ -36,7 +38,7 @@ export class WorkflowService {
       executionCount: 0,
       errorCount: 0,
     };
-    
+
     await setDoc(workflowRef, newWorkflow);
     return workflowRef.id;
   }
@@ -45,24 +47,27 @@ export class WorkflowService {
   static async getWorkflows(): Promise<Workflow[]> {
     const q = query(collection(db, WORKFLOWS_COLLECTION), orderBy('createdAt', 'desc'));
     const snapshot = await getDocs(q);
-    
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-      createdAt: doc.data().createdAt?.toDate(),
-      updatedAt: doc.data().updatedAt?.toDate(),
-      lastExecutedAt: doc.data().lastExecutedAt?.toDate(),
-    } as Workflow));
+
+    return snapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate(),
+          updatedAt: doc.data().updatedAt?.toDate(),
+          lastExecutedAt: doc.data().lastExecutedAt?.toDate(),
+        }) as Workflow
+    );
   }
 
   // Get a single workflow
   static async getWorkflow(workflowId: string): Promise<Workflow | null> {
     const workflowDoc = await getDoc(doc(db, WORKFLOWS_COLLECTION, workflowId));
-    
+
     if (!workflowDoc.exists()) {
       return null;
     }
-    
+
     const data = workflowDoc.data();
     return {
       id: workflowDoc.id,
@@ -96,7 +101,10 @@ export class WorkflowService {
   }
 
   // Execute a workflow (mock implementation)
-  static async executeWorkflow(workflowId: string, variables: Record<string, any> = {}): Promise<string> {
+  static async executeWorkflow(
+    workflowId: string,
+    variables: Record<string, any> = {}
+  ): Promise<string> {
     const workflow = await this.getWorkflow(workflowId);
     if (!workflow) {
       throw new Error('Workflow not found');
@@ -139,7 +147,7 @@ export class WorkflowService {
     variables: Record<string, any>
   ): Promise<void> {
     const logs: WorkflowLog[] = [];
-    let currentNodeId = workflow.nodes.find(n => n.type === 'trigger')?.id;
+    let currentNodeId = workflow.nodes.find((n) => n.type === 'trigger')?.id;
 
     if (!currentNodeId) {
       await this.updateExecution(executionId, {
@@ -152,7 +160,7 @@ export class WorkflowService {
 
     try {
       while (currentNodeId) {
-        const node = workflow.nodes.find(n => n.id === currentNodeId);
+        const node = workflow.nodes.find((n) => n.id === currentNodeId);
         if (!node) break;
 
         // Log execution
@@ -171,11 +179,11 @@ export class WorkflowService {
         });
 
         // Find next node
-        const edge = workflow.edges.find(e => e.source === currentNodeId);
+        const edge = workflow.edges.find((e) => e.source === currentNodeId);
         currentNodeId = edge?.target;
 
         // Simulate processing time
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
 
       // Complete execution
@@ -200,7 +208,10 @@ export class WorkflowService {
   }
 
   // Update execution
-  private static async updateExecution(executionId: string, updates: Partial<WorkflowExecution>): Promise<void> {
+  private static async updateExecution(
+    executionId: string,
+    updates: Partial<WorkflowExecution>
+  ): Promise<void> {
     await updateDoc(doc(db, EXECUTIONS_COLLECTION, executionId), updates);
   }
 
@@ -218,27 +229,30 @@ export class WorkflowService {
     }
 
     const snapshot = await getDocs(q);
-    
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-      startedAt: doc.data().startedAt?.toDate(),
-      completedAt: doc.data().completedAt?.toDate(),
-      logs: doc.data().logs?.map((log: any) => ({
-        ...log,
-        timestamp: log.timestamp?.toDate(),
-      })),
-    } as WorkflowExecution));
+
+    return snapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+          startedAt: doc.data().startedAt?.toDate(),
+          completedAt: doc.data().completedAt?.toDate(),
+          logs: doc.data().logs?.map((log: any) => ({
+            ...log,
+            timestamp: log.timestamp?.toDate(),
+          })),
+        }) as WorkflowExecution
+    );
   }
 
   // Get single execution
   static async getExecution(executionId: string): Promise<WorkflowExecution | null> {
     const executionDoc = await getDoc(doc(db, EXECUTIONS_COLLECTION, executionId));
-    
+
     if (!executionDoc.exists()) {
       return null;
     }
-    
+
     const data = executionDoc.data();
     return {
       id: executionDoc.id,
@@ -268,11 +282,11 @@ export class WorkflowService {
     return template.replace(/\{\{([^}]+)\}\}/g, (match, key) => {
       const keys = key.trim().split('.');
       let value: any = variables;
-      
+
       for (const k of keys) {
         value = value?.[k];
       }
-      
+
       return value !== undefined ? String(value) : match;
     });
   }

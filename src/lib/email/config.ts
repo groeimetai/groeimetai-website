@@ -8,10 +8,10 @@ export const emailConfig = {
     name: 'GroeimetAI',
     address: 'info@groeimetai.io',
   },
-  
+
   // Admin emails that should receive notifications
   adminEmails: ['niels@groeimetai.io'],
-  
+
   // SMTP configuration getter to evaluate environment variables at runtime
   get smtp() {
     return {

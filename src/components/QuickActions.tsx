@@ -63,11 +63,14 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
   }, []);
 
   // Safe navigation helper
-  const navigateTo = useCallback((path: string) => {
-    if (mounted) {
-      router.push(path);
-    }
-  }, [mounted, router]);
+  const navigateTo = useCallback(
+    (path: string) => {
+      if (mounted) {
+        router.push(path);
+      }
+    },
+    [mounted, router]
+  );
 
   // Define all available quick actions
   const allActions: QuickAction[] = [
@@ -157,7 +160,6 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       shortcut: 'Ctrl+H',
       category: 'communication',
     },
-
 
     // Admin Actions
     {
@@ -297,18 +299,23 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
 
     const groups: { [key: string]: QuickAction[] } = {
       'Recently Used': recentActions.slice(0, 3),
-      Suggested: availableActions.filter((a) => suggested.includes(a.id) && !recentActionIds.includes(a.id)),
+      Suggested: availableActions.filter(
+        (a) => suggested.includes(a.id) && !recentActionIds.includes(a.id)
+      ),
     };
 
     // Add remaining actions by category
-    const categorized = availableActions.reduce((acc, action) => {
-      if (!suggested.includes(action.id) && !recentActionIds.includes(action.id)) {
-        const category = action.category.charAt(0).toUpperCase() + action.category.slice(1);
-        if (!acc[category]) acc[category] = [];
-        acc[category].push(action);
-      }
-      return acc;
-    }, {} as { [key: string]: QuickAction[] });
+    const categorized = availableActions.reduce(
+      (acc, action) => {
+        if (!suggested.includes(action.id) && !recentActionIds.includes(action.id)) {
+          const category = action.category.charAt(0).toUpperCase() + action.category.slice(1);
+          if (!acc[category]) acc[category] = [];
+          acc[category].push(action);
+        }
+        return acc;
+      },
+      {} as { [key: string]: QuickAction[] }
+    );
 
     return { ...groups, ...categorized };
   };
@@ -394,7 +401,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
           >
             {isOpen ? <X className="w-6 h-6" /> : <Plus className="w-6 h-6" />}
           </motion.div>
-          
+
           {/* Pulse animation when closed */}
           {!isOpen && (
             <motion.div
@@ -528,10 +535,7 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
           </motion.div>
         )}
       </AnimatePresence>
-      <ProjectRequestDialog 
-        open={projectDialogOpen} 
-        onOpenChange={setProjectDialogOpen} 
-      />
+      <ProjectRequestDialog open={projectDialogOpen} onOpenChange={setProjectDialogOpen} />
     </div>
   );
 }

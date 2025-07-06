@@ -1,12 +1,12 @@
-import { 
-  collection, 
-  addDoc, 
+import {
+  collection,
+  addDoc,
   serverTimestamp,
   query,
   where,
   getDocs,
   deleteDoc,
-  doc
+  doc,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { Notification } from '@/components/NotificationCenter';
@@ -18,7 +18,7 @@ export const notificationService = {
       const docRef = await addDoc(collection(db, 'notifications'), {
         ...data,
         createdAt: serverTimestamp(),
-        read: false
+        read: false,
       });
       return docRef.id;
     } catch (error) {
@@ -28,18 +28,21 @@ export const notificationService = {
   },
 
   // Send notification to user
-  async sendToUser(userId: string, notification: {
-    type: Notification['type'];
-    title: string;
-    description: string;
-    link?: string;
-    priority?: 'low' | 'medium' | 'high';
-    actionRequired?: boolean;
-  }) {
+  async sendToUser(
+    userId: string,
+    notification: {
+      type: Notification['type'];
+      title: string;
+      description: string;
+      link?: string;
+      priority?: 'low' | 'medium' | 'high';
+      actionRequired?: boolean;
+    }
+  ) {
     return this.create({
       userId,
       ...notification,
-      read: false
+      read: false,
     });
   },
 
@@ -53,7 +56,7 @@ export const notificationService = {
   }) {
     try {
       const usersSnapshot = await getDocs(collection(db, 'users'));
-      const promises = usersSnapshot.docs.map(userDoc => 
+      const promises = usersSnapshot.docs.map((userDoc) =>
         this.sendToUser(userDoc.id, notification)
       );
       await Promise.all(promises);
@@ -68,19 +71,17 @@ export const notificationService = {
     try {
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      
+
       const q = query(
         collection(db, 'notifications'),
         where('userId', '==', userId),
         where('createdAt', '<', thirtyDaysAgo),
         where('read', '==', true)
       );
-      
+
       const snapshot = await getDocs(q);
-      const promises = snapshot.docs.map(doc => 
-        deleteDoc(doc.ref)
-      );
-      
+      const promises = snapshot.docs.map((doc) => deleteDoc(doc.ref));
+
       await Promise.all(promises);
     } catch (error) {
       console.error('Error cleaning up notifications:', error);
@@ -94,7 +95,7 @@ export const notificationService = {
       type: 'message' as const,
       title: 'New Message',
       description: `You have a new message from ${fromName}`,
-      priority: 'medium' as const
+      priority: 'medium' as const,
     }),
 
     quoteStatusUpdate: (projectName: string, status: string) => ({
@@ -102,14 +103,14 @@ export const notificationService = {
       title: 'Quote Status Update',
       description: `Your quote for "${projectName}" has been ${status}`,
       priority: 'high' as const,
-      actionRequired: status === 'approved'
+      actionRequired: status === 'approved',
     }),
 
     projectUpdate: (projectName: string, update: string) => ({
       type: 'project' as const,
       title: 'Project Update',
       description: `${projectName}: ${update}`,
-      priority: 'medium' as const
+      priority: 'medium' as const,
     }),
 
     paymentReminder: (amount: string, dueDate: string) => ({
@@ -117,21 +118,21 @@ export const notificationService = {
       title: 'Payment Reminder',
       description: `Payment of ${amount} is due on ${dueDate}`,
       priority: 'high' as const,
-      actionRequired: true
+      actionRequired: true,
     }),
 
     meetingReminder: (meetingTitle: string, time: string) => ({
       type: 'meeting' as const,
       title: 'Meeting Reminder',
       description: `${meetingTitle} scheduled for ${time}`,
-      priority: 'high' as const
+      priority: 'high' as const,
     }),
 
     systemAnnouncement: (message: string) => ({
       type: 'system' as const,
       title: 'System Update',
       description: message,
-      priority: 'low' as const
-    })
-  }
+      priority: 'low' as const,
+    }),
+  },
 };

@@ -239,7 +239,9 @@ export default function ContactPage() {
                           <SelectItem value="multi-agent">
                             {t('form.services.multiAgent')}
                           </SelectItem>
-                          <SelectItem value="small-projects">{t('form.services.security')}</SelectItem>
+                          <SelectItem value="small-projects">
+                            {t('form.services.security')}
+                          </SelectItem>
                           <SelectItem value="other">{t('form.services.other')}</SelectItem>
                         </SelectContent>
                       </Select>
@@ -345,8 +347,8 @@ export default function ContactPage() {
                   <p className="text-muted-foreground mb-4">
                     {t('additionalInfo.scheduleMeetingDescription')}
                   </p>
-                  <Button 
-                    className="w-full hover-lift" 
+                  <Button
+                    className="w-full hover-lift"
                     variant="outline"
                     onClick={() => setMeetingModalOpen(true)}
                   >
@@ -416,10 +418,7 @@ export default function ContactPage() {
       </section>
 
       {/* Meeting Scheduler Modal */}
-      <MeetingSchedulerModal 
-        open={meetingModalOpen} 
-        onOpenChange={setMeetingModalOpen} 
-      />
+      <MeetingSchedulerModal open={meetingModalOpen} onOpenChange={setMeetingModalOpen} />
     </main>
   );
 }

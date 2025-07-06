@@ -168,7 +168,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setError(null);
       const credential = await signInWithEmailAndPassword(auth, email, password);
-      
+
       // Check if email is verified
       if (!credential.user.emailVerified) {
         // Send verification email again
@@ -179,10 +179,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         error.code = 'auth/email-not-verified';
         throw error;
       }
-      
+
       const userData = await createOrUpdateUserDoc(credential.user);
       setUser(userData);
-      
+
       // Log successful login
       await logAuthActivity('auth.login', credential.user.uid, credential.user.email || '', {
         method: 'email',
@@ -201,17 +201,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         };
       }
       setError(error.message);
-      
+
       // Log failed login attempt
-      await logErrorActivity('auth.login', error, {
-        uid: 'unknown',
-        email: email,
-        displayName: undefined,
-      }, {
-        errorCode: error.code,
-        method: 'email',
-      });
-      
+      await logErrorActivity(
+        'auth.login',
+        error,
+        {
+          uid: 'unknown',
+          email: email,
+          displayName: undefined,
+        },
+        {
+          errorCode: error.code,
+          method: 'email',
+        }
+      );
+
       throw error;
     }
   };
@@ -235,7 +240,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Create user document
       const newUser = await createOrUpdateUserDoc(credential.user, userData);
       setUser(newUser);
-      
+
       // Log successful registration
       await logAuthActivity('auth.register', credential.user.uid, credential.user.email || '', {
         method: 'email',
@@ -244,16 +249,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
     } catch (error: any) {
       setError(error.message);
-      
+
       // Log failed registration
-      await logErrorActivity('auth.register', error, {
-        uid: 'unknown',
-        email: email,
-        displayName: userData.displayName,
-      }, {
-        errorCode: error.code,
-      });
-      
+      await logErrorActivity(
+        'auth.register',
+        error,
+        {
+          uid: 'unknown',
+          email: email,
+          displayName: userData.displayName,
+        },
+        {
+          errorCode: error.code,
+        }
+      );
+
       throw error;
     }
   };
@@ -262,31 +272,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = async () => {
     try {
       setError(null);
-      
+
       // Log logout before clearing user state
       if (firebaseUser) {
         await logAuthActivity('auth.logout', firebaseUser.uid, firebaseUser.email || '', {
           timestamp: new Date().toISOString(),
         });
       }
-      
+
       await signOut(auth);
       setUser(null);
       setFirebaseUser(null);
     } catch (error: any) {
       setError(error.message);
-      
+
       // Log failed logout
       if (firebaseUser) {
-        await logErrorActivity('auth.logout', error, {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email || '',
-          displayName: firebaseUser.displayName || undefined,
-        }, {
-          errorCode: error.code,
-        });
+        await logErrorActivity(
+          'auth.logout',
+          error,
+          {
+            uid: firebaseUser.uid,
+            email: firebaseUser.email || '',
+            displayName: firebaseUser.displayName || undefined,
+          },
+          {
+            errorCode: error.code,
+          }
+        );
       }
-      
+
       throw error;
     }
   };
@@ -296,23 +311,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setError(null);
       await sendPasswordResetEmail(auth, email);
-      
+
       // Log password reset request
       await logAuthActivity('auth.password_reset', 'unknown', email, {
         timestamp: new Date().toISOString(),
       });
     } catch (error: any) {
       setError(error.message);
-      
+
       // Log failed password reset
-      await logErrorActivity('auth.password_reset', error, {
-        uid: 'unknown',
-        email: email,
-        displayName: undefined,
-      }, {
-        errorCode: error.code,
-      });
-      
+      await logErrorActivity(
+        'auth.password_reset',
+        error,
+        {
+          uid: 'unknown',
+          email: email,
+          displayName: undefined,
+        },
+        {
+          errorCode: error.code,
+        }
+      );
+
       throw error;
     }
   };
@@ -331,7 +351,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         photoURL: credential.user.photoURL || undefined,
       });
       setUser(userData);
-      
+
       // Log successful Google login
       await logAuthActivity('auth.login', credential.user.uid, credential.user.email || '', {
         method: 'google',
@@ -339,17 +359,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
     } catch (error: any) {
       setError(error.message);
-      
+
       // Log failed Google login
-      await logErrorActivity('auth.login', error, {
-        uid: 'unknown',
-        email: 'unknown',
-        displayName: undefined,
-      }, {
-        errorCode: error.code,
-        method: 'google',
-      });
-      
+      await logErrorActivity(
+        'auth.login',
+        error,
+        {
+          uid: 'unknown',
+          email: 'unknown',
+          displayName: undefined,
+        },
+        {
+          errorCode: error.code,
+          method: 'google',
+        }
+      );
+
       throw error;
     }
   };
@@ -368,7 +393,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         photoURL: credential.user.photoURL || undefined,
       });
       setUser(userData);
-      
+
       // Log successful LinkedIn login
       await logAuthActivity('auth.login', credential.user.uid, credential.user.email || '', {
         method: 'linkedin',
@@ -376,17 +401,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
     } catch (error: any) {
       setError(error.message);
-      
+
       // Log failed LinkedIn login
-      await logErrorActivity('auth.login', error, {
-        uid: 'unknown',
-        email: 'unknown',  
-        displayName: undefined,
-      }, {
-        errorCode: error.code,
-        method: 'linkedin',
-      });
-      
+      await logErrorActivity(
+        'auth.login',
+        error,
+        {
+          uid: 'unknown',
+          email: 'unknown',
+          displayName: undefined,
+        },
+        {
+          errorCode: error.code,
+          method: 'linkedin',
+        }
+      );
+
       throw error;
     }
   };
@@ -445,8 +475,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (firebaseUser) {
         // Only set user if email is verified (except for social logins which are pre-verified)
-        if (firebaseUser.emailVerified || 
-            firebaseUser.providerData.some(p => p.providerId === 'google.com' || p.providerId === 'linkedin.com')) {
+        if (
+          firebaseUser.emailVerified ||
+          firebaseUser.providerData.some(
+            (p) => p.providerId === 'google.com' || p.providerId === 'linkedin.com'
+          )
+        ) {
           const userData = await fetchUserData(firebaseUser.uid);
           if (userData) {
             setUser(userData);

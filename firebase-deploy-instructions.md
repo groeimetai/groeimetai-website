@@ -19,11 +19,13 @@ firebase deploy --only firestore:rules
 ## Or deploy separately:
 
 ### 1. Deploy Firestore Rules
+
 ```bash
 firebase deploy --only firestore:rules
 ```
 
 ### 2. Deploy Firestore Indexes
+
 ```bash
 firebase deploy --only firestore:indexes
 ```

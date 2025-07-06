@@ -47,7 +47,7 @@ export type ActivityType =
   | 'message.send'
   | 'notification.send';
 
-export type ResourceType = 
+export type ResourceType =
   | 'user'
   | 'project'
   | 'quote'
@@ -107,9 +107,7 @@ class ActivityLogger {
   /**
    * Log an activity
    */
-  async log(
-    activity: Omit<ActivityLog, 'id' | 'timestamp'>
-  ): Promise<void> {
+  async log(activity: Omit<ActivityLog, 'id' | 'timestamp'>): Promise<void> {
     try {
       // Build log object without undefined values
       const log: Omit<ActivityLog, 'id'> = {
@@ -156,9 +154,7 @@ class ActivityLogger {
   /**
    * Log an activity immediately (bypass batching)
    */
-  private async logImmediately(
-    log: Omit<ActivityLog, 'id'>
-  ): Promise<void> {
+  private async logImmediately(log: Omit<ActivityLog, 'id'>): Promise<void> {
     try {
       await addDoc(collection(db, this.COLLECTION_NAME), log);
     } catch (error) {
@@ -224,9 +220,7 @@ class ActivityLogger {
     lastDoc?: DocumentSnapshot;
   }): Promise<{ logs: ActivityLog[]; lastDoc?: DocumentSnapshot }> {
     try {
-      const constraints: QueryConstraint[] = [
-        orderBy('timestamp', 'desc'),
-      ];
+      const constraints: QueryConstraint[] = [orderBy('timestamp', 'desc')];
 
       if (filters.userId) {
         constraints.push(where('userId', '==', filters.userId));
@@ -281,11 +275,7 @@ class ActivityLogger {
   /**
    * Get activity statistics
    */
-  async getActivityStats(filters: {
-    startDate?: Date;
-    endDate?: Date;
-    userId?: string;
-  }): Promise<{
+  async getActivityStats(filters: { startDate?: Date; endDate?: Date; userId?: string }): Promise<{
     totalActivities: number;
     activitiesByType: Record<ActivityType, number>;
     activitiesBySeverity: Record<string, number>;
@@ -326,7 +316,8 @@ class ActivityLogger {
         stats.activitiesByType[data.action] = (stats.activitiesByType[data.action] || 0) + 1;
 
         // Count by severity
-        stats.activitiesBySeverity[data.severity] = (stats.activitiesBySeverity[data.severity] || 0) + 1;
+        stats.activitiesBySeverity[data.severity] =
+          (stats.activitiesBySeverity[data.severity] || 0) + 1;
 
         // Count by user
         stats.userActivityCount[data.userId] = (stats.userActivityCount[data.userId] || 0) + 1;
@@ -377,7 +368,7 @@ class ActivityLogger {
       );
 
       const snapshot = await getDocs(q);
-      
+
       if (snapshot.empty) {
         return 0;
       }

@@ -2,10 +2,9 @@ import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 
 // Dynamic import to avoid SSR issues with ReactFlow
-const WorkflowAutomation = dynamic(
-  () => import('@/components/admin/WorkflowAutomation'),
-  { ssr: false }
-);
+const WorkflowAutomation = dynamic(() => import('@/components/admin/WorkflowAutomation'), {
+  ssr: false,
+});
 
 export const metadata: Metadata = {
   title: 'Workflow Automation | Admin Dashboard',

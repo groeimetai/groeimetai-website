@@ -1,10 +1,10 @@
-import { 
-  collection, 
-  query, 
-  where, 
-  orderBy, 
-  getDocs, 
-  getDoc, 
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  getDocs,
+  getDoc,
   doc,
   addDoc,
   updateDoc,
@@ -12,7 +12,7 @@ import {
   serverTimestamp,
   Timestamp,
   QueryConstraint,
-  limit as firestoreLimit
+  limit as firestoreLimit,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { Project, ProjectStatus, PaginatedResponse } from '@/types';
@@ -53,7 +53,7 @@ const mapFirestoreToProject = (id: string, data: any): Project => {
     budget: data.budget || {
       amount: 0,
       currency: 'EUR',
-      type: 'fixed'
+      type: 'fixed',
     },
     milestones: data.milestones || [],
     tags: data.tags || [],
@@ -87,47 +87,47 @@ export const firestoreProjectService = {
   }): Promise<PaginatedResponse<Project>> {
     try {
       const constraints: QueryConstraint[] = [];
-      
+
       // Filter by user
       if (params?.userId) {
         constraints.push(where('userId', '==', params.userId));
       }
-      
+
       // Filter by status
       if (params?.status && params.status !== 'all') {
         constraints.push(where('status', '==', params.status));
       }
-      
+
       // Filter by type
       if (params?.type) {
         constraints.push(where('type', '==', params.type));
       }
-      
+
       // Filter by consultant
       if (params?.consultantId) {
         constraints.push(where('consultantId', '==', params.consultantId));
       }
-      
+
       // Sort
       const sortField = params?.sort || 'createdAt';
       const sortOrder = params?.order || 'desc';
       constraints.push(orderBy(sortField, sortOrder));
-      
+
       // Limit
       const limitValue = params?.limit || 20;
       constraints.push(firestoreLimit(limitValue));
-      
+
       // Create query
       const projectsQuery = query(collection(db, 'projects'), ...constraints);
-      
+
       // Execute query
       const snapshot = await getDocs(projectsQuery);
-      
+
       // Map documents to projects
       const projects: Project[] = [];
       snapshot.forEach((doc) => {
         const data = doc.data();
-        
+
         // Simple search filter (client-side for now)
         if (params?.search) {
           const searchLower = params.search.toLowerCase();
@@ -137,10 +137,10 @@ export const firestoreProjectService = {
             return;
           }
         }
-        
+
         projects.push(mapFirestoreToProject(doc.id, data));
       });
-      
+
       // Return paginated response
       return {
         items: projects,
@@ -151,7 +151,7 @@ export const firestoreProjectService = {
           pages: Math.ceil(projects.length / limitValue),
           hasNext: false, // Simple implementation for now
           hasPrev: false,
-        }
+        },
       };
     } catch (error) {
       console.error('Error fetching projects:', error);
@@ -164,11 +164,11 @@ export const firestoreProjectService = {
     try {
       const docRef = doc(db, 'projects', id);
       const docSnap = await getDoc(docRef);
-      
+
       if (!docSnap.exists()) {
         throw new Error('Project not found');
       }
-      
+
       return mapFirestoreToProject(docSnap.id, docSnap.data());
     } catch (error) {
       console.error('Error fetching project:', error);
@@ -186,12 +186,12 @@ export const firestoreProjectService = {
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       };
-      
+
       const docRef = await addDoc(collection(db, 'projects'), projectData);
-      
+
       // Fetch the created project
       const project = await this.get(docRef.id);
-      
+
       // Log activity
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -212,11 +212,11 @@ export const firestoreProjectService = {
           }
         );
       }
-      
+
       return project;
     } catch (error: any) {
       console.error('Error creating project:', error);
-      
+
       // Log error
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -233,7 +233,7 @@ export const firestoreProjectService = {
           }
         );
       }
-      
+
       throw new Error('Failed to create project');
     }
   },
@@ -242,18 +242,18 @@ export const firestoreProjectService = {
   async update(id: string, data: Partial<Project>): Promise<Project> {
     try {
       const docRef = doc(db, 'projects', id);
-      
+
       // Get the project name for logging
       const existingProject = await this.get(id);
-      
+
       await updateDoc(docRef, {
         ...data,
         updatedAt: serverTimestamp(),
       });
-      
+
       // Fetch the updated project
       const updatedProject = await this.get(id);
-      
+
       // Log activity
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -291,11 +291,11 @@ export const firestoreProjectService = {
           );
         }
       }
-      
+
       return updatedProject;
     } catch (error: any) {
       console.error('Error updating project:', error);
-      
+
       // Log error
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -313,7 +313,7 @@ export const firestoreProjectService = {
           }
         );
       }
-      
+
       throw new Error('Failed to update project');
     }
   },
@@ -323,10 +323,10 @@ export const firestoreProjectService = {
     try {
       // Get project info before deleting
       const project = await this.get(id);
-      
+
       const docRef = doc(db, 'projects', id);
       await deleteDoc(docRef);
-      
+
       // Log activity
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -348,7 +348,7 @@ export const firestoreProjectService = {
       }
     } catch (error: any) {
       console.error('Error deleting project:', error);
-      
+
       // Log error
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -365,7 +365,7 @@ export const firestoreProjectService = {
           }
         );
       }
-      
+
       throw new Error('Failed to delete project');
     }
   },

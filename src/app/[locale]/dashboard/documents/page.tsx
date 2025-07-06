@@ -161,9 +161,19 @@ export default function DocumentsPage() {
     if (files && files.length > 0) {
       const file = files[0];
       // Check if file type is supported
-      const supportedTypes = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.txt', '.csv'];
+      const supportedTypes = [
+        '.pdf',
+        '.doc',
+        '.docx',
+        '.xls',
+        '.xlsx',
+        '.ppt',
+        '.pptx',
+        '.txt',
+        '.csv',
+      ];
       const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
-      
+
       if (supportedTypes.includes(fileExtension)) {
         setSelectedFile(file);
         setShowUploadDialog(true);
@@ -348,19 +358,21 @@ export default function DocumentsPage() {
 
                 <div className="space-y-4">
                   {!selectedFile ? (
-                    <div 
+                    <div
                       className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-                        isDragging 
-                          ? 'border-orange bg-orange/10' 
+                        isDragging
+                          ? 'border-orange bg-orange/10'
                           : 'border-white/20 hover:border-orange/50'
                       }`}
                       onDragOver={handleDragOver}
                       onDragLeave={handleDragLeave}
                       onDrop={handleDrop}
                     >
-                      <CloudUpload className={`w-12 h-12 mx-auto mb-4 ${
-                        isDragging ? 'text-orange' : 'text-white/40'
-                      }`} />
+                      <CloudUpload
+                        className={`w-12 h-12 mx-auto mb-4 ${
+                          isDragging ? 'text-orange' : 'text-white/40'
+                        }`}
+                      />
                       <p className="text-white/80 mb-2">Drop your file here or click to browse</p>
                       <p className="text-white/40 text-sm mb-4">
                         Supported formats: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, CSV
@@ -373,9 +385,7 @@ export default function DocumentsPage() {
                           onChange={handleFileSelect}
                           accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"
                         />
-                        <Button className="bg-orange hover:bg-orange/90">
-                          Select File
-                        </Button>
+                        <Button className="bg-orange hover:bg-orange/90">Select File</Button>
                       </label>
                     </div>
                   ) : (
@@ -391,82 +401,84 @@ export default function DocumentsPage() {
                         <p className="text-white/60 text-sm">{formatFileSize(selectedFile.size)}</p>
                       </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="project" className="text-white">
-                        Project Name (Optional)
-                      </Label>
-                      <Input
-                        id="project"
-                        value={uploadMetadata.projectName}
-                        onChange={(e) =>
-                          setUploadMetadata({ ...uploadMetadata, projectName: e.target.value })
-                        }
-                        placeholder="e.g., AI Transformation Initiative"
-                        className="bg-white/5 border-white/10 text-white"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="description" className="text-white">
-                        Description (Optional)
-                      </Label>
-                      <Textarea
-                        id="description"
-                        value={uploadMetadata.description}
-                        onChange={(e) =>
-                          setUploadMetadata({ ...uploadMetadata, description: e.target.value })
-                        }
-                        placeholder="Brief description of the document..."
-                        className="bg-white/5 border-white/10 text-white"
-                        rows={3}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="tags" className="text-white">
-                        Tags (Optional)
-                      </Label>
-                      <Input
-                        id="tags"
-                        value={uploadMetadata.tags}
-                        onChange={(e) =>
-                          setUploadMetadata({ ...uploadMetadata, tags: e.target.value })
-                        }
-                        placeholder="contract, legal, 2025 (comma separated)"
-                        className="bg-white/5 border-white/10 text-white"
-                      />
-                    </div>
-
-                    {uploadProgress && (
                       <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-white/60">Uploading...</span>
-                          <span className="text-white">{Math.round(uploadProgress.progress)}%</span>
-                        </div>
-                        <Progress value={uploadProgress.progress} className="bg-white/10" />
+                        <Label htmlFor="project" className="text-white">
+                          Project Name (Optional)
+                        </Label>
+                        <Input
+                          id="project"
+                          value={uploadMetadata.projectName}
+                          onChange={(e) =>
+                            setUploadMetadata({ ...uploadMetadata, projectName: e.target.value })
+                          }
+                          placeholder="e.g., AI Transformation Initiative"
+                          className="bg-white/5 border-white/10 text-white"
+                        />
                       </div>
-                    )}
 
-                    <div className="flex gap-2">
-                      <Button
-                        onClick={handleUpload}
-                        disabled={isUploading}
-                        className="flex-1 bg-orange hover:bg-orange/90"
-                      >
-                        {isUploading ? 'Uploading...' : 'Upload'}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => {
-                          setShowUploadDialog(false);
-                          setSelectedFile(null);
-                          setUploadMetadata({ description: '', tags: '', projectName: '' });
-                        }}
-                        disabled={isUploading}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="description" className="text-white">
+                          Description (Optional)
+                        </Label>
+                        <Textarea
+                          id="description"
+                          value={uploadMetadata.description}
+                          onChange={(e) =>
+                            setUploadMetadata({ ...uploadMetadata, description: e.target.value })
+                          }
+                          placeholder="Brief description of the document..."
+                          className="bg-white/5 border-white/10 text-white"
+                          rows={3}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="tags" className="text-white">
+                          Tags (Optional)
+                        </Label>
+                        <Input
+                          id="tags"
+                          value={uploadMetadata.tags}
+                          onChange={(e) =>
+                            setUploadMetadata({ ...uploadMetadata, tags: e.target.value })
+                          }
+                          placeholder="contract, legal, 2025 (comma separated)"
+                          className="bg-white/5 border-white/10 text-white"
+                        />
+                      </div>
+
+                      {uploadProgress && (
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-white/60">Uploading...</span>
+                            <span className="text-white">
+                              {Math.round(uploadProgress.progress)}%
+                            </span>
+                          </div>
+                          <Progress value={uploadProgress.progress} className="bg-white/10" />
+                        </div>
+                      )}
+
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={handleUpload}
+                          disabled={isUploading}
+                          className="flex-1 bg-orange hover:bg-orange/90"
+                        >
+                          {isUploading ? 'Uploading...' : 'Upload'}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setShowUploadDialog(false);
+                            setSelectedFile(null);
+                            setUploadMetadata({ description: '', tags: '', projectName: '' });
+                          }}
+                          disabled={isUploading}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
                     </>
                   )}
                 </div>
@@ -756,7 +768,6 @@ export default function DocumentsPage() {
             </div>
           </div>
         )}
-
       </div>
     </main>
   );

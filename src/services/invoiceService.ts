@@ -1,16 +1,16 @@
 import { db, collections } from '@/lib/firebase';
-import { 
-  doc, 
-  collection, 
-  setDoc, 
-  getDoc, 
-  updateDoc, 
-  query, 
-  where, 
-  orderBy, 
+import {
+  doc,
+  collection,
+  setDoc,
+  getDoc,
+  updateDoc,
+  query,
+  where,
+  orderBy,
   getDocs,
   serverTimestamp,
-  Timestamp 
+  Timestamp,
 } from 'firebase/firestore';
 import { Invoice, InvoiceStatus, InvoiceType, InvoiceItem, InvoiceFinancial } from '@/types';
 import { emailService } from './emailService';
@@ -24,7 +24,7 @@ class InvoiceService {
     const date = new Date();
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
-    
+
     // Get the last invoice of the current month
     const q = query(
       collection(db, collections.invoices || 'invoices'),
@@ -32,16 +32,16 @@ class InvoiceService {
       where('invoiceNumber', '<=', `INV-${year}${month}-999`),
       orderBy('invoiceNumber', 'desc')
     );
-    
+
     const snapshot = await getDocs(q);
     let nextNumber = 1;
-    
+
     if (!snapshot.empty) {
       const lastInvoice = snapshot.docs[0].data();
       const lastNumber = parseInt(lastInvoice.invoiceNumber.split('-')[2]);
       nextNumber = lastNumber + 1;
     }
-    
+
     return `INV-${year}${month}-${String(nextNumber).padStart(3, '0')}`;
   }
 
@@ -52,7 +52,7 @@ class InvoiceService {
     const subtotal = items.reduce((sum, item) => sum + item.total, 0);
     const tax = items.reduce((sum, item) => sum + item.tax, 0);
     const total = subtotal + tax - discount;
-    
+
     return {
       subtotal,
       discount,
@@ -60,7 +60,7 @@ class InvoiceService {
       total,
       paid: 0,
       balance: total,
-      currency: 'EUR'
+      currency: 'EUR',
     };
   }
 
@@ -83,7 +83,7 @@ class InvoiceService {
     try {
       const invoiceNumber = await this.generateInvoiceNumber();
       const financial = this.calculateFinancials(invoiceData.items);
-      
+
       const invoice: Invoice = {
         id: doc(collection(db, collections.invoices || 'invoices')).id,
         invoiceNumber,
@@ -102,16 +102,16 @@ class InvoiceService {
         reminders: [],
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: invoiceData.createdBy
+        createdBy: invoiceData.createdBy,
       };
-      
+
       // Save to Firestore
       await setDoc(doc(db, collections.invoices || 'invoices', invoice.id), {
         ...invoice,
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       });
-      
+
       return invoice;
     } catch (error) {
       console.error('Error creating invoice:', error);
@@ -125,14 +125,14 @@ class InvoiceService {
   async getInvoice(invoiceId: string): Promise<Invoice | null> {
     try {
       const invoiceDoc = await getDoc(doc(db, collections.invoices || 'invoices', invoiceId));
-      
+
       if (!invoiceDoc.exists()) {
         return null;
       }
-      
+
       return {
         id: invoiceDoc.id,
-        ...invoiceDoc.data()
+        ...invoiceDoc.data(),
       } as Invoice;
     } catch (error) {
       console.error('Error getting invoice:', error);
@@ -147,7 +147,7 @@ class InvoiceService {
     try {
       await updateDoc(doc(db, collections.invoices || 'invoices', invoiceId), {
         ...updates,
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       });
     } catch (error) {
       console.error('Error updating invoice:', error);
@@ -158,35 +158,39 @@ class InvoiceService {
   /**
    * Send invoice email to customer
    */
-  async sendInvoice(invoiceId: string, recipientEmail: string, recipientName?: string): Promise<void> {
+  async sendInvoice(
+    invoiceId: string,
+    recipientEmail: string,
+    recipientName?: string
+  ): Promise<void> {
     try {
       const invoice = await this.getInvoice(invoiceId);
       if (!invoice) {
         throw new Error('Invoice not found');
       }
-      
+
       // Generate PDF if not already generated
       if (!invoice.pdfUrl) {
         // PDF is generated on-demand via the API endpoint
         const pdfUrl = `/api/invoices/${invoice.id}/pdf`;
-        await this.updateInvoice(invoiceId, { 
+        await this.updateInvoice(invoiceId, {
           pdfUrl,
-          pdfGeneratedAt: new Date()
+          pdfGeneratedAt: new Date(),
         });
         invoice.pdfUrl = pdfUrl;
       }
-      
+
       // Send email with invoice
       await emailService.sendInvoiceEmail({
         recipientEmail,
         recipientName,
         invoice,
-        pdfUrl: invoice.pdfUrl
+        pdfUrl: invoice.pdfUrl,
       });
-      
+
       // Update invoice status
       await this.updateInvoice(invoiceId, {
-        status: 'sent'
+        status: 'sent',
       });
     } catch (error) {
       console.error('Error sending invoice:', error);
@@ -198,8 +202,8 @@ class InvoiceService {
    * Update invoice payment status
    */
   async updatePaymentStatus(
-    invoiceId: string, 
-    status: InvoiceStatus, 
+    invoiceId: string,
+    status: InvoiceStatus,
     paymentDetails?: {
       paymentId?: string;
       paymentMethod?: string;
@@ -210,28 +214,28 @@ class InvoiceService {
     try {
       const updates: any = {
         status,
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       };
-      
+
       if (status === 'paid' && paymentDetails) {
         updates.paidDate = serverTimestamp();
         updates.paymentMethod = paymentDetails.paymentMethod;
         updates.paymentDetails = {
           transactionId: paymentDetails.transactionId,
-          paymentId: paymentDetails.paymentId
+          paymentId: paymentDetails.paymentId,
         };
-        
+
         // Update financial data
         const invoice = await this.getInvoice(invoiceId);
         if (invoice) {
           updates.financial = {
             ...invoice.financial,
             paid: paymentDetails.paidAmount || invoice.financial.total,
-            balance: 0
+            balance: 0,
           };
         }
       }
-      
+
       await this.updateInvoice(invoiceId, updates);
     } catch (error) {
       console.error('Error updating payment status:', error);
@@ -249,12 +253,15 @@ class InvoiceService {
         where('clientId', '==', clientId),
         orderBy('createdAt', 'desc')
       );
-      
+
       const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      } as Invoice));
+      return snapshot.docs.map(
+        (doc) =>
+          ({
+            id: doc.id,
+            ...doc.data(),
+          }) as Invoice
+      );
     } catch (error) {
       console.error('Error getting client invoices:', error);
       throw error;
@@ -273,12 +280,15 @@ class InvoiceService {
         where('dueDate', '<', now),
         orderBy('dueDate', 'asc')
       );
-      
+
       const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      } as Invoice));
+      return snapshot.docs.map(
+        (doc) =>
+          ({
+            id: doc.id,
+            ...doc.data(),
+          }) as Invoice
+      );
     } catch (error) {
       console.error('Error getting overdue invoices:', error);
       throw error;
@@ -288,32 +298,35 @@ class InvoiceService {
   /**
    * Send invoice reminder
    */
-  async sendReminder(invoiceId: string, reminderType: 'due_soon' | 'overdue' | 'final_notice'): Promise<void> {
+  async sendReminder(
+    invoiceId: string,
+    reminderType: 'due_soon' | 'overdue' | 'final_notice'
+  ): Promise<void> {
     try {
       const invoice = await this.getInvoice(invoiceId);
       if (!invoice) {
         throw new Error('Invoice not found');
       }
-      
+
       // Get client details
       const clientDoc = await getDoc(doc(db, collections.users, invoice.clientId));
       const client = clientDoc.data();
-      
+
       if (client) {
         await emailService.sendInvoiceReminderEmail({
           recipientEmail: client.email,
           recipientName: client.fullName,
           invoice,
-          reminderType
+          reminderType,
         });
-        
+
         // Update invoice with reminder info
         const reminders = invoice.reminders || [];
         reminders.push({
           sentAt: new Date(),
-          type: reminderType
+          type: reminderType,
         });
-        
+
         await this.updateInvoice(invoiceId, { reminders });
       }
     } catch (error) {

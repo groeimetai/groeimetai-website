@@ -139,7 +139,7 @@ export default function Navigation() {
                       {t('signIn')}
                     </Button>
                   </Link>
-                  <StartProjectButton 
+                  <StartProjectButton
                     className="bg-orange hover:bg-orange-600 text-white border-0 shadow-orange hover-lift"
                     preselectedService="genai-consultancy"
                   >
@@ -233,7 +233,7 @@ export default function Navigation() {
                       </Button>
                     </Link>
                     <div onClick={() => setIsMobileMenuOpen(false)}>
-                      <StartProjectButton 
+                      <StartProjectButton
                         className="w-full bg-orange hover:bg-orange-600 text-white border-0"
                         preselectedService="genai-consultancy"
                       >

@@ -12,7 +12,7 @@ import {
   limit,
   orderBy,
   where,
-  getDoc
+  getDoc,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
@@ -37,7 +37,7 @@ import {
   Copy,
   ExternalLink,
   BarChart3,
-  XCircle
+  XCircle,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -194,10 +194,10 @@ export default function AdminDatabasePage() {
       setIsLoading(true);
       const collectionRef = collection(db, collectionName);
       const snapshot = await getDocs(collectionRef);
-      
-      const data = snapshot.docs.map(doc => ({
+
+      const data = snapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
 
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -217,7 +217,7 @@ export default function AdminDatabasePage() {
   const runQuery = () => {
     // Simulate query execution
     const startTime = Date.now();
-    
+
     // Mock query result
     setQueryResult({
       collection: selectedCollection,
@@ -236,22 +236,22 @@ export default function AdminDatabasePage() {
       name: `Manual Backup - ${format(new Date(), 'yyyy-MM-dd HH:mm')}`,
       date: new Date(),
       size: totalSize,
-      collections: collections.map(c => c.name),
+      collections: collections.map((c) => c.name),
       status: 'in_progress',
     };
-    
+
     setBackups([newBackup, ...backups]);
-    
+
     // Simulate backup completion
     setTimeout(() => {
-      setBackups(prev => 
-        prev.map(b => b.id === newBackup.id ? { ...b, status: 'completed' } : b)
+      setBackups((prev) =>
+        prev.map((b) => (b.id === newBackup.id ? { ...b, status: 'completed' } : b))
       );
     }, 3000);
   };
 
   const deleteBackup = (backupId: string) => {
-    setBackups(backups.filter(b => b.id !== backupId));
+    setBackups(backups.filter((b) => b.id !== backupId));
   };
 
   const optimizeDatabase = () => {
@@ -350,12 +350,7 @@ export default function AdminDatabasePage() {
           <CardHeader>
             <div className="flex justify-between items-center">
               <CardTitle className="text-white">Performance Metrics</CardTitle>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={optimizeDatabase}
-                disabled={isLoading}
-              >
+              <Button size="sm" variant="outline" onClick={optimizeDatabase} disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <Loader2 className="animate-spin w-4 h-4 mr-2" />
@@ -401,7 +396,9 @@ export default function AdminDatabasePage() {
                   <span className="text-white/60">Active Connections</span>
                   <Users className="w-4 h-4 text-purple-500" />
                 </div>
-                <p className="text-2xl font-bold text-white">{performanceMetrics.activeConnections}</p>
+                <p className="text-2xl font-bold text-white">
+                  {performanceMetrics.activeConnections}
+                </p>
                 <p className="text-sm text-purple-500">Normal</p>
               </div>
             </div>
@@ -453,9 +450,7 @@ export default function AdminDatabasePage() {
                         <TableCell className="text-white/80">
                           {formatBytes(collection.sizeInBytes)}
                         </TableCell>
-                        <TableCell className="text-white/80">
-                          {collection.indexes}
-                        </TableCell>
+                        <TableCell className="text-white/80">{collection.indexes}</TableCell>
                         <TableCell className="text-white/80">
                           {format(collection.lastModified, 'MMM d, yyyy')}
                         </TableCell>
@@ -527,7 +522,8 @@ export default function AdminDatabasePage() {
 
                 <div className="flex justify-between items-center">
                   <p className="text-sm text-white/60">
-                    Query will be executed on the <strong>{selectedCollection || 'selected'}</strong> collection
+                    Query will be executed on the{' '}
+                    <strong>{selectedCollection || 'selected'}</strong> collection
                   </p>
                   <Button
                     onClick={runQuery}
@@ -599,13 +595,17 @@ export default function AdminDatabasePage() {
                               backup.status === 'completed'
                                 ? 'text-green-500 border-green-500/30'
                                 : backup.status === 'failed'
-                                ? 'text-red-500 border-red-500/30'
-                                : 'text-yellow-500 border-yellow-500/30'
+                                  ? 'text-red-500 border-red-500/30'
+                                  : 'text-yellow-500 border-yellow-500/30'
                             }
                           >
-                            {backup.status === 'completed' && <CheckCircle className="w-3 h-3 mr-1" />}
+                            {backup.status === 'completed' && (
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                            )}
                             {backup.status === 'failed' && <XCircle className="w-3 h-3 mr-1" />}
-                            {backup.status === 'in_progress' && <Loader2 className="animate-spin w-3 h-3 mr-1" />}
+                            {backup.status === 'in_progress' && (
+                              <Loader2 className="animate-spin w-3 h-3 mr-1" />
+                            )}
                             {backup.status}
                           </Badge>
                           {backup.status === 'completed' && (
@@ -733,7 +733,10 @@ export default function AdminDatabasePage() {
               <Button variant="outline" onClick={() => setIsQueryDialogOpen(false)}>
                 Close
               </Button>
-              <Button onClick={() => exportCollection(selectedCollection)} className="bg-orange hover:bg-orange/90">
+              <Button
+                onClick={() => exportCollection(selectedCollection)}
+                className="bg-orange hover:bg-orange/90"
+              >
                 <Download className="w-4 h-4 mr-2" />
                 Export Collection
               </Button>

@@ -96,10 +96,10 @@ class MollieService {
       if (invoice.items && invoice.items.length > 0) {
         const itemDescriptions = invoice.items
           .slice(0, 3) // Limit to first 3 items
-          .map(item => `${item.quantity}x ${item.description}`)
+          .map((item) => `${item.quantity}x ${item.description}`)
           .join(', ');
         description = `Invoice #${invoice.id}: ${itemDescriptions}`;
-        
+
         // Mollie has a 255 character limit for description
         if (description.length > 255) {
           description = description.substring(0, 252) + '...';

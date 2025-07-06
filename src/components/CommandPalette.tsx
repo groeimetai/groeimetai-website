@@ -145,7 +145,7 @@ import {
   ZoomOut,
   Rocket,
   Bot,
-  Brain
+  Brain,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -216,40 +216,46 @@ export function CommandPaletteProvider({ children }: { children: React.ReactNode
   // Load recent items from localStorage
   useEffect(() => {
     if (!mounted) return;
-    
+
     const savedSearches = localStorage.getItem('commandPalette:recentSearches');
     const savedActions = localStorage.getItem('commandPalette:recentActions');
-    
+
     if (savedSearches) setRecentSearches(JSON.parse(savedSearches));
     if (savedActions) setRecentActions(JSON.parse(savedActions));
   }, [mounted]);
 
-  const toggle = useCallback(() => setOpen(prev => !prev), []);
+  const toggle = useCallback(() => setOpen((prev) => !prev), []);
 
-  const addRecentSearch = useCallback((search: string) => {
-    if (!search.trim() || !mounted) return;
-    
-    setRecentSearches(prev => {
-      const updated = [search, ...prev.filter(s => s !== search)].slice(0, 5);
-      localStorage.setItem('commandPalette:recentSearches', JSON.stringify(updated));
-      return updated;
-    });
-  }, [mounted]);
+  const addRecentSearch = useCallback(
+    (search: string) => {
+      if (!search.trim() || !mounted) return;
 
-  const addRecentAction = useCallback((actionId: string) => {
-    if (!mounted) return;
-    
-    setRecentActions(prev => {
-      const updated = [actionId, ...prev.filter(id => id !== actionId)].slice(0, 10);
-      localStorage.setItem('commandPalette:recentActions', JSON.stringify(updated));
-      return updated;
-    });
-  }, [mounted]);
+      setRecentSearches((prev) => {
+        const updated = [search, ...prev.filter((s) => s !== search)].slice(0, 5);
+        localStorage.setItem('commandPalette:recentSearches', JSON.stringify(updated));
+        return updated;
+      });
+    },
+    [mounted]
+  );
+
+  const addRecentAction = useCallback(
+    (actionId: string) => {
+      if (!mounted) return;
+
+      setRecentActions((prev) => {
+        const updated = [actionId, ...prev.filter((id) => id !== actionId)].slice(0, 10);
+        localStorage.setItem('commandPalette:recentActions', JSON.stringify(updated));
+        return updated;
+      });
+    },
+    [mounted]
+  );
 
   // Global keyboard shortcut
   useEffect(() => {
     if (!mounted) return;
-    
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
@@ -262,15 +268,15 @@ export function CommandPaletteProvider({ children }: { children: React.ReactNode
   }, [toggle, mounted]);
 
   return (
-    <CommandPaletteContext.Provider 
-      value={{ 
-        open, 
-        setOpen, 
-        toggle, 
-        recentSearches, 
-        recentActions, 
-        addRecentSearch, 
-        addRecentAction 
+    <CommandPaletteContext.Provider
+      value={{
+        open,
+        setOpen,
+        toggle,
+        recentSearches,
+        recentActions,
+        addRecentSearch,
+        addRecentAction,
       }}
     >
       {children}
@@ -287,10 +293,11 @@ interface CommandPaletteProps {
 
 // Internal component that uses context
 function CommandPaletteInternal() {
-  const { open, setOpen, recentSearches, recentActions, addRecentSearch, addRecentAction } = useCommandPalette();
-  
+  const { open, setOpen, recentSearches, recentActions, addRecentSearch, addRecentAction } =
+    useCommandPalette();
+
   return (
-    <CommandPaletteBase 
+    <CommandPaletteBase
       open={open}
       setOpen={setOpen}
       recentSearches={recentSearches}
@@ -304,21 +311,21 @@ function CommandPaletteInternal() {
 // Standalone component that uses props
 function CommandPaletteStandalone({ isOpen, onClose }: CommandPaletteProps) {
   const [mounted, setMounted] = useState(false);
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
-  
+
   const setOpen = (value: boolean) => {
     if (!value) onClose();
   };
-  
+
   if (!mounted) {
     return null;
   }
-  
+
   return (
-    <CommandPaletteBase 
+    <CommandPaletteBase
       open={isOpen}
       setOpen={setOpen}
       recentSearches={[]}
@@ -339,13 +346,13 @@ interface CommandPaletteBaseProps {
   addRecentAction: (actionId: string) => void;
 }
 
-function CommandPaletteBase({ 
-  open, 
-  setOpen, 
-  recentSearches, 
-  recentActions, 
-  addRecentSearch, 
-  addRecentAction 
+function CommandPaletteBase({
+  open,
+  setOpen,
+  recentSearches,
+  recentActions,
+  addRecentSearch,
+  addRecentAction,
 }: CommandPaletteBaseProps) {
   const [search, setSearch] = useState('');
   const [ragResults, setRagResults] = useState<any[]>([]);
@@ -365,11 +372,14 @@ function CommandPaletteBase({
   }, []);
 
   // Safe navigation helper - only use router when mounted
-  const navigateTo = useCallback((path: string) => {
-    if (mounted && router) {
-      router.push(path);
-    }
-  }, [mounted, router]);
+  const navigateTo = useCallback(
+    (path: string) => {
+      if (mounted && router) {
+        router.push(path);
+      }
+    },
+    [mounted, router]
+  );
 
   // Create command items
   const createCommandItems = useCallback((): CommandItem[] => {
@@ -389,7 +399,7 @@ function CommandPaletteBase({
         setOpen(false);
       },
       shortcut: 'N',
-      isNew: true
+      isNew: true,
     });
 
     items.push({
@@ -405,7 +415,7 @@ function CommandPaletteBase({
         navigateTo('/dashboard/messages');
         setOpen(false);
       },
-      shortcut: 'C'
+      shortcut: 'C',
     });
 
     items.push({
@@ -420,7 +430,7 @@ function CommandPaletteBase({
         navigateTo('/dashboard/consultations');
         setOpen(false);
       },
-      shortcut: 'M'
+      shortcut: 'M',
     });
 
     items.push({
@@ -435,11 +445,12 @@ function CommandPaletteBase({
         openHelpCenter();
         setOpen(false);
       },
-      shortcut: '?'
+      shortcut: '?',
     });
 
     // Only show tutorial if not completed
-    const tutorialCompleted = mounted && localStorage.getItem('tutorial:getting-started:completed') === 'true';
+    const tutorialCompleted =
+      mounted && localStorage.getItem('tutorial:getting-started:completed') === 'true';
     if (!tutorialCompleted) {
       items.push({
         id: 'action-tutorial',
@@ -455,7 +466,7 @@ function CommandPaletteBase({
           setOpen(false);
         },
         badge: 'Recommended',
-        badgeVariant: 'default'
+        badgeVariant: 'default',
       });
     }
 
@@ -471,7 +482,7 @@ function CommandPaletteBase({
       action: () => {
         navigateTo('/dashboard');
         setOpen(false);
-      }
+      },
     });
 
     items.push({
@@ -485,7 +496,7 @@ function CommandPaletteBase({
       action: () => {
         navigateTo('/dashboard/projects');
         setOpen(false);
-      }
+      },
     });
 
     items.push({
@@ -499,10 +510,8 @@ function CommandPaletteBase({
       action: () => {
         navigateTo('/dashboard/invoices');
         setOpen(false);
-      }
+      },
     });
-
-
 
     // Help Articles - In a real app, this would come from your API or context
     const helpArticles = [
@@ -510,17 +519,17 @@ function CommandPaletteBase({
         id: '1',
         title: 'How to Request a New Project',
         category: 'Getting Started',
-        tags: ['project', 'request', 'quote']
+        tags: ['project', 'request', 'quote'],
       },
       {
         id: '2',
         title: 'Understanding Project Timelines',
         category: 'Projects',
-        tags: ['timeline', 'milestones', 'progress']
-      }
+        tags: ['timeline', 'milestones', 'progress'],
+      },
     ];
-    
-    helpArticles.forEach(article => {
+
+    helpArticles.forEach((article) => {
       items.push({
         id: `help-${article.id}`,
         type: 'help',
@@ -534,7 +543,7 @@ function CommandPaletteBase({
           // You could pass article ID to help center to open specific article
           setOpen(false);
         },
-        metadata: article
+        metadata: article,
       });
     });
 
@@ -550,7 +559,7 @@ function CommandPaletteBase({
       action: () => {
         navigateTo('/dashboard/settings');
         setOpen(false);
-      }
+      },
     });
 
     // Admin items (if user is admin)
@@ -569,7 +578,7 @@ function CommandPaletteBase({
         },
         isAdmin: true,
         badge: 'Admin',
-        badgeVariant: 'secondary'
+        badgeVariant: 'secondary',
       });
 
       items.push({
@@ -584,7 +593,7 @@ function CommandPaletteBase({
           navigateTo('/dashboard/admin/users');
           setOpen(false);
         },
-        isAdmin: true
+        isAdmin: true,
       });
 
       items.push({
@@ -599,7 +608,7 @@ function CommandPaletteBase({
           navigateTo('/dashboard/admin/analytics');
           setOpen(false);
         },
-        isAdmin: true
+        isAdmin: true,
       });
     }
 
@@ -616,27 +625,36 @@ function CommandPaletteBase({
         action: async () => {
           setOpen(false);
           await logout();
-        }
+        },
       });
     }
 
     return items;
-  }, [user, navigateTo, setOpen, openHelpCenter, startTutorial, logout, setProjectDialogOpen, mounted]);
+  }, [
+    user,
+    navigateTo,
+    setOpen,
+    openHelpCenter,
+    startTutorial,
+    logout,
+    setProjectDialogOpen,
+    mounted,
+  ]);
 
   // Filter items based on search
   const filteredItems = useMemo(() => {
     const items = createCommandItems();
-    
+
     if (!search) return items;
-    
+
     const searchLower = search.toLowerCase();
-    
-    return items.filter(item => {
+
+    return items.filter((item) => {
       const titleMatch = item.title.toLowerCase().includes(searchLower);
       const descriptionMatch = item.description?.toLowerCase().includes(searchLower);
-      const keywordMatch = item.keywords?.some(k => k.toLowerCase().includes(searchLower));
+      const keywordMatch = item.keywords?.some((k) => k.toLowerCase().includes(searchLower));
       const categoryMatch = item.category.toLowerCase().includes(searchLower);
-      
+
       return titleMatch || descriptionMatch || keywordMatch || categoryMatch;
     });
   }, [search, createCommandItems]);
@@ -644,39 +662,39 @@ function CommandPaletteBase({
   // Group items by category
   const groupedItems = useMemo(() => {
     const groups: { [key: string]: CommandItem[] } = {};
-    
-    filteredItems.forEach(item => {
+
+    filteredItems.forEach((item) => {
       if (!groups[item.category]) {
         groups[item.category] = [];
       }
       groups[item.category].push(item);
     });
-    
+
     // Sort groups by priority
     const sortedGroups: CommandGroup[] = [];
     const categoryOrder = ['Actions', 'Navigation', 'Help', 'Settings', 'Admin'];
-    
-    categoryOrder.forEach(category => {
+
+    categoryOrder.forEach((category) => {
       if (groups[category]) {
         sortedGroups.push({
           id: category.toLowerCase(),
           title: category,
-          items: groups[category]
+          items: groups[category],
         });
       }
     });
-    
+
     // Add any remaining categories
-    Object.keys(groups).forEach(category => {
+    Object.keys(groups).forEach((category) => {
       if (!categoryOrder.includes(category)) {
         sortedGroups.push({
           id: category.toLowerCase(),
           title: category,
-          items: groups[category]
+          items: groups[category],
         });
       }
     });
-    
+
     return sortedGroups;
   }, [filteredItems]);
 
@@ -684,18 +702,21 @@ function CommandPaletteBase({
   const recentItems = useMemo(() => {
     const items = createCommandItems();
     return recentActions
-      .map(actionId => items.find(item => item.id === actionId))
+      .map((actionId) => items.find((item) => item.id === actionId))
       .filter(Boolean) as CommandItem[];
   }, [recentActions, createCommandItems]);
 
   // Handle item selection
-  const handleSelect = useCallback((item: CommandItem) => {
-    addRecentAction(item.id);
-    if (search) {
-      addRecentSearch(search);
-    }
-    item.action();
-  }, [addRecentAction, addRecentSearch, search]);
+  const handleSelect = useCallback(
+    (item: CommandItem) => {
+      addRecentAction(item.id);
+      if (search) {
+        addRecentSearch(search);
+      }
+      item.action();
+    },
+    [addRecentAction, addRecentSearch, search]
+  );
 
   // Don't render until mounted to avoid SSR issues
   if (!mounted) {
@@ -707,109 +728,110 @@ function CommandPaletteBase({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="overflow-hidden p-0 max-w-2xl bg-black/95 border-white/20 [&>button]:hidden">
           <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-white/60 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
-          <div className="flex items-center border-b border-white/20 px-3">
-            <CommandIcon className="mr-2 h-4 w-4 shrink-0 text-white/60" />
-            <Command.Input
-              placeholder="Type a command or search..."
-              value={search}
-              onValueChange={setSearch}
-              className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm text-white outline-none placeholder:text-white/50 disabled:cursor-not-allowed disabled:opacity-50"
-            />
-            {isSearching && (
-              <div className="absolute right-12 top-3.5 text-white/40">
-                <RefreshCw className="w-4 h-4 animate-spin" />
-              </div>
-            )}
-            <button
-              onClick={() => setOpen(false)}
-              className="ml-2 p-1 rounded-md hover:bg-white/10 transition-colors"
-              aria-label="Close command palette"
-            >
-              <X className="h-4 w-4 text-white/60" />
-            </button>
-          </div>
-          
-          <ScrollArea className="max-h-[450px] overflow-y-auto">
-            <Command.List>
-              <Command.Empty className="py-6 text-center text-sm text-white/60">
-                No results found.
-              </Command.Empty>
-              
-              {/* Recent Actions */}
-              {!search && recentItems.length > 0 && (
-                <Command.Group heading="Recent">
-                  {recentItems.map((item) => (
-                    <CommandItem key={item.id} item={item} onSelect={handleSelect} />
-                  ))}
-                </Command.Group>
+            <div className="flex items-center border-b border-white/20 px-3">
+              <CommandIcon className="mr-2 h-4 w-4 shrink-0 text-white/60" />
+              <Command.Input
+                placeholder="Type a command or search..."
+                value={search}
+                onValueChange={setSearch}
+                className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm text-white outline-none placeholder:text-white/50 disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              {isSearching && (
+                <div className="absolute right-12 top-3.5 text-white/40">
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                </div>
               )}
-              
-              {/* Recent Searches */}
-              {!search && recentSearches.length > 0 && (
-                <Command.Group heading="Recent Searches">
-                  {recentSearches.map((recentSearch) => (
-                    <Command.Item
-                      key={recentSearch}
-                      value={recentSearch}
-                      onSelect={() => setSearch(recentSearch)}
-                      className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-white border border-white/10 hover:bg-white/10 hover:border-white/20 cursor-pointer"
-                    >
-                      <Clock className="w-4 h-4 text-white/40" />
-                      <span>{recentSearch}</span>
-                    </Command.Item>
-                  ))}
-                </Command.Group>
-              )}
-              
-              {/* Grouped Items */}
-              {groupedItems.map((group) => (
-                <Command.Group key={group.id} heading={group.title}>
-                  {group.items.map((item) => (
-                    <CommandItem key={item.id} item={item} onSelect={handleSelect} />
-                  ))}
-                </Command.Group>
-              ))}
-            </Command.List>
-          </ScrollArea>
-          
-          <div className="border-t border-white/20 px-3 py-2">
-            <div className="flex items-center justify-between text-xs text-white/40">
-              <div className="flex items-center gap-4">
-                <span className="flex items-center gap-1">
-                  <kbd className="pointer-events-none inline-flex h-4 select-none items-center gap-1 rounded border border-white/20 bg-white/10 px-1 font-mono text-[10px] font-medium">↑↓</kbd>
-                  Navigate
-                </span>
-                <span className="flex items-center gap-1">
-                  <kbd className="pointer-events-none inline-flex h-4 select-none items-center gap-1 rounded border border-white/20 bg-white/10 px-1 font-mono text-[10px] font-medium">↵</kbd>
-                  Select
-                </span>
-              </div>
-              <span className="flex items-center gap-1">
-                Press
-                <kbd className="pointer-events-none inline-flex h-4 select-none items-center gap-1 rounded border border-white/20 bg-white/10 px-1 font-mono text-[10px] font-medium">
-                  <span className="text-xs">⌘</span>K
-                </kbd>
-                to open
-              </span>
+              <button
+                onClick={() => setOpen(false)}
+                className="ml-2 p-1 rounded-md hover:bg-white/10 transition-colors"
+                aria-label="Close command palette"
+              >
+                <X className="h-4 w-4 text-white/60" />
+              </button>
             </div>
-          </div>
-        </Command>
-      </DialogContent>
-    </Dialog>
-    <ProjectRequestDialog 
-      open={projectDialogOpen} 
-      onOpenChange={setProjectDialogOpen} 
-    />
+
+            <ScrollArea className="max-h-[450px] overflow-y-auto">
+              <Command.List>
+                <Command.Empty className="py-6 text-center text-sm text-white/60">
+                  No results found.
+                </Command.Empty>
+
+                {/* Recent Actions */}
+                {!search && recentItems.length > 0 && (
+                  <Command.Group heading="Recent">
+                    {recentItems.map((item) => (
+                      <CommandItem key={item.id} item={item} onSelect={handleSelect} />
+                    ))}
+                  </Command.Group>
+                )}
+
+                {/* Recent Searches */}
+                {!search && recentSearches.length > 0 && (
+                  <Command.Group heading="Recent Searches">
+                    {recentSearches.map((recentSearch) => (
+                      <Command.Item
+                        key={recentSearch}
+                        value={recentSearch}
+                        onSelect={() => setSearch(recentSearch)}
+                        className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-white border border-white/10 hover:bg-white/10 hover:border-white/20 cursor-pointer"
+                      >
+                        <Clock className="w-4 h-4 text-white/40" />
+                        <span>{recentSearch}</span>
+                      </Command.Item>
+                    ))}
+                  </Command.Group>
+                )}
+
+                {/* Grouped Items */}
+                {groupedItems.map((group) => (
+                  <Command.Group key={group.id} heading={group.title}>
+                    {group.items.map((item) => (
+                      <CommandItem key={item.id} item={item} onSelect={handleSelect} />
+                    ))}
+                  </Command.Group>
+                ))}
+              </Command.List>
+            </ScrollArea>
+
+            <div className="border-t border-white/20 px-3 py-2">
+              <div className="flex items-center justify-between text-xs text-white/40">
+                <div className="flex items-center gap-4">
+                  <span className="flex items-center gap-1">
+                    <kbd className="pointer-events-none inline-flex h-4 select-none items-center gap-1 rounded border border-white/20 bg-white/10 px-1 font-mono text-[10px] font-medium">
+                      ↑↓
+                    </kbd>
+                    Navigate
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <kbd className="pointer-events-none inline-flex h-4 select-none items-center gap-1 rounded border border-white/20 bg-white/10 px-1 font-mono text-[10px] font-medium">
+                      ↵
+                    </kbd>
+                    Select
+                  </span>
+                </div>
+                <span className="flex items-center gap-1">
+                  Press
+                  <kbd className="pointer-events-none inline-flex h-4 select-none items-center gap-1 rounded border border-white/20 bg-white/10 px-1 font-mono text-[10px] font-medium">
+                    <span className="text-xs">⌘</span>K
+                  </kbd>
+                  to open
+                </span>
+              </div>
+            </div>
+          </Command>
+        </DialogContent>
+      </Dialog>
+      <ProjectRequestDialog open={projectDialogOpen} onOpenChange={setProjectDialogOpen} />
     </>
   );
 }
 
 // Command Item Component
-function CommandItem({ 
-  item, 
-  onSelect 
-}: { 
-  item: CommandItem; 
+function CommandItem({
+  item,
+  onSelect,
+}: {
+  item: CommandItem;
   onSelect: (item: CommandItem) => void;
 }) {
   return (
@@ -821,44 +843,49 @@ function CommandItem({
       <div className="flex h-8 w-8 items-center justify-center rounded-md bg-white/5">
         {item.icon}
       </div>
-      
+
       <div className="flex-1">
         <div className="flex items-center gap-2">
           <span className="font-medium">{item.title}</span>
           {item.isNew && (
-            <Badge variant="default" className="bg-green-500/20 text-green-400 border-green-500/50 text-[10px] px-1 py-0">
+            <Badge
+              variant="default"
+              className="bg-green-500/20 text-green-400 border-green-500/50 text-[10px] px-1 py-0"
+            >
               NEW
             </Badge>
           )}
           {item.isPro && (
-            <Badge variant="default" className="bg-blue-500/20 text-blue-400 border-blue-500/50 text-[10px] px-1 py-0">
+            <Badge
+              variant="default"
+              className="bg-blue-500/20 text-blue-400 border-blue-500/50 text-[10px] px-1 py-0"
+            >
               PRO
             </Badge>
           )}
           {item.badge && (
-            <Badge 
-              variant={item.badgeVariant || 'default'} 
+            <Badge
+              variant={item.badgeVariant || 'default'}
               className={cn(
-                "text-[10px] px-1 py-0",
-                item.badgeVariant === 'destructive' && "bg-red-500/20 text-red-400 border-red-500/50",
-                item.badgeVariant === 'secondary' && "bg-white/10 text-white/60 border-white/20"
+                'text-[10px] px-1 py-0',
+                item.badgeVariant === 'destructive' &&
+                  'bg-red-500/20 text-red-400 border-red-500/50',
+                item.badgeVariant === 'secondary' && 'bg-white/10 text-white/60 border-white/20'
               )}
             >
               {item.badge}
             </Badge>
           )}
         </div>
-        {item.description && (
-          <p className="text-xs text-white/60 mt-0.5">{item.description}</p>
-        )}
+        {item.description && <p className="text-xs text-white/60 mt-0.5">{item.description}</p>}
       </div>
-      
+
       {item.shortcut && (
         <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-white/20 bg-white/10 px-1.5 font-mono text-[10px] font-medium text-white/60">
           {item.shortcut}
         </kbd>
       )}
-      
+
       <ChevronRight className="w-4 h-4 text-white/40" />
     </Command.Item>
   );
@@ -869,7 +896,7 @@ export default CommandPaletteStandalone;
 // Export utilities
 export function CommandPaletteButton() {
   const { toggle } = useCommandPalette();
-  
+
   return (
     <button
       onClick={toggle}

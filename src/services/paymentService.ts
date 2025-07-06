@@ -1,13 +1,6 @@
 import { createMollieClient } from '@mollie/api-client';
 import { db, collections } from '@/lib/firebase';
-import { 
-  doc, 
-  collection, 
-  setDoc, 
-  getDoc, 
-  updateDoc, 
-  serverTimestamp 
-} from 'firebase/firestore';
+import { doc, collection, setDoc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { invoiceService } from './invoiceService';
 import { emailService } from './emailService';
 
@@ -41,13 +34,7 @@ export interface Payment {
   expiresAt?: Date;
 }
 
-export type PaymentStatus = 
-  | 'open'
-  | 'pending'
-  | 'paid'
-  | 'failed'
-  | 'canceled'
-  | 'expired';
+export type PaymentStatus = 'open' | 'pending' | 'paid' | 'failed' | 'canceled' | 'expired';
 
 class PaymentService {
   private mollieClient: any = null;
@@ -60,7 +47,9 @@ class PaymentService {
     if (!this.mollieClient) {
       const apiKey = process.env.MOLLIE_API_KEY;
       if (!apiKey) {
-        throw new Error('MOLLIE_API_KEY is not configured. Please add it to your environment variables.');
+        throw new Error(
+          'MOLLIE_API_KEY is not configured. Please add it to your environment variables.'
+        );
       }
       this.mollieClient = createMollieClient({ apiKey });
     }
@@ -99,7 +88,7 @@ class PaymentService {
       const molliePayment = await mollieClient.payments.create({
         amount: {
           value: invoice.financial.balance.toFixed(2),
-          currency: invoice.financial.currency || 'EUR'
+          currency: invoice.financial.currency || 'EUR',
         },
         description: `Invoice ${invoice.invoiceNumber}`,
         redirectUrl: params.redirectUrl,
@@ -108,9 +97,9 @@ class PaymentService {
         metadata: {
           invoiceId: invoice.id,
           clientId: invoice.clientId,
-          organizationId: invoice.organizationId || ''
+          organizationId: invoice.organizationId || '',
         },
-        locale: (client.preferences?.language === 'nl' ? 'nl_NL' : 'en_US') as any
+        locale: (client.preferences?.language === 'nl' ? 'nl_NL' : 'en_US') as any,
       });
 
       // Create payment record
@@ -125,7 +114,7 @@ class PaymentService {
         metadata: {
           invoiceId: invoice.id,
           clientId: invoice.clientId,
-          organizationId: invoice.organizationId
+          organizationId: invoice.organizationId,
         },
         molliePaymentId: molliePayment.id,
         checkoutUrl: molliePayment._links.checkout?.href,
@@ -134,14 +123,14 @@ class PaymentService {
         cancelUrl: params.cancelUrl || params.redirectUrl,
         createdAt: new Date(),
         updatedAt: new Date(),
-        expiresAt: molliePayment.expiresAt ? new Date(molliePayment.expiresAt) : undefined
+        expiresAt: molliePayment.expiresAt ? new Date(molliePayment.expiresAt) : undefined,
       };
 
       // Save payment to Firestore
       await setDoc(doc(db, collections.payments, payment.id), {
         ...payment,
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       });
 
       // Update invoice with payment details
@@ -149,8 +138,8 @@ class PaymentService {
         paymentDetails: {
           transactionId: molliePayment.id,
           reference: molliePayment.getCheckoutUrl() || '',
-          notes: `Mollie payment: ${molliePayment.status}`
-        }
+          notes: `Mollie payment: ${molliePayment.status}`,
+        },
       });
 
       return payment;
@@ -168,7 +157,7 @@ class PaymentService {
       // Get payment from Mollie
       const mollieClient = this.getMollieClient();
       const molliePayment = await mollieClient.payments.get(paymentId);
-      
+
       // Find payment in database by Mollie payment ID
       const paymentDoc = await this.getPaymentByMollieId(molliePayment.id);
       if (!paymentDoc) {
@@ -178,25 +167,25 @@ class PaymentService {
 
       const payment = paymentDoc.data as Payment;
       const newStatus = this.mapMollieStatus(molliePayment.status);
-      
+
       // Update payment status
       const updates: any = {
         status: newStatus,
         method: molliePayment.method || payment.method,
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       };
 
       // Handle different payment statuses
       switch (newStatus) {
         case 'paid':
           updates.paidAt = serverTimestamp();
-          
+
           // Update invoice status
           await invoiceService.updatePaymentStatus(payment.invoiceId, 'paid', {
             paymentId: payment.id,
             paymentMethod: molliePayment.method || 'unknown',
             paidAmount: parseFloat(molliePayment.amount.value),
-            transactionId: molliePayment.id
+            transactionId: molliePayment.id,
           });
 
           // Send confirmation email
@@ -210,7 +199,7 @@ class PaymentService {
                 recipientName: client.fullName,
                 invoice,
                 paymentMethod: molliePayment.method || 'unknown',
-                transactionId: molliePayment.id
+                transactionId: molliePayment.id,
               });
             }
           }
@@ -219,27 +208,26 @@ class PaymentService {
         case 'failed':
           updates.failedAt = serverTimestamp();
           await invoiceService.updateInvoice(payment.invoiceId, {
-            status: 'sent' // Revert to sent status
+            status: 'sent', // Revert to sent status
           });
           break;
 
         case 'canceled':
           updates.cancelledAt = serverTimestamp();
           await invoiceService.updateInvoice(payment.invoiceId, {
-            status: 'sent' // Revert to sent status
+            status: 'sent', // Revert to sent status
           });
           break;
 
         case 'expired':
           await invoiceService.updateInvoice(payment.invoiceId, {
-            status: 'sent' // Revert to sent status
+            status: 'sent', // Revert to sent status
           });
           break;
       }
 
       // Update payment record
       await updateDoc(doc(db, collections.payments, paymentDoc.id), updates);
-
     } catch (error) {
       console.error('Error handling webhook:', error);
       throw error;
@@ -252,14 +240,14 @@ class PaymentService {
   async getPayment(paymentId: string): Promise<Payment | null> {
     try {
       const paymentDoc = await getDoc(doc(db, collections.payments, paymentId));
-      
+
       if (!paymentDoc.exists()) {
         return null;
       }
 
       return {
         id: paymentDoc.id,
-        ...paymentDoc.data()
+        ...paymentDoc.data(),
       } as Payment;
     } catch (error) {
       console.error('Error getting payment:', error);
@@ -270,18 +258,20 @@ class PaymentService {
   /**
    * Get payment by Mollie payment ID
    */
-  private async getPaymentByMollieId(molliePaymentId: string): Promise<{ id: string; data: Payment } | null> {
+  private async getPaymentByMollieId(
+    molliePaymentId: string
+  ): Promise<{ id: string; data: Payment } | null> {
     try {
       // In a real implementation, you would query the payments collection
       // For now, we'll iterate through all payments (not efficient for production)
       const paymentsSnapshot = await getDocs(collection(db, collections.payments));
-      
+
       for (const doc of paymentsSnapshot.docs) {
         const payment = doc.data() as Payment;
         if (payment.molliePaymentId === molliePaymentId) {
           return {
             id: doc.id,
-            data: payment
+            data: payment,
           };
         }
       }
@@ -313,12 +303,12 @@ class PaymentService {
         const mollieClient = this.getMollieClient();
         const molliePayment = await mollieClient.payments.get(payment.molliePaymentId);
         const newStatus = this.mapMollieStatus(molliePayment.status);
-        
+
         // Update local status if different
         if (newStatus !== payment.status) {
           await updateDoc(doc(db, collections.payments, paymentId), {
             status: newStatus,
-            updatedAt: serverTimestamp()
+            updatedAt: serverTimestamp(),
           });
         }
 
@@ -337,14 +327,14 @@ class PaymentService {
    */
   private mapMollieStatus(mollieStatus: string): PaymentStatus {
     const statusMap: { [key: string]: PaymentStatus } = {
-      'open': 'open',
-      'pending': 'pending',
-      'paid': 'paid',
-      'failed': 'failed',
-      'canceled': 'canceled',
-      'expired': 'expired',
-      'authorized': 'pending',
-      'processing': 'pending'
+      open: 'open',
+      pending: 'pending',
+      paid: 'paid',
+      failed: 'failed',
+      canceled: 'canceled',
+      expired: 'expired',
+      authorized: 'pending',
+      processing: 'pending',
     };
 
     return statusMap[mollieStatus] || 'pending';

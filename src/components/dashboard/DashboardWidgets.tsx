@@ -31,7 +31,7 @@ import {
   Rocket,
   Flag,
   CheckCircle,
-  Circle
+  Circle,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -60,10 +60,18 @@ import {
   addDoc,
   serverTimestamp,
   setDoc,
-  writeBatch
+  writeBatch,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import { formatDistanceToNow, format, isToday, isTomorrow, isThisWeek, startOfDay, endOfDay } from 'date-fns';
+import {
+  formatDistanceToNow,
+  format,
+  isToday,
+  isTomorrow,
+  isThisWeek,
+  startOfDay,
+  endOfDay,
+} from 'date-fns';
 import { Link } from '@/i18n/routing';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -73,7 +81,17 @@ import toast from 'react-hot-toast';
 
 interface Widget {
   id: string;
-  type: 'stats' | 'recentActivity' | 'projectProgress' | 'upcomingMeetings' | 'quickActions' | 'revenue' | 'tasks' | 'projectTimeline' | 'messages' | 'documents';
+  type:
+    | 'stats'
+    | 'recentActivity'
+    | 'projectProgress'
+    | 'upcomingMeetings'
+    | 'quickActions'
+    | 'revenue'
+    | 'tasks'
+    | 'projectTimeline'
+    | 'messages'
+    | 'documents';
   title: string;
   size: 'small' | 'medium' | 'large' | 'xlarge';
   position: { x: number; y: number };
@@ -108,7 +126,15 @@ interface ChatChannel {
   unreadCount?: number;
 }
 
-const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widgetData: any; user: any }) => {
+const MessagingWidget = ({
+  isAdmin,
+  widgetData,
+  user,
+}: {
+  isAdmin: boolean;
+  widgetData: any;
+  user: any;
+}) => {
   const [selectedChat, setSelectedChat] = useState<ChatChannel | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -138,8 +164,8 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
           const supportChatsSnapshot = await getDocs(
             query(collection(db, 'supportChats'), orderBy('lastMessageAt', 'desc'))
           );
-          
-          supportChatsSnapshot.forEach(doc => {
+
+          supportChatsSnapshot.forEach((doc) => {
             const data = doc.data();
             chatsList.push({
               id: doc.id,
@@ -149,7 +175,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
               type: 'support',
               lastMessage: data.lastMessage,
               lastMessageAt: data.lastMessageAt,
-              unreadCount: 0 // TODO: Implement unread count
+              unreadCount: 0, // TODO: Implement unread count
             });
           });
 
@@ -160,7 +186,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
             const chatId = `project_${projectDoc.id}`;
             const chatRef = doc(db, 'projectChats', chatId);
             const chatDoc = await getDoc(chatRef);
-            
+
             if (chatDoc.exists()) {
               const chatData = chatDoc.data();
               chatsList.push({
@@ -171,7 +197,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
                 type: 'project',
                 lastMessage: chatData.lastMessage,
                 lastMessageAt: chatData.lastMessageAt,
-                unreadCount: 0
+                unreadCount: 0,
               });
             }
           }
@@ -180,7 +206,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
           const supportChatId = `support_${user.uid}`;
           const supportRef = doc(db, 'supportChats', supportChatId);
           const supportDoc = await getDoc(supportRef);
-          
+
           if (supportDoc.exists()) {
             const data = supportDoc.data();
             chatsList.push({
@@ -189,7 +215,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
               type: 'support',
               lastMessage: data.lastMessage,
               lastMessageAt: data.lastMessageAt,
-              unreadCount: 0
+              unreadCount: 0,
             });
           } else {
             // Create support chat if it doesn't exist
@@ -199,7 +225,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
               type: 'support',
               lastMessage: 'Start a conversation with our support team',
               lastMessageAt: null,
-              unreadCount: 0
+              unreadCount: 0,
             });
           }
 
@@ -207,13 +233,13 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
           const userProjectsSnapshot = await getDocs(
             query(collection(db, 'projects'), where('clientId', '==', user.uid))
           );
-          
+
           for (const projectDoc of userProjectsSnapshot.docs) {
             const projectData = projectDoc.data();
             const chatId = `project_${projectDoc.id}`;
             const chatRef = doc(db, 'projectChats', chatId);
             const chatDoc = await getDoc(chatRef);
-            
+
             if (chatDoc.exists()) {
               const chatData = chatDoc.data();
               chatsList.push({
@@ -224,14 +250,14 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
                 type: 'project',
                 lastMessage: chatData.lastMessage,
                 lastMessageAt: chatData.lastMessageAt,
-                unreadCount: 0
+                unreadCount: 0,
               });
             }
           }
         }
 
         setChats(chatsList);
-        
+
         // Auto-select first chat if none selected
         if (chatsList.length > 0 && !selectedChat) {
           setSelectedChat(chatsList[0]);
@@ -250,7 +276,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
 
     setIsLoading(true);
     let unsubscribe: (() => void) | undefined;
-    
+
     // Mark notifications as read when opening chat
     const markChatNotificationsAsRead = async () => {
       try {
@@ -260,22 +286,25 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
           where('type', '==', 'message'),
           where('read', '==', false)
         );
-        
+
         const snapshot = await getDocs(notificationsQuery);
         const batch = writeBatch(db);
-        
-        snapshot.docs.forEach(doc => {
+
+        snapshot.docs.forEach((doc) => {
           const notification = doc.data();
           // Check if notification is related to this chat
           if (selectedChat.type === 'support' && notification.title?.includes('Support')) {
             batch.update(doc.ref, { read: true, readAt: serverTimestamp() });
           } else if (selectedChat.userName && notification.title?.includes(selectedChat.userName)) {
             batch.update(doc.ref, { read: true, readAt: serverTimestamp() });
-          } else if (selectedChat.projectName && notification.description?.includes(selectedChat.projectName)) {
+          } else if (
+            selectedChat.projectName &&
+            notification.description?.includes(selectedChat.projectName)
+          ) {
             batch.update(doc.ref, { read: true, readAt: serverTimestamp() });
           }
         });
-        
+
         if (snapshot.docs.length > 0) {
           await batch.commit();
         }
@@ -283,7 +312,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
         console.error('Error marking notifications as read:', error);
       }
     };
-    
+
     markChatNotificationsAsRead();
 
     const loadMessages = async () => {
@@ -329,11 +358,11 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
     setIsSending(true);
     try {
       const collectionName = selectedChat.type === 'support' ? 'supportChats' : 'projectChats';
-      
+
       // Ensure chat document exists
       const chatRef = doc(db, collectionName, selectedChat.id);
       const chatDoc = await getDoc(chatRef);
-      
+
       if (!chatDoc.exists()) {
         // Create chat document for new chats
         await setDoc(chatRef, {
@@ -343,7 +372,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
           projectName: selectedChat.projectName,
           createdAt: serverTimestamp(),
           lastMessageAt: serverTimestamp(),
-          status: 'active'
+          status: 'active',
         });
       }
 
@@ -351,19 +380,22 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
       const messagesRef = collection(db, collectionName, selectedChat.id, 'messages');
       const messageData = {
         senderId: user.uid,
-        senderName: isAdmin ? 'GroeimetAI Support' : (user.displayName || user.email),
+        senderName: isAdmin ? 'GroeimetAI Support' : user.displayName || user.email,
         senderRole: isAdmin ? 'admin' : 'user',
         content: newMessage.trim(),
         createdAt: serverTimestamp(),
       };
-      
+
       await addDoc(messagesRef, messageData);
 
       // Create notification for the recipient
       const notificationData = {
         type: 'message' as const,
-        title: isAdmin ? 'New message from Support' : `New message from ${user.displayName || user.email}`,
-        description: newMessage.trim().substring(0, 100) + (newMessage.trim().length > 100 ? '...' : ''),
+        title: isAdmin
+          ? 'New message from Support'
+          : `New message from ${user.displayName || user.email}`,
+        description:
+          newMessage.trim().substring(0, 100) + (newMessage.trim().length > 100 ? '...' : ''),
         read: false,
         createdAt: serverTimestamp(),
         link: isAdmin ? '/dashboard' : '/dashboard/admin',
@@ -381,23 +413,27 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
         // User sending to admin - create notifications for all admins
         const adminsQuery = query(collection(db, 'users'), where('role', '==', 'admin'));
         const adminsSnapshot = await getDocs(adminsQuery);
-        
-        const notificationPromises = adminsSnapshot.docs.map(adminDoc => 
+
+        const notificationPromises = adminsSnapshot.docs.map((adminDoc) =>
           addDoc(collection(db, 'notifications'), {
             ...notificationData,
             userId: adminDoc.id,
           })
         );
-        
+
         await Promise.all(notificationPromises);
       }
 
       // Update last message
-      await setDoc(chatRef, {
-        lastMessageAt: serverTimestamp(),
-        lastMessage: newMessage.trim(),
-        lastMessageBy: user.uid
-      }, { merge: true });
+      await setDoc(
+        chatRef,
+        {
+          lastMessageAt: serverTimestamp(),
+          lastMessage: newMessage.trim(),
+          lastMessageBy: user.uid,
+        },
+        { merge: true }
+      );
 
       setNewMessage('');
     } catch (error) {
@@ -420,7 +456,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
   const getInitials = (name: string) => {
     return name
       .split(' ')
-      .map(n => n[0])
+      .map((n) => n[0])
       .join('')
       .toUpperCase()
       .slice(0, 2);
@@ -440,27 +476,25 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
                 key={chat.id}
                 onClick={() => setSelectedChat(chat)}
                 className={`w-full p-2 rounded-lg text-left transition-colors ${
-                  selectedChat?.id === chat.id
-                    ? 'bg-white/10'
-                    : 'hover:bg-white/5'
+                  selectedChat?.id === chat.id ? 'bg-white/10' : 'hover:bg-white/5'
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <Avatar className="w-8 h-8">
-                    <AvatarFallback className={`${
-                      chat.type === 'support' ? 'bg-green/20 text-green' : 'bg-orange/20 text-orange'
-                    } text-xs`}>
+                    <AvatarFallback
+                      className={`${
+                        chat.type === 'support'
+                          ? 'bg-green/20 text-green'
+                          : 'bg-orange/20 text-orange'
+                      } text-xs`}
+                    >
                       {getInitials(chat.userName)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white truncate">
-                      {chat.userName}
-                    </p>
+                    <p className="text-sm font-medium text-white truncate">{chat.userName}</p>
                     {chat.lastMessage && (
-                      <p className="text-xs text-white/60 truncate">
-                        {chat.lastMessage}
-                      </p>
+                      <p className="text-xs text-white/60 truncate">{chat.lastMessage}</p>
                     )}
                   </div>
                   {(chat.unreadCount ?? 0) > 0 && (
@@ -483,9 +517,13 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
             <div className="p-3 border-b border-white/10">
               <div className="flex items-center gap-2">
                 <Avatar className="w-8 h-8">
-                  <AvatarFallback className={`${
-                    selectedChat.type === 'support' ? 'bg-green/20 text-green' : 'bg-orange/20 text-orange'
-                  } text-xs`}>
+                  <AvatarFallback
+                    className={`${
+                      selectedChat.type === 'support'
+                        ? 'bg-green/20 text-green'
+                        : 'bg-orange/20 text-orange'
+                    } text-xs`}
+                  >
                     {getInitials(selectedChat.userName)}
                   </AvatarFallback>
                 </Avatar>
@@ -506,7 +544,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
                     <Loader2 className="w-5 h-5 animate-spin text-orange" />
                   </div>
                 )}
-                
+
                 {!isLoading && messages.length === 0 && (
                   <div className="text-center text-white/40 py-8">
                     <p className="text-sm">No messages yet</p>
@@ -516,35 +554,39 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
 
                 {messages.map((msg) => {
                   const isOwnMessage = msg.senderId === user?.uid;
-                  
+
                   return (
                     <div
                       key={msg.id}
-                      className={`flex ${
-                        isOwnMessage ? 'justify-end' : 'justify-start'
-                      }`}
+                      className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
                     >
-                      <div className={`flex items-end gap-2 max-w-[70%] ${
-                        isOwnMessage ? 'flex-row-reverse' : ''
-                      }`}>
+                      <div
+                        className={`flex items-end gap-2 max-w-[70%] ${
+                          isOwnMessage ? 'flex-row-reverse' : ''
+                        }`}
+                      >
                         <Avatar className="w-6 h-6 flex-shrink-0">
-                          <AvatarFallback className={`text-xs ${
-                            msg.senderRole === 'admin' ? 'bg-green/20 text-green' : 'bg-orange/20 text-orange'
-                          }`}>
+                          <AvatarFallback
+                            className={`text-xs ${
+                              msg.senderRole === 'admin'
+                                ? 'bg-green/20 text-green'
+                                : 'bg-orange/20 text-orange'
+                            }`}
+                          >
                             {getInitials(msg.senderName)}
                           </AvatarFallback>
                         </Avatar>
                         <div
                           className={`rounded-lg px-3 py-2 ${
-                            isOwnMessage
-                              ? 'bg-orange text-white'
-                              : 'bg-white/10 text-white'
+                            isOwnMessage ? 'bg-orange text-white' : 'bg-white/10 text-white'
                           }`}
                         >
                           <p className="text-sm break-words">{msg.content}</p>
-                          <p className={`text-xs mt-1 ${
-                            isOwnMessage ? 'text-white/70' : 'text-white/50'
-                          }`}>
+                          <p
+                            className={`text-xs mt-1 ${
+                              isOwnMessage ? 'text-white/70' : 'text-white/50'
+                            }`}
+                          >
                             {formatMessageTime(msg.createdAt)}
                           </p>
                         </div>
@@ -596,36 +638,130 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
 
 // Different default widgets for users vs admins
 const DEFAULT_USER_WIDGETS: Widget[] = [
-  { id: '1', type: 'projectTimeline', title: 'Project Timeline', size: 'large', position: { x: 0, y: 0 } },
-  { id: '2', type: 'messages', title: 'Messages & Communication', size: 'xlarge', position: { x: 1, y: 0 } },
-  { id: '3', type: 'quickActions', title: 'Quick Actions', size: 'small', position: { x: 0, y: 2 } },
-  { id: '4', type: 'documents', title: 'Recent Documents', size: 'medium', position: { x: 1, y: 2 } },
+  {
+    id: '1',
+    type: 'projectTimeline',
+    title: 'Project Timeline',
+    size: 'large',
+    position: { x: 0, y: 0 },
+  },
+  {
+    id: '2',
+    type: 'messages',
+    title: 'Messages & Communication',
+    size: 'xlarge',
+    position: { x: 1, y: 0 },
+  },
+  {
+    id: '3',
+    type: 'quickActions',
+    title: 'Quick Actions',
+    size: 'small',
+    position: { x: 0, y: 2 },
+  },
+  {
+    id: '4',
+    type: 'documents',
+    title: 'Recent Documents',
+    size: 'medium',
+    position: { x: 1, y: 2 },
+  },
 ];
 
 const DEFAULT_ADMIN_WIDGETS: Widget[] = [
   { id: '1', type: 'stats', title: 'Business Metrics', size: 'medium', position: { x: 0, y: 0 } },
-  { id: '2', type: 'messages', title: 'Client Communications', size: 'xlarge', position: { x: 2, y: 0 } },
-  { id: '3', type: 'projectProgress', title: 'Active Projects', size: 'medium', position: { x: 0, y: 1 } },
+  {
+    id: '2',
+    type: 'messages',
+    title: 'Client Communications',
+    size: 'xlarge',
+    position: { x: 2, y: 0 },
+  },
+  {
+    id: '3',
+    type: 'projectProgress',
+    title: 'Active Projects',
+    size: 'medium',
+    position: { x: 0, y: 1 },
+  },
   { id: '4', type: 'tasks', title: 'Team Tasks', size: 'medium', position: { x: 1, y: 1 } },
   { id: '5', type: 'revenue', title: 'Revenue Overview', size: 'medium', position: { x: 2, y: 1 } },
 ];
 
 const WIDGET_TYPES = [
-  { type: 'stats', title: 'Business Metrics', icon: BarChart3, description: 'Key business performance indicators', adminOnly: true },
-  { type: 'recentActivity', title: 'Recent Activity', icon: Activity, description: 'Latest updates and changes' },
-  { type: 'projectProgress', title: 'Active Projects', icon: Target, description: 'Overview of all active projects', adminOnly: true },
-  { type: 'projectTimeline', title: 'Project Timeline', icon: Clock, description: 'Your project milestones and progress', userOnly: true },
-  { type: 'upcomingMeetings', title: 'Upcoming Consultations', icon: Calendar, description: 'Scheduled meetings with consultants' },
-  { type: 'quickActions', title: 'Quick Actions', icon: Plus, description: 'Common actions and shortcuts' },
-  { type: 'tasks', title: 'Team Tasks', icon: FileText, description: 'Task management for team', adminOnly: true },
-  { type: 'messages', title: 'Messages', icon: MessageSquare, description: 'All your conversations in one place' },
-  { type: 'documents', title: 'Documents', icon: FileText, description: 'Recent contracts and deliverables', userOnly: true },
-  { type: 'revenue', title: 'Revenue', icon: DollarSign, description: 'Financial performance metrics', adminOnly: true },
+  {
+    type: 'stats',
+    title: 'Business Metrics',
+    icon: BarChart3,
+    description: 'Key business performance indicators',
+    adminOnly: true,
+  },
+  {
+    type: 'recentActivity',
+    title: 'Recent Activity',
+    icon: Activity,
+    description: 'Latest updates and changes',
+  },
+  {
+    type: 'projectProgress',
+    title: 'Active Projects',
+    icon: Target,
+    description: 'Overview of all active projects',
+    adminOnly: true,
+  },
+  {
+    type: 'projectTimeline',
+    title: 'Project Timeline',
+    icon: Clock,
+    description: 'Your project milestones and progress',
+    userOnly: true,
+  },
+  {
+    type: 'upcomingMeetings',
+    title: 'Upcoming Consultations',
+    icon: Calendar,
+    description: 'Scheduled meetings with consultants',
+  },
+  {
+    type: 'quickActions',
+    title: 'Quick Actions',
+    icon: Plus,
+    description: 'Common actions and shortcuts',
+  },
+  {
+    type: 'tasks',
+    title: 'Team Tasks',
+    icon: FileText,
+    description: 'Task management for team',
+    adminOnly: true,
+  },
+  {
+    type: 'messages',
+    title: 'Messages',
+    icon: MessageSquare,
+    description: 'All your conversations in one place',
+  },
+  {
+    type: 'documents',
+    title: 'Documents',
+    icon: FileText,
+    description: 'Recent contracts and deliverables',
+    userOnly: true,
+  },
+  {
+    type: 'revenue',
+    title: 'Revenue',
+    icon: DollarSign,
+    description: 'Financial performance metrics',
+    adminOnly: true,
+  },
 ];
 
 export default function DashboardWidgets() {
   const { user, isAdmin } = useAuth();
-  const [widgets, setWidgets] = useState<Widget[]>(isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS);
+  const [widgets, setWidgets] = useState<Widget[]>(
+    isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS
+  );
   const [widgetData, setWidgetData] = useState<WidgetData>({});
   const [isDragging, setIsDragging] = useState<string | null>(null);
   const [draggedWidget, setDraggedWidget] = useState<Widget | null>(null);
@@ -640,7 +776,7 @@ export default function DashboardWidgets() {
   // Load user's widget preferences function (defined outside useEffect for reusability)
   const loadWidgetPreferences = async () => {
     if (!user) return;
-    
+
     setIsLoading(true);
     try {
       const userDoc = await getDocs(query(collection(db, 'users'), where('uid', '==', user.uid)));
@@ -686,11 +822,11 @@ export default function DashboardWidgets() {
     try {
       const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
       const userSnapshot = await getDocs(userQuery);
-      
+
       if (!userSnapshot.empty) {
         await updateDoc(userSnapshot.docs[0].ref, {
           dashboardWidgets: updatedWidgets || widgets,
-          updatedAt: new Date()
+          updatedAt: new Date(),
         });
         // Update original widgets to reflect saved state
         setOriginalWidgets(updatedWidgets || widgets);
@@ -720,15 +856,17 @@ export default function DashboardWidgets() {
           const allProjectsSnapshot = await getDocs(collection(db, 'projects'));
           const allQuotesSnapshot = await getDocs(collection(db, 'quotes'));
           const allInvoicesSnapshot = await getDocs(collection(db, 'invoices'));
-          
+
           data.stats = {
             projects: allProjectsSnapshot.size,
-            activeProjects: allProjectsSnapshot.docs.filter(doc => doc.data().status === 'active').length,
+            activeProjects: allProjectsSnapshot.docs.filter((doc) => doc.data().status === 'active')
+              .length,
             quotes: allQuotesSnapshot.size,
-            pendingQuotes: allQuotesSnapshot.docs.filter(doc => doc.data().status === 'pending').length,
-            totalClients: new Set(allProjectsSnapshot.docs.map(doc => doc.data().clientId)).size,
+            pendingQuotes: allQuotesSnapshot.docs.filter((doc) => doc.data().status === 'pending')
+              .length,
+            totalClients: new Set(allProjectsSnapshot.docs.map((doc) => doc.data().clientId)).size,
             revenue: allInvoicesSnapshot.docs
-              .filter(doc => doc.data().status === 'paid')
+              .filter((doc) => doc.data().status === 'paid')
               .reduce((sum, doc) => sum + (doc.data().amount || 0), 0),
           };
 
@@ -736,7 +874,7 @@ export default function DashboardWidgets() {
           const chatsSnapshot = await getDocs(
             query(collection(db, 'supportChats'), orderBy('lastMessageAt', 'desc'))
           );
-          
+
           // Get unread notifications for admin
           const adminUnreadQuery = query(
             collection(db, 'notifications'),
@@ -745,52 +883,65 @@ export default function DashboardWidgets() {
             where('read', '==', false)
           );
           const adminUnreadNotifications = await getDocs(adminUnreadQuery);
-          
-          data.activeChats = await Promise.all(chatsSnapshot.docs.map(async (chatDoc) => {
-            const chatData = chatDoc.data();
-            
-            // Count unread messages from this user
-            const unreadFromUser = adminUnreadNotifications.docs.filter(doc => {
-              const notification = doc.data();
-              return notification.title?.includes(chatData.userName) || 
-                     notification.description?.includes(chatData.userName);
-            }).length;
-            
-            return {
-              id: chatDoc.id,
-              userId: chatData.userId,
-              userName: chatData.userName,
-              projectName: chatData.projectName,
-              lastMessage: chatData.lastMessage,
-              lastMessageAt: chatData.lastMessageAt,
-              unreadCount: unreadFromUser,
-            };
-          }));
+
+          data.activeChats = await Promise.all(
+            chatsSnapshot.docs.map(async (chatDoc) => {
+              const chatData = chatDoc.data();
+
+              // Count unread messages from this user
+              const unreadFromUser = adminUnreadNotifications.docs.filter((doc) => {
+                const notification = doc.data();
+                return (
+                  notification.title?.includes(chatData.userName) ||
+                  notification.description?.includes(chatData.userName)
+                );
+              }).length;
+
+              return {
+                id: chatDoc.id,
+                userId: chatData.userId,
+                userName: chatData.userName,
+                projectName: chatData.projectName,
+                lastMessage: chatData.lastMessage,
+                lastMessageAt: chatData.lastMessageAt,
+                unreadCount: unreadFromUser,
+              };
+            })
+          );
 
           // Fetch revenue data
-          const paidInvoices = allInvoicesSnapshot.docs.filter(doc => doc.data().status === 'paid');
+          const paidInvoices = allInvoicesSnapshot.docs.filter(
+            (doc) => doc.data().status === 'paid'
+          );
           const currentMonth = new Date().getMonth();
-          const monthlyInvoices = paidInvoices.filter(doc => {
+          const monthlyInvoices = paidInvoices.filter((doc) => {
             const date = doc.data().paidAt?.toDate();
             return date && date.getMonth() === currentMonth;
           });
-          
+
           data.totalRevenue = paidInvoices.reduce((sum, doc) => sum + (doc.data().amount || 0), 0);
-          data.monthlyRevenue = monthlyInvoices.reduce((sum, doc) => sum + (doc.data().amount || 0), 0);
+          data.monthlyRevenue = monthlyInvoices.reduce(
+            (sum, doc) => sum + (doc.data().amount || 0),
+            0
+          );
           data.pendingRevenue = allInvoicesSnapshot.docs
-            .filter(doc => doc.data().status === 'pending')
+            .filter((doc) => doc.data().status === 'pending')
             .reduce((sum, doc) => sum + (doc.data().amount || 0), 0);
-          
+
           // Calculate revenue growth
           const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-          const lastMonthInvoices = paidInvoices.filter(doc => {
+          const lastMonthInvoices = paidInvoices.filter((doc) => {
             const date = doc.data().paidAt?.toDate();
             return date && date.getMonth() === lastMonth;
           });
-          const lastMonthRevenue = lastMonthInvoices.reduce((sum, doc) => sum + (doc.data().amount || 0), 0);
-          data.revenueGrowth = lastMonthRevenue > 0 
-            ? Math.round(((data.monthlyRevenue - lastMonthRevenue) / lastMonthRevenue) * 100)
-            : 0;
+          const lastMonthRevenue = lastMonthInvoices.reduce(
+            (sum, doc) => sum + (doc.data().amount || 0),
+            0
+          );
+          data.revenueGrowth =
+            lastMonthRevenue > 0
+              ? Math.round(((data.monthlyRevenue - lastMonthRevenue) / lastMonthRevenue) * 100)
+              : 0;
 
           // Fetch upcoming meetings for admins
           const meetingsQuery = query(
@@ -801,8 +952,8 @@ export default function DashboardWidgets() {
             limit(5)
           );
           const meetingsSnapshot = await getDocs(meetingsQuery);
-          
-          data.upcomingMeetings = meetingsSnapshot.docs.map(doc => {
+
+          data.upcomingMeetings = meetingsSnapshot.docs.map((doc) => {
             const meeting = doc.data();
             return {
               id: doc.id,
@@ -814,10 +965,11 @@ export default function DashboardWidgets() {
               platform: meeting.platform,
               meetingLink: meeting.meetingLink,
               participants: meeting.participants || [],
-              clientName: meeting.participants?.find((p: any) => p.role !== 'organizer')?.name || 'Unknown Client',
+              clientName:
+                meeting.participants?.find((p: any) => p.role !== 'organizer')?.name ||
+                'Unknown Client',
             };
           });
-
         } else {
           // User data fetching
           const projectsQuery = query(
@@ -825,39 +977,38 @@ export default function DashboardWidgets() {
             where('clientId', '==', user.uid)
           );
           const projectsSnapshot = await getDocs(projectsQuery);
-          
-          const quotesQuery = query(
-            collection(db, 'quotes'),
-            where('userId', '==', user.uid)
-          );
+
+          const quotesQuery = query(collection(db, 'quotes'), where('userId', '==', user.uid));
           const quotesSnapshot = await getDocs(quotesQuery);
 
           // For project timeline widget
           if (projectsSnapshot.docs.length > 0) {
             const latestProject = projectsSnapshot.docs[0].data();
             data.projectName = latestProject.name || 'My AI Project';
-            
+
             const timelineRef = doc(db, 'projectTimelines', projectsSnapshot.docs[0].id);
             const timelineDoc = await getDoc(timelineRef);
-            
+
             if (timelineDoc.exists()) {
               const timelineData = timelineDoc.data();
               data.timelineStages = timelineData.stages || [];
-              
+
               // Calculate overall progress
               if (timelineData.stages) {
-                const completedStages = timelineData.stages.filter((s: any) => s.status === 'completed').length;
+                const completedStages = timelineData.stages.filter(
+                  (s: any) => s.status === 'completed'
+                ).length;
                 const currentStage = timelineData.stages.find((s: any) => s.status === 'current');
                 const currentProgress = currentStage?.progress || 0;
-                
+
                 // Overall progress includes partial progress of current stage
                 data.timelineProgress = Math.round(
-                  ((completedStages * 100) + currentProgress) / timelineData.stages.length
+                  (completedStages * 100 + currentProgress) / timelineData.stages.length
                 );
               } else {
                 data.timelineProgress = 0;
               }
-              
+
               // Add milestone and estimated completion
               data.nextMilestone = timelineData.milestone || null;
               data.estimatedCompletion = latestProject.estimatedCompletion || null;
@@ -872,33 +1023,37 @@ export default function DashboardWidgets() {
             where('read', '==', false)
           );
           const unreadNotifications = await getDocs(unreadNotificationsQuery);
-          
+
           // Count unread support messages
-          const supportUnread = unreadNotifications.docs.filter(doc => {
+          const supportUnread = unreadNotifications.docs.filter((doc) => {
             const notification = doc.data();
             return notification.title?.includes('Support');
           }).length;
-          
+
           data.supportUnread = supportUnread;
-          
+
           // Get project chats with unread counts
-          data.projectChats = await Promise.all(projectsSnapshot.docs.map(async (projectDoc) => {
-            const projectData = projectDoc.data();
-            
-            // Count unread messages for this project
-            const projectUnread = unreadNotifications.docs.filter(doc => {
-              const notification = doc.data();
-              return notification.description?.includes(projectData.name) || 
-                     notification.link?.includes(projectDoc.id);
-            }).length;
-            
-            return {
-              id: projectDoc.id,
-              projectId: projectDoc.id,
-              projectName: projectData.name,
-              unreadCount: projectUnread,
-            };
-          }));
+          data.projectChats = await Promise.all(
+            projectsSnapshot.docs.map(async (projectDoc) => {
+              const projectData = projectDoc.data();
+
+              // Count unread messages for this project
+              const projectUnread = unreadNotifications.docs.filter((doc) => {
+                const notification = doc.data();
+                return (
+                  notification.description?.includes(projectData.name) ||
+                  notification.link?.includes(projectDoc.id)
+                );
+              }).length;
+
+              return {
+                id: projectDoc.id,
+                projectId: projectDoc.id,
+                projectName: projectData.name,
+                unreadCount: projectUnread,
+              };
+            })
+          );
 
           // For documents widget
           const documentsQuery = query(
@@ -908,8 +1063,8 @@ export default function DashboardWidgets() {
             limit(5)
           );
           const documentsSnapshot = await getDocs(documentsQuery);
-          
-          data.recentDocuments = documentsSnapshot.docs.map(doc => {
+
+          data.recentDocuments = documentsSnapshot.docs.map((doc) => {
             const docData = doc.data();
             return {
               id: doc.id,
@@ -922,7 +1077,8 @@ export default function DashboardWidgets() {
           // Stats for users (simplified)
           data.stats = {
             projects: projectsSnapshot.size,
-            activeProjects: projectsSnapshot.docs.filter(doc => doc.data().status === 'active').length,
+            activeProjects: projectsSnapshot.docs.filter((doc) => doc.data().status === 'active')
+              .length,
             quotes: quotesSnapshot.size,
             documents: documentsSnapshot.size,
           };
@@ -937,8 +1093,8 @@ export default function DashboardWidgets() {
             limit(5)
           );
           const meetingsSnapshot = await getDocs(meetingsQuery);
-          
-          data.upcomingMeetings = meetingsSnapshot.docs.map(doc => {
+
+          data.upcomingMeetings = meetingsSnapshot.docs.map((doc) => {
             const meeting = doc.data();
             return {
               id: doc.id,
@@ -960,8 +1116,8 @@ export default function DashboardWidgets() {
             title: string;
             time: Date;
           }> = [];
-          
-          projectsSnapshot.docs.slice(0, 5).forEach(doc => {
+
+          projectsSnapshot.docs.slice(0, 5).forEach((doc) => {
             const project = doc.data();
             activities.push({
               id: doc.id,
@@ -971,13 +1127,17 @@ export default function DashboardWidgets() {
             });
           });
 
-          data.recentActivity = activities.sort((a, b) => b.time.getTime() - a.time.getTime()).slice(0, 5);
+          data.recentActivity = activities
+            .sort((a, b) => b.time.getTime() - a.time.getTime())
+            .slice(0, 5);
 
           // Project progress
-          data.projectProgress = projectsSnapshot.docs.slice(0, 3).map(doc => {
+          data.projectProgress = projectsSnapshot.docs.slice(0, 3).map((doc) => {
             const project = doc.data();
             const progress = project.milestones
-              ? (project.milestones.filter((m: any) => m.status === 'completed').length / project.milestones.length) * 100
+              ? (project.milestones.filter((m: any) => m.status === 'completed').length /
+                  project.milestones.length) *
+                100
               : 0;
             return {
               id: doc.id,
@@ -998,7 +1158,7 @@ export default function DashboardWidgets() {
   }, [user, widgets, isAdmin]);
 
   const addWidget = (type: string) => {
-    const widgetType = WIDGET_TYPES.find(w => w.type === type);
+    const widgetType = WIDGET_TYPES.find((w) => w.type === type);
     if (!widgetType) return;
 
     // Determine size based on widget type
@@ -1026,16 +1186,14 @@ export default function DashboardWidgets() {
   };
 
   const removeWidget = (widgetId: string) => {
-    const updatedWidgets = widgets.filter(w => w.id !== widgetId);
+    const updatedWidgets = widgets.filter((w) => w.id !== widgetId);
     setWidgets(updatedWidgets);
     setHasUnsavedChanges(true);
   };
 
   const toggleWidgetSize = async (widgetId: string) => {
-    const updatedWidgets = widgets.map(w => 
-      w.id === widgetId 
-        ? { ...w, isExpanded: !w.isExpanded }
-        : w
+    const updatedWidgets = widgets.map((w) =>
+      w.id === widgetId ? { ...w, isExpanded: !w.isExpanded } : w
     );
     setWidgets(updatedWidgets);
     if (!isEditMode) {
@@ -1053,7 +1211,7 @@ export default function DashboardWidgets() {
   const handleReorder = (newOrder: Widget[]) => {
     const updatedWidgets = newOrder.map((w, index) => ({
       ...w,
-      position: { x: index % 3, y: Math.floor(index / 3) }
+      position: { x: index % 3, y: Math.floor(index / 3) },
     }));
     setWidgets(updatedWidgets);
     setHasUnsavedChanges(true);
@@ -1095,7 +1253,11 @@ export default function DashboardWidgets() {
   };
 
   const resetToDefault = async () => {
-    if (confirm('Are you sure you want to reset to default layout? This will remove all your customizations.')) {
+    if (
+      confirm(
+        'Are you sure you want to reset to default layout? This will remove all your customizations.'
+      )
+    ) {
       const defaultWidgets = isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS;
       setWidgets(defaultWidgets);
       setHasUnsavedChanges(true);
@@ -1114,19 +1276,27 @@ export default function DashboardWidgets() {
                 <>
                   <div className="bg-white/5 rounded-lg p-4">
                     <p className="text-white/60 text-sm">Active Projects</p>
-                    <p className="text-2xl font-bold text-green-500">{widgetData.stats?.activeProjects || 0}</p>
+                    <p className="text-2xl font-bold text-green-500">
+                      {widgetData.stats?.activeProjects || 0}
+                    </p>
                   </div>
                   <div className="bg-white/5 rounded-lg p-4">
                     <p className="text-white/60 text-sm">Total Clients</p>
-                    <p className="text-2xl font-bold text-white">{widgetData.stats?.totalClients || 0}</p>
+                    <p className="text-2xl font-bold text-white">
+                      {widgetData.stats?.totalClients || 0}
+                    </p>
                   </div>
                   <div className="bg-white/5 rounded-lg p-4">
                     <p className="text-white/60 text-sm">Revenue</p>
-                    <p className="text-2xl font-bold text-orange">€{(widgetData.stats?.revenue || 0).toLocaleString()}</p>
+                    <p className="text-2xl font-bold text-orange">
+                      €{(widgetData.stats?.revenue || 0).toLocaleString()}
+                    </p>
                   </div>
                   <div className="bg-white/5 rounded-lg p-4">
                     <p className="text-white/60 text-sm">Pending Quotes</p>
-                    <p className="text-2xl font-bold text-yellow-500">{widgetData.stats?.pendingQuotes || 0}</p>
+                    <p className="text-2xl font-bold text-yellow-500">
+                      {widgetData.stats?.pendingQuotes || 0}
+                    </p>
                   </div>
                 </>
               ) : (
@@ -1134,7 +1304,9 @@ export default function DashboardWidgets() {
                 <>
                   <div className="bg-white/5 rounded-lg p-4 col-span-2">
                     <p className="text-white/60 text-sm mb-1">Your Active Projects</p>
-                    <p className="text-3xl font-bold text-green-500">{widgetData.stats?.activeProjects || 0}</p>
+                    <p className="text-3xl font-bold text-green-500">
+                      {widgetData.stats?.activeProjects || 0}
+                    </p>
                     <p className="text-white/40 text-xs mt-1">
                       {widgetData.stats?.projects || 0} total projects with GroeimetAI
                     </p>
@@ -1149,7 +1321,10 @@ export default function DashboardWidgets() {
             <div className="space-y-3">
               {widgetData.recentActivity?.length > 0 ? (
                 widgetData.recentActivity.map((activity: any) => (
-                  <div key={activity.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                  <div
+                    key={activity.id}
+                    className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
+                  >
                     <div>
                       <p className="text-white text-sm">{activity.title}</p>
                       <p className="text-white/40 text-xs">
@@ -1221,9 +1396,9 @@ export default function DashboardWidgets() {
               ) : (
                 // User quick actions - focused on requesting services
                 <>
-                  <Button 
-                    variant="outline" 
-                    className="w-full justify-start" 
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
                     size="sm"
                     onClick={() => setProjectDialogOpen(true)}
                   >
@@ -1255,7 +1430,7 @@ export default function DashboardWidgets() {
 
         case 'upcomingMeetings':
           const meetings = widgetData.upcomingMeetings || [];
-          
+
           const formatMeetingTime = (startTime: Date, endTime: Date) => {
             return `${format(startTime, 'h:mm a')} - ${format(endTime, 'h:mm a')}`;
           };
@@ -1268,7 +1443,12 @@ export default function DashboardWidgets() {
           };
 
           const getMeetingIcon = (platform?: string) => {
-            if (platform === 'video' || platform === 'zoom' || platform === 'teams' || platform === 'meet') {
+            if (
+              platform === 'video' ||
+              platform === 'zoom' ||
+              platform === 'teams' ||
+              platform === 'meet'
+            ) {
               return <Video className="w-3 h-3" />;
             }
             if (platform === 'in_person') {
@@ -1281,7 +1461,10 @@ export default function DashboardWidgets() {
             <div className="space-y-3">
               {meetings.length > 0 ? (
                 meetings.map((meeting: any) => (
-                  <div key={meeting.id} className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors">
+                  <div
+                    key={meeting.id}
+                    className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+                  >
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="text-white text-sm font-medium flex items-center gap-2">
                         {getMeetingIcon(meeting.platform)}
@@ -1300,19 +1483,19 @@ export default function DashboardWidgets() {
                       </p>
                     )}
                     {isAdmin && meeting.clientName && (
-                      <p className="text-white/40 text-xs mt-1">
-                        Client: {meeting.clientName}
-                      </p>
+                      <p className="text-white/40 text-xs mt-1">Client: {meeting.clientName}</p>
                     )}
                     {!isAdmin && meeting.participants.length > 0 && (
                       <p className="text-white/40 text-xs mt-1">
-                        With: {meeting.participants.find((p: any) => p.role === 'organizer')?.name || 'GroeimetAI Team'}
+                        With:{' '}
+                        {meeting.participants.find((p: any) => p.role === 'organizer')?.name ||
+                          'GroeimetAI Team'}
                       </p>
                     )}
                     {meeting.meetingLink && (
-                      <a 
-                        href={meeting.meetingLink} 
-                        target="_blank" 
+                      <a
+                        href={meeting.meetingLink}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="text-orange text-xs mt-2 inline-flex items-center gap-1 hover:underline"
                       >
@@ -1333,7 +1516,7 @@ export default function DashboardWidgets() {
                   </Link>
                 </div>
               )}
-              
+
               {meetings.length > 0 && (
                 <Link href="/dashboard/consultations">
                   <Button variant="outline" className="w-full" size="sm">
@@ -1343,7 +1526,6 @@ export default function DashboardWidgets() {
               )}
             </div>
           );
-
 
         case 'tasks':
           return (
@@ -1370,18 +1552,43 @@ export default function DashboardWidgets() {
         case 'projectTimeline':
           // Default timeline stages with proper icons
           const defaultStages = [
-            { id: 1, name: 'Discovery', icon: 'briefcase', status: 'upcoming', description: 'Understanding your needs' },
-            { id: 2, name: 'Planning', icon: 'target', status: 'upcoming', description: 'Defining project scope' },
-            { id: 3, name: 'Development', icon: 'rocket', status: 'upcoming', description: 'Building your solution' },
-            { id: 4, name: 'Delivery', icon: 'flag', status: 'upcoming', description: 'Final implementation' }
+            {
+              id: 1,
+              name: 'Discovery',
+              icon: 'briefcase',
+              status: 'upcoming',
+              description: 'Understanding your needs',
+            },
+            {
+              id: 2,
+              name: 'Planning',
+              icon: 'target',
+              status: 'upcoming',
+              description: 'Defining project scope',
+            },
+            {
+              id: 3,
+              name: 'Development',
+              icon: 'rocket',
+              status: 'upcoming',
+              description: 'Building your solution',
+            },
+            {
+              id: 4,
+              name: 'Delivery',
+              icon: 'flag',
+              status: 'upcoming',
+              description: 'Final implementation',
+            },
           ];
-          
-          const stages = widgetData.timelineStages?.length > 0 ? widgetData.timelineStages : defaultStages;
+
+          const stages =
+            widgetData.timelineStages?.length > 0 ? widgetData.timelineStages : defaultStages;
           const currentStage = stages.find((stage: any) => stage.status === 'current');
           const completedCount = stages.filter((stage: any) => stage.status === 'completed').length;
           const currentStageProgress = currentStage?.progress || 0;
           const totalProgress = (completedCount * 100 + currentStageProgress) / stages.length;
-          
+
           // Map icon strings to components
           const stageIcons = {
             briefcase: Briefcase,
@@ -1389,7 +1596,7 @@ export default function DashboardWidgets() {
             rocket: Rocket,
             flag: Flag,
           };
-          
+
           return (
             <div className="h-full flex flex-col">
               {/* Project Header */}
@@ -1399,36 +1606,45 @@ export default function DashboardWidgets() {
                   {currentStage?.name || 'Planning'}
                 </Badge>
               </div>
-              
+
               {/* Overall Progress */}
               <div className="mb-8">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm text-white/60">Overall Progress</span>
-                  <span className="text-sm font-medium text-white">{Math.round(totalProgress)}%</span>
+                  <span className="text-sm font-medium text-white">
+                    {Math.round(totalProgress)}%
+                  </span>
                 </div>
                 <Progress value={totalProgress} className="h-2" />
               </div>
-              
+
               {/* Timeline Stages */}
               <div className="flex-1 space-y-6 overflow-y-auto">
                 {stages.map((stage: any, index: number) => {
                   const StageIcon = stageIcons[stage.icon as keyof typeof stageIcons] || Briefcase;
-                  
+
                   return (
                     <div key={stage.id || index} className="relative">
                       {/* Connection Line */}
                       {index < stages.length - 1 && (
-                        <div className={`absolute left-5 top-10 bottom-0 w-0.5 ${
-                          stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
-                        }`} />
+                        <div
+                          className={`absolute left-5 top-10 bottom-0 w-0.5 ${
+                            stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
+                          }`}
+                        />
                       )}
-                      
+
                       <div className="flex items-start space-x-4">
                         {/* Stage Icon */}
-                        <div className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center ${
-                          stage.status === 'completed' ? 'bg-green-500' : 
-                          stage.status === 'current' ? 'bg-orange' : 'bg-white/20'
-                        }`}>
+                        <div
+                          className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center ${
+                            stage.status === 'completed'
+                              ? 'bg-green-500'
+                              : stage.status === 'current'
+                                ? 'bg-orange'
+                                : 'bg-white/20'
+                          }`}
+                        >
                           {stage.status === 'completed' ? (
                             <CheckCircle className="w-5 h-5 text-white" />
                           ) : stage.status === 'current' ? (
@@ -1437,19 +1653,24 @@ export default function DashboardWidgets() {
                             <StageIcon className="w-5 h-5 text-white/60" />
                           )}
                         </div>
-                        
+
                         {/* Stage Details */}
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
-                            <h4 className={`font-medium ${
-                              stage.status === 'completed' ? 'text-white' : 
-                              stage.status === 'current' ? 'text-white' : 'text-white/60'
-                            }`}>
+                            <h4
+                              className={`font-medium ${
+                                stage.status === 'completed'
+                                  ? 'text-white'
+                                  : stage.status === 'current'
+                                    ? 'text-white'
+                                    : 'text-white/60'
+                              }`}
+                            >
                               {stage.name}
                             </h4>
                           </div>
                           <p className="text-sm text-white/60 mt-1">{stage.description}</p>
-                          
+
                           {/* Stage Progress Bar (for current stage) */}
                           {stage.status === 'current' && stage.progress && (
                             <div className="mt-2">
@@ -1462,7 +1683,7 @@ export default function DashboardWidgets() {
                   );
                 })}
               </div>
-              
+
               {/* Next Milestone */}
               {(widgetData.milestone || !widgetData.timelineStages) && (
                 <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
@@ -1471,13 +1692,14 @@ export default function DashboardWidgets() {
                     <div>
                       <p className="text-sm font-medium text-white">Next Milestone</p>
                       <p className="text-xs text-white/60">
-                        {widgetData.milestone || 'Your project timeline will be updated once your request is approved'}
+                        {widgetData.milestone ||
+                          'Your project timeline will be updated once your request is approved'}
                       </p>
                     </div>
                   </div>
                 </div>
               )}
-              
+
               {/* Next Milestone */}
               {(widgetData.milestone || !widgetData.timelineStages) && (
                 <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
@@ -1486,7 +1708,8 @@ export default function DashboardWidgets() {
                     <div>
                       <p className="text-sm font-medium text-white">Next Milestone</p>
                       <p className="text-xs text-white/60">
-                        {widgetData.milestone || 'Your project timeline will be updated once your request is approved'}
+                        {widgetData.milestone ||
+                          'Your project timeline will be updated once your request is approved'}
                       </p>
                     </div>
                   </div>
@@ -1509,7 +1732,9 @@ export default function DashboardWidgets() {
                       <FileText className="w-5 h-5 text-orange" />
                       <div>
                         <p className="text-white text-sm font-medium">{doc.name}</p>
-                        <p className="text-white/60 text-xs">{doc.type} • {doc.date}</p>
+                        <p className="text-white/60 text-xs">
+                          {doc.type} • {doc.date}
+                        </p>
                       </div>
                     </div>
                     <Button variant="ghost" size="icon" className="h-6 w-6">
@@ -1518,7 +1743,7 @@ export default function DashboardWidgets() {
                   </div>
                 </div>
               ))}
-              
+
               <Link href="/dashboard/documents">
                 <Button variant="outline" className="w-full" size="sm">
                   View All Documents
@@ -1536,7 +1761,7 @@ export default function DashboardWidgets() {
                 </p>
                 <p className="text-white/60 text-sm">Total Revenue</p>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
                   <p className="text-xl font-semibold text-green-400">
@@ -1551,7 +1776,7 @@ export default function DashboardWidgets() {
                   <p className="text-white/60 text-xs">Pending</p>
                 </div>
               </div>
-              
+
               <Progress value={widgetData.revenueGrowth || 0} className="h-2" />
               <p className="text-white/60 text-xs text-center">
                 {widgetData.revenueGrowth || 0}% growth vs last month
@@ -1564,22 +1789,21 @@ export default function DashboardWidgets() {
       }
     };
 
-    const widgetSizeClass = widget.isExpanded 
+    const widgetSizeClass = widget.isExpanded
       ? 'col-span-full'
-      : widget.size === 'small' 
-        ? 'col-span-1' 
-        : widget.size === 'large' 
-          ? 'col-span-2 row-span-2' 
+      : widget.size === 'small'
+        ? 'col-span-1'
+        : widget.size === 'large'
+          ? 'col-span-2 row-span-2'
           : widget.size === 'xlarge'
             ? 'col-span-3 row-span-3'
             : 'col-span-1';
 
     return (
-      <div
-        key={widget.id}
-        className={`${widgetSizeClass}`}
-      >
-        <Card className={`bg-white/5 border-white/10 h-full ${isDragging === widget.id ? 'opacity-50 cursor-grabbing' : isEditMode ? 'cursor-grab' : ''}`}>
+      <div key={widget.id} className={`${widgetSizeClass}`}>
+        <Card
+          className={`bg-white/5 border-white/10 h-full ${isDragging === widget.id ? 'opacity-50 cursor-grabbing' : isEditMode ? 'cursor-grab' : ''}`}
+        >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">{widget.title}</CardTitle>
             <div className="flex items-center gap-1">
@@ -1645,16 +1869,10 @@ export default function DashboardWidgets() {
             </Button>
           ) : (
             <>
-              <Button
-                variant="ghost"
-                onClick={handleCancelEdit}
-              >
+              <Button variant="ghost" onClick={handleCancelEdit}>
                 Cancel
               </Button>
-              <Button
-                variant="outline"
-                onClick={resetToDefault}
-              >
+              <Button variant="outline" onClick={resetToDefault}>
                 Reset to Default
               </Button>
               <Button
@@ -1682,35 +1900,35 @@ export default function DashboardWidgets() {
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid grid-cols-1 gap-3 mt-4">
-                  {WIDGET_TYPES
-                    .filter((widgetType: any) => {
-                      // Filter widgets based on user role
-                      if (widgetType.adminOnly && !isAdmin) return false;
-                      if (widgetType.userOnly && isAdmin) return false;
-                      return true;
-                    })
-                    .map((widgetType) => {
-                      const Icon = widgetType.icon;
-                      const isAdded = widgets.some(w => w.type === widgetType.type);
-                      return (
-                        <Button
-                          key={widgetType.type}
-                          variant="outline"
-                          className="justify-start h-auto p-4"
-                          onClick={() => !isAdded && addWidget(widgetType.type)}
-                          disabled={isAdded}
-                        >
-                          <Icon className="w-5 h-5 mr-3" />
-                          <div className="text-left">
-                            <p className="font-medium">{widgetType.title}</p>
-                            <p className="text-xs text-white/60">{widgetType.description}</p>
-                          </div>
-                          {isAdded && (
-                            <Badge variant="outline" className="ml-auto">Added</Badge>
-                          )}
-                        </Button>
-                      );
-                    })}
+                  {WIDGET_TYPES.filter((widgetType: any) => {
+                    // Filter widgets based on user role
+                    if (widgetType.adminOnly && !isAdmin) return false;
+                    if (widgetType.userOnly && isAdmin) return false;
+                    return true;
+                  }).map((widgetType) => {
+                    const Icon = widgetType.icon;
+                    const isAdded = widgets.some((w) => w.type === widgetType.type);
+                    return (
+                      <Button
+                        key={widgetType.type}
+                        variant="outline"
+                        className="justify-start h-auto p-4"
+                        onClick={() => !isAdded && addWidget(widgetType.type)}
+                        disabled={isAdded}
+                      >
+                        <Icon className="w-5 h-5 mr-3" />
+                        <div className="text-left">
+                          <p className="font-medium">{widgetType.title}</p>
+                          <p className="text-xs text-white/60">{widgetType.description}</p>
+                        </div>
+                        {isAdded && (
+                          <Badge variant="outline" className="ml-auto">
+                            Added
+                          </Badge>
+                        )}
+                      </Button>
+                    );
+                  })}
                 </div>
               </DialogContent>
             </Dialog>
@@ -1733,26 +1951,29 @@ export default function DashboardWidgets() {
             onReorder={handleReorder}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
             data-help="dashboard-widgets-edit"
-        >
-          {widgets.map(widget => (
-            <Reorder.Item
-              key={widget.id}
-              value={widget}
-              dragListener={true}
-              dragControls={undefined}
-              whileDrag={{ scale: 1.05, opacity: 0.8 }}
-              onDragStart={() => setIsDragging(widget.id)}
-              onDragEnd={() => setIsDragging(null)}
-            >
-              {renderWidget(widget)}
-            </Reorder.Item>
-          ))}
-        </Reorder.Group>
+          >
+            {widgets.map((widget) => (
+              <Reorder.Item
+                key={widget.id}
+                value={widget}
+                dragListener={true}
+                dragControls={undefined}
+                whileDrag={{ scale: 1.05, opacity: 0.8 }}
+                onDragStart={() => setIsDragging(widget.id)}
+                onDragEnd={() => setIsDragging(null)}
+              >
+                {renderWidget(widget)}
+              </Reorder.Item>
+            ))}
+          </Reorder.Group>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-help="dashboard-widgets-grid">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+          data-help="dashboard-widgets-grid"
+        >
           <AnimatePresence>
-            {widgets.map(widget => (
+            {widgets.map((widget) => (
               <motion.div
                 key={widget.id}
                 layout
@@ -1773,21 +1994,15 @@ export default function DashboardWidgets() {
           <Settings className="w-16 h-16 text-white/20 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-white mb-2">No widgets added</h3>
           <p className="text-white/60 mb-6">Add widgets to customize your dashboard</p>
-          <Button
-            className="bg-orange hover:bg-orange/90"
-            onClick={() => setShowAddWidget(true)}
-          >
+          <Button className="bg-orange hover:bg-orange/90" onClick={() => setShowAddWidget(true)}>
             <Plus className="w-4 h-4 mr-2" />
             Add Your First Widget
           </Button>
         </div>
       )}
-      
+
       {/* Project Request Dialog */}
-      <ProjectRequestDialog 
-        open={projectDialogOpen} 
-        onOpenChange={setProjectDialogOpen} 
-      />
+      <ProjectRequestDialog open={projectDialogOpen} onOpenChange={setProjectDialogOpen} />
     </div>
   );
 }

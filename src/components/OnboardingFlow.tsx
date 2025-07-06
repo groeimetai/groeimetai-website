@@ -17,7 +17,7 @@ import {
   FileText,
   Settings,
   Sparkles,
-  ArrowRight
+  ArrowRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -48,7 +48,7 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSkipping, setIsSkipping] = useState(false);
-  
+
   // Form data
   const [companyName, setCompanyName] = useState('');
   const [industry, setIndustry] = useState('');
@@ -61,22 +61,26 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
     {
       id: 0,
       title: 'Welcome to GroeimetAI!',
-      description: 'Let\'s get you set up in just a few steps',
+      description: "Let's get you set up in just a few steps",
       icon: Sparkles,
       component: (
         <div className="text-center space-y-6">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ type: "spring", duration: 0.6 }}
+            transition={{ type: 'spring', duration: 0.6 }}
           >
             <div className="w-24 h-24 bg-orange/20 rounded-full mx-auto flex items-center justify-center">
               <Rocket className="w-12 h-12 text-orange" />
             </div>
           </motion.div>
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Ready to transform your business with AI?</h2>
-            <p className="text-white/60">This quick setup will help us understand your needs better</p>
+            <h2 className="text-2xl font-bold text-white mb-2">
+              Ready to transform your business with AI?
+            </h2>
+            <p className="text-white/60">
+              This quick setup will help us understand your needs better
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
             <div className="bg-white/5 rounded-lg p-4">
@@ -93,7 +97,7 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
             </div>
           </div>
         </div>
-      )
+      ),
     },
     {
       id: 1,
@@ -103,7 +107,9 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
       component: (
         <div className="space-y-6">
           <div>
-            <Label htmlFor="company-name" className="text-white">Company Name</Label>
+            <Label htmlFor="company-name" className="text-white">
+              Company Name
+            </Label>
             <Input
               id="company-name"
               value={companyName}
@@ -112,9 +118,11 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
               className="mt-2 bg-white/5 border-white/10 text-white"
             />
           </div>
-          
+
           <div>
-            <Label htmlFor="industry" className="text-white">Industry</Label>
+            <Label htmlFor="industry" className="text-white">
+              Industry
+            </Label>
             <Select value={industry} onValueChange={setIndustry}>
               <SelectTrigger className="mt-2 bg-white/5 border-white/10 text-white">
                 <SelectValue placeholder="Select your industry" />
@@ -130,9 +138,11 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
-            <Label htmlFor="company-size" className="text-white">Company Size</Label>
+            <Label htmlFor="company-size" className="text-white">
+              Company Size
+            </Label>
             <Select value={companySize} onValueChange={setCompanySize}>
               <SelectTrigger className="mt-2 bg-white/5 border-white/10 text-white">
                 <SelectValue placeholder="Select company size" />
@@ -147,7 +157,7 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
             </Select>
           </div>
         </div>
-      )
+      ),
     },
     {
       id: 2,
@@ -166,13 +176,9 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
               'Create AI-powered products',
               'Improve decision making',
               'Reduce costs',
-              'Scale business faster'
+              'Scale business faster',
             ].map((goal) => (
-              <motion.div
-                key={goal}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
+              <motion.div key={goal} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Card
                   className={`p-4 cursor-pointer transition-all ${
                     goals.includes(goal)
@@ -180,17 +186,17 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
                       : 'bg-white/5 border-white/10 hover:bg-white/10'
                   }`}
                   onClick={() => {
-                    setGoals(prev =>
-                      prev.includes(goal)
-                        ? prev.filter(g => g !== goal)
-                        : [...prev, goal]
+                    setGoals((prev) =>
+                      prev.includes(goal) ? prev.filter((g) => g !== goal) : [...prev, goal]
                     );
                   }}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                      goals.includes(goal) ? 'border-orange bg-orange' : 'border-white/40'
-                    }`}>
+                    <div
+                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                        goals.includes(goal) ? 'border-orange bg-orange' : 'border-white/40'
+                      }`}
+                    >
                       {goals.includes(goal) && <CheckCircle className="w-3 h-3 text-white" />}
                     </div>
                     <span className="text-white text-sm">{goal}</span>
@@ -200,7 +206,7 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
             ))}
           </div>
         </div>
-      )
+      ),
     },
     {
       id: 3,
@@ -216,7 +222,7 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
               { name: 'Custom AI Development', desc: 'Tailored AI solutions for your needs' },
               { name: 'Process Automation', desc: 'Automate workflows with AI' },
               { name: 'Data Analytics', desc: 'AI-powered insights from your data' },
-              { name: 'AI Training', desc: 'Train your team on AI technologies' }
+              { name: 'AI Training', desc: 'Train your team on AI technologies' },
             ].map((service) => (
               <motion.div
                 key={service.name}
@@ -230,18 +236,24 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
                       : 'bg-white/5 border-white/10 hover:bg-white/10'
                   }`}
                   onClick={() => {
-                    setInterests(prev =>
+                    setInterests((prev) =>
                       prev.includes(service.name)
-                        ? prev.filter(i => i !== service.name)
+                        ? prev.filter((i) => i !== service.name)
                         : [...prev, service.name]
                     );
                   }}
                 >
                   <div className="flex items-start gap-3">
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${
-                      interests.includes(service.name) ? 'border-orange bg-orange' : 'border-white/40'
-                    }`}>
-                      {interests.includes(service.name) && <CheckCircle className="w-3 h-3 text-white" />}
+                    <div
+                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${
+                        interests.includes(service.name)
+                          ? 'border-orange bg-orange'
+                          : 'border-white/40'
+                      }`}
+                    >
+                      {interests.includes(service.name) && (
+                        <CheckCircle className="w-3 h-3 text-white" />
+                      )}
                     </div>
                     <div className="flex-1">
                       <h4 className="text-white font-medium">{service.name}</h4>
@@ -253,7 +265,7 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
             ))}
           </div>
         </div>
-      )
+      ),
     },
     {
       id: 4,
@@ -268,7 +280,7 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
               {[
                 { value: 'email', label: 'Email', icon: FileText },
                 { value: 'phone', label: 'Phone', icon: MessageSquare },
-                { value: 'both', label: 'Both', icon: Settings }
+                { value: 'both', label: 'Both', icon: Settings },
               ].map((method) => (
                 <Card
                   key={method.value}
@@ -280,16 +292,18 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
                   onClick={() => setPreferredContact(method.value)}
                 >
                   <div className="text-center">
-                    <method.icon className={`w-8 h-8 mx-auto mb-2 ${
-                      preferredContact === method.value ? 'text-orange' : 'text-white/60'
-                    }`} />
+                    <method.icon
+                      className={`w-8 h-8 mx-auto mb-2 ${
+                        preferredContact === method.value ? 'text-orange' : 'text-white/60'
+                      }`}
+                    />
                     <p className="text-white font-medium">{method.label}</p>
                   </div>
                 </Card>
               ))}
             </div>
           </div>
-          
+
           <div className="bg-white/5 rounded-lg p-4">
             <h4 className="text-white font-medium mb-2">What happens next?</h4>
             <ul className="space-y-2 text-white/80 text-sm">
@@ -308,8 +322,8 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
             </ul>
           </div>
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   const handleNext = () => {
@@ -339,18 +353,18 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
             goals,
             interests,
             preferredContact,
-            completedAt: new Date()
+            completedAt: new Date(),
           },
-          updatedAt: new Date()
+          updatedAt: new Date(),
         });
-        
+
         // Fire confetti
         confetti({
           particleCount: 100,
           spread: 70,
-          origin: { y: 0.6 }
+          origin: { y: 0.6 },
         });
-        
+
         // Complete onboarding
         setTimeout(() => {
           onComplete();
@@ -368,7 +382,7 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
         await updateDoc(doc(db, 'users', user.uid), {
           onboardingCompleted: true,
           onboardingSkipped: true,
-          updatedAt: new Date()
+          updatedAt: new Date(),
         });
         onComplete();
       } catch (error) {
@@ -391,7 +405,7 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-orange/20 rounded-full flex items-center justify-center">
-                {React.createElement(steps[currentStep].icon, { className: "w-5 h-5 text-orange" })}
+                {React.createElement(steps[currentStep].icon, { className: 'w-5 h-5 text-orange' })}
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-white">{steps[currentStep].title}</h3>
@@ -408,7 +422,7 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
               <X className="w-5 h-5" />
             </Button>
           </div>
-          
+
           {/* Progress Bar */}
           <Progress value={progress} className="h-1" />
         </div>
@@ -436,11 +450,7 @@ export default function OnboardingFlow({ onComplete }: { onComplete: () => void 
             </div>
             <div className="flex gap-3">
               {currentStep > 0 && (
-                <Button
-                  variant="outline"
-                  onClick={handlePrevious}
-                  className="bg-white/5"
-                >
+                <Button variant="outline" onClick={handlePrevious} className="bg-white/5">
                   <ChevronLeft className="w-4 h-4 mr-1" />
                   Previous
                 </Button>

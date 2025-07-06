@@ -7,14 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import {
-  CheckSquare,
-  Square,
-  X,
-  Loader2,
-  Undo2,
-  CheckCircle,
-} from 'lucide-react';
+import { CheckSquare, Square, X, Loader2, Undo2, CheckCircle } from 'lucide-react';
 import { useToast } from '@/components/ui/toaster';
 import {
   Dialog,
@@ -79,37 +72,38 @@ export default function UserBulkActions({
   // Clean up expired undo items
   useEffect(() => {
     const interval = setInterval(() => {
-      setUndoStack(prev => 
-        prev.filter(item => Date.now() - item.timestamp < undoDuration)
-      );
+      setUndoStack((prev) => prev.filter((item) => Date.now() - item.timestamp < undoDuration));
     }, 1000);
     return () => clearInterval(interval);
   }, [undoDuration]);
 
-  const toggleSelection = useCallback((itemId: string) => {
-    setSelectedIds(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(itemId)) {
-        newSet.delete(itemId);
-      } else {
-        if (maxSelectable && newSet.size >= maxSelectable) {
-          toast({
-            title: 'Selection limit reached',
-            description: `You can only select up to ${maxSelectable} items at once.`,
-          });
-          return prev;
+  const toggleSelection = useCallback(
+    (itemId: string) => {
+      setSelectedIds((prev) => {
+        const newSet = new Set(prev);
+        if (newSet.has(itemId)) {
+          newSet.delete(itemId);
+        } else {
+          if (maxSelectable && newSet.size >= maxSelectable) {
+            toast({
+              title: 'Selection limit reached',
+              description: `You can only select up to ${maxSelectable} items at once.`,
+            });
+            return prev;
+          }
+          newSet.add(itemId);
         }
-        newSet.add(itemId);
-      }
-      return newSet;
-    });
-  }, [maxSelectable, toast]);
+        return newSet;
+      });
+    },
+    [maxSelectable, toast]
+  );
 
   const selectAll = useCallback(() => {
-    const allIds = items.map(item => item[idField]);
+    const allIds = items.map((item) => item[idField]);
     const limitedIds = maxSelectable ? allIds.slice(0, maxSelectable) : allIds;
     setSelectedIds(new Set(limitedIds));
-    
+
     if (maxSelectable && allIds.length > maxSelectable) {
       toast({
         title: 'Selection limited',
@@ -122,87 +116,99 @@ export default function UserBulkActions({
     setSelectedIds(new Set());
   }, []);
 
-  const executeAction = useCallback(async (action: BulkAction) => {
-    const selectedArray = Array.from(selectedIds);
-    if (selectedArray.length === 0) return;
+  const executeAction = useCallback(
+    async (action: BulkAction) => {
+      const selectedArray = Array.from(selectedIds);
+      if (selectedArray.length === 0) return;
 
-    setIsProcessing(true);
-    setProcessingProgress(0);
-    setProcessingMessage(`Processing ${selectedArray.length} items...`);
-
-    try {
-      // Simulate progress for better UX
-      const progressInterval = setInterval(() => {
-        setProcessingProgress(prev => Math.min(prev + 10, 90));
-      }, 200);
-
-      await action.handler(selectedArray);
-
-      clearInterval(progressInterval);
-      setProcessingProgress(100);
-      
-      // Add to undo stack if enabled
-      if (enableUndo) {
-        setUndoStack(prev => [...prev, {
-          action: action.label,
-          items: selectedArray,
-          timestamp: Date.now(),
-          handler: async () => {
-            // This should be implemented by the parent component
-            toast({
-              title: 'Undo functionality',
-              description: 'Implement undo handler in parent component',
-            });
-          },
-        }]);
-      }
-
-      toast({
-        title: 'Bulk action completed',
-        description: `Successfully processed ${selectedArray.length} items.`,
-      });
-
-      // Clear selection after successful action
-      deselectAll();
-    } catch (error) {
-      console.error('Bulk action error:', error);
-      toast({
-        title: 'Action failed',
-        description: 'Failed to complete bulk action. Please try again.',
-      });
-    } finally {
-      setIsProcessing(false);
+      setIsProcessing(true);
       setProcessingProgress(0);
-      setProcessingMessage('');
-      setShowConfirmDialog(false);
-      setPendingAction(null);
-    }
-  }, [selectedIds, enableUndo, deselectAll, toast]);
+      setProcessingMessage(`Processing ${selectedArray.length} items...`);
 
-  const handleActionClick = useCallback((action: BulkAction) => {
-    if (action.requiresConfirmation) {
-      setPendingAction(action);
-      setShowConfirmDialog(true);
-    } else {
-      executeAction(action);
-    }
-  }, [executeAction]);
+      try {
+        // Simulate progress for better UX
+        const progressInterval = setInterval(() => {
+          setProcessingProgress((prev) => Math.min(prev + 10, 90));
+        }, 200);
 
-  const handleUndo = useCallback(async (undoItem: UndoState) => {
-    try {
-      await undoItem.handler();
-      setUndoStack(prev => prev.filter(item => item !== undoItem));
-      toast({
-        title: 'Action undone',
-        description: `Reverted "${undoItem.action}" for ${undoItem.items.length} items.`,
-      });
-    } catch (error) {
-      toast({
-        title: 'Undo failed',
-        description: 'Failed to undo action. Please try again.',
-      });
-    }
-  }, [toast]);
+        await action.handler(selectedArray);
+
+        clearInterval(progressInterval);
+        setProcessingProgress(100);
+
+        // Add to undo stack if enabled
+        if (enableUndo) {
+          setUndoStack((prev) => [
+            ...prev,
+            {
+              action: action.label,
+              items: selectedArray,
+              timestamp: Date.now(),
+              handler: async () => {
+                // This should be implemented by the parent component
+                toast({
+                  title: 'Undo functionality',
+                  description: 'Implement undo handler in parent component',
+                });
+              },
+            },
+          ]);
+        }
+
+        toast({
+          title: 'Bulk action completed',
+          description: `Successfully processed ${selectedArray.length} items.`,
+        });
+
+        // Clear selection after successful action
+        deselectAll();
+      } catch (error) {
+        console.error('Bulk action error:', error);
+        toast({
+          title: 'Action failed',
+          description: 'Failed to complete bulk action. Please try again.',
+        });
+      } finally {
+        setIsProcessing(false);
+        setProcessingProgress(0);
+        setProcessingMessage('');
+        setShowConfirmDialog(false);
+        setPendingAction(null);
+      }
+    },
+    [selectedIds, enableUndo, deselectAll, toast]
+  );
+
+  const handleActionClick = useCallback(
+    (action: BulkAction) => {
+      if (action.requiresConfirmation) {
+        setPendingAction(action);
+        setShowConfirmDialog(true);
+      } else {
+        executeAction(action);
+      }
+    },
+    [executeAction]
+  );
+
+  const handleUndo = useCallback(
+    async (undoItem: UndoState) => {
+      try {
+        await undoItem.handler();
+        setUndoStack((prev) => prev.filter((item) => item !== undoItem));
+        toast({
+          title: 'Action undone',
+          description: `Reverted "${undoItem.action}" for ${undoItem.items.length} items.`,
+        });
+      } catch (error) {
+        toast({
+          title: 'Undo failed',
+          description: 'Failed to undo action. Please try again.',
+        });
+      }
+    },
+    [toast]
+  );
 
   const selectedCount = selectedIds.size;
   const isAllSelected = selectedCount === items.length && items.length > 0;
@@ -226,7 +232,7 @@ export default function UserBulkActions({
                     {selectedCount} selected
                   </Badge>
                   <div className="flex gap-2">
-                    {actions.map(action => (
+                    {actions.map((action) => (
                       <Button
                         key={action.id}
                         variant={action.variant || 'outline'}
@@ -240,12 +246,7 @@ export default function UserBulkActions({
                     ))}
                   </div>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={deselectAll}
-                  disabled={isProcessing}
-                >
+                <Button variant="ghost" size="sm" onClick={deselectAll} disabled={isProcessing}>
                   <X className="w-4 h-4" />
                 </Button>
               </div>
@@ -287,13 +288,11 @@ export default function UserBulkActions({
 
       {/* Items List */}
       <div className="space-y-2">
-        {items.map(item => {
+        {items.map((item) => {
           const itemId = item[idField];
           const isSelected = selectedIds.has(itemId);
           return (
-            <div key={itemId}>
-              {renderItem(item, isSelected, () => toggleSelection(itemId))}
-            </div>
+            <div key={itemId}>{renderItem(item, isSelected, () => toggleSelection(itemId))}</div>
           );
         })}
       </div>
@@ -342,7 +341,7 @@ export default function UserBulkActions({
           <DialogHeader>
             <DialogTitle className="text-white">Confirm Bulk Action</DialogTitle>
             <DialogDescription className="text-white/60">
-              {pendingAction?.confirmationMessage || 
+              {pendingAction?.confirmationMessage ||
                 `Are you sure you want to ${pendingAction?.label.toLowerCase()} ${selectedCount} items?`}
             </DialogDescription>
           </DialogHeader>
@@ -358,7 +357,9 @@ export default function UserBulkActions({
               variant={pendingAction?.variant === 'destructive' ? 'destructive' : 'default'}
               onClick={() => pendingAction && executeAction(pendingAction)}
               disabled={isProcessing}
-              className={pendingAction?.variant !== 'destructive' ? 'bg-orange hover:bg-orange/90' : ''}
+              className={
+                pendingAction?.variant !== 'destructive' ? 'bg-orange hover:bg-orange/90' : ''
+              }
             >
               {isProcessing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               Confirm

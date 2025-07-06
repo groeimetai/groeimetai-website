@@ -15,44 +15,35 @@ export async function POST(request: NextRequest) {
 
     const token = authHeader.split('Bearer ')[1];
     const { valid, decodedToken } = await verifyIdToken(token);
-    
+
     if (!valid || !decodedToken) {
-      return NextResponse.json(
-        { error: 'Invalid authentication token' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 });
     }
 
     // Parse request body
     const body = await request.json();
-    
+
     // Validate required fields
     if (!body.invoiceId) {
-      return NextResponse.json(
-        { error: 'Missing required field: invoiceId' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing required field: invoiceId' }, { status: 400 });
     }
 
     // Get invoice to check permissions using dynamic imports
     const { getDoc, doc } = await import('firebase/firestore');
     const { db, collections } = await import('@/lib/firebase');
-    
+
     const invoiceDoc = await getDoc(doc(db, collections.invoices, body.invoiceId));
-    
+
     if (!invoiceDoc.exists()) {
-      return NextResponse.json(
-        { error: 'Invoice not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
-    
+
     const invoice = { id: invoiceDoc.id, ...invoiceDoc.data() } as any;
 
     // Check permissions: anyone can pay their own invoice, admin/consultant can create payment links for any invoice
-    const hasPermission = 
+    const hasPermission =
       invoice.clientId === decodedToken.uid ||
-      decodedToken.role === 'admin' || 
+      decodedToken.role === 'admin' ||
       decodedToken.role === 'consultant';
 
     if (!hasPermission) {
@@ -64,15 +55,13 @@ export async function POST(request: NextRequest) {
 
     // Check if invoice is already paid
     if (invoice.status === 'paid') {
-      return NextResponse.json(
-        { error: 'Invoice is already paid' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invoice is already paid' }, { status: 400 });
     }
 
     // Generate URLs
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `https://${request.headers.get('host')}`;
-    const redirectUrl = body.redirectUrl || `${baseUrl}/dashboard/invoices/${body.invoiceId}/payment-success`;
+    const redirectUrl =
+      body.redirectUrl || `${baseUrl}/dashboard/invoices/${body.invoiceId}/payment-success`;
     const cancelUrl = body.cancelUrl || `${baseUrl}/dashboard/invoices/${body.invoiceId}`;
     const webhookUrl = `${baseUrl}/api/webhooks/mollie`;
 
@@ -82,7 +71,7 @@ export async function POST(request: NextRequest) {
       invoiceId: body.invoiceId,
       redirectUrl,
       webhookUrl,
-      cancelUrl
+      cancelUrl,
     });
 
     return NextResponse.json(
@@ -91,15 +80,15 @@ export async function POST(request: NextRequest) {
         data: {
           paymentId: payment.id,
           checkoutUrl: payment.checkoutUrl,
-          expiresAt: payment.expiresAt
+          expiresAt: payment.expiresAt,
         },
-        message: 'Payment created successfully'
+        message: 'Payment created successfully',
       },
       { status: 201 }
     );
   } catch (error) {
     console.error('Error creating payment:', error);
-    
+
     // Check for specific error types
     if (error instanceof Error) {
       if (error.message === 'Payment service not configured') {
@@ -109,11 +98,11 @@ export async function POST(request: NextRequest) {
         );
       }
     }
-    
+
     return NextResponse.json(
       {
         error: 'Failed to create payment',
-        details: process.env.NODE_ENV === 'development' ? error : undefined
+        details: process.env.NODE_ENV === 'development' ? error : undefined,
       },
       { status: 500 }
     );

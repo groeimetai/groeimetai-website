@@ -27,22 +27,25 @@ export interface IndexableContent {
 }
 
 // Extract content from different page types
-export async function extractPageContent(pagePath: string, locale: 'en' | 'nl'): Promise<IndexableContent[]> {
+export async function extractPageContent(
+  pagePath: string,
+  locale: 'en' | 'nl'
+): Promise<IndexableContent[]> {
   const content: IndexableContent[] = [];
-  
+
   try {
     // Read page file
     const filePath = join(process.cwd(), 'src/app', `[locale]`, pagePath);
     const fileContent = readFileSync(filePath, 'utf-8');
-    
+
     // Extract metadata and content (simplified - would need proper parsing)
     const title = extractTitle(fileContent);
     const description = extractDescription(fileContent);
     const pageContent = extractTextContent(fileContent);
-    
+
     // Chunk the content
     const chunks = chunkText(pageContent);
-    
+
     // Create indexable items for each chunk
     chunks.forEach((chunk, index) => {
       content.push({
@@ -66,26 +69,23 @@ export async function extractPageContent(pagePath: string, locale: 'en' | 'nl'):
   } catch (error) {
     console.error(`Error extracting content from ${pagePath}:`, error);
   }
-  
+
   return content;
 }
 
 // Extract blog posts
 export async function extractBlogPosts(locale: 'en' | 'nl'): Promise<IndexableContent[]> {
   const content: IndexableContent[] = [];
-  const blogPosts = [
-    'multi-agent-systems-future-automation',
-    'rag-architectuur-best-practices',
-  ];
-  
+  const blogPosts = ['multi-agent-systems-future-automation', 'rag-architectuur-best-practices'];
+
   for (const slug of blogPosts) {
     try {
       const filePath = join(process.cwd(), 'src/content/blog', `${slug}-${locale}.mdx`);
       const fileContent = readFileSync(filePath, 'utf-8');
       const { data, content: mdxContent } = matter(fileContent);
-      
+
       const chunks = chunkText(mdxContent);
-      
+
       chunks.forEach((chunk, index) => {
         content.push({
           id: `blog-${locale}-${slug}-chunk-${index}`,
@@ -110,7 +110,7 @@ export async function extractBlogPosts(locale: 'en' | 'nl'): Promise<IndexableCo
       console.error(`Error extracting blog post ${slug}:`, error);
     }
   }
-  
+
   return content;
 }
 
@@ -118,15 +118,15 @@ export async function extractBlogPosts(locale: 'en' | 'nl'): Promise<IndexableCo
 export async function indexContent(items: IndexableContent[]) {
   const index = getIndex();
   const batchSize = 100;
-  
+
   for (let i = 0; i < items.length; i += batchSize) {
     const batch = items.slice(i, i + batchSize);
-    
+
     try {
       // Generate embeddings for the batch
-      const texts = batch.map(item => `${item.metadata.title}\n\n${item.content}`);
+      const texts = batch.map((item) => `${item.metadata.title}\n\n${item.content}`);
       const embeddings = await generateEmbeddings(texts);
-      
+
       // Prepare vectors for Pinecone
       const vectors = batch.map((item, idx) => ({
         id: item.id,
@@ -136,12 +136,12 @@ export async function indexContent(items: IndexableContent[]) {
           contentPreview: item.content.substring(0, 200) + '...',
         },
       }));
-      
+
       // Upsert to Pinecone with environment-specific namespace
       const environment = batch[0].metadata.environment || 'development';
       const namespace = `${environment}-${batch[0].metadata.locale}`;
       await index.namespace(namespace).upsert(vectors);
-      
+
       console.log(`Indexed batch ${i / batchSize + 1} (${vectors.length} items)`);
     } catch (error) {
       console.error(`Error indexing batch ${i / batchSize + 1}:`, error);

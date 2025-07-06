@@ -7,11 +7,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
 
 // Define admin emails directly here to avoid module issues
-const ADMIN_EMAILS = [
-  'info@groeimetai.io',
-  'niels@groeimetai.io',
-  'admin@groeimetai.io',
-];
+const ADMIN_EMAILS = ['info@groeimetai.io', 'niels@groeimetai.io', 'admin@groeimetai.io'];
 
 // Initialize Firebase Admin SDK
 const app = initializeApp({
@@ -27,7 +23,7 @@ const auth = getAuth(app);
 
 async function setupAdminAccounts() {
   console.log('Setting up admin accounts...');
-  
+
   for (const email of ADMIN_EMAILS) {
     try {
       // Try to get user by email

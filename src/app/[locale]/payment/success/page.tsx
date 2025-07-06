@@ -38,7 +38,7 @@ function PaymentSuccessContent() {
         // In a real implementation, you would call an API to check the payment status
         // For now, we'll simulate checking the invoice status
         const response = await fetch(`/api/invoices/${invoiceId}`);
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch invoice');
         }
@@ -108,13 +108,9 @@ function PaymentSuccessContent() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <Card className="max-w-md w-full">
         <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            {getStatusIcon()}
-          </div>
+          <div className="flex justify-center mb-4">{getStatusIcon()}</div>
           <CardTitle className="text-2xl">{getStatusTitle()}</CardTitle>
-          <CardDescription className="text-base mt-2">
-            {paymentStatus.message}
-          </CardDescription>
+          <CardDescription className="text-base mt-2">{paymentStatus.message}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {paymentStatus.status === 'success' && (
@@ -128,10 +124,7 @@ function PaymentSuccessContent() {
                 </p>
               </div>
               <div className="flex flex-col gap-2">
-                <Button
-                  onClick={() => router.push('/dashboard')}
-                  className="w-full"
-                >
+                <Button onClick={() => router.push('/dashboard')} className="w-full">
                   Go to Dashboard
                 </Button>
                 <Button
@@ -158,10 +151,7 @@ function PaymentSuccessContent() {
                 </ul>
               </div>
               <div className="flex flex-col gap-2">
-                <Button
-                  onClick={() => router.push(`/invoices/${invoiceId}`)}
-                  className="w-full"
-                >
+                <Button onClick={() => router.push(`/invoices/${invoiceId}`)} className="w-full">
                   Try Again
                 </Button>
                 <Button
@@ -186,10 +176,7 @@ function PaymentSuccessContent() {
                 </p>
               </div>
               <div className="flex flex-col gap-2">
-                <Button
-                  onClick={() => router.push('/dashboard')}
-                  className="w-full"
-                >
+                <Button onClick={() => router.push('/dashboard')} className="w-full">
                   Go to Dashboard
                 </Button>
                 <Button
@@ -205,19 +192,14 @@ function PaymentSuccessContent() {
 
           {paymentStatus.status === 'checking' && (
             <div className="text-center py-8">
-              <p className="text-sm text-gray-500">
-                Please wait while we verify your payment...
-              </p>
+              <p className="text-sm text-gray-500">Please wait while we verify your payment...</p>
             </div>
           )}
 
           <div className="pt-4 border-t text-center">
             <p className="text-sm text-gray-500">
               Need help?{' '}
-              <Link
-                href="/contact"
-                className="text-blue-600 hover:text-blue-700 font-medium"
-              >
+              <Link href="/contact" className="text-blue-600 hover:text-blue-700 font-medium">
                 Contact Support
               </Link>
             </p>
@@ -230,11 +212,13 @@ function PaymentSuccessContent() {
 
 export default function PaymentSuccessPage() {
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-orange" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="h-8 w-8 animate-spin text-orange" />
+        </div>
+      }
+    >
       <PaymentSuccessContent />
     </Suspense>
   );

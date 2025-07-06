@@ -18,17 +18,13 @@ import {
   ExternalLink,
   Search,
   Sparkles,
-  MessageSquare
+  MessageSquare,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Dialog,
   DialogContent,
@@ -95,17 +91,19 @@ const HELP_TOOLTIPS: HelpTooltip[] = [
     id: 'dashboard-widgets',
     targetElement: '[data-help="dashboard-main-widgets"]',
     title: 'Customize Your Dashboard',
-    content: 'Click the customize button to add, remove, or rearrange widgets to suit your workflow.',
+    content:
+      'Click the customize button to add, remove, or rearrange widgets to suit your workflow.',
     position: 'bottom',
     showOnFirstVisit: true,
-    pagePattern: '^/(nl|en)?/?dashboard$' // Only show on main dashboard
+    pagePattern: '^/(nl|en)?/?dashboard$', // Only show on main dashboard
   },
   {
     id: 'notification-center',
     targetElement: '[data-help="notification-center"]',
     title: 'Stay Updated',
-    content: 'All your notifications in one place. Click the bell icon to view and manage your notifications.',
-    position: 'bottom'
+    content:
+      'All your notifications in one place. Click the bell icon to view and manage your notifications.',
+    position: 'bottom',
   },
   {
     id: 'project-timeline',
@@ -113,15 +111,16 @@ const HELP_TOOLTIPS: HelpTooltip[] = [
     title: 'Track Your Progress',
     content: 'See where your project stands and what comes next in your journey with us.',
     position: 'right',
-    pagePattern: '^/(nl|en)?/?dashboard$' // Only show on main dashboard
+    pagePattern: '^/(nl|en)?/?dashboard$', // Only show on main dashboard
   },
   {
     id: 'chat-widget',
     targetElement: '[data-help="chat-widget"]',
     title: 'Direct Communication',
-    content: 'Chat directly with our team. Get instant support, ask questions, and receive updates.',
+    content:
+      'Chat directly with our team. Get instant support, ask questions, and receive updates.',
     position: 'left',
-    pagePattern: '^/(nl|en)?/?dashboard$' // Only show on main dashboard
+    pagePattern: '^/(nl|en)?/?dashboard$', // Only show on main dashboard
   },
   {
     id: 'quick-actions',
@@ -129,7 +128,7 @@ const HELP_TOOLTIPS: HelpTooltip[] = [
     title: 'Quick Access',
     content: 'Jump to frequently used features with these quick action buttons.',
     position: 'top',
-    pagePattern: '^/(nl|en)?/?dashboard$' // Only show on main dashboard
+    pagePattern: '^/(nl|en)?/?dashboard$', // Only show on main dashboard
   },
   {
     id: 'welcome-header',
@@ -138,8 +137,8 @@ const HELP_TOOLTIPS: HelpTooltip[] = [
     content: 'This is your central hub for managing AI projects and tracking progress.',
     position: 'bottom',
     showOnFirstVisit: true,
-    pagePattern: '^/(nl|en)?/?dashboard$' // Only show on main dashboard
-  }
+    pagePattern: '^/(nl|en)?/?dashboard$', // Only show on main dashboard
+  },
 ];
 
 const TUTORIALS: Tutorial[] = [
@@ -151,25 +150,26 @@ const TUTORIALS: Tutorial[] = [
     steps: [
       {
         title: 'Welcome to Your Dashboard',
-        content: 'This is your central hub for managing all your AI projects and communications with our team.',
-        targetElement: '[data-help="dashboard-main"]'
+        content:
+          'This is your central hub for managing all your AI projects and communications with our team.',
+        targetElement: '[data-help="dashboard-main"]',
       },
       {
         title: 'Customize Your Experience',
         content: 'You can customize your dashboard by adding widgets that matter most to you.',
-        targetElement: '[data-help="dashboard-main-widgets"]'
+        targetElement: '[data-help="dashboard-main-widgets"]',
       },
       {
         title: 'Stay Connected',
         content: 'Use the chat widget to communicate directly with our team anytime.',
-        targetElement: '[data-help="chat-widget"]'
+        targetElement: '[data-help="chat-widget"]',
       },
       {
         title: 'Track Your Projects',
         content: 'Monitor your project progress and milestones in real-time.',
-        targetElement: '[data-help="project-timeline"]'
-      }
-    ]
+        targetElement: '[data-help="project-timeline"]',
+      },
+    ],
   },
   {
     id: 'managing-projects',
@@ -180,7 +180,7 @@ const TUTORIALS: Tutorial[] = [
       {
         title: 'View All Projects',
         content: 'Navigate to the Projects page to see all your active and completed projects.',
-        targetElement: '[data-help="projects-link"]'
+        targetElement: '[data-help="projects-link"]',
       },
       {
         title: 'Project Details',
@@ -188,10 +188,11 @@ const TUTORIALS: Tutorial[] = [
       },
       {
         title: 'Communication',
-        content: 'Each project has a dedicated chat for seamless communication with your project team.',
-      }
-    ]
-  }
+        content:
+          'Each project has a dedicated chat for seamless communication with your project team.',
+      },
+    ],
+  },
 ];
 
 const HELP_ARTICLES: HelpArticle[] = [
@@ -217,7 +218,7 @@ Requesting a new AI project with GroeimetAI is simple:
 - Any specific requirements
 
 Our team is here to help transform your ideas into reality!
-    `
+    `,
   },
   {
     id: '2',
@@ -241,8 +242,8 @@ Your project timeline shows the journey from concept to completion:
 - Gray circles are upcoming stages
 
 You'll receive notifications at each milestone completion.
-    `
-  }
+    `,
+  },
 ];
 
 export function HelpProvider({ children }: { children: React.ReactNode }) {
@@ -255,40 +256,43 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
   const [hasSeenTooltips, setHasSeenTooltips] = useState<string[]>([]);
 
   const hideTooltip = useCallback((tooltipId: string) => {
-    setActiveTooltips(prev => prev.filter(id => id !== tooltipId));
+    setActiveTooltips((prev) => prev.filter((id) => id !== tooltipId));
   }, []);
 
-  const showTooltip = useCallback((tooltipId: string) => {
-    // Find the tooltip configuration
-    const tooltip = HELP_TOOLTIPS.find(t => t.id === tooltipId);
-    if (!tooltip) return;
-    
-    // Check if tooltip should be shown on current page
-    if (tooltip.pagePattern) {
-      const regex = new RegExp(tooltip.pagePattern);
-      if (!regex.test(pathname)) {
-        return; // Don't show tooltip if page doesn't match pattern
-      }
-    }
-    
-    // Prevent duplicate tooltips
-    setActiveTooltips(prev => {
-      if (prev.includes(tooltipId)) return prev;
-      return [...prev, tooltipId];
-    });
-    
-    // Mark as seen
-    if (!hasSeenTooltips.includes(tooltipId)) {
-      const newSeen = [...hasSeenTooltips, tooltipId];
-      setHasSeenTooltips(newSeen);
-      localStorage.setItem('seenHelpTooltips', JSON.stringify(newSeen));
-    }
+  const showTooltip = useCallback(
+    (tooltipId: string) => {
+      // Find the tooltip configuration
+      const tooltip = HELP_TOOLTIPS.find((t) => t.id === tooltipId);
+      if (!tooltip) return;
 
-    // Auto-hide after 10 seconds
-    setTimeout(() => {
-      hideTooltip(tooltipId);
-    }, 10000);
-  }, [hasSeenTooltips, hideTooltip, pathname]);
+      // Check if tooltip should be shown on current page
+      if (tooltip.pagePattern) {
+        const regex = new RegExp(tooltip.pagePattern);
+        if (!regex.test(pathname)) {
+          return; // Don't show tooltip if page doesn't match pattern
+        }
+      }
+
+      // Prevent duplicate tooltips
+      setActiveTooltips((prev) => {
+        if (prev.includes(tooltipId)) return prev;
+        return [...prev, tooltipId];
+      });
+
+      // Mark as seen
+      if (!hasSeenTooltips.includes(tooltipId)) {
+        const newSeen = [...hasSeenTooltips, tooltipId];
+        setHasSeenTooltips(newSeen);
+        localStorage.setItem('seenHelpTooltips', JSON.stringify(newSeen));
+      }
+
+      // Auto-hide after 10 seconds
+      setTimeout(() => {
+        hideTooltip(tooltipId);
+      }, 10000);
+    },
+    [hasSeenTooltips, hideTooltip, pathname]
+  );
 
   // Load seen tooltips from localStorage
   useEffect(() => {
@@ -301,14 +305,15 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
   // Show first-visit tooltips only on dashboard
   useEffect(() => {
     // Only show tooltips on the main dashboard page
-    const isDashboardPage = pathname === '/dashboard' || pathname === '/nl/dashboard' || pathname === '/en/dashboard';
-    
+    const isDashboardPage =
+      pathname === '/dashboard' || pathname === '/nl/dashboard' || pathname === '/en/dashboard';
+
     if (!isDashboardPage) {
       // Clear any active tooltips when navigating away from dashboard
       setActiveTooltips([]);
       return;
     }
-    
+
     // Temporarily disable auto-showing tooltips to prevent duplicates
     /*
     const firstVisitTooltips = HELP_TOOLTIPS.filter(
@@ -330,7 +335,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
   }, [hasSeenTooltips, showTooltip, pathname]);
 
   const startTutorial = (tutorialId: string) => {
-    const tutorial = TUTORIALS.find(t => t.id === tutorialId);
+    const tutorial = TUTORIALS.find((t) => t.id === tutorialId);
     if (tutorial) {
       setActiveTutorial(tutorial);
       setTutorialStep(0);
@@ -357,10 +362,11 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
     setIsHelpCenterOpen(true);
   };
 
-  const filteredArticles = HELP_ARTICLES.filter(article =>
-    article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    article.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    article.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredArticles = HELP_ARTICLES.filter(
+    (article) =>
+      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
@@ -383,50 +389,56 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
 
       {/* Contextual Tooltips */}
       <AnimatePresence>
-        {activeTooltips.map(tooltipId => {
-          const tooltip = HELP_TOOLTIPS.find(t => t.id === tooltipId);
+        {activeTooltips.map((tooltipId) => {
+          const tooltip = HELP_TOOLTIPS.find((t) => t.id === tooltipId);
           if (!tooltip) return null;
 
           // Calculate position based on target element
           const targetEl = document.querySelector(tooltip.targetElement);
           let position = { top: 0, left: 0 };
-          
+
           if (targetEl) {
             const rect = targetEl.getBoundingClientRect();
             const tooltipWidth = 350; // Approximate width
             const tooltipHeight = 120; // Approximate height
             const padding = 10;
-            
+
             switch (tooltip.position) {
               case 'top':
                 position = {
                   top: rect.top - tooltipHeight - padding,
-                  left: rect.left + (rect.width / 2) - (tooltipWidth / 2)
+                  left: rect.left + rect.width / 2 - tooltipWidth / 2,
                 };
                 break;
               case 'bottom':
                 position = {
                   top: rect.bottom + padding,
-                  left: rect.left + (rect.width / 2) - (tooltipWidth / 2)
+                  left: rect.left + rect.width / 2 - tooltipWidth / 2,
                 };
                 break;
               case 'left':
                 position = {
-                  top: rect.top + (rect.height / 2) - (tooltipHeight / 2),
-                  left: rect.left - tooltipWidth - padding
+                  top: rect.top + rect.height / 2 - tooltipHeight / 2,
+                  left: rect.left - tooltipWidth - padding,
                 };
                 break;
               case 'right':
                 position = {
-                  top: rect.top + (rect.height / 2) - (tooltipHeight / 2),
-                  left: rect.right + padding
+                  top: rect.top + rect.height / 2 - tooltipHeight / 2,
+                  left: rect.right + padding,
                 };
                 break;
             }
-            
+
             // Ensure tooltip stays within viewport
-            position.top = Math.max(10, Math.min(position.top, window.innerHeight - tooltipHeight - 10));
-            position.left = Math.max(10, Math.min(position.left, window.innerWidth - tooltipWidth - 10));
+            position.top = Math.max(
+              10,
+              Math.min(position.top, window.innerHeight - tooltipHeight - 10)
+            );
+            position.left = Math.max(
+              10,
+              Math.min(position.left, window.innerWidth - tooltipWidth - 10)
+            );
           }
 
           return (
@@ -438,7 +450,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
               className="fixed z-50"
               style={{
                 top: `${position.top}px`,
-                left: `${position.left}px`
+                left: `${position.left}px`,
               }}
             >
               <Card className="bg-black/95 border-orange/50 shadow-xl max-w-sm">
@@ -485,16 +497,12 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-2">
                   <h2 className="text-2xl font-bold text-white">{activeTutorial.title}</h2>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setActiveTutorial(null)}
-                  >
+                  <Button variant="ghost" size="icon" onClick={() => setActiveTutorial(null)}>
                     <X className="w-5 h-5" />
                   </Button>
                 </div>
-                <Progress 
-                  value={((tutorialStep + 1) / activeTutorial.steps.length) * 100} 
+                <Progress
+                  value={((tutorialStep + 1) / activeTutorial.steps.length) * 100}
                   className="h-2"
                 />
               </div>
@@ -503,27 +511,18 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                 <h3 className="text-xl font-semibold text-white mb-3">
                   {activeTutorial.steps[tutorialStep].title}
                 </h3>
-                <p className="text-white/80">
-                  {activeTutorial.steps[tutorialStep].content}
-                </p>
+                <p className="text-white/80">{activeTutorial.steps[tutorialStep].content}</p>
               </div>
 
               <div className="flex items-center justify-between">
-                <Button
-                  variant="outline"
-                  onClick={prevTutorialStep}
-                  disabled={tutorialStep === 0}
-                >
+                <Button variant="outline" onClick={prevTutorialStep} disabled={tutorialStep === 0}>
                   <ChevronLeft className="w-4 h-4 mr-1" />
                   Previous
                 </Button>
                 <span className="text-white/60 text-sm">
                   Step {tutorialStep + 1} of {activeTutorial.steps.length}
                 </span>
-                <Button
-                  className="bg-orange hover:bg-orange/90"
-                  onClick={nextTutorialStep}
-                >
+                <Button className="bg-orange hover:bg-orange/90" onClick={nextTutorialStep}>
                   {tutorialStep === activeTutorial.steps.length - 1 ? 'Finish' : 'Next'}
                   <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
@@ -565,15 +564,20 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
 
                 <ScrollArea className="h-[400px]">
                   <div className="space-y-3">
-                    {filteredArticles.map(article => (
-                      <Card key={article.id} className="bg-white/5 border-white/10 cursor-pointer hover:bg-white/10">
+                    {filteredArticles.map((article) => (
+                      <Card
+                        key={article.id}
+                        className="bg-white/5 border-white/10 cursor-pointer hover:bg-white/10"
+                      >
                         <CardContent className="p-4">
                           <div className="flex items-start justify-between">
                             <div>
                               <h4 className="text-white font-medium mb-1">{article.title}</h4>
-                              <p className="text-white/60 text-sm line-clamp-2">{article.content}</p>
+                              <p className="text-white/60 text-sm line-clamp-2">
+                                {article.content}
+                              </p>
                               <div className="flex gap-2 mt-2">
-                                {article.tags.map(tag => (
+                                {article.tags.map((tag) => (
                                   <Badge key={tag} variant="outline" className="text-xs">
                                     {tag}
                                   </Badge>
@@ -592,9 +596,9 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
 
             <TabsContent value="tutorials" className="mt-6">
               <div className="grid gap-4">
-                {TUTORIALS.map(tutorial => (
-                  <Card 
-                    key={tutorial.id} 
+                {TUTORIALS.map((tutorial) => (
+                  <Card
+                    key={tutorial.id}
                     className="bg-white/5 border-white/10 cursor-pointer hover:bg-white/10"
                     onClick={() => startTutorial(tutorial.id)}
                   >
@@ -621,8 +625,12 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
             <TabsContent value="videos" className="mt-6">
               <div className="text-center py-12">
                 <Video className="w-16 h-16 text-white/20 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">Video Tutorials Coming Soon</h3>
-                <p className="text-white/60">We&apos;re creating helpful video content to guide you</p>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  Video Tutorials Coming Soon
+                </h3>
+                <p className="text-white/60">
+                  We&apos;re creating helpful video content to guide you
+                </p>
               </div>
             </TabsContent>
 
@@ -637,9 +645,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                         <p className="text-white/60 text-sm mb-4">
                           Get instant help from our support team through the chat widget
                         </p>
-                        <Button className="bg-orange hover:bg-orange/90">
-                          Open Chat
-                        </Button>
+                        <Button className="bg-orange hover:bg-orange/90">Open Chat</Button>
                       </div>
                     </div>
                   </CardContent>
@@ -672,20 +678,17 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
 }
 
 // Helper component to add help tooltip triggers
-export function HelpTrigger({ 
-  tooltipId, 
-  children 
-}: { 
-  tooltipId: string; 
-  children: React.ReactNode 
+export function HelpTrigger({
+  tooltipId,
+  children,
+}: {
+  tooltipId: string;
+  children: React.ReactNode;
 }) {
   const { showTooltip } = useHelp();
 
   return (
-    <div 
-      data-help={tooltipId}
-      className="relative inline-block"
-    >
+    <div data-help={tooltipId} className="relative inline-block">
       {children}
       <button
         onClick={() => showTooltip(tooltipId)}

@@ -15,7 +15,13 @@ import { WorkflowBuilder } from './workflow/WorkflowBuilder';
 import { WorkflowExecutionHistory } from './workflow/WorkflowExecutionHistory';
 import { workflowTemplates } from '@/data/workflowTemplates';
 import { WorkflowService } from '@/services/workflowService';
-import { Workflow, WorkflowExecution, WorkflowTemplate, WorkflowNode, WorkflowEdge } from '@/types/workflow';
+import {
+  Workflow,
+  WorkflowExecution,
+  WorkflowTemplate,
+  WorkflowNode,
+  WorkflowEdge,
+} from '@/types/workflow';
 import {
   Dialog,
   DialogContent,
@@ -102,7 +108,7 @@ export default function WorkflowAutomation() {
     if (!user) return;
 
     try {
-      const template = workflowTemplates.find(t => t.id === newWorkflow.templateId);
+      const template = workflowTemplates.find((t) => t.id === newWorkflow.templateId);
       if (!template) {
         toast.error('Please select a template');
         return;
@@ -176,9 +182,10 @@ export default function WorkflowAutomation() {
     }
   };
 
-  const filteredWorkflows = workflows.filter(workflow => {
-    const matchesSearch = workflow.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         workflow.description.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredWorkflows = workflows.filter((workflow) => {
+    const matchesSearch =
+      workflow.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      workflow.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesSearch;
   });
 
@@ -192,7 +199,7 @@ export default function WorkflowAutomation() {
     return <Badge variant="default">Active</Badge>;
   };
 
-  const categories = Array.from(new Set(workflowTemplates.map(t => t.category)));
+  const categories = Array.from(new Set(workflowTemplates.map((t) => t.category)));
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -321,8 +328,7 @@ export default function WorkflowAutomation() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {workflowTemplates
               .filter(
-                (template) =>
-                  filterCategory === 'all' || template.category === filterCategory
+                (template) => filterCategory === 'all' || template.category === filterCategory
               )
               .map((template) => (
                 <Card key={template.id} className="hover:shadow-lg transition-shadow">
@@ -393,9 +399,7 @@ export default function WorkflowAutomation() {
               <Input
                 id="name"
                 value={newWorkflow.name}
-                onChange={(e) =>
-                  setNewWorkflow({ ...newWorkflow, name: e.target.value })
-                }
+                onChange={(e) => setNewWorkflow({ ...newWorkflow, name: e.target.value })}
                 placeholder="Enter workflow name"
               />
             </div>
@@ -404,9 +408,7 @@ export default function WorkflowAutomation() {
               <Textarea
                 id="description"
                 value={newWorkflow.description}
-                onChange={(e) =>
-                  setNewWorkflow({ ...newWorkflow, description: e.target.value })
-                }
+                onChange={(e) => setNewWorkflow({ ...newWorkflow, description: e.target.value })}
                 placeholder="Describe what this workflow does"
                 rows={3}
               />
@@ -415,9 +417,7 @@ export default function WorkflowAutomation() {
               <Label htmlFor="template">Template</Label>
               <Select
                 value={newWorkflow.templateId}
-                onValueChange={(value) =>
-                  setNewWorkflow({ ...newWorkflow, templateId: value })
-                }
+                onValueChange={(value) => setNewWorkflow({ ...newWorkflow, templateId: value })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a template" />
@@ -446,9 +446,7 @@ export default function WorkflowAutomation() {
         <DialogContent className="max-w-4xl h-[80vh]">
           <DialogHeader>
             <DialogTitle>Edit Workflow: {selectedWorkflow?.name}</DialogTitle>
-            <DialogDescription>
-              Modify the workflow using the visual builder
-            </DialogDescription>
+            <DialogDescription>Modify the workflow using the visual builder</DialogDescription>
           </DialogHeader>
           <div className="flex-1 h-full">
             <ReactFlowProvider>
@@ -457,9 +455,9 @@ export default function WorkflowAutomation() {
                 initialEdges={selectedWorkflow?.edges || []}
                 onSave={(nodes, edges) => {
                   if (selectedWorkflow) {
-                    updateWorkflow(selectedWorkflow.id, { 
-                      nodes: nodes as WorkflowNode[], 
-                      edges: edges as WorkflowEdge[] 
+                    updateWorkflow(selectedWorkflow.id, {
+                      nodes: nodes as WorkflowNode[],
+                      edges: edges as WorkflowEdge[],
                     });
                     setShowEditDialog(false);
                   }
@@ -475,9 +473,7 @@ export default function WorkflowAutomation() {
         <DialogContent className="max-w-4xl h-[80vh]">
           <DialogHeader>
             <DialogTitle>Template Preview: {selectedTemplate?.name}</DialogTitle>
-            <DialogDescription>
-              {selectedTemplate?.description}
-            </DialogDescription>
+            <DialogDescription>{selectedTemplate?.description}</DialogDescription>
           </DialogHeader>
           <div className="flex-1 h-full">
             <ReactFlowProvider>

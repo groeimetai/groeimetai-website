@@ -12,22 +12,24 @@ let storage: ReturnType<typeof getStorage> | null = null;
 // Initialize Firebase Admin SDK lazily
 function initializeAdmin() {
   if (initialized) return;
-  
+
   // Check if we're in a build environment
   const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
   if (isBuildTime) {
     console.log('Skipping Firebase Admin initialization during build');
     return;
   }
-  
+
   // Check if required environment variables are present
-  if (!process.env.FIREBASE_PROJECT_ID || 
-      !process.env.FIREBASE_CLIENT_EMAIL || 
-      !process.env.FIREBASE_PRIVATE_KEY) {
+  if (
+    !process.env.FIREBASE_PROJECT_ID ||
+    !process.env.FIREBASE_CLIENT_EMAIL ||
+    !process.env.FIREBASE_PRIVATE_KEY
+  ) {
     console.warn('Firebase Admin environment variables not found');
     return;
   }
-  
+
   try {
     const serviceAccount: ServiceAccount = {
       projectId: process.env.FIREBASE_PROJECT_ID,
@@ -61,7 +63,7 @@ export const adminAuth = new Proxy({} as ReturnType<typeof getAuth>, {
       throw new Error('Firebase Admin Auth not initialized');
     }
     return auth[prop as keyof typeof auth];
-  }
+  },
 });
 
 export const adminDb = new Proxy({} as ReturnType<typeof getFirestore>, {
@@ -71,7 +73,7 @@ export const adminDb = new Proxy({} as ReturnType<typeof getFirestore>, {
       throw new Error('Firebase Admin Firestore not initialized');
     }
     return db[prop as keyof typeof db];
-  }
+  },
 });
 
 export const adminStorage = new Proxy({} as ReturnType<typeof getStorage>, {
@@ -81,7 +83,7 @@ export const adminStorage = new Proxy({} as ReturnType<typeof getStorage>, {
       throw new Error('Firebase Admin Storage not initialized');
     }
     return storage[prop as keyof typeof storage];
-  }
+  },
 });
 
 // Helper functions for custom claims

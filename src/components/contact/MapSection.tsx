@@ -117,8 +117,8 @@ export default function MapSection({ className }: MapSectionProps) {
 
   return (
     <div className={className}>
-      <div 
-        ref={mapRef} 
+      <div
+        ref={mapRef}
         className="w-full h-[400px] rounded-lg overflow-hidden relative bg-black/50"
       >
         <div className="absolute inset-0 flex items-center justify-center">
@@ -131,7 +131,8 @@ export default function MapSection({ className }: MapSectionProps) {
       {!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY && (
         <div className="mt-4 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
           <p className="text-sm text-yellow-500">
-            Map requires Google Maps API key. Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in your environment.
+            Map requires Google Maps API key. Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in your
+            environment.
           </p>
         </div>
       )}

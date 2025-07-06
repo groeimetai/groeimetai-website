@@ -15,7 +15,7 @@ import {
   onSnapshot,
   updateDoc,
   doc,
-  serverTimestamp
+  serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
@@ -42,7 +42,7 @@ import {
   XCircle,
   GitBranch,
   ChevronLeft,
-  Loader2
+  Loader2,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -60,12 +60,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from '@/i18n/routing';
 import ChatManagement from '@/components/admin/ChatManagement';
 import { formatDistanceToNow, format } from 'date-fns';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import QuoteChat from '@/components/QuoteChat';
 import ProjectTimelineManager from '@/components/admin/ProjectTimelineManager';
 import { notificationService } from '@/services/notificationService';
@@ -147,7 +142,7 @@ export default function AdminDashboard() {
   const [activeProjects, setActiveProjects] = useState(0);
   const [pendingQuotes, setPendingQuotes] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
-  
+
   // Legacy states for quote management
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [meetings, setMeetings] = useState<Meeting[]>([]);
@@ -156,14 +151,9 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  
+
   // Bulk selection state
-  const {
-    selectedIds,
-    setSelectedIds,
-    toggleSelection,
-    clearSelection,
-  } = useBulkSelection(quotes);
+  const { selectedIds, setSelectedIds, toggleSelection, clearSelection } = useBulkSelection(quotes);
 
   // Redirect if not admin
   useEffect(() => {
@@ -193,7 +183,7 @@ export default function AdminDashboard() {
         // Fetch users
         const usersSnapshot = await getDocs(collection(db, 'users'));
         const totalUsers = usersSnapshot.size;
-        const newUsers = usersSnapshot.docs.filter(doc => {
+        const newUsers = usersSnapshot.docs.filter((doc) => {
           const createdAt = doc.data().createdAt?.toDate();
           return createdAt && createdAt >= startDate;
         }).length;
@@ -214,13 +204,13 @@ export default function AdminDashboard() {
           quotesData.push({ id: doc.id, ...doc.data() } as Quote);
         });
         setQuotes(quotesData);
-        
-        const pendingCount = quotesData.filter(q => q.status === 'pending').length;
+
+        const pendingCount = quotesData.filter((q) => q.status === 'pending').length;
         setPendingQuotes(pendingCount);
 
         // Calculate revenue (from approved quotes)
         let revenue = 0;
-        quotesData.forEach(quote => {
+        quotesData.forEach((quote) => {
           if (quote.status === 'approved' && quote.totalCost) {
             revenue += quote.totalCost;
           }
@@ -235,7 +225,7 @@ export default function AdminDashboard() {
             change: newUsers > 0 ? (newUsers / totalUsers) * 100 : 0,
             trend: newUsers > 0 ? 'up' : 'neutral',
             icon: Users,
-            color: 'text-blue-500'
+            color: 'text-blue-500',
           },
           {
             title: 'Active Projects',
@@ -243,7 +233,7 @@ export default function AdminDashboard() {
             change: 12, // Mock change
             trend: 'up',
             icon: Briefcase,
-            color: 'text-green-500'
+            color: 'text-green-500',
           },
           {
             title: 'Pending Quotes',
@@ -251,7 +241,7 @@ export default function AdminDashboard() {
             change: -5, // Mock change
             trend: 'down',
             icon: FileText,
-            color: 'text-yellow-500'
+            color: 'text-yellow-500',
           },
           {
             title: 'Revenue',
@@ -259,13 +249,13 @@ export default function AdminDashboard() {
             change: 23, // Mock change
             trend: 'up',
             icon: DollarSign,
-            color: 'text-purple-500'
-          }
+            color: 'text-purple-500',
+          },
         ]);
 
         // Fetch recent activities
         const activities: RecentActivity[] = [];
-        
+
         // Recent users
         const recentUsersQuery = query(
           collection(db, 'users'),
@@ -273,33 +263,32 @@ export default function AdminDashboard() {
           limit(5)
         );
         const recentUsersSnapshot = await getDocs(recentUsersQuery);
-        recentUsersSnapshot.forEach(doc => {
+        recentUsersSnapshot.forEach((doc) => {
           const data = doc.data();
           activities.push({
             id: doc.id,
             type: 'user',
             title: 'New user registered',
             description: data.displayName || data.email,
-            timestamp: data.createdAt?.toDate() || new Date()
+            timestamp: data.createdAt?.toDate() || new Date(),
           });
         });
 
         // Recent quotes
-        quotesData.slice(0, 5).forEach(quote => {
+        quotesData.slice(0, 5).forEach((quote) => {
           activities.push({
             id: quote.id,
             type: 'quote',
             title: 'New quote request',
             description: quote.projectName || 'Untitled Project',
             timestamp: quote.createdAt?.toDate() || new Date(),
-            status: quote.status
+            status: quote.status,
           });
         });
 
         // Sort activities by timestamp
         activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
         setRecentActivities(activities.slice(0, 10));
-
       } catch (error) {
         console.error('Error fetching metrics:', error);
       } finally {
@@ -320,7 +309,7 @@ export default function AdminDashboard() {
       if (user) {
         await updateDoc(doc(db, 'users', user.uid), {
           lastActive: serverTimestamp(),
-          isOnline: true
+          isOnline: true,
         });
       }
     };
@@ -332,9 +321,9 @@ export default function AdminDashboard() {
         collection(db, 'users'),
         where('lastActive', '>=', Timestamp.fromDate(fiveMinutesAgo))
       );
-      
+
       const snapshot = await getDocs(onlineQuery);
-      const onlineUserIds = snapshot.docs.map(doc => doc.id);
+      const onlineUserIds = snapshot.docs.map((doc) => doc.id);
       setOnlineUsers(onlineUserIds);
       setActiveUsers(onlineUserIds.length);
     };
@@ -355,7 +344,7 @@ export default function AdminDashboard() {
       if (user) {
         updateDoc(doc(db, 'users', user.uid), {
           isOnline: false,
-          lastActive: serverTimestamp()
+          lastActive: serverTimestamp(),
         }).catch(console.error);
       }
     };
@@ -366,12 +355,12 @@ export default function AdminDashboard() {
     try {
       const meetingsQuery = query(collection(db, 'meetings'), orderBy('createdAt', 'desc'));
       const snapshot = await getDocs(meetingsQuery);
-      
+
       const meetingsData: Meeting[] = [];
       snapshot.forEach((doc) => {
         meetingsData.push({ id: doc.id, ...doc.data() } as Meeting);
       });
-      
+
       setMeetings(meetingsData);
     } catch (err) {
       console.error('Error fetching meetings:', err);
@@ -381,16 +370,16 @@ export default function AdminDashboard() {
   // Update quote status
   const updateQuoteStatus = async (quoteId: string, newStatus: Quote['status']) => {
     try {
-      const quote = quotes.find(q => q.id === quoteId);
+      const quote = quotes.find((q) => q.id === quoteId);
       if (!quote) return;
-      
+
       const oldStatus = quote.status;
-      
+
       await updateDoc(doc(db, 'quotes', quoteId), {
         status: newStatus,
         updatedAt: new Date(),
       });
-      
+
       // Send email notification to client
       try {
         await fetch('/api/email/send', {
@@ -414,7 +403,7 @@ export default function AdminDashboard() {
         console.error('Failed to send email notification:', emailError);
         // Don't fail the status update if email fails
       }
-      
+
       // Send in-app notification if user has an account
       if (quote.userId) {
         try {
@@ -426,11 +415,11 @@ export default function AdminDashboard() {
           console.error('Failed to send notification:', notifError);
         }
       }
-      
+
       // Update local state
-      setQuotes(quotes.map(quote => 
-        quote.id === quoteId ? { ...quote, status: newStatus } : quote
-      ));
+      setQuotes(
+        quotes.map((quote) => (quote.id === quoteId ? { ...quote, status: newStatus } : quote))
+      );
     } catch (err) {
       console.error('Error updating quote status:', err);
       setError('Failed to update status. Please try again.');
@@ -449,7 +438,7 @@ export default function AdminDashboard() {
               updatedAt: new Date(),
             });
           }
-          setQuotes(quotes.filter(q => !data.ids.includes(q.id)));
+          setQuotes(quotes.filter((q) => !data.ids.includes(q.id)));
           break;
 
         case 'updateStatus':
@@ -461,10 +450,20 @@ export default function AdminDashboard() {
 
         case 'export':
           // Export selected quotes
-          const selectedQuotes = quotes.filter(q => data.ids.includes(q.id));
+          const selectedQuotes = quotes.filter((q) => data.ids.includes(q.id));
           const csv = [
-            ['ID', 'Project Name', 'Company', 'Full Name', 'Email', 'Status', 'Budget', 'Timeline', 'Created At'],
-            ...selectedQuotes.map(q => [
+            [
+              'ID',
+              'Project Name',
+              'Company',
+              'Full Name',
+              'Email',
+              'Status',
+              'Budget',
+              'Timeline',
+              'Created At',
+            ],
+            ...selectedQuotes.map((q) => [
               q.id,
               q.projectName,
               q.company,
@@ -476,7 +475,7 @@ export default function AdminDashboard() {
               q.createdAt.toDate().toISOString(),
             ]),
           ]
-            .map(row => row.join(','))
+            .map((row) => row.join(','))
             .join('\n');
 
           // Download CSV
@@ -560,17 +559,16 @@ export default function AdminDashboard() {
     }
   };
 
-  const filteredQuotes = statusFilter === 'all' 
-    ? quotes 
-    : quotes.filter(quote => quote.status === statusFilter);
+  const filteredQuotes =
+    statusFilter === 'all' ? quotes : quotes.filter((quote) => quote.status === statusFilter);
 
   // Stats
   const stats = {
     total: quotes.length,
-    pending: quotes.filter(q => q.status === 'pending').length,
-    reviewed: quotes.filter(q => q.status === 'reviewed').length,
-    approved: quotes.filter(q => q.status === 'approved').length,
-    rejected: quotes.filter(q => q.status === 'rejected').length,
+    pending: quotes.filter((q) => q.status === 'pending').length,
+    reviewed: quotes.filter((q) => q.status === 'reviewed').length,
+    approved: quotes.filter((q) => q.status === 'approved').length,
+    rejected: quotes.filter((q) => q.status === 'rejected').length,
   };
 
   return (
@@ -647,13 +645,18 @@ export default function AdminDashboard() {
                     <Badge
                       variant="outline"
                       className={`${
-                        metric.trend === 'up' ? 'text-green-500 border-green-500/30' : 
-                        metric.trend === 'down' ? 'text-red-500 border-red-500/30' : 
-                        'text-white/60 border-white/20'
+                        metric.trend === 'up'
+                          ? 'text-green-500 border-green-500/30'
+                          : metric.trend === 'down'
+                            ? 'text-red-500 border-red-500/30'
+                            : 'text-white/60 border-white/20'
                       }`}
                     >
-                      {metric.trend === 'up' ? <ArrowUp className="w-3 h-3 mr-1" /> : 
-                       metric.trend === 'down' ? <ArrowDown className="w-3 h-3 mr-1" /> : null}
+                      {metric.trend === 'up' ? (
+                        <ArrowUp className="w-3 h-3 mr-1" />
+                      ) : metric.trend === 'down' ? (
+                        <ArrowDown className="w-3 h-3 mr-1" />
+                      ) : null}
                       {Math.abs(metric.change)}%
                     </Badge>
                   </div>
@@ -685,23 +688,38 @@ export default function AdminDashboard() {
                 <CardHeader>
                   <CardTitle className="text-white flex items-center justify-between">
                     Recent Activity
-                    <Button variant="ghost" size="sm">View All</Button>
+                    <Button variant="ghost" size="sm">
+                      View All
+                    </Button>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     {recentActivities.map((activity) => (
-                      <div key={activity.id} className="flex items-start gap-3 p-3 bg-white/5 rounded-lg">
-                        <div className={`p-2 rounded-lg ${
-                          activity.type === 'user' ? 'bg-blue-500/20' :
-                          activity.type === 'project' ? 'bg-green-500/20' :
-                          activity.type === 'quote' ? 'bg-yellow-500/20' :
-                          'bg-purple-500/20'
-                        }`}>
-                          {activity.type === 'user' ? <Users className="w-4 h-4 text-blue-500" /> :
-                           activity.type === 'project' ? <Briefcase className="w-4 h-4 text-green-500" /> :
-                           activity.type === 'quote' ? <FileText className="w-4 h-4 text-yellow-500" /> :
-                           <MessageSquare className="w-4 h-4 text-purple-500" />}
+                      <div
+                        key={activity.id}
+                        className="flex items-start gap-3 p-3 bg-white/5 rounded-lg"
+                      >
+                        <div
+                          className={`p-2 rounded-lg ${
+                            activity.type === 'user'
+                              ? 'bg-blue-500/20'
+                              : activity.type === 'project'
+                                ? 'bg-green-500/20'
+                                : activity.type === 'quote'
+                                  ? 'bg-yellow-500/20'
+                                  : 'bg-purple-500/20'
+                          }`}
+                        >
+                          {activity.type === 'user' ? (
+                            <Users className="w-4 h-4 text-blue-500" />
+                          ) : activity.type === 'project' ? (
+                            <Briefcase className="w-4 h-4 text-green-500" />
+                          ) : activity.type === 'quote' ? (
+                            <FileText className="w-4 h-4 text-yellow-500" />
+                          ) : (
+                            <MessageSquare className="w-4 h-4 text-purple-500" />
+                          )}
                         </div>
                         <div className="flex-1">
                           <p className="text-white text-sm font-medium">{activity.title}</p>
@@ -812,7 +830,7 @@ export default function AdminDashboard() {
                   { value: 'rejected', label: 'Rejected' },
                 ]}
               />
-              
+
               {/* Filter */}
               <div className="flex gap-2">
                 <Button
@@ -827,28 +845,28 @@ export default function AdminDashboard() {
                   onClick={() => setStatusFilter('pending')}
                   className={statusFilter === 'pending' ? 'bg-orange' : ''}
                 >
-                  Pending ({quotes.filter(q => q.status === 'pending').length})
+                  Pending ({quotes.filter((q) => q.status === 'pending').length})
                 </Button>
                 <Button
                   variant={statusFilter === 'reviewed' ? 'default' : 'outline'}
                   onClick={() => setStatusFilter('reviewed')}
                   className={statusFilter === 'reviewed' ? 'bg-orange' : ''}
                 >
-                  Reviewed ({quotes.filter(q => q.status === 'reviewed').length})
+                  Reviewed ({quotes.filter((q) => q.status === 'reviewed').length})
                 </Button>
                 <Button
                   variant={statusFilter === 'approved' ? 'default' : 'outline'}
                   onClick={() => setStatusFilter('approved')}
                   className={statusFilter === 'approved' ? 'bg-orange' : ''}
                 >
-                  Approved ({quotes.filter(q => q.status === 'approved').length})
+                  Approved ({quotes.filter((q) => q.status === 'approved').length})
                 </Button>
                 <Button
                   variant={statusFilter === 'rejected' ? 'default' : 'outline'}
                   onClick={() => setStatusFilter('rejected')}
                   className={statusFilter === 'rejected' ? 'bg-orange' : ''}
                 >
-                  Rejected ({quotes.filter(q => q.status === 'rejected').length})
+                  Rejected ({quotes.filter((q) => q.status === 'rejected').length})
                 </Button>
               </div>
 
@@ -857,7 +875,7 @@ export default function AdminDashboard() {
                 <div className="space-y-4">
                   {filteredQuotes.map((quote) => {
                     const StatusIcon = getStatusIcon(quote.status);
-                    
+
                     return (
                       <SelectableListItem
                         key={quote.id}
@@ -866,99 +884,116 @@ export default function AdminDashboard() {
                         onSelect={toggleSelection}
                         className="bg-white/5 border border-white/10 rounded-lg mb-4"
                       >
-                          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-3 mb-2">
-                                <h3 className="text-xl font-semibold text-white">{quote.projectName}</h3>
-                                <Badge
-                                  variant="outline"
-                                  className={`${getStatusColor(quote.status)} bg-opacity-20 border-0`}
-                                >
-                                  <StatusIcon className="w-3 h-3 mr-1" />
-                                  {quote.status}
-                                </Badge>
-                              </div>
-                              
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-white/60 mb-3">
-                                <p><span className="font-medium">Name:</span> {quote.fullName}</p>
-                                <p><span className="font-medium">Email:</span> {quote.email}</p>
-                                <p><span className="font-medium">Company:</span> {quote.company}</p>
-                                <p><span className="font-medium">Budget:</span> {quote.budget}</p>
-                                <p><span className="font-medium">Timeline:</span> {quote.timeline}</p>
-                                <p><span className="font-medium">Submitted:</span> {formatDistanceToNow(quote.createdAt.toDate())} ago</p>
-                              </div>
-                              
-                              <div className="mb-3">
-                                <p className="text-sm font-medium text-white/60 mb-1">Services:</p>
-                                <div className="flex flex-wrap gap-1">
-                                  {quote.services.map((service, index) => (
-                                    <Badge key={index} variant="outline" className="text-xs">
-                                      {service}
-                                    </Badge>
-                                  ))}
-                                </div>
-                              </div>
-                              
-                              <p className="text-sm text-white/80 line-clamp-2">{quote.projectDescription}</p>
-                            </div>
-                            
-                            <div className="flex gap-2">
-                              <Button
-                                size="sm"
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-xl font-semibold text-white">
+                                {quote.projectName}
+                              </h3>
+                              <Badge
                                 variant="outline"
-                                onClick={() => {
-                                  setSelectedQuote(quote);
-                                  setIsChatOpen(true);
-                                }}
+                                className={`${getStatusColor(quote.status)} bg-opacity-20 border-0`}
                               >
-                                <MessageSquare className="w-4 h-4 mr-1" />
-                                Chat
-                              </Button>
-                              {quote.status === 'pending' && (
-                                <>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => updateQuoteStatus(quote.id, 'reviewed')}
-                                  >
-                                    Mark Reviewed
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    className="bg-green-500 hover:bg-green-600"
-                                    onClick={() => updateQuoteStatus(quote.id, 'approved')}
-                                  >
-                                    Approve
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="destructive"
-                                    onClick={() => updateQuoteStatus(quote.id, 'rejected')}
-                                  >
-                                    Reject
-                                  </Button>
-                                </>
-                              )}
-                              {quote.status === 'reviewed' && (
-                                <>
-                                  <Button
-                                    size="sm"
-                                    className="bg-green-500 hover:bg-green-600"
-                                    onClick={() => updateQuoteStatus(quote.id, 'approved')}
-                                  >
-                                    Approve
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="destructive"
-                                    onClick={() => updateQuoteStatus(quote.id, 'rejected')}
-                                  >
-                                    Reject
-                                  </Button>
-                                </>
-                              )}
+                                <StatusIcon className="w-3 h-3 mr-1" />
+                                {quote.status}
+                              </Badge>
                             </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-white/60 mb-3">
+                              <p>
+                                <span className="font-medium">Name:</span> {quote.fullName}
+                              </p>
+                              <p>
+                                <span className="font-medium">Email:</span> {quote.email}
+                              </p>
+                              <p>
+                                <span className="font-medium">Company:</span> {quote.company}
+                              </p>
+                              <p>
+                                <span className="font-medium">Budget:</span> {quote.budget}
+                              </p>
+                              <p>
+                                <span className="font-medium">Timeline:</span> {quote.timeline}
+                              </p>
+                              <p>
+                                <span className="font-medium">Submitted:</span>{' '}
+                                {formatDistanceToNow(quote.createdAt.toDate())} ago
+                              </p>
+                            </div>
+
+                            <div className="mb-3">
+                              <p className="text-sm font-medium text-white/60 mb-1">Services:</p>
+                              <div className="flex flex-wrap gap-1">
+                                {quote.services.map((service, index) => (
+                                  <Badge key={index} variant="outline" className="text-xs">
+                                    {service}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+
+                            <p className="text-sm text-white/80 line-clamp-2">
+                              {quote.projectDescription}
+                            </p>
                           </div>
+
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                setSelectedQuote(quote);
+                                setIsChatOpen(true);
+                              }}
+                            >
+                              <MessageSquare className="w-4 h-4 mr-1" />
+                              Chat
+                            </Button>
+                            {quote.status === 'pending' && (
+                              <>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => updateQuoteStatus(quote.id, 'reviewed')}
+                                >
+                                  Mark Reviewed
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  className="bg-green-500 hover:bg-green-600"
+                                  onClick={() => updateQuoteStatus(quote.id, 'approved')}
+                                >
+                                  Approve
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="destructive"
+                                  onClick={() => updateQuoteStatus(quote.id, 'rejected')}
+                                >
+                                  Reject
+                                </Button>
+                              </>
+                            )}
+                            {quote.status === 'reviewed' && (
+                              <>
+                                <Button
+                                  size="sm"
+                                  className="bg-green-500 hover:bg-green-600"
+                                  onClick={() => updateQuoteStatus(quote.id, 'approved')}
+                                >
+                                  Approve
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="destructive"
+                                  onClick={() => updateQuoteStatus(quote.id, 'rejected')}
+                                >
+                                  Reject
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </div>
                       </SelectableListItem>
                     );
                   })}
@@ -1037,9 +1072,7 @@ export default function AdminDashboard() {
                   <BarChart3 className="w-16 h-16 mx-auto mb-4" />
                   <p>Advanced analytics coming soon</p>
                   <Link href="/dashboard/admin/analytics">
-                    <Button className="mt-4 bg-orange hover:bg-orange/90">
-                      Go to Analytics
-                    </Button>
+                    <Button className="mt-4 bg-orange hover:bg-orange/90">Go to Analytics</Button>
                   </Link>
                 </div>
               </CardContent>
@@ -1056,8 +1089,8 @@ export default function AdminDashboard() {
           </DialogHeader>
           {selectedQuote && (
             <div className="h-full flex flex-col">
-              <QuoteChat 
-                quoteId={selectedQuote.id} 
+              <QuoteChat
+                quoteId={selectedQuote.id}
                 quoteName={selectedQuote.projectName}
                 userName={selectedQuote.fullName}
               />
@@ -1065,7 +1098,6 @@ export default function AdminDashboard() {
           )}
         </DialogContent>
       </Dialog>
-
     </main>
   );
 }

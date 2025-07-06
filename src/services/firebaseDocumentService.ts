@@ -192,7 +192,7 @@ export const firebaseDocumentService = {
       return result;
     } catch (error: any) {
       console.error('Error uploading document:', error);
-      
+
       // Log error
       await logErrorActivity(
         'file.upload',
@@ -209,7 +209,7 @@ export const firebaseDocumentService = {
           projectId: metadata?.projectId,
         }
       );
-      
+
       throw error;
     }
   },
@@ -319,7 +319,7 @@ export const firebaseDocumentService = {
       window.document.body.appendChild(a);
       a.click();
       window.document.body.removeChild(a);
-      
+
       // Log activity
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -345,7 +345,7 @@ export const firebaseDocumentService = {
       }
     } catch (error: any) {
       console.error('Error downloading document:', error);
-      
+
       // Log error
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -363,7 +363,7 @@ export const firebaseDocumentService = {
           }
         );
       }
-      
+
       throw error;
     }
   },
@@ -374,7 +374,9 @@ export const firebaseDocumentService = {
       // Get document info before deleting
       const docRef = doc(db, collections.documents, documentId);
       const docSnap = await getDoc(docRef);
-      const documentData = docSnap.exists() ? { ...docSnap.data(), id: docSnap.id } as FirebaseDocument : null;
+      const documentData = docSnap.exists()
+        ? ({ ...docSnap.data(), id: docSnap.id } as FirebaseDocument)
+        : null;
 
       // Delete from Storage
       const storageRef = ref(storage, storagePath);
@@ -382,7 +384,7 @@ export const firebaseDocumentService = {
 
       // Delete from Firestore
       await deleteDoc(doc(db, collections.documents, documentId));
-      
+
       // Log activity if we have document data and current user
       const currentUser = auth.currentUser;
       if (documentData && currentUser) {
@@ -408,7 +410,7 @@ export const firebaseDocumentService = {
       }
     } catch (error: any) {
       console.error('Error deleting document:', error);
-      
+
       // Log error
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -426,7 +428,7 @@ export const firebaseDocumentService = {
           }
         );
       }
-      
+
       throw error;
     }
   },

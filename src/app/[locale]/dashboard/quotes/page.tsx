@@ -19,22 +19,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Link } from '@/i18n/routing';
-import { 
-  collection, 
-  query, 
-  where, 
-  orderBy, 
-  getDocs,
-  onSnapshot
-} from 'firebase/firestore';
+import { collection, query, where, orderBy, getDocs, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { formatDistanceToNow } from 'date-fns';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import QuoteChat from '@/components/QuoteChat';
 
 interface Quote {
@@ -84,7 +72,7 @@ export default function QuotesPage() {
     );
 
     const unsubscribe = onSnapshot(
-      quotesQuery, 
+      quotesQuery,
       (snapshot) => {
         const quotesData: Quote[] = [];
         snapshot.forEach((doc) => {
@@ -101,7 +89,7 @@ export default function QuotesPage() {
           where('email', '==', user.email),
           orderBy('createdAt', 'desc')
         );
-        
+
         onSnapshot(emailQuery, (snapshot) => {
           const quotesData: Quote[] = [];
           snapshot.forEach((doc) => {
@@ -172,7 +160,9 @@ export default function QuotesPage() {
 
           <div>
             <h1 className="text-3xl font-bold text-white">Your Project Requests</h1>
-            <p className="text-white/60 mt-2">Track the status of your project requests and communicate with our team</p>
+            <p className="text-white/60 mt-2">
+              Track the status of your project requests and communicate with our team
+            </p>
           </div>
         </div>
 
@@ -202,7 +192,7 @@ export default function QuotesPage() {
             >
               {quotes.map((quote) => {
                 const StatusIcon = getStatusIcon(quote.status);
-                
+
                 return (
                   <motion.div
                     key={quote.id}
@@ -222,16 +212,26 @@ export default function QuotesPage() {
                             {quote.status}
                           </Badge>
                         </div>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-white/60 mb-3">
-                          <p><span className="font-medium">Budget:</span> {quote.budget}</p>
-                          <p><span className="font-medium">Timeline:</span> {quote.timeline}</p>
-                          <p><span className="font-medium">Submitted:</span> {formatDistanceToNow(quote.createdAt.toDate())} ago</p>
+                          <p>
+                            <span className="font-medium">Budget:</span> {quote.budget}
+                          </p>
+                          <p>
+                            <span className="font-medium">Timeline:</span> {quote.timeline}
+                          </p>
+                          <p>
+                            <span className="font-medium">Submitted:</span>{' '}
+                            {formatDistanceToNow(quote.createdAt.toDate())} ago
+                          </p>
                           {quote.updatedAt && (
-                            <p><span className="font-medium">Last Updated:</span> {formatDistanceToNow(quote.updatedAt.toDate())} ago</p>
+                            <p>
+                              <span className="font-medium">Last Updated:</span>{' '}
+                              {formatDistanceToNow(quote.updatedAt.toDate())} ago
+                            </p>
                           )}
                         </div>
-                        
+
                         <div className="mb-3">
                           <p className="text-sm font-medium text-white/60 mb-1">Services:</p>
                           <div className="flex flex-wrap gap-1">
@@ -242,10 +242,12 @@ export default function QuotesPage() {
                             ))}
                           </div>
                         </div>
-                        
-                        <p className="text-sm text-white/80 line-clamp-2">{quote.projectDescription}</p>
+
+                        <p className="text-sm text-white/80 line-clamp-2">
+                          {quote.projectDescription}
+                        </p>
                       </div>
-                      
+
                       <Button
                         variant="outline"
                         onClick={() => {
@@ -294,10 +296,7 @@ export default function QuotesPage() {
           </DialogHeader>
           {selectedQuote && (
             <div className="h-full flex flex-col">
-              <QuoteChat 
-                quoteId={selectedQuote.id} 
-                quoteName={selectedQuote.projectName}
-              />
+              <QuoteChat quoteId={selectedQuote.id} quoteName={selectedQuote.projectName} />
             </div>
           )}
         </DialogContent>

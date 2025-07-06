@@ -1,26 +1,31 @@
 # GroeiMetAI UX Features Documentation
 
 ## Overview
+
 This document outlines all the UX improvements and features implemented to enhance both user and admin experiences on the GroeiMetAI platform.
 
 ## User Experience Features
 
-### 1. **Notification Center** 
+### 1. **Notification Center**
+
 📍 Location: Navigation bar (bell icon)
+
 - **Real-time notifications** for project updates, quotes, and communications
 - **Notification preferences** - customize which notifications you receive
-- **Email/In-app delivery options** 
+- **Email/In-app delivery options**
 - **Filter by type** - All, Projects, Quotes, System, etc.
 - **Mark all as read** functionality
 - **Persistent storage** with Firestore real-time sync
 
 ### 2. **Customizable Dashboard Widgets**
+
 📍 Location: User dashboard
+
 - **Drag-and-drop** widget arrangement
 - **Add/Remove widgets** with the Customize button
 - **Widget types**:
   - Quick Stats
-  - Recent Activity  
+  - Recent Activity
   - Project Progress
   - Upcoming Meetings
   - Quick Actions
@@ -29,8 +34,10 @@ This document outlines all the UX improvements and features implemented to enhan
 - **Persistent layout** saved to user profile
 - **Responsive design** adapts to screen size
 
-### 3. **Command Palette** 
+### 3. **Command Palette**
+
 🔑 Shortcut: `Cmd/Ctrl + K`
+
 - **Universal search** across projects, users, actions, and help
 - **Quick navigation** to any page
 - **Recent searches** saved locally
@@ -44,8 +51,10 @@ This document outlines all the UX improvements and features implemented to enhan
 - **Keyboard navigation** with arrow keys
 
 ### 4. **Quick Actions**
+
 📍 Location: Floating action button (bottom right)
 🔑 Shortcut: `Cmd/Ctrl + Shift + A`
+
 - **Context-aware actions** based on current page
 - **Recently used actions** prioritized
 - **Action shortcuts** displayed
@@ -57,7 +66,9 @@ This document outlines all the UX improvements and features implemented to enhan
   - View Analytics
 
 ### 5. **Help System**
+
 📍 Location: Help button (bottom right) or press `F1`
+
 - **Interactive tutorials** with step-by-step guidance
 - **Contextual tooltips** that appear on first visit
 - **Help Center** with articles, tutorials, and videos
@@ -66,6 +77,7 @@ This document outlines all the UX improvements and features implemented to enhan
 - **Search functionality** across all help content
 
 ### 6. **Interactive Onboarding**
+
 - **Personalized welcome flow** for new users
 - **Profile completion wizard**
 - **Dashboard tour** highlighting key features
@@ -75,7 +87,9 @@ This document outlines all the UX improvements and features implemented to enhan
 ## Admin Features
 
 ### 7. **User Management Interface**
+
 📍 Location: `/dashboard/admin/users`
+
 - **Advanced filtering** by role, status, registration date
 - **User details panel** with inline editing
 - **Role management** with immediate effect
@@ -87,7 +101,9 @@ This document outlines all the UX improvements and features implemented to enhan
 - **Real-time updates** when user data changes
 
 ### 8. **Bulk Actions System**
+
 📍 Available on: Projects, Quotes, Users lists
+
 - **Multi-select** with checkboxes
 - **Floating action bar** appears when items selected
 - **Supported operations**:
@@ -100,7 +116,9 @@ This document outlines all the UX improvements and features implemented to enhan
 - **Undo functionality** for non-destructive actions
 
 ### 9. **Workflow Automation**
+
 📍 Location: `/dashboard/admin/workflows`
+
 - **Visual workflow builder** with drag-and-drop
 - **Pre-built templates**:
   - New Client Onboarding
@@ -123,7 +141,9 @@ This document outlines all the UX improvements and features implemented to enhan
 - **Execution history** with performance metrics
 
 ### 10. **Activity Logging System**
+
 📍 Location: `/dashboard/admin/activity`
+
 - **Comprehensive activity tracking**:
   - Authentication events
   - CRUD operations
@@ -141,7 +161,9 @@ This document outlines all the UX improvements and features implemented to enhan
 - **Suspicious activity alerts**
 
 ### 11. **Analytics Dashboard**
+
 📍 Location: Admin dashboard
+
 - **Key metrics** at a glance
 - **Revenue tracking** with trends
 - **Project statistics**
@@ -151,18 +173,19 @@ This document outlines all the UX improvements and features implemented to enhan
 
 ## Keyboard Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Cmd/Ctrl + K` | Open Command Palette |
-| `Cmd/Ctrl + Shift + A` | Toggle Quick Actions |
-| `F1` | Open Help Center |
-| `Escape` | Close modals/dialogs |
-| `Arrow Keys` | Navigate in Command Palette |
-| `Enter` | Select in Command Palette |
+| Shortcut               | Action                      |
+| ---------------------- | --------------------------- |
+| `Cmd/Ctrl + K`         | Open Command Palette        |
+| `Cmd/Ctrl + Shift + A` | Toggle Quick Actions        |
+| `F1`                   | Open Help Center            |
+| `Escape`               | Close modals/dialogs        |
+| `Arrow Keys`           | Navigate in Command Palette |
+| `Enter`                | Select in Command Palette   |
 
 ## Best Practices
 
 ### For Users:
+
 1. **Customize your dashboard** to show widgets most relevant to your workflow
 2. **Set notification preferences** to avoid information overload
 3. **Use keyboard shortcuts** for faster navigation
@@ -170,6 +193,7 @@ This document outlines all the UX improvements and features implemented to enhan
 5. **Use the command palette** for quick access to everything
 
 ### For Admins:
+
 1. **Set up workflows** for repetitive tasks to save time
 2. **Monitor activity logs** regularly for security
 3. **Use bulk actions** for efficient management
@@ -179,6 +203,7 @@ This document outlines all the UX improvements and features implemented to enhan
 ## Technical Implementation
 
 ### Technologies Used:
+
 - **React** with TypeScript for type safety
 - **Framer Motion** for smooth animations
 - **Firebase Firestore** for real-time data sync
@@ -188,6 +213,7 @@ This document outlines all the UX improvements and features implemented to enhan
 - **Tailwind CSS** for styling
 
 ### Performance Optimizations:
+
 - Lazy loading of components
 - Batch operations for bulk actions
 - Debounced search inputs
@@ -198,6 +224,7 @@ This document outlines all the UX improvements and features implemented to enhan
 ## Support
 
 For help with any feature:
+
 1. Press `F1` to open the Help Center
 2. Use the chat widget to contact support
 3. Check the tutorials for step-by-step guides

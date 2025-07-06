@@ -316,7 +316,11 @@ export default async function ServicesPage() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('readyToStart.title')}</h2>
             <p className="text-xl text-muted-foreground mb-8">{t('readyToStart.description')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <StartProjectButton size="lg" className="shadow-premium hover-lift" preselectedService="genai-consultancy">
+              <StartProjectButton
+                size="lg"
+                className="shadow-premium hover-lift"
+                preselectedService="genai-consultancy"
+              >
                 {t('cta.consultation')}
               </StartProjectButton>
               <Link href="/cases">

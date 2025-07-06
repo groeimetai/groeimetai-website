@@ -4,14 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
-import {
-  collection,
-  query,
-  getDocs,
-  where,
-  orderBy,
-  Timestamp
-} from 'firebase/firestore';
+import { collection, query, getDocs, where, orderBy, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
   TrendingUp,
@@ -33,7 +26,7 @@ import {
   Target,
   Award,
   Zap,
-  Loader2
+  Loader2,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -218,7 +211,7 @@ export default function AdminAnalyticsPage() {
           analyticsData.users.byMonth[index]?.count || 0,
         ]),
       ]
-        .map(row => row.join(','))
+        .map((row) => row.join(','))
         .join('\n');
 
       const blob = new Blob([csv], { type: 'text/csv' });
@@ -254,13 +247,18 @@ export default function AdminAnalyticsPage() {
                 change > 0 ? 'text-green-500 border-green-500/30' : 'text-red-500 border-red-500/30'
               }`}
             >
-              {change > 0 ? <ArrowUp className="w-3 h-3 mr-1" /> : <ArrowDown className="w-3 h-3 mr-1" />}
+              {change > 0 ? (
+                <ArrowUp className="w-3 h-3 mr-1" />
+              ) : (
+                <ArrowDown className="w-3 h-3 mr-1" />
+              )}
               {Math.abs(change)}%
             </Badge>
           )}
         </div>
         <h3 className="text-2xl font-bold text-white mb-1">
-          {prefix}{typeof value === 'number' ? value.toLocaleString() : value}
+          {prefix}
+          {typeof value === 'number' ? value.toLocaleString() : value}
         </h3>
         <p className="text-white/60 text-sm">{title}</p>
       </CardContent>
@@ -367,7 +365,7 @@ export default function AdminAnalyticsPage() {
                         <div
                           className="w-full bg-orange/80 rounded-t"
                           style={{
-                            height: `${(item.amount / Math.max(...analyticsData.revenue.byMonth.map(m => m.amount))) * 200}px`,
+                            height: `${(item.amount / Math.max(...analyticsData.revenue.byMonth.map((m) => m.amount))) * 200}px`,
                           }}
                         />
                       </div>
@@ -385,7 +383,9 @@ export default function AdminAnalyticsPage() {
                       <div key={service.service}>
                         <div className="flex justify-between items-center mb-2">
                           <span className="text-sm text-white">{service.service}</span>
-                          <span className="text-sm text-white/60">€{service.amount.toLocaleString()}</span>
+                          <span className="text-sm text-white/60">
+                            €{service.amount.toLocaleString()}
+                          </span>
                         </div>
                         <Progress value={percentage} className="h-2" />
                       </div>
@@ -408,9 +408,9 @@ export default function AdminAnalyticsPage() {
                           const strokeDasharray = `${percentage * 3.6} ${360 - percentage * 3.6}`;
                           const strokeDashoffset = -cumulativePercentage * 3.6;
                           cumulativePercentage += percentage;
-                          
+
                           const colors = ['#10b981', '#f59e0b', '#ef4444'];
-                          
+
                           return (
                             <circle
                               key={status.status}
@@ -429,7 +429,9 @@ export default function AdminAnalyticsPage() {
                     </svg>
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-center">
-                        <p className="text-3xl font-bold text-white">{analyticsData.projects.total}</p>
+                        <p className="text-3xl font-bold text-white">
+                          {analyticsData.projects.total}
+                        </p>
                         <p className="text-sm text-white/60">Total Projects</p>
                       </div>
                     </div>
@@ -456,16 +458,24 @@ export default function AdminAnalyticsPage() {
                   <div>
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-white/60">Completion Rate</span>
-                      <span className="text-white font-medium">{analyticsData.projects.completionRate}%</span>
+                      <span className="text-white font-medium">
+                        {analyticsData.projects.completionRate}%
+                      </span>
                     </div>
                     <Progress value={analyticsData.projects.completionRate} className="h-3" />
                   </div>
                   <div>
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-white/60">Average Duration</span>
-                      <span className="text-white font-medium">{analyticsData.projects.averageDuration} days</span>
+                      <span className="text-white font-medium">
+                        {analyticsData.projects.averageDuration} days
+                      </span>
                     </div>
-                    <Progress value={analyticsData.projects.averageDuration} max={90} className="h-3" />
+                    <Progress
+                      value={analyticsData.projects.averageDuration}
+                      max={90}
+                      className="h-3"
+                    />
                   </div>
                   <div className="pt-4 border-t border-white/10">
                     <div className="flex items-center justify-between">
@@ -473,7 +483,9 @@ export default function AdminAnalyticsPage() {
                         <Activity className="w-4 h-4 text-green-500" />
                         <span className="text-sm text-white/60">Active Projects</span>
                       </div>
-                      <span className="text-xl font-bold text-white">{analyticsData.projects.active}</span>
+                      <span className="text-xl font-bold text-white">
+                        {analyticsData.projects.active}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -486,7 +498,7 @@ export default function AdminAnalyticsPage() {
                       <div
                         className="w-full bg-blue-500/80 rounded-t"
                         style={{
-                          height: `${(item.count / Math.max(...analyticsData.users.byMonth.map(m => m.count))) * 160}px`,
+                          height: `${(item.count / Math.max(...analyticsData.users.byMonth.map((m) => m.count))) * 160}px`,
                         }}
                       />
                       <span className="text-xs text-white/60 mt-2">{item.month.slice(0, 3)}</span>
@@ -516,7 +528,10 @@ export default function AdminAnalyticsPage() {
                     <div className="flex items-center gap-4 flex-1">
                       <div className="w-10 h-10 rounded-full bg-orange/20 flex items-center justify-center">
                         <span className="text-sm font-medium text-white">
-                          {member.name.split(' ').map(n => n[0]).join('')}
+                          {member.name
+                            .split(' ')
+                            .map((n) => n[0])
+                            .join('')}
                         </span>
                       </div>
                       <div className="flex-1">
@@ -529,7 +544,9 @@ export default function AdminAnalyticsPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Progress value={member.performance} className="w-24 h-2" />
-                      <span className="text-sm text-white/80 w-12 text-right">{member.performance}%</span>
+                      <span className="text-sm text-white/80 w-12 text-right">
+                        {member.performance}%
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -575,7 +592,9 @@ export default function AdminAnalyticsPage() {
                     <span className="text-sm text-white/60">All time</span>
                   </div>
                   <h3 className="text-lg font-medium text-white mb-2">Success Rate</h3>
-                  <p className="text-2xl font-bold text-white">{analyticsData.quotes.conversionRate}%</p>
+                  <p className="text-2xl font-bold text-white">
+                    {analyticsData.quotes.conversionRate}%
+                  </p>
                   <p className="text-sm text-white/60 mt-1">
                     {analyticsData.quotes.approved} of {analyticsData.quotes.total} quotes
                   </p>

@@ -28,6 +28,7 @@ The Firebase rules will now be automatically deployed whenever you push to the m
 ## Current Rules Status
 
 The rules have been updated to allow users to:
+
 - Read their own projects (created via QuoteRequestForm with userId field)
 - Create projects when they're the owner
 - Update their own projects

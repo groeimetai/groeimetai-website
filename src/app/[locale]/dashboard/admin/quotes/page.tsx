@@ -14,7 +14,7 @@ import {
   doc,
   addDoc,
   Timestamp,
-  serverTimestamp
+  serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
@@ -35,7 +35,7 @@ import {
   DollarSign,
   Loader2,
   AlertCircle,
-  ArrowUpDown
+  ArrowUpDown,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -115,12 +115,7 @@ export default function AdminQuotesPage() {
   const [emailMessage, setEmailMessage] = useState('');
   const [sendingEmail, setSendingEmail] = useState(false);
 
-  const {
-    selectedIds,
-    setSelectedIds,
-    toggleSelection,
-    clearSelection,
-  } = useBulkSelection(quotes);
+  const { selectedIds, setSelectedIds, toggleSelection, clearSelection } = useBulkSelection(quotes);
 
   // Redirect if not admin
   useEffect(() => {
@@ -136,17 +131,14 @@ export default function AdminQuotesPage() {
     const fetchQuotes = async () => {
       setIsLoading(true);
       try {
-        const quotesQuery = query(
-          collection(db, 'quotes'),
-          orderBy('createdAt', 'desc')
-        );
+        const quotesQuery = query(collection(db, 'quotes'), orderBy('createdAt', 'desc'));
         const quotesSnapshot = await getDocs(quotesQuery);
-        
+
         const quotesData: Quote[] = [];
         quotesSnapshot.forEach((doc) => {
           quotesData.push({ id: doc.id, ...doc.data() } as Quote);
         });
-        
+
         setQuotes(quotesData);
       } catch (error) {
         console.error('Error fetching quotes:', error);
@@ -159,72 +151,77 @@ export default function AdminQuotesPage() {
   }, [user, isAdmin]);
 
   // Filter and sort quotes
-  const filteredQuotes = quotes.filter(quote => {
-    // Search filter
-    if (searchQuery) {
-      const search = searchQuery.toLowerCase();
-      if (!quote.projectName.toLowerCase().includes(search) &&
+  const filteredQuotes = quotes
+    .filter((quote) => {
+      // Search filter
+      if (searchQuery) {
+        const search = searchQuery.toLowerCase();
+        if (
+          !quote.projectName.toLowerCase().includes(search) &&
           !quote.fullName.toLowerCase().includes(search) &&
           !quote.company.toLowerCase().includes(search) &&
-          !quote.email.toLowerCase().includes(search)) {
+          !quote.email.toLowerCase().includes(search)
+        ) {
+          return false;
+        }
+      }
+
+      // Status filter
+      if (statusFilter !== 'all' && quote.status !== statusFilter) {
         return false;
       }
-    }
 
-    // Status filter
-    if (statusFilter !== 'all' && quote.status !== statusFilter) {
-      return false;
-    }
+      // Date filter
+      if (dateFilter !== 'all') {
+        const now = new Date();
+        const quoteDate = quote.createdAt?.toDate() || new Date();
+        const daysDiff = Math.floor((now.getTime() - quoteDate.getTime()) / (1000 * 60 * 60 * 24));
 
-    // Date filter
-    if (dateFilter !== 'all') {
-      const now = new Date();
-      const quoteDate = quote.createdAt?.toDate() || new Date();
-      const daysDiff = Math.floor((now.getTime() - quoteDate.getTime()) / (1000 * 60 * 60 * 24));
-      
-      if (dateFilter === '7days' && daysDiff > 7) return false;
-      if (dateFilter === '30days' && daysDiff > 30) return false;
-      if (dateFilter === '90days' && daysDiff > 90) return false;
-    }
+        if (dateFilter === '7days' && daysDiff > 7) return false;
+        if (dateFilter === '30days' && daysDiff > 30) return false;
+        if (dateFilter === '90days' && daysDiff > 90) return false;
+      }
 
-    return true;
-  }).sort((a, b) => {
-    let compareValue = 0;
-    
-    switch (sortBy) {
-      case 'projectName':
-        compareValue = a.projectName.localeCompare(b.projectName);
-        break;
-      case 'company':
-        compareValue = a.company.localeCompare(b.company);
-        break;
-      case 'budget':
-        compareValue = (a.totalCost || 0) - (b.totalCost || 0);
-        break;
-      case 'status':
-        compareValue = a.status.localeCompare(b.status);
-        break;
-      default:
-        compareValue = (a.createdAt?.toDate() || new Date()).getTime() - 
-                      (b.createdAt?.toDate() || new Date()).getTime();
-    }
-    
-    return sortOrder === 'asc' ? compareValue : -compareValue;
-  });
+      return true;
+    })
+    .sort((a, b) => {
+      let compareValue = 0;
+
+      switch (sortBy) {
+        case 'projectName':
+          compareValue = a.projectName.localeCompare(b.projectName);
+          break;
+        case 'company':
+          compareValue = a.company.localeCompare(b.company);
+          break;
+        case 'budget':
+          compareValue = (a.totalCost || 0) - (b.totalCost || 0);
+          break;
+        case 'status':
+          compareValue = a.status.localeCompare(b.status);
+          break;
+        default:
+          compareValue =
+            (a.createdAt?.toDate() || new Date()).getTime() -
+            (b.createdAt?.toDate() || new Date()).getTime();
+      }
+
+      return sortOrder === 'asc' ? compareValue : -compareValue;
+    });
 
   // Update quote status
   const updateQuoteStatus = async (quoteId: string, newStatus: Quote['status']) => {
     try {
-      const quote = quotes.find(q => q.id === quoteId);
+      const quote = quotes.find((q) => q.id === quoteId);
       if (!quote) return;
-      
+
       await updateDoc(doc(db, 'quotes', quoteId), {
         status: newStatus,
         updatedAt: serverTimestamp(),
         reviewedBy: user?.uid,
         reviewedAt: serverTimestamp(),
       });
-      
+
       // Send email notification
       try {
         await fetch('/api/email/send', {
@@ -247,7 +244,7 @@ export default function AdminQuotesPage() {
       } catch (emailError) {
         console.error('Failed to send email notification:', emailError);
       }
-      
+
       // Send in-app notification
       if (quote.userId) {
         await notificationService.sendToUser(
@@ -255,13 +252,15 @@ export default function AdminQuotesPage() {
           notificationService.templates.quoteStatusUpdate(quote.projectName, newStatus)
         );
       }
-      
+
       // Update local state
-      setQuotes(quotes.map(q => 
-        q.id === quoteId 
-          ? { ...q, status: newStatus, reviewedBy: user?.uid, reviewedAt: Timestamp.now() } 
-          : q
-      ));
+      setQuotes(
+        quotes.map((q) =>
+          q.id === quoteId
+            ? { ...q, status: newStatus, reviewedBy: user?.uid, reviewedAt: Timestamp.now() }
+            : q
+        )
+      );
     } catch (error) {
       console.error('Error updating quote status:', error);
     }
@@ -353,7 +352,7 @@ export default function AdminQuotesPage() {
               updatedAt: serverTimestamp(),
             });
           }
-          setQuotes(quotes.filter(q => !data.ids.includes(q.id)));
+          setQuotes(quotes.filter((q) => !data.ids.includes(q.id)));
           break;
 
         case 'updateStatus':
@@ -363,10 +362,21 @@ export default function AdminQuotesPage() {
           break;
 
         case 'export':
-          const selectedQuotes = quotes.filter(q => data.ids.includes(q.id));
+          const selectedQuotes = quotes.filter((q) => data.ids.includes(q.id));
           const csv = [
-            ['ID', 'Project Name', 'Company', 'Contact', 'Email', 'Status', 'Budget', 'Timeline', 'Services', 'Created'],
-            ...selectedQuotes.map(q => [
+            [
+              'ID',
+              'Project Name',
+              'Company',
+              'Contact',
+              'Email',
+              'Status',
+              'Budget',
+              'Timeline',
+              'Services',
+              'Created',
+            ],
+            ...selectedQuotes.map((q) => [
               q.id,
               q.projectName,
               q.company,
@@ -379,7 +389,7 @@ export default function AdminQuotesPage() {
               format(q.createdAt?.toDate() || new Date(), 'yyyy-MM-dd'),
             ]),
           ]
-            .map(row => row.map(cell => `"${cell}"`).join(','))
+            .map((row) => row.map((cell) => `"${cell}"`).join(','))
             .join('\n');
 
           const blob = new Blob([csv], { type: 'text/csv' });
@@ -456,14 +466,16 @@ export default function AdminQuotesPage() {
   // Stats
   const stats = {
     total: quotes.length,
-    pending: quotes.filter(q => q.status === 'pending').length,
-    approved: quotes.filter(q => q.status === 'approved').length,
-    rejected: quotes.filter(q => q.status === 'rejected').length,
-    totalValue: quotes.filter(q => q.status === 'approved')
+    pending: quotes.filter((q) => q.status === 'pending').length,
+    approved: quotes.filter((q) => q.status === 'approved').length,
+    rejected: quotes.filter((q) => q.status === 'rejected').length,
+    totalValue: quotes
+      .filter((q) => q.status === 'approved')
       .reduce((sum, q) => sum + (q.totalCost || 0), 0),
-    conversionRate: quotes.length > 0 
-      ? Math.round((quotes.filter(q => q.status === 'approved').length / quotes.length) * 100)
-      : 0,
+    conversionRate:
+      quotes.length > 0
+        ? Math.round((quotes.filter((q) => q.status === 'approved').length / quotes.length) * 100)
+        : 0,
   };
 
   return (
@@ -551,7 +563,7 @@ export default function AdminQuotesPage() {
                   className="pl-10 bg-white/5 border-white/10 text-white"
                 />
               </div>
-              
+
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-[140px] bg-white/5 border-white/10 text-white">
                   <SelectValue placeholder="Status" />
@@ -632,10 +644,12 @@ export default function AdminQuotesPage() {
                   <TableRow className="border-white/10">
                     <TableHead className="w-12 text-white/60">
                       <Checkbox
-                        checked={selectedIds.size === filteredQuotes.length && filteredQuotes.length > 0}
+                        checked={
+                          selectedIds.size === filteredQuotes.length && filteredQuotes.length > 0
+                        }
                         onChange={(e) => {
                           if (e.target.checked) {
-                            setSelectedIds(new Set(filteredQuotes.map(q => q.id)));
+                            setSelectedIds(new Set(filteredQuotes.map((q) => q.id)));
                           } else {
                             clearSelection();
                           }
@@ -655,7 +669,7 @@ export default function AdminQuotesPage() {
                 <TableBody>
                   {filteredQuotes.map((quote) => {
                     const StatusIcon = getStatusIcon(quote.status);
-                    
+
                     return (
                       <TableRow key={quote.id} className="border-white/10">
                         <TableCell>
@@ -674,7 +688,9 @@ export default function AdminQuotesPage() {
                                 </Badge>
                               ))}
                               {quote.services.length > 2 && (
-                                <span className="text-xs text-white/60">+{quote.services.length - 2}</span>
+                                <span className="text-xs text-white/60">
+                                  +{quote.services.length - 2}
+                                </span>
                               )}
                             </div>
                           </div>
@@ -778,14 +794,24 @@ export default function AdminQuotesPage() {
                   <div>
                     <h3 className="text-sm font-medium text-white/60 mb-2">Contact Information</h3>
                     <div className="space-y-2">
-                      <p className="text-white"><strong>Name:</strong> {selectedQuote.fullName}</p>
-                      <p className="text-white"><strong>Email:</strong> {selectedQuote.email}</p>
+                      <p className="text-white">
+                        <strong>Name:</strong> {selectedQuote.fullName}
+                      </p>
+                      <p className="text-white">
+                        <strong>Email:</strong> {selectedQuote.email}
+                      </p>
                       {selectedQuote.phone && (
-                        <p className="text-white"><strong>Phone:</strong> {selectedQuote.phone}</p>
+                        <p className="text-white">
+                          <strong>Phone:</strong> {selectedQuote.phone}
+                        </p>
                       )}
-                      <p className="text-white"><strong>Company:</strong> {selectedQuote.company}</p>
+                      <p className="text-white">
+                        <strong>Company:</strong> {selectedQuote.company}
+                      </p>
                       {selectedQuote.jobTitle && (
-                        <p className="text-white"><strong>Title:</strong> {selectedQuote.jobTitle}</p>
+                        <p className="text-white">
+                          <strong>Title:</strong> {selectedQuote.jobTitle}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -793,10 +819,17 @@ export default function AdminQuotesPage() {
                   <div>
                     <h3 className="text-sm font-medium text-white/60 mb-2">Project Information</h3>
                     <div className="space-y-2">
-                      <p className="text-white"><strong>Project:</strong> {selectedQuote.projectName}</p>
-                      <p className="text-white"><strong>Budget:</strong> {selectedQuote.budget}</p>
-                      <p className="text-white"><strong>Timeline:</strong> {selectedQuote.timeline}</p>
-                      <p className="text-white"><strong>Status:</strong> 
+                      <p className="text-white">
+                        <strong>Project:</strong> {selectedQuote.projectName}
+                      </p>
+                      <p className="text-white">
+                        <strong>Budget:</strong> {selectedQuote.budget}
+                      </p>
+                      <p className="text-white">
+                        <strong>Timeline:</strong> {selectedQuote.timeline}
+                      </p>
+                      <p className="text-white">
+                        <strong>Status:</strong>
                         <Badge
                           variant="outline"
                           className={`ml-2 ${getStatusColor(selectedQuote.status)} bg-opacity-20 border-0`}
@@ -821,13 +854,19 @@ export default function AdminQuotesPage() {
 
                 <div>
                   <h3 className="text-sm font-medium text-white/60 mb-2">Project Description</h3>
-                  <p className="text-white whitespace-pre-wrap">{selectedQuote.projectDescription}</p>
+                  <p className="text-white whitespace-pre-wrap">
+                    {selectedQuote.projectDescription}
+                  </p>
                 </div>
 
                 {selectedQuote.additionalRequirements && (
                   <div>
-                    <h3 className="text-sm font-medium text-white/60 mb-2">Additional Requirements</h3>
-                    <p className="text-white whitespace-pre-wrap">{selectedQuote.additionalRequirements}</p>
+                    <h3 className="text-sm font-medium text-white/60 mb-2">
+                      Additional Requirements
+                    </h3>
+                    <p className="text-white whitespace-pre-wrap">
+                      {selectedQuote.additionalRequirements}
+                    </p>
                   </div>
                 )}
 
@@ -916,7 +955,7 @@ export default function AdminQuotesPage() {
               <Button variant="outline" onClick={() => setIsEmailDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button 
+              <Button
                 onClick={sendQuoteEmail}
                 className="bg-orange hover:bg-orange/90"
                 disabled={!emailSubject || !emailMessage || sendingEmail}
@@ -945,8 +984,8 @@ export default function AdminQuotesPage() {
             </DialogHeader>
             {selectedQuote && (
               <div className="h-full flex flex-col">
-                <QuoteChat 
-                  quoteId={selectedQuote.id} 
+                <QuoteChat
+                  quoteId={selectedQuote.id}
                   quoteName={selectedQuote.projectName}
                   userName={selectedQuote.fullName}
                 />

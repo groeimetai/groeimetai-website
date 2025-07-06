@@ -1,12 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import QuoteRequestForm from '@/components/forms/QuoteRequestForm';
 import { useTranslations } from 'next-intl';
 
@@ -16,7 +11,11 @@ interface ProjectRequestDialogProps {
   preselectedService?: string;
 }
 
-export function ProjectRequestDialog({ open, onOpenChange, preselectedService }: ProjectRequestDialogProps) {
+export function ProjectRequestDialog({
+  open,
+  onOpenChange,
+  preselectedService,
+}: ProjectRequestDialogProps) {
   const t = useTranslations('projectDialog');
 
   return (
@@ -28,9 +27,9 @@ export function ProjectRequestDialog({ open, onOpenChange, preselectedService }:
           </DialogTitle>
         </DialogHeader>
         <div className="mt-4">
-          <QuoteRequestForm 
-            isDialog={true} 
-            onSuccess={() => onOpenChange(false)} 
+          <QuoteRequestForm
+            isDialog={true}
+            onSuccess={() => onOpenChange(false)}
             preselectedService={preselectedService}
           />
         </div>

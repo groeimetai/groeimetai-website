@@ -23,16 +23,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { nodeTypes } from './CustomNodes';
 import { ActionType, TriggerType, WorkflowNode, WorkflowEdge } from '@/types/workflow';
-import {
-  Plus,
-  Save,
-  Play,
-  Download,
-  Upload,
-  Trash2,
-  Settings,
-  Copy,
-} from 'lucide-react';
+import { Plus, Save, Play, Download, Upload, Trash2, Settings, Copy } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -84,7 +75,9 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [showNodeDialog, setShowNodeDialog] = useState(false);
-  const [nodeDialogType, setNodeDialogType] = useState<'trigger' | 'action' | 'condition' | 'end'>('action');
+  const [nodeDialogType, setNodeDialogType] = useState<'trigger' | 'action' | 'condition' | 'end'>(
+    'action'
+  );
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -124,7 +117,9 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
   const deleteSelectedNode = () => {
     if (selectedNode) {
       setNodes((nds) => nds.filter((n) => n.id !== selectedNode.id));
-      setEdges((eds) => eds.filter((e) => e.source !== selectedNode.id && e.target !== selectedNode.id));
+      setEdges((eds) =>
+        eds.filter((e) => e.source !== selectedNode.id && e.target !== selectedNode.id)
+      );
       setSelectedNode(null);
     }
   };
@@ -244,12 +239,7 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
               Export
             </Button>
             <label>
-              <input
-                type="file"
-                accept=".json"
-                onChange={importWorkflow}
-                className="hidden"
-              />
+              <input type="file" accept=".json" onChange={importWorkflow} className="hidden" />
               <Button size="sm" variant="outline" asChild>
                 <span>
                   <Upload className="w-4 h-4 mr-1" />
@@ -288,9 +278,7 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add {nodeDialogType} Node</DialogTitle>
-            <DialogDescription>
-              Configure the {nodeDialogType} node properties
-            </DialogDescription>
+            <DialogDescription>Configure the {nodeDialogType} node properties</DialogDescription>
           </DialogHeader>
           <NodeConfigForm
             type={nodeDialogType}

@@ -62,4 +62,3 @@ export function BrochureDownloadButton({ locale }: BrochureDownloadButtonProps) 
     </Button>
   );
 }
-

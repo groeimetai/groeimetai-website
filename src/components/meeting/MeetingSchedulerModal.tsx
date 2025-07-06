@@ -1,7 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { format, addDays, setHours, setMinutes, startOfDay, isBefore, isAfter, isSameDay, addMinutes } from 'date-fns';
+import {
+  format,
+  addDays,
+  setHours,
+  setMinutes,
+  startOfDay,
+  isBefore,
+  isAfter,
+  isSameDay,
+  addMinutes,
+} from 'date-fns';
 import {
   Dialog,
   DialogContent,
@@ -19,7 +29,15 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase/config';
 import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
-import { Calendar as CalendarIcon, Clock, Loader2, Check, Video, Phone, MapPin } from 'lucide-react';
+import {
+  Calendar as CalendarIcon,
+  Clock,
+  Loader2,
+  Check,
+  Video,
+  Phone,
+  MapPin,
+} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'react-hot-toast';
 
@@ -42,7 +60,7 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [meetingType, setMeetingType] = useState<'video' | 'phone' | 'in-person'>('video');
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -58,7 +76,7 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
       const slots: TimeSlot[] = [];
       const startHour = 9; // 9 AM
       const endHour = 17; // 5 PM
-      
+
       for (let hour = startHour; hour < endHour; hour++) {
         for (let minute = 0; minute < 60; minute += 30) {
           const slotTime = format(setMinutes(setHours(selectedDate, hour), minute), 'HH:mm');
@@ -69,7 +87,7 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
           });
         }
       }
-      
+
       setTimeSlots(slots);
     }
   }, [selectedDate]);
@@ -77,19 +95,19 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
   // Pre-fill user data if logged in
   useEffect(() => {
     if (user && open) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         name: user.displayName || '',
         email: user.email || '',
       }));
-      
+
       // Fetch additional user data
       const fetchUserData = async () => {
         try {
           const userDoc = await getDoc(doc(db, 'users', user.uid));
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            setFormData(prev => ({
+            setFormData((prev) => ({
               ...prev,
               company: userData.company || '',
               phone: userData.phoneNumber || '',
@@ -99,21 +117,21 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
           console.error('Error fetching user data:', error);
         }
       };
-      
+
       fetchUserData();
     }
   }, [user, open]);
 
   const handleSubmit = async () => {
     if (!selectedDate || !selectedTime) return;
-    
+
     setLoading(true);
     try {
       const meetingDateTime = setMinutes(
         setHours(selectedDate, parseInt(selectedTime.split(':')[0])),
         parseInt(selectedTime.split(':')[1])
       );
-      
+
       // Create meeting request
       const meetingData = {
         userId: user?.uid || null,
@@ -124,13 +142,16 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
         startTime: meetingDateTime,
         endTime: addMinutes(meetingDateTime, 30),
         duration: 30,
-        location: meetingType === 'in-person' ? {
-          type: 'physical',
-          address: 'Apeldoorn, Nederland',
-        } : {
-          type: 'virtual',
-          platform: meetingType === 'video' ? 'video' : 'phone',
-        },
+        location:
+          meetingType === 'in-person'
+            ? {
+                type: 'physical',
+                address: 'Apeldoorn, Nederland',
+              }
+            : {
+                type: 'virtual',
+                platform: meetingType === 'video' ? 'video' : 'phone',
+              },
         participantIds: [user?.uid || 'guest'],
         participants: [
           {
@@ -150,9 +171,9 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
         updatedAt: serverTimestamp(),
         createdBy: user?.uid || 'guest',
       };
-      
+
       const meetingRef = await addDoc(collection(db, 'meetings'), meetingData);
-      
+
       // Send email notification to admin
       try {
         await fetch('/api/email/send', {
@@ -169,7 +190,12 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
               topic: formData.topic,
               date: format(meetingDateTime, 'PPP'),
               time: format(meetingDateTime, 'p'),
-              meetingType: meetingType === 'in-person' ? 'In-Person' : meetingType === 'video' ? 'Video Call' : 'Phone Call',
+              meetingType:
+                meetingType === 'in-person'
+                  ? 'In-Person'
+                  : meetingType === 'video'
+                    ? 'Video Call'
+                    : 'Phone Call',
               description: formData.description,
               meetingId: meetingRef.id,
             },
@@ -179,7 +205,7 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
         console.error('Failed to send email notification:', emailError);
         // Don't fail the submission if email fails
       }
-      
+
       // Create notification for admin
       await addDoc(collection(db, 'notifications'), {
         userId: 'admin', // This should be the actual admin user ID
@@ -195,10 +221,10 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
         read: false,
         createdAt: serverTimestamp(),
       });
-      
+
       toast.success(t('success'));
       onOpenChange(false);
-      
+
       // Reset form
       setStep(1);
       setSelectedDate(undefined);
@@ -238,24 +264,17 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
           {/* Progress indicator */}
           <div className="flex items-center justify-between mb-8">
             {[1, 2, 3].map((stepNum) => (
-              <div
-                key={stepNum}
-                className={`flex items-center ${stepNum < 3 ? 'flex-1' : ''}`}
-              >
+              <div key={stepNum} className={`flex items-center ${stepNum < 3 ? 'flex-1' : ''}`}>
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    step >= stepNum
-                      ? 'bg-orange text-white'
-                      : 'bg-gray-200 text-gray-500'
+                    step >= stepNum ? 'bg-orange text-white' : 'bg-gray-200 text-gray-500'
                   }`}
                 >
                   {step > stepNum ? <Check className="w-5 h-5" /> : stepNum}
                 </div>
                 {stepNum < 3 && (
                   <div
-                    className={`flex-1 h-1 mx-2 ${
-                      step > stepNum ? 'bg-orange' : 'bg-gray-200'
-                    }`}
+                    className={`flex-1 h-1 mx-2 ${step > stepNum ? 'bg-orange' : 'bg-gray-200'}`}
                   />
                 )}
               </div>
@@ -266,7 +285,7 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
           {step === 1 && (
             <div className="space-y-4">
               <h3 className="text-lg font-semibold mb-4">{t('steps.contact.title')}</h3>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="name">{t('fields.name')} *</Label>
@@ -288,7 +307,7 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
                   />
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="company">{t('fields.company')}</Label>
@@ -307,7 +326,7 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="topic">{t('fields.topic')} *</Label>
                 <Input
@@ -318,7 +337,7 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
                   required
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor="description">{t('fields.description')}</Label>
                 <Textarea
@@ -329,7 +348,7 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
                   rows={3}
                 />
               </div>
-              
+
               <div className="flex justify-end">
                 <Button
                   onClick={() => setStep(2)}
@@ -345,7 +364,7 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
           {step === 2 && (
             <div className="space-y-4">
               <h3 className="text-lg font-semibold mb-4">{t('steps.datetime.title')}</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <Label className="mb-2 block">{t('fields.selectDate')}</Label>
@@ -357,7 +376,7 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
                     className="rounded-md border"
                   />
                 </div>
-                
+
                 <div>
                   <Label className="mb-2 block">{t('fields.selectTime')}</Label>
                   <div className="h-[300px] overflow-y-auto border rounded-md p-2">
@@ -386,7 +405,7 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
                   </div>
                 </div>
               </div>
-              
+
               <div className="mt-6">
                 <Label className="mb-2 block">{t('fields.meetingType')}</Label>
                 <CustomRadioGroup
@@ -417,15 +436,12 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
                   </div>
                 </CustomRadioGroup>
               </div>
-              
+
               <div className="flex justify-between">
                 <Button variant="outline" onClick={() => setStep(1)}>
                   {t('back')}
                 </Button>
-                <Button
-                  onClick={() => setStep(3)}
-                  disabled={!selectedDate || !selectedTime}
-                >
+                <Button onClick={() => setStep(3)} disabled={!selectedDate || !selectedTime}>
                   {t('next')}
                 </Button>
               </div>
@@ -436,21 +452,37 @@ export default function MeetingSchedulerModal({ open, onOpenChange }: MeetingSch
           {step === 3 && selectedDate && (
             <div className="space-y-4">
               <h3 className="text-lg font-semibold mb-4">{t('steps.confirm.title')}</h3>
-              
+
               <Alert>
                 <AlertDescription>
                   <div className="space-y-2">
-                    <p><strong>{t('fields.name')}:</strong> {formData.name}</p>
-                    <p><strong>{t('fields.email')}:</strong> {formData.email}</p>
-                    {formData.company && <p><strong>{t('fields.company')}:</strong> {formData.company}</p>}
-                    <p><strong>{t('fields.topic')}:</strong> {formData.topic}</p>
-                    <p><strong>{t('fields.date')}:</strong> {format(selectedDate, 'PPP')}</p>
-                    <p><strong>{t('fields.time')}:</strong> {selectedTime}</p>
-                    <p><strong>{t('fields.meetingType')}:</strong> {t(`meetingTypes.${meetingType}`)}</p>
+                    <p>
+                      <strong>{t('fields.name')}:</strong> {formData.name}
+                    </p>
+                    <p>
+                      <strong>{t('fields.email')}:</strong> {formData.email}
+                    </p>
+                    {formData.company && (
+                      <p>
+                        <strong>{t('fields.company')}:</strong> {formData.company}
+                      </p>
+                    )}
+                    <p>
+                      <strong>{t('fields.topic')}:</strong> {formData.topic}
+                    </p>
+                    <p>
+                      <strong>{t('fields.date')}:</strong> {format(selectedDate, 'PPP')}
+                    </p>
+                    <p>
+                      <strong>{t('fields.time')}:</strong> {selectedTime}
+                    </p>
+                    <p>
+                      <strong>{t('fields.meetingType')}:</strong> {t(`meetingTypes.${meetingType}`)}
+                    </p>
                   </div>
                 </AlertDescription>
               </Alert>
-              
+
               <div className="flex justify-between">
                 <Button variant="outline" onClick={() => setStep(2)}>
                   {t('back')}

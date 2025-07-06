@@ -7,6 +7,7 @@ This document describes the Mollie payment integration implementation for invoic
 ### 1. Install Dependencies
 
 The Mollie SDK has already been added to package.json:
+
 ```bash
 npm install
 ```
@@ -24,6 +25,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 For production, use your live Mollie API key and production URL:
+
 ```env
 MOLLIE_API_KEY=live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 NEXT_PUBLIC_APP_URL=https://yourdomain.com
@@ -32,6 +34,7 @@ NEXT_PUBLIC_APP_URL=https://yourdomain.com
 ### 3. Webhook Configuration
 
 Configure your Mollie webhook URL in the Mollie Dashboard:
+
 - Webhook URL: `https://yourdomain.com/api/webhooks/mollie`
 - The webhook will be called for all payment status changes
 
@@ -84,16 +87,16 @@ const payment = await mollieService.createPayment({
   id: 'invoice-123',
   customerId: 'customer-456',
   customerName: 'John Doe',
-  amount: 100.00,
+  amount: 100.0,
   currency: 'EUR',
   description: 'Invoice #123',
   items: [
     {
       description: 'Consulting services',
       quantity: 1,
-      price: 100.00
-    }
-  ]
+      price: 100.0,
+    },
+  ],
 });
 
 // Redirect user to payment page
@@ -113,7 +116,7 @@ import { PaymentButton } from '@/components/invoice/PaymentButton';
   onPaymentInitiated={() => {
     console.log('Payment initiated');
   }}
-/>
+/>;
 ```
 
 ## Payment Flow
@@ -137,6 +140,7 @@ import { PaymentButton } from '@/components/invoice/PaymentButton';
 ### Test Mode
 
 Use Mollie test API keys for development:
+
 - Test API keys start with `test_`
 - Use test payment methods
 - No real money is transferred
@@ -144,6 +148,7 @@ Use Mollie test API keys for development:
 ### Test Payment Methods
 
 In test mode, you can use:
+
 - **iDEAL**: Select any test bank
 - **Credit Card**: Use test card numbers
   - Success: `4111 1111 1111 1111`
@@ -152,6 +157,7 @@ In test mode, you can use:
 ### Testing Webhooks
 
 For local development, use ngrok or similar to expose your local webhook:
+
 ```bash
 ngrok http 3000
 ```
@@ -177,6 +183,7 @@ Then update your Mollie webhook URL to the ngrok URL.
 ## Error Handling
 
 The integration includes comprehensive error handling:
+
 - Network errors
 - Invalid payment states
 - Missing configuration
@@ -187,6 +194,7 @@ All errors are logged for debugging and monitoring.
 ## Support
 
 For Mollie-specific issues:
+
 - Documentation: https://docs.mollie.com/
 - Dashboard: https://www.mollie.com/dashboard/
 - Support: https://www.mollie.com/contact

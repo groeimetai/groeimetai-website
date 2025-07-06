@@ -2,18 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  collection, 
-  query, 
-  orderBy, 
-  onSnapshot, 
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
   doc,
   Timestamp,
   where,
   getDocs,
   addDoc,
   serverTimestamp,
-  setDoc
+  setDoc,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { notificationService } from '@/services/notificationService';
@@ -22,15 +22,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Send, 
-  Loader2, 
-  MessageSquare, 
-  User,
-  Clock,
-  ChevronLeft,
-  Search
-} from 'lucide-react';
+import { Send, Loader2, MessageSquare, User, Clock, ChevronLeft, Search } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -139,20 +131,24 @@ export default function ChatManagement() {
 
       // Update last message timestamp
       const channelRef = doc(db, 'supportChats', selectedChannel.id);
-      await setDoc(channelRef, {
-        lastMessageAt: serverTimestamp(),
-        lastMessage: newMessage.trim(),
-        lastMessageBy: user.uid
-      }, { merge: true });
+      await setDoc(
+        channelRef,
+        {
+          lastMessageAt: serverTimestamp(),
+          lastMessage: newMessage.trim(),
+          lastMessageBy: user.uid,
+        },
+        { merge: true }
+      );
 
       // Send notification to the user
       const notificationData = notificationService.templates.newMessage(
         user.displayName || 'Support Team'
       );
-      
+
       await notificationService.sendToUser(selectedChannel.userId, {
         ...notificationData,
-        link: '/dashboard'
+        link: '/dashboard',
       });
 
       setNewMessage('');
@@ -175,15 +171,16 @@ export default function ChatManagement() {
   const getInitials = (name: string) => {
     return name
       .split(' ')
-      .map(n => n[0])
+      .map((n) => n[0])
       .join('')
       .toUpperCase()
       .slice(0, 2);
   };
 
-  const filteredChannels = channels.filter(channel => 
-    channel.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    channel.userEmail.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredChannels = channels.filter(
+    (channel) =>
+      channel.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      channel.userEmail.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Channel list view
@@ -235,18 +232,14 @@ export default function ChatManagement() {
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-medium text-white truncate">
-                        {channel.userName}
-                      </h3>
+                      <h3 className="font-medium text-white truncate">{channel.userName}</h3>
                       <span className="text-xs text-white/40">
                         {formatMessageTime(channel.lastMessageAt)}
                       </span>
                     </div>
                     <p className="text-sm text-white/60 truncate">{channel.userEmail}</p>
                     {channel.lastMessage && (
-                      <p className="text-sm text-white/40 truncate mt-1">
-                        {channel.lastMessage}
-                      </p>
+                      <p className="text-sm text-white/40 truncate mt-1">{channel.lastMessage}</p>
                     )}
                   </div>
                   {channel.status === 'active' && (
@@ -310,7 +303,11 @@ export default function ChatManagement() {
                   }`}
                 >
                   <Avatar className="w-8 h-8">
-                    <AvatarFallback className={isAdminMessage ? 'bg-green/20 text-green' : 'bg-orange/20 text-orange'}>
+                    <AvatarFallback
+                      className={
+                        isAdminMessage ? 'bg-green/20 text-green' : 'bg-orange/20 text-orange'
+                      }
+                    >
                       {isAdminMessage ? 'AI' : getInitials(msg.senderName)}
                     </AvatarFallback>
                   </Avatar>
@@ -323,13 +320,9 @@ export default function ChatManagement() {
                           : 'bg-white/10 text-white'
                       }`}
                     >
-                      <p className="text-xs font-medium mb-1 opacity-80">
-                        {msg.senderName}
-                      </p>
+                      <p className="text-xs font-medium mb-1 opacity-80">{msg.senderName}</p>
                       <p className="text-sm">{msg.content}</p>
-                      <p className="text-xs mt-1 opacity-60">
-                        {formatMessageTime(msg.createdAt)}
-                      </p>
+                      <p className="text-xs mt-1 opacity-60">{formatMessageTime(msg.createdAt)}</p>
                     </div>
                   </div>
                 </motion.div>

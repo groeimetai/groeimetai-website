@@ -71,7 +71,11 @@ interface QuoteRequestFormProps {
   preselectedService?: string;
 }
 
-export default function QuoteRequestForm({ isDialog = false, onSuccess, preselectedService }: QuoteRequestFormProps) {
+export default function QuoteRequestForm({
+  isDialog = false,
+  onSuccess,
+  preselectedService,
+}: QuoteRequestFormProps) {
   const router = useRouter();
   const { register, user, firebaseUser, loginWithGoogle } = useAuth();
   const t = useTranslations('auth.quoteRequest');
@@ -86,7 +90,7 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
   useEffect(() => {
     setMounted(true);
   }, []);
-  
+
   // Helper to determine if user is logged in
   const isLoggedIn = !!user;
 
@@ -105,10 +109,10 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
         { id: 5, title: t('form.requirements'), icon: Building, type: 'requirements' },
         { id: 6, title: t('form.review'), icon: Check, type: 'review' },
       ];
-      
+
   // Helper to get current step type
   const getCurrentStepType = () => {
-    return steps.find(step => step.id === currentStep)?.type || '';
+    return steps.find((step) => step.id === currentStep)?.type || '';
   };
 
   const [formData, setFormData] = useState({
@@ -126,7 +130,7 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
 
     // Project Details
     projectName: '',
-    services: preselectedService ? [preselectedService] : [] as string[],
+    services: preselectedService ? [preselectedService] : ([] as string[]),
     projectDescription: '',
 
     // Requirements
@@ -146,7 +150,7 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
           const userDoc = await getDoc(doc(db, 'users', user.uid));
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            setFormData(prev => ({
+            setFormData((prev) => ({
               ...prev,
               fullName: userData.displayName || user.displayName || '',
               email: user.email || '',
@@ -193,7 +197,7 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
 
   const validateStep = () => {
     const stepType = getCurrentStepType();
-    
+
     switch (stepType) {
       case 'account':
         if (formData.accountType === 'account') {
@@ -375,7 +379,7 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
     } catch (error: any) {
       console.error('Failed to submit quote request:', error);
       setError(t('errors.submissionFailed'));
-      
+
       // Log error
       await logErrorActivity(
         'quote.create',
@@ -747,11 +751,7 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
                           <div
                             className={`
                               p-2 rounded-lg transition-colors
-                              ${
-                                isSelected
-                                  ? 'bg-orange text-white'
-                                  : 'bg-white/10 text-white/60'
-                              }
+                              ${isSelected ? 'bg-orange text-white' : 'bg-white/10 text-white/60'}
                             `}
                           >
                             <Icon className="w-5 h-5" />

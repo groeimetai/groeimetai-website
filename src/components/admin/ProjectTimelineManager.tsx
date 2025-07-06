@@ -2,13 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -86,10 +80,34 @@ interface UserProject {
 
 // Default stages template - moved outside component to avoid dependency issues
 const defaultStages: ProjectStage[] = [
-  { id: 1, name: 'Discovery', icon: 'briefcase', status: 'upcoming', description: 'Understanding your needs' },
-  { id: 2, name: 'Planning', icon: 'target', status: 'upcoming', description: 'Defining project scope' },
-  { id: 3, name: 'Development', icon: 'rocket', status: 'upcoming', description: 'Building your solution' },
-  { id: 4, name: 'Delivery', icon: 'flag', status: 'upcoming', description: 'Final implementation' },
+  {
+    id: 1,
+    name: 'Discovery',
+    icon: 'briefcase',
+    status: 'upcoming',
+    description: 'Understanding your needs',
+  },
+  {
+    id: 2,
+    name: 'Planning',
+    icon: 'target',
+    status: 'upcoming',
+    description: 'Defining project scope',
+  },
+  {
+    id: 3,
+    name: 'Development',
+    icon: 'rocket',
+    status: 'upcoming',
+    description: 'Building your solution',
+  },
+  {
+    id: 4,
+    name: 'Delivery',
+    icon: 'flag',
+    status: 'upcoming',
+    description: 'Final implementation',
+  },
 ];
 
 export default function ProjectTimelineManager() {
@@ -120,18 +138,19 @@ export default function ProjectTimelineManager() {
 
     const unsubscribe = onSnapshot(q, async (snapshot) => {
       const projectsData: UserProject[] = [];
-      
+
       for (const docSnapshot of snapshot.docs) {
         const quoteData = docSnapshot.data();
-        
+
         // Get the timeline data for this project
         const timelineDoc = await getDoc(doc(db, 'projectTimelines', docSnapshot.id));
         const timelineData = timelineDoc.exists() ? timelineDoc.data() : {};
-        
+
         projectsData.push({
           id: docSnapshot.id,
           userId: quoteData.userId || '',
-          userName: quoteData.fullName || quoteData.firstName + ' ' + quoteData.lastName || 'Unknown',
+          userName:
+            quoteData.fullName || quoteData.firstName + ' ' + quoteData.lastName || 'Unknown',
           userEmail: quoteData.email || '',
           projectName: quoteData.projectTitle || 'Untitled Project',
           status: quoteData.status,
@@ -140,7 +159,7 @@ export default function ProjectTimelineManager() {
           milestone: timelineData.milestone || '',
         });
       }
-      
+
       setProjects(projectsData);
       setLoading(false);
     });
@@ -157,9 +176,10 @@ export default function ProjectTimelineManager() {
     if (!selectedProject || !editingStage) return;
 
     try {
-      const updatedStages = selectedProject.stages?.map(stage => 
-        stage.id === editingStage.id ? editingStage : stage
-      ) || defaultStages;
+      const updatedStages =
+        selectedProject.stages?.map((stage) =>
+          stage.id === editingStage.id ? editingStage : stage
+        ) || defaultStages;
 
       // Update Firestore
       await setDoc(doc(db, 'projectTimelines', selectedProject.id), {
@@ -182,12 +202,16 @@ export default function ProjectTimelineManager() {
     if (!selectedProject) return;
 
     try {
-      await setDoc(doc(db, 'projectTimelines', selectedProject.id), {
-        stages: selectedProject.stages || defaultStages,
-        milestone: milestone,
-        projectName: selectedProject.projectName,
-        updatedAt: Timestamp.now(),
-      }, { merge: true });
+      await setDoc(
+        doc(db, 'projectTimelines', selectedProject.id),
+        {
+          stages: selectedProject.stages || defaultStages,
+          milestone: milestone,
+          projectName: selectedProject.projectName,
+          updatedAt: Timestamp.now(),
+        },
+        { merge: true }
+      );
 
       toast.success('Milestone updated');
     } catch (error) {
@@ -197,8 +221,8 @@ export default function ProjectTimelineManager() {
   };
 
   const calculateProgress = (stages: ProjectStage[]) => {
-    const completedCount = stages.filter(s => s.status === 'completed').length;
-    const currentStage = stages.find(s => s.status === 'current');
+    const completedCount = stages.filter((s) => s.status === 'completed').length;
+    const currentStage = stages.find((s) => s.status === 'current');
     const currentProgress = currentStage?.progress || 0;
     return Math.round((completedCount * 100 + currentProgress) / stages.length);
   };
@@ -278,10 +302,12 @@ export default function ProjectTimelineManager() {
                 <div className="flex gap-2">
                   <Input
                     value={selectedProject.milestone || ''}
-                    onChange={(e) => setSelectedProject({
-                      ...selectedProject,
-                      milestone: e.target.value,
-                    })}
+                    onChange={(e) =>
+                      setSelectedProject({
+                        ...selectedProject,
+                        milestone: e.target.value,
+                      })
+                    }
                     placeholder="Enter next milestone..."
                     className="bg-white/5 border-white/10 text-white"
                   />
@@ -299,20 +325,27 @@ export default function ProjectTimelineManager() {
                 <h3 className="text-sm font-medium text-white/80">Project Stages</h3>
                 {(selectedProject.stages || defaultStages).map((stage, index) => {
                   const StageIcon = stageIcons[stage.icon as keyof typeof stageIcons] || Briefcase;
-                  
+
                   return (
                     <div key={stage.id} className="relative">
                       {index < (selectedProject.stages || defaultStages).length - 1 && (
-                        <div className={`absolute left-5 top-12 bottom-0 w-0.5 ${
-                          stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
-                        }`} />
+                        <div
+                          className={`absolute left-5 top-12 bottom-0 w-0.5 ${
+                            stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
+                          }`}
+                        />
                       )}
-                      
+
                       <div className="flex items-start gap-4 p-4 bg-white/5 rounded-lg">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          stage.status === 'completed' ? 'bg-green-500' :
-                          stage.status === 'current' ? 'bg-orange' : 'bg-white/20'
-                        }`}>
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                            stage.status === 'completed'
+                              ? 'bg-green-500'
+                              : stage.status === 'current'
+                                ? 'bg-orange'
+                                : 'bg-white/20'
+                          }`}
+                        >
                           {stage.status === 'completed' ? (
                             <CheckCircle className="w-5 h-5 text-white" />
                           ) : stage.status === 'current' ? (
@@ -321,7 +354,7 @@ export default function ProjectTimelineManager() {
                             <StageIcon className="w-5 h-5 text-white/60" />
                           )}
                         </div>
-                        
+
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
                             <h4 className="font-medium text-white">{stage.name}</h4>
@@ -371,15 +404,18 @@ export default function ProjectTimelineManager() {
               Update the stage details and progress
             </DialogDescription>
           </DialogHeader>
-          
+
           {editingStage && (
             <div className="space-y-4">
               <div>
                 <Label className="text-white">Status</Label>
                 <Select
                   value={editingStage.status}
-                  onValueChange={(value) => 
-                    setEditingStage({ ...editingStage, status: value as 'completed' | 'current' | 'upcoming' })
+                  onValueChange={(value) =>
+                    setEditingStage({
+                      ...editingStage,
+                      status: value as 'completed' | 'current' | 'upcoming',
+                    })
                   }
                 >
                   <SelectTrigger className="bg-white/5 border-white/10 text-white">
@@ -397,10 +433,12 @@ export default function ProjectTimelineManager() {
                 <Label className="text-white">Description</Label>
                 <Textarea
                   value={editingStage.description}
-                  onChange={(e) => setEditingStage({
-                    ...editingStage,
-                    description: e.target.value,
-                  })}
+                  onChange={(e) =>
+                    setEditingStage({
+                      ...editingStage,
+                      description: e.target.value,
+                    })
+                  }
                   className="bg-white/5 border-white/10 text-white"
                   rows={3}
                 />
@@ -414,10 +452,12 @@ export default function ProjectTimelineManager() {
                     min="0"
                     max="100"
                     value={editingStage.progress || 0}
-                    onChange={(e) => setEditingStage({
-                      ...editingStage,
-                      progress: parseInt(e.target.value) || 0,
-                    })}
+                    onChange={(e) =>
+                      setEditingStage({
+                        ...editingStage,
+                        progress: parseInt(e.target.value) || 0,
+                      })
+                    }
                     className="bg-white/5 border-white/10 text-white"
                   />
                 </div>
@@ -428,10 +468,12 @@ export default function ProjectTimelineManager() {
                   <Label className="text-white">Estimated Completion</Label>
                   <Input
                     value={editingStage.estimatedCompletion || ''}
-                    onChange={(e) => setEditingStage({
-                      ...editingStage,
-                      estimatedCompletion: e.target.value,
-                    })}
+                    onChange={(e) =>
+                      setEditingStage({
+                        ...editingStage,
+                        estimatedCompletion: e.target.value,
+                      })
+                    }
                     placeholder="e.g., March 2024"
                     className="bg-white/5 border-white/10 text-white"
                   />
@@ -448,10 +490,7 @@ export default function ProjectTimelineManager() {
             >
               Cancel
             </Button>
-            <Button
-              onClick={handleSaveStage}
-              className="bg-orange hover:bg-orange/90"
-            >
+            <Button onClick={handleSaveStage} className="bg-orange hover:bg-orange/90">
               Save Changes
             </Button>
           </DialogFooter>

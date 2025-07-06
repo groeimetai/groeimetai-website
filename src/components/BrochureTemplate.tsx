@@ -168,7 +168,14 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View style={{ marginBottom: 10 }}>
-            <Text style={[styles.logo, { backgroundColor: '#FF6600', paddingHorizontal: 20, paddingVertical: 10 }]}>GroeimetAI</Text>
+            <Text
+              style={[
+                styles.logo,
+                { backgroundColor: '#FF6600', paddingHorizontal: 20, paddingVertical: 10 },
+              ]}
+            >
+              GroeimetAI
+            </Text>
           </View>
           <Text style={styles.tagline}>
             {locale === 'nl' ? 'Strategische AI Consultancy' : 'Strategic AI Consultancy'}
@@ -176,9 +183,7 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
         </View>
 
         <View style={{ marginTop: 50, marginBottom: 50 }}>
-          <Text style={styles.gradientTitle}>
-            {t.brochure.coverTitle}
-          </Text>
+          <Text style={styles.gradientTitle}>{t.brochure.coverTitle}</Text>
           <Text style={styles.text}>{t.brochure.coverDescription}</Text>
         </View>
 
@@ -191,15 +196,11 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
           </View>
           <View style={styles.statBox}>
             <Text style={styles.statNumber}>4</Text>
-            <Text style={styles.statLabel}>
-              {locale === 'nl' ? 'Projecten' : 'Projects'}
-            </Text>
+            <Text style={styles.statLabel}>{locale === 'nl' ? 'Projecten' : 'Projects'}</Text>
           </View>
           <View style={styles.statBox}>
             <Text style={styles.statNumber}>€2.8M</Text>
-            <Text style={styles.statLabel}>
-              {locale === 'nl' ? 'Bespaard' : 'Saved'}
-            </Text>
+            <Text style={styles.statLabel}>{locale === 'nl' ? 'Bespaard' : 'Saved'}</Text>
           </View>
         </View>
 
@@ -336,4 +337,3 @@ export const createBrochureDocument = (locale: 'en' | 'nl', translations: any) =
     </Document>
   );
 };
-

@@ -218,17 +218,17 @@ export default async function ServiceDetailPage({
             </div>
             <p className="text-lg text-white/80 mb-8">{service.longDescription}</p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <StartProjectButton 
-                size="lg" 
+              <StartProjectButton
+                size="lg"
                 className="shadow-premium hover-lift"
                 preselectedService={
                   {
-                    'strategy': 'genai-consultancy',
-                    'transformation': 'llm-integration',
-                    'governance': 'ai-security',
-                    'innovation': 'multi-agent',
-                    'advisory': 'rag-architecture',
-                    'adoption': 'servicenow-ai',
+                    strategy: 'genai-consultancy',
+                    transformation: 'llm-integration',
+                    governance: 'ai-security',
+                    innovation: 'multi-agent',
+                    advisory: 'rag-architecture',
+                    adoption: 'servicenow-ai',
                     // Legacy slugs already match
                     'genai-consultancy': 'genai-consultancy',
                     'llm-integration': 'llm-integration',
@@ -364,7 +364,11 @@ export default async function ServiceDetailPage({
             </h2>
             <p className="text-xl text-white/70 mb-8">{t('letsRealize')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <StartProjectButton size="lg" className="shadow-premium hover-lift" preselectedService="genai-consultancy">
+              <StartProjectButton
+                size="lg"
+                className="shadow-premium hover-lift"
+                preselectedService="genai-consultancy"
+              >
                 {tServicesPage('cta.consultation')}
               </StartProjectButton>
               <Link href="/cases">

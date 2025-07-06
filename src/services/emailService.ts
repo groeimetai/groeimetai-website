@@ -22,7 +22,7 @@ class EmailService {
     if (!transporter) {
       throw new Error('Email transporter not available');
     }
-    
+
     try {
       const info = await transporter.sendMail({
         from: `"${emailConfig.from.name}" <${emailConfig.from.address}>`,
@@ -54,7 +54,7 @@ class EmailService {
     requestId: string;
   }) {
     const template = emailTemplates.newProjectRequest(data);
-    
+
     // Send to all admin emails
     await this.sendEmail({
       to: emailConfig.adminEmails,
@@ -76,7 +76,7 @@ class EmailService {
     quoteId: string;
   }) {
     const template = emailTemplates.quoteStatusChange(data);
-    
+
     await this.sendEmail({
       to: data.recipientEmail,
       subject: template.subject,
@@ -102,7 +102,7 @@ class EmailService {
       recipientName: 'Admin',
       recipientEmail: emailConfig.adminEmails[0],
     });
-    
+
     // Send to all admin emails
     await this.sendEmail({
       to: emailConfig.adminEmails,
@@ -126,7 +126,7 @@ class EmailService {
     pdfUrl?: string;
   }) {
     const template = emailTemplates.sendInvoice(data);
-    
+
     await this.sendEmail({
       to: data.recipientEmail,
       subject: template.subject,
@@ -143,7 +143,7 @@ class EmailService {
     reminderType: 'due_soon' | 'overdue' | 'final_notice';
   }) {
     const template = emailTemplates.sendInvoiceReminder(data);
-    
+
     await this.sendEmail({
       to: data.recipientEmail,
       subject: template.subject,
@@ -161,7 +161,7 @@ class EmailService {
     transactionId: string;
   }) {
     const template = emailTemplates.sendPaymentConfirmation(data);
-    
+
     await this.sendEmail({
       to: data.recipientEmail,
       subject: template.subject,

@@ -2,17 +2,17 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  collection, 
-  query, 
-  orderBy, 
-  onSnapshot, 
-  addDoc, 
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  addDoc,
   serverTimestamp,
   Timestamp,
   doc,
   setDoc,
-  getDoc
+  getDoc,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -70,7 +70,7 @@ export default function AdminSupportChat({ chatId, userId, userName }: AdminSupp
     const q = query(messagesRef, orderBy('createdAt', 'asc'));
 
     unsubscribe = onSnapshot(
-      q, 
+      q,
       (snapshot) => {
         const newMessages: Message[] = [];
         snapshot.forEach((doc) => {
@@ -110,12 +110,16 @@ export default function AdminSupportChat({ chatId, userId, userName }: AdminSupp
 
       // Update last message timestamp and status
       const channelRef = doc(db, 'supportChats', chatId);
-      await setDoc(channelRef, {
-        lastMessageAt: serverTimestamp(),
-        lastMessage: newMessage.trim(),
-        lastMessageBy: user.uid,
-        status: 'active' // Set to active when admin responds
-      }, { merge: true });
+      await setDoc(
+        channelRef,
+        {
+          lastMessageAt: serverTimestamp(),
+          lastMessage: newMessage.trim(),
+          lastMessageBy: user.uid,
+          status: 'active', // Set to active when admin responds
+        },
+        { merge: true }
+      );
 
       setNewMessage('');
     } catch (error) {
@@ -137,7 +141,7 @@ export default function AdminSupportChat({ chatId, userId, userName }: AdminSupp
   const getInitials = (name: string) => {
     return name
       .split(' ')
-      .map(n => n[0])
+      .map((n) => n[0])
       .join('')
       .toUpperCase()
       .slice(0, 2);
@@ -157,18 +161,18 @@ export default function AdminSupportChat({ chatId, userId, userName }: AdminSupp
               <Loader2 className="w-6 h-6 animate-spin text-orange" />
             </div>
           )}
-          
+
           {!isLoading && messages.length === 0 && (
             <div className="text-center text-white/40 py-8">
               <p>No messages yet in this conversation.</p>
             </div>
           )}
-          
+
           <AnimatePresence initial={false}>
             {messages.map((msg) => {
               const isOwnMessage = msg.senderId === user?.uid;
               const isAdminMessage = msg.senderRole === 'admin';
-              
+
               return (
                 <motion.div
                   key={msg.id}
@@ -181,30 +185,30 @@ export default function AdminSupportChat({ chatId, userId, userName }: AdminSupp
                   }`}
                 >
                   <Avatar className="w-8 h-8">
-                    <AvatarFallback className={isAdminMessage ? 'bg-green/20 text-green' : 'bg-orange/20 text-orange'}>
+                    <AvatarFallback
+                      className={
+                        isAdminMessage ? 'bg-green/20 text-green' : 'bg-orange/20 text-orange'
+                      }
+                    >
                       {isAdminMessage ? 'AI' : getInitials(msg.senderName)}
                     </AvatarFallback>
                   </Avatar>
-                  
+
                   <div className={`flex-1 ${isOwnMessage ? 'flex justify-end' : ''}`}>
                     <div
                       className={`inline-block rounded-lg p-3 max-w-[80%] ${
                         isOwnMessage
                           ? 'bg-green text-white'
                           : isAdminMessage
-                          ? 'bg-green/20 text-white border border-green/30'
-                          : 'bg-white/10 text-white'
+                            ? 'bg-green/20 text-white border border-green/30'
+                            : 'bg-white/10 text-white'
                       }`}
                     >
                       {!isOwnMessage && (
-                        <p className="text-xs font-medium mb-1 opacity-80">
-                          {msg.senderName}
-                        </p>
+                        <p className="text-xs font-medium mb-1 opacity-80">{msg.senderName}</p>
                       )}
                       <p className="text-sm">{msg.content}</p>
-                      <p className="text-xs mt-1 opacity-60">
-                        {formatMessageTime(msg.createdAt)}
-                      </p>
+                      <p className="text-xs mt-1 opacity-60">{formatMessageTime(msg.createdAt)}</p>
                     </div>
                   </div>
                 </motion.div>

@@ -11,7 +11,7 @@ import {
   updateDoc,
   addDoc,
   deleteDoc,
-  serverTimestamp
+  serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
@@ -33,7 +33,7 @@ import {
   Globe,
   Palette,
   Database,
-  AlertCircle
+  AlertCircle,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -48,12 +48,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Dialog,
   DialogContent,
@@ -143,7 +138,7 @@ export default function AdminSettingsPage() {
       id: '2',
       name: 'New User Welcome',
       subject: 'Welcome to GroeimetAI',
-      body: 'Welcome {{userName}}!\n\nThank you for joining GroeimetAI. We\'re excited to help you grow with AI.\n\nBest regards,\nThe GroeimetAI Team',
+      body: "Welcome {{userName}}!\n\nThank you for joining GroeimetAI. We're excited to help you grow with AI.\n\nBest regards,\nThe GroeimetAI Team",
       variables: ['userName'],
     },
   ]);
@@ -208,8 +203,20 @@ export default function AdminSettingsPage() {
 
   // API Keys
   const [apiKeys, setApiKeys] = useState([
-    { id: '1', name: 'Production API', key: 'sk-...abc123', created: '2024-01-01', lastUsed: '2024-01-15' },
-    { id: '2', name: 'Development API', key: 'sk-...def456', created: '2024-01-10', lastUsed: '2024-01-14' },
+    {
+      id: '1',
+      name: 'Production API',
+      key: 'sk-...abc123',
+      created: '2024-01-01',
+      lastUsed: '2024-01-15',
+    },
+    {
+      id: '2',
+      name: 'Development API',
+      key: 'sk-...def456',
+      created: '2024-01-10',
+      lastUsed: '2024-01-14',
+    },
   ]);
 
   // Dialog states
@@ -230,11 +237,11 @@ export default function AdminSettingsPage() {
   const saveSettings = async (section: string) => {
     setIsSaving(true);
     setSaveMessage('');
-    
+
     try {
       // Simulate saving to database
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       setSaveMessage(`${section} settings saved successfully!`);
       setTimeout(() => setSaveMessage(''), 3000);
     } catch (error) {
@@ -260,13 +267,13 @@ export default function AdminSettingsPage() {
     if (!editingTemplate) return;
 
     if (editingTemplate.id) {
-      setEmailTemplates(templates =>
-        templates.map(t => t.id === editingTemplate.id ? editingTemplate : t)
+      setEmailTemplates((templates) =>
+        templates.map((t) => (t.id === editingTemplate.id ? editingTemplate : t))
       );
     } else {
-      setEmailTemplates(templates => [
+      setEmailTemplates((templates) => [
         ...templates,
-        { ...editingTemplate, id: Date.now().toString() }
+        { ...editingTemplate, id: Date.now().toString() },
       ]);
     }
 
@@ -275,7 +282,7 @@ export default function AdminSettingsPage() {
   };
 
   const deleteEmailTemplate = (id: string) => {
-    setEmailTemplates(templates => templates.filter(t => t.id !== id));
+    setEmailTemplates((templates) => templates.filter((t) => t.id !== id));
   };
 
   const addTeamMember = () => {
@@ -294,14 +301,11 @@ export default function AdminSettingsPage() {
     if (!editingMember) return;
 
     if (editingMember.id) {
-      setTeamMembers(members =>
-        members.map(m => m.id === editingMember.id ? editingMember : m)
+      setTeamMembers((members) =>
+        members.map((m) => (m.id === editingMember.id ? editingMember : m))
       );
     } else {
-      setTeamMembers(members => [
-        ...members,
-        { ...editingMember, id: Date.now().toString() }
-      ]);
+      setTeamMembers((members) => [...members, { ...editingMember, id: Date.now().toString() }]);
     }
 
     setIsTeamDialogOpen(false);
@@ -309,7 +313,7 @@ export default function AdminSettingsPage() {
   };
 
   const deleteTeamMember = (id: string) => {
-    setTeamMembers(members => members.filter(m => m.id !== id));
+    setTeamMembers((members) => members.filter((m) => m.id !== id));
   };
 
   const addService = () => {
@@ -328,14 +332,11 @@ export default function AdminSettingsPage() {
     if (!editingService) return;
 
     if (editingService.id) {
-      setServices(services =>
-        services.map(s => s.id === editingService.id ? editingService : s)
+      setServices((services) =>
+        services.map((s) => (s.id === editingService.id ? editingService : s))
       );
     } else {
-      setServices(services => [
-        ...services,
-        { ...editingService, id: Date.now().toString() }
-      ]);
+      setServices((services) => [...services, { ...editingService, id: Date.now().toString() }]);
     }
 
     setIsServiceDialogOpen(false);
@@ -343,7 +344,7 @@ export default function AdminSettingsPage() {
   };
 
   const deleteService = (id: string) => {
-    setServices(services => services.filter(s => s.id !== id));
+    setServices((services) => services.filter((s) => s.id !== id));
   };
 
   const generateApiKey = () => {
@@ -426,67 +427,95 @@ export default function AdminSettingsPage() {
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <Label htmlFor="company-name" className="text-white/80">Company Name</Label>
+                    <Label htmlFor="company-name" className="text-white/80">
+                      Company Name
+                    </Label>
                     <Input
                       id="company-name"
                       value={companySettings.name}
-                      onChange={(e) => setCompanySettings({ ...companySettings, name: e.target.value })}
+                      onChange={(e) =>
+                        setCompanySettings({ ...companySettings, name: e.target.value })
+                      }
                       className="mt-1 bg-white/5 border-white/10 text-white"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="company-email" className="text-white/80">Contact Email</Label>
+                    <Label htmlFor="company-email" className="text-white/80">
+                      Contact Email
+                    </Label>
                     <Input
                       id="company-email"
                       type="email"
                       value={companySettings.email}
-                      onChange={(e) => setCompanySettings({ ...companySettings, email: e.target.value })}
+                      onChange={(e) =>
+                        setCompanySettings({ ...companySettings, email: e.target.value })
+                      }
                       className="mt-1 bg-white/5 border-white/10 text-white"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="company-phone" className="text-white/80">Phone Number</Label>
+                    <Label htmlFor="company-phone" className="text-white/80">
+                      Phone Number
+                    </Label>
                     <Input
                       id="company-phone"
                       value={companySettings.phone}
-                      onChange={(e) => setCompanySettings({ ...companySettings, phone: e.target.value })}
+                      onChange={(e) =>
+                        setCompanySettings({ ...companySettings, phone: e.target.value })
+                      }
                       className="mt-1 bg-white/5 border-white/10 text-white"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="company-website" className="text-white/80">Website</Label>
+                    <Label htmlFor="company-website" className="text-white/80">
+                      Website
+                    </Label>
                     <Input
                       id="company-website"
                       value={companySettings.website}
-                      onChange={(e) => setCompanySettings({ ...companySettings, website: e.target.value })}
+                      onChange={(e) =>
+                        setCompanySettings({ ...companySettings, website: e.target.value })
+                      }
                       className="mt-1 bg-white/5 border-white/10 text-white"
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <Label htmlFor="company-address" className="text-white/80">Address</Label>
+                    <Label htmlFor="company-address" className="text-white/80">
+                      Address
+                    </Label>
                     <Textarea
                       id="company-address"
                       value={companySettings.address}
-                      onChange={(e) => setCompanySettings({ ...companySettings, address: e.target.value })}
+                      onChange={(e) =>
+                        setCompanySettings({ ...companySettings, address: e.target.value })
+                      }
                       className="mt-1 bg-white/5 border-white/10 text-white"
                       rows={3}
                     />
                   </div>
                   <div>
-                    <Label htmlFor="company-vat" className="text-white/80">VAT Number</Label>
+                    <Label htmlFor="company-vat" className="text-white/80">
+                      VAT Number
+                    </Label>
                     <Input
                       id="company-vat"
                       value={companySettings.vat}
-                      onChange={(e) => setCompanySettings({ ...companySettings, vat: e.target.value })}
+                      onChange={(e) =>
+                        setCompanySettings({ ...companySettings, vat: e.target.value })
+                      }
                       className="mt-1 bg-white/5 border-white/10 text-white"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="company-registration" className="text-white/80">Registration Number</Label>
+                    <Label htmlFor="company-registration" className="text-white/80">
+                      Registration Number
+                    </Label>
                     <Input
                       id="company-registration"
                       value={companySettings.registration}
-                      onChange={(e) => setCompanySettings({ ...companySettings, registration: e.target.value })}
+                      onChange={(e) =>
+                        setCompanySettings({ ...companySettings, registration: e.target.value })
+                      }
                       className="mt-1 bg-white/5 border-white/10 text-white"
                     />
                   </div>
@@ -525,7 +554,11 @@ export default function AdminSettingsPage() {
                       Manage email templates for automated communications
                     </CardDescription>
                   </div>
-                  <Button onClick={addEmailTemplate} size="sm" className="bg-orange hover:bg-orange/90">
+                  <Button
+                    onClick={addEmailTemplate}
+                    size="sm"
+                    className="bg-orange hover:bg-orange/90"
+                  >
                     <Plus className="w-4 h-4 mr-2" />
                     Add Template
                   </Button>
@@ -588,7 +621,11 @@ export default function AdminSettingsPage() {
                       Manage team members and their permissions
                     </CardDescription>
                   </div>
-                  <Button onClick={addTeamMember} size="sm" className="bg-orange hover:bg-orange/90">
+                  <Button
+                    onClick={addTeamMember}
+                    size="sm"
+                    className="bg-orange hover:bg-orange/90"
+                  >
                     <Plus className="w-4 h-4 mr-2" />
                     Add Member
                   </Button>
@@ -605,7 +642,10 @@ export default function AdminSettingsPage() {
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-full bg-orange/20 flex items-center justify-center">
                             <span className="text-sm font-medium text-white">
-                              {member.name.split(' ').map(n => n[0]).join('')}
+                              {member.name
+                                .split(' ')
+                                .map((n) => n[0])
+                                .join('')}
                             </span>
                           </div>
                           <div>
@@ -618,8 +658,10 @@ export default function AdminSettingsPage() {
                           <Switch
                             checked={member.active}
                             onCheckedChange={(checked) => {
-                              setTeamMembers(members =>
-                                members.map(m => m.id === member.id ? { ...m, active: checked } : m)
+                              setTeamMembers((members) =>
+                                members.map((m) =>
+                                  m.id === member.id ? { ...m, active: checked } : m
+                                )
                               );
                             }}
                           />
@@ -681,7 +723,8 @@ export default function AdminSettingsPage() {
                           <div className="flex items-center gap-4 mt-2">
                             {service.priceType !== 'custom' && (
                               <span className="text-white">
-                                €{service.basePrice} {service.priceType === 'hourly' ? '/ hour' : ''}
+                                €{service.basePrice}{' '}
+                                {service.priceType === 'hourly' ? '/ hour' : ''}
                               </span>
                             )}
                             <Badge variant="outline">{service.priceType}</Badge>
@@ -691,8 +734,10 @@ export default function AdminSettingsPage() {
                           <Switch
                             checked={service.active}
                             onCheckedChange={(checked) => {
-                              setServices(services =>
-                                services.map(s => s.id === service.id ? { ...s, active: checked } : s)
+                              setServices((services) =>
+                                services.map((s) =>
+                                  s.id === service.id ? { ...s, active: checked } : s
+                                )
                               );
                             }}
                           />
@@ -735,14 +780,19 @@ export default function AdminSettingsPage() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label htmlFor="email-notifications" className="text-white">Email Notifications</Label>
+                      <Label htmlFor="email-notifications" className="text-white">
+                        Email Notifications
+                      </Label>
                       <p className="text-sm text-white/60">Receive notifications via email</p>
                     </div>
                     <Switch
                       id="email-notifications"
                       checked={notificationSettings.emailNotifications}
                       onCheckedChange={(checked) =>
-                        setNotificationSettings({ ...notificationSettings, emailNotifications: checked })
+                        setNotificationSettings({
+                          ...notificationSettings,
+                          emailNotifications: checked,
+                        })
                       }
                     />
                   </div>
@@ -750,8 +800,12 @@ export default function AdminSettingsPage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label htmlFor="new-quotes" className="text-white">New Quotes</Label>
-                        <p className="text-sm text-white/60">Get notified when new quotes are submitted</p>
+                        <Label htmlFor="new-quotes" className="text-white">
+                          New Quotes
+                        </Label>
+                        <p className="text-sm text-white/60">
+                          Get notified when new quotes are submitted
+                        </p>
                       </div>
                       <Switch
                         id="new-quotes"
@@ -764,56 +818,78 @@ export default function AdminSettingsPage() {
                     </div>
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label htmlFor="project-updates" className="text-white">Project Updates</Label>
-                        <p className="text-sm text-white/60">Notifications for project status changes</p>
+                        <Label htmlFor="project-updates" className="text-white">
+                          Project Updates
+                        </Label>
+                        <p className="text-sm text-white/60">
+                          Notifications for project status changes
+                        </p>
                       </div>
                       <Switch
                         id="project-updates"
                         checked={notificationSettings.projectUpdates}
                         onCheckedChange={(checked) =>
-                          setNotificationSettings({ ...notificationSettings, projectUpdates: checked })
+                          setNotificationSettings({
+                            ...notificationSettings,
+                            projectUpdates: checked,
+                          })
                         }
                         disabled={!notificationSettings.emailNotifications}
                       />
                     </div>
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label htmlFor="user-registrations" className="text-white">User Registrations</Label>
+                        <Label htmlFor="user-registrations" className="text-white">
+                          User Registrations
+                        </Label>
                         <p className="text-sm text-white/60">New user sign-ups</p>
                       </div>
                       <Switch
                         id="user-registrations"
                         checked={notificationSettings.userRegistrations}
                         onCheckedChange={(checked) =>
-                          setNotificationSettings({ ...notificationSettings, userRegistrations: checked })
+                          setNotificationSettings({
+                            ...notificationSettings,
+                            userRegistrations: checked,
+                          })
                         }
                         disabled={!notificationSettings.emailNotifications}
                       />
                     </div>
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label htmlFor="system-alerts" className="text-white">System Alerts</Label>
+                        <Label htmlFor="system-alerts" className="text-white">
+                          System Alerts
+                        </Label>
                         <p className="text-sm text-white/60">Important system notifications</p>
                       </div>
                       <Switch
                         id="system-alerts"
                         checked={notificationSettings.systemAlerts}
                         onCheckedChange={(checked) =>
-                          setNotificationSettings({ ...notificationSettings, systemAlerts: checked })
+                          setNotificationSettings({
+                            ...notificationSettings,
+                            systemAlerts: checked,
+                          })
                         }
                         disabled={!notificationSettings.emailNotifications}
                       />
                     </div>
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label htmlFor="weekly-report" className="text-white">Weekly Report</Label>
+                        <Label htmlFor="weekly-report" className="text-white">
+                          Weekly Report
+                        </Label>
                         <p className="text-sm text-white/60">Receive weekly summary reports</p>
                       </div>
                       <Switch
                         id="weekly-report"
                         checked={notificationSettings.weeklyReport}
                         onCheckedChange={(checked) =>
-                          setNotificationSettings({ ...notificationSettings, weeklyReport: checked })
+                          setNotificationSettings({
+                            ...notificationSettings,
+                            weeklyReport: checked,
+                          })
                         }
                         disabled={!notificationSettings.emailNotifications}
                       />
@@ -854,7 +930,11 @@ export default function AdminSettingsPage() {
                       Manage API keys for external integrations
                     </CardDescription>
                   </div>
-                  <Button onClick={generateApiKey} size="sm" className="bg-orange hover:bg-orange/90">
+                  <Button
+                    onClick={generateApiKey}
+                    size="sm"
+                    className="bg-orange hover:bg-orange/90"
+                  >
                     <Plus className="w-4 h-4 mr-2" />
                     Generate Key
                   </Button>
@@ -864,7 +944,8 @@ export default function AdminSettingsPage() {
                 <Alert className="mb-6 bg-yellow-500/10 border-yellow-500/30">
                   <AlertCircle className="w-4 h-4 text-yellow-500" />
                   <AlertDescription className="text-white">
-                    Keep your API keys secure. Never share them publicly or commit them to version control.
+                    Keep your API keys secure. Never share them publicly or commit them to version
+                    control.
                   </AlertDescription>
                 </Alert>
                 <div className="space-y-4">
@@ -885,7 +966,9 @@ export default function AdminSettingsPage() {
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => setApiKeys(keys => keys.filter(k => k.id !== apiKey.id))}
+                          onClick={() =>
+                            setApiKeys((keys) => keys.filter((k) => k.id !== apiKey.id))
+                          }
                         >
                           <Trash2 className="w-4 h-4 text-red-500" />
                         </Button>
@@ -902,16 +985,16 @@ export default function AdminSettingsPage() {
         <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
           <DialogContent className="bg-black/95 border-white/20 text-white">
             <DialogHeader>
-              <DialogTitle>
-                {editingTemplate?.id ? 'Edit' : 'Add'} Email Template
-              </DialogTitle>
+              <DialogTitle>{editingTemplate?.id ? 'Edit' : 'Add'} Email Template</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 mt-4">
               <div>
                 <Label className="text-white/80">Template Name</Label>
                 <Input
                   value={editingTemplate?.name || ''}
-                  onChange={(e) => setEditingTemplate(prev => prev ? { ...prev, name: e.target.value } : null)}
+                  onChange={(e) =>
+                    setEditingTemplate((prev) => (prev ? { ...prev, name: e.target.value } : null))
+                  }
                   className="mt-1 bg-white/5 border-white/10 text-white"
                 />
               </div>
@@ -919,7 +1002,11 @@ export default function AdminSettingsPage() {
                 <Label className="text-white/80">Subject</Label>
                 <Input
                   value={editingTemplate?.subject || ''}
-                  onChange={(e) => setEditingTemplate(prev => prev ? { ...prev, subject: e.target.value } : null)}
+                  onChange={(e) =>
+                    setEditingTemplate((prev) =>
+                      prev ? { ...prev, subject: e.target.value } : null
+                    )
+                  }
                   className="mt-1 bg-white/5 border-white/10 text-white"
                 />
               </div>
@@ -927,7 +1014,9 @@ export default function AdminSettingsPage() {
                 <Label className="text-white/80">Body</Label>
                 <Textarea
                   value={editingTemplate?.body || ''}
-                  onChange={(e) => setEditingTemplate(prev => prev ? { ...prev, body: e.target.value } : null)}
+                  onChange={(e) =>
+                    setEditingTemplate((prev) => (prev ? { ...prev, body: e.target.value } : null))
+                  }
                   rows={6}
                   className="mt-1 bg-white/5 border-white/10 text-white"
                 />
@@ -936,9 +1025,19 @@ export default function AdminSettingsPage() {
                 <Label className="text-white/80">Variables (comma separated)</Label>
                 <Input
                   value={editingTemplate?.variables.join(', ') || ''}
-                  onChange={(e) => setEditingTemplate(prev => 
-                    prev ? { ...prev, variables: e.target.value.split(',').map(v => v.trim()).filter(Boolean) } : null
-                  )}
+                  onChange={(e) =>
+                    setEditingTemplate((prev) =>
+                      prev
+                        ? {
+                            ...prev,
+                            variables: e.target.value
+                              .split(',')
+                              .map((v) => v.trim())
+                              .filter(Boolean),
+                          }
+                        : null
+                    )
+                  }
                   className="mt-1 bg-white/5 border-white/10 text-white"
                   placeholder="clientName, projectName, companyName"
                 />
@@ -959,16 +1058,16 @@ export default function AdminSettingsPage() {
         <Dialog open={isTeamDialogOpen} onOpenChange={setIsTeamDialogOpen}>
           <DialogContent className="bg-black/95 border-white/20 text-white">
             <DialogHeader>
-              <DialogTitle>
-                {editingMember?.id ? 'Edit' : 'Add'} Team Member
-              </DialogTitle>
+              <DialogTitle>{editingMember?.id ? 'Edit' : 'Add'} Team Member</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 mt-4">
               <div>
                 <Label className="text-white/80">Name</Label>
                 <Input
                   value={editingMember?.name || ''}
-                  onChange={(e) => setEditingMember(prev => prev ? { ...prev, name: e.target.value } : null)}
+                  onChange={(e) =>
+                    setEditingMember((prev) => (prev ? { ...prev, name: e.target.value } : null))
+                  }
                   className="mt-1 bg-white/5 border-white/10 text-white"
                 />
               </div>
@@ -977,7 +1076,9 @@ export default function AdminSettingsPage() {
                 <Input
                   type="email"
                   value={editingMember?.email || ''}
-                  onChange={(e) => setEditingMember(prev => prev ? { ...prev, email: e.target.value } : null)}
+                  onChange={(e) =>
+                    setEditingMember((prev) => (prev ? { ...prev, email: e.target.value } : null))
+                  }
                   className="mt-1 bg-white/5 border-white/10 text-white"
                 />
               </div>
@@ -985,7 +1086,9 @@ export default function AdminSettingsPage() {
                 <Label className="text-white/80">Role</Label>
                 <Select
                   value={editingMember?.role || 'Project Manager'}
-                  onValueChange={(value: string) => setEditingMember(prev => prev ? { ...prev, role: value } : null)}
+                  onValueChange={(value: string) =>
+                    setEditingMember((prev) => (prev ? { ...prev, role: value } : null))
+                  }
                 >
                   <SelectTrigger className="bg-white/5 border-white/10 text-white">
                     <SelectValue />
@@ -1015,16 +1118,16 @@ export default function AdminSettingsPage() {
         <Dialog open={isServiceDialogOpen} onOpenChange={setIsServiceDialogOpen}>
           <DialogContent className="bg-black/95 border-white/20 text-white">
             <DialogHeader>
-              <DialogTitle>
-                {editingService?.id ? 'Edit' : 'Add'} Service
-              </DialogTitle>
+              <DialogTitle>{editingService?.id ? 'Edit' : 'Add'} Service</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 mt-4">
               <div>
                 <Label className="text-white/80">Service Name</Label>
                 <Input
                   value={editingService?.name || ''}
-                  onChange={(e) => setEditingService(prev => prev ? { ...prev, name: e.target.value } : null)}
+                  onChange={(e) =>
+                    setEditingService((prev) => (prev ? { ...prev, name: e.target.value } : null))
+                  }
                   className="mt-1 bg-white/5 border-white/10 text-white"
                 />
               </div>
@@ -1032,7 +1135,11 @@ export default function AdminSettingsPage() {
                 <Label className="text-white/80">Description</Label>
                 <Textarea
                   value={editingService?.description || ''}
-                  onChange={(e) => setEditingService(prev => prev ? { ...prev, description: e.target.value } : null)}
+                  onChange={(e) =>
+                    setEditingService((prev) =>
+                      prev ? { ...prev, description: e.target.value } : null
+                    )
+                  }
                   rows={3}
                   className="mt-1 bg-white/5 border-white/10 text-white"
                 />
@@ -1041,8 +1148,10 @@ export default function AdminSettingsPage() {
                 <Label className="text-white/80">Pricing Type</Label>
                 <Select
                   value={editingService?.priceType || 'fixed'}
-                  onValueChange={(value) => 
-                    setEditingService(prev => prev ? { ...prev, priceType: value as 'fixed' | 'hourly' | 'custom' } : null)
+                  onValueChange={(value) =>
+                    setEditingService((prev) =>
+                      prev ? { ...prev, priceType: value as 'fixed' | 'hourly' | 'custom' } : null
+                    )
                   }
                 >
                   <SelectTrigger className="bg-white/5 border-white/10 text-white">
@@ -1061,9 +1170,11 @@ export default function AdminSettingsPage() {
                   <Input
                     type="number"
                     value={editingService?.basePrice || 0}
-                    onChange={(e) => setEditingService(prev => 
-                      prev ? { ...prev, basePrice: parseInt(e.target.value) || 0 } : null
-                    )}
+                    onChange={(e) =>
+                      setEditingService((prev) =>
+                        prev ? { ...prev, basePrice: parseInt(e.target.value) || 0 } : null
+                      )
+                    }
                     className="mt-1 bg-white/5 border-white/10 text-white"
                   />
                 </div>

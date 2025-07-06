@@ -54,7 +54,10 @@ export const WorkflowExecutionHistory: React.FC<WorkflowExecutionHistoryProps> =
   };
 
   const getStatusBadge = (status: WorkflowExecution['status']) => {
-    const variants: Record<WorkflowExecution['status'], 'default' | 'destructive' | 'secondary' | 'outline'> = {
+    const variants: Record<
+      WorkflowExecution['status'],
+      'default' | 'destructive' | 'secondary' | 'outline'
+    > = {
       completed: 'default',
       failed: 'destructive',
       running: 'secondary',
@@ -123,16 +126,13 @@ export const WorkflowExecutionHistory: React.FC<WorkflowExecutionHistoryProps> =
             ) : (
               executions.map((execution) => (
                 <TableRow key={execution.id}>
-                  <TableCell className="font-mono text-sm">
-                    {execution.id.slice(0, 8)}...
-                  </TableCell>
+                  <TableCell className="font-mono text-sm">{execution.id.slice(0, 8)}...</TableCell>
                   <TableCell>{getStatusBadge(execution.status)}</TableCell>
-                  <TableCell>
-                    {format(execution.startedAt, 'MMM d, HH:mm:ss')}
-                  </TableCell>
+                  <TableCell>{format(execution.startedAt, 'MMM d, HH:mm:ss')}</TableCell>
                   <TableCell>{getDuration(execution)}</TableCell>
                   <TableCell>
-                    {execution.currentNodeId || (execution.status === 'completed' ? 'Finished' : '-')}
+                    {execution.currentNodeId ||
+                      (execution.status === 'completed' ? 'Finished' : '-')}
                   </TableCell>
                   <TableCell>
                     <Button
@@ -151,16 +151,11 @@ export const WorkflowExecutionHistory: React.FC<WorkflowExecutionHistoryProps> =
         </Table>
       </div>
 
-      <Dialog
-        open={!!selectedExecution}
-        onOpenChange={() => setSelectedExecution(null)}
-      >
+      <Dialog open={!!selectedExecution} onOpenChange={() => setSelectedExecution(null)}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle>Execution Details</DialogTitle>
-            <DialogDescription>
-              Execution ID: {selectedExecution?.id}
-            </DialogDescription>
+            <DialogDescription>Execution ID: {selectedExecution?.id}</DialogDescription>
           </DialogHeader>
 
           {selectedExecution && (
@@ -176,9 +171,7 @@ export const WorkflowExecutionHistory: React.FC<WorkflowExecutionHistoryProps> =
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Started At</p>
-                  <p className="mt-1 font-medium">
-                    {format(selectedExecution.startedAt, 'PPpp')}
-                  </p>
+                  <p className="mt-1 font-medium">{format(selectedExecution.startedAt, 'PPpp')}</p>
                 </div>
                 {selectedExecution.completedAt && (
                   <div>

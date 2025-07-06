@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyIdToken } from '@/lib/firebase/admin';
 
 // POST /api/invoices/[id]/send
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Verify authentication
     const authHeader = request.headers.get('authorization');
@@ -18,34 +15,28 @@ export async function POST(
 
     const token = authHeader.split('Bearer ')[1];
     const { valid, decodedToken } = await verifyIdToken(token);
-    
+
     if (!valid || !decodedToken) {
-      return NextResponse.json(
-        { error: 'Invalid authentication token' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 });
     }
 
     // Get invoice to check permissions using dynamic import
     const { getDoc, doc } = await import('firebase/firestore');
     const { db, collections } = await import('@/lib/firebase');
-    
+
     const invoiceDoc = await getDoc(doc(db, collections.invoices, params.id));
-    
+
     if (!invoiceDoc.exists()) {
-      return NextResponse.json(
-        { error: 'Invoice not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
-    
+
     const invoice = { id: invoiceDoc.id, ...invoiceDoc.data() } as any;
 
     // Check permissions: admin, consultant, or the client who owns the invoice
-    const hasPermission = 
-      decodedToken.role === 'admin' || 
+    const hasPermission =
+      decodedToken.role === 'admin' ||
       decodedToken.role === 'consultant' ||
-      (invoice.clientId === decodedToken.uid);
+      invoice.clientId === decodedToken.uid;
 
     if (!hasPermission) {
       return NextResponse.json(
@@ -62,21 +53,21 @@ export async function POST(
     // If no email provided, get from client
     let email = recipientEmail;
     let name = recipientName;
-    
+
     if (!email) {
       const { getDoc, doc } = await import('firebase/firestore');
       const { db, collections } = await import('@/lib/firebase');
-      
+
       const clientDoc = await getDoc(doc(db, collections.users, invoice.clientId));
       const client = clientDoc.data();
-      
+
       if (!client?.email) {
         return NextResponse.json(
           { error: 'No email address found for invoice recipient' },
           { status: 400 }
         );
       }
-      
+
       email = client.email;
       name = client.fullName || client.displayName || undefined;
     }
@@ -88,17 +79,17 @@ export async function POST(
     return NextResponse.json(
       {
         success: true,
-        message: `Invoice ${invoice.invoiceNumber} sent successfully to ${email}`
+        message: `Invoice ${invoice.invoiceNumber} sent successfully to ${email}`,
       },
       { status: 200 }
     );
   } catch (error) {
     console.error('Error sending invoice:', error);
-    
+
     return NextResponse.json(
       {
         error: 'Failed to send invoice',
-        details: process.env.NODE_ENV === 'development' ? error : undefined
+        details: process.env.NODE_ENV === 'development' ? error : undefined,
       },
       { status: 500 }
     );

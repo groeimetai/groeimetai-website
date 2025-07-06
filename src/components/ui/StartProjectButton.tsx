@@ -16,12 +16,12 @@ interface StartProjectButtonProps {
   preselectedService?: string;
 }
 
-export function StartProjectButton({ 
-  variant = 'default', 
-  size = 'default', 
+export function StartProjectButton({
+  variant = 'default',
+  size = 'default',
   className = '',
   children,
-  preselectedService
+  preselectedService,
 }: StartProjectButtonProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -53,22 +53,19 @@ export function StartProjectButton({
 
   return (
     <>
-      <Button
-        variant={variant}
-        size={size}
-        className={className}
-        onClick={handleClick}
-      >
+      <Button variant={variant} size={size} className={className} onClick={handleClick}>
         {children || (
           <>
-            {user ? t('goToDashboard', { defaultMessage: 'Go to Dashboard' }) : t('startProject', { defaultMessage: 'Start Project' })}
+            {user
+              ? t('goToDashboard', { defaultMessage: 'Go to Dashboard' })
+              : t('startProject', { defaultMessage: 'Start Project' })}
             <ArrowRight className="ml-2 w-4 h-4" />
           </>
         )}
       </Button>
-      <ProjectRequestDialog 
-        open={dialogOpen} 
-        onOpenChange={setDialogOpen} 
+      <ProjectRequestDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
         preselectedService={preselectedService}
       />
     </>

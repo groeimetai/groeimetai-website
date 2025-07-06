@@ -11,9 +11,7 @@ interface LocaleProvidersProps {
 export function LocaleProviders({ children }: LocaleProvidersProps) {
   return (
     <HelpProvider>
-      <CommandPaletteProvider>
-        {children}
-      </CommandPaletteProvider>
+      <CommandPaletteProvider>{children}</CommandPaletteProvider>
     </HelpProvider>
   );
 }

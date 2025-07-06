@@ -112,17 +112,18 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/components/ui/toaster';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface UserActivity {
   id: string;
   userId: string;
-  type: 'login' | 'logout' | 'profile_update' | 'project_created' | 'quote_submitted' | 'payment_made';
+  type:
+    | 'login'
+    | 'logout'
+    | 'profile_update'
+    | 'project_created'
+    | 'quote_submitted'
+    | 'payment_made';
   description: string;
   metadata?: any;
   timestamp: Date;
@@ -168,7 +169,7 @@ export default function UsersManagementPage() {
   const [hasMore, setHasMore] = useState(true);
   const [totalUsers, setTotalUsers] = useState(0);
   const [page, setPage] = useState(1);
-  
+
   // Filters
   const [filters, setFilters] = useState<UserFilters>({
     search: '',
@@ -222,7 +223,7 @@ export default function UsersManagementPage() {
       if (filters.dateRange !== 'all') {
         const now = new Date();
         let startDate = new Date();
-        
+
         switch (filters.dateRange) {
           case 'today':
             startDate.setHours(0, 0, 0, 0);
@@ -237,7 +238,7 @@ export default function UsersManagementPage() {
             startDate.setFullYear(now.getFullYear() - 1);
             break;
         }
-        
+
         q = query(q, where('createdAt', '>=', Timestamp.fromDate(startDate)));
       }
 
@@ -265,12 +266,13 @@ export default function UsersManagementPage() {
         let filteredUsers = usersData;
         if (filters.search) {
           const searchLower = filters.search.toLowerCase();
-          filteredUsers = usersData.filter(user =>
-            user.displayName.toLowerCase().includes(searchLower) ||
-            user.email.toLowerCase().includes(searchLower) ||
-            user.company?.toLowerCase().includes(searchLower) ||
-            user.firstName?.toLowerCase().includes(searchLower) ||
-            user.lastName?.toLowerCase().includes(searchLower)
+          filteredUsers = usersData.filter(
+            (user) =>
+              user.displayName.toLowerCase().includes(searchLower) ||
+              user.email.toLowerCase().includes(searchLower) ||
+              user.company?.toLowerCase().includes(searchLower) ||
+              user.firstName?.toLowerCase().includes(searchLower) ||
+              user.lastName?.toLowerCase().includes(searchLower)
           );
         }
 
@@ -302,10 +304,10 @@ export default function UsersManagementPage() {
         orderBy('timestamp', 'desc'),
         limit(50)
       );
-      
+
       const snapshot = await getDocs(activitiesQuery);
       const activities: UserActivity[] = [];
-      
+
       snapshot.forEach((doc) => {
         const data = doc.data();
         activities.push({
@@ -314,7 +316,7 @@ export default function UsersManagementPage() {
           timestamp: data.timestamp?.toDate() || new Date(),
         } as UserActivity);
       });
-      
+
       setUserActivities(activities);
     } catch (error) {
       console.error('Error fetching user activities:', error);
@@ -322,11 +324,14 @@ export default function UsersManagementPage() {
   }, []);
 
   // Handle user selection
-  const handleUserSelect = useCallback((user: User) => {
-    setSelectedUser(user);
-    setShowUserDetails(true);
-    fetchUserActivities(user.uid);
-  }, [fetchUserActivities]);
+  const handleUserSelect = useCallback(
+    (user: User) => {
+      setSelectedUser(user);
+      setShowUserDetails(true);
+      fetchUserActivities(user.uid);
+    },
+    [fetchUserActivities]
+  );
 
   // Update user
   const handleUserUpdate = async () => {
@@ -395,7 +400,7 @@ export default function UsersManagementPage() {
       });
 
       const action = isActive ? 'deactivated' : 'activated';
-      
+
       // Send notification
       await notificationService.sendToUser(userId, {
         type: 'system',
@@ -424,7 +429,7 @@ export default function UsersManagementPage() {
 
     try {
       await notificationService.sendToUser(selectedUser.uid, {
-        type: notificationData.type === 'error' ? 'system' : notificationData.type as any,
+        type: notificationData.type === 'error' ? 'system' : (notificationData.type as any),
         title: notificationData.title,
         description: notificationData.message,
         link: notificationData.link,
@@ -458,7 +463,7 @@ export default function UsersManagementPage() {
     setProcessingExport(true);
 
     try {
-      const exportData = users.map(user => ({
+      const exportData = users.map((user) => ({
         id: user.uid,
         email: exportOptions.includePersonalData ? user.email : 'hidden',
         name: user.displayName,
@@ -483,13 +488,15 @@ export default function UsersManagementPage() {
       if (exportOptions.format === 'csv') {
         // Convert to CSV
         const headers = Object.keys(exportData[0] || {}).join(',');
-        const rows = exportData.map(row => 
-          Object.values(row).map(value => 
-            typeof value === 'string' && value.includes(',') ? `"${value}"` : value
-          ).join(',')
+        const rows = exportData.map((row) =>
+          Object.values(row)
+            .map((value) =>
+              typeof value === 'string' && value.includes(',') ? `"${value}"` : value
+            )
+            .join(',')
         );
         const csv = [headers, ...rows].join('\n');
-        
+
         // Download CSV
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
@@ -536,16 +543,16 @@ export default function UsersManagementPage() {
       icon: <CheckCircle className="w-4 h-4" />,
       handler: async (selectedIds: string[]) => {
         const batch = writeBatch(db);
-        selectedIds.forEach(id => {
+        selectedIds.forEach((id) => {
           batch.update(doc(db, 'users', id), {
             isActive: true,
             updatedAt: new Date(),
           });
         });
         await batch.commit();
-        
+
         // Send notifications
-        const promises = selectedIds.map(id =>
+        const promises = selectedIds.map((id) =>
           notificationService.sendToUser(id, {
             type: 'system',
             title: 'Account Activated',
@@ -562,19 +569,20 @@ export default function UsersManagementPage() {
       icon: <Ban className="w-4 h-4" />,
       variant: 'destructive',
       requiresConfirmation: true,
-      confirmationMessage: 'Are you sure you want to deactivate these users? They will not be able to access their accounts.',
+      confirmationMessage:
+        'Are you sure you want to deactivate these users? They will not be able to access their accounts.',
       handler: async (selectedIds: string[]) => {
         const batch = writeBatch(db);
-        selectedIds.forEach(id => {
+        selectedIds.forEach((id) => {
           batch.update(doc(db, 'users', id), {
             isActive: false,
             updatedAt: new Date(),
           });
         });
         await batch.commit();
-        
+
         // Send notifications
-        const promises = selectedIds.map(id =>
+        const promises = selectedIds.map((id) =>
           notificationService.sendToUser(id, {
             type: 'system',
             title: 'Account Deactivated',
@@ -602,7 +610,7 @@ export default function UsersManagementPage() {
       label: 'Export Selected',
       icon: <Download className="w-4 h-4" />,
       handler: async (selectedIds: string[]) => {
-        const selectedUsers = users.filter(u => selectedIds.includes(u.uid));
+        const selectedUsers = users.filter((u) => selectedIds.includes(u.uid));
         // Export logic here
         toast({
           title: 'Export completed',
@@ -697,7 +705,7 @@ export default function UsersManagementPage() {
                   <div>
                     <p className="text-sm text-white/60">Active Users</p>
                     <p className="text-2xl font-bold text-white">
-                      {users.filter(u => u.isActive).length}
+                      {users.filter((u) => u.isActive).length}
                     </p>
                   </div>
                   <CheckCircle className="w-8 h-8 text-green-500" />
@@ -710,7 +718,7 @@ export default function UsersManagementPage() {
                   <div>
                     <p className="text-sm text-white/60">Verified Users</p>
                     <p className="text-2xl font-bold text-white">
-                      {users.filter(u => u.isVerified).length}
+                      {users.filter((u) => u.isVerified).length}
                     </p>
                   </div>
                   <Shield className="w-8 h-8 text-purple-500" />
@@ -723,11 +731,13 @@ export default function UsersManagementPage() {
                   <div>
                     <p className="text-sm text-white/60">New This Month</p>
                     <p className="text-2xl font-bold text-white">
-                      {users.filter(u => {
-                        const oneMonthAgo = new Date();
-                        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-                        return u.createdAt > oneMonthAgo;
-                      }).length}
+                      {
+                        users.filter((u) => {
+                          const oneMonthAgo = new Date();
+                          oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+                          return u.createdAt > oneMonthAgo;
+                        }).length
+                      }
                     </p>
                   </div>
                   <TrendingUp className="w-8 h-8 text-orange" />
@@ -795,11 +805,7 @@ export default function UsersManagementPage() {
                   </SelectContent>
                 </Select>
                 <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setShowExportDialog(true)}
-                  >
+                  <Button variant="outline" size="icon" onClick={() => setShowExportDialog(true)}>
                     <Download className="w-4 h-4" />
                   </Button>
                   <Button
@@ -834,14 +840,19 @@ export default function UsersManagementPage() {
                         onClick={(e) => e.stopPropagation()}
                       />
                       <Avatar className="w-12 h-12">
-                        <AvatarImage src={user.photoURL || ''} alt={user.displayName || user.email} />
+                        <AvatarImage
+                          src={user.photoURL || ''}
+                          alt={user.displayName || user.email}
+                        />
                         <AvatarFallback className="bg-orange/20 text-orange">
                           {user.displayName?.charAt(0) || user.email.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1" onClick={() => handleUserSelect(user)}>
                         <div className="flex items-center gap-2">
-                          <h3 className="font-medium text-white">{user.displayName || 'Unnamed User'}</h3>
+                          <h3 className="font-medium text-white">
+                            {user.displayName || 'Unnamed User'}
+                          </h3>
                           <Badge variant="outline" className={getRoleBadgeColor(user.role)}>
                             {user.role}
                           </Badge>
@@ -897,17 +908,21 @@ export default function UsersManagementPage() {
                             <Eye className="w-4 h-4 mr-2" />
                             View Details
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => {
-                            setEditingUser(user);
-                            setShowUserDetails(true);
-                          }}>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setEditingUser(user);
+                              setShowUserDetails(true);
+                            }}
+                          >
                             <Edit className="w-4 h-4 mr-2" />
                             Edit User
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => {
-                            setSelectedUser(user);
-                            setShowSendNotification(true);
-                          }}>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setSelectedUser(user);
+                              setShowSendNotification(true);
+                            }}
+                          >
                             <Bell className="w-4 h-4 mr-2" />
                             Send Notification
                           </DropdownMenuItem>
@@ -973,7 +988,9 @@ export default function UsersManagementPage() {
                 {editingUser ? 'Edit User' : 'User Details'}
               </SheetTitle>
               <SheetDescription className="text-white/60">
-                {editingUser ? 'Update user information and settings' : 'View detailed user information and activity'}
+                {editingUser
+                  ? 'Update user information and settings'
+                  : 'View detailed user information and activity'}
               </SheetDescription>
             </SheetHeader>
 
@@ -982,16 +999,26 @@ export default function UsersManagementPage() {
                 {/* User Profile */}
                 <div className="flex items-center gap-4">
                   <Avatar className="w-20 h-20">
-                    <AvatarImage src={(editingUser || selectedUser)?.photoURL || ''} alt={(editingUser || selectedUser)?.displayName || (editingUser || selectedUser)?.email || 'User'} />
+                    <AvatarImage
+                      src={(editingUser || selectedUser)?.photoURL || ''}
+                      alt={
+                        (editingUser || selectedUser)?.displayName ||
+                        (editingUser || selectedUser)?.email ||
+                        'User'
+                      }
+                    />
                     <AvatarFallback className="bg-orange/20 text-orange text-2xl">
-                      {(editingUser || selectedUser)?.displayName?.charAt(0) || (editingUser || selectedUser)?.email.charAt(0)}
+                      {(editingUser || selectedUser)?.displayName?.charAt(0) ||
+                        (editingUser || selectedUser)?.email.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
                     {editingUser ? (
                       <Input
                         value={editingUser.displayName}
-                        onChange={(e) => setEditingUser({ ...editingUser, displayName: e.target.value })}
+                        onChange={(e) =>
+                          setEditingUser({ ...editingUser, displayName: e.target.value })
+                        }
                         className="bg-white/5 border-white/10 text-white text-xl font-semibold mb-2"
                       />
                     ) : (
@@ -1000,7 +1027,10 @@ export default function UsersManagementPage() {
                       </h3>
                     )}
                     <div className="flex items-center gap-2">
-                      <Badge variant="outline" className={getRoleBadgeColor((editingUser || selectedUser)!.role)}>
+                      <Badge
+                        variant="outline"
+                        className={getRoleBadgeColor((editingUser || selectedUser)!.role)}
+                      >
                         {(editingUser || selectedUser)!.role}
                       </Badge>
                       {(editingUser || selectedUser)!.isActive ? (
@@ -1035,7 +1065,9 @@ export default function UsersManagementPage() {
                         {editingUser ? (
                           <Input
                             value={editingUser.email}
-                            onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+                            onChange={(e) =>
+                              setEditingUser({ ...editingUser, email: e.target.value })
+                            }
                             className="bg-white/5 border-white/10 text-white"
                           />
                         ) : (
@@ -1047,11 +1079,15 @@ export default function UsersManagementPage() {
                         {editingUser ? (
                           <Input
                             value={editingUser.phoneNumber || ''}
-                            onChange={(e) => setEditingUser({ ...editingUser, phoneNumber: e.target.value })}
+                            onChange={(e) =>
+                              setEditingUser({ ...editingUser, phoneNumber: e.target.value })
+                            }
                             className="bg-white/5 border-white/10 text-white"
                           />
                         ) : (
-                          <p className="text-white">{selectedUser?.phoneNumber || 'Not provided'}</p>
+                          <p className="text-white">
+                            {selectedUser?.phoneNumber || 'Not provided'}
+                          </p>
                         )}
                       </div>
                       <div>
@@ -1059,7 +1095,9 @@ export default function UsersManagementPage() {
                         {editingUser ? (
                           <Input
                             value={editingUser.firstName}
-                            onChange={(e) => setEditingUser({ ...editingUser, firstName: e.target.value })}
+                            onChange={(e) =>
+                              setEditingUser({ ...editingUser, firstName: e.target.value })
+                            }
                             className="bg-white/5 border-white/10 text-white"
                           />
                         ) : (
@@ -1071,7 +1109,9 @@ export default function UsersManagementPage() {
                         {editingUser ? (
                           <Input
                             value={editingUser.lastName}
-                            onChange={(e) => setEditingUser({ ...editingUser, lastName: e.target.value })}
+                            onChange={(e) =>
+                              setEditingUser({ ...editingUser, lastName: e.target.value })
+                            }
                             className="bg-white/5 border-white/10 text-white"
                           />
                         ) : (
@@ -1083,7 +1123,9 @@ export default function UsersManagementPage() {
                         {editingUser ? (
                           <Input
                             value={editingUser.company || ''}
-                            onChange={(e) => setEditingUser({ ...editingUser, company: e.target.value })}
+                            onChange={(e) =>
+                              setEditingUser({ ...editingUser, company: e.target.value })
+                            }
                             className="bg-white/5 border-white/10 text-white"
                           />
                         ) : (
@@ -1095,7 +1137,9 @@ export default function UsersManagementPage() {
                         {editingUser ? (
                           <Input
                             value={editingUser.jobTitle || ''}
-                            onChange={(e) => setEditingUser({ ...editingUser, jobTitle: e.target.value })}
+                            onChange={(e) =>
+                              setEditingUser({ ...editingUser, jobTitle: e.target.value })
+                            }
                             className="bg-white/5 border-white/10 text-white"
                           />
                         ) : (
@@ -1112,7 +1156,9 @@ export default function UsersManagementPage() {
                         {editingUser ? (
                           <Select
                             value={editingUser.role}
-                            onValueChange={(value) => setEditingUser({ ...editingUser, role: value as UserRole })}
+                            onValueChange={(value) =>
+                              setEditingUser({ ...editingUser, role: value as UserRole })
+                            }
                           >
                             <SelectTrigger className="bg-white/5 border-white/10 text-white">
                               <SelectValue />
@@ -1133,7 +1179,9 @@ export default function UsersManagementPage() {
                         {editingUser ? (
                           <Select
                             value={editingUser.accountType || 'customer'}
-                            onValueChange={(value) => setEditingUser({ ...editingUser, accountType: value as any })}
+                            onValueChange={(value) =>
+                              setEditingUser({ ...editingUser, accountType: value as any })
+                            }
                           >
                             <SelectTrigger className="bg-white/5 border-white/10 text-white">
                               <SelectValue />
@@ -1145,7 +1193,9 @@ export default function UsersManagementPage() {
                             </SelectContent>
                           </Select>
                         ) : (
-                          <p className="text-white capitalize">{selectedUser?.accountType || 'customer'}</p>
+                          <p className="text-white capitalize">
+                            {selectedUser?.accountType || 'customer'}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -1159,7 +1209,9 @@ export default function UsersManagementPage() {
                         {editingUser ? (
                           <Switch
                             checked={editingUser.isActive}
-                            onCheckedChange={(checked) => setEditingUser({ ...editingUser, isActive: checked })}
+                            onCheckedChange={(checked) =>
+                              setEditingUser({ ...editingUser, isActive: checked })
+                            }
                           />
                         ) : (
                           <Badge variant={selectedUser?.isActive ? 'default' : 'secondary'}>
@@ -1170,7 +1222,9 @@ export default function UsersManagementPage() {
                       <div className="flex items-center justify-between">
                         <div className="space-y-0.5">
                           <Label className="text-white">Email Verified</Label>
-                          <p className="text-sm text-white/60">User has verified their email address</p>
+                          <p className="text-sm text-white/60">
+                            User has verified their email address
+                          </p>
                         </div>
                         <Badge variant={selectedUser?.isVerified ? 'default' : 'secondary'}>
                           {selectedUser?.isVerified ? 'Verified' : 'Unverified'}
@@ -1208,7 +1262,10 @@ export default function UsersManagementPage() {
                       <div className="space-y-3">
                         {userActivities.length > 0 ? (
                           userActivities.map((activity) => (
-                            <div key={activity.id} className="flex items-start gap-3 p-3 bg-white/5 rounded-lg">
+                            <div
+                              key={activity.id}
+                              className="flex items-start gap-3 p-3 bg-white/5 rounded-lg"
+                            >
                               {getActivityIcon(activity.type)}
                               <div className="flex-1">
                                 <p className="text-white text-sm">{activity.description}</p>
@@ -1231,7 +1288,9 @@ export default function UsersManagementPage() {
                       <h4 className="text-white font-medium mb-3">Notification Preferences</h4>
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <Label htmlFor="email-notif" className="text-white/80">Email Notifications</Label>
+                          <Label htmlFor="email-notif" className="text-white/80">
+                            Email Notifications
+                          </Label>
                           <Switch
                             id="email-notif"
                             checked={(editingUser || selectedUser)?.preferences.notifications.email}
@@ -1239,7 +1298,9 @@ export default function UsersManagementPage() {
                           />
                         </div>
                         <div className="flex items-center justify-between">
-                          <Label htmlFor="push-notif" className="text-white/80">Push Notifications</Label>
+                          <Label htmlFor="push-notif" className="text-white/80">
+                            Push Notifications
+                          </Label>
                           <Switch
                             id="push-notif"
                             checked={(editingUser || selectedUser)?.preferences.notifications.push}
@@ -1247,7 +1308,9 @@ export default function UsersManagementPage() {
                           />
                         </div>
                         <div className="flex items-center justify-between">
-                          <Label htmlFor="sms-notif" className="text-white/80">SMS Notifications</Label>
+                          <Label htmlFor="sms-notif" className="text-white/80">
+                            SMS Notifications
+                          </Label>
                           <Switch
                             id="sms-notif"
                             checked={(editingUser || selectedUser)?.preferences.notifications.sms}
@@ -1264,15 +1327,21 @@ export default function UsersManagementPage() {
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <Label className="text-white/60">Language</Label>
-                          <p className="text-white">{(editingUser || selectedUser)?.preferences.language || 'en'}</p>
+                          <p className="text-white">
+                            {(editingUser || selectedUser)?.preferences.language || 'en'}
+                          </p>
                         </div>
                         <div>
                           <Label className="text-white/60">Timezone</Label>
-                          <p className="text-white">{(editingUser || selectedUser)?.preferences.timezone}</p>
+                          <p className="text-white">
+                            {(editingUser || selectedUser)?.preferences.timezone}
+                          </p>
                         </div>
                         <div>
                           <Label className="text-white/60">Theme</Label>
-                          <p className="text-white capitalize">{(editingUser || selectedUser)?.preferences.theme}</p>
+                          <p className="text-white capitalize">
+                            {(editingUser || selectedUser)?.preferences.theme}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -1326,7 +1395,10 @@ export default function UsersManagementPage() {
                             <div>
                               <p className="text-sm text-white/60">Total Spent</p>
                               <p className="text-2xl font-bold text-white">
-                                €{((editingUser || selectedUser)?.stats.totalSpent || 0).toLocaleString()}
+                                €
+                                {(
+                                  (editingUser || selectedUser)?.stats.totalSpent || 0
+                                ).toLocaleString()}
                               </p>
                             </div>
                             <CreditCard className="w-8 h-8 text-orange" />
@@ -1349,10 +1421,7 @@ export default function UsersManagementPage() {
                     >
                       Cancel
                     </Button>
-                    <Button
-                      className="bg-orange hover:bg-orange/90"
-                      onClick={handleUserUpdate}
-                    >
+                    <Button className="bg-orange hover:bg-orange/90" onClick={handleUserUpdate}>
                       Save Changes
                     </Button>
                   </SheetFooter>
@@ -1397,30 +1466,42 @@ export default function UsersManagementPage() {
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div>
-                <Label htmlFor="notif-title" className="text-white">Title</Label>
+                <Label htmlFor="notif-title" className="text-white">
+                  Title
+                </Label>
                 <Input
                   id="notif-title"
                   value={notificationData.title}
-                  onChange={(e) => setNotificationData({ ...notificationData, title: e.target.value })}
+                  onChange={(e) =>
+                    setNotificationData({ ...notificationData, title: e.target.value })
+                  }
                   className="bg-white/5 border-white/10 text-white"
                   placeholder="Notification title"
                 />
               </div>
               <div>
-                <Label htmlFor="notif-message" className="text-white">Message</Label>
+                <Label htmlFor="notif-message" className="text-white">
+                  Message
+                </Label>
                 <Textarea
                   id="notif-message"
                   value={notificationData.message}
-                  onChange={(e) => setNotificationData({ ...notificationData, message: e.target.value })}
+                  onChange={(e) =>
+                    setNotificationData({ ...notificationData, message: e.target.value })
+                  }
                   className="bg-white/5 border-white/10 text-white min-h-[100px]"
                   placeholder="Notification message"
                 />
               </div>
               <div>
-                <Label htmlFor="notif-type" className="text-white">Type</Label>
+                <Label htmlFor="notif-type" className="text-white">
+                  Type
+                </Label>
                 <Select
                   value={notificationData.type}
-                  onValueChange={(value) => setNotificationData({ ...notificationData, type: value as any })}
+                  onValueChange={(value) =>
+                    setNotificationData({ ...notificationData, type: value as any })
+                  }
                 >
                   <SelectTrigger className="bg-white/5 border-white/10 text-white">
                     <SelectValue />
@@ -1434,11 +1515,15 @@ export default function UsersManagementPage() {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="notif-link" className="text-white">Link (optional)</Label>
+                <Label htmlFor="notif-link" className="text-white">
+                  Link (optional)
+                </Label>
                 <Input
                   id="notif-link"
                   value={notificationData.link}
-                  onChange={(e) => setNotificationData({ ...notificationData, link: e.target.value })}
+                  onChange={(e) =>
+                    setNotificationData({ ...notificationData, link: e.target.value })
+                  }
                   className="bg-white/5 border-white/10 text-white"
                   placeholder="https://..."
                 />
@@ -1487,31 +1572,37 @@ export default function UsersManagementPage() {
               </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="export-personal" className="text-white">Include Personal Data</Label>
+                  <Label htmlFor="export-personal" className="text-white">
+                    Include Personal Data
+                  </Label>
                   <Switch
                     id="export-personal"
                     checked={exportOptions.includePersonalData}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={(checked) =>
                       setExportOptions({ ...exportOptions, includePersonalData: checked })
                     }
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="export-activity" className="text-white">Include Activity Data</Label>
+                  <Label htmlFor="export-activity" className="text-white">
+                    Include Activity Data
+                  </Label>
                   <Switch
                     id="export-activity"
                     checked={exportOptions.includeActivityData}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={(checked) =>
                       setExportOptions({ ...exportOptions, includeActivityData: checked })
                     }
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="export-stats" className="text-white">Include Statistics</Label>
+                  <Label htmlFor="export-stats" className="text-white">
+                    Include Statistics
+                  </Label>
                   <Switch
                     id="export-stats"
                     checked={exportOptions.includeStats}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={(checked) =>
                       setExportOptions({ ...exportOptions, includeStats: checked })
                     }
                   />

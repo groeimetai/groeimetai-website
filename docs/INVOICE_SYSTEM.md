@@ -38,7 +38,7 @@ The GroeiMetAI invoice system provides a complete invoicing solution with automa
 // From project detail page
 const invoice = await createInvoiceFromQuote(quoteId, {
   dueDate: addDays(new Date(), 30),
-  notes: 'Payment terms: 30 days'
+  notes: 'Payment terms: 30 days',
 });
 ```
 
@@ -50,26 +50,26 @@ interface Invoice {
   invoiceNumber: string;
   projectId: string;
   clientId: string;
-  
+
   // Financial details
   items: InvoiceItem[];
   subtotal: number;
   tax: number;
   total: number;
-  
+
   // Status
   status: 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled';
   paymentStatus?: 'pending' | 'paid' | 'failed' | 'expired';
-  
+
   // Dates
   issueDate: Date;
   dueDate: Date;
   paidDate?: Date;
-  
+
   // Payment
   paymentId?: string;
   paymentUrl?: string;
-  
+
   // Metadata
   createdAt: Date;
   updatedAt: Date;
@@ -88,7 +88,7 @@ The invoice sending process:
 ```typescript
 // API: POST /api/invoices/[id]/send
 const response = await fetch(`/api/invoices/${invoiceId}/send`, {
-  method: 'POST'
+  method: 'POST',
 });
 ```
 
@@ -101,15 +101,15 @@ const response = await fetch(`/api/invoices/${invoiceId}/send`, {
 const payment = await mollieClient.payments.create({
   amount: {
     currency: 'EUR',
-    value: invoice.total.toFixed(2)
+    value: invoice.total.toFixed(2),
   },
   description: `Invoice ${invoice.invoiceNumber}`,
   redirectUrl: `${APP_URL}/invoices/${invoice.id}/thank-you`,
   webhookUrl: `${APP_URL}/api/webhooks/mollie`,
   metadata: {
     invoiceId: invoice.id,
-    invoiceNumber: invoice.invoiceNumber
-  }
+    invoiceNumber: invoice.invoiceNumber,
+  },
 });
 ```
 
@@ -130,6 +130,7 @@ const payment = await mollieClient.payments.create({
 ### Invoice PDF Structure
 
 The PDF includes:
+
 - Company branding and logo
 - Invoice number and dates
 - Client information
@@ -148,11 +149,11 @@ const pdfOptions = {
     top: '1cm',
     right: '1cm',
     bottom: '1cm',
-    left: '1cm'
+    left: '1cm',
   },
   displayHeaderFooter: true,
   headerTemplate: '<company-header>',
-  footerTemplate: '<legal-footer>'
+  footerTemplate: '<legal-footer>',
 };
 ```
 
@@ -161,33 +162,17 @@ const pdfOptions = {
 ### Invoice Email
 
 ```html
-Subject: Invoice ${invoiceNumber} from GroeiMetAI
-
-Dear ${clientName},
-
-Please find attached invoice ${invoiceNumber} for ${projectName}.
-
-Amount due: €${totalAmount}
-Due date: ${dueDate}
-
-Pay online: ${paymentUrl}
-
-Thank you for your business!
+Subject: Invoice ${invoiceNumber} from GroeiMetAI Dear ${clientName}, Please find attached invoice
+${invoiceNumber} for ${projectName}. Amount due: €${totalAmount} Due date: ${dueDate} Pay online:
+${paymentUrl} Thank you for your business!
 ```
 
 ### Payment Confirmation
 
 ```html
-Subject: Payment Received - Invoice ${invoiceNumber}
-
-Dear ${clientName},
-
-We've received your payment of €${amount} for invoice ${invoiceNumber}.
-
-Transaction ID: ${transactionId}
-Payment Date: ${paymentDate}
-
-Thank you for your prompt payment!
+Subject: Payment Received - Invoice ${invoiceNumber} Dear ${clientName}, We've received your payment
+of €${amount} for invoice ${invoiceNumber}. Transaction ID: ${transactionId} Payment Date:
+${paymentDate} Thank you for your prompt payment!
 ```
 
 ## Payment Methods
@@ -259,7 +244,7 @@ Expired: 4000 0000 0000 0069
 MOLLIE_API_KEY=test_xxxxxx          # Use test_ for development
 MOLLIE_WEBHOOK_SECRET=secret_xxx    # From Mollie dashboard
 
-# Email Configuration  
+# Email Configuration
 RESEND_API_KEY=re_xxxxxx           # Resend API key
 
 # Application URLs
@@ -269,6 +254,7 @@ NEXT_PUBLIC_APP_URL=https://app.groeimetai.io
 ### Webhook Setup
 
 1. **Local Development**
+
    ```bash
    # Use ngrok for local webhook testing
    ngrok http 3000
@@ -316,6 +302,7 @@ NEXT_PUBLIC_APP_URL=https://app.groeimetai.io
 **Symptoms**: Payment made but invoice not updated
 
 **Solutions**:
+
 - Check webhook URL configuration
 - Verify firewall/security rules
 - Review Mollie webhook logs
@@ -326,6 +313,7 @@ NEXT_PUBLIC_APP_URL=https://app.groeimetai.io
 **Symptoms**: Email sent without attachment
 
 **Solutions**:
+
 - Check Puppeteer installation
 - Verify memory limits
 - Review PDF template syntax
@@ -336,6 +324,7 @@ NEXT_PUBLIC_APP_URL=https://app.groeimetai.io
 **Symptoms**: Emails not arriving
 
 **Solutions**:
+
 - Verify Resend API key
 - Check spam folders
 - Review domain SPF/DKIM
@@ -346,6 +335,7 @@ NEXT_PUBLIC_APP_URL=https://app.groeimetai.io
 **Symptoms**: Mollie shows paid, invoice shows unpaid
 
 **Solutions**:
+
 - Manual webhook retry
 - Check webhook processing logs
 - Verify payment metadata
@@ -361,14 +351,14 @@ console.log('Webhook received:', {
   paymentId: payment.id,
   status: payment.status,
   amount: payment.amount,
-  metadata: payment.metadata
+  metadata: payment.metadata,
 });
 
 // In invoice service
 console.log('Invoice updated:', {
   invoiceId: invoice.id,
   oldStatus: invoice.status,
-  newStatus: newStatus
+  newStatus: newStatus,
 });
 ```
 
@@ -472,7 +462,7 @@ describe('Invoice System', () => {
     expect(invoice.status).toBe('draft');
     expect(invoice.total).toBe(quote.total);
   });
-  
+
   test('processes payment webhook', async () => {
     const result = await processWebhook(mockPaymentId);
     expect(result.invoice.status).toBe('paid');
@@ -508,9 +498,9 @@ const archiveOldInvoices = async () => {
   const sixMonthsAgo = subMonths(new Date(), 6);
   const invoices = await getInvoices({
     status: 'paid',
-    paidDate: { $lt: sixMonthsAgo }
+    paidDate: { $lt: sixMonthsAgo },
   });
-  
+
   for (const invoice of invoices) {
     await archiveInvoice(invoice.id);
   }
@@ -552,6 +542,7 @@ const archiveOldInvoices = async () => {
 ## Support
 
 For technical support:
+
 - Review error logs in Firebase Console
 - Check Mollie dashboard for payment issues
 - Monitor Resend for email delivery

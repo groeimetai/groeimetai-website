@@ -15,10 +15,28 @@ interface Project {
 
 // Mock data
 const mockProjects: Project[] = [
-  { id: '1', name: 'Website Redesign', status: 'active', assignee: 'John Doe', createdAt: new Date() },
+  {
+    id: '1',
+    name: 'Website Redesign',
+    status: 'active',
+    assignee: 'John Doe',
+    createdAt: new Date(),
+  },
   { id: '2', name: 'Mobile App', status: 'draft', createdAt: new Date() },
-  { id: '3', name: 'API Development', status: 'completed', assignee: 'Jane Smith', createdAt: new Date() },
-  { id: '4', name: 'Database Migration', status: 'active', assignee: 'Bob Johnson', createdAt: new Date() },
+  {
+    id: '3',
+    name: 'API Development',
+    status: 'completed',
+    assignee: 'Jane Smith',
+    createdAt: new Date(),
+  },
+  {
+    id: '4',
+    name: 'Database Migration',
+    status: 'active',
+    assignee: 'Bob Johnson',
+    createdAt: new Date(),
+  },
 ];
 
 // Status options for bulk update
@@ -39,46 +57,42 @@ const assigneeOptions = [
 
 export function BulkActionsExample() {
   const [projects, setProjects] = React.useState(mockProjects);
-  
+
   // Use the bulk selection hook
-  const {
-    selectedIds,
-    setSelectedIds,
-    toggleSelection,
-    clearSelection,
-  } = useBulkSelection(projects);
+  const { selectedIds, setSelectedIds, toggleSelection, clearSelection } =
+    useBulkSelection(projects);
 
   // Handle bulk actions
   const handleBulkAction = async (action: BulkActionType, data?: any) => {
     console.log('Executing bulk action:', action, data);
 
     // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
     switch (action) {
       case 'delete':
         // Remove selected projects
-        setProjects(prev => prev.filter(p => !data.ids.includes(p.id)));
+        setProjects((prev) => prev.filter((p) => !data.ids.includes(p.id)));
         break;
 
       case 'archive':
         // Archive selected projects
-        setProjects(prev =>
-          prev.map(p => (data.ids.includes(p.id) ? { ...p, status: 'archived' as const } : p))
+        setProjects((prev) =>
+          prev.map((p) => (data.ids.includes(p.id) ? { ...p, status: 'archived' as const } : p))
         );
         break;
 
       case 'updateStatus':
         // Update status for selected projects
-        setProjects(prev =>
-          prev.map(p => (data.ids.includes(p.id) ? { ...p, status: data.status } : p))
+        setProjects((prev) =>
+          prev.map((p) => (data.ids.includes(p.id) ? { ...p, status: data.status } : p))
         );
         break;
 
       case 'assign':
         // Assign selected projects
-        setProjects(prev =>
-          prev.map(p =>
+        setProjects((prev) =>
+          prev.map((p) =>
             data.ids.includes(p.id)
               ? { ...p, assignee: data.assigneeId === 'unassigned' ? undefined : data.assigneeId }
               : p
@@ -88,10 +102,10 @@ export function BulkActionsExample() {
 
       case 'export':
         // Export selected projects
-        const selectedProjects = projects.filter(p => data.ids.includes(p.id));
+        const selectedProjects = projects.filter((p) => data.ids.includes(p.id));
         const csv = [
           ['ID', 'Name', 'Status', 'Assignee', 'Created At'],
-          ...selectedProjects.map(p => [
+          ...selectedProjects.map((p) => [
             p.id,
             p.name,
             p.status,
@@ -99,7 +113,7 @@ export function BulkActionsExample() {
             p.createdAt.toISOString(),
           ]),
         ]
-          .map(row => row.join(','))
+          .map((row) => row.join(','))
           .join('\n');
 
         // Download CSV
@@ -133,7 +147,7 @@ export function BulkActionsExample() {
 
       {/* List of projects with selection */}
       <div className="border rounded-lg divide-y">
-        {projects.map(project => (
+        {projects.map((project) => (
           <SelectableListItem
             key={project.id}
             id={project.id}
@@ -167,16 +181,17 @@ export function BulkActionsExample() {
                   <input
                     type="checkbox"
                     checked={projects.length > 0 && selectedIds.size === projects.length}
-                    ref={input => {
+                    ref={(input) => {
                       if (input) {
-                        input.indeterminate = selectedIds.size > 0 && selectedIds.size < projects.length;
+                        input.indeterminate =
+                          selectedIds.size > 0 && selectedIds.size < projects.length;
                       }
                     }}
                     onChange={() => {
                       if (selectedIds.size === projects.length) {
                         clearSelection();
                       } else {
-                        setSelectedIds(new Set(projects.map(p => p.id)));
+                        setSelectedIds(new Set(projects.map((p) => p.id)));
                       }
                     }}
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
@@ -189,7 +204,7 @@ export function BulkActionsExample() {
               </tr>
             </thead>
             <tbody className="divide-y">
-              {projects.map(project => (
+              {projects.map((project) => (
                 <tr
                   key={project.id}
                   className={selectedIds.has(project.id) ? 'bg-blue-50' : 'hover:bg-gray-50'}

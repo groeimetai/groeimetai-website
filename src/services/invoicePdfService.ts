@@ -10,7 +10,7 @@ export class InvoicePdfService {
   private readonly primaryTextColor = '#1a202c';
   private readonly secondaryTextColor = '#4a5568';
   private readonly backgroundColor = '#f7fafc';
-  
+
   /**
    * Generate a PDF invoice
    * @param invoice - Invoice data
@@ -20,12 +20,12 @@ export class InvoicePdfService {
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
-      format: 'a4'
+      format: 'a4',
     });
 
     // Set up fonts and colors
     doc.setFont('helvetica');
-    
+
     // Add content to PDF
     this.addHeader(doc);
     this.addInvoiceDetails(doc, invoice);
@@ -48,12 +48,12 @@ export class InvoicePdfService {
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
-      format: 'a4'
+      format: 'a4',
     });
 
     // Set up fonts and colors
     doc.setFont('helvetica');
-    
+
     // Add content to PDF
     this.addHeader(doc);
     this.addInvoiceDetails(doc, invoice);
@@ -149,7 +149,7 @@ export class InvoicePdfService {
     // Billing address
     const address = invoice.billingAddress;
     let addressY = yPos + 7;
-    
+
     doc.text(address.street, 20, addressY);
     addressY += 5;
     doc.text(`${address.postalCode} ${address.city}`, 20, addressY);
@@ -171,7 +171,7 @@ export class InvoicePdfService {
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(74, 85, 104);
-    
+
     doc.text('Description', 20, yPos);
     doc.text('Qty', 120, yPos, { align: 'right' });
     doc.text('Unit Price', 145, yPos, { align: 'right' });
@@ -220,7 +220,9 @@ export class InvoicePdfService {
     doc.setTextColor(74, 85, 104);
     doc.text('Subtotal:', 145, yPos);
     doc.setTextColor(26, 32, 44);
-    doc.text(this.formatCurrency(financial.subtotal, financial.currency), 190, yPos, { align: 'right' });
+    doc.text(this.formatCurrency(financial.subtotal, financial.currency), 190, yPos, {
+      align: 'right',
+    });
 
     // Discount
     if (financial.discount > 0) {
@@ -228,7 +230,9 @@ export class InvoicePdfService {
       doc.setTextColor(74, 85, 104);
       doc.text('Discount:', 145, yPos);
       doc.setTextColor(26, 32, 44);
-      doc.text(`-${this.formatCurrency(financial.discount, financial.currency)}`, 190, yPos, { align: 'right' });
+      doc.text(`-${this.formatCurrency(financial.discount, financial.currency)}`, 190, yPos, {
+        align: 'right',
+      });
     }
 
     // Tax
@@ -249,7 +253,9 @@ export class InvoicePdfService {
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(255, 122, 0); // brandColor
     doc.text('Total:', 145, yPos);
-    doc.text(this.formatCurrency(financial.total, financial.currency), 190, yPos, { align: 'right' });
+    doc.text(this.formatCurrency(financial.total, financial.currency), 190, yPos, {
+      align: 'right',
+    });
 
     // Amount paid and balance
     if (financial.paid > 0) {
@@ -259,14 +265,18 @@ export class InvoicePdfService {
       doc.setTextColor(74, 85, 104);
       doc.text('Amount Paid:', 145, yPos);
       doc.setTextColor(26, 32, 44);
-      doc.text(this.formatCurrency(financial.paid, financial.currency), 190, yPos, { align: 'right' });
+      doc.text(this.formatCurrency(financial.paid, financial.currency), 190, yPos, {
+        align: 'right',
+      });
 
       yPos += 6;
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(74, 85, 104);
       doc.text('Balance Due:', 145, yPos);
       doc.setTextColor(26, 32, 44);
-      doc.text(this.formatCurrency(financial.balance, financial.currency), 190, yPos, { align: 'right' });
+      doc.text(this.formatCurrency(financial.balance, financial.currency), 190, yPos, {
+        align: 'right',
+      });
     }
   }
 
@@ -283,11 +293,11 @@ export class InvoicePdfService {
 
     doc.setFont('helvetica', 'normal');
     doc.text(`Payment is due by ${this.formatDate(invoice.dueDate)}`, 20, yPos + 6);
-    
+
     // Bank details
     doc.setFont('helvetica', 'bold');
     doc.text('Bank Details:', 20, yPos + 16);
-    
+
     doc.setFont('helvetica', 'normal');
     doc.text('Bank: ABN AMRO', 20, yPos + 22);
     doc.text('IBAN: NL91 ABNA 0417 1643 00', 20, yPos + 28);
@@ -308,34 +318,39 @@ export class InvoicePdfService {
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(156, 163, 175);
-    
+
     doc.text('Thank you for your business!', 105, yPos, { align: 'center' });
-    doc.text('GroeiMetAI B.V. | Herengracht 100, 1015 BS Amsterdam | BTW: NL123456789B01', 105, yPos + 5, { align: 'center' });
+    doc.text(
+      'GroeiMetAI B.V. | Herengracht 100, 1015 BS Amsterdam | BTW: NL123456789B01',
+      105,
+      yPos + 5,
+      { align: 'center' }
+    );
   }
 
   /**
    * Add status badge
    */
   private addStatusBadge(doc: jsPDF, status: string, x: number, y: number): void {
-    const statusColors: { [key: string]: { bg: number[], text: number[] } } = {
+    const statusColors: { [key: string]: { bg: number[]; text: number[] } } = {
       paid: { bg: [16, 185, 129], text: [255, 255, 255] },
       overdue: { bg: [239, 68, 68], text: [255, 255, 255] },
       pending: { bg: [251, 191, 36], text: [255, 255, 255] },
-      draft: { bg: [156, 163, 175], text: [255, 255, 255] }
+      draft: { bg: [156, 163, 175], text: [255, 255, 255] },
     };
 
     const colors = statusColors[status] || statusColors.draft;
-    
+
     // Badge background
     doc.setFillColor(colors.bg[0], colors.bg[1], colors.bg[2]);
     doc.roundedRect(x, y - 4, 25, 7, 1, 1, 'F');
-    
+
     // Badge text
     doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
     doc.setFontSize(8);
     doc.setFont('helvetica', 'bold');
     doc.text(status.toUpperCase(), x + 12.5, y, { align: 'center' });
-    
+
     // Reset text color
     doc.setTextColor(26, 32, 44);
   }
@@ -348,7 +363,7 @@ export class InvoicePdfService {
     return d.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   }
 
@@ -360,7 +375,7 @@ export class InvoicePdfService {
       style: 'currency',
       currency: currency || 'EUR',
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     }).format(amount);
   }
 }
@@ -369,8 +384,8 @@ export class InvoicePdfService {
 export const invoicePdfService = new InvoicePdfService();
 
 // Export main function for convenience
-export const generateInvoicePDF = (invoice: Invoice) => 
+export const generateInvoicePDF = (invoice: Invoice) =>
   invoicePdfService.generateInvoicePDF(invoice);
 
-export const generateInvoicePDFBlob = (invoice: Invoice) => 
+export const generateInvoicePDFBlob = (invoice: Invoice) =>
   invoicePdfService.generateInvoicePDFBlob(invoice);

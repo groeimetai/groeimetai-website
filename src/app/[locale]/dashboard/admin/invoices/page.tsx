@@ -128,12 +128,8 @@ export default function AdminInvoicesPage() {
     taxRate: 21, // Default 21% VAT
   });
 
-  const {
-    selectedIds,
-    setSelectedIds,
-    toggleSelection,
-    clearSelection,
-  } = useBulkSelection(invoices);
+  const { selectedIds, setSelectedIds, toggleSelection, clearSelection } =
+    useBulkSelection(invoices);
 
   // Redirect if not admin
   useEffect(() => {
@@ -161,13 +157,10 @@ export default function AdminInvoicesPage() {
               const invoiceData = doc.data();
               // Get client data
               const clientDoc = await getDocs(
-                query(
-                  collection(db, collections.users),
-                  where('uid', '==', invoiceData.clientId)
-                )
+                query(collection(db, collections.users), where('uid', '==', invoiceData.clientId))
               );
               const clientData = clientDoc.docs[0]?.data();
-              
+
               return {
                 id: doc.id,
                 ...invoiceData,
@@ -191,10 +184,13 @@ export default function AdminInvoicesPage() {
           where('role', '==', 'client')
         );
         const clientsSnapshot = await getDocs(clientsQuery);
-        const clientsList = clientsSnapshot.docs.map(doc => ({
-          uid: doc.id,
-          ...doc.data()
-        } as User));
+        const clientsList = clientsSnapshot.docs.map(
+          (doc) =>
+            ({
+              uid: doc.id,
+              ...doc.data(),
+            }) as User
+        );
         setClients(clientsList);
 
         return () => unsubscribe();
@@ -209,76 +205,86 @@ export default function AdminInvoicesPage() {
   }, [user, isAdmin]);
 
   // Filter and sort invoices
-  const filteredInvoices = invoices.filter(invoice => {
-    // Search filter
-    if (searchQuery) {
-      const search = searchQuery.toLowerCase();
-      if (!invoice.invoiceNumber.toLowerCase().includes(search) &&
+  const filteredInvoices = invoices
+    .filter((invoice) => {
+      // Search filter
+      if (searchQuery) {
+        const search = searchQuery.toLowerCase();
+        if (
+          !invoice.invoiceNumber.toLowerCase().includes(search) &&
           !invoice.clientName?.toLowerCase().includes(search) &&
-          !invoice.clientEmail?.toLowerCase().includes(search)) {
+          !invoice.clientEmail?.toLowerCase().includes(search)
+        ) {
+          return false;
+        }
+      }
+
+      // Status filter
+      if (statusFilter !== 'all' && invoice.status !== statusFilter) {
         return false;
       }
-    }
 
-    // Status filter
-    if (statusFilter !== 'all' && invoice.status !== statusFilter) {
-      return false;
-    }
+      // Date filter
+      if (dateFilter !== 'all') {
+        const now = new Date();
+        const invoiceDate = invoice.issueDate;
+        const daysDiff = Math.floor(
+          (now.getTime() - invoiceDate.getTime()) / (1000 * 60 * 60 * 24)
+        );
 
-    // Date filter
-    if (dateFilter !== 'all') {
-      const now = new Date();
-      const invoiceDate = invoice.issueDate;
-      const daysDiff = Math.floor((now.getTime() - invoiceDate.getTime()) / (1000 * 60 * 60 * 24));
-      
-      if (dateFilter === '7days' && daysDiff > 7) return false;
-      if (dateFilter === '30days' && daysDiff > 30) return false;
-      if (dateFilter === '90days' && daysDiff > 90) return false;
-    }
+        if (dateFilter === '7days' && daysDiff > 7) return false;
+        if (dateFilter === '30days' && daysDiff > 30) return false;
+        if (dateFilter === '90days' && daysDiff > 90) return false;
+      }
 
-    return true;
-  }).sort((a, b) => {
-    let compareValue = 0;
-    
-    switch (sortBy) {
-      case 'invoiceNumber':
-        compareValue = a.invoiceNumber.localeCompare(b.invoiceNumber);
-        break;
-      case 'clientName':
-        compareValue = (a.clientName || '').localeCompare(b.clientName || '');
-        break;
-      case 'total':
-        compareValue = a.financial.total - b.financial.total;
-        break;
-      case 'dueDate':
-        compareValue = a.dueDate.getTime() - b.dueDate.getTime();
-        break;
-      default:
-        compareValue = a.issueDate.getTime() - b.issueDate.getTime();
-    }
-    
-    return sortOrder === 'asc' ? compareValue : -compareValue;
-  });
+      return true;
+    })
+    .sort((a, b) => {
+      let compareValue = 0;
+
+      switch (sortBy) {
+        case 'invoiceNumber':
+          compareValue = a.invoiceNumber.localeCompare(b.invoiceNumber);
+          break;
+        case 'clientName':
+          compareValue = (a.clientName || '').localeCompare(b.clientName || '');
+          break;
+        case 'total':
+          compareValue = a.financial.total - b.financial.total;
+          break;
+        case 'dueDate':
+          compareValue = a.dueDate.getTime() - b.dueDate.getTime();
+          break;
+        default:
+          compareValue = a.issueDate.getTime() - b.issueDate.getTime();
+      }
+
+      return sortOrder === 'asc' ? compareValue : -compareValue;
+    });
 
   // Calculate stats
   const stats = {
     total: invoices.length,
-    draft: invoices.filter(i => i.status === 'draft').length,
-    sent: invoices.filter(i => i.status === 'sent').length,
-    paid: invoices.filter(i => i.status === 'paid').length,
-    overdue: invoices.filter(i => i.status === 'overdue').length,
-    totalRevenue: invoices.filter(i => i.status === 'paid').reduce((sum, i) => sum + i.financial.total, 0),
-    outstandingRevenue: invoices.filter(i => ['sent', 'viewed', 'overdue'].includes(i.status)).reduce((sum, i) => sum + i.financial.balance, 0),
+    draft: invoices.filter((i) => i.status === 'draft').length,
+    sent: invoices.filter((i) => i.status === 'sent').length,
+    paid: invoices.filter((i) => i.status === 'paid').length,
+    overdue: invoices.filter((i) => i.status === 'overdue').length,
+    totalRevenue: invoices
+      .filter((i) => i.status === 'paid')
+      .reduce((sum, i) => sum + i.financial.total, 0),
+    outstandingRevenue: invoices
+      .filter((i) => ['sent', 'viewed', 'overdue'].includes(i.status))
+      .reduce((sum, i) => sum + i.financial.balance, 0),
   };
 
   // Calculate invoice totals
   const calculateInvoiceTotals = useCallback(() => {
-    const subtotal = formData.items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
+    const subtotal = formData.items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
     const discount = formData.discount || 0;
     const taxableAmount = subtotal - discount;
     const tax = (taxableAmount * formData.taxRate) / 100;
     const total = taxableAmount + tax;
-    
+
     return { subtotal, discount, tax, total };
   }, [formData.items, formData.discount, formData.taxRate]);
 
@@ -289,7 +295,7 @@ export default function AdminInvoicesPage() {
       ...updatedItems[index],
       [field]: value,
     };
-    
+
     // Recalculate item total
     if (field === 'quantity' || field === 'unitPrice') {
       const quantity = field === 'quantity' ? value : updatedItems[index].quantity;
@@ -297,7 +303,7 @@ export default function AdminInvoicesPage() {
       updatedItems[index].total = quantity * unitPrice;
       updatedItems[index].tax = (updatedItems[index].total * formData.taxRate) / 100;
     }
-    
+
     setFormData({ ...formData, items: updatedItems });
   };
 
@@ -305,14 +311,17 @@ export default function AdminInvoicesPage() {
   const addInvoiceItem = () => {
     setFormData({
       ...formData,
-      items: [...formData.items, { 
-        id: Date.now().toString(),
-        description: '', 
-        quantity: 1, 
-        unitPrice: 0, 
-        tax: 0,
-        total: 0 
-      }]
+      items: [
+        ...formData.items,
+        {
+          id: Date.now().toString(),
+          description: '',
+          quantity: 1,
+          unitPrice: 0,
+          tax: 0,
+          total: 0,
+        },
+      ],
     });
   };
 
@@ -326,10 +335,10 @@ export default function AdminInvoicesPage() {
   const createInvoice = async () => {
     try {
       if (!user) return;
-      
+
       const totals = calculateInvoiceTotals();
-      const selectedClient = clients.find(c => c.uid === formData.clientId);
-      
+      const selectedClient = clients.find((c) => c.uid === formData.clientId);
+
       if (!selectedClient) {
         toast.error('Please select a client');
         return;
@@ -337,14 +346,14 @@ export default function AdminInvoicesPage() {
 
       const currentUser = auth.currentUser;
       if (!currentUser) throw new Error('No authenticated user');
-      
+
       const token = await currentUser.getIdToken();
       if (!token) throw new Error('No authentication token');
 
       const response = await fetch('/api/invoices/create', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -358,7 +367,7 @@ export default function AdminInvoicesPage() {
           },
           projectId: formData.projectId,
           type: 'standard',
-          items: formData.items.filter(item => item.description && item.total > 0),
+          items: formData.items.filter((item) => item.description && item.total > 0),
           dueDate: formData.dueDate,
           issueDate: new Date(),
           sendEmail: false,
@@ -399,14 +408,14 @@ export default function AdminInvoicesPage() {
     try {
       const currentUser = auth.currentUser;
       if (!currentUser) throw new Error('No authenticated user');
-      
+
       const token = await currentUser.getIdToken();
       if (!token) throw new Error('No authentication token');
 
       const response = await fetch(`/api/invoices/${invoice.id}/send`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -434,7 +443,7 @@ export default function AdminInvoicesPage() {
     try {
       const currentUser = auth.currentUser;
       if (!currentUser) throw new Error('No authenticated user');
-      
+
       const token = await currentUser.getIdToken();
       if (!token) throw new Error('No authentication token');
 
@@ -442,7 +451,7 @@ export default function AdminInvoicesPage() {
       const response = await fetch(`/api/invoices/${invoice.id}/send`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -471,7 +480,7 @@ export default function AdminInvoicesPage() {
     try {
       const currentUser = auth.currentUser;
       if (!currentUser) throw new Error('No authenticated user');
-      
+
       const token = await currentUser.getIdToken();
       if (!token) throw new Error('No authentication token');
 
@@ -479,7 +488,7 @@ export default function AdminInvoicesPage() {
       const response = await fetch('/api/payments/create', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -513,13 +522,13 @@ export default function AdminInvoicesPage() {
     try {
       const currentUser = auth.currentUser;
       if (!currentUser) throw new Error('No authenticated user');
-      
+
       const token = await currentUser.getIdToken();
       if (!token) throw new Error('No authentication token');
 
       const response = await fetch(`/api/invoices/${invoice.id}/pdf`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -545,7 +554,7 @@ export default function AdminInvoicesPage() {
   // Delete invoice
   const deleteInvoice = async (invoiceId: string) => {
     if (!confirm('Are you sure you want to delete this invoice?')) return;
-    
+
     try {
       await deleteDoc(doc(db, collections.invoices || 'invoices', invoiceId));
       toast.success('Invoice deleted successfully');
@@ -561,7 +570,7 @@ export default function AdminInvoicesPage() {
       switch (action) {
         case 'delete':
           if (!confirm(`Are you sure you want to delete ${data.ids.length} invoices?`)) return;
-          
+
           for (const invoiceId of data.ids) {
             await deleteDoc(doc(db, collections.invoices || 'invoices', invoiceId));
           }
@@ -579,10 +588,10 @@ export default function AdminInvoicesPage() {
           break;
 
         case 'export':
-          const selectedInvoices = invoices.filter(i => data.ids.includes(i.id));
+          const selectedInvoices = invoices.filter((i) => data.ids.includes(i.id));
           const csv = [
             ['Invoice Number', 'Client', 'Status', 'Issue Date', 'Due Date', 'Total', 'Balance'],
-            ...selectedInvoices.map(i => [
+            ...selectedInvoices.map((i) => [
               i.invoiceNumber,
               i.clientName || '',
               i.status,
@@ -592,7 +601,7 @@ export default function AdminInvoicesPage() {
               `${i.financial.currency} ${i.financial.balance.toFixed(2)}`,
             ]),
           ]
-            .map(row => row.join(','))
+            .map((row) => row.join(','))
             .join('\n');
 
           const blob = new Blob([csv], { type: 'text/csv' });
@@ -670,7 +679,10 @@ export default function AdminInvoicesPage() {
             <h1 className="text-3xl font-bold text-white mb-2">Invoices Management</h1>
             <p className="text-white/60">Create and manage invoices for all clients</p>
           </div>
-          <Button onClick={() => setIsCreateDialogOpen(true)} className="bg-orange hover:bg-orange/90">
+          <Button
+            onClick={() => setIsCreateDialogOpen(true)}
+            className="bg-orange hover:bg-orange/90"
+          >
             <Plus className="w-4 h-4 mr-2" />
             Create Invoice
           </Button>
@@ -684,7 +696,9 @@ export default function AdminInvoicesPage() {
                 <span className="text-white/60 text-sm">Total Revenue</span>
                 <DollarSign className="w-4 h-4 text-green-500" />
               </div>
-              <p className="text-2xl font-bold text-white">€{stats.totalRevenue.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-white">
+                €{stats.totalRevenue.toLocaleString()}
+              </p>
             </CardContent>
           </Card>
 
@@ -694,7 +708,9 @@ export default function AdminInvoicesPage() {
                 <span className="text-white/60 text-sm">Outstanding</span>
                 <Clock className="w-4 h-4 text-yellow-500" />
               </div>
-              <p className="text-2xl font-bold text-white">€{stats.outstandingRevenue.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-white">
+                €{stats.outstandingRevenue.toLocaleString()}
+              </p>
             </CardContent>
           </Card>
 
@@ -752,7 +768,7 @@ export default function AdminInvoicesPage() {
                   className="pl-10 bg-white/5 border-white/10 text-white"
                 />
               </div>
-              
+
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-[140px] bg-white/5 border-white/10 text-white">
                   <SelectValue placeholder="Status" />
@@ -833,10 +849,13 @@ export default function AdminInvoicesPage() {
                   <TableRow className="border-white/10">
                     <TableHead className="w-12 text-white/60">
                       <Checkbox
-                        checked={selectedIds.size === filteredInvoices.length && filteredInvoices.length > 0}
+                        checked={
+                          selectedIds.size === filteredInvoices.length &&
+                          filteredInvoices.length > 0
+                        }
                         onChange={(e) => {
                           if (e.target.checked) {
-                            setSelectedIds(new Set(filteredInvoices.map(i => i.id)));
+                            setSelectedIds(new Set(filteredInvoices.map((i) => i.id)));
                           } else {
                             clearSelection();
                           }
@@ -855,8 +874,10 @@ export default function AdminInvoicesPage() {
                 <TableBody>
                   {filteredInvoices.map((invoice) => {
                     const StatusIcon = getStatusIcon(invoice.status);
-                    const isOverdue = ['sent', 'viewed'].includes(invoice.status) && isAfter(new Date(), invoice.dueDate);
-                    
+                    const isOverdue =
+                      ['sent', 'viewed'].includes(invoice.status) &&
+                      isAfter(new Date(), invoice.dueDate);
+
                     return (
                       <TableRow key={invoice.id} className="border-white/10">
                         <TableCell>
@@ -869,7 +890,9 @@ export default function AdminInvoicesPage() {
                           <div>
                             <p className="font-medium text-white">{invoice.invoiceNumber}</p>
                             {invoice.projectId && (
-                              <p className="text-sm text-white/60">Project ID: {invoice.projectId}</p>
+                              <p className="text-sm text-white/60">
+                                Project ID: {invoice.projectId}
+                              </p>
                             )}
                           </div>
                         </TableCell>
@@ -895,7 +918,9 @@ export default function AdminInvoicesPage() {
                           <div className={isOverdue ? 'text-red-500' : 'text-white/80'}>
                             {format(invoice.dueDate, 'MMM d, yyyy')}
                             {isOverdue && (
-                              <p className="text-xs">Overdue by {formatDistanceToNow(invoice.dueDate)}</p>
+                              <p className="text-xs">
+                                Overdue by {formatDistanceToNow(invoice.dueDate)}
+                              </p>
                             )}
                           </div>
                         </TableCell>
@@ -943,7 +968,7 @@ export default function AdminInvoicesPage() {
                                 )}
                               </Button>
                             )}
-                            {(['sent', 'viewed', 'overdue'].includes(invoice.status)) && (
+                            {['sent', 'viewed', 'overdue'].includes(invoice.status) && (
                               <>
                                 <Button
                                   size="sm"
@@ -1010,14 +1035,18 @@ export default function AdminInvoicesPage() {
               {/* Client Selection */}
               <div>
                 <Label className="text-white/80">Client</Label>
-                <Select value={formData.clientId} onValueChange={(value) => setFormData({ ...formData, clientId: value })}>
+                <Select
+                  value={formData.clientId}
+                  onValueChange={(value) => setFormData({ ...formData, clientId: value })}
+                >
                   <SelectTrigger className="mt-1 bg-white/5 border-white/10 text-white">
                     <SelectValue placeholder="Select a client" />
                   </SelectTrigger>
                   <SelectContent>
                     {clients.map((client) => (
                       <SelectItem key={client.uid} value={client.uid}>
-                        {client.displayName || client.email} {client.company && `(${client.company})`}
+                        {client.displayName || client.email}{' '}
+                        {client.company && `(${client.company})`}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -1031,7 +1060,9 @@ export default function AdminInvoicesPage() {
                   <Input
                     type="date"
                     value={format(formData.dueDate, 'yyyy-MM-dd')}
-                    onChange={(e) => setFormData({ ...formData, dueDate: new Date(e.target.value) })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, dueDate: new Date(e.target.value) })
+                    }
                     className="mt-1 bg-white/5 border-white/10 text-white"
                   />
                 </div>
@@ -1040,7 +1071,9 @@ export default function AdminInvoicesPage() {
                   <Input
                     type="number"
                     value={formData.taxRate}
-                    onChange={(e) => setFormData({ ...formData, taxRate: parseFloat(e.target.value) || 0 })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, taxRate: parseFloat(e.target.value) || 0 })
+                    }
                     className="mt-1 bg-white/5 border-white/10 text-white"
                   />
                 </div>
@@ -1050,12 +1083,7 @@ export default function AdminInvoicesPage() {
               <div>
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-medium text-white">Invoice Items</h3>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    onClick={addInvoiceItem}
-                  >
+                  <Button type="button" size="sm" variant="outline" onClick={addInvoiceItem}>
                     <Plus className="w-4 h-4 mr-2" />
                     Add Item
                   </Button>
@@ -1076,7 +1104,9 @@ export default function AdminInvoicesPage() {
                           type="number"
                           placeholder="Qty"
                           value={item.quantity}
-                          onChange={(e) => updateInvoiceItem(index, 'quantity', parseInt(e.target.value) || 0)}
+                          onChange={(e) =>
+                            updateInvoiceItem(index, 'quantity', parseInt(e.target.value) || 0)
+                          }
                           className="bg-white/5 border-white/10 text-white"
                         />
                       </div>
@@ -1085,7 +1115,9 @@ export default function AdminInvoicesPage() {
                           type="number"
                           placeholder="Rate"
                           value={item.unitPrice}
-                          onChange={(e) => updateInvoiceItem(index, 'unitPrice', parseFloat(e.target.value) || 0)}
+                          onChange={(e) =>
+                            updateInvoiceItem(index, 'unitPrice', parseFloat(e.target.value) || 0)
+                          }
                           className="bg-white/5 border-white/10 text-white"
                         />
                       </div>
@@ -1114,7 +1146,9 @@ export default function AdminInvoicesPage() {
                 <Input
                   type="number"
                   value={formData.discount}
-                  onChange={(e) => setFormData({ ...formData, discount: parseFloat(e.target.value) || 0 })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, discount: parseFloat(e.target.value) || 0 })
+                  }
                   className="mt-1 bg-white/5 border-white/10 text-white"
                 />
               </div>
@@ -1164,16 +1198,21 @@ export default function AdminInvoicesPage() {
 
               {/* Actions */}
               <div className="flex justify-end gap-3">
-                <Button variant="outline" onClick={() => {
-                  setIsCreateDialogOpen(false);
-                  resetForm();
-                }}>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsCreateDialogOpen(false);
+                    resetForm();
+                  }}
+                >
                   Cancel
                 </Button>
                 <Button
                   onClick={createInvoice}
                   className="bg-orange hover:bg-orange/90"
-                  disabled={!formData.clientId || !formData.items.some(i => i.description && i.total > 0)}
+                  disabled={
+                    !formData.clientId || !formData.items.some((i) => i.description && i.total > 0)
+                  }
                 >
                   Create Invoice
                 </Button>
@@ -1193,7 +1232,9 @@ export default function AdminInvoicesPage() {
                 {/* Invoice Header */}
                 <div className="flex justify-between items-start">
                   <div>
-                    <h2 className="text-2xl font-bold text-white">{selectedInvoice.invoiceNumber}</h2>
+                    <h2 className="text-2xl font-bold text-white">
+                      {selectedInvoice.invoiceNumber}
+                    </h2>
                     <Badge
                       variant="outline"
                       className={`mt-2 ${getStatusColor(selectedInvoice.status)} bg-opacity-20 border-0`}
@@ -1203,7 +1244,9 @@ export default function AdminInvoicesPage() {
                   </div>
                   <div className="text-right">
                     <p className="text-white/60">Issue Date</p>
-                    <p className="text-white">{format(selectedInvoice.issueDate, 'MMMM d, yyyy')}</p>
+                    <p className="text-white">
+                      {format(selectedInvoice.issueDate, 'MMMM d, yyyy')}
+                    </p>
                     <p className="text-white/60 mt-2">Due Date</p>
                     <p className="text-white">{format(selectedInvoice.dueDate, 'MMMM d, yyyy')}</p>
                   </div>
@@ -1219,7 +1262,8 @@ export default function AdminInvoicesPage() {
                       <>
                         <p className="text-white/80">{selectedInvoice.billingAddress.street}</p>
                         <p className="text-white/80">
-                          {selectedInvoice.billingAddress.city} {selectedInvoice.billingAddress.postalCode}
+                          {selectedInvoice.billingAddress.city}{' '}
+                          {selectedInvoice.billingAddress.postalCode}
                         </p>
                         <p className="text-white/80">{selectedInvoice.billingAddress.country}</p>
                       </>
@@ -1251,9 +1295,15 @@ export default function AdminInvoicesPage() {
                         <TableRow key={item.id} className="border-white/10">
                           <TableCell className="text-white">{item.description}</TableCell>
                           <TableCell className="text-right text-white">{item.quantity}</TableCell>
-                          <TableCell className="text-right text-white">€{item.unitPrice.toFixed(2)}</TableCell>
-                          <TableCell className="text-right text-white">€{item.tax.toFixed(2)}</TableCell>
-                          <TableCell className="text-right text-white">€{item.total.toFixed(2)}</TableCell>
+                          <TableCell className="text-right text-white">
+                            €{item.unitPrice.toFixed(2)}
+                          </TableCell>
+                          <TableCell className="text-right text-white">
+                            €{item.tax.toFixed(2)}
+                          </TableCell>
+                          <TableCell className="text-right text-white">
+                            €{item.total.toFixed(2)}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -1318,7 +1368,7 @@ export default function AdminInvoicesPage() {
                       Send Invoice
                     </Button>
                   )}
-                  {(['sent', 'viewed', 'overdue'].includes(selectedInvoice.status)) && (
+                  {['sent', 'viewed', 'overdue'].includes(selectedInvoice.status) && (
                     <Button
                       onClick={() => {
                         createPaymentLink(selectedInvoice);

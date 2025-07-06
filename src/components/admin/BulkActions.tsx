@@ -93,7 +93,7 @@ export function BulkActions({
     if (isAllSelected) {
       onSelectionChange(new Set());
     } else {
-      onSelectionChange(new Set(items.map(item => item.id)));
+      onSelectionChange(new Set(items.map((item) => item.id)));
     }
   }, [isAllSelected, items, onSelectionChange]);
 
@@ -125,7 +125,7 @@ export function BulkActions({
       try {
         // Simulate progress for demo
         const updateInterval = setInterval(() => {
-          setProgress(prev => {
+          setProgress((prev) => {
             if (!prev || prev.completed >= prev.total) return prev;
             return {
               ...prev,
@@ -146,7 +146,7 @@ export function BulkActions({
 
         onSelectionChange(new Set());
       } catch (error) {
-        setProgress(prev => ({
+        setProgress((prev) => ({
           ...prev!,
           failed: prev!.total - prev!.completed,
           message: 'Operation failed',
@@ -155,7 +155,7 @@ export function BulkActions({
         toast({
           title: 'Error',
           description: `Failed to ${action} items`,
-          });
+        });
       } finally {
         setIsProcessing(false);
         setIsConfirmOpen(false);
@@ -219,7 +219,7 @@ export function BulkActions({
         <input
           type="checkbox"
           checked={isAllSelected}
-          ref={input => {
+          ref={(input) => {
             if (input) {
               input.indeterminate = isPartiallySelected;
             }
@@ -276,7 +276,11 @@ export function BulkActions({
                     onClick={() => setIsExpanded(!isExpanded)}
                     className="h-6 w-6 p-0"
                   >
-                    {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
+                    {isExpanded ? (
+                      <ChevronDown className="h-4 w-4" />
+                    ) : (
+                      <ChevronUp className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
 
@@ -284,13 +288,13 @@ export function BulkActions({
                   <div className="flex flex-wrap gap-2">
                     {actions.includes('updateStatus') && statusOptions.length > 0 && (
                       <Select
-                        onValueChange={value => handleAction('updateStatus', { status: value })}
+                        onValueChange={(value) => handleAction('updateStatus', { status: value })}
                       >
                         <SelectTrigger className="w-[140px]" disabled={isProcessing}>
                           <SelectValue placeholder="Update status" />
                         </SelectTrigger>
                         <SelectContent>
-                          {statusOptions.map(option => (
+                          {statusOptions.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
                               {option.label}
                             </SelectItem>
@@ -301,13 +305,13 @@ export function BulkActions({
 
                     {actions.includes('assign') && assigneeOptions.length > 0 && (
                       <Select
-                        onValueChange={value => handleAction('assign', { assigneeId: value })}
+                        onValueChange={(value) => handleAction('assign', { assigneeId: value })}
                       >
                         <SelectTrigger className="w-[140px]" disabled={isProcessing}>
                           <SelectValue placeholder="Assign to" />
                         </SelectTrigger>
                         <SelectContent>
-                          {assigneeOptions.map(option => (
+                          {assigneeOptions.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
                               {option.label}
                             </SelectItem>
@@ -381,12 +385,14 @@ export function BulkActions({
               {pendingAction === 'delete' && (
                 <>
                   <AlertCircle className="inline-block h-4 w-4 mr-2 text-red-600" />
-                  Are you sure you want to delete {selectedCount} items? This action cannot be undone.
+                  Are you sure you want to delete {selectedCount} items? This action cannot be
+                  undone.
                 </>
               )}
               {pendingAction === 'archive' && (
                 <>
-                  Are you sure you want to archive {selectedCount} items? You can restore them later.
+                  Are you sure you want to archive {selectedCount} items? You can restore them
+                  later.
                 </>
               )}
             </DialogDescription>
@@ -450,7 +456,7 @@ export function useBulkSelection<T extends { id: string }>(items: T[]) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const toggleSelection = useCallback((id: string) => {
-    setSelectedIds(prev => {
+    setSelectedIds((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(id)) {
         newSet.delete(id);
@@ -462,7 +468,7 @@ export function useBulkSelection<T extends { id: string }>(items: T[]) {
   }, []);
 
   const selectAll = useCallback(() => {
-    setSelectedIds(new Set(items.map(item => item.id)));
+    setSelectedIds(new Set(items.map((item) => item.id)));
   }, [items]);
 
   const clearSelection = useCallback(() => {
@@ -470,7 +476,7 @@ export function useBulkSelection<T extends { id: string }>(items: T[]) {
   }, []);
 
   const getSelectedItems = useCallback(() => {
-    return items.filter(item => selectedIds.has(item.id));
+    return items.filter((item) => selectedIds.has(item.id));
   }, [items, selectedIds]);
 
   return {

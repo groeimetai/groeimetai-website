@@ -10,7 +10,7 @@ import { LocaleProviders } from '@/components/LocaleProviders';
 // Dynamically import Navigation to avoid SSR issues with router
 const Navigation = dynamic(() => import('@/components/layout/Navigation'), {
   ssr: false,
-  loading: () => <div className="h-20" /> // Placeholder to prevent layout shift
+  loading: () => <div className="h-20" />, // Placeholder to prevent layout shift
 });
 
 export async function generateStaticParams() {

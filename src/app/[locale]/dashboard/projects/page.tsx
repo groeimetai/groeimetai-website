@@ -121,13 +121,13 @@ export default function ProjectsPage() {
   // Handle project cancellation
   const handleCancelProject = async () => {
     if (!selectedProject) return;
-    
+
     setIsDeleting(true);
     try {
       await projectService.update(selectedProject.id, {
         status: 'cancelled' as ProjectStatus,
       });
-      
+
       // Refresh projects list
       await fetchProjects();
       setCancelDialogOpen(false);
@@ -143,11 +143,11 @@ export default function ProjectsPage() {
   // Handle project deletion
   const handleDeleteProject = async () => {
     if (!selectedProject) return;
-    
+
     setIsDeleting(true);
     try {
       await projectService.delete(selectedProject.id);
-      
+
       // Refresh projects list
       await fetchProjects();
       setDeleteDialogOpen(false);
@@ -342,9 +342,9 @@ export default function ProjectsPage() {
                       </div>
                     </div>
                     <div className="relative">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         className="text-white/60 hover:text-white focus:outline-none"
                         onClick={(e) => {
                           e.preventDefault();
@@ -455,8 +455,8 @@ export default function ProjectsPage() {
               transform your business with cutting-edge AI solutions.
             </p>
 
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="bg-orange hover:bg-orange/90"
               onClick={() => setProjectDialogOpen(true)}
             >
@@ -473,8 +473,9 @@ export default function ProjectsPage() {
           <DialogHeader>
             <DialogTitle>Cancel Project</DialogTitle>
             <DialogDescription>
-              Are you sure you want to cancel &ldquo;{selectedProject?.name}&rdquo;? This action cannot be undone.
-              The project will be marked as cancelled and all associated tasks will be stopped.
+              Are you sure you want to cancel &ldquo;{selectedProject?.name}&rdquo;? This action
+              cannot be undone. The project will be marked as cancelled and all associated tasks
+              will be stopped.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -485,11 +486,7 @@ export default function ProjectsPage() {
             >
               Keep Project
             </Button>
-            <Button
-              variant="destructive"
-              onClick={handleCancelProject}
-              disabled={isDeleting}
-            >
+            <Button variant="destructive" onClick={handleCancelProject} disabled={isDeleting}>
               {isDeleting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -509,7 +506,7 @@ export default function ProjectsPage() {
           <DialogHeader>
             <DialogTitle>Delete Project</DialogTitle>
             <DialogDescription>
-              Are you sure you want to permanently delete &ldquo;{selectedProject?.name}&rdquo;? 
+              Are you sure you want to permanently delete &ldquo;{selectedProject?.name}&rdquo;?
               This action cannot be undone and all project data will be lost.
             </DialogDescription>
           </DialogHeader>
@@ -521,11 +518,7 @@ export default function ProjectsPage() {
             >
               Cancel
             </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDeleteProject}
-              disabled={isDeleting}
-            >
+            <Button variant="destructive" onClick={handleDeleteProject} disabled={isDeleting}>
               {isDeleting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -540,10 +533,7 @@ export default function ProjectsPage() {
       </Dialog>
 
       {/* Project Request Dialog */}
-      <ProjectRequestDialog 
-        open={projectDialogOpen} 
-        onOpenChange={setProjectDialogOpen} 
-      />
+      <ProjectRequestDialog open={projectDialogOpen} onOpenChange={setProjectDialogOpen} />
     </main>
   );
 }

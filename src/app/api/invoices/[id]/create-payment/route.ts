@@ -9,18 +9,12 @@ import { Invoice } from '@/types';
  * POST /api/invoices/[id]/create-payment
  * Create a Mollie payment link for an invoice
  */
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Check authentication
     const session = await getServerSession();
     if (!session) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const invoiceId = params.id;
@@ -30,20 +24,14 @@ export async function POST(
     const invoiceSnap = await getDoc(invoiceRef);
 
     if (!invoiceSnap.exists()) {
-      return NextResponse.json(
-        { error: 'Invoice not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
 
     const invoice = { id: invoiceSnap.id, ...invoiceSnap.data() } as Invoice;
 
     // Check if invoice is already paid
     if (invoice.status === 'paid') {
-      return NextResponse.json(
-        { error: 'Invoice is already paid' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invoice is already paid' }, { status: 400 });
     }
 
     // TODO: Check if invoice has a pending payment once we add Mollie payment tracking to the Invoice model
@@ -123,7 +111,6 @@ export async function POST(
       ...paymentResult,
       message: 'Payment link created successfully',
     });
-
   } catch (error) {
     console.error('Error creating payment link:', error);
     return NextResponse.json(
@@ -140,18 +127,12 @@ export async function POST(
  * GET /api/invoices/[invoiceId]/create-payment
  * Get payment status for an invoice
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { invoiceId: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { invoiceId: string } }) {
   try {
     // Check authentication
     const session = await getServerSession();
     if (!session) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { invoiceId } = params;
@@ -161,10 +142,7 @@ export async function GET(
     const invoiceSnap = await getDoc(invoiceRef);
 
     if (!invoiceSnap.exists()) {
-      return NextResponse.json(
-        { error: 'Invoice not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
 
     const invoice = { id: invoiceSnap.id, ...invoiceSnap.data() } as Invoice;
@@ -190,7 +168,6 @@ export async function GET(
       method: payment.method,
       checkoutUrl: payment.getCheckoutUrl() || null,
     });
-
   } catch (error) {
     console.error('Error getting payment status:', error);
     return NextResponse.json(

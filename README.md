@@ -237,6 +237,7 @@ npm start
 ### Debug Mode
 
 Enable debug logs:
+
 ```env
 DEBUG=true
 ```
@@ -244,6 +245,7 @@ DEBUG=true
 ## Support
 
 For issues and questions:
+
 - Check [documentation](./docs/)
 - Review [invoice system guide](./docs/INVOICE_SYSTEM.md)
 - Contact support at support@groeimetai.io

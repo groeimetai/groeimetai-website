@@ -1434,11 +1434,13 @@ export default function SettingsPage() {
                                   )}
                                 </div>
 
-                                {deleteConfirmEmail && deleteConfirmEmail.toLowerCase() !== user.email?.toLowerCase() && (
-                                  <p className="text-xs text-red-400">
-                                    Email doesn&apos;t match. Please type exactly: {user.email}
-                                  </p>
-                                )}
+                                {deleteConfirmEmail &&
+                                  deleteConfirmEmail.toLowerCase() !==
+                                    user.email?.toLowerCase() && (
+                                    <p className="text-xs text-red-400">
+                                      Email doesn&apos;t match. Please type exactly: {user.email}
+                                    </p>
+                                  )}
 
                                 <DialogFooter className="mt-6">
                                   <Button
@@ -1452,7 +1454,8 @@ export default function SettingsPage() {
                                     onClick={handleAccountDeletion}
                                     disabled={
                                       isDeleting ||
-                                      deleteConfirmEmail.toLowerCase() !== user.email?.toLowerCase() ||
+                                      deleteConfirmEmail.toLowerCase() !==
+                                        user.email?.toLowerCase() ||
                                       !deletePassword ||
                                       deletePassword.length < 6
                                     }

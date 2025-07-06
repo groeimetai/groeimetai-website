@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  collection, 
-  query, 
-  orderBy, 
-  onSnapshot, 
-  addDoc, 
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  addDoc,
   serverTimestamp,
-  Timestamp 
+  Timestamp,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -80,7 +80,7 @@ export default function QuoteChat({ quoteId, quoteName, userName }: QuoteChatPro
       const messagesRef = collection(db, 'quotes', quoteId, 'messages');
       await addDoc(messagesRef, {
         senderId: user.uid,
-        senderName: isAdmin ? 'GroeimetAI Team' : (user.displayName || user.email),
+        senderName: isAdmin ? 'GroeimetAI Team' : user.displayName || user.email,
         senderRole: isAdmin ? 'admin' : 'user',
         content: newMessage.trim(),
         createdAt: serverTimestamp(),
@@ -132,7 +132,7 @@ export default function QuoteChat({ quoteId, quoteName, userName }: QuoteChatPro
             <AnimatePresence initial={false}>
               {messages.map((message) => {
                 const isOwnMessage = message.senderId === user?.uid;
-                
+
                 return (
                   <motion.div
                     key={message.id}
@@ -147,14 +147,12 @@ export default function QuoteChat({ quoteId, quoteName, userName }: QuoteChatPro
                         isOwnMessage
                           ? 'bg-orange text-white'
                           : message.senderRole === 'admin'
-                          ? 'bg-green/20 text-white border border-green/30'
-                          : 'bg-white/10 text-white'
+                            ? 'bg-green/20 text-white border border-green/30'
+                            : 'bg-white/10 text-white'
                       }`}
                     >
                       {!isOwnMessage && (
-                        <p className="text-xs font-medium mb-1 opacity-80">
-                          {message.senderName}
-                        </p>
+                        <p className="text-xs font-medium mb-1 opacity-80">{message.senderName}</p>
                       )}
                       <p className="text-sm">{message.content}</p>
                       <p className="text-xs mt-1 opacity-60">

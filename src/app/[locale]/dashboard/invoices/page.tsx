@@ -49,14 +49,7 @@ import { toast } from 'react-hot-toast';
 // Invoice operations are handled through API routes
 import { PaymentButton } from '@/components/invoice/PaymentButton';
 import { Invoice, InvoiceStatus } from '@/types';
-import { 
-  collection, 
-  query, 
-  where, 
-  orderBy, 
-  onSnapshot,
-  Timestamp
-} from 'firebase/firestore';
+import { collection, query, where, orderBy, onSnapshot, Timestamp } from 'firebase/firestore';
 import { db, collections } from '@/lib/firebase';
 
 interface InvoiceStats {
@@ -105,26 +98,41 @@ export default function InvoicesPage() {
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        const invoicesData = snapshot.docs.map(doc => {
+        const invoicesData = snapshot.docs.map((doc) => {
           const data = doc.data();
           return {
             id: doc.id,
             ...data,
             // Convert Firestore timestamps to Date objects
-            issueDate: data.issueDate instanceof Timestamp ? data.issueDate.toDate() : new Date(data.issueDate),
-            dueDate: data.dueDate instanceof Timestamp ? data.dueDate.toDate() : new Date(data.dueDate),
-            paidDate: data.paidDate instanceof Timestamp ? data.paidDate.toDate() : data.paidDate ? new Date(data.paidDate) : undefined,
-            createdAt: data.createdAt instanceof Timestamp ? data.createdAt.toDate() : new Date(data.createdAt),
-            updatedAt: data.updatedAt instanceof Timestamp ? data.updatedAt.toDate() : new Date(data.updatedAt),
+            issueDate:
+              data.issueDate instanceof Timestamp
+                ? data.issueDate.toDate()
+                : new Date(data.issueDate),
+            dueDate:
+              data.dueDate instanceof Timestamp ? data.dueDate.toDate() : new Date(data.dueDate),
+            paidDate:
+              data.paidDate instanceof Timestamp
+                ? data.paidDate.toDate()
+                : data.paidDate
+                  ? new Date(data.paidDate)
+                  : undefined,
+            createdAt:
+              data.createdAt instanceof Timestamp
+                ? data.createdAt.toDate()
+                : new Date(data.createdAt),
+            updatedAt:
+              data.updatedAt instanceof Timestamp
+                ? data.updatedAt.toDate()
+                : new Date(data.updatedAt),
           } as Invoice;
         });
 
         // Check for overdue invoices
         const now = new Date();
-        const updatedInvoices = invoicesData.map(invoice => {
+        const updatedInvoices = invoicesData.map((invoice) => {
           if (
-            invoice.status !== 'paid' && 
-            invoice.status !== 'cancelled' && 
+            invoice.status !== 'paid' &&
+            invoice.status !== 'cancelled' &&
             isAfter(now, invoice.dueDate)
           ) {
             return { ...invoice, status: 'overdue' as InvoiceStatus };
@@ -149,17 +157,17 @@ export default function InvoicesPage() {
 
   // Calculate stats
   const calculateStats = (invoicesList: Invoice[]) => {
-    const paidInvoices = invoicesList.filter(inv => inv.status === 'paid');
-    const pendingInvoices = invoicesList.filter(inv => 
-      inv.status === 'sent' || inv.status === 'viewed' || inv.status === 'partial'
+    const paidInvoices = invoicesList.filter((inv) => inv.status === 'paid');
+    const pendingInvoices = invoicesList.filter(
+      (inv) => inv.status === 'sent' || inv.status === 'viewed' || inv.status === 'partial'
     );
-    const overdueInvoices = invoicesList.filter(inv => inv.status === 'overdue');
-    
+    const overdueInvoices = invoicesList.filter((inv) => inv.status === 'overdue');
+
     // Calculate average payment time for paid invoices
     let totalPaymentDays = 0;
     let paymentCount = 0;
-    
-    paidInvoices.forEach(inv => {
+
+    paidInvoices.forEach((inv) => {
       if (inv.paidDate) {
         const daysToPay = Math.floor(
           (inv.paidDate.getTime() - inv.issueDate.getTime()) / (1000 * 60 * 60 * 24)
@@ -168,14 +176,14 @@ export default function InvoicesPage() {
         paymentCount++;
       }
     });
-    
+
     const avgPaymentTime = paymentCount > 0 ? Math.round(totalPaymentDays / paymentCount) : 0;
-    
+
     setStats({
       totalPaid: paidInvoices.reduce((sum, inv) => sum + inv.financial.total, 0),
       totalPending: pendingInvoices.reduce((sum, inv) => sum + inv.financial.total, 0),
       totalOverdue: overdueInvoices.reduce((sum, inv) => sum + inv.financial.total, 0),
-      recentPayments: paidInvoices.filter(inv => {
+      recentPayments: paidInvoices.filter((inv) => {
         const paidDate = inv.paidDate || new Date();
         const daysSincePaid = (Date.now() - paidDate.getTime()) / (1000 * 60 * 60 * 24);
         return daysSincePaid <= 30;
@@ -190,25 +198,23 @@ export default function InvoicesPage() {
 
     // Apply status filter
     if (statusFilter !== 'all') {
-      filtered = filtered.filter(inv => inv.status === statusFilter);
+      filtered = filtered.filter((inv) => inv.status === statusFilter);
     }
 
     // Apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(inv => {
+      filtered = filtered.filter((inv) => {
         // Search in invoice number
         if (inv.invoiceNumber.toLowerCase().includes(query)) return true;
-        
+
         // Search in project name if available
         if (inv.projectId) {
           // You might want to fetch project name from projects collection
           // For now, we'll search in items descriptions
-          return inv.items.some(item => 
-            item.description.toLowerCase().includes(query)
-          );
+          return inv.items.some((item) => item.description.toLowerCase().includes(query));
         }
-        
+
         return false;
       });
     }
@@ -273,7 +279,7 @@ export default function InvoicesPage() {
       toast('PDF download will be available soon', {
         icon: '📄',
       });
-      
+
       // When authentication is properly set up, use this code:
       /*
       const idToken = await user?.getIdToken();
@@ -330,21 +336,29 @@ export default function InvoicesPage() {
     toast('Invoice printing will be available soon', {
       icon: '🖨️',
     });
-    
+
     // When authentication is properly set up, use this code:
     // window.open(`/api/invoices/${invoice.id}/pdf`, '_blank');
   };
 
   const getStatusDisplayName = (status: InvoiceStatus): string => {
     switch (status) {
-      case 'draft': return 'Draft';
-      case 'sent': return 'Sent';
-      case 'viewed': return 'Viewed';
-      case 'paid': return 'Paid';
-      case 'partial': return 'Partial';
-      case 'overdue': return 'Overdue';
-      case 'cancelled': return 'Cancelled';
-      default: return status;
+      case 'draft':
+        return 'Draft';
+      case 'sent':
+        return 'Sent';
+      case 'viewed':
+        return 'Viewed';
+      case 'paid':
+        return 'Paid';
+      case 'partial':
+        return 'Partial';
+      case 'overdue':
+        return 'Overdue';
+      case 'cancelled':
+        return 'Cancelled';
+      default:
+        return status;
     }
   };
 
@@ -455,7 +469,9 @@ export default function InvoicesPage() {
           >
             <Card className="bg-white/5 border-white/10">
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-white/60">Avg. Payment Time</CardTitle>
+                <CardTitle className="text-sm font-medium text-white/60">
+                  Avg. Payment Time
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between">
@@ -533,9 +549,7 @@ export default function InvoicesPage() {
               </p>
               {invoices.length === 0 && (
                 <Link href="/dashboard">
-                  <Button className="mt-4 bg-orange hover:bg-orange/90">
-                    Back to Dashboard
-                  </Button>
+                  <Button className="mt-4 bg-orange hover:bg-orange/90">Back to Dashboard</Button>
                 </Link>
               )}
             </div>
@@ -578,9 +592,7 @@ export default function InvoicesPage() {
                         <td className="p-4">
                           <div>
                             <p className="text-white">
-                              {invoice.items.length > 0 
-                                ? invoice.items[0].description 
-                                : 'Invoice'}
+                              {invoice.items.length > 0 ? invoice.items[0].description : 'Invoice'}
                             </p>
                             {invoice.items.length > 1 && (
                               <p className="text-sm text-white/60">
@@ -594,7 +606,8 @@ export default function InvoicesPage() {
                             {formatCurrency(invoice.financial.total, invoice.financial.currency)}
                           </p>
                           <p className="text-sm text-white/60">
-                            incl. {formatCurrency(invoice.financial.tax, invoice.financial.currency)} tax
+                            incl.{' '}
+                            {formatCurrency(invoice.financial.tax, invoice.financial.currency)} tax
                           </p>
                         </td>
                         <td className="p-4">
@@ -664,7 +677,10 @@ export default function InvoicesPage() {
                                   <MoreVertical className="w-4 h-4" />
                                 </Button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end" className="bg-gray-900 border-white/10">
+                              <DropdownMenuContent
+                                align="end"
+                                className="bg-gray-900 border-white/10"
+                              >
                                 <DropdownMenuItem
                                   onClick={() => handlePrintInvoice(invoice)}
                                   className="text-white hover:bg-white/10"
@@ -672,7 +688,9 @@ export default function InvoicesPage() {
                                   <Printer className="w-4 h-4 mr-2" />
                                   Print Invoice
                                 </DropdownMenuItem>
-                                {(invoice.status === 'sent' || invoice.status === 'viewed' || invoice.status === 'overdue') && (
+                                {(invoice.status === 'sent' ||
+                                  invoice.status === 'viewed' ||
+                                  invoice.status === 'overdue') && (
                                   <DropdownMenuItem
                                     onClick={() => handleSendReminder(invoice)}
                                     className="text-white hover:bg-white/10"
@@ -716,10 +734,16 @@ export default function InvoicesPage() {
                   </span>
                 </Badge>
                 <div className="text-right text-sm">
-                  <p className="text-white/60">Issued: {format(selectedInvoice.issueDate, 'MMM d, yyyy')}</p>
-                  <p className="text-white/60">Due: {format(selectedInvoice.dueDate, 'MMM d, yyyy')}</p>
+                  <p className="text-white/60">
+                    Issued: {format(selectedInvoice.issueDate, 'MMM d, yyyy')}
+                  </p>
+                  <p className="text-white/60">
+                    Due: {format(selectedInvoice.dueDate, 'MMM d, yyyy')}
+                  </p>
                   {selectedInvoice.paidDate && (
-                    <p className="text-green-400">Paid: {format(selectedInvoice.paidDate, 'MMM d, yyyy')}</p>
+                    <p className="text-green-400">
+                      Paid: {format(selectedInvoice.paidDate, 'MMM d, yyyy')}
+                    </p>
                   )}
                 </div>
               </div>
@@ -730,7 +754,10 @@ export default function InvoicesPage() {
                   <h3 className="text-sm font-medium text-white/60 mb-2">Billing Address</h3>
                   <div className="text-white">
                     <p>{selectedInvoice.billingAddress.street}</p>
-                    <p>{selectedInvoice.billingAddress.city}, {selectedInvoice.billingAddress.state} {selectedInvoice.billingAddress.postalCode}</p>
+                    <p>
+                      {selectedInvoice.billingAddress.city}, {selectedInvoice.billingAddress.state}{' '}
+                      {selectedInvoice.billingAddress.postalCode}
+                    </p>
                     <p>{selectedInvoice.billingAddress.country}</p>
                   </div>
                 </div>
@@ -771,34 +798,66 @@ export default function InvoicesPage() {
               <div className="space-y-2">
                 <div className="flex justify-between text-white/60">
                   <span>Subtotal</span>
-                  <span>{formatCurrency(selectedInvoice.financial.subtotal, selectedInvoice.financial.currency)}</span>
+                  <span>
+                    {formatCurrency(
+                      selectedInvoice.financial.subtotal,
+                      selectedInvoice.financial.currency
+                    )}
+                  </span>
                 </div>
                 {selectedInvoice.financial.discount > 0 && (
                   <div className="flex justify-between text-white/60">
                     <span>Discount</span>
-                    <span>-{formatCurrency(selectedInvoice.financial.discount, selectedInvoice.financial.currency)}</span>
+                    <span>
+                      -
+                      {formatCurrency(
+                        selectedInvoice.financial.discount,
+                        selectedInvoice.financial.currency
+                      )}
+                    </span>
                   </div>
                 )}
                 <div className="flex justify-between text-white/60">
                   <span>Tax</span>
-                  <span>{formatCurrency(selectedInvoice.financial.tax, selectedInvoice.financial.currency)}</span>
+                  <span>
+                    {formatCurrency(
+                      selectedInvoice.financial.tax,
+                      selectedInvoice.financial.currency
+                    )}
+                  </span>
                 </div>
                 <div className="flex justify-between text-white font-medium text-lg pt-2 border-t border-white/10">
                   <span>Total</span>
-                  <span>{formatCurrency(selectedInvoice.financial.total, selectedInvoice.financial.currency)}</span>
+                  <span>
+                    {formatCurrency(
+                      selectedInvoice.financial.total,
+                      selectedInvoice.financial.currency
+                    )}
+                  </span>
                 </div>
-                {selectedInvoice.financial.paid > 0 && selectedInvoice.financial.paid < selectedInvoice.financial.total && (
-                  <>
-                    <div className="flex justify-between text-green-400">
-                      <span>Paid</span>
-                      <span>{formatCurrency(selectedInvoice.financial.paid, selectedInvoice.financial.currency)}</span>
-                    </div>
-                    <div className="flex justify-between text-orange font-medium">
-                      <span>Balance Due</span>
-                      <span>{formatCurrency(selectedInvoice.financial.balance, selectedInvoice.financial.currency)}</span>
-                    </div>
-                  </>
-                )}
+                {selectedInvoice.financial.paid > 0 &&
+                  selectedInvoice.financial.paid < selectedInvoice.financial.total && (
+                    <>
+                      <div className="flex justify-between text-green-400">
+                        <span>Paid</span>
+                        <span>
+                          {formatCurrency(
+                            selectedInvoice.financial.paid,
+                            selectedInvoice.financial.currency
+                          )}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-orange font-medium">
+                        <span>Balance Due</span>
+                        <span>
+                          {formatCurrency(
+                            selectedInvoice.financial.balance,
+                            selectedInvoice.financial.currency
+                          )}
+                        </span>
+                      </div>
+                    </>
+                  )}
               </div>
 
               {/* Payment Info */}
@@ -807,10 +866,14 @@ export default function InvoicesPage() {
                   <h3 className="text-sm font-medium text-white/60 mb-2">Payment Information</h3>
                   <p className="text-white">Method: {selectedInvoice.paymentMethod}</p>
                   {selectedInvoice.paymentDetails?.transactionId && (
-                    <p className="text-white">Transaction ID: {selectedInvoice.paymentDetails.transactionId}</p>
+                    <p className="text-white">
+                      Transaction ID: {selectedInvoice.paymentDetails.transactionId}
+                    </p>
                   )}
                   {selectedInvoice.paymentDetails?.reference && (
-                    <p className="text-white">Reference: {selectedInvoice.paymentDetails.reference}</p>
+                    <p className="text-white">
+                      Reference: {selectedInvoice.paymentDetails.reference}
+                    </p>
                   )}
                 </div>
               )}

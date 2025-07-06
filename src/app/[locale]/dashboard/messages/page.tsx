@@ -4,9 +4,9 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Send, 
-  Paperclip, 
+import {
+  Send,
+  Paperclip,
   Search,
   ChevronLeft,
   MessageSquare,
@@ -31,7 +31,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -94,98 +94,103 @@ export default function MessagesPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Mock data - replace with Firebase queries
-  const mockConversations: Conversation[] = useMemo(() => [
-    {
-      id: '1',
-      participants: [
-        {
-          id: 'groeimetai-team',
-          name: 'GroeimetAI Team',
-          email: 'team@groeimetai.com',
-          avatar: '/logo.png',
-        },
-      ],
-      lastMessage: {
-        id: 'm1',
-        content: 'Welcome to GroeimetAI! We\'re excited to work with you on your AI transformation journey.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-        isRead: true,
-        sender: {
-          id: 'groeimetai-team',
-          name: 'GroeimetAI Team',
-          email: 'team@groeimetai.com',
-          isGroeimetAI: true,
-        },
-      },
-      unreadCount: 0,
-      isStarred: true,
-      isArchived: false,
-      subject: 'Welcome to GroeimetAI',
-    },
-    {
-      id: '2',
-      participants: [
-        {
-          id: 'project-manager',
-          name: 'Sarah Chen',
-          email: 'sarah@groeimetai.com',
-        },
-      ],
-      lastMessage: {
-        id: 'm2',
-        content: 'I\'ve reviewed your project requirements and prepared a detailed timeline. Let\'s discuss this in our next meeting.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
-        isRead: false,
-        sender: {
-          id: 'project-manager',
-          name: 'Sarah Chen',
-          email: 'sarah@groeimetai.com',
-          isGroeimetAI: true,
-        },
-      },
-      unreadCount: 2,
-      isStarred: false,
-      isArchived: false,
-      projectName: 'E-commerce AI Integration',
-      subject: 'Project Timeline Update',
-    },
-    {
-      id: '3',
-      participants: [
-        {
-          id: 'tech-lead',
-          name: 'Michael Brown',
-          email: 'michael@groeimetai.com',
-        },
-      ],
-      lastMessage: {
-        id: 'm3',
-        content: 'The API integration is complete. Please review the documentation attached.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3 days ago
-        isRead: true,
-        sender: {
-          id: 'tech-lead',
-          name: 'Michael Brown',
-          email: 'michael@groeimetai.com',
-          isGroeimetAI: true,
-        },
-        attachments: [
+  const mockConversations: Conversation[] = useMemo(
+    () => [
+      {
+        id: '1',
+        participants: [
           {
-            id: 'att1',
-            name: 'API_Documentation.pdf',
-            size: 2048000,
-            type: 'application/pdf',
-            url: '#',
+            id: 'groeimetai-team',
+            name: 'GroeimetAI Team',
+            email: 'team@groeimetai.com',
+            avatar: '/logo.png',
           },
         ],
+        lastMessage: {
+          id: 'm1',
+          content:
+            "Welcome to GroeimetAI! We're excited to work with you on your AI transformation journey.",
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
+          isRead: true,
+          sender: {
+            id: 'groeimetai-team',
+            name: 'GroeimetAI Team',
+            email: 'team@groeimetai.com',
+            isGroeimetAI: true,
+          },
+        },
+        unreadCount: 0,
+        isStarred: true,
+        isArchived: false,
+        subject: 'Welcome to GroeimetAI',
       },
-      unreadCount: 0,
-      isStarred: false,
-      isArchived: false,
-      projectName: 'Data Analytics Dashboard',
-      subject: 'API Integration Complete',
-    },
-  ], []);
+      {
+        id: '2',
+        participants: [
+          {
+            id: 'project-manager',
+            name: 'Sarah Chen',
+            email: 'sarah@groeimetai.com',
+          },
+        ],
+        lastMessage: {
+          id: 'm2',
+          content:
+            "I've reviewed your project requirements and prepared a detailed timeline. Let's discuss this in our next meeting.",
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
+          isRead: false,
+          sender: {
+            id: 'project-manager',
+            name: 'Sarah Chen',
+            email: 'sarah@groeimetai.com',
+            isGroeimetAI: true,
+          },
+        },
+        unreadCount: 2,
+        isStarred: false,
+        isArchived: false,
+        projectName: 'E-commerce AI Integration',
+        subject: 'Project Timeline Update',
+      },
+      {
+        id: '3',
+        participants: [
+          {
+            id: 'tech-lead',
+            name: 'Michael Brown',
+            email: 'michael@groeimetai.com',
+          },
+        ],
+        lastMessage: {
+          id: 'm3',
+          content: 'The API integration is complete. Please review the documentation attached.',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3 days ago
+          isRead: true,
+          sender: {
+            id: 'tech-lead',
+            name: 'Michael Brown',
+            email: 'michael@groeimetai.com',
+            isGroeimetAI: true,
+          },
+          attachments: [
+            {
+              id: 'att1',
+              name: 'API_Documentation.pdf',
+              size: 2048000,
+              type: 'application/pdf',
+              url: '#',
+            },
+          ],
+        },
+        unreadCount: 0,
+        isStarred: false,
+        isArchived: false,
+        projectName: 'Data Analytics Dashboard',
+        subject: 'API Integration Complete',
+      },
+    ],
+    []
+  );
 
   // Load conversations
   useEffect(() => {
@@ -211,9 +216,9 @@ export default function MessagesPage() {
 
   // Filter conversations
   const filteredConversations = conversations.filter((conv) => {
-    const matchesSearch = 
+    const matchesSearch =
       conv.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conv.participants.some(p => p.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      conv.participants.some((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
       conv.lastMessage.content.toLowerCase().includes(searchQuery.toLowerCase());
 
     switch (filter) {
@@ -231,7 +236,7 @@ export default function MessagesPage() {
   // Load messages for selected conversation
   const loadMessages = (conversation: Conversation) => {
     setSelectedConversation(conversation);
-    
+
     // Mock messages - replace with Firebase query
     const mockMessages: Message[] = [
       {
@@ -244,7 +249,7 @@ export default function MessagesPage() {
       },
       {
         id: 'm2',
-        content: 'Thank you for reaching out! I\'d be happy to help with your questions.',
+        content: "Thank you for reaching out! I'd be happy to help with your questions.",
         timestamp: new Date(Date.now() - 1000 * 60 * 30),
         isRead: true,
         sender: {
@@ -256,7 +261,8 @@ export default function MessagesPage() {
       },
       {
         id: 'm3',
-        content: 'Great! I\'ve prepared some initial recommendations for your project. Let me share the key points with you.',
+        content:
+          "Great! I've prepared some initial recommendations for your project. Let me share the key points with you.",
         timestamp: new Date(Date.now() - 1000 * 60 * 15),
         isRead: true,
         sender: conversation.lastMessage.sender,
@@ -264,11 +270,11 @@ export default function MessagesPage() {
     ];
 
     setMessages(mockMessages);
-    
+
     // Mark conversation as read
-    setConversations(prevConversations => 
-      prevConversations.map(conv => 
-        conv.id === conversation.id 
+    setConversations((prevConversations) =>
+      prevConversations.map((conv) =>
+        conv.id === conversation.id
           ? { ...conv, unreadCount: 0, lastMessage: { ...conv.lastMessage, isRead: true } }
           : conv
       )
@@ -280,7 +286,7 @@ export default function MessagesPage() {
     if (!newMessage.trim() || !selectedConversation || !user) return;
 
     setIsSending(true);
-    
+
     try {
       const message: Message = {
         id: `m${Date.now()}`,
@@ -295,19 +301,20 @@ export default function MessagesPage() {
         },
       };
 
-      setMessages(prev => [...prev, message]);
+      setMessages((prev) => [...prev, message]);
       setNewMessage('');
 
       // Simulate response after 2 seconds
       setTimeout(() => {
         const response: Message = {
           id: `m${Date.now() + 1}`,
-          content: 'Thank you for your message! Our team will respond within 24 hours during business hours.',
+          content:
+            'Thank you for your message! Our team will respond within 24 hours during business hours.',
           timestamp: new Date(),
           isRead: false,
           sender: selectedConversation.lastMessage.sender,
         };
-        setMessages(prev => [...prev, response]);
+        setMessages((prev) => [...prev, response]);
       }, 2000);
 
       toast.success('Message sent successfully!');
@@ -340,8 +347,8 @@ export default function MessagesPage() {
 
   // Toggle star
   const toggleStar = (conversationId: string) => {
-    setConversations(prev =>
-      prev.map(conv =>
+    setConversations((prev) =>
+      prev.map((conv) =>
         conv.id === conversationId ? { ...conv, isStarred: !conv.isStarred } : conv
       )
     );
@@ -349,8 +356,8 @@ export default function MessagesPage() {
 
   // Archive conversation
   const archiveConversation = (conversationId: string) => {
-    setConversations(prev =>
-      prev.map(conv =>
+    setConversations((prev) =>
+      prev.map((conv) =>
         conv.id === conversationId ? { ...conv, isArchived: !conv.isArchived } : conv
       )
     );
@@ -536,7 +543,11 @@ export default function MessagesPage() {
                   </Button>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="text-white/60 hover:text-white">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-white/60 hover:text-white"
+                      >
                         <MoreVertical className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -571,9 +582,7 @@ export default function MessagesPage() {
                     >
                       <div
                         className={`max-w-[70%] ${
-                          message.sender.isGroeimetAI
-                            ? 'bg-white/10'
-                            : 'bg-orange/20'
+                          message.sender.isGroeimetAI ? 'bg-white/10' : 'bg-orange/20'
                         } rounded-lg p-4`}
                       >
                         <div className="flex items-center gap-2 mb-2">
@@ -588,7 +597,7 @@ export default function MessagesPage() {
                           )}
                         </div>
                         <p className="text-white/90">{message.content}</p>
-                        
+
                         {message.attachments && message.attachments.length > 0 && (
                           <div className="mt-3 space-y-2">
                             {message.attachments.map((attachment) => (
@@ -626,11 +635,7 @@ export default function MessagesPage() {
               {/* Message Input */}
               <div className="p-4 border-t border-white/10">
                 <div className="flex items-end gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-white/60 hover:text-white"
-                  >
+                  <Button variant="ghost" size="icon" className="text-white/60 hover:text-white">
                     <Paperclip className="w-5 h-5" />
                   </Button>
                   <Textarea
@@ -661,7 +666,9 @@ export default function MessagesPage() {
               <div className="text-center">
                 <MessageSquare className="w-16 h-16 text-white/20 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-white mb-2">Select a conversation</h3>
-                <p className="text-white/60">Choose a conversation from the list to start messaging</p>
+                <p className="text-white/60">
+                  Choose a conversation from the list to start messaging
+                </p>
               </div>
             </div>
           )}

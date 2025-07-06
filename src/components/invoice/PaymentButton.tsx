@@ -54,9 +54,7 @@ export function PaymentButton({
       }
     } catch (error) {
       console.error('Payment error:', error);
-      toast.error(
-        error instanceof Error ? error.message : 'Failed to initiate payment'
-      );
+      toast.error(error instanceof Error ? error.message : 'Failed to initiate payment');
     } finally {
       setIsLoading(false);
     }
@@ -64,20 +62,11 @@ export function PaymentButton({
 
   // Don't show button for paid invoices
   if (status === 'paid') {
-    return (
-      <div className="text-green-600 font-medium">
-        ✓ Paid
-      </div>
-    );
+    return <div className="text-green-600 font-medium">✓ Paid</div>;
   }
 
   return (
-    <Button
-      onClick={handlePayment}
-      disabled={isLoading}
-      className="w-full sm:w-auto"
-      size="lg"
-    >
+    <Button onClick={handlePayment} disabled={isLoading} className="w-full sm:w-auto" size="lg">
       {isLoading ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -96,7 +85,7 @@ export function PaymentButton({
 
 /**
  * Example usage in an invoice component:
- * 
+ *
  * <PaymentButton
  *   invoiceId={invoice.id}
  *   amount={invoice.totalAmount}

@@ -7,6 +7,7 @@ The activity logging system provides comprehensive tracking of all important use
 ## Features
 
 ### 1. Automatic Activity Logging
+
 - **Authentication Events**: Login, logout, registration, password reset, email verification, 2FA changes
 - **Project Operations**: Create, update, delete, status changes
 - **Quote Management**: Create, update, delete, status changes
@@ -17,12 +18,14 @@ The activity logging system provides comprehensive tracking of all important use
 - **Errors**: System errors and failures
 
 ### 2. Batch Processing
+
 - Logs are batched for performance (50 logs per batch)
 - 5-second delay for batch processing
 - Critical activities are logged immediately
 - Automatic flush on application shutdown
 
 ### 3. Admin Dashboard
+
 - Real-time activity feed with filtering
 - Search by user, action type, resource, date range
 - Activity analytics and insights
@@ -32,6 +35,7 @@ The activity logging system provides comprehensive tracking of all important use
 - User activity heatmap
 
 ### 4. Data Retention
+
 - 30-day automatic retention policy
 - Manual cleanup utility available
 - Configurable retention period
@@ -39,6 +43,7 @@ The activity logging system provides comprehensive tracking of all important use
 ## Implementation
 
 ### Activity Logger Service
+
 Located at `/src/services/activityLogger.ts`
 
 ```typescript
@@ -49,25 +54,14 @@ await logAuthActivity('auth.login', userId, userEmail, {
 });
 
 // Log resource activity
-await logResourceActivity(
-  'project.create',
-  'project',
-  projectId,
-  projectName,
-  user,
-  metadata
-);
+await logResourceActivity('project.create', 'project', projectId, projectName, user, metadata);
 
 // Log errors
-await logErrorActivity(
-  'file.upload',
-  error,
-  user,
-  context
-);
+await logErrorActivity('file.upload', error, user, context);
 ```
 
 ### Activity Types
+
 - `auth.*`: Authentication related activities
 - `project.*`: Project management activities
 - `quote.*`: Quote management activities
@@ -81,6 +75,7 @@ await logErrorActivity(
 - `error.*`: Error events
 
 ### Severity Levels
+
 - `info`: Normal operations
 - `warning`: Actions requiring attention
 - `error`: Failed operations or errors
@@ -90,8 +85,9 @@ await logErrorActivity(
 Access the activity logs dashboard at `/dashboard/admin/activity`
 
 ### Features:
+
 1. **Activity Feed**: Real-time list of all activities
-2. **Filters**: 
+2. **Filters**:
    - User search
    - Action type filter
    - Severity filter
@@ -116,15 +112,19 @@ Access the activity logs dashboard at `/dashboard/admin/activity`
 ## Maintenance
 
 ### Automatic Cleanup
+
 Old logs are automatically cleaned up after 30 days to manage storage.
 
 ### Manual Cleanup
+
 Run the cleanup utility:
+
 ```bash
 node src/utils/cleanupActivityLogs.ts
 ```
 
 ### Monitoring
+
 - Check for suspicious activities regularly
 - Monitor storage usage
 - Review error logs for system issues
@@ -134,35 +134,27 @@ node src/utils/cleanupActivityLogs.ts
 ### Adding Activity Logging to New Features
 
 1. Import the logging functions:
+
 ```typescript
 import { logResourceActivity, logErrorActivity } from '@/services/activityLogger';
 ```
 
 2. Add logging to your operations:
+
 ```typescript
 try {
   // Your operation
   const result = await createResource(data);
-  
+
   // Log success
-  await logResourceActivity(
-    'resource.create',
-    'resource',
-    result.id,
-    result.name,
-    currentUser,
-    { additionalData }
-  );
-  
+  await logResourceActivity('resource.create', 'resource', result.id, result.name, currentUser, {
+    additionalData,
+  });
+
   return result;
 } catch (error) {
   // Log error
-  await logErrorActivity(
-    'resource.create',
-    error,
-    currentUser,
-    { attemptedData: data }
-  );
+  await logErrorActivity('resource.create', error, currentUser, { attemptedData: data });
   throw error;
 }
 ```

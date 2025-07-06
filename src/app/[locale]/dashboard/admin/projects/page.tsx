@@ -13,7 +13,7 @@ import {
   updateDoc,
   doc,
   deleteDoc,
-  Timestamp
+  Timestamp,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
@@ -38,7 +38,7 @@ import {
   ArrowUpDown,
   UserPlus,
   Mail,
-  Loader2
+  Loader2,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -135,12 +135,8 @@ export default function AdminProjectsPage() {
   const [selectedTeamMembers, setSelectedTeamMembers] = useState<string[]>([]);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
 
-  const {
-    selectedIds,
-    setSelectedIds,
-    toggleSelection,
-    clearSelection,
-  } = useBulkSelection(projects);
+  const { selectedIds, setSelectedIds, toggleSelection, clearSelection } =
+    useBulkSelection(projects);
 
   // Redirect if not admin
   useEffect(() => {
@@ -157,26 +153,23 @@ export default function AdminProjectsPage() {
       setIsLoading(true);
       try {
         // Get all projects
-        const projectsQuery = query(
-          collection(db, 'projects'),
-          orderBy('createdAt', 'desc')
-        );
+        const projectsQuery = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
         const projectsSnapshot = await getDocs(projectsQuery);
-        
+
         const projectsData: Project[] = [];
-        
+
         // Get all user data for client information
         const usersQuery = query(collection(db, 'users'));
         const usersSnapshot = await getDocs(usersQuery);
         const usersMap = new Map();
-        usersSnapshot.forEach(doc => {
+        usersSnapshot.forEach((doc) => {
           usersMap.set(doc.id, doc.data());
         });
-        
+
         projectsSnapshot.forEach((doc) => {
           const data = doc.data();
           const clientData = usersMap.get(data.clientId || data.userId);
-          
+
           projectsData.push({
             id: doc.id,
             name: data.name || data.projectName || 'Untitled Project',
@@ -191,7 +184,7 @@ export default function AdminProjectsPage() {
             budget: data.budget || {
               amount: 0,
               currency: 'EUR',
-              type: 'fixed'
+              type: 'fixed',
             },
             progress: data.progress || 0,
             milestones: data.milestones || [],
@@ -200,7 +193,7 @@ export default function AdminProjectsPage() {
             updatedAt: data.updatedAt?.toDate() || new Date(),
           });
         });
-        
+
         setProjects(projectsData);
       } catch (error) {
         console.error('Error fetching projects:', error);
@@ -213,59 +206,65 @@ export default function AdminProjectsPage() {
   }, [user, isAdmin]);
 
   // Filter and sort projects
-  const filteredProjects = projects.filter(project => {
-    // Search filter
-    if (searchQuery) {
-      const search = searchQuery.toLowerCase();
-      if (!project.name.toLowerCase().includes(search) &&
+  const filteredProjects = projects
+    .filter((project) => {
+      // Search filter
+      if (searchQuery) {
+        const search = searchQuery.toLowerCase();
+        if (
+          !project.name.toLowerCase().includes(search) &&
           !project.clientName?.toLowerCase().includes(search) &&
-          !project.services.some(s => s.toLowerCase().includes(search))) {
+          !project.services.some((s) => s.toLowerCase().includes(search))
+        ) {
+          return false;
+        }
+      }
+
+      // Status filter
+      if (statusFilter !== 'all' && project.status !== statusFilter) {
         return false;
       }
-    }
 
-    // Status filter
-    if (statusFilter !== 'all' && project.status !== statusFilter) {
-      return false;
-    }
+      // Date filter
+      if (dateFilter !== 'all') {
+        const now = new Date();
+        const projectDate = project.startDate;
+        const daysDiff = Math.floor(
+          (now.getTime() - projectDate.getTime()) / (1000 * 60 * 60 * 24)
+        );
 
-    // Date filter
-    if (dateFilter !== 'all') {
-      const now = new Date();
-      const projectDate = project.startDate;
-      const daysDiff = Math.floor((now.getTime() - projectDate.getTime()) / (1000 * 60 * 60 * 24));
-      
-      if (dateFilter === '7days' && daysDiff > 7) return false;
-      if (dateFilter === '30days' && daysDiff > 30) return false;
-      if (dateFilter === '90days' && daysDiff > 90) return false;
-    }
+        if (dateFilter === '7days' && daysDiff > 7) return false;
+        if (dateFilter === '30days' && daysDiff > 30) return false;
+        if (dateFilter === '90days' && daysDiff > 90) return false;
+      }
 
-    return true;
-  }).sort((a, b) => {
-    let compareValue = 0;
-    
-    switch (sortBy) {
-      case 'name':
-        compareValue = a.name.localeCompare(b.name);
-        break;
-      case 'client':
-        compareValue = (a.clientName || '').localeCompare(b.clientName || '');
-        break;
-      case 'startDate':
-        compareValue = a.startDate.getTime() - b.startDate.getTime();
-        break;
-      case 'budget':
-        compareValue = a.budget.amount - b.budget.amount;
-        break;
-      case 'progress':
-        compareValue = a.progress - b.progress;
-        break;
-      default:
-        compareValue = a.createdAt.getTime() - b.createdAt.getTime();
-    }
-    
-    return sortOrder === 'asc' ? compareValue : -compareValue;
-  });
+      return true;
+    })
+    .sort((a, b) => {
+      let compareValue = 0;
+
+      switch (sortBy) {
+        case 'name':
+          compareValue = a.name.localeCompare(b.name);
+          break;
+        case 'client':
+          compareValue = (a.clientName || '').localeCompare(b.clientName || '');
+          break;
+        case 'startDate':
+          compareValue = a.startDate.getTime() - b.startDate.getTime();
+          break;
+        case 'budget':
+          compareValue = a.budget.amount - b.budget.amount;
+          break;
+        case 'progress':
+          compareValue = a.progress - b.progress;
+          break;
+        default:
+          compareValue = a.createdAt.getTime() - b.createdAt.getTime();
+      }
+
+      return sortOrder === 'asc' ? compareValue : -compareValue;
+    });
 
   // Handle bulk actions
   const handleBulkAction = async (action: BulkActionType, data?: any) => {
@@ -275,7 +274,7 @@ export default function AdminProjectsPage() {
           for (const projectId of data.ids) {
             await deleteDoc(doc(db, 'projects', projectId));
           }
-          setProjects(projects.filter(p => !data.ids.includes(p.id)));
+          setProjects(projects.filter((p) => !data.ids.includes(p.id)));
           break;
 
         case 'updateStatus':
@@ -285,16 +284,27 @@ export default function AdminProjectsPage() {
               updatedAt: Timestamp.now(),
             });
           }
-          setProjects(projects.map(p => 
-            data.ids.includes(p.id) ? { ...p, status: data.status } : p
-          ));
+          setProjects(
+            projects.map((p) => (data.ids.includes(p.id) ? { ...p, status: data.status } : p))
+          );
           break;
 
         case 'export':
-          const selectedProjects = projects.filter(p => data.ids.includes(p.id));
+          const selectedProjects = projects.filter((p) => data.ids.includes(p.id));
           const csv = [
-            ['ID', 'Project Name', 'Client', 'Email', 'Status', 'Type', 'Budget', 'Progress', 'Start Date', 'Services'],
-            ...selectedProjects.map(p => [
+            [
+              'ID',
+              'Project Name',
+              'Client',
+              'Email',
+              'Status',
+              'Type',
+              'Budget',
+              'Progress',
+              'Start Date',
+              'Services',
+            ],
+            ...selectedProjects.map((p) => [
               p.id,
               p.name,
               p.clientName || '',
@@ -307,7 +317,7 @@ export default function AdminProjectsPage() {
               p.services.join(', '),
             ]),
           ]
-            .map(row => row.join(','))
+            .map((row) => row.join(','))
             .join('\n');
 
           const blob = new Blob([csv], { type: 'text/csv' });
@@ -327,9 +337,9 @@ export default function AdminProjectsPage() {
               updatedAt: Timestamp.now(),
             });
           }
-          setProjects(projects.map(p => 
-            data.ids.includes(p.id) ? { ...p, status: 'cancelled' } : p
-          ));
+          setProjects(
+            projects.map((p) => (data.ids.includes(p.id) ? { ...p, status: 'cancelled' } : p))
+          );
           break;
       }
 
@@ -346,17 +356,18 @@ export default function AdminProjectsPage() {
         status: newStatus,
         updatedAt: Timestamp.now(),
       });
-      
-      setProjects(projects.map(p => 
-        p.id === projectId ? { ...p, status: newStatus } : p
-      ));
+
+      setProjects(projects.map((p) => (p.id === projectId ? { ...p, status: newStatus } : p)));
 
       // Send notification
-      const project = projects.find(p => p.id === projectId);
+      const project = projects.find((p) => p.id === projectId);
       if (project?.clientId) {
         await notificationService.sendToUser(
           project.clientId,
-          notificationService.templates.projectUpdate(project.name, `Status changed to ${newStatus}`)
+          notificationService.templates.projectUpdate(
+            project.name,
+            `Status changed to ${newStatus}`
+          )
         );
       }
     } catch (error) {
@@ -373,10 +384,12 @@ export default function AdminProjectsPage() {
         assignedTo: selectedTeamMembers,
         updatedAt: Timestamp.now(),
       });
-      
-      setProjects(projects.map(p => 
-        p.id === selectedProject.id ? { ...p, assignedTo: selectedTeamMembers } : p
-      ));
+
+      setProjects(
+        projects.map((p) =>
+          p.id === selectedProject.id ? { ...p, assignedTo: selectedTeamMembers } : p
+        )
+      );
 
       setIsAssignDialogOpen(false);
       setSelectedTeamMembers([]);
@@ -416,7 +429,7 @@ export default function AdminProjectsPage() {
   };
 
   const toggleRowExpansion = (projectId: string) => {
-    setExpandedRows(prev => {
+    setExpandedRows((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(projectId)) {
         newSet.delete(projectId);
@@ -441,8 +454,8 @@ export default function AdminProjectsPage() {
   // Stats
   const stats = {
     total: projects.length,
-    active: projects.filter(p => p.status === 'active').length,
-    completed: projects.filter(p => p.status === 'completed').length,
+    active: projects.filter((p) => p.status === 'active').length,
+    completed: projects.filter((p) => p.status === 'completed').length,
     totalRevenue: projects.reduce((sum, p) => sum + (p.budget.amount || 0), 0),
   };
 
@@ -493,7 +506,9 @@ export default function AdminProjectsPage() {
                 <span className="text-white/60">Total Revenue</span>
                 <DollarSign className="w-5 h-5 text-purple-500" />
               </div>
-              <p className="text-2xl font-bold text-white">€{stats.totalRevenue.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-white">
+                €{stats.totalRevenue.toLocaleString()}
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -511,7 +526,7 @@ export default function AdminProjectsPage() {
                   className="pl-10 bg-white/5 border-white/10 text-white"
                 />
               </div>
-              
+
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-[140px] bg-white/5 border-white/10 text-white">
                   <SelectValue placeholder="Status" />
@@ -591,10 +606,13 @@ export default function AdminProjectsPage() {
                   <TableRow className="border-white/10">
                     <TableHead className="w-12 text-white/60">
                       <Checkbox
-                        checked={selectedIds.size === filteredProjects.length && filteredProjects.length > 0}
+                        checked={
+                          selectedIds.size === filteredProjects.length &&
+                          filteredProjects.length > 0
+                        }
                         onChange={(e) => {
                           if (e.target.checked) {
-                            setSelectedIds(new Set(filteredProjects.map(p => p.id)));
+                            setSelectedIds(new Set(filteredProjects.map((p) => p.id)));
                           } else {
                             clearSelection();
                           }
@@ -615,7 +633,7 @@ export default function AdminProjectsPage() {
                   {filteredProjects.map((project) => {
                     const StatusIcon = getStatusIcon(project.status);
                     const isExpanded = expandedRows.has(project.id);
-                    
+
                     return (
                       <>
                         <TableRow key={project.id} className="border-white/10">
@@ -666,7 +684,7 @@ export default function AdminProjectsPage() {
                                 <>
                                   <div className="flex -space-x-2">
                                     {project.assignedTo.slice(0, 3).map((memberId, idx) => {
-                                      const member = mockTeamMembers.find(m => m.id === memberId);
+                                      const member = mockTeamMembers.find((m) => m.id === memberId);
                                       return (
                                         <div
                                           key={idx}
@@ -674,7 +692,10 @@ export default function AdminProjectsPage() {
                                           title={member?.name}
                                         >
                                           <span className="text-xs text-white">
-                                            {member?.name.split(' ').map(n => n[0]).join('')}
+                                            {member?.name
+                                              .split(' ')
+                                              .map((n) => n[0])
+                                              .join('')}
                                           </span>
                                         </div>
                                       );
@@ -728,7 +749,9 @@ export default function AdminProjectsPage() {
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
-                                  onClick={() => router.push(`/dashboard/admin/projects/${project.id}`)}
+                                  onClick={() =>
+                                    router.push(`/dashboard/admin/projects/${project.id}`)
+                                  }
                                 >
                                   <Edit className="w-4 h-4 mr-2" />
                                   View Details
@@ -803,14 +826,20 @@ export default function AdminProjectsPage() {
                                 </div>
                                 {project.milestones.length > 0 && (
                                   <div>
-                                    <h4 className="text-sm font-medium text-white mb-2">Milestones</h4>
+                                    <h4 className="text-sm font-medium text-white mb-2">
+                                      Milestones
+                                    </h4>
                                     <div className="space-y-2">
                                       {project.milestones.map((milestone, idx) => (
                                         <div key={idx} className="flex items-center gap-2">
-                                          <div className={`w-2 h-2 rounded-full ${
-                                            milestone.completed ? 'bg-green-500' : 'bg-white/20'
-                                          }`} />
-                                          <span className="text-sm text-white/80">{milestone.name}</span>
+                                          <div
+                                            className={`w-2 h-2 rounded-full ${
+                                              milestone.completed ? 'bg-green-500' : 'bg-white/20'
+                                            }`}
+                                          />
+                                          <span className="text-sm text-white/80">
+                                            {milestone.name}
+                                          </span>
                                           {milestone.dueDate && (
                                             <span className="text-xs text-white/60">
                                               Due {format(milestone.dueDate.toDate(), 'MMM d')}
@@ -854,7 +883,7 @@ export default function AdminProjectsPage() {
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 mt-4">
-              {mockTeamMembers.map(member => (
+              {mockTeamMembers.map((member) => (
                 <label
                   key={member.id}
                   className="flex items-center space-x-3 cursor-pointer p-3 rounded-lg hover:bg-white/5"
@@ -865,13 +894,17 @@ export default function AdminProjectsPage() {
                       if (e.target.checked) {
                         setSelectedTeamMembers([...selectedTeamMembers, member.id]);
                       } else {
-                        setSelectedTeamMembers(selectedTeamMembers.filter(id => id !== member.id));
+                        setSelectedTeamMembers(
+                          selectedTeamMembers.filter((id) => id !== member.id)
+                        );
                       }
                     }}
                   />
                   <div className="flex-1">
                     <p className="font-medium text-white">{member.name}</p>
-                    <p className="text-sm text-white/60">{member.role} • {member.email}</p>
+                    <p className="text-sm text-white/60">
+                      {member.role} • {member.email}
+                    </p>
                   </div>
                 </label>
               ))}

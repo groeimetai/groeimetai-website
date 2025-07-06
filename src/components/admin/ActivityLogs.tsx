@@ -57,12 +57,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/use-toast';
-import {
-  activityLogger,
-  ActivityLog,
-  ActivityType,
-  ResourceType,
-} from '@/services/activityLogger';
+import { activityLogger, ActivityLog, ActivityType, ResourceType } from '@/services/activityLogger';
 import { DocumentSnapshot } from 'firebase/firestore';
 
 interface ActivityFilters {
@@ -99,41 +94,44 @@ export function ActivityLogs() {
   const { toast } = useToast();
 
   // Load activity logs
-  const loadLogs = useCallback(async (reset = false) => {
-    try {
-      if (reset) {
-        setLoading(true);
-        setLastDoc(undefined);
-      } else {
-        setLoadingMore(true);
+  const loadLogs = useCallback(
+    async (reset = false) => {
+      try {
+        if (reset) {
+          setLoading(true);
+          setLastDoc(undefined);
+        } else {
+          setLoadingMore(true);
+        }
+
+        const { logs: newLogs, lastDoc: newLastDoc } = await activityLogger.getActivityLogs({
+          ...filters,
+          pageSize: 50,
+          lastDoc: reset ? undefined : lastDoc,
+        });
+
+        if (reset) {
+          setLogs(newLogs);
+        } else {
+          setLogs((prev) => [...prev, ...newLogs]);
+        }
+
+        setLastDoc(newLastDoc);
+        setHasMore(newLogs.length === 50);
+      } catch (error) {
+        console.error('Error loading activity logs:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to load activity logs',
+          variant: 'destructive',
+        });
+      } finally {
+        setLoading(false);
+        setLoadingMore(false);
       }
-
-      const { logs: newLogs, lastDoc: newLastDoc } = await activityLogger.getActivityLogs({
-        ...filters,
-        pageSize: 50,
-        lastDoc: reset ? undefined : lastDoc,
-      });
-
-      if (reset) {
-        setLogs(newLogs);
-      } else {
-        setLogs((prev) => [...prev, ...newLogs]);
-      }
-
-      setLastDoc(newLastDoc);
-      setHasMore(newLogs.length === 50);
-    } catch (error) {
-      console.error('Error loading activity logs:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load activity logs',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-      setLoadingMore(false);
-    }
-  }, [filters, lastDoc, toast]);
+    },
+    [filters, lastDoc, toast]
+  );
 
   // Load stats
   const loadStats = useCallback(async () => {
@@ -171,7 +169,7 @@ export function ActivityLogs() {
     try {
       setExporting(true);
       const csv = await activityLogger.exportToCSV(filters);
-      
+
       // Create download link
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
@@ -259,27 +257,17 @@ export function ActivityLogs() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button
-            onClick={handleRefresh}
-            disabled={refreshing}
-            variant="outline"
-          >
+          <Button onClick={handleRefresh} disabled={refreshing} variant="outline">
             <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
-          <Button
-            onClick={handleExport}
-            disabled={exporting}
-            variant="outline"
-          >
+          <Button onClick={handleExport} disabled={exporting} variant="outline">
             <Download className="h-4 w-4 mr-2" />
             Export CSV
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                More Actions
-              </Button>
+              <Button variant="outline">More Actions</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem onClick={handleCleanup}>
@@ -296,8 +284,8 @@ export function ActivityLogs() {
           <AlertTriangle className="h-4 w-4" />
           <AlertTitle>Suspicious Activities Detected</AlertTitle>
           <AlertDescription>
-            {suspiciousActivities.length} suspicious activities detected in the last hour.
-            Review these activities for potential security issues.
+            {suspiciousActivities.length} suspicious activities detected in the last hour. Review
+            these activities for potential security issues.
           </AlertDescription>
           <Button
             size="sm"
@@ -348,7 +336,7 @@ export function ActivityLogs() {
                 <Select
                   value={filters.action || ''}
                   onValueChange={(value) =>
-                    setFilters({ ...filters, action: value as ActivityType || undefined })
+                    setFilters({ ...filters, action: (value as ActivityType) || undefined })
                   }
                 >
                   <SelectTrigger id="action">
@@ -372,7 +360,10 @@ export function ActivityLogs() {
                 <Select
                   value={filters.severity || ''}
                   onValueChange={(value) =>
-                    setFilters({ ...filters, severity: value as 'info' | 'warning' | 'error' || undefined })
+                    setFilters({
+                      ...filters,
+                      severity: (value as 'info' | 'warning' | 'error') || undefined,
+                    })
                   }
                 >
                   <SelectTrigger id="severity">
@@ -394,7 +385,10 @@ export function ActivityLogs() {
                   type="date"
                   value={filters.startDate ? format(filters.startDate, 'yyyy-MM-dd') : ''}
                   onChange={(e) =>
-                    setFilters({ ...filters, startDate: e.target.value ? new Date(e.target.value) : undefined })
+                    setFilters({
+                      ...filters,
+                      startDate: e.target.value ? new Date(e.target.value) : undefined,
+                    })
                   }
                 />
               </div>
@@ -406,17 +400,16 @@ export function ActivityLogs() {
                   type="date"
                   value={filters.endDate ? format(filters.endDate, 'yyyy-MM-dd') : ''}
                   onChange={(e) =>
-                    setFilters({ ...filters, endDate: e.target.value ? new Date(e.target.value) : undefined })
+                    setFilters({
+                      ...filters,
+                      endDate: e.target.value ? new Date(e.target.value) : undefined,
+                    })
                   }
                 />
               </div>
 
               <div className="flex items-end">
-                <Button
-                  onClick={() => setFilters({})}
-                  variant="outline"
-                  className="w-full"
-                >
+                <Button onClick={() => setFilters({})} variant="outline" className="w-full">
                   Clear Filters
                 </Button>
               </div>
@@ -427,9 +420,7 @@ export function ActivityLogs() {
           <Card>
             <CardHeader>
               <CardTitle>Recent Activity</CardTitle>
-              <CardDescription>
-                Showing {logs.length} activities
-              </CardDescription>
+              <CardDescription>Showing {logs.length} activities</CardDescription>
             </CardHeader>
             <CardContent>
               {loading ? (
@@ -439,9 +430,7 @@ export function ActivityLogs() {
                   ))}
                 </div>
               ) : logs.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  No activity logs found
-                </div>
+                <div className="text-center py-8 text-muted-foreground">No activity logs found</div>
               ) : (
                 <>
                   <Table>
@@ -498,9 +487,7 @@ export function ActivityLogs() {
                                 {log.severity}
                               </Badge>
                             </TableCell>
-                            <TableCell className="max-w-xs truncate">
-                              {log.description}
-                            </TableCell>
+                            <TableCell className="max-w-xs truncate">{log.description}</TableCell>
                             <TableCell>
                               <Button
                                 size="sm"
@@ -568,7 +555,9 @@ export function ActivityLogs() {
                     <AlertTriangle className="h-4 w-4 text-yellow-500" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{stats.activitiesBySeverity.warning || 0}</div>
+                    <div className="text-2xl font-bold">
+                      {stats.activitiesBySeverity.warning || 0}
+                    </div>
                   </CardContent>
                 </Card>
 
@@ -578,7 +567,9 @@ export function ActivityLogs() {
                     <AlertTriangle className="h-4 w-4 text-red-500" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{stats.activitiesBySeverity.error || 0}</div>
+                    <div className="text-2xl font-bold">
+                      {stats.activitiesBySeverity.error || 0}
+                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -614,7 +605,7 @@ export function ActivityLogs() {
                 <CardContent>
                   <div className="space-y-2">
                     {stats.peakHours.map((hour) => {
-                      const maxCount = Math.max(...stats.peakHours.map(h => h.count));
+                      const maxCount = Math.max(...stats.peakHours.map((h) => h.count));
                       const percentage = (hour.count / maxCount) * 100;
                       return (
                         <div key={hour.hour} className="flex items-center gap-2">
