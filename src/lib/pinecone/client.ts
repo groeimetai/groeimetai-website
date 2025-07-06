@@ -1,14 +1,25 @@
 import { Pinecone } from '@pinecone-database/pinecone';
 
-// Initialize Pinecone client
-export const pineconeClient = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY || '',
-});
+// Lazy initialize Pinecone client
+let pineconeClient: Pinecone | null = null;
+
+export const getPineconeClient = () => {
+  if (!pineconeClient) {
+    const apiKey = process.env.PINECONE_API_KEY;
+    if (!apiKey) {
+      throw new Error('PINECONE_API_KEY is not configured');
+    }
+    pineconeClient = new Pinecone({
+      apiKey: apiKey,
+    });
+  }
+  return pineconeClient;
+};
 
 // Get the index (using the provided URL)
 export const getIndex = () => {
   const indexName = 'groeimetai-website'; // Extract from URL
-  return pineconeClient.index(indexName);
+  return getPineconeClient().index(indexName);
 };
 
 // Pinecone configuration

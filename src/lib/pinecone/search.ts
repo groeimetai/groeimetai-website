@@ -2,9 +2,18 @@ import { getIndex } from './client';
 import { generateEmbedding } from '../embeddings/openai';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let openaiClient: OpenAI | null = null;
+
+const getOpenAIClient = () => {
+  if (!openaiClient) {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      throw new Error('OPENAI_API_KEY is not configured');
+    }
+    openaiClient = new OpenAI({ apiKey });
+  }
+  return openaiClient;
+};
 
 export interface SearchResult {
   id: string;
@@ -38,6 +47,11 @@ export async function searchContent(options: SearchOptions): Promise<{
   const { query, locale, limit = 10, filter, includeContext = false } = options;
   
   try {
+    // Check if API keys are configured
+    if (!process.env.PINECONE_API_KEY || !process.env.OPENAI_API_KEY) {
+      console.warn('Search API keys not configured');
+      return { results: [], totalResults: 0 };
+    }
     // Generate embedding for the query
     const queryEmbedding = await generateEmbedding(query);
     
@@ -151,7 +165,7 @@ async function generateRAGResponse(
     : `Context:\n${context}\n\nQuestion: ${query}\n\nProvide a concise answer based on the context.`;
   
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAIClient().chat.completions.create({
       model: 'gpt-4-turbo-preview',
       messages: [
         { role: 'system', content: systemPrompt },

@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { searchContent } from '@/lib/pinecone/search';
 
 export async function POST(request: NextRequest) {
+  // Check if Pinecone API key is configured
+  if (!process.env.PINECONE_API_KEY) {
+    return NextResponse.json(
+      { 
+        error: 'Search functionality is not configured', 
+        results: [], 
+        totalResults: 0 
+      },
+      { status: 503 }
+    );
+  }
   try {
     const body = await request.json();
     const { query, locale = 'en', limit = 10, filter, includeContext = false } = body;
@@ -42,6 +53,18 @@ export async function POST(request: NextRequest) {
 
 // Also support GET for simple queries
 export async function GET(request: NextRequest) {
+  // Check if Pinecone API key is configured
+  if (!process.env.PINECONE_API_KEY) {
+    return NextResponse.json(
+      { 
+        error: 'Search functionality is not configured', 
+        results: [], 
+        totalResults: 0 
+      },
+      { status: 503 }
+    );
+  }
+  
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get('q');
   const locale = (searchParams.get('locale') || 'en') as 'en' | 'nl';
