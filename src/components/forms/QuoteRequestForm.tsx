@@ -716,10 +716,10 @@ export default function QuoteRequestForm({ isDialog = false, onSuccess, preselec
                       icon: Users,
                     },
                     {
-                      id: 'ai-security',
+                      id: 'small-projects',
                       title: t('form.services.security'),
                       description: t('form.services.securityDesc'),
-                      icon: Shield,
+                      icon: Chrome,
                     },
                   ].map((service) => {
                     const Icon = service.icon;

@@ -429,39 +429,39 @@
       "duration": "12-20 weken"
     },
     "security": {
-      "title": "AI Security & Compliance",
-      "subtitle": "Enterprise AI Governance",
-      "description": "Beveilig uw AI implementaties met enterprise-grade security.",
-      "longDescription": "Onze AI Security & Compliance service zorgt ervoor dat uw AI systemen veilig, betrouwbaar en compliant zijn met alle relevante regelgeving.",
+      "title": "Kleine Projecten",
+      "subtitle": "Maatwerk Ontwikkeling",
+      "description": "Laat uw unieke ideeën tot leven komen met maatwerk ontwikkeling.",
+      "longDescription": "Van websites en webapplicaties tot browser extensies en custom tools - wij ontwikkelen oplossingen die perfect aansluiten bij uw specifieke behoeften.",
       "benefits": [
-        "GDPR & AI Act compliance",
-        "Reduced security risks",
-        "Ethical AI practices",
-        "Data privacy protection",
-        "Audit readiness"
+        "Snelle en flexibele ontwikkeling",
+        "Kosteneffectieve oplossingen",
+        "Moderne technologiën",
+        "Volledig op maat gemaakt",
+        "Onderhoud en support"
       ],
       "features": [
         {
-          "title": "Security Assessment",
-          "description": "Comprehensive AI security evaluation"
+          "title": "Requirements Analyse",
+          "description": "Complete analyse van projectvereisten"
         },
         {
-          "title": "Compliance Framework",
-          "description": "Implementation van compliance standards"
+          "title": "Ontwerpfase",
+          "description": "UI/UX design en technische architectuur"
         },
         {
-          "title": "Bias Detection",
-          "description": "Identificatie en mitigatie van AI bias"
+          "title": "Ontwikkeling",
+          "description": "Agile ontwikkeling met regelmatige updates"
         },
         {
-          "title": "Governance Structure",
-          "description": "AI governance framework en policies"
+          "title": "Testing & Oplevering",
+          "description": "Grondige testing en soepele deployment"
         }
       ],
       "process": [
         {
-          "title": "Risk Assessment",
-          "description": "Identificatie van AI security risks"
+          "title": "Projectplanning",
+          "description": "Maatwerk oplossing architectuur ontwerp"
         },
         {
           "title": "Compliance Audit",
@@ -886,8 +886,8 @@
           "servicenowDesc": "AI-aangedreven ServiceNow verbeteringen",
           "multiAgent": "Multi-Agent Orkestratie",
           "multiAgentDesc": "Coördineer meerdere AI-agenten voor complexe workflows",
-          "security": "AI Beveiliging & Governance",
-          "securityDesc": "Veilige en compliant AI-implementaties"
+          "security": "Kleine Projecten",
+          "securityDesc": "Maatwerk websites, applicaties, extensies en meer"
         }
       },
       "getStarted": "Aan de Slag",
@@ -1020,7 +1020,7 @@
         "rag": "RAG Architectuur",
         "servicenow": "ServiceNow AI",
         "multiAgent": "Multi-Agent Orchestration",
-        "security": "AI Security & Compliance",
+        "security": "Kleine Projecten",
         "other": "Anders"
       },
       "messageLabel": "Bericht *",
@@ -1098,8 +1098,8 @@
     "service1Description": "Navigeer de AI-revolutie met deskundige begeleiding. Wij helpen u kansen te identificeren, strategieën te ontwikkelen en AI-oplossingen te implementeren die echte bedrijfswaarde leveren.",
     "service2Title": "LLM Integratie & Optimalisatie",
     "service2Description": "Transformeer uw bedrijfsprocessen met Large Language Models. Van klantenservice tot interne operaties, wij implementeren en optimaliseren LLM-oplossingen.",
-    "service3Title": "AI Beveiliging & Governance",
-    "service3Description": "Zorg ervoor dat uw AI-implementaties veilig, compliant en ethisch zijn. Wij bieden uitgebreide beveiligingsbeoordelingen en governance-frameworks.",
+    "service3Title": "Kleine Projecten",
+    "service3Description": "Maatwerk ontwikkeling voor uw unieke behoeften. Van websites en webapplicaties tot browser extensies en custom tools, wij brengen uw ideeën tot leven.",
     "service4Title": "Multi-Agent Orkestratie",
     "service4Description": "Benut de kracht van meerdere AI-agenten die samenwerken. Onze orkestratieoplossingen maken complexe workflows en autonome operaties mogelijk.",
     "service5Title": "RAG Architectuur Ontwerp",

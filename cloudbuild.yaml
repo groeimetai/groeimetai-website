@@ -92,6 +92,46 @@ steps:
             --set-env-vars NODE_ENV=production
         fi
 
+  # Build search index after every deployment
+  - name: 'gcr.io/cloud-builders/npm'
+    id: 'index-content'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Building search index for $BRANCH_NAME branch..."
+        
+        # Install dependencies
+        npm install --legacy-peer-deps
+        
+        # Set environment and base URL based on branch
+        if [[ "$BRANCH_NAME" == "main" ]]; then
+          export INDEX_ENVIRONMENT="production"
+          export BASE_URL="https://app.groeimetai.io"
+          echo "Indexing production site: $BASE_URL"
+        else
+          export INDEX_ENVIRONMENT="staging"
+          # Get staging URL dynamically
+          export BASE_URL=$(gcloud run services describe groeimetai-app-staging --platform managed --region us-central1 --format 'value(status.url)')
+          echo "Indexing staging site: $BASE_URL"
+        fi
+        
+        echo "Indexing content for $INDEX_ENVIRONMENT environment..."
+        
+        # Wait a bit for deployment to stabilize
+        echo "Waiting 30 seconds for deployment to stabilize..."
+        sleep 30
+        
+        # Run the indexing script with live crawling
+        npm run build:search-index
+        
+        echo "Search index updated successfully!"
+    env:
+      - 'PINECONE_API_KEY=$_PINECONE_API_KEY'
+      - 'OPENAI_API_KEY=$_OPENAI_API_KEY'
+      - 'BRANCH_NAME=$BRANCH_NAME'
+    timeout: '900s'  # Increased timeout for crawling
+
 # Build timeout
 timeout: '1200s'
 
@@ -105,6 +145,8 @@ substitutions:
   _NEXT_PUBLIC_FIREBASE_APP_ID: ''
   _NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ''
   _NEXT_PUBLIC_GEMINI_API_KEY: ''
+  _PINECONE_API_KEY: ''
+  _OPENAI_API_KEY: ''
 
 # Build logs will be stored in Cloud Storage
 options:

@@ -7,6 +7,7 @@ import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/contexts/AuthContext';
 import { useHelp } from '@/components/HelpSystem';
 import { ProjectRequestDialog } from '@/components/dialogs/ProjectRequestDialog';
+import { useLocale } from 'next-intl';
 import {
   Search,
   FileText,
@@ -347,12 +348,16 @@ function CommandPaletteBase({
   addRecentAction 
 }: CommandPaletteBaseProps) {
   const [search, setSearch] = useState('');
+  const [ragResults, setRagResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchDebounceTimer, setSearchDebounceTimer] = useState<NodeJS.Timeout | null>(null);
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const [projectDialogOpen, setProjectDialogOpen] = useState(false);
   const router = useRouter();
   const { user, logout } = useAuth();
   const { openHelpCenter, startTutorial } = useHelp();
+  const locale = useLocale();
 
   // Ensure we're on the client side
   useEffect(() => {
@@ -396,9 +401,8 @@ function CommandPaletteBase({
       icon: <MessageSquare className="w-4 h-4" />,
       keywords: ['chat', 'message', 'talk', 'support'],
       action: () => {
-        // Open chat widget
-        const chatButton = document.querySelector('[data-chat-widget]') as HTMLElement;
-        chatButton?.click();
+        // Navigate to messages page
+        navigateTo('/dashboard/messages');
         setOpen(false);
       },
       shortcut: 'C'
@@ -434,21 +438,26 @@ function CommandPaletteBase({
       shortcut: '?'
     });
 
-    items.push({
-      id: 'action-tutorial',
-      type: 'action',
-      category: 'Actions',
-      title: 'Start Tutorial',
-      description: 'Learn how to use the platform',
-      icon: <Lightbulb className="w-4 h-4" />,
-      keywords: ['tutorial', 'guide', 'learn', 'onboarding'],
-      action: () => {
-        startTutorial('getting-started');
-        setOpen(false);
-      },
-      badge: 'Recommended',
-      badgeVariant: 'default'
-    });
+    // Only show tutorial if not completed
+    const tutorialCompleted = mounted && localStorage.getItem('tutorial:getting-started:completed') === 'true';
+    if (!tutorialCompleted) {
+      items.push({
+        id: 'action-tutorial',
+        type: 'action',
+        category: 'Actions',
+        title: 'Start Tutorial',
+        description: 'Learn how to use the platform',
+        icon: <Lightbulb className="w-4 h-4" />,
+        keywords: ['tutorial', 'guide', 'learn', 'onboarding'],
+        action: () => {
+          startTutorial('getting-started');
+          localStorage.setItem('tutorial:getting-started:completed', 'true');
+          setOpen(false);
+        },
+        badge: 'Recommended',
+        badgeVariant: 'default'
+      });
+    }
 
     // Navigation
     items.push({
@@ -696,7 +705,7 @@ function CommandPaletteBase({
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="overflow-hidden p-0 max-w-2xl bg-black/95 border-white/20">
+        <DialogContent className="overflow-hidden p-0 max-w-2xl bg-black/95 border-white/20 [&>button]:hidden">
           <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-white/60 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
           <div className="flex items-center border-b border-white/20 px-3">
             <CommandIcon className="mr-2 h-4 w-4 shrink-0 text-white/60" />
@@ -706,9 +715,18 @@ function CommandPaletteBase({
               onValueChange={setSearch}
               className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm text-white outline-none placeholder:text-white/50 disabled:cursor-not-allowed disabled:opacity-50"
             />
-            <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-white/20 bg-white/10 px-1.5 font-mono text-[10px] font-medium text-white/60">
-              <span className="text-xs">ESC</span>
-            </kbd>
+            {isSearching && (
+              <div className="absolute right-12 top-3.5 text-white/40">
+                <RefreshCw className="w-4 h-4 animate-spin" />
+              </div>
+            )}
+            <button
+              onClick={() => setOpen(false)}
+              className="ml-2 p-1 rounded-md hover:bg-white/10 transition-colors"
+              aria-label="Close command palette"
+            >
+              <X className="h-4 w-4 text-white/60" />
+            </button>
           </div>
           
           <ScrollArea className="max-h-[450px] overflow-y-auto">
@@ -734,7 +752,7 @@ function CommandPaletteBase({
                       key={recentSearch}
                       value={recentSearch}
                       onSelect={() => setSearch(recentSearch)}
-                      className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-white hover:bg-white/10 cursor-pointer"
+                      className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-white border border-white/10 hover:bg-white/10 hover:border-white/20 cursor-pointer"
                     >
                       <Clock className="w-4 h-4 text-white/40" />
                       <span>{recentSearch}</span>
@@ -798,7 +816,7 @@ function CommandItem({
     <Command.Item
       value={`${item.id} ${item.title} ${item.description || ''} ${item.keywords?.join(' ') || ''}`}
       onSelect={() => onSelect(item)}
-      className="relative flex cursor-pointer select-none items-center gap-2 rounded-lg px-2 py-2 text-sm text-white outline-none hover:bg-white/10 data-[selected]:bg-white/10"
+      className="relative flex cursor-pointer select-none items-center gap-2 rounded-lg px-2 py-2 text-sm text-white outline-none border border-white/10 hover:bg-white/10 hover:border-white/20 data-[selected]:bg-white/10 data-[selected]:border-white/20"
     >
       <div className="flex h-8 w-8 items-center justify-center rounded-md bg-white/5">
         {item.icon}

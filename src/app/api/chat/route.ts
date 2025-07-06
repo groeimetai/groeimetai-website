@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
 - ServiceNow AI integratie 
 - Multi-agent orchestration systemen
 - RAG architectuur design
-- AI security & compliance
+- Kleine projecten (websites, apps, extensies)
 
 Wees vriendelijk, professioneel en gefocust op hoe we hun bedrijf kunnen transformeren met AI. Houd antwoorden beknopt en actiegerecht. Antwoord ALTIJD in het Nederlands.
 

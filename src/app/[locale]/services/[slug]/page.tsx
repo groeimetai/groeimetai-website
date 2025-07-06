@@ -19,6 +19,7 @@ import {
   ArrowRight,
   Check,
   ArrowLeft,
+  Chrome,
 } from 'lucide-react';
 
 const BrochureDownloadButton = dynamic(
@@ -68,7 +69,7 @@ const iconMap = {
   'rag-architecture': Layers,
   'servicenow-ai': Workflow,
   'multi-agent-orchestration': Sparkles,
-  'ai-security': Shield,
+  'small-projects': Chrome,
 };
 
 function getServiceDataFromTranslations(slug: string, t: any): ServiceDetailData | null {
@@ -86,7 +87,7 @@ function getServiceDataFromTranslations(slug: string, t: any): ServiceDetailData
     'rag-architecture': 'rag',
     'servicenow-ai': 'servicenow',
     'multi-agent-orchestration': 'multiAgent',
-    'ai-security': 'security',
+    'small-projects': 'security',
   }[slug];
 
   if (!serviceKey) return null;
@@ -149,7 +150,7 @@ export async function generateMetadata({
     'rag-architecture': 'rag',
     'servicenow-ai': 'servicenow',
     'multi-agent-orchestration': 'multiAgent',
-    'ai-security': 'security',
+    'small-projects': 'security',
   }[params.slug];
 
   if (!serviceKey) {

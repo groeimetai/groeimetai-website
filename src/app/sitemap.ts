@@ -32,7 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'rag-architecture',
     'servicenow-ai',
     'multi-agent-orchestration',
-    'ai-security',
+    'small-projects',
   ];
 
   const servicePages: MetadataRoute.Sitemap = locales.flatMap((locale) =>

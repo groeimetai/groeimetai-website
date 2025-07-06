@@ -429,39 +429,39 @@
       "duration": "12-20 weeks"
     },
     "security": {
-      "title": "AI Security & Compliance",
-      "subtitle": "Enterprise AI Governance",
-      "description": "Secure your AI implementations with enterprise-grade security.",
-      "longDescription": "Our AI Security & Compliance service ensures your AI systems are secure, reliable, and compliant with all relevant regulations.",
+      "title": "Small Projects",
+      "subtitle": "Custom Development Solutions",
+      "description": "Bring your unique ideas to life with custom development.",
+      "longDescription": "From websites and web applications to browser extensions and custom tools, we develop solutions that perfectly fit your specific needs.",
       "benefits": [
-        "GDPR & AI Act compliance",
-        "Reduced security risks",
-        "Ethical AI practices",
-        "Data privacy protection",
-        "Audit readiness"
+        "Fast and flexible development",
+        "Cost-effective solutions",
+        "Modern technologies",
+        "Fully customized to your needs",
+        "Ongoing maintenance and support"
       ],
       "features": [
         {
-          "title": "Security Assessment",
-          "description": "Comprehensive AI security evaluation"
+          "title": "Requirements Analysis",
+          "description": "Full project requirements analysis"
         },
         {
-          "title": "Compliance Framework",
-          "description": "Implementation of compliance standards"
+          "title": "Design Phase",
+          "description": "UI/UX design and technical architecture"
         },
         {
-          "title": "Bias Detection",
-          "description": "Identification and mitigation of AI bias"
+          "title": "Development",
+          "description": "Agile development with regular updates"
         },
         {
-          "title": "Governance Structure",
-          "description": "AI governance framework and policies"
+          "title": "Testing & Delivery",
+          "description": "Thorough testing and smooth deployment"
         }
       ],
       "process": [
         {
-          "title": "Risk Assessment",
-          "description": "Identification of AI security risks"
+          "title": "Project Planning",
+          "description": "Custom solution architecture design"
         },
         {
           "title": "Compliance Audit",
@@ -896,8 +896,8 @@
           "servicenowDesc": "AI-powered ServiceNow enhancements",
           "multiAgent": "Multi-Agent Orchestration",
           "multiAgentDesc": "Coordinate multiple AI agents for complex workflows",
-          "security": "AI Security & Governance",
-          "securityDesc": "Secure and compliant AI implementations"
+          "security": "Small Projects",
+          "securityDesc": "Custom websites, applications, extensions and more"
         }
       },
       "getStarted": "Get Started",
@@ -1030,7 +1030,7 @@
         "rag": "RAG Architecture",
         "servicenow": "ServiceNow AI",
         "multiAgent": "Multi-Agent Orchestration",
-        "security": "AI Security & Compliance",
+        "security": "Small Projects",
         "other": "Other"
       },
       "messageLabel": "Message *",
@@ -1097,8 +1097,8 @@
     "service1Description": "Navigate the AI revolution with expert guidance. We help you identify opportunities, develop strategies, and implement AI solutions that deliver real business value.",
     "service2Title": "LLM Integration & Optimization",
     "service2Description": "Transform your business processes with Large Language Models. From customer service to internal operations, we implement and optimize LLM solutions.",
-    "service3Title": "AI Security & Governance",
-    "service3Description": "Ensure your AI implementations are secure, compliant, and ethical. We provide comprehensive security assessments and governance frameworks.",
+    "service3Title": "Small Projects",
+    "service3Description": "Custom development for your unique needs. From websites and web applications to browser extensions and custom tools, we bring your ideas to life.",
     "service4Title": "Multi-Agent Orchestration",
     "service4Description": "Harness the power of multiple AI agents working together. Our orchestration solutions enable complex workflows and autonomous operations.",
     "service5Title": "RAG Architecture Design",

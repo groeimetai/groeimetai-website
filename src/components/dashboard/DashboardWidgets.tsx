@@ -54,7 +54,8 @@ import {
   Timestamp,
   addDoc,
   serverTimestamp,
-  setDoc
+  setDoc,
+  writeBatch
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { formatDistanceToNow, format, isToday, isTomorrow, isThisWeek, startOfDay, endOfDay } from 'date-fns';
@@ -236,7 +237,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
     };
 
     loadChats();
-  }, [user, isAdmin]);
+  }, [user, isAdmin, selectedChat]);
 
   // Subscribe to messages for selected chat
   useEffect(() => {
@@ -244,6 +245,41 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
 
     setIsLoading(true);
     let unsubscribe: (() => void) | undefined;
+    
+    // Mark notifications as read when opening chat
+    const markChatNotificationsAsRead = async () => {
+      try {
+        const notificationsQuery = query(
+          collection(db, 'notifications'),
+          where('userId', '==', user.uid),
+          where('type', '==', 'message'),
+          where('read', '==', false)
+        );
+        
+        const snapshot = await getDocs(notificationsQuery);
+        const batch = writeBatch(db);
+        
+        snapshot.docs.forEach(doc => {
+          const notification = doc.data();
+          // Check if notification is related to this chat
+          if (selectedChat.type === 'support' && notification.title?.includes('Support')) {
+            batch.update(doc.ref, { read: true, readAt: serverTimestamp() });
+          } else if (selectedChat.userName && notification.title?.includes(selectedChat.userName)) {
+            batch.update(doc.ref, { read: true, readAt: serverTimestamp() });
+          } else if (selectedChat.projectName && notification.description?.includes(selectedChat.projectName)) {
+            batch.update(doc.ref, { read: true, readAt: serverTimestamp() });
+          }
+        });
+        
+        if (snapshot.docs.length > 0) {
+          await batch.commit();
+        }
+      } catch (error) {
+        console.error('Error marking notifications as read:', error);
+      }
+    };
+    
+    markChatNotificationsAsRead();
 
     const loadMessages = async () => {
       try {
@@ -308,13 +344,48 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
 
       // Add message
       const messagesRef = collection(db, collectionName, selectedChat.id, 'messages');
-      await addDoc(messagesRef, {
+      const messageData = {
         senderId: user.uid,
         senderName: isAdmin ? 'GroeimetAI Support' : (user.displayName || user.email),
         senderRole: isAdmin ? 'admin' : 'user',
         content: newMessage.trim(),
         createdAt: serverTimestamp(),
-      });
+      };
+      
+      await addDoc(messagesRef, messageData);
+
+      // Create notification for the recipient
+      const notificationData = {
+        type: 'message' as const,
+        title: isAdmin ? 'New message from Support' : `New message from ${user.displayName || user.email}`,
+        description: newMessage.trim().substring(0, 100) + (newMessage.trim().length > 100 ? '...' : ''),
+        read: false,
+        createdAt: serverTimestamp(),
+        link: isAdmin ? '/dashboard' : '/dashboard/admin',
+        priority: 'medium' as const,
+        actionRequired: false,
+      };
+
+      if (isAdmin && selectedChat.userId) {
+        // Admin sending to user - create notification for the user
+        await addDoc(collection(db, 'notifications'), {
+          ...notificationData,
+          userId: selectedChat.userId,
+        });
+      } else if (!isAdmin) {
+        // User sending to admin - create notifications for all admins
+        const adminsQuery = query(collection(db, 'users'), where('role', '==', 'admin'));
+        const adminsSnapshot = await getDocs(adminsQuery);
+        
+        const notificationPromises = adminsSnapshot.docs.map(adminDoc => 
+          addDoc(collection(db, 'notifications'), {
+            ...notificationData,
+            userId: adminDoc.id,
+          })
+        );
+        
+        await Promise.all(notificationPromises);
+      }
 
       // Update last message
       await setDoc(chatRef, {
@@ -387,7 +458,7 @@ const MessagingWidget = ({ isAdmin, widgetData, user }: { isAdmin: boolean; widg
                       </p>
                     )}
                   </div>
-                  {chat.unreadCount > 0 && (
+                  {(chat.unreadCount ?? 0) > 0 && (
                     <Badge className="bg-orange text-white text-xs h-5 min-w-[20px] px-1">
                       {chat.unreadCount}
                     </Badge>
@@ -600,6 +671,7 @@ export default function DashboardWidgets() {
   // Load preferences on mount
   useEffect(() => {
     loadWidgetPreferences();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isAdmin]);
 
   // Save widget preferences with proper error handling
@@ -660,17 +732,35 @@ export default function DashboardWidgets() {
             query(collection(db, 'supportChats'), orderBy('lastMessageAt', 'desc'))
           );
           
-          data.activeChats = chatsSnapshot.docs.map(doc => {
-            const chatData = doc.data();
+          // Get unread notifications for admin
+          const adminUnreadQuery = query(
+            collection(db, 'notifications'),
+            where('userId', '==', user.uid),
+            where('type', '==', 'message'),
+            where('read', '==', false)
+          );
+          const adminUnreadNotifications = await getDocs(adminUnreadQuery);
+          
+          data.activeChats = await Promise.all(chatsSnapshot.docs.map(async (chatDoc) => {
+            const chatData = chatDoc.data();
+            
+            // Count unread messages from this user
+            const unreadFromUser = adminUnreadNotifications.docs.filter(doc => {
+              const notification = doc.data();
+              return notification.title?.includes(chatData.userName) || 
+                     notification.description?.includes(chatData.userName);
+            }).length;
+            
             return {
-              id: doc.id,
+              id: chatDoc.id,
+              userId: chatData.userId,
               userName: chatData.userName,
               projectName: chatData.projectName,
               lastMessage: chatData.lastMessage,
               lastMessageAt: chatData.lastMessageAt,
-              unreadCount: 0, // TODO: Implement unread count
+              unreadCount: unreadFromUser,
             };
-          });
+          }));
 
           // Fetch revenue data
           const paidInvoices = allInvoicesSnapshot.docs.filter(doc => doc.data().status === 'paid');
@@ -740,25 +830,69 @@ export default function DashboardWidgets() {
           // For project timeline widget
           if (projectsSnapshot.docs.length > 0) {
             const latestProject = projectsSnapshot.docs[0].data();
+            data.projectName = latestProject.name || 'My AI Project';
+            
             const timelineRef = doc(db, 'projectTimelines', projectsSnapshot.docs[0].id);
             const timelineDoc = await getDoc(timelineRef);
             
             if (timelineDoc.exists()) {
               const timelineData = timelineDoc.data();
               data.timelineStages = timelineData.stages || [];
-              data.timelineProgress = timelineData.stages 
-                ? Math.round((timelineData.stages.filter((s: any) => s.status === 'completed').length / timelineData.stages.length) * 100)
-                : 0;
+              
+              // Calculate overall progress
+              if (timelineData.stages) {
+                const completedStages = timelineData.stages.filter((s: any) => s.status === 'completed').length;
+                const currentStage = timelineData.stages.find((s: any) => s.status === 'current');
+                const currentProgress = currentStage?.progress || 0;
+                
+                // Overall progress includes partial progress of current stage
+                data.timelineProgress = Math.round(
+                  ((completedStages * 100) + currentProgress) / timelineData.stages.length
+                );
+              } else {
+                data.timelineProgress = 0;
+              }
+              
+              // Add milestone and estimated completion
+              data.nextMilestone = timelineData.milestone || null;
+              data.estimatedCompletion = latestProject.estimatedCompletion || null;
             }
           }
 
-          // For messages widget
-          data.supportUnread = 0; // TODO: Implement unread count
-          data.projectChats = projectsSnapshot.docs.map(doc => ({
-            id: doc.id,
-            projectId: doc.id,
-            projectName: doc.data().name,
-            unreadCount: 0, // TODO: Implement unread count
+          // For messages widget - get unread message counts from notifications
+          const unreadNotificationsQuery = query(
+            collection(db, 'notifications'),
+            where('userId', '==', user.uid),
+            where('type', '==', 'message'),
+            where('read', '==', false)
+          );
+          const unreadNotifications = await getDocs(unreadNotificationsQuery);
+          
+          // Count unread support messages
+          const supportUnread = unreadNotifications.docs.filter(doc => {
+            const notification = doc.data();
+            return notification.title?.includes('Support');
+          }).length;
+          
+          data.supportUnread = supportUnread;
+          
+          // Get project chats with unread counts
+          data.projectChats = await Promise.all(projectsSnapshot.docs.map(async (projectDoc) => {
+            const projectData = projectDoc.data();
+            
+            // Count unread messages for this project
+            const projectUnread = unreadNotifications.docs.filter(doc => {
+              const notification = doc.data();
+              return notification.description?.includes(projectData.name) || 
+                     notification.link?.includes(projectDoc.id);
+            }).length;
+            
+            return {
+              id: projectDoc.id,
+              projectId: projectDoc.id,
+              projectName: projectData.name,
+              unreadCount: projectUnread,
+            };
           }));
 
           // For documents widget
@@ -1220,114 +1354,127 @@ export default function DashboardWidgets() {
 
         case 'projectTimeline':
           return (
-            <div className="space-y-4">
-              <div className="mb-4">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-white/60">Overall Progress</span>
-                  <span className="text-sm font-medium text-white">
-                    {widgetData.timelineProgress || 0}%
-                  </span>
+            <div className="h-full flex flex-col">
+              {/* Project Header */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  {widgetData.projectName || 'Your Project Timeline'}
+                </h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-white/60">Overall Progress</span>
+                    <span className="text-sm font-medium text-white">
+                      {widgetData.timelineProgress || 0}%
+                    </span>
+                  </div>
+                  <Progress value={widgetData.timelineProgress || 0} className="h-3" />
+                  {widgetData.estimatedCompletion && (
+                    <p className="text-xs text-white/60">
+                      Estimated completion: {widgetData.estimatedCompletion}
+                    </p>
+                  )}
                 </div>
-                <Progress value={widgetData.timelineProgress || 0} className="h-2" />
               </div>
               
-              {widgetData.timelineStages?.map((stage: any, index: number) => (
-                <div key={index} className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    stage.status === 'completed' ? 'bg-green-500' : 
-                    stage.status === 'current' ? 'bg-orange' : 'bg-white/20'
-                  }`}>
-                    {stage.status === 'completed' ? '✓' : index + 1}
+              {/* Timeline Stages */}
+              <div className="flex-1 space-y-4 overflow-y-auto">
+                {widgetData.timelineStages?.length > 0 ? (
+                  widgetData.timelineStages.map((stage: any, index: number) => (
+                    <div key={index} className="relative">
+                      {/* Connection Line */}
+                      {index < widgetData.timelineStages.length - 1 && (
+                        <div className={`absolute left-4 top-10 bottom-0 w-0.5 ${
+                          stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
+                        }`} />
+                      )}
+                      
+                      <div className="flex items-start gap-4">
+                        {/* Stage Icon */}
+                        <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          stage.status === 'completed' ? 'bg-green-500' : 
+                          stage.status === 'current' ? 'bg-orange animate-pulse' : 'bg-white/20'
+                        }`}>
+                          {stage.status === 'completed' ? (
+                            <Check className="w-4 h-4 text-white" />
+                          ) : stage.status === 'current' ? (
+                            <Clock className="w-4 h-4 text-white" />
+                          ) : (
+                            <span className="text-xs text-white">{index + 1}</span>
+                          )}
+                        </div>
+                        
+                        {/* Stage Details */}
+                        <div className="flex-1 pb-6">
+                          <div className="flex items-center justify-between mb-1">
+                            <h4 className={`font-medium ${
+                              stage.status === 'current' ? 'text-white' : 
+                              stage.status === 'completed' ? 'text-white/80' : 'text-white/60'
+                            }`}>
+                              {stage.name}
+                            </h4>
+                            {stage.status === 'current' && stage.progress && (
+                              <span className="text-xs text-orange">{stage.progress}%</span>
+                            )}
+                          </div>
+                          <p className="text-sm text-white/60 mb-2">{stage.description}</p>
+                          
+                          {/* Stage Progress Bar (for current stage) */}
+                          {stage.status === 'current' && stage.progress && (
+                            <Progress value={stage.progress} className="h-1 mb-2" />
+                          )}
+                          
+                          {/* Stage Dates */}
+                          <div className="flex gap-4 text-xs text-white/40">
+                            {stage.startedAt && (
+                              <span>Started: {new Date(stage.startedAt.toDate()).toLocaleDateString()}</span>
+                            )}
+                            {stage.completedAt && (
+                              <span>Completed: {new Date(stage.completedAt.toDate()).toLocaleDateString()}</span>
+                            )}
+                            {stage.estimatedCompletion && stage.status !== 'completed' && (
+                              <span>Est: {stage.estimatedCompletion}</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8">
+                    <Target className="w-12 h-12 text-white/20 mx-auto mb-3" />
+                    <p className="text-white/60">Project timeline will appear here</p>
+                    <p className="text-white/40 text-sm mt-1">Once your project request is approved</p>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-white text-sm font-medium">{stage.name}</p>
-                    <p className="text-white/60 text-xs">{stage.description}</p>
+                )}
+              </div>
+              
+              {/* Next Milestone */}
+              {widgetData.nextMilestone && (
+                <div className="mt-4 p-3 bg-orange/10 rounded-lg border border-orange/20">
+                  <div className="flex items-center gap-2">
+                    <Target className="w-4 h-4 text-orange" />
+                    <div>
+                      <p className="text-sm font-medium text-white">Next Milestone</p>
+                      <p className="text-xs text-white/60">{widgetData.nextMilestone}</p>
+                    </div>
                   </div>
                 </div>
-              ))}
+              )}
               
-              <Link href="/dashboard/projects">
-                <Button variant="outline" className="w-full mt-4" size="sm">
-                  View Full Timeline
-                </Button>
-              </Link>
+              {/* View Full Timeline Button */}
+              {widgetData.timelineStages?.length > 0 && (
+                <Link href="/dashboard/projects" className="mt-4">
+                  <Button variant="outline" className="w-full" size="sm">
+                    View Full Project Details
+                  </Button>
+                </Link>
+              )}
             </div>
           );
 
         case 'messages':
-          return (
-            <div className="space-y-3">
-              {isAdmin ? (
-                // Admin view: Show all active chats with client names
-                widgetData.activeChats?.map((chat: any) => (
-                  <Link key={chat.id} href={`/dashboard/admin?chat=${chat.id}`}>
-                    <div className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-orange/20 flex items-center justify-center">
-                            {chat.userName?.charAt(0).toUpperCase() || 'U'}
-                          </div>
-                          <div>
-                            <p className="text-white text-sm font-medium">{chat.userName}</p>
-                            <p className="text-white/60 text-xs">{chat.projectName || 'General Support'}</p>
-                          </div>
-                        </div>
-                        {chat.unreadCount > 0 && (
-                          <Badge className="bg-orange text-white">{chat.unreadCount}</Badge>
-                        )}
-                      </div>
-                      {chat.lastMessage && (
-                        <p className="text-white/60 text-xs mt-2 truncate">{chat.lastMessage}</p>
-                      )}
-                    </div>
-                  </Link>
-                ))
-              ) : (
-                // User view: Show support chat and project chats
-                <>
-                  <Link href="/dashboard">
-                    <div className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <MessageSquare className="w-5 h-5 text-orange" />
-                          <div>
-                            <p className="text-white text-sm font-medium">Support Chat</p>
-                            <p className="text-white/60 text-xs">Chat with our team</p>
-                          </div>
-                        </div>
-                        {widgetData.supportUnread > 0 && (
-                          <Badge className="bg-orange text-white">{widgetData.supportUnread}</Badge>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                  
-                  {widgetData.projectChats?.map((chat: any) => (
-                    <Link key={chat.id} href={`/dashboard/projects/${chat.projectId}`}>
-                      <div className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <FileText className="w-5 h-5 text-orange" />
-                            <div>
-                              <p className="text-white text-sm font-medium">{chat.projectName}</p>
-                              <p className="text-white/60 text-xs">Project Discussion</p>
-                            </div>
-                          </div>
-                          {chat.unreadCount > 0 && (
-                            <Badge className="bg-orange text-white">{chat.unreadCount}</Badge>
-                          )}
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </>
-              )}
-              
-              {(!widgetData.activeChats?.length && !widgetData.projectChats?.length) && (
-                <p className="text-white/60 text-sm text-center py-4">No active conversations</p>
-              )}
-            </div>
-          );
+          // Use a component for complex messaging widget
+          return <MessagingWidget isAdmin={isAdmin} widgetData={widgetData} user={user} />;
 
         case 'documents':
           return (
