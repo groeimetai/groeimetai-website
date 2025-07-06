@@ -73,6 +73,7 @@ export default function DocumentsPage() {
     projectName: '',
   });
   const [storageUsage, setStorageUsage] = useState({ totalBytes: 0, documentCount: 0 });
+  const [isDragging, setIsDragging] = useState(false);
 
   // Fetch documents on component mount
   const fetchDocuments = useCallback(async () => {
@@ -136,6 +137,39 @@ export default function DocumentsPage() {
     if (file) {
       setSelectedFile(file);
       setShowUploadDialog(true);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      // Check if file type is supported
+      const supportedTypes = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.txt', '.csv'];
+      const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+      
+      if (supportedTypes.includes(fileExtension)) {
+        setSelectedFile(file);
+        setShowUploadDialog(true);
+      } else {
+        setError(`File type not supported. Please upload: ${supportedTypes.join(', ')}`);
+      }
     }
   };
 
@@ -312,12 +346,50 @@ export default function DocumentsPage() {
                   </DialogDescription>
                 </DialogHeader>
 
-                {selectedFile && (
-                  <div className="space-y-4">
-                    <div className="p-4 bg-white/5 rounded-lg border border-white/10">
-                      <p className="text-white font-medium">{selectedFile.name}</p>
-                      <p className="text-white/60 text-sm">{formatFileSize(selectedFile.size)}</p>
+                <div className="space-y-4">
+                  {!selectedFile ? (
+                    <div 
+                      className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+                        isDragging 
+                          ? 'border-orange bg-orange/10' 
+                          : 'border-white/20 hover:border-orange/50'
+                      }`}
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                    >
+                      <CloudUpload className={`w-12 h-12 mx-auto mb-4 ${
+                        isDragging ? 'text-orange' : 'text-white/40'
+                      }`} />
+                      <p className="text-white/80 mb-2">Drop your file here or click to browse</p>
+                      <p className="text-white/40 text-sm mb-4">
+                        Supported formats: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, CSV
+                      </p>
+                      <label htmlFor="dialog-file-upload" className="cursor-pointer">
+                        <input
+                          id="dialog-file-upload"
+                          type="file"
+                          className="hidden"
+                          onChange={handleFileSelect}
+                          accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"
+                        />
+                        <Button className="bg-orange hover:bg-orange/90">
+                          Select File
+                        </Button>
+                      </label>
                     </div>
+                  ) : (
+                    <>
+                      <div className="p-4 bg-white/5 rounded-lg border border-white/10 relative">
+                        <button
+                          onClick={() => setSelectedFile(null)}
+                          className="absolute top-2 right-2 text-white/40 hover:text-white"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                        <p className="text-white font-medium">{selectedFile.name}</p>
+                        <p className="text-white/60 text-sm">{formatFileSize(selectedFile.size)}</p>
+                      </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="project" className="text-white">
@@ -395,8 +467,9 @@ export default function DocumentsPage() {
                         Cancel
                       </Button>
                     </div>
-                  </div>
-                )}
+                    </>
+                  )}
+                </div>
               </DialogContent>
             </Dialog>
           </div>
@@ -684,13 +757,6 @@ export default function DocumentsPage() {
           </div>
         )}
 
-        {/* Hidden file input */}
-        <input
-          type="file"
-          className="hidden"
-          onChange={handleFileSelect}
-          accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"
-        />
       </div>
     </main>
   );

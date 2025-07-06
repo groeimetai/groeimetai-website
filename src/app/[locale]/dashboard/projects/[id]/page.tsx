@@ -206,10 +206,12 @@ export default function ProjectDetailPage() {
             </div>
 
             <div className="flex gap-3">
-              <Button variant="outline">
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Contact Team
-              </Button>
+              <Link href="/dashboard/messages">
+                <Button variant="outline">
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Contact Team
+                </Button>
+              </Link>
               <Button className="bg-orange hover:bg-orange/90">
                 <FileText className="w-4 h-4 mr-2" />
                 View Documents
@@ -584,9 +586,11 @@ export default function ProjectDetailPage() {
                       <MessageSquare className="w-5 h-5 text-orange" />
                       <span className="text-white">Project Chat</span>
                     </div>
-                    <Button size="sm" variant="outline">
-                      Open Chat
-                    </Button>
+                    <Link href="/dashboard/messages">
+                      <Button size="sm" variant="outline">
+                        Open Chat
+                      </Button>
+                    </Link>
                   </div>
                   
                   <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">

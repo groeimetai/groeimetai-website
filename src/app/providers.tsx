@@ -21,12 +21,14 @@ export function Providers({ children }: ProvidersProps) {
       <AuthProvider>
         {children}
         <Toaster
-          position="top-right"
+          position="top-center"
           toastOptions={{
             style: {
               background: '#1a1a1a',
               color: '#fff',
               border: '1px solid rgba(255, 255, 255, 0.1)',
+              marginTop: '80px',
+              zIndex: 9999,
             },
             success: {
               iconTheme: {
