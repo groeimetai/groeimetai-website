@@ -1244,9 +1244,10 @@ export default function DashboardWidgets() {
 
     setIsLoading(true);
     try {
-      const userDoc = await getDocs(query(collection(db, 'users'), where('uid', '==', user.uid)));
-      if (!userDoc.empty) {
-        const userData = userDoc.docs[0].data();
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
         if (userData.dashboardWidgets) {
           setWidgets(userData.dashboardWidgets);
           setOriginalWidgets(userData.dashboardWidgets);
@@ -1285,11 +1286,11 @@ export default function DashboardWidgets() {
     if (!user) return false;
 
     try {
-      const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
-      const userSnapshot = await getDocs(userQuery);
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
 
-      if (!userSnapshot.empty) {
-        await updateDoc(userSnapshot.docs[0].ref, {
+      if (userDoc.exists()) {
+        await updateDoc(userDocRef, {
           dashboardWidgets: updatedWidgets || widgets,
           updatedAt: new Date(),
         });
@@ -1544,7 +1545,7 @@ export default function DashboardWidgets() {
           // For documents widget
           const documentsQuery = query(
             collection(db, 'documents'),
-            where('userId', '==', user.uid),
+            where('uploadedBy.uid', '==', user.uid),
             orderBy('createdAt', 'desc'),
             limit(5)
           );
