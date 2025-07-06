@@ -622,7 +622,7 @@ const MessagingWidget = ({
             </div>
 
             {/* Messages */}
-            <ScrollArea ref={scrollAreaRef} className="flex-1 p-3" style={{ maxHeight: '400px' }}>
+            <ScrollArea ref={scrollAreaRef} className="flex-1 p-3" style={{ height: 'calc(100% - 140px)' }}>
               <div className="space-y-3">
                 {isLoading && (
                   <div className="flex items-center justify-center py-8">
@@ -711,83 +711,87 @@ const MessagingWidget = ({
             </ScrollArea>
 
             {/* Message Input */}
-            <form onSubmit={sendMessage} className="p-3 border-t border-white/10">
-              {/* Selected Files Preview */}
-              {selectedFiles.length > 0 && (
-                <div className="mb-2 space-y-1">
-                  {selectedFiles.map((file, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between bg-white/5 rounded p-1.5 text-xs"
-                    >
-                      <div className="flex items-center gap-1.5 min-w-0">
-                        {file.type.startsWith('image/') ? (
-                          <ImageIcon className="w-3 h-3 text-white/60 flex-shrink-0" />
-                        ) : (
-                          <FileText className="w-3 h-3 text-white/60 flex-shrink-0" />
-                        )}
-                        <div className="min-w-0">
-                          <p className="text-white truncate">{file.name}</p>
-                          <p className="text-white/40">{formatFileSize(file.size)}</p>
+            <div className="mt-auto">
+              <form onSubmit={sendMessage} className="p-3 border-t border-white/10">
+                {/* Selected Files Preview */}
+                {selectedFiles.length > 0 && (
+                  <ScrollArea className="max-h-[80px] mb-2">
+                    <div className="space-y-1 pr-2">
+                      {selectedFiles.map((file, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between bg-white/5 rounded p-1.5 text-xs"
+                        >
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            {file.type.startsWith('image/') ? (
+                              <ImageIcon className="w-3 h-3 text-white/60 flex-shrink-0" />
+                            ) : (
+                              <FileText className="w-3 h-3 text-white/60 flex-shrink-0" />
+                            )}
+                            <div className="min-w-0">
+                              <p className="text-white truncate">{file.name}</p>
+                              <p className="text-white/40">{formatFileSize(file.size)}</p>
+                            </div>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeSelectedFile(index)}
+                            className="text-white/60 hover:text-white h-5 w-5 p-0"
+                          >
+                            <X className="w-3 h-3" />
+                          </Button>
                         </div>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeSelectedFile(index)}
-                        className="text-white/60 hover:text-white h-5 w-5 p-0"
-                      >
-                        <X className="w-3 h-3" />
-                      </Button>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              )}
-              <div className="flex gap-2">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  multiple
-                  onChange={handleFileSelect}
-                  className="hidden"
-                  accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="text-white/60 hover:text-white"
-                  disabled={isSending}
-                >
-                  <Paperclip className="w-4 h-4" />
-                </Button>
-                <Input
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Type a message..."
-                  className="flex-1 bg-white/5 border-white/20 text-white placeholder:text-white/40 text-sm"
-                  disabled={isSending}
-                />
-                <Button
-                  type="submit"
-                  size="sm"
-                  className="bg-orange hover:bg-orange/90"
-                  disabled={(!newMessage.trim() && selectedFiles.length === 0) || isSending}
-                >
-                  {isSending ? (
-                    isUploading ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                  </ScrollArea>
+                )}
+                <div className="flex gap-2">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    onChange={handleFileSelect}
+                    className="hidden"
+                    accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="text-white/60 hover:text-white"
+                    disabled={isSending}
+                  >
+                    <Paperclip className="w-4 h-4" />
+                  </Button>
+                  <Input
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder="Type a message..."
+                    className="flex-1 bg-white/5 border-white/20 text-white placeholder:text-white/40 text-sm"
+                    disabled={isSending}
+                  />
+                  <Button
+                    type="submit"
+                    size="sm"
+                    className="bg-orange hover:bg-orange/90"
+                    disabled={(!newMessage.trim() && selectedFiles.length === 0) || isSending}
+                  >
+                    {isSending ? (
+                      isUploading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      )
                     ) : (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    )
-                  ) : (
-                    <Send className="w-4 h-4" />
-                  )}
-                </Button>
-              </div>
-            </form>
+                      <Send className="w-4 h-4" />
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </div>
           </>
         ) : (
           <div className="flex-1 flex items-center justify-center">
