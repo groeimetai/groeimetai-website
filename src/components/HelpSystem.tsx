@@ -47,6 +47,7 @@ interface HelpTooltip {
   content: string;
   position?: 'top' | 'bottom' | 'left' | 'right';
   showOnFirstVisit?: boolean;
+  pagePattern?: string; // Optional regex pattern to match specific pages
 }
 
 interface Tutorial {
@@ -96,7 +97,8 @@ const HELP_TOOLTIPS: HelpTooltip[] = [
     title: 'Customize Your Dashboard',
     content: 'Click the customize button to add, remove, or rearrange widgets to suit your workflow.',
     position: 'bottom',
-    showOnFirstVisit: true
+    showOnFirstVisit: true,
+    pagePattern: '^/(nl|en)?/?dashboard$' // Only show on main dashboard
   },
   {
     id: 'notification-center',
@@ -110,21 +112,24 @@ const HELP_TOOLTIPS: HelpTooltip[] = [
     targetElement: '[data-help="project-timeline"]',
     title: 'Track Your Progress',
     content: 'See where your project stands and what comes next in your journey with us.',
-    position: 'right'
+    position: 'right',
+    pagePattern: '^/(nl|en)?/?dashboard$' // Only show on main dashboard
   },
   {
     id: 'chat-widget',
     targetElement: '[data-help="chat-widget"]',
     title: 'Direct Communication',
     content: 'Chat directly with our team. Get instant support, ask questions, and receive updates.',
-    position: 'left'
+    position: 'left',
+    pagePattern: '^/(nl|en)?/?dashboard$' // Only show on main dashboard
   },
   {
     id: 'quick-actions',
     targetElement: '[data-help="quick-actions"]',
     title: 'Quick Access',
     content: 'Jump to frequently used features with these quick action buttons.',
-    position: 'top'
+    position: 'top',
+    pagePattern: '^/(nl|en)?/?dashboard$' // Only show on main dashboard
   },
   {
     id: 'welcome-header',
@@ -132,7 +137,8 @@ const HELP_TOOLTIPS: HelpTooltip[] = [
     title: 'Your Personalized Dashboard',
     content: 'This is your central hub for managing AI projects and tracking progress.',
     position: 'bottom',
-    showOnFirstVisit: true
+    showOnFirstVisit: true,
+    pagePattern: '^/(nl|en)?/?dashboard$' // Only show on main dashboard
   }
 ];
 
@@ -253,6 +259,18 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const showTooltip = useCallback((tooltipId: string) => {
+    // Find the tooltip configuration
+    const tooltip = HELP_TOOLTIPS.find(t => t.id === tooltipId);
+    if (!tooltip) return;
+    
+    // Check if tooltip should be shown on current page
+    if (tooltip.pagePattern) {
+      const regex = new RegExp(tooltip.pagePattern);
+      if (!regex.test(pathname)) {
+        return; // Don't show tooltip if page doesn't match pattern
+      }
+    }
+    
     setActiveTooltips(prev => [...prev, tooltipId]);
     
     // Mark as seen
@@ -266,7 +284,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
     setTimeout(() => {
       hideTooltip(tooltipId);
     }, 10000);
-  }, [hasSeenTooltips, hideTooltip]);
+  }, [hasSeenTooltips, hideTooltip, pathname]);
 
   // Load seen tooltips from localStorage
   useEffect(() => {
