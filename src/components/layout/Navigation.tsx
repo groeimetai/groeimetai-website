@@ -140,7 +140,7 @@ export default function Navigation() {
                     </Button>
                   </Link>
                   <StartProjectButton
-                    className="bg-orange hover:bg-orange-600 text-white border-0 shadow-orange hover-lift"
+                    className="bg-orange hover:bg-orange-600 text-white border border-orange shadow-orange hover-lift"
                     preselectedService="genai-consultancy"
                   >
                     {t('getStarted')}
@@ -249,7 +249,7 @@ export default function Navigation() {
                         </Button>
                       </Link>
                       <StartProjectButton
-                        className="w-full bg-orange hover:bg-orange-600 text-white border-0 shadow-lg shadow-orange/20"
+                        className="w-full bg-orange hover:bg-orange-600 text-white border border-orange shadow-lg shadow-orange/20"
                         preselectedService="genai-consultancy"
                       >
                         {t('getStarted')}
