@@ -2,11 +2,11 @@ import nodemailer from 'nodemailer';
 
 // Email configuration with lazy evaluation
 export const emailConfig = {
-  // Use info@groeimetai.io as the "from" address
-  // But authenticate with niels@groeimetai.io (since info@ is an alias)
+  // Use niels@groeimetai.io as the "from" address
+  // (must match the authentication email for Namecheap)
   from: {
     name: 'GroeimetAI',
-    address: 'info@groeimetai.io',
+    address: process.env.SMTP_USER || 'niels@groeimetai.io',
   },
 
   // Admin emails that should receive notifications
@@ -25,12 +25,19 @@ export const emailConfig = {
         user: process.env.SMTP_USER || '', // Full email address for Namecheap
         pass: process.env.SMTP_PASS || '', // Email password or app password
       },
+      // Additional settings
+      requireTLS: true,
+      connectionTimeout: 10000, // 10 seconds
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
       // Namecheap specific settings
       ...(isNamecheap && {
         tls: {
           rejectUnauthorized: false, // May be needed for some Namecheap configs
           minVersion: 'TLSv1.2',
+          ciphers: 'SSLv3',
         },
+        authMethod: 'PLAIN', // Try PLAIN auth method
       }),
     };
   },
@@ -43,30 +50,35 @@ export const createTransporter = () => {
     console.log('Skipping email transporter creation during build');
     return null;
   }
-  return nodemailer.createTransport({
-    host: emailConfig.smtp.host,
-    port: emailConfig.smtp.port,
-    secure: emailConfig.smtp.secure,
-    auth: {
-      user: emailConfig.smtp.auth.user,
-      pass: emailConfig.smtp.auth.pass,
-    },
-  });
+  return nodemailer.createTransport(emailConfig.smtp);
 };
 
 // Verify SMTP connection configuration
 export const verifyEmailConnection = async () => {
+  // Skip verification if no password is set
+  if (!process.env.SMTP_PASS) {
+    console.log('Email service not configured - missing SMTP_PASS');
+    return false;
+  }
+  
   const transporter = createTransporter();
   if (!transporter) {
     console.log('Email transporter not available (build time)');
     return false;
   }
+  
   try {
     await transporter.verify();
     console.log('Email server is ready to send messages');
     return true;
-  } catch (error) {
-    console.error('Email server connection failed:', error);
+  } catch (error: any) {
+    console.error('Email server connection failed:', error.message);
+    console.error('SMTP Config:', {
+      host: emailConfig.smtp.host,
+      port: emailConfig.smtp.port,
+      user: emailConfig.smtp.auth.user,
+      hasPassword: !!emailConfig.smtp.auth.pass,
+    });
     return false;
   }
 };

@@ -11,10 +11,21 @@ export interface EmailOptions {
 
 class EmailService {
   async sendEmail(options: EmailOptions) {
+    // Skip email in development if not configured
+    if (process.env.NODE_ENV === 'development' && !process.env.SMTP_PASS) {
+      console.log('Skipping email in development - SMTP not configured');
+      return { success: true, messageId: 'dev-skip' };
+    }
+    
     // Verify email configuration
     const isConnected = await verifyEmailConnection();
     if (!isConnected) {
       console.error('Email service is not properly configured');
+      // In development, don't throw error
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Email skipped in development due to configuration error');
+        return { success: true, messageId: 'dev-error-skip' };
+      }
       throw new Error('Email service unavailable');
     }
 
