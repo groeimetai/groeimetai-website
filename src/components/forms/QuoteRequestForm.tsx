@@ -314,7 +314,7 @@ export default function QuoteRequestForm({
 
       // Send email notification to admin
       try {
-        await fetch('/api/email/send', {
+        const emailResponse = await fetch('/api/email/send', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -334,9 +334,15 @@ export default function QuoteRequestForm({
             },
           }),
         });
+
+        if (!emailResponse.ok) {
+          const errorData = await emailResponse.json().catch(() => ({}));
+          console.warn('Email notification failed:', errorData);
+          // Log but don't show error to user - email is not critical for submission
+        }
       } catch (emailError) {
-        console.error('Failed to send email notification:', emailError);
-        // Don't fail the submission if email fails
+        console.warn('Failed to send email notification:', emailError);
+        // Don't fail the submission if email fails - it's not critical
       }
 
       // Create a project only if user is logged in AND email is verified
