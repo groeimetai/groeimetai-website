@@ -52,6 +52,22 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
     setHasInteracted(true);
   };
 
+  // Listen for custom event to open chatbot
+  useEffect(() => {
+    const handleOpenChatbot = () => {
+      setIsOpen(true);
+      setShowProactive(false);
+      localStorage.setItem('chatbot_interacted', 'true');
+      setHasInteracted(true);
+    };
+
+    window.addEventListener('openChatbot', handleOpenChatbot);
+
+    return () => {
+      window.removeEventListener('openChatbot', handleOpenChatbot);
+    };
+  }, []);
+
   const handleClose = () => {
     setIsOpen(false);
   };

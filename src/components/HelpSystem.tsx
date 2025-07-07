@@ -3,6 +3,10 @@
 import React, { useState, useEffect, createContext, useContext, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import dynamic from 'next/dynamic';
+
+// Dynamically import ChatbotWidget to avoid SSR issues
+const ChatbotWidget = dynamic(() => import('@/components/chatbot/ChatbotWidget').then(mod => mod.ChatbotWidget), { ssr: false });
 import {
   HelpCircle,
   X,
@@ -19,6 +23,7 @@ import {
   Search,
   Sparkles,
   MessageSquare,
+  Bot,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -373,6 +378,9 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
     <HelpContext.Provider value={{ showTooltip, hideTooltip, startTutorial, openHelpCenter }}>
       {children}
 
+      {/* ChatBot Widget */}
+      <ChatbotWidget />
+
       {/* Help Button */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
@@ -639,13 +647,23 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                 <Card className="bg-white/5 border-white/10">
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
-                      <MessageSquare className="w-8 h-8 text-orange" />
+                      <Bot className="w-8 h-8 text-orange" />
                       <div>
-                        <h4 className="text-white font-medium mb-2">Chat with Support</h4>
+                        <h4 className="text-white font-medium mb-2">AI Assistant (24/7)</h4>
                         <p className="text-white/60 text-sm mb-4">
-                          Get instant help from our support team through the chat widget
+                          Get instant answers from our AI chatbot - available 24/7 to help with all your questions
                         </p>
-                        <Button className="bg-orange hover:bg-orange/90">Open Chat</Button>
+                        <Button 
+                          className="bg-orange hover:bg-orange/90"
+                          onClick={() => {
+                            setIsHelpCenterOpen(false);
+                            // Trigger chatbot opening
+                            const event = new CustomEvent('openChatbot');
+                            window.dispatchEvent(event);
+                          }}
+                        >
+                          Open AI Chat
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -654,7 +672,27 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                 <Card className="bg-white/5 border-white/10">
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
-                      <BookOpen className="w-8 h-8 text-blue-500" />
+                      <MessageSquare className="w-8 h-8 text-blue-500" />
+                      <div>
+                        <h4 className="text-white font-medium mb-2">Chat with Human Support</h4>
+                        <p className="text-white/60 text-sm mb-4">
+                          Need more help? Connect with our support team during business hours (Mon-Fri 9-17 CET)
+                        </p>
+                        <a href="/dashboard/messages" target="_blank" rel="noopener noreferrer" className="inline-flex">
+                          <Button variant="outline">
+                            Open Support Chat
+                            <ExternalLink className="w-4 h-4 ml-2" />
+                          </Button>
+                        </a>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white/5 border-white/10">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <BookOpen className="w-8 h-8 text-green-500" />
                       <div>
                         <h4 className="text-white font-medium mb-2">Browse Documentation</h4>
                         <p className="text-white/60 text-sm mb-4">
