@@ -543,11 +543,11 @@ export default function UsersManagementPage() {
       let generatedCount = 0;
 
       for (const userId of userIds) {
-        const user = users.find(u => u.uid === userId);
+        const user = users.find((u) => u.uid === userId);
         if (user && !user.photoURL) {
           const { generateAvatarDataUri } = await import('@/lib/utils/avatar');
           const avatarDataUri = generateAvatarDataUri(user.displayName || user.email);
-          
+
           batch.update(doc(db, 'users', userId), {
             photoURL: avatarDataUri,
             updatedAt: new Date(),
@@ -860,7 +860,7 @@ export default function UsersManagementPage() {
                   <Button
                     variant="outline"
                     onClick={async () => {
-                      const usersWithoutAvatar = users.filter(u => !u.photoURL).map(u => u.uid);
+                      const usersWithoutAvatar = users.filter((u) => !u.photoURL).map((u) => u.uid);
                       if (usersWithoutAvatar.length > 0) {
                         await generateAvatarsForUsers(usersWithoutAvatar);
                       } else {

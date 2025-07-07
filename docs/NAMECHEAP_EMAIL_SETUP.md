@@ -17,6 +17,7 @@ SMTP_PASS=your-namecheap-email-password
 ```
 
 ### Namecheap Email Settings:
+
 - **Incoming Server**: mail.privateemail.com
 - **Outgoing Server**: mail.privateemail.com
 - **SMTP Port**: 587 (STARTTLS) of 465 (SSL/TLS)
@@ -44,7 +45,7 @@ env:
   - name: SMTP_HOST
     value: mail.privateemail.com
   - name: SMTP_PORT
-    value: "587"
+    value: '587'
   - name: SMTP_USER
     valueFrom:
       secretKeyRef:
@@ -69,15 +70,15 @@ const transporter = nodemailer.createTransport({
   secure: false, // true for 465, false for other ports
   auth: {
     user: 'info@groeimetai.io',
-    pass: process.env.SMTP_PASS
+    pass: process.env.SMTP_PASS,
   },
   tls: {
-    rejectUnauthorized: false // Voor development
-  }
+    rejectUnauthorized: false, // Voor development
+  },
 });
 
 // Test connection
-transporter.verify(function(error, success) {
+transporter.verify(function (error, success) {
   if (error) {
     console.log('❌ Error:', error);
   } else {
@@ -86,18 +87,21 @@ transporter.verify(function(error, success) {
 });
 
 // Send test email
-transporter.sendMail({
-  from: '"GroeimetAI" <info@groeimetai.io>',
-  to: 'test@example.com',
-  subject: 'Test Email',
-  html: '<h1>Test from Namecheap</h1>'
-}, (error, info) => {
-  if (error) {
-    console.log('❌ Send error:', error);
-  } else {
-    console.log('✅ Email sent:', info.messageId);
+transporter.sendMail(
+  {
+    from: '"GroeimetAI" <info@groeimetai.io>',
+    to: 'test@example.com',
+    subject: 'Test Email',
+    html: '<h1>Test from Namecheap</h1>',
+  },
+  (error, info) => {
+    if (error) {
+      console.log('❌ Send error:', error);
+    } else {
+      console.log('✅ Email sent:', info.messageId);
+    }
   }
-});
+);
 ```
 
 ## 5. SPF & DKIM Records
@@ -105,6 +109,7 @@ transporter.sendMail({
 Voor betere deliverability, voeg deze DNS records toe:
 
 ### SPF Record:
+
 ```
 Type: TXT
 Name: @
@@ -112,21 +117,25 @@ Value: v=spf1 include:spf.privateemail.com ~all
 ```
 
 ### DKIM Record:
+
 Namecheap genereert deze voor je in het control panel.
 
 ## 6. Troubleshooting
 
 ### Connection Refused
+
 - Controleer of poort 587 open is
 - Probeer poort 465 met secure: true
 - Check firewall instellingen
 
 ### Authentication Failed
+
 - Gebruik volledig email adres als username
 - Controleer wachtwoord
 - Enable "Less secure app access" indien nodig
 
 ### Emails komen niet aan
+
 - Check SPF/DKIM records
 - Controleer spam folder
 - Test met mail-tester.com

@@ -16,7 +16,7 @@ export const emailConfig = {
   get smtp() {
     const port = parseInt(process.env.SMTP_PORT || '587');
     const isNamecheap = process.env.SMTP_HOST?.includes('privateemail.com');
-    
+
     return {
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: port,

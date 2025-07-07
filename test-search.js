@@ -13,17 +13,17 @@ async function testSearch() {
         query: 'AI consulting',
         locale: 'en',
         limit: 5,
-        includeContext: true
-      })
+        includeContext: true,
+      }),
     });
 
     const data = await response.json();
-    
+
     console.log('Search API Response:');
     console.log('Status:', response.status);
     console.log('Total Results:', data.totalResults);
     console.log('\nTop Results:');
-    
+
     data.results?.forEach((result, index) => {
       console.log(`\n${index + 1}. ${result.title}`);
       console.log(`   URL: ${result.url}`);
@@ -33,7 +33,6 @@ async function testSearch() {
         console.log(`   Context: ${result.context.substring(0, 100)}...`);
       }
     });
-    
   } catch (error) {
     console.error('Error testing search:', error);
   }

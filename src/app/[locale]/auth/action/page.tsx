@@ -2,11 +2,11 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { 
-  applyActionCode, 
-  confirmPasswordReset, 
+import {
+  applyActionCode,
+  confirmPasswordReset,
   verifyPasswordResetCode,
-  checkActionCode 
+  checkActionCode,
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
 import { useTranslations } from 'next-intl';
@@ -24,11 +24,11 @@ function AuthActionContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const t = useTranslations('auth');
-  
+
   const mode = searchParams.get('mode') as ActionMode;
   const oobCode = searchParams.get('oobCode');
   const continueUrl = searchParams.get('continueUrl');
-  
+
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -38,12 +38,12 @@ function AuthActionContent() {
 
   const handleVerifyEmail = async () => {
     if (!oobCode) return;
-    
+
     try {
       await applyActionCode(auth, oobCode);
       setSuccess(true);
       setLoading(false);
-      
+
       // Redirect after 3 seconds
       setTimeout(() => {
         router.push(continueUrl || '/dashboard');
@@ -66,7 +66,7 @@ function AuthActionContent() {
     checkActionCode(auth, oobCode)
       .then((info) => {
         setEmail(info.data.email || '');
-        
+
         // Auto-verify email if that's the mode
         if (mode === 'verifyEmail') {
           handleVerifyEmail();
@@ -83,29 +83,29 @@ function AuthActionContent() {
 
   const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (newPassword !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-    
+
     if (newPassword.length < 6) {
       setError('Password must be at least 6 characters');
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       // Verify the reset code first
       await verifyPasswordResetCode(auth, oobCode!);
-      
+
       // Reset the password
       await confirmPasswordReset(auth, oobCode!, newPassword);
-      
+
       setSuccess(true);
-      
+
       // Redirect to login after 3 seconds
       setTimeout(() => {
         router.push('/login');
@@ -144,13 +144,11 @@ function AuthActionContent() {
                 {mode === 'verifyEmail' ? 'Email Verified!' : 'Password Reset!'}
               </h2>
               <p className="text-white/60 mb-4">
-                {mode === 'verifyEmail' 
-                  ? 'Your email has been successfully verified.' 
+                {mode === 'verifyEmail'
+                  ? 'Your email has been successfully verified.'
                   : 'Your password has been successfully reset.'}
               </p>
-              <p className="text-white/40 text-sm">
-                Redirecting you in a moment...
-              </p>
+              <p className="text-white/40 text-sm">Redirecting you in a moment...</p>
             </div>
           </CardContent>
         </Card>
@@ -170,9 +168,7 @@ function AuthActionContent() {
                 {error || 'This action link is invalid or has expired.'}
               </p>
               <Link href="/login">
-                <Button className="bg-orange hover:bg-orange/90">
-                  Back to Login
-                </Button>
+                <Button className="bg-orange hover:bg-orange/90">Back to Login</Button>
               </Link>
             </div>
           </CardContent>
@@ -187,14 +183,14 @@ function AuthActionContent() {
       <div className="min-h-screen bg-black flex items-center justify-center p-4">
         <Card className="w-full max-w-md bg-white/5 border-white/10">
           <CardHeader>
-            <CardTitle className="text-2xl text-white text-center">
-              Reset Your Password
-            </CardTitle>
+            <CardTitle className="text-2xl text-white text-center">Reset Your Password</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handlePasswordReset} className="space-y-4">
               <div>
-                <Label htmlFor="email" className="text-white/80">Email</Label>
+                <Label htmlFor="email" className="text-white/80">
+                  Email
+                </Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                   <Input
@@ -208,7 +204,9 @@ function AuthActionContent() {
               </div>
 
               <div>
-                <Label htmlFor="newPassword" className="text-white/80">New Password</Label>
+                <Label htmlFor="newPassword" className="text-white/80">
+                  New Password
+                </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                   <Input
@@ -225,7 +223,9 @@ function AuthActionContent() {
               </div>
 
               <div>
-                <Label htmlFor="confirmPassword" className="text-white/80">Confirm Password</Label>
+                <Label htmlFor="confirmPassword" className="text-white/80">
+                  Confirm Password
+                </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                   <Input
@@ -243,9 +243,7 @@ function AuthActionContent() {
 
               {error && (
                 <Alert className="bg-red-500/10 border-red-500/30">
-                  <AlertDescription className="text-red-500">
-                    {error}
-                  </AlertDescription>
+                  <AlertDescription className="text-red-500">{error}</AlertDescription>
                 </Alert>
               )}
 
@@ -281,18 +279,20 @@ function AuthActionContent() {
 
 export default function AuthActionPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-black flex items-center justify-center p-4">
-        <Card className="w-full max-w-md bg-white/5 border-white/10">
-          <CardContent className="p-6">
-            <div className="text-center">
-              <Loader2 className="w-12 h-12 text-orange animate-spin mx-auto mb-4" />
-              <p className="text-white">Loading...</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black flex items-center justify-center p-4">
+          <Card className="w-full max-w-md bg-white/5 border-white/10">
+            <CardContent className="p-6">
+              <div className="text-center">
+                <Loader2 className="w-12 h-12 text-orange animate-spin mx-auto mb-4" />
+                <p className="text-white">Loading...</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      }
+    >
       <AuthActionContent />
     </Suspense>
   );

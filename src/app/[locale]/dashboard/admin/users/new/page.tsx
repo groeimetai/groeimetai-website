@@ -190,7 +190,7 @@ export default function NewUserPage() {
       router.push('/dashboard/admin/users');
     } catch (error: any) {
       console.error('Error creating user:', error);
-      
+
       let errorMessage = 'Failed to create user. Please try again.';
       if (error.code === 'auth/email-already-in-use') {
         errorMessage = 'This email address is already registered';
@@ -487,7 +487,9 @@ export default function NewUserPage() {
                     <Label htmlFor="isActive" className="text-white">
                       Account Active
                     </Label>
-                    <p className="text-sm text-white/60">User can immediately access the platform</p>
+                    <p className="text-sm text-white/60">
+                      User can immediately access the platform
+                    </p>
                   </div>
                   <Switch
                     id="isActive"

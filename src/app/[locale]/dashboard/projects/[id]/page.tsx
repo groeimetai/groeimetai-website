@@ -110,10 +110,11 @@ export default function ProjectDetailPage() {
           };
 
           setProject(projectData);
-          
+
           // Also set up timeline listener for this project
           const timelineRef = doc(db, 'projectTimelines', docSnapshot.id);
-          unsubscribeTimeline = onSnapshot(timelineRef, 
+          unsubscribeTimeline = onSnapshot(
+            timelineRef,
             (timelineDoc) => {
               if (timelineDoc.exists()) {
                 setTimelineData(timelineDoc.data());
@@ -126,7 +127,7 @@ export default function ProjectDetailPage() {
               }
             }
           );
-          
+
           setIsLoading(false);
         }
       },
@@ -141,67 +142,68 @@ export default function ProjectDetailPage() {
     // Also listen to projects collection (mainly for admins)
     // Only attempt if user is admin or if we haven't found the project in quotes
     const shouldListenToProjects = user.role === 'admin' || !project;
-    
+
     if (shouldListenToProjects) {
       unsubscribeProject = onSnapshot(
         projectRef,
         (docSnapshot) => {
-        if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
+          if (docSnapshot.exists()) {
+            const data = docSnapshot.data();
 
-          // Verify user has access
-          if (data.clientId !== user.uid && user.role !== 'admin') {
-            setError('You do not have permission to view this project');
-            setIsLoading(false);
-            return;
-          }
-
-          const projectData: Project = {
-            id: docSnapshot.id,
-            ...data,
-            startDate: data.startDate?.toDate?.() || new Date(),
-            endDate: data.endDate?.toDate?.(),
-            createdAt: data.createdAt?.toDate?.() || new Date(),
-            updatedAt: data.updatedAt?.toDate?.() || new Date(),
-          } as Project;
-
-          setProject(projectData);
-          
-          // Also set up timeline listener for this project
-          const timelineRef = doc(db, 'projectTimelines', docSnapshot.id);
-          unsubscribeTimeline = onSnapshot(timelineRef, 
-            (timelineDoc) => {
-              if (timelineDoc.exists()) {
-                setTimelineData(timelineDoc.data());
-              }
-            },
-            (error) => {
-              // Ignore permission errors for timeline
-              if (error.code !== 'permission-denied') {
-                console.error('Error loading timeline:', error);
-              }
+            // Verify user has access
+            if (data.clientId !== user.uid && user.role !== 'admin') {
+              setError('You do not have permission to view this project');
+              setIsLoading(false);
+              return;
             }
-          );
-          
-          setIsLoading(false);
-        } else {
-          // If not found in projects collection, rely on quotes collection
-          if (!project) {
+
+            const projectData: Project = {
+              id: docSnapshot.id,
+              ...data,
+              startDate: data.startDate?.toDate?.() || new Date(),
+              endDate: data.endDate?.toDate?.(),
+              createdAt: data.createdAt?.toDate?.() || new Date(),
+              updatedAt: data.updatedAt?.toDate?.() || new Date(),
+            } as Project;
+
+            setProject(projectData);
+
+            // Also set up timeline listener for this project
+            const timelineRef = doc(db, 'projectTimelines', docSnapshot.id);
+            unsubscribeTimeline = onSnapshot(
+              timelineRef,
+              (timelineDoc) => {
+                if (timelineDoc.exists()) {
+                  setTimelineData(timelineDoc.data());
+                }
+              },
+              (error) => {
+                // Ignore permission errors for timeline
+                if (error.code !== 'permission-denied') {
+                  console.error('Error loading timeline:', error);
+                }
+              }
+            );
+
+            setIsLoading(false);
+          } else {
+            // If not found in projects collection, rely on quotes collection
+            if (!project) {
+              setIsLoading(false);
+            }
+          }
+        },
+        (error) => {
+          // Only log error if it's not a permission error
+          if (error.code !== 'permission-denied') {
+            console.error('Error listening to project:', error);
+          }
+          // Don't set error state for permission errors if we might get data from quotes collection
+          if (!project && error.code !== 'permission-denied') {
+            setError('Failed to load project details. Please try again.');
             setIsLoading(false);
           }
         }
-      },
-      (error) => {
-        // Only log error if it's not a permission error
-        if (error.code !== 'permission-denied') {
-          console.error('Error listening to project:', error);
-        }
-        // Don't set error state for permission errors if we might get data from quotes collection
-        if (!project && error.code !== 'permission-denied') {
-          setError('Failed to load project details. Please try again.');
-          setIsLoading(false);
-        }
-      }
       );
     }
 
@@ -289,12 +291,14 @@ export default function ProjectDetailPage() {
   const calculateProgress = (project: Project): number => {
     // First, try to use timeline data
     if (timelineData?.stages && timelineData.stages.length > 0) {
-      const completedStages = timelineData.stages.filter((s: any) => s.status === 'completed').length;
+      const completedStages = timelineData.stages.filter(
+        (s: any) => s.status === 'completed'
+      ).length;
       const currentStage = timelineData.stages.find((s: any) => s.status === 'current');
       const currentProgress = currentStage?.progress || 0;
       return Math.round((completedStages * 100 + currentProgress) / timelineData.stages.length);
     }
-    
+
     // Fallback to milestones if no timeline data
     if (!project.milestones || project.milestones.length === 0) return 0;
     const completedMilestones = project.milestones.filter((m) => m.status === 'completed').length;
@@ -304,19 +308,19 @@ export default function ProjectDetailPage() {
   // Safe date formatter that handles Firestore Timestamps and invalid dates
   const formatDate = (date: any, formatString: string = 'MMM dd, yyyy'): string => {
     if (!date) return '';
-    
+
     try {
       // Handle Firestore Timestamp
       if (date.toDate && typeof date.toDate === 'function') {
         return format(date.toDate(), formatString);
       }
-      
+
       // Handle regular date
       const parsedDate = new Date(date);
       if (isNaN(parsedDate.getTime())) {
         return '';
       }
-      
+
       return format(parsedDate, formatString);
     } catch (error) {
       console.error('Date formatting error:', error);
@@ -402,9 +406,7 @@ export default function ProjectDetailPage() {
               <div>
                 <p className="text-white/60 text-sm">Start Date</p>
                 <p className="text-white font-semibold">
-                  {project.startDate
-                    ? formatDate(project.startDate) || 'Not set'
-                    : 'Not set'}
+                  {project.startDate ? formatDate(project.startDate) || 'Not set' : 'Not set'}
                 </p>
               </div>
               <div>
@@ -573,7 +575,7 @@ export default function ProjectDetailPage() {
           <TabsContent value="timeline">
             <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6">
               <h3 className="text-lg font-semibold text-white mb-6">Project Timeline</h3>
-              
+
               {/* Overall Timeline Progress */}
               {timelineData?.stages && timelineData.stages.length > 0 && (
                 <div className="mb-8">
@@ -586,14 +588,19 @@ export default function ProjectDetailPage() {
                   <Progress value={calculateProgress(project)} className="h-2" />
                 </div>
               )}
-              
+
               {timelineData?.stages && timelineData.stages.length > 0 ? (
                 <div className="space-y-6">
                   {timelineData.stages.map((stage: any, index: number) => {
-                    const StageIcon = stage.icon === 'briefcase' ? BriefcaseIcon : 
-                                     stage.icon === 'target' ? TargetIcon :
-                                     stage.icon === 'rocket' ? Rocket : Flag;
-                    
+                    const StageIcon =
+                      stage.icon === 'briefcase'
+                        ? BriefcaseIcon
+                        : stage.icon === 'target'
+                          ? TargetIcon
+                          : stage.icon === 'rocket'
+                            ? Rocket
+                            : Flag;
+
                     return (
                       <div key={stage.id || index} className="relative">
                         {/* Connection Line */}
@@ -604,7 +611,7 @@ export default function ProjectDetailPage() {
                             }`}
                           />
                         )}
-                        
+
                         <div className="flex items-start space-x-4">
                           {/* Stage Icon */}
                           <div
@@ -624,7 +631,7 @@ export default function ProjectDetailPage() {
                               <StageIcon className="w-5 h-5 text-white/60" />
                             )}
                           </div>
-                          
+
                           {/* Stage Details */}
                           <div className="flex-1">
                             <div className="flex items-center justify-between">
@@ -639,14 +646,15 @@ export default function ProjectDetailPage() {
                               >
                                 {stage.name}
                               </h4>
-                              {stage.estimatedCompletion && formatDate(stage.estimatedCompletion) && (
-                                <span className="text-sm text-white/60">
-                                  Est. {formatDate(stage.estimatedCompletion)}
-                                </span>
-                              )}
+                              {stage.estimatedCompletion &&
+                                formatDate(stage.estimatedCompletion) && (
+                                  <span className="text-sm text-white/60">
+                                    Est. {formatDate(stage.estimatedCompletion)}
+                                  </span>
+                                )}
                             </div>
                             <p className="text-sm text-white/60 mt-1">{stage.description}</p>
-                            
+
                             {/* Stage Progress Bar (for current stage) */}
                             {stage.status === 'current' && stage.progress !== undefined && (
                               <div className="mt-3">
@@ -657,19 +665,21 @@ export default function ProjectDetailPage() {
                                 <Progress value={stage.progress} className="h-1" />
                               </div>
                             )}
-                            
+
                             {/* Completion info */}
-                            {stage.status === 'completed' && stage.completedAt && formatDate(stage.completedAt) && (
-                              <p className="text-xs text-green-500 mt-2">
-                                Completed on {formatDate(stage.completedAt)}
-                              </p>
-                            )}
+                            {stage.status === 'completed' &&
+                              stage.completedAt &&
+                              formatDate(stage.completedAt) && (
+                                <p className="text-xs text-green-500 mt-2">
+                                  Completed on {formatDate(stage.completedAt)}
+                                </p>
+                              )}
                           </div>
                         </div>
                       </div>
                     );
                   })}
-                  
+
                   {/* Next Milestone */}
                   {timelineData.milestone && (
                     <div className="mt-6 p-4 bg-orange/10 rounded-lg border border-orange/20">
@@ -687,7 +697,9 @@ export default function ProjectDetailPage() {
                 <div className="text-center py-8">
                   <Target className="w-12 h-12 text-white/20 mx-auto mb-3" />
                   <p className="text-white/60">No timeline data available yet</p>
-                  <p className="text-white/40 text-sm mt-1">Timeline will be updated as the project progresses</p>
+                  <p className="text-white/40 text-sm mt-1">
+                    Timeline will be updated as the project progresses
+                  </p>
                 </div>
               )}
             </Card>

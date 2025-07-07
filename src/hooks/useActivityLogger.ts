@@ -49,10 +49,7 @@ export function useActivityLogger() {
 
   // Log authentication activity
   const logAuth = useCallback(
-    async (
-      action: Extract<ActivityType, `auth.${string}`>,
-      metadata?: Record<string, any>
-    ) => {
+    async (action: Extract<ActivityType, `auth.${string}`>, metadata?: Record<string, any>) => {
       if (!user) return;
 
       try {
@@ -97,11 +94,7 @@ export function useActivityLogger() {
 
   // Log error activity
   const logError = useCallback(
-    async (
-      action: ActivityType,
-      error: Error,
-      context?: Record<string, any>
-    ) => {
+    async (action: ActivityType, error: Error, context?: Record<string, any>) => {
       if (!user) return;
 
       try {

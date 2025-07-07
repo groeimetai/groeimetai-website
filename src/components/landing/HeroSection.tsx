@@ -14,7 +14,6 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black dark:bg-black">
-
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/95 to-black" />
 

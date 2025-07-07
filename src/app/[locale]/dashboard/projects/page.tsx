@@ -191,7 +191,7 @@ export default function ProjectsPage() {
 
     projects.forEach((project) => {
       const timelineRef = doc(db, 'projectTimelines', project.id);
-      
+
       const unsubscribe = onSnapshot(
         timelineRef,
         (docSnapshot) => {
@@ -209,7 +209,7 @@ export default function ProjectsPage() {
           }
         }
       );
-      
+
       unsubscribes.push(unsubscribe);
     });
 
@@ -278,11 +278,11 @@ export default function ProjectsPage() {
     if (!timeline?.stages || timeline.stages.length === 0) {
       return 0;
     }
-    
+
     const completedStages = timeline.stages.filter((s: any) => s.status === 'completed').length;
     const currentStage = timeline.stages.find((s: any) => s.status === 'current');
     const currentProgress = currentStage?.progress || 0;
-    
+
     return Math.round((completedStages * 100 + currentProgress) / timeline.stages.length);
   };
 
@@ -331,7 +331,7 @@ export default function ProjectsPage() {
     if (timelineProgress > 0) {
       return timelineProgress;
     }
-    
+
     // Fallback to milestones if no timeline data
     if (!project.milestones || project.milestones.length === 0) return 0;
     const completedMilestones = project.milestones.filter((m) => m.status === 'completed').length;

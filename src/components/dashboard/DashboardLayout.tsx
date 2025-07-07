@@ -178,18 +178,24 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar>
-                      {user?.photoURL && <AvatarImage src={user.photoURL} alt={user?.displayName || 'User'} />}
-                      <AvatarFallback>{user?.displayName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
+                      {user?.photoURL && (
+                        <AvatarImage src={user.photoURL} alt={user?.displayName || 'User'} />
+                      )}
+                      <AvatarFallback>
+                        {user?.displayName?.charAt(0).toUpperCase() ||
+                          user?.email?.charAt(0).toUpperCase() ||
+                          'U'}
+                      </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end">
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user?.displayName || 'User'}</p>
-                      <p className="text-xs leading-none text-muted-foreground">
-                        {user?.email}
+                      <p className="text-sm font-medium leading-none">
+                        {user?.displayName || 'User'}
                       </p>
+                      <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
@@ -202,7 +208,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     <span>Settings</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem 
+                  <DropdownMenuItem
                     className={`text-destructive ${isLoggingOut ? 'opacity-50 cursor-not-allowed' : ''}`}
                     onClick={isLoggingOut ? undefined : handleLogout}
                   >

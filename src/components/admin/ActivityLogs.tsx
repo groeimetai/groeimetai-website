@@ -58,7 +58,16 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/use-toast';
 import { activityLogger, ActivityLog, ActivityType, ResourceType } from '@/services/activityLogger';
-import { DocumentSnapshot, collection, query, where, orderBy, limit, onSnapshot, Timestamp } from 'firebase/firestore';
+import {
+  DocumentSnapshot,
+  collection,
+  query,
+  where,
+  orderBy,
+  limit,
+  onSnapshot,
+  Timestamp,
+} from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
 interface ActivityFilters {
@@ -166,7 +175,7 @@ export function ActivityLogs() {
 
     // Set up real-time listener for new activities
     const constraints = [];
-    
+
     // Add filter constraints
     if (filters.userId) {
       constraints.push(where('userId', '==', filters.userId));
@@ -207,7 +216,7 @@ export function ActivityLogs() {
               id: change.doc.id,
               ...data,
             } as ActivityLog;
-            
+
             // Only add if it's a new activity with timestamp
             if (data.timestamp) {
               newLogs.push(log);
@@ -217,10 +226,10 @@ export function ActivityLogs() {
 
         // Update logs with new activities
         if (newLogs.length > 0) {
-          setLogs(prevLogs => {
+          setLogs((prevLogs) => {
             // Filter out any duplicates and add new logs at the beginning
-            const newLogIds = new Set(newLogs.map(log => log.id));
-            const filteredPrevLogs = prevLogs.filter(log => !newLogIds.has(log.id));
+            const newLogIds = new Set(newLogs.map((log) => log.id));
+            const filteredPrevLogs = prevLogs.filter((log) => !newLogIds.has(log.id));
             const updatedLogs = [...newLogs, ...filteredPrevLogs];
             return updatedLogs.slice(0, 50);
           });

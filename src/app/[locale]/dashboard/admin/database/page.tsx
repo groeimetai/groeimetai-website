@@ -96,11 +96,11 @@ interface QueryResult {
 }
 
 // Component to browse collection documents
-function BrowseCollectionContent({ 
-  collectionName, 
-  onClose 
-}: { 
-  collectionName: string; 
+function BrowseCollectionContent({
+  collectionName,
+  onClose,
+}: {
+  collectionName: string;
   onClose: () => void;
 }) {
   const [documents, setDocuments] = useState<any[]>([]);
@@ -112,12 +112,12 @@ function BrowseCollectionContent({
         const collectionRef = collection(db, collectionName);
         const q = query(collectionRef, limit(5));
         const snapshot = await getDocs(q);
-        
-        const docs = snapshot.docs.map(doc => ({
+
+        const docs = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        
+
         setDocuments(docs);
       } catch (error) {
         console.error('Error fetching documents:', error);
@@ -140,9 +140,7 @@ function BrowseCollectionContent({
   return (
     <>
       <div className="bg-black/50 p-4 rounded-lg overflow-x-auto max-h-96">
-        <pre className="text-white/80 text-sm">
-          {JSON.stringify(documents, null, 2)}
-        </pre>
+        <pre className="text-white/80 text-sm">{JSON.stringify(documents, null, 2)}</pre>
       </div>
       <div className="flex justify-end gap-3 mt-6">
         <Button variant="outline" onClick={onClose}>
@@ -151,7 +149,9 @@ function BrowseCollectionContent({
         <Button
           onClick={() => {
             // Export collection
-            const blob = new Blob([JSON.stringify(documents, null, 2)], { type: 'application/json' });
+            const blob = new Blob([JSON.stringify(documents, null, 2)], {
+              type: 'application/json',
+            });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -229,17 +229,17 @@ export default function AdminDatabasePage() {
           const collectionRef = collection(db, collectionName);
           const countQuery = query(collectionRef, limit(1000)); // Sample for count
           const snapshot = await getDocs(countQuery);
-          
+
           // Get a sample document to estimate size
           let estimatedSize = 0;
           let lastModified = new Date();
-          
+
           if (snapshot.docs.length > 0) {
             const sampleDoc = snapshot.docs[0].data();
             // Estimate size based on JSON string length * document count
             const sampleSize = JSON.stringify(sampleDoc).length;
             estimatedSize = sampleSize * snapshot.size;
-            
+
             // Get last modified from newest document
             if (sampleDoc.updatedAt?.toDate) {
               lastModified = sampleDoc.updatedAt.toDate();
@@ -269,10 +269,12 @@ export default function AdminDatabasePage() {
       }
 
       const performanceEnd = Date.now();
-      const avgLatency = Math.round((performanceEnd - performanceStart) / MONITORED_COLLECTIONS.length);
+      const avgLatency = Math.round(
+        (performanceEnd - performanceStart) / MONITORED_COLLECTIONS.length
+      );
 
       setCollections(collectionStats);
-      
+
       // Update performance metrics with real data
       setPerformanceMetrics({
         readLatency: avgLatency,
@@ -283,10 +285,11 @@ export default function AdminDatabasePage() {
 
       // Fetch specific stats
       try {
-        const usersCount = collectionStats.find(c => c.name === 'users')?.documentCount || 0;
-        const projectsCount = collectionStats.find(c => c.name === 'projects')?.documentCount || 0;
-        const quotesCount = collectionStats.find(c => c.name === 'quotes')?.documentCount || 0;
-        
+        const usersCount = collectionStats.find((c) => c.name === 'users')?.documentCount || 0;
+        const projectsCount =
+          collectionStats.find((c) => c.name === 'projects')?.documentCount || 0;
+        const quotesCount = collectionStats.find((c) => c.name === 'quotes')?.documentCount || 0;
+
         // Get today's activity count
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -296,7 +299,7 @@ export default function AdminDatabasePage() {
           limit(100)
         );
         const activitySnapshot = await getDocs(activityQuery);
-        
+
         setRealDatabaseStats({
           totalUsers: usersCount,
           totalProjects: projectsCount,
@@ -366,7 +369,7 @@ export default function AdminDatabasePage() {
 
   const runQuery = async () => {
     if (!selectedCollection) return;
-    
+
     setIsLoading(true);
     const startTime = Date.now();
 
@@ -374,7 +377,7 @@ export default function AdminDatabasePage() {
       // Create a basic query - in production, you'd parse the queryText
       const collectionRef = collection(db, selectedCollection);
       let q = query(collectionRef, limit(10)); // Default limit
-      
+
       // Simple query parsing (very basic implementation)
       if (queryText.includes('limit(')) {
         const limitMatch = queryText.match(/limit\((\d+)\)/);
@@ -383,18 +386,18 @@ export default function AdminDatabasePage() {
           q = query(collectionRef, limit(limitValue));
         }
       }
-      
+
       // Execute query
       const snapshot = await getDocs(q);
-      const documents = snapshot.docs.map(doc => ({
+      const documents = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
         // Convert Firestore timestamps to dates for display
         ...(doc.data().createdAt && {
-          createdAt: doc.data().createdAt.toDate?.() || doc.data().createdAt
+          createdAt: doc.data().createdAt.toDate?.() || doc.data().createdAt,
         }),
         ...(doc.data().updatedAt && {
-          updatedAt: doc.data().updatedAt.toDate?.() || doc.data().updatedAt
+          updatedAt: doc.data().updatedAt.toDate?.() || doc.data().updatedAt,
         }),
       }));
 
@@ -427,7 +430,7 @@ export default function AdminDatabasePage() {
     // Simulate backup completion
     setTimeout(() => {
       setBackups((prev) => {
-        const updated = prev.map((b) => 
+        const updated = prev.map((b) =>
           b.id === newBackup.id ? { ...b, status: 'completed' as const } : b
         );
         // Save to localStorage
@@ -445,26 +448,26 @@ export default function AdminDatabasePage() {
 
   const optimizeDatabase = async () => {
     setIsLoading(true);
-    
+
     try {
       // In a real app, this would trigger actual optimization
       // For now, we'll re-fetch stats which can help identify issues
       const performanceStart = Date.now();
-      
+
       // Test read performance
       const testQuery = query(collection(db, 'users'), limit(10));
       await getDocs(testQuery);
-      
+
       const readLatency = Date.now() - performanceStart;
-      
+
       // Update metrics with "optimized" values
-      setPerformanceMetrics(prev => ({
+      setPerformanceMetrics((prev) => ({
         readLatency: Math.max(5, Math.round(readLatency * 0.8)), // 20% improvement
         writeLatency: Math.max(8, Math.round(prev.writeLatency * 0.85)),
         cacheHitRate: Math.min(95, prev.cacheHitRate + 5),
         activeConnections: Math.max(10, prev.activeConnections - 5),
       }));
-      
+
       // Show success message
       alert('Database optimization completed successfully!');
     } catch (error) {
@@ -517,7 +520,9 @@ export default function AdminDatabasePage() {
               </div>
               <p className="text-2xl font-bold text-white">{totalDocuments.toLocaleString()}</p>
               <p className="text-sm text-green-500 mt-2">
-                {realDatabaseStats.todayActivity > 0 ? `${realDatabaseStats.todayActivity} today` : 'No activity today'}
+                {realDatabaseStats.todayActivity > 0
+                  ? `${realDatabaseStats.todayActivity} today`
+                  : 'No activity today'}
               </p>
             </CardContent>
           </Card>
@@ -540,10 +545,7 @@ export default function AdminDatabasePage() {
                 <Clock className="w-5 h-5 text-white/40" />
               </div>
               <p className="text-xl font-bold text-white">
-                {backups.length > 0 
-                  ? formatDistanceToNow(backups[0].date) + ' ago'
-                  : 'Never'
-                }
+                {backups.length > 0 ? formatDistanceToNow(backups[0].date) + ' ago' : 'Never'}
               </p>
               <Button
                 size="sm"

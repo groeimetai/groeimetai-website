@@ -6,7 +6,19 @@ import { Link } from '@/i18n/routing';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { StartProjectButton } from '@/components/ui/StartProjectButton';
-import { Menu, X, LogOut, LayoutDashboard, Briefcase, Users, Phone, FileText, Globe, Bell, User } from 'lucide-react';
+import {
+  Menu,
+  X,
+  LogOut,
+  LayoutDashboard,
+  Briefcase,
+  Users,
+  Phone,
+  FileText,
+  Globe,
+  Bell,
+  User,
+} from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
@@ -180,7 +192,9 @@ export default function Navigation() {
               <div className="flex flex-col space-y-2">
                 {/* Navigation Section */}
                 <div className="mb-4">
-                  <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">Navigation</p>
+                  <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">
+                    Navigation
+                  </p>
                   {navItems.map((item) => (
                     <Link
                       key={item.href}
@@ -195,14 +209,18 @@ export default function Navigation() {
                 </div>
                 {/* Language Section */}
                 <div className="border-t border-white/10 pt-4 mb-4">
-                  <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">Language</p>
+                  <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">
+                    Language
+                  </p>
                   <div className="px-4">
                     <LanguageSwitcher />
                   </div>
                 </div>
                 {/* User Section */}
                 <div className="border-t border-white/10 pt-4">
-                  <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">{user ? 'Account' : 'Get Started'}</p>
+                  <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">
+                    {user ? 'Account' : 'Get Started'}
+                  </p>
                   {user ? (
                     <>
                       <div className="px-4 mb-3">

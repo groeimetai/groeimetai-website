@@ -34,7 +34,7 @@ export default function LoginForm() {
 
     try {
       await login(email, password);
-      
+
       // Redirect to dashboard on successful login
       if (mounted) {
         router.push('/dashboard');

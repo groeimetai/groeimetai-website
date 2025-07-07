@@ -1,6 +1,6 @@
 /**
  * Test script voor Namecheap email configuratie
- * 
+ *
  * Gebruik:
  * 1. Voeg je credentials toe aan .env
  * 2. Run: node scripts/test-namecheap-email.js
@@ -22,11 +22,11 @@ console.log(colors.blue + '\n🔧 Testing Namecheap Email Configuration...\n' + 
 
 // Check environment variables
 const requiredEnvVars = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
-const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+const missingVars = requiredEnvVars.filter((varName) => !process.env[varName]);
 
 if (missingVars.length > 0) {
   console.error(colors.red + '❌ Missing environment variables:' + colors.reset);
-  missingVars.forEach(varName => {
+  missingVars.forEach((varName) => {
     console.error(`   - ${varName}`);
   });
   console.log('\nAdd these to your .env file:');
@@ -65,34 +65,34 @@ transporter.verify(async (error, success) => {
   if (error) {
     console.error(colors.red + '\n❌ Connection failed!' + colors.reset);
     console.error('Error:', error.message);
-    
+
     if (error.message.includes('auth')) {
       console.log('\n💡 Tips:');
       console.log('- Gebruik je volledige email adres als username');
       console.log('- Controleer je wachtwoord');
       console.log('- Probeer port 465 met secure: true');
     }
-    
+
     process.exit(1);
   } else {
     console.log(colors.green + '✅ Connection successful!' + colors.reset);
     console.log('📮 Server is ready to send emails\n');
-    
+
     // Ask to send test email
     const readline = require('readline').createInterface({
       input: process.stdin,
       output: process.stdout,
     });
-    
+
     readline.question('📧 Send test email to (email address): ', async (testEmail) => {
       if (!testEmail) {
         console.log('Skipping test email.');
         readline.close();
         process.exit(0);
       }
-      
+
       console.log(`\n📤 Sending test email to ${testEmail}...`);
-      
+
       try {
         const info = await transporter.sendMail({
           from: `"GroeimetAI" <${process.env.SMTP_USER}>`,
@@ -128,7 +128,7 @@ transporter.verify(async (error, success) => {
           `,
           text: `Email Configuration Successful!\n\nYour Namecheap email configuration is working correctly.\n\nConfiguration Details:\n- SMTP Host: ${process.env.SMTP_HOST}\n- SMTP Port: ${process.env.SMTP_PORT}\n- From: ${process.env.SMTP_USER}\n\n© ${new Date().getFullYear()} GroeimetAI`,
         });
-        
+
         console.log(colors.green + '\n✅ Test email sent successfully!' + colors.reset);
         console.log(`Message ID: ${info.messageId}`);
         console.log(`\n🎉 Email configuration is working perfectly!\n`);
@@ -136,7 +136,7 @@ transporter.verify(async (error, success) => {
         console.error(colors.red + '\n❌ Failed to send test email!' + colors.reset);
         console.error('Error:', error.message);
       }
-      
+
       readline.close();
       process.exit(0);
     });

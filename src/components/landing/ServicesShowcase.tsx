@@ -66,34 +66,32 @@ export default function ServicesShowcase() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
               <div className="relative h-full p-8 rounded-2xl border border-white/10 bg-black-50 transition-all duration-300 overflow-hidden">
-                  {/* Gradient overlay */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-5`}
-                  />
+                {/* Gradient overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-5`} />
 
-                    {/* Icon */}
-                    <div
-                      className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${service.color} text-white mb-6`}
-                    >
-                      <service.icon className="w-6 h-6" />
-                    </div>
-
-                    {/* Content */}
-                  <h3 className="text-xl font-semibold mb-3 text-white">
-                      {t(`items.${service.key}.title`)}
-                    </h3>
-                    <p className="text-white/60 mb-6">{t(`items.${service.key}.description`)}</p>
-
-                    {/* Features */}
-                    <ul className="space-y-2">
-                      {(t.raw(`items.${service.key}.features`) as string[]).map((feature) => (
-                        <li key={feature} className="flex items-center text-sm text-white/50">
-                          <div className="w-1.5 h-1.5 rounded-full bg-orange mr-2" />
-                          {feature}
-                        </li>
-                      ))}
-                  </ul>
+                {/* Icon */}
+                <div
+                  className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${service.color} text-white mb-6`}
+                >
+                  <service.icon className="w-6 h-6" />
                 </div>
+
+                {/* Content */}
+                <h3 className="text-xl font-semibold mb-3 text-white">
+                  {t(`items.${service.key}.title`)}
+                </h3>
+                <p className="text-white/60 mb-6">{t(`items.${service.key}.description`)}</p>
+
+                {/* Features */}
+                <ul className="space-y-2">
+                  {(t.raw(`items.${service.key}.features`) as string[]).map((feature) => (
+                    <li key={feature} className="flex items-center text-sm text-white/50">
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange mr-2" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </motion.div>
           ))}
         </div>

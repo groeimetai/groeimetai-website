@@ -6,7 +6,7 @@ export function generateAvatarDataUri(displayName: string): string {
   // Get initials (max 2 characters)
   const initials = displayName
     .split(' ')
-    .map(word => word.charAt(0))
+    .map((word) => word.charAt(0))
     .join('')
     .substring(0, 2)
     .toUpperCase();
@@ -15,7 +15,7 @@ export function generateAvatarDataUri(displayName: string): string {
   let hash = 0;
   for (let i = 0; i < displayName.length; i++) {
     const char = displayName.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
+    hash = (hash << 5) - hash + char;
     hash = hash & hash; // Convert to 32-bit integer
   }
 
@@ -69,7 +69,11 @@ export function generateAvatarDataUri(displayName: string): string {
 /**
  * Generate avatar URL or fallback to generated avatar
  */
-export function getAvatarUrl(user: { displayName?: string; photoURL?: string | null; email: string }): string {
+export function getAvatarUrl(user: {
+  displayName?: string;
+  photoURL?: string | null;
+  email: string;
+}): string {
   if (user.photoURL) {
     return user.photoURL;
   }
@@ -84,7 +88,7 @@ export function getAvatarUrl(user: { displayName?: string; photoURL?: string | n
 export function getInitials(name: string): string {
   return name
     .split(' ')
-    .map(word => word.charAt(0))
+    .map((word) => word.charAt(0))
     .join('')
     .substring(0, 2)
     .toUpperCase();

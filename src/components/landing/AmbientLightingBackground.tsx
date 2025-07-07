@@ -70,7 +70,7 @@ export default function AmbientLightingBackground() {
 
     const createLights = () => {
       lightsRef.current = [];
-      
+
       // Create subtle ambient lights
       const lightColors = [
         'rgba(251, 146, 60, 0.02)', // orange
@@ -80,11 +80,11 @@ export default function AmbientLightingBackground() {
 
       // Add 3-5 ambient lights
       const lightCount = 3 + Math.floor(Math.random() * 3);
-      
+
       for (let i = 0; i < lightCount; i++) {
         const x = Math.random() * window.innerWidth;
         const y = Math.random() * window.innerHeight;
-        
+
         lightsRef.current.push({
           x,
           y,
@@ -158,12 +158,7 @@ export default function AmbientLightingBackground() {
         mouseGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
         ctx.fillStyle = mouseGradient;
-        ctx.fillRect(
-          mouseRef.current.x - 150,
-          mouseRef.current.y - 150,
-          300,
-          300
-        );
+        ctx.fillRect(mouseRef.current.x - 150, mouseRef.current.y - 150, 300, 300);
       }
     };
 

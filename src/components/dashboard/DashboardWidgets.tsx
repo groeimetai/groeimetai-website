@@ -1389,7 +1389,7 @@ export default function DashboardWidgets() {
   );
   const [widgetData, setWidgetData] = useState<WidgetData>({
     timelineProgress: 0,
-    timelineStages: []
+    timelineStages: [],
   });
   const [isDragging, setIsDragging] = useState<string | null>(null);
   const [draggedWidget, setDraggedWidget] = useState<Widget | null>(null);
@@ -1638,11 +1638,11 @@ export default function DashboardWidgets() {
 
           // First check for actual projects
           if (projectsSnapshot.docs.length > 0) {
-            const activeProjects = projectsSnapshot.docs.filter(doc => {
+            const activeProjects = projectsSnapshot.docs.filter((doc) => {
               const project = doc.data();
               return project.status === 'active' || project.status === 'in_progress';
             });
-            
+
             if (activeProjects.length > 0) {
               activeProject = activeProjects[0].data();
               activeProjectId = activeProjects[0].id;
@@ -1655,13 +1655,15 @@ export default function DashboardWidgets() {
 
           // If no projects, check for approved quotes
           if (!activeProject && quotesSnapshot.docs.length > 0) {
-            const approvedQuotes = quotesSnapshot.docs.filter(doc => doc.data().status === 'approved');
+            const approvedQuotes = quotesSnapshot.docs.filter(
+              (doc) => doc.data().status === 'approved'
+            );
             if (approvedQuotes.length > 0) {
               const quote = approvedQuotes[0].data();
               activeProject = {
                 name: quote.projectName || 'My AI Project',
                 status: 'active',
-                estimatedCompletion: quote.estimatedCompletion
+                estimatedCompletion: quote.estimatedCompletion,
               };
               activeProjectId = approvedQuotes[0].id;
             }
@@ -1715,7 +1717,7 @@ export default function DashboardWidgets() {
                   projectName: activeProject.name || 'My AI Project',
                   timelineStages: [],
                   timelineProgress: 0,
-                  projectId: activeProjectId
+                  projectId: activeProjectId,
                 }));
               }
             });
@@ -1871,12 +1873,15 @@ export default function DashboardWidgets() {
           });
         }
 
-        setWidgetData(prevData => ({
+        setWidgetData((prevData) => ({
           ...prevData,
           ...data,
           // Preserve timeline data if it was already set by real-time listener
           timelineStages: prevData.timelineStages || data.timelineStages,
-          timelineProgress: prevData.timelineProgress !== undefined ? prevData.timelineProgress : data.timelineProgress
+          timelineProgress:
+            prevData.timelineProgress !== undefined
+              ? prevData.timelineProgress
+              : data.timelineProgress,
         }));
       } catch (error) {
         // Only log actual errors, not permission issues that are already handled
@@ -2336,7 +2341,10 @@ export default function DashboardWidgets() {
           const currentStage = stages.find((stage: any) => stage.status === 'current');
           const completedCount = stages.filter((stage: any) => stage.status === 'completed').length;
           const currentStageProgress = currentStage?.progress || 0;
-          const totalProgress = widgetData.timelineProgress !== undefined ? widgetData.timelineProgress : (completedCount * 100 + currentStageProgress) / stages.length;
+          const totalProgress =
+            widgetData.timelineProgress !== undefined
+              ? widgetData.timelineProgress
+              : (completedCount * 100 + currentStageProgress) / stages.length;
 
           // Map icon strings to components
           const stageIcons = {

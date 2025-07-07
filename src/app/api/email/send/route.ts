@@ -9,10 +9,10 @@ export async function POST(request: NextRequest) {
       // Return success even if email is not configured
       // This prevents breaking the user experience
       return NextResponse.json(
-        { 
-          success: true, 
+        {
+          success: true,
           message: 'Request processed (email notifications disabled)',
-          warning: 'Email service not configured'
+          warning: 'Email service not configured',
         },
         { status: 200 }
       );
@@ -52,13 +52,15 @@ export async function POST(request: NextRequest) {
     console.error('Email API error:', error);
 
     // Check if it's a configuration error
-    if (error.message?.includes('Email service unavailable') || 
-        error.message?.includes('Email transporter not available')) {
+    if (
+      error.message?.includes('Email service unavailable') ||
+      error.message?.includes('Email transporter not available')
+    ) {
       return NextResponse.json(
-        { 
-          success: true, 
+        {
+          success: true,
           message: 'Request processed (email service temporarily unavailable)',
-          warning: 'Email notifications are currently disabled'
+          warning: 'Email notifications are currently disabled',
         },
         { status: 200 }
       );
@@ -70,7 +72,8 @@ export async function POST(request: NextRequest) {
       {
         success: true,
         message: 'Request processed (email notification failed)',
-        warning: process.env.NODE_ENV === 'development' ? error.message : 'Email notification failed',
+        warning:
+          process.env.NODE_ENV === 'development' ? error.message : 'Email notification failed',
       },
       { status: 200 }
     );

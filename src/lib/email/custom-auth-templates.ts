@@ -27,7 +27,8 @@ const translations = {
       subject: 'Reset je wachtwoord - GroeimetAI',
       title: 'Wachtwoord resetten',
       greeting: 'Hallo,',
-      message: 'Je hebt een verzoek ingediend om je wachtwoord te resetten voor je GroeimetAI account.',
+      message:
+        'Je hebt een verzoek ingediend om je wachtwoord te resetten voor je GroeimetAI account.',
       instruction: 'Klik op de onderstaande knop om een nieuw wachtwoord in te stellen:',
       button: 'Reset Wachtwoord',
       expires: 'Deze link is 1 uur geldig.',
@@ -39,7 +40,8 @@ const translations = {
       subject: 'Verifieer je email - GroeimetAI',
       title: 'Email Verificatie',
       greeting: 'Welkom bij GroeimetAI!',
-      message: 'Bedankt voor je registratie. Verifieer je email adres om toegang te krijgen tot alle functionaliteiten.',
+      message:
+        'Bedankt voor je registratie. Verifieer je email adres om toegang te krijgen tot alle functionaliteiten.',
       instruction: 'Klik op de onderstaande knop om je email te verifiëren:',
       button: 'Verifieer Email',
       expires: 'Deze link is 24 uur geldig.',
@@ -51,7 +53,8 @@ const translations = {
       subject: 'Email adres herstellen - GroeimetAI',
       title: 'Email Herstel',
       greeting: 'Hallo,',
-      message: 'We hebben een verzoek ontvangen om je email adres te wijzigen voor je GroeimetAI account.',
+      message:
+        'We hebben een verzoek ontvangen om je email adres te wijzigen voor je GroeimetAI account.',
       instruction: 'Klik op de onderstaande knop om deze wijziging te bevestigen:',
       button: 'Bevestig Email Wijziging',
       warning: 'Let op: dit zal je login email adres permanent wijzigen.',
@@ -70,7 +73,7 @@ const translations = {
       instruction: 'Click the button below to set a new password:',
       button: 'Reset Password',
       expires: 'This link expires in 1 hour.',
-      ignore: 'If you didn\'t request this, you can safely ignore this email.',
+      ignore: "If you didn't request this, you can safely ignore this email.",
       needHelp: 'Need help?',
       contact: 'Contact our support team',
     },
@@ -82,7 +85,7 @@ const translations = {
       instruction: 'Click the button below to verify your email:',
       button: 'Verify Email',
       expires: 'This link expires in 24 hours.',
-      ignore: 'If you didn\'t create an account, you can safely ignore this email.',
+      ignore: "If you didn't create an account, you can safely ignore this email.",
       needHelp: 'Need help?',
       contact: 'Contact our support team',
     },
@@ -95,7 +98,7 @@ const translations = {
       button: 'Confirm Email Change',
       warning: 'Warning: this will permanently change your login email address.',
       expires: 'This link expires in 1 hour.',
-      ignore: 'If you didn\'t request this, please contact us immediately.',
+      ignore: "If you didn't request this, please contact us immediately.",
       needHelp: 'Need help?',
       contact: 'Contact our support team',
     },
@@ -170,8 +173,10 @@ const baseEmailTemplate = (content: string): string => `
 
 export const customEmailTemplates = {
   passwordReset: (data: PasswordResetData): EmailTemplate => {
-    const t = translations[data.lang as keyof typeof translations]?.passwordReset || translations.nl.passwordReset;
-    
+    const t =
+      translations[data.lang as keyof typeof translations]?.passwordReset ||
+      translations.nl.passwordReset;
+
     const content = `
       <h1 style="margin: 0 0 20px 0; color: #000000; font-size: 28px; font-weight: 600;">${t.title}</h1>
       <p style="margin: 0 0 10px 0; color: #333333; font-size: 16px; line-height: 1.5;">${t.greeting}</p>
@@ -200,7 +205,7 @@ export const customEmailTemplates = {
         </a>
       </p>
     `;
-    
+
     return {
       subject: t.subject,
       html: baseEmailTemplate(content),
@@ -209,8 +214,10 @@ export const customEmailTemplates = {
   },
 
   emailVerification: (data: EmailVerificationData): EmailTemplate => {
-    const t = translations[data.lang as keyof typeof translations]?.emailVerification || translations.nl.emailVerification;
-    
+    const t =
+      translations[data.lang as keyof typeof translations]?.emailVerification ||
+      translations.nl.emailVerification;
+
     const content = `
       <h1 style="margin: 0 0 20px 0; color: #000000; font-size: 28px; font-weight: 600;">${t.title}</h1>
       <p style="margin: 0 0 10px 0; color: #333333; font-size: 16px; line-height: 1.5;">${t.greeting}</p>
@@ -239,7 +246,7 @@ export const customEmailTemplates = {
         </a>
       </p>
     `;
-    
+
     return {
       subject: t.subject,
       html: baseEmailTemplate(content),
@@ -248,8 +255,10 @@ export const customEmailTemplates = {
   },
 
   emailRecovery: (data: EmailRecoveryData): EmailTemplate => {
-    const t = translations[data.lang as keyof typeof translations]?.emailRecovery || translations.nl.emailRecovery;
-    
+    const t =
+      translations[data.lang as keyof typeof translations]?.emailRecovery ||
+      translations.nl.emailRecovery;
+
     const content = `
       <h1 style="margin: 0 0 20px 0; color: #000000; font-size: 28px; font-weight: 600;">${t.title}</h1>
       <p style="margin: 0 0 10px 0; color: #333333; font-size: 16px; line-height: 1.5;">${t.greeting}</p>
@@ -285,7 +294,7 @@ export const customEmailTemplates = {
         </a>
       </p>
     `;
-    
+
     return {
       subject: t.subject,
       html: baseEmailTemplate(content),

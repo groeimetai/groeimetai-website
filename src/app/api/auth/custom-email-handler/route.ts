@@ -9,10 +9,7 @@ export async function POST(request: NextRequest) {
     // For custom email handling, we trust the email provided by Firebase
     // The oobCode verification happens on the client side when the user clicks the link
     if (!email) {
-      return NextResponse.json(
-        { error: 'Email address is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Email address is required' }, { status: 400 });
     }
 
     switch (mode) {
@@ -29,17 +26,11 @@ export async function POST(request: NextRequest) {
         return handleEmailRecovery(email, oobCode, continueUrl, lang);
 
       default:
-        return NextResponse.json(
-          { error: 'Invalid mode' },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: 'Invalid mode' }, { status: 400 });
     }
   } catch (error) {
     console.error('Custom email handler error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -66,9 +57,9 @@ async function handlePasswordReset(
     text: template.text,
   });
 
-  return NextResponse.json({ 
-    success: true, 
-    message: 'Password reset email sent' 
+  return NextResponse.json({
+    success: true,
+    message: 'Password reset email sent',
   });
 }
 
@@ -95,9 +86,9 @@ async function handleEmailVerification(
     text: template.text,
   });
 
-  return NextResponse.json({ 
-    success: true, 
-    message: 'Verification email sent' 
+  return NextResponse.json({
+    success: true,
+    message: 'Verification email sent',
   });
 }
 
@@ -124,8 +115,8 @@ async function handleEmailRecovery(
     text: template.text,
   });
 
-  return NextResponse.json({ 
-    success: true, 
-    message: 'Recovery email sent' 
+  return NextResponse.json({
+    success: true,
+    message: 'Recovery email sent',
   });
 }

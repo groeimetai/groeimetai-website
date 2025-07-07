@@ -59,11 +59,15 @@ export default function LoginPage() {
     } catch (error: any) {
       console.error('Login failed:', error);
       console.error('Error code:', error.code); // Debug log to see actual error code
-      
+
       // Set user-friendly error messages
       if (error.code === 'auth/user-not-found') {
         setError(t('errors.userNotFound'));
-      } else if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential' || error.code === 'auth/invalid-login-credentials') {
+      } else if (
+        error.code === 'auth/wrong-password' ||
+        error.code === 'auth/invalid-credential' ||
+        error.code === 'auth/invalid-login-credentials'
+      ) {
         setError(t('errors.wrongPassword'));
       } else if (error.code === 'auth/invalid-email') {
         setError(t('errors.invalidEmail'));

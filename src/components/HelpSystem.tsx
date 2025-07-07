@@ -381,7 +381,6 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
     <HelpContext.Provider value={{ showTooltip, hideTooltip, startTutorial, openHelpCenter }}>
       {children}
 
-
       {/* Help Button */}
       {mounted && (
         <motion.div
@@ -648,9 +647,10 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                       <div>
                         <h4 className="text-white font-medium mb-2">AI Assistant (24/7)</h4>
                         <p className="text-white/60 text-sm mb-4">
-                          Get instant answers from our AI chatbot - available 24/7 to help with all your questions
+                          Get instant answers from our AI chatbot - available 24/7 to help with all
+                          your questions
                         </p>
-                        <Button 
+                        <Button
                           className="bg-orange hover:bg-orange/90"
                           onClick={() => {
                             setIsHelpCenterOpen(false);
@@ -673,9 +673,15 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                       <div>
                         <h4 className="text-white font-medium mb-2">Chat with Human Support</h4>
                         <p className="text-white/60 text-sm mb-4">
-                          Need more help? Connect with our support team during business hours (Mon-Fri 9-17 CET)
+                          Need more help? Connect with our support team during business hours
+                          (Mon-Fri 9-17 CET)
                         </p>
-                        <a href="/dashboard/messages" target="_blank" rel="noopener noreferrer" className="inline-flex">
+                        <a
+                          href="/dashboard/messages"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex"
+                        >
                           <Button variant="outline">
                             Open Support Chat
                             <ExternalLink className="w-4 h-4 ml-2" />
