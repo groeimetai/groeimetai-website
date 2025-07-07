@@ -1629,13 +1629,46 @@ export default function DashboardWidgets() {
           const quotesQuery = query(collection(db, 'quotes'), where('userId', '==', user.uid));
           const quotesSnapshot = await getDocs(quotesQuery);
 
-          // For project timeline widget
+          // For project timeline widget - check both projects and approved quotes
+          let activeProject = null;
+          let activeProjectId = null;
+
+          // First check for actual projects
           if (projectsSnapshot.docs.length > 0) {
-            const latestProject = projectsSnapshot.docs[0].data();
-            data.projectName = latestProject.name || 'My AI Project';
+            const activeProjects = projectsSnapshot.docs.filter(doc => {
+              const project = doc.data();
+              return project.status === 'active' || project.status === 'in_progress';
+            });
+            
+            if (activeProjects.length > 0) {
+              activeProject = activeProjects[0].data();
+              activeProjectId = activeProjects[0].id;
+            } else {
+              // No active projects, use the most recent
+              activeProject = projectsSnapshot.docs[0].data();
+              activeProjectId = projectsSnapshot.docs[0].id;
+            }
+          }
+
+          // If no projects, check for approved quotes
+          if (!activeProject && quotesSnapshot.docs.length > 0) {
+            const approvedQuotes = quotesSnapshot.docs.filter(doc => doc.data().status === 'approved');
+            if (approvedQuotes.length > 0) {
+              const quote = approvedQuotes[0].data();
+              activeProject = {
+                name: quote.projectName || 'My AI Project',
+                status: 'active',
+                estimatedCompletion: quote.estimatedCompletion
+              };
+              activeProjectId = approvedQuotes[0].id;
+            }
+          }
+
+          if (activeProject && activeProjectId) {
+            data.projectName = activeProject.name || 'My AI Project';
 
             // Set up real-time listener for timeline
-            const timelineRef = doc(db, 'projectTimelines', projectsSnapshot.docs[0].id);
+            const timelineRef = doc(db, 'projectTimelines', activeProjectId);
 
             // Store unsubscribe function
             const unsubscribeTimeline = onSnapshot(timelineRef, (timelineDoc) => {
@@ -1645,6 +1678,7 @@ export default function DashboardWidgets() {
                 setWidgetData((prevData) => {
                   const newData = { ...prevData };
                   newData.timelineStages = timelineData.stages || [];
+                  newData.projectName = activeProject.name || 'My AI Project';
 
                   // Calculate overall progress
                   if (timelineData.stages) {
@@ -1666,15 +1700,30 @@ export default function DashboardWidgets() {
 
                   // Add milestone and estimated completion
                   newData.milestone = timelineData.milestone || null;
-                  newData.estimatedCompletion = latestProject.estimatedCompletion || null;
+                  newData.estimatedCompletion = activeProject.estimatedCompletion || null;
+                  newData.projectId = activeProjectId;
 
                   return newData;
                 });
+              } else {
+                // No timeline document exists yet - use default data
+                setWidgetData((prevData) => ({
+                  ...prevData,
+                  projectName: activeProject.name || 'My AI Project',
+                  timelineStages: [],
+                  timelineProgress: 0,
+                  projectId: activeProjectId
+                }));
               }
             });
 
             // Store unsubscribe function for cleanup
             timelineUnsubscribes.current.push(unsubscribeTimeline);
+          } else {
+            // No projects at all - set empty data
+            data.projectName = 'Your AI Project';
+            data.timelineStages = [];
+            data.timelineProgress = 0;
           }
 
           // For messages widget - get unread message counts from notifications
@@ -2279,7 +2328,7 @@ export default function DashboardWidgets() {
           const currentStage = stages.find((stage: any) => stage.status === 'current');
           const completedCount = stages.filter((stage: any) => stage.status === 'completed').length;
           const currentStageProgress = currentStage?.progress || 0;
-          const totalProgress = (completedCount * 100 + currentStageProgress) / stages.length;
+          const totalProgress = widgetData.timelineProgress || (completedCount * 100 + currentStageProgress) / stages.length;
 
           // Map icon strings to components
           const stageIcons = {
@@ -2289,11 +2338,32 @@ export default function DashboardWidgets() {
             flag: Flag,
           };
 
+          // Check if user has no projects
+          if (!widgetData.projectId && widgetData.timelineStages?.length === 0) {
+            return (
+              <div className="h-full flex flex-col items-center justify-center text-center p-6">
+                <Briefcase className="w-16 h-16 text-white/20 mb-4" />
+                <h3 className="text-lg font-semibold text-white mb-2">No Active Projects</h3>
+                <p className="text-white/60 text-sm mb-6">
+                  Request a project to see your progress timeline here
+                </p>
+                <Link href="/contact?type=project">
+                  <Button className="bg-orange hover:bg-orange/90">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Request New Project
+                  </Button>
+                </Link>
+              </div>
+            );
+          }
+
           return (
             <div className="h-full flex flex-col">
               {/* Project Header */}
               <div className="mb-6">
-                <h3 className="text-xl font-semibold text-white">Project Timeline</h3>
+                <h3 className="text-xl font-semibold text-white">
+                  {widgetData.projectName || 'Project Timeline'}
+                </h3>
                 <Badge variant="outline" className="text-orange border-orange mt-2">
                   {currentStage?.name || 'Planning'}
                 </Badge>
@@ -2390,6 +2460,21 @@ export default function DashboardWidgets() {
                     </div>
                   </div>
                 </div>
+              )}
+
+              {/* View Project Button */}
+              {widgetData.projectId ? (
+                <Link href={`/dashboard/projects/${widgetData.projectId}`} className="mt-4 block">
+                  <Button variant="outline" className="w-full" size="sm">
+                    View Project Details
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/dashboard/projects" className="mt-4 block">
+                  <Button variant="outline" className="w-full" size="sm">
+                    View All Projects
+                  </Button>
+                </Link>
               )}
             </div>
           );

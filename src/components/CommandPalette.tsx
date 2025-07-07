@@ -48,6 +48,7 @@ import {
   Copy,
   Trash2,
   Edit3,
+  Bot,
   Eye,
   Mail,
   Phone,
@@ -144,7 +145,6 @@ import {
   ZoomIn,
   ZoomOut,
   Rocket,
-  Bot,
   Brain,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -416,6 +416,25 @@ function CommandPaletteBase({
         setOpen(false);
       },
       shortcut: 'C',
+    });
+
+    items.push({
+      id: 'action-chatbot',
+      type: 'action',
+      category: 'Actions',
+      title: 'AI Assistant',
+      description: 'Chat with our AI assistant (24/7)',
+      icon: <Bot className="w-4 h-4" />,
+      keywords: ['ai', 'bot', 'chatbot', 'assistant', 'help', '24/7'],
+      action: () => {
+        // Trigger chatbot opening
+        const event = new CustomEvent('openChatbot');
+        window.dispatchEvent(event);
+        setOpen(false);
+      },
+      shortcut: 'B',
+      badge: '24/7',
+      badgeVariant: 'default',
     });
 
     items.push({

@@ -259,6 +259,11 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
   const [isHelpCenterOpen, setIsHelpCenterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [hasSeenTooltips, setHasSeenTooltips] = useState<string[]>([]);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const hideTooltip = useCallback((tooltipId: string) => {
     setActiveTooltips((prev) => prev.filter((id) => id !== tooltipId));
@@ -378,22 +383,24 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
     <HelpContext.Provider value={{ showTooltip, hideTooltip, startTutorial, openHelpCenter }}>
       {children}
 
-      {/* ChatBot Widget */}
-      <ChatbotWidget />
+      {/* ChatBot Widget - only render after mounting to avoid hydration issues */}
+      {mounted && <ChatbotWidget />}
 
       {/* Help Button */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="fixed bottom-6 left-4 z-50"
-      >
-        <Button
-          className="bg-orange hover:bg-orange/90 rounded-full w-14 h-14 shadow-lg"
-          onClick={openHelpCenter}
+      {mounted && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="fixed bottom-6 left-4 z-50"
         >
-          <HelpCircle className="w-6 h-6" />
-        </Button>
-      </motion.div>
+          <Button
+            className="bg-orange hover:bg-orange/90 rounded-full w-14 h-14 shadow-lg"
+            onClick={openHelpCenter}
+          >
+            <HelpCircle className="w-6 h-6" />
+          </Button>
+        </motion.div>
+      )}
 
       {/* Contextual Tooltips */}
       <AnimatePresence>
