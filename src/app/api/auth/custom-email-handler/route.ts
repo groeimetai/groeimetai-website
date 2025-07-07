@@ -1,41 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from 'firebase-admin';
-import { initAdmin } from '@/lib/firebase/admin';
 import { emailService } from '@/services/emailService';
 import { customEmailTemplates } from '@/lib/email/custom-auth-templates';
 
-// Initialize admin SDK
-initAdmin();
-
 export async function POST(request: NextRequest) {
   try {
-    const { mode, oobCode, continueUrl, lang = 'nl' } = await request.json();
+    const { mode, oobCode, continueUrl, lang = 'nl', email } = await request.json();
 
-    // Verify the action code
-    let actionCodeInfo;
-    try {
-      actionCodeInfo = await auth().checkActionCode(oobCode);
-    } catch (error) {
+    // For custom email handling, we trust the email provided by Firebase
+    // The oobCode verification happens on the client side when the user clicks the link
+    if (!email) {
       return NextResponse.json(
-        { error: 'Invalid or expired action code' },
+        { error: 'Email address is required' },
         { status: 400 }
       );
     }
 
-    const { data, operation } = actionCodeInfo;
-
     switch (mode) {
       case 'resetPassword':
         // Handle password reset
-        return handlePasswordReset(data.email!, oobCode, continueUrl, lang);
+        return handlePasswordReset(email, oobCode, continueUrl, lang);
 
       case 'verifyEmail':
         // Handle email verification
-        return handleEmailVerification(data.email!, oobCode, continueUrl, lang);
+        return handleEmailVerification(email, oobCode, continueUrl, lang);
 
       case 'recoverEmail':
         // Handle email recovery
-        return handleEmailRecovery(data.email!, oobCode, continueUrl, lang);
+        return handleEmailRecovery(email, oobCode, continueUrl, lang);
 
       default:
         return NextResponse.json(

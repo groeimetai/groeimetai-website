@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { 
   applyActionCode, 
@@ -20,7 +20,7 @@ import Link from 'next/link';
 
 type ActionMode = 'resetPassword' | 'verifyEmail' | 'recoverEmail';
 
-export default function AuthActionPage() {
+function AuthActionContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const t = useTranslations('auth');
@@ -35,6 +35,25 @@ export default function AuthActionPage() {
   const [email, setEmail] = useState<string>('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleVerifyEmail = async () => {
+    if (!oobCode) return;
+    
+    try {
+      await applyActionCode(auth, oobCode);
+      setSuccess(true);
+      setLoading(false);
+      
+      // Redirect after 3 seconds
+      setTimeout(() => {
+        router.push(continueUrl || '/dashboard');
+      }, 3000);
+    } catch (error: any) {
+      console.error('Email verification error:', error);
+      setError(error.message || 'Failed to verify email');
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!mode || !oobCode) {
@@ -60,26 +79,7 @@ export default function AuthActionPage() {
         setError('This link is invalid or has expired');
         setLoading(false);
       });
-  }, [mode, oobCode]);
-
-  const handleVerifyEmail = async () => {
-    if (!oobCode) return;
-    
-    try {
-      await applyActionCode(auth, oobCode);
-      setSuccess(true);
-      setLoading(false);
-      
-      // Redirect after 3 seconds
-      setTimeout(() => {
-        router.push(continueUrl || '/dashboard');
-      }, 3000);
-    } catch (error: any) {
-      console.error('Email verification error:', error);
-      setError(error.message || 'Failed to verify email');
-      setLoading(false);
-    }
-  };
+  }, [mode, oobCode, handleVerifyEmail]);
 
   const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -277,4 +277,23 @@ export default function AuthActionPage() {
   }
 
   return null;
+}
+
+export default function AuthActionPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
+        <Card className="w-full max-w-md bg-white/5 border-white/10">
+          <CardContent className="p-6">
+            <div className="text-center">
+              <Loader2 className="w-12 h-12 text-orange animate-spin mx-auto mb-4" />
+              <p className="text-white">Loading...</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    }>
+      <AuthActionContent />
+    </Suspense>
+  );
 }
