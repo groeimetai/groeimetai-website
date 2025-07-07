@@ -9,7 +9,6 @@ import WhyChooseUs from '@/components/landing/WhyChooseUs';
 import OurApproach from '@/components/landing/OurApproach';
 import TrustIndicators from '@/components/landing/TrustIndicators';
 import QuoteRequestForm from '@/components/forms/QuoteRequestForm';
-import ChatbotWidget from '@/components/chatbot/ChatbotWidget';
 import AmbientLightingBackground from '@/components/landing/AmbientLightingBackground';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CheckCircle } from 'lucide-react';
@@ -87,7 +86,6 @@ function HomePageContent() {
           </div>
         </section>
       </main>
-      <ChatbotWidget />
     </>
   );
 }
