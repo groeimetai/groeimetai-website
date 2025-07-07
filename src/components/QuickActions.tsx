@@ -265,16 +265,16 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
     const suggested: string[] = [];
 
     if (pathname.includes('/projects')) {
-      suggested.push('create-project', 'upload-document');
+      suggested.push('create-project', 'upload-document', 'ai-assistant');
     } else if (pathname.includes('/documents')) {
-      suggested.push('upload-document', 'create-project');
+      suggested.push('upload-document', 'create-project', 'ai-assistant');
     } else if (pathname.includes('/consultations')) {
-      suggested.push('schedule-meeting', 'contact-support');
+      suggested.push('schedule-meeting', 'contact-support', 'ai-assistant');
     } else if (pathname.includes('/admin')) {
       suggested.push('manage-users', 'system-settings', 'data-export');
     } else {
       // Default suggestions
-      suggested.push('create-project', 'schedule-meeting', 'upload-document');
+      suggested.push('create-project', 'schedule-meeting', 'upload-document', 'ai-assistant');
     }
 
     // Always include command palette

@@ -285,11 +285,43 @@ export default function ProjectDetailPage() {
     return status.replace('_', ' ').charAt(0).toUpperCase() + status.slice(1).replace('_', ' ');
   };
 
-  // Calculate actual progress based on milestones
+  // Calculate actual progress based on timeline or milestones
   const calculateProgress = (project: Project): number => {
+    // First, try to use timeline data
+    if (timelineData?.stages && timelineData.stages.length > 0) {
+      const completedStages = timelineData.stages.filter((s: any) => s.status === 'completed').length;
+      const currentStage = timelineData.stages.find((s: any) => s.status === 'current');
+      const currentProgress = currentStage?.progress || 0;
+      return Math.round((completedStages * 100 + currentProgress) / timelineData.stages.length);
+    }
+    
+    // Fallback to milestones if no timeline data
     if (!project.milestones || project.milestones.length === 0) return 0;
     const completedMilestones = project.milestones.filter((m) => m.status === 'completed').length;
     return Math.round((completedMilestones / project.milestones.length) * 100);
+  };
+
+  // Safe date formatter that handles Firestore Timestamps and invalid dates
+  const formatDate = (date: any, formatString: string = 'MMM dd, yyyy'): string => {
+    if (!date) return '';
+    
+    try {
+      // Handle Firestore Timestamp
+      if (date.toDate && typeof date.toDate === 'function') {
+        return format(date.toDate(), formatString);
+      }
+      
+      // Handle regular date
+      const parsedDate = new Date(date);
+      if (isNaN(parsedDate.getTime())) {
+        return '';
+      }
+      
+      return format(parsedDate, formatString);
+    } catch (error) {
+      console.error('Date formatting error:', error);
+      return '';
+    }
   };
 
   // Format budget display
@@ -371,14 +403,14 @@ export default function ProjectDetailPage() {
                 <p className="text-white/60 text-sm">Start Date</p>
                 <p className="text-white font-semibold">
                   {project.startDate
-                    ? format(new Date(project.startDate), 'MMM dd, yyyy')
+                    ? formatDate(project.startDate) || 'Not set'
                     : 'Not set'}
                 </p>
               </div>
               <div>
                 <p className="text-white/60 text-sm">Estimated End</p>
                 <p className="text-white font-semibold">
-                  {project.endDate ? format(new Date(project.endDate), 'MMM dd, yyyy') : 'Not set'}
+                  {project.endDate ? formatDate(project.endDate) || 'Not set' : 'Not set'}
                 </p>
               </div>
               <div>
@@ -527,7 +559,7 @@ export default function ProjectDetailPage() {
                         <div className="flex-1">
                           <p className="text-white font-medium">{milestone.name}</p>
                           <p className="text-white/60 text-sm">
-                            Due: {format(new Date(milestone.dueDate), 'MMM dd, yyyy')}
+                            Due: {formatDate(milestone.dueDate)}
                           </p>
                         </div>
                       </div>
@@ -541,6 +573,20 @@ export default function ProjectDetailPage() {
           <TabsContent value="timeline">
             <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6">
               <h3 className="text-lg font-semibold text-white mb-6">Project Timeline</h3>
+              
+              {/* Overall Timeline Progress */}
+              {timelineData?.stages && timelineData.stages.length > 0 && (
+                <div className="mb-8">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-white/60">Overall Timeline Progress</span>
+                    <span className="text-sm font-medium text-white">
+                      {calculateProgress(project)}%
+                    </span>
+                  </div>
+                  <Progress value={calculateProgress(project)} className="h-2" />
+                </div>
+              )}
+              
               {timelineData?.stages && timelineData.stages.length > 0 ? (
                 <div className="space-y-6">
                   {timelineData.stages.map((stage: any, index: number) => {
@@ -593,9 +639,9 @@ export default function ProjectDetailPage() {
                               >
                                 {stage.name}
                               </h4>
-                              {stage.estimatedCompletion && (
+                              {stage.estimatedCompletion && formatDate(stage.estimatedCompletion) && (
                                 <span className="text-sm text-white/60">
-                                  Est. {format(new Date(stage.estimatedCompletion), 'MMM dd, yyyy')}
+                                  Est. {formatDate(stage.estimatedCompletion)}
                                 </span>
                               )}
                             </div>
@@ -613,9 +659,9 @@ export default function ProjectDetailPage() {
                             )}
                             
                             {/* Completion info */}
-                            {stage.status === 'completed' && stage.completedAt && (
+                            {stage.status === 'completed' && stage.completedAt && formatDate(stage.completedAt) && (
                               <p className="text-xs text-green-500 mt-2">
-                                Completed on {format(new Date(stage.completedAt), 'MMM dd, yyyy')}
+                                Completed on {formatDate(stage.completedAt)}
                               </p>
                             )}
                           </div>
@@ -684,7 +730,7 @@ export default function ProjectDetailPage() {
                         <div className="flex items-center gap-4 mt-2 text-sm text-white/60">
                           <span className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
-                            Due: {format(new Date(milestone.dueDate), 'MMM dd, yyyy')}
+                            Due: {formatDate(milestone.dueDate)}
                           </span>
                           {milestone.payment && (
                             <span className="flex items-center gap-1">
@@ -721,7 +767,7 @@ export default function ProjectDetailPage() {
                         <div>
                           <h4 className="font-semibold text-white">{milestone.name}</h4>
                           <p className="text-white/60 text-sm">
-                            Due: {format(new Date(milestone.dueDate), 'MMM dd, yyyy')}
+                            Due: {formatDate(milestone.dueDate)}
                           </p>
                         </div>
                         <Badge
@@ -912,7 +958,7 @@ export default function ProjectDetailPage() {
                     </p>
                     <p className="text-white/40 text-xs mt-1">
                       {project.createdAt
-                        ? format(new Date(project.createdAt), 'MMM dd, yyyy at HH:mm')
+                        ? formatDate(project.createdAt, 'MMM dd, yyyy at HH:mm') || 'Recently'
                         : 'Recently'}
                     </p>
                   </div>
