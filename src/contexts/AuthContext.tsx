@@ -183,11 +183,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const userData = await createOrUpdateUserDoc(credential.user);
       setUser(userData);
 
-      // Log successful login
-      await logAuthActivity('auth.login', credential.user.uid, credential.user.email || '', {
-        method: 'email',
-        timestamp: new Date().toISOString(),
-      });
+      // Log successful login (wrap in try-catch to prevent permission errors)
+      try {
+        await logAuthActivity('auth.login', credential.user.uid, credential.user.email || '', {
+          method: 'email',
+          timestamp: new Date().toISOString(),
+        });
+      } catch (logError) {
+        console.error('Failed to log activity:', logError);
+      }
     } catch (error: any) {
       // Check if error requires multi-factor authentication
       if (error.code === 'auth/multi-factor-auth-required') {
@@ -234,24 +238,48 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         });
       }
 
-      // Send verification email
-      await sendEmailVerification(credential.user);
+      // Don't send Firebase's default email - we'll send our own custom email
+      // await sendEmailVerification(credential.user);
+      
+      // Send custom verification email via our email service
+      try {
+        const response = await fetch('/api/auth/send-verification', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: credential.user.email,
+            uid: credential.user.uid,
+            lang: userData.language || 'nl',
+          }),
+        });
+        
+        if (!response.ok) {
+          console.error('Failed to send custom verification email');
+        }
+      } catch (emailError) {
+        console.error('Error sending verification email:', emailError);
+      }
 
       // Create user document
       const newUser = await createOrUpdateUserDoc(credential.user, userData);
       setUser(newUser);
 
-      // Log successful registration
-      await logAuthActivity('auth.register', credential.user.uid, credential.user.email || '', {
-        method: 'email',
-        emailVerificationSent: true,
-        timestamp: new Date().toISOString(),
-      });
+      // Log successful registration (wrap in try-catch to prevent permission errors)
+      try {
+        await logAuthActivity('auth.register', credential.user.uid, credential.user.email || '', {
+          method: 'email',
+          emailVerificationSent: true,
+          timestamp: new Date().toISOString(),
+        });
+      } catch (logError) {
+        console.error('Failed to log activity:', logError);
+      }
     } catch (error: any) {
       setError(error.message);
 
-      // Log failed registration
-      await logErrorActivity(
+      // Log failed registration (wrap in try-catch to prevent permission errors)
+      try {
+        await logErrorActivity(
         'auth.register',
         error,
         {
@@ -310,19 +338,41 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const resetPassword = async (email: string) => {
     try {
       setError(null);
-      await sendPasswordResetEmail(auth, email);
-
-      // Log password reset request
-      await logAuthActivity('auth.password_reset', 'unknown', email, {
-        timestamp: new Date().toISOString(),
+      
+      // Don't use Firebase's default email - send our custom email
+      // await sendPasswordResetEmail(auth, email);
+      
+      // Send custom password reset email via our email service
+      const response = await fetch('/api/auth/send-password-reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          lang: user?.language || 'nl',
+        }),
       });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to send password reset email');
+      }
+
+      // Log password reset request (wrap in try-catch to prevent permission errors)
+      try {
+        await logAuthActivity('auth.password_reset', 'unknown', email, {
+          timestamp: new Date().toISOString(),
+        });
+      } catch (logError) {
+        console.error('Failed to log activity:', logError);
+      }
     } catch (error: any) {
       setError(error.message);
 
-      // Log failed password reset
-      await logErrorActivity(
-        'auth.password_reset',
-        error,
+      // Log failed password reset (wrap in try-catch to prevent permission errors)
+      try {
+        await logErrorActivity(
+          'auth.password_reset',
+          error,
         {
           uid: 'unknown',
           email: email,
@@ -352,16 +402,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
       setUser(userData);
 
-      // Log successful Google login
-      await logAuthActivity('auth.login', credential.user.uid, credential.user.email || '', {
-        method: 'google',
-        timestamp: new Date().toISOString(),
-      });
+      // Log successful Google login (wrap in try-catch to prevent permission errors)
+      try {
+        await logAuthActivity('auth.login', credential.user.uid, credential.user.email || '', {
+          method: 'google',
+          timestamp: new Date().toISOString(),
+        });
+      } catch (logError) {
+        console.error('Failed to log activity:', logError);
+      }
     } catch (error: any) {
       setError(error.message);
 
-      // Log failed Google login
-      await logErrorActivity(
+      // Log failed Google login (wrap in try-catch to prevent permission errors)
+      try {
+        await logErrorActivity(
         'auth.login',
         error,
         {
@@ -448,7 +503,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setError(null);
       if (!firebaseUser) throw new Error('No authenticated user');
-      await sendEmailVerification(firebaseUser);
+      
+      // Don't use Firebase's default email - send our custom email
+      // await sendEmailVerification(firebaseUser);
+      
+      // Send custom verification email via our email service
+      const response = await fetch('/api/auth/send-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: firebaseUser.email,
+          uid: firebaseUser.uid,
+          lang: user?.language || 'nl',
+        }),
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to send verification email');
+      }
     } catch (error: any) {
       setError(error.message);
       throw error;
