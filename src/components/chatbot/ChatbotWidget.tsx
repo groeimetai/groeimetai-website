@@ -12,12 +12,14 @@ interface ChatbotWidgetProps {
   autoOpen?: boolean;
   delay?: number;
   proactiveMessage?: string;
+  hideButton?: boolean;
 }
 
 export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
   autoOpen = false,
   delay = 5000,
   proactiveMessage = "👋 Need help exploring our AI solutions? I'm here to assist!",
+  hideButton = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showProactive, setShowProactive] = useState(false);
@@ -109,30 +111,32 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
       )}
 
       {/* Chat Button */}
-      <button
-        onClick={handleOpen}
-        className={cn(
-          'fixed bottom-4 right-4 z-40',
-          'bg-black border-2 border-orange',
-          'text-orange rounded-full p-4',
-          'shadow-lg hover:shadow-xl',
-          'transform transition-all duration-300',
-          'hover:scale-110 active:scale-95',
-          'hover:bg-orange hover:text-white',
-          'group'
-        )}
-        aria-label="Open chat"
-      >
-        <MessageSquare className="h-6 w-6" />
-        <span className="absolute -top-1 -right-1 h-3 w-3 bg-green-400 rounded-full animate-pulse"></span>
+      {!hideButton && (
+        <button
+          onClick={handleOpen}
+          className={cn(
+            'fixed bottom-4 right-4 z-40',
+            'bg-black border-2 border-orange',
+            'text-orange rounded-full p-4',
+            'shadow-lg hover:shadow-xl',
+            'transform transition-all duration-300',
+            'hover:scale-110 active:scale-95',
+            'hover:bg-orange hover:text-white',
+            'group'
+          )}
+          aria-label="Open chat"
+        >
+          <MessageSquare className="h-6 w-6" />
+          <span className="absolute -top-1 -right-1 h-3 w-3 bg-green-400 rounded-full animate-pulse"></span>
 
-        {/* Hover tooltip */}
-        <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-          <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
-            Chat met AI Assistent
+          {/* Hover tooltip */}
+          <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+            <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+              Chat met AI Assistent
+            </div>
           </div>
-        </div>
-      </button>
+        </button>
+      )}
     </>
   );
 };

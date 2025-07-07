@@ -57,6 +57,10 @@ import DashboardWidgets from '@/components/dashboard/DashboardWidgets';
 import { HelpTrigger } from '@/components/HelpSystem';
 import CommandPalette from '@/components/CommandPalette';
 import QuickActions from '@/components/QuickActions';
+import dynamic from 'next/dynamic';
+
+// Dynamically import ChatbotWidget to avoid SSR issues
+const ChatbotWidget = dynamic(() => import('@/components/chatbot/ChatbotWidget').then(mod => mod.ChatbotWidget), { ssr: false });
 
 interface ProjectStage {
   id: number;
@@ -700,6 +704,9 @@ export default function DashboardPage() {
 
         {/* Quick Actions FAB */}
         <QuickActions onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
+        
+        {/* ChatbotWidget - button hidden, opened via QuickActions */}
+        <ChatbotWidget hideButton={true} />
       </main>
   );
 }

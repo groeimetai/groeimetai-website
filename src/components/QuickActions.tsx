@@ -20,6 +20,7 @@ import {
   Shield,
   Activity,
   ChevronRight,
+  Bot,
 } from 'lucide-react';
 import { useRouter } from '@/i18n/routing';
 import { usePathname } from 'next/navigation';
@@ -126,6 +127,20 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
     },
 
     // Communication Actions
+    {
+      id: 'ai-assistant',
+      label: 'AI Assistant',
+      icon: Bot,
+      action: () => {
+        // Trigger custom event to open chatbot
+        const event = new CustomEvent('openChatbot');
+        window.dispatchEvent(event);
+        trackAction('ai-assistant');
+        setIsOpen(false);
+      },
+      shortcut: 'Ctrl+B',
+      category: 'communication',
+    },
     {
       id: 'schedule-meeting',
       label: 'View Consultations',
