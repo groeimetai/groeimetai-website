@@ -249,7 +249,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           body: JSON.stringify({
             email: credential.user.email,
             uid: credential.user.uid,
-            lang: userData.language || 'nl',
+            lang: userData.preferences?.language || 'nl',
           }),
         });
 
@@ -351,7 +351,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
-          lang: user?.language || 'nl',
+          lang: user?.preferences?.language || 'nl',
         }),
       });
 
@@ -523,7 +523,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         body: JSON.stringify({
           email: firebaseUser.email,
           uid: firebaseUser.uid,
-          lang: user?.language || 'nl',
+          lang: user?.preferences?.language || 'nl',
         }),
       });
 
