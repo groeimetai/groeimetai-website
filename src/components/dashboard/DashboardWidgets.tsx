@@ -1725,8 +1725,7 @@ export default function DashboardWidgets() {
           } else {
             // No projects at all - set empty data
             data.projectName = 'Your AI Project';
-            data.timelineStages = [];
-            data.timelineProgress = 0;
+            // Don't set timeline data here - let it come from real-time listener or stay as initialized
           }
 
           // For messages widget - get unread message counts from notifications
@@ -1872,7 +1871,13 @@ export default function DashboardWidgets() {
           });
         }
 
-        setWidgetData(data);
+        setWidgetData(prevData => ({
+          ...prevData,
+          ...data,
+          // Preserve timeline data if it was already set by real-time listener
+          timelineStages: prevData.timelineStages || data.timelineStages,
+          timelineProgress: prevData.timelineProgress !== undefined ? prevData.timelineProgress : data.timelineProgress
+        }));
       } catch (error) {
         // Only log actual errors, not permission issues that are already handled
         if (
