@@ -54,7 +54,7 @@ import DashboardChat from '@/components/DashboardChat';
 import ChatManagement from '@/components/admin/ChatManagement';
 import OnboardingFlow from '@/components/OnboardingFlow';
 import DashboardWidgets from '@/components/dashboard/DashboardWidgets';
-import { HelpProvider, HelpTrigger } from '@/components/HelpSystem';
+import { HelpTrigger } from '@/components/HelpSystem';
 import CommandPalette from '@/components/CommandPalette';
 import QuickActions from '@/components/QuickActions';
 
@@ -422,8 +422,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <HelpProvider>
-      <main className="min-h-screen bg-black" data-help="dashboard-main">
+    <main className="min-h-screen bg-black" data-help="dashboard-main">
         {/* Onboarding Flow */}
         {showOnboarding && !checkingOnboarding && (
           <OnboardingFlow onComplete={handleOnboardingComplete} />
@@ -702,6 +701,5 @@ export default function DashboardPage() {
         {/* Quick Actions FAB */}
         <QuickActions onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
       </main>
-    </HelpProvider>
   );
 }

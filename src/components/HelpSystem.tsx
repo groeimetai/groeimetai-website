@@ -5,8 +5,6 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
-// Dynamically import ChatbotWidget to avoid SSR issues
-const ChatbotWidget = dynamic(() => import('@/components/chatbot/ChatbotWidget').then(mod => mod.ChatbotWidget), { ssr: false });
 import {
   HelpCircle,
   X,
@@ -383,8 +381,6 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
     <HelpContext.Provider value={{ showTooltip, hideTooltip, startTutorial, openHelpCenter }}>
       {children}
 
-      {/* ChatBot Widget - only render after mounting to avoid hydration issues */}
-      {mounted && <ChatbotWidget />}
 
       {/* Help Button */}
       {mounted && (
