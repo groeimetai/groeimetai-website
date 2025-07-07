@@ -130,39 +130,8 @@ const baseEmailTemplate = (content: string): string => `
           <!-- Header -->
           <tr>
             <td style="background-color: #000000; padding: 30px; text-align: center;">
-              <div style="display: inline-block; height: 40px;">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 62" style="height: 40px; width: auto;">
-                  <style>
-                    .logo-text {
-                      font-family: 'Helvetica Neue', Arial, sans-serif;
-                      font-size: 62px;
-                      font-weight: 900;
-                      font-style: italic;
-                      letter-spacing: -2.6px;
-                      fill: white;
-                      paint-order: stroke fill;
-                      stroke: #F97316;
-                      stroke-width: 3px;
-                      stroke-linejoin: miter;
-                      stroke-miterlimit: 2;
-                    }
-                    .text {
-                      font-family: 'Helvetica Neue', Arial, sans-serif;
-                      font-size: 62px;
-                      font-weight: 900;
-                      font-style: italic;
-                      letter-spacing: -2.6px;
-                      fill: white;
-                      paint-order: stroke fill;
-                      stroke: #F97316;
-                      stroke-width: 3px;
-                      stroke-linejoin: miter;
-                      stroke-miterlimit: 2;
-                    }
-                  </style>
-                  <text x="10" y="52" class="logo-text">Groeimet</text>
-                  <text x="265" y="52" class="text">Ai</text>
-                </svg>
+              <div style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 28px; font-weight: 900; font-style: italic; color: #ffffff; text-shadow: 2px 2px 0px #F97316, -2px -2px 0px #F97316, 2px -2px 0px #F97316, -2px 2px 0px #F97316; letter-spacing: -1px;">
+                GroeimetAI
               </div>
             </td>
           </tr>
