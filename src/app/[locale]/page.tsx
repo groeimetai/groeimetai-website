@@ -10,7 +10,7 @@ import OurApproach from '@/components/landing/OurApproach';
 import TrustIndicators from '@/components/landing/TrustIndicators';
 import QuoteRequestForm from '@/components/forms/QuoteRequestForm';
 import ChatbotWidget from '@/components/chatbot/ChatbotWidget';
-import ParticleBackground from '@/components/landing/ParticleBackground';
+import AmbientLightingBackground from '@/components/landing/AmbientLightingBackground';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -38,7 +38,7 @@ function HomePageContent() {
 
   return (
     <>
-      <ParticleBackground />
+      <AmbientLightingBackground />
       <main className="relative z-10">
         {/* Success Message */}
         <AnimatePresence>

@@ -6,7 +6,7 @@ import { Link } from '@/i18n/routing';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { StartProjectButton } from '@/components/ui/StartProjectButton';
-import { Menu, X, LogOut, LayoutDashboard } from 'lucide-react';
+import { Menu, X, LogOut, LayoutDashboard, Briefcase, Users, Phone, FileText, Globe, Bell, User } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
@@ -29,10 +29,10 @@ export default function Navigation() {
   }, []);
 
   const navItems = [
-    { label: t('services'), href: '/services' },
-    { label: t('cases'), href: '/cases' },
-    { label: t('about'), href: '/about' },
-    { label: t('contact'), href: '/contact' },
+    { label: t('services'), href: '/services', icon: Briefcase },
+    { label: t('cases'), href: '/cases', icon: FileText },
+    { label: t('about'), href: '/about', icon: Users },
+    { label: t('contact'), href: '/contact', icon: Phone },
   ];
 
   const handleLogout = async () => {
@@ -153,13 +153,13 @@ export default function Navigation() {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden relative p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? (
-                <X className="h-5 w-5 text-orange" />
+                <X className="h-6 w-6 text-orange" />
               ) : (
-                <Menu className="h-5 w-5 text-white" />
+                <Menu className="h-6 w-6 text-white" />
               )}
             </Button>
           </div>
@@ -170,78 +170,93 @@ export default function Navigation() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-black/95 backdrop-blur-lg border-t border-white/10"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="md:hidden bg-black/98 backdrop-blur-xl border-t border-white/10 shadow-2xl"
           >
             <div className="container mx-auto px-4 py-6">
-              <div className="flex flex-col space-y-4">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="text-white font-medium py-2 px-4 rounded-lg hover-orange"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-                <hr className="border-white/20" />
-                <div className="px-4 py-2">
-                  <LanguageSwitcher />
+              <div className="flex flex-col space-y-2">
+                {/* Navigation Section */}
+                <div className="mb-4">
+                  <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">Navigation</p>
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="flex items-center text-white font-medium py-3 px-4 rounded-lg hover:bg-white/5 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <item.icon className="w-5 h-5 mr-3 text-white/60" />
+                      {item.label}
+                    </Link>
+                  ))}
                 </div>
-                <hr className="border-white/20" />
-                {user ? (
-                  <>
-                    <div className="px-4 flex items-center justify-between">
-                      <span className="text-white/60 text-sm">Notifications</span>
-                      <NotificationCenter />
-                    </div>
-                    <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start text-white hover:text-orange hover:bg-white/10"
-                      >
-                        <LayoutDashboard className="w-4 h-4 mr-2" />
-                        {t('dashboard')}
-                      </Button>
-                    </Link>
-                    <ClientOnly>
-                      <Button
-                        onClick={() => {
-                          handleLogout();
-                          setIsMobileMenuOpen(false);
-                        }}
-                        variant="ghost"
-                        className="w-full justify-start text-white hover:text-orange hover:bg-white/10"
-                      >
-                        <LogOut className="w-4 h-4 mr-2" />
-                        {t('logout')}
-                      </Button>
-                    </ClientOnly>
-                  </>
-                ) : (
-                  <>
-                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start text-white hover:text-orange hover:bg-white/10"
-                      >
-                        {t('signIn')}
-                      </Button>
-                    </Link>
-                    <div onClick={() => setIsMobileMenuOpen(false)}>
+                {/* Language Section */}
+                <div className="border-t border-white/10 pt-4 mb-4">
+                  <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">Language</p>
+                  <div className="px-4">
+                    <LanguageSwitcher />
+                  </div>
+                </div>
+                {/* User Section */}
+                <div className="border-t border-white/10 pt-4">
+                  <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">{user ? 'Account' : 'Get Started'}</p>
+                  {user ? (
+                    <>
+                      <div className="px-4 mb-3">
+                        <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
+                          <div className="flex items-center">
+                            <Bell className="w-5 h-5 mr-2 text-white/60" />
+                            <span className="text-white/80 text-sm">Notifications</span>
+                          </div>
+                          <NotificationCenter />
+                        </div>
+                      </div>
+                      <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start text-white hover:bg-white/5 py-3"
+                        >
+                          <LayoutDashboard className="w-5 h-5 mr-3" />
+                          {t('dashboard')}
+                        </Button>
+                      </Link>
+                      <ClientOnly>
+                        <Button
+                          onClick={() => {
+                            handleLogout();
+                            setIsMobileMenuOpen(false);
+                          }}
+                          variant="ghost"
+                          className="w-full justify-start text-white hover:bg-white/5 py-3"
+                        >
+                          <LogOut className="w-5 h-5 mr-3" />
+                          {t('logout')}
+                        </Button>
+                      </ClientOnly>
+                    </>
+                  ) : (
+                    <div className="space-y-3">
+                      <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start text-white hover:bg-white/5 py-3"
+                        >
+                          <User className="w-5 h-5 mr-3" />
+                          {t('signIn')}
+                        </Button>
+                      </Link>
                       <StartProjectButton
-                        className="w-full bg-orange hover:bg-orange-600 text-white border-0"
+                        className="w-full bg-orange hover:bg-orange-600 text-white border-0 shadow-lg shadow-orange/20"
                         preselectedService="genai-consultancy"
                       >
                         {t('getStarted')}
                       </StartProjectButton>
                     </div>
-                  </>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </motion.div>

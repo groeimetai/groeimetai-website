@@ -1,6 +1,5 @@
 'use client';
 
-import ParticleBackground from '@/components/landing/ParticleBackground';
 import { useState, useEffect } from 'react';
 
 export default function TestHeroPage() {
@@ -39,7 +38,6 @@ export default function TestHeroPage() {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
-      <ParticleBackground />
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-white p-8">
         <h1 className="text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">

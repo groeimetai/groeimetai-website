@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { StartProjectButton } from '@/components/ui/StartProjectButton';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Link } from '@/i18n/routing';
-import ParticleBackground from './ParticleBackground';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -15,8 +14,6 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black dark:bg-black">
-      {/* Animated particle background */}
-      <ParticleBackground />
 
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/95 to-black" />

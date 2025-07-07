@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { Brain, Cpu, Shield, Zap, Code, Users } from 'lucide-react';
-import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 
 const services = [
@@ -66,14 +65,11 @@ export default function ServicesShowcase() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
-              <Link href={`/services/${service.key}`}>
-                <div className="group relative h-full">
-                  {/* Card */}
-                  <div className="relative h-full p-8 rounded-2xl border border-white/10 bg-black-50 hover-lift transition-all duration-300 overflow-hidden">
-                    {/* Gradient overlay on hover */}
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
-                    />
+              <div className="relative h-full p-8 rounded-2xl border border-white/10 bg-black-50 transition-all duration-300 overflow-hidden">
+                  {/* Gradient overlay */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-5`}
+                  />
 
                     {/* Icon */}
                     <div
@@ -83,7 +79,7 @@ export default function ServicesShowcase() {
                     </div>
 
                     {/* Content */}
-                    <h3 className="text-xl font-semibold mb-3 text-white group-hover:text-orange transition-all duration-300">
+                  <h3 className="text-xl font-semibold mb-3 text-white">
                       {t(`items.${service.key}.title`)}
                     </h3>
                     <p className="text-white/60 mb-6">{t(`items.${service.key}.description`)}</p>
@@ -96,29 +92,8 @@ export default function ServicesShowcase() {
                           {feature}
                         </li>
                       ))}
-                    </ul>
-
-                    {/* Hover indicator */}
-                    <div className="absolute bottom-8 right-8 transform translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
-                      <div className="w-10 h-10 rounded-full bg-orange flex items-center justify-center">
-                        <svg
-                          className="w-5 h-5 text-white"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
+                  </ul>
                 </div>
-              </Link>
             </motion.div>
           ))}
         </div>
