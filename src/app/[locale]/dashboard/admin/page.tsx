@@ -146,6 +146,7 @@ export default function AdminDashboard() {
   // Legacy states for quote management
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const [projects, setProjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -188,13 +189,54 @@ export default function AdminDashboard() {
           return createdAt && createdAt >= startDate;
         }).length;
 
-        // Fetch projects
-        const projectsQuery = query(
-          collection(db, 'projects'),
-          where('status', 'in', ['active', 'in_progress'])
-        );
+        // Fetch projects (from both projects and approved quotes)
+        const projectsQuery = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
         const projectsSnapshot = await getDocs(projectsQuery);
-        setActiveProjects(projectsSnapshot.size);
+        
+        // Also fetch approved quotes (which are projects)
+        const approvedQuotesQuery = query(
+          collection(db, 'quotes'),
+          where('status', '==', 'approved'),
+          orderBy('createdAt', 'desc')
+        );
+        const approvedQuotesSnapshot = await getDocs(approvedQuotesQuery);
+        
+        // Combine both data sources
+        const projectsData: any[] = [];
+        
+        // Add projects from projects collection
+        projectsSnapshot.forEach((doc) => {
+          const data = doc.data();
+          projectsData.push({
+            id: doc.id,
+            name: data.name || data.projectName || 'Untitled Project',
+            clientName: data.clientName || 'Unknown Client',
+            status: data.status || 'active',
+            progress: data.progress || 0,
+            createdAt: data.createdAt?.toDate() || new Date(),
+            type: 'project'
+          });
+        });
+        
+        // Add approved quotes as projects
+        approvedQuotesSnapshot.forEach((doc) => {
+          const data = doc.data();
+          projectsData.push({
+            id: doc.id,
+            name: data.projectName || 'Untitled Project',
+            clientName: data.fullName || 'Unknown Client',
+            status: 'active',
+            progress: 0,
+            createdAt: data.createdAt?.toDate() || new Date(),
+            type: 'quote'
+          });
+        });
+        
+        // Sort by creation date
+        projectsData.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        
+        setProjects(projectsData);
+        setActiveProjects(projectsData.filter(p => p.status === 'active' || p.status === 'in_progress').length);
 
         // Fetch quotes
         const quotesQuery = query(collection(db, 'quotes'), orderBy('createdAt', 'desc'));
@@ -1018,18 +1060,74 @@ export default function AdminDashboard() {
           <TabsContent value="projects">
             <Card className="bg-white/5 border-white/10">
               <CardHeader>
-                <CardTitle className="text-white">Project Overview</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12 text-white/40">
-                  <Briefcase className="w-16 h-16 mx-auto mb-4" />
-                  <p>Project management interface coming soon</p>
+                <CardTitle className="text-white flex items-center justify-between">
+                  All Projects
                   <Link href="/dashboard/admin/projects">
-                    <Button className="mt-4 bg-orange hover:bg-orange/90">
-                      Go to Project Management
+                    <Button size="sm" className="bg-orange hover:bg-orange/90">
+                      View All
                     </Button>
                   </Link>
-                </div>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="max-h-[600px] overflow-y-auto">
+                {isLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <Loader2 className="animate-spin h-8 w-8 text-orange mr-3" />
+                    <span className="text-white/60">Loading projects...</span>
+                  </div>
+                ) : projects.length > 0 ? (
+                  <div className="space-y-4">
+                    {projects.slice(0, 10).map((project) => (
+                      <div key={project.id} className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-white mb-1">{project.name}</h4>
+                          <p className="text-sm text-white/60 mb-2">{project.clientName} • {project.status === 'active' ? 'Planning Phase' : project.status}</p>
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
+                              <Progress value={project.progress} className="w-20 h-2" />
+                              <span className="text-xs text-white/60">{project.progress}%</span>
+                            </div>
+                            <Badge variant="outline" className="text-xs capitalize">
+                              {project.status}
+                            </Badge>
+                            <Badge variant="outline" className="text-xs bg-blue-500/20 text-blue-400">
+                              {project.type}
+                            </Badge>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Link href={`/dashboard/admin/projects/${project.id}`}>
+                            <Button size="sm" variant="outline">
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          </Link>
+                          <Button size="sm" variant="outline">
+                            <MoreVertical className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                    {projects.length > 10 && (
+                      <div className="text-center py-4">
+                        <Link href="/dashboard/admin/projects">
+                          <Button variant="outline">
+                            View {projects.length - 10} more projects
+                          </Button>
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 text-white/40">
+                    <Briefcase className="w-16 h-16 mx-auto mb-4" />
+                    <p>No active projects found</p>
+                    <Link href="/dashboard/admin/projects">
+                      <Button className="mt-4 bg-orange hover:bg-orange/90">
+                        Go to Project Management
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
