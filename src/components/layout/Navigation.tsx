@@ -174,7 +174,7 @@ export default function Navigation() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="md:hidden bg-white/5 backdrop-blur-xl border-t border-white/10 shadow-2xl"
+            className="md:hidden bg-white/5 backdrop-blur-xl border-t border-white/10 shadow-2xl rounded-b-2xl"
           >
             <div className="container mx-auto px-4 py-6">
               <div className="flex flex-col space-y-2">
