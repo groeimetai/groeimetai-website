@@ -227,8 +227,8 @@ export default function ConsultationsPage() {
         location: {
           type: formData.platform === 'in_person' ? 'physical' : 'virtual',
           platform: formData.platform,
-          link: formData.meetingLink || undefined,
-          address: formData.address || undefined,
+          ...(formData.meetingLink && { link: formData.meetingLink }),
+          ...(formData.address && { address: formData.address }),
         },
         participantIds: [user.uid],
         participants: [
@@ -242,7 +242,7 @@ export default function ConsultationsPage() {
         createdAt: serverTimestamp() as Timestamp,
         updatedAt: serverTimestamp() as Timestamp,
         createdBy: user.uid,
-        meetingLink: formData.meetingLink || undefined,
+        ...(formData.meetingLink && { meetingLink: formData.meetingLink }),
       };
 
       await addDoc(collection(db, 'meetings'), meetingData);

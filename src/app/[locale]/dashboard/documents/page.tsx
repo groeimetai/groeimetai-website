@@ -377,15 +377,17 @@ export default function DocumentsPage() {
                       <p className="text-white/40 text-sm mb-4">
                         Supported formats: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, CSV
                       </p>
-                      <label htmlFor="dialog-file-upload" className="cursor-pointer">
-                        <input
-                          id="dialog-file-upload"
-                          type="file"
-                          className="hidden"
-                          onChange={handleFileSelect}
-                          accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"
-                        />
-                        <Button className="bg-orange hover:bg-orange/90">Select File</Button>
+                      <input
+                        id="dialog-file-upload"
+                        type="file"
+                        className="hidden"
+                        onChange={handleFileSelect}
+                        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"
+                      />
+                      <label htmlFor="dialog-file-upload">
+                        <span className="inline-flex items-center justify-center px-4 py-2 bg-orange hover:bg-orange/90 text-white font-medium rounded-md cursor-pointer transition-colors">
+                          Select File
+                        </span>
                       </label>
                     </div>
                   ) : (
@@ -579,18 +581,18 @@ export default function DocumentsPage() {
                     Start building your document library by uploading your first file. Keep all your
                     important project files organized in one place.
                   </p>
-                  <label htmlFor="file-upload" className="cursor-pointer">
-                    <input
-                      id="file-upload"
-                      type="file"
-                      className="hidden"
-                      onChange={handleFileSelect}
-                      accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"
-                    />
-                    <Button className="bg-orange hover:bg-orange/90">
+                  <input
+                    id="file-upload"
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileSelect}
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"
+                  />
+                  <label htmlFor="file-upload">
+                    <span className="inline-flex items-center justify-center px-4 py-2 bg-orange hover:bg-orange/90 text-white font-medium rounded-md cursor-pointer transition-colors">
                       <CloudUpload className="w-4 h-4 mr-2" />
                       Upload Your First Document
-                    </Button>
+                    </span>
                   </label>
                 </>
               ) : (
