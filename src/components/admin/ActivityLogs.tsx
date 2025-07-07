@@ -58,7 +58,8 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/use-toast';
 import { activityLogger, ActivityLog, ActivityType, ResourceType } from '@/services/activityLogger';
-import { DocumentSnapshot } from 'firebase/firestore';
+import { DocumentSnapshot, collection, query, where, orderBy, limit, onSnapshot, Timestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
 
 interface ActivityFilters {
   userId?: string;
@@ -157,12 +158,88 @@ export function ActivityLogs() {
     }
   }, []);
 
-  // Initial load
+  // Initial load and real-time monitoring
   useEffect(() => {
     loadLogs(true);
     loadStats();
     loadSuspiciousActivities();
-  }, [filters, loadLogs, loadStats, loadSuspiciousActivities]);
+
+    // Set up real-time listener for new activities
+    const constraints = [];
+    
+    // Add filter constraints
+    if (filters.userId) {
+      constraints.push(where('userId', '==', filters.userId));
+    }
+    if (filters.action) {
+      constraints.push(where('action', '==', filters.action));
+    }
+    if (filters.resourceType) {
+      constraints.push(where('resourceType', '==', filters.resourceType));
+    }
+    if (filters.severity) {
+      constraints.push(where('severity', '==', filters.severity));
+    }
+    if (filters.startDate) {
+      constraints.push(where('timestamp', '>=', Timestamp.fromDate(filters.startDate)));
+    }
+    if (filters.endDate) {
+      constraints.push(where('timestamp', '<=', Timestamp.fromDate(filters.endDate)));
+    }
+
+    // Create query with constraints
+    const q = query(
+      collection(db, 'activities'),
+      ...constraints,
+      orderBy('timestamp', 'desc'),
+      limit(50)
+    );
+
+    // Subscribe to real-time updates
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (!snapshot.metadata.fromCache && !snapshot.metadata.hasPendingWrites) {
+        // Get new activities
+        const newLogs: ActivityLog[] = [];
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === 'added') {
+            const data = change.doc.data();
+            const log: ActivityLog = {
+              id: change.doc.id,
+              ...data,
+            } as ActivityLog;
+            
+            // Only add if it's a new activity with timestamp
+            if (data.timestamp) {
+              newLogs.push(log);
+            }
+          }
+        });
+
+        // Update logs with new activities
+        if (newLogs.length > 0) {
+          setLogs(prevLogs => {
+            // Filter out any duplicates and add new logs at the beginning
+            const newLogIds = new Set(newLogs.map(log => log.id));
+            const filteredPrevLogs = prevLogs.filter(log => !newLogIds.has(log.id));
+            const updatedLogs = [...newLogs, ...filteredPrevLogs];
+            return updatedLogs.slice(0, 50);
+          });
+
+          // Show toast for new activities
+          toast({
+            title: 'New Activity',
+            description: `${newLogs.length} new activity ${newLogs.length === 1 ? 'log' : 'logs'} detected`,
+          });
+
+          // Update stats and suspicious activities
+          loadStats();
+          loadSuspiciousActivities();
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [filters, loadLogs, loadStats, loadSuspiciousActivities, toast]);
 
   // Export to CSV
   const handleExport = async () => {

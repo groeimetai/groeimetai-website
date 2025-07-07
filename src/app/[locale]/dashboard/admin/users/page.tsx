@@ -536,6 +536,49 @@ export default function UsersManagementPage() {
   };
 
   // Bulk actions
+  // Generate avatars for users without photos
+  const generateAvatarsForUsers = async (userIds: string[]) => {
+    try {
+      const batch = writeBatch(db);
+      let generatedCount = 0;
+
+      for (const userId of userIds) {
+        const user = users.find(u => u.uid === userId);
+        if (user && !user.photoURL) {
+          const { generateAvatarDataUri } = await import('@/lib/utils/avatar');
+          const avatarDataUri = generateAvatarDataUri(user.displayName || user.email);
+          
+          batch.update(doc(db, 'users', userId), {
+            photoURL: avatarDataUri,
+            updatedAt: new Date(),
+          });
+          generatedCount++;
+        }
+      }
+
+      if (generatedCount > 0) {
+        await batch.commit();
+        toast({
+          title: 'Avatars generated',
+          description: `Generated avatars for ${generatedCount} users`,
+        });
+      } else {
+        toast({
+          title: 'No avatars generated',
+          description: 'All selected users already have profile photos',
+          type: 'info',
+        });
+      }
+    } catch (error) {
+      console.error('Error generating avatars:', error);
+      toast({
+        title: 'Generation failed',
+        description: 'Failed to generate avatars. Please try again.',
+        type: 'error',
+      });
+    }
+  };
+
   const bulkActions: BulkAction[] = [
     {
       id: 'activate',
@@ -604,6 +647,12 @@ export default function UsersManagementPage() {
           description: `Ready to send notification to ${selectedIds.length} users.`,
         });
       },
+    },
+    {
+      id: 'generate-avatars',
+      label: 'Generate Avatars',
+      icon: <UserPlus className="w-4 h-4" />,
+      handler: generateAvatarsForUsers,
     },
     {
       id: 'export',
@@ -807,6 +856,24 @@ export default function UsersManagementPage() {
                 <div className="flex gap-2">
                   <Button variant="outline" size="icon" onClick={() => setShowExportDialog(true)}>
                     <Download className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={async () => {
+                      const usersWithoutAvatar = users.filter(u => !u.photoURL).map(u => u.uid);
+                      if (usersWithoutAvatar.length > 0) {
+                        await generateAvatarsForUsers(usersWithoutAvatar);
+                      } else {
+                        toast({
+                          title: 'All users have avatars',
+                          description: 'No users need avatar generation',
+                          type: 'info',
+                        });
+                      }
+                    }}
+                  >
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Generate Avatars
                   </Button>
                   <Button
                     className="bg-orange hover:bg-orange/90"

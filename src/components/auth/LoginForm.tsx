@@ -11,9 +11,11 @@ import { Separator } from '@/components/ui/separator';
 import { Mail, Lock, Loader2, Chrome } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 import { FaLinkedin } from 'react-icons/fa';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function LoginForm() {
   const router = useRouter();
+  const { login, loginWithGoogle, loginWithLinkedIn } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,18 +33,26 @@ export default function LoginForm() {
     setError('');
 
     try {
-      // TODO: Implement Firebase email/password login
-      console.log('Login with:', { email, password });
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Redirect to dashboard
+      await login(email, password);
+      
+      // Redirect to dashboard on successful login
       if (mounted) {
         router.push('/dashboard');
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to login');
+      if (err.code === 'auth/email-not-verified') {
+        setError('Please verify your email address. A verification email has been sent.');
+      } else if (err.code === 'auth/user-not-found') {
+        setError('No account found with this email address.');
+      } else if (err.code === 'auth/wrong-password') {
+        setError('Incorrect password. Please try again.');
+      } else if (err.code === 'auth/invalid-email') {
+        setError('Invalid email address.');
+      } else if (err.code === 'auth/too-many-requests') {
+        setError('Too many failed attempts. Please try again later.');
+      } else {
+        setError(err.message || 'Failed to login');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -53,18 +63,26 @@ export default function LoginForm() {
     setError('');
 
     try {
-      // TODO: Implement Firebase social login
-      console.log('Login with:', provider);
+      if (provider === 'google') {
+        await loginWithGoogle();
+      } else if (provider === 'linkedin') {
+        await loginWithLinkedIn();
+      }
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Redirect to dashboard
+      // Redirect to dashboard on successful login
       if (mounted) {
         router.push('/dashboard');
       }
     } catch (err: any) {
-      setError(err.message || `Failed to login with ${provider}`);
+      if (err.code === 'auth/popup-blocked') {
+        setError('Popup blocked. Please allow popups for this site.');
+      } else if (err.code === 'auth/popup-closed-by-user') {
+        setError('Login cancelled.');
+      } else if (err.code === 'auth/account-exists-with-different-credential') {
+        setError('An account already exists with the same email address.');
+      } else {
+        setError(err.message || `Failed to login with ${provider}`);
+      }
     } finally {
       setIsLoading(false);
     }

@@ -359,7 +359,26 @@ export default function QuoteRequestForm({
           updatedAt: serverTimestamp(),
         };
 
-        await addDoc(collection(db, 'projects'), projectData);
+        const projectRef = await addDoc(collection(db, 'projects'), projectData);
+
+        // Log project creation
+        await logResourceActivity(
+          'project.create',
+          'project',
+          projectRef.id,
+          formData.projectName,
+          {
+            uid: userId || user?.uid || 'unknown',
+            email: formData.email,
+            displayName: formData.fullName,
+          },
+          {
+            services: formData.services,
+            budget: formData.budget,
+            timeline: formData.timeline,
+            quoteId: quoteRef.id,
+          }
+        );
       } else if ((userId || user?.uid) && !firebaseUser?.emailVerified) {
         // User created account but email not verified yet
         // Project will be created later when email is verified

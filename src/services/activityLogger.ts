@@ -92,7 +92,7 @@ class ActivityLogger {
   };
   private readonly BATCH_SIZE = 50;
   private readonly BATCH_DELAY = 5000; // 5 seconds
-  private readonly COLLECTION_NAME = 'activityLogs';
+  private readonly COLLECTION_NAME = 'activities';
   private readonly RETENTION_DAYS = 30;
 
   private constructor() {}
@@ -112,7 +112,7 @@ class ActivityLogger {
       // Build log object without undefined values
       const log: Omit<ActivityLog, 'id'> = {
         ...activity,
-        timestamp: serverTimestamp() as Timestamp,
+        timestamp: Timestamp.now(),
       };
 
       // Only add optional fields if they have values
