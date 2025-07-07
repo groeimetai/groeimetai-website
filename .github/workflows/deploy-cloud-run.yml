@@ -60,6 +60,7 @@ jobs:
             --build-arg NEXT_PUBLIC_FIREBASE_APP_ID="${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}" \
             --build-arg NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID="${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}" \
             --build-arg NEXT_PUBLIC_GEMINI_API_KEY="${{ secrets.NEXT_PUBLIC_GEMINI_API_KEY }}" \
+            --build-arg NEXT_PUBLIC_APP_URL="${{ secrets.NEXT_PUBLIC_APP_URL }}" \
             -t europe-west1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }} \
             -t europe-west1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:latest \
             .
@@ -82,6 +83,14 @@ jobs:
             --set-env-vars FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }} \
             --set-env-vars SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
             --set-env-vars NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }} \
+            --set-env-vars NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }} \
+            --set-env-vars SMTP_HOST=${{ secrets.SMTP_HOST }} \
+            --set-env-vars SMTP_PORT=${{ secrets.SMTP_PORT }} \
+            --set-env-vars SMTP_USER=${{ secrets.SMTP_USER }} \
+            --set-env-vars SMTP_PASS=${{ secrets.SMTP_PASS }} \
+            --set-env-vars GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} \
+            --set-env-vars PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }} \
+            --set-env-vars OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
             --min-instances 1 \
             --max-instances 10 \
             --memory 1Gi \
