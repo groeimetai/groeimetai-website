@@ -111,14 +111,21 @@ export default function ProjectDetailPage() {
         }
       },
       (error) => {
-        console.error('Error listening to quote:', error);
+        // Only log error if it's not a permission error
+        if (error.code !== 'permission-denied') {
+          console.error('Error listening to quote:', error);
+        }
       }
     );
 
-    // Also listen to projects collection
-    unsubscribeProject = onSnapshot(
-      projectRef,
-      (docSnapshot) => {
+    // Also listen to projects collection (mainly for admins)
+    // Only attempt if user is admin or if we haven't found the project in quotes
+    const shouldListenToProjects = user.role === 'admin' || !project;
+    
+    if (shouldListenToProjects) {
+      unsubscribeProject = onSnapshot(
+        projectRef,
+        (docSnapshot) => {
         if (docSnapshot.exists()) {
           const data = docSnapshot.data();
 
@@ -148,13 +155,18 @@ export default function ProjectDetailPage() {
         }
       },
       (error) => {
-        console.error('Error listening to project:', error);
-        if (!project) {
+        // Only log error if it's not a permission error
+        if (error.code !== 'permission-denied') {
+          console.error('Error listening to project:', error);
+        }
+        // Don't set error state for permission errors if we might get data from quotes collection
+        if (!project && error.code !== 'permission-denied') {
           setError('Failed to load project details. Please try again.');
           setIsLoading(false);
         }
       }
-    );
+      );
+    }
 
     // Cleanup function
     return () => {
