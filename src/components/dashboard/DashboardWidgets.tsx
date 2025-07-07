@@ -550,7 +550,7 @@ const MessagingWidget = ({
   };
 
   return (
-    <div className="flex h-full overflow-hidden" style={{ height: '550px' }}>
+    <div className="flex h-full overflow-hidden" style={{ height: '600px' }}>
       {/* Chat List - 1/3 width */}
       <div className="w-1/3 border-r border-white/10 flex flex-col">
         <div className="p-3 border-b border-white/10">
@@ -1387,7 +1387,10 @@ export default function DashboardWidgets() {
   const [widgets, setWidgets] = useState<Widget[]>(
     isAdmin ? DEFAULT_ADMIN_WIDGETS : DEFAULT_USER_WIDGETS
   );
-  const [widgetData, setWidgetData] = useState<WidgetData>({});
+  const [widgetData, setWidgetData] = useState<WidgetData>({
+    timelineProgress: 0,
+    timelineStages: []
+  });
   const [isDragging, setIsDragging] = useState<string | null>(null);
   const [draggedWidget, setDraggedWidget] = useState<Widget | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -2328,7 +2331,7 @@ export default function DashboardWidgets() {
           const currentStage = stages.find((stage: any) => stage.status === 'current');
           const completedCount = stages.filter((stage: any) => stage.status === 'completed').length;
           const currentStageProgress = currentStage?.progress || 0;
-          const totalProgress = widgetData.timelineProgress || (completedCount * 100 + currentStageProgress) / stages.length;
+          const totalProgress = widgetData.timelineProgress !== undefined ? widgetData.timelineProgress : (completedCount * 100 + currentStageProgress) / stages.length;
 
           // Map icon strings to components
           const stageIcons = {
@@ -2564,7 +2567,7 @@ export default function DashboardWidgets() {
     return (
       <div key={widget.id} className={`${widgetSizeClass}`}>
         <Card
-          className={`bg-white/5 border-white/10 h-full flex flex-col ${isTopWidget ? 'min-h-[600px] max-h-[600px]' : ''}`}
+          className={`bg-white/5 border-white/10 h-full flex flex-col ${isTopWidget ? 'min-h-[650px] max-h-[650px]' : ''}`}
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">{widget.title}</CardTitle>
