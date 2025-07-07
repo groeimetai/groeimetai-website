@@ -206,7 +206,8 @@ export default function UsersManagementPage() {
     const setupRealtimeUpdates = () => {
       let q = query(collection(db, 'users'));
 
-      // Apply filters
+      // Apply filters - we'll filter deleted users client-side to avoid Firestore query issues
+      
       if (filters.role !== 'all') {
         q = query(q, where('role', '==', filters.role));
       }
@@ -262,11 +263,12 @@ export default function UsersManagementPage() {
           } as User);
         });
 
-        // Apply search filter (client-side)
-        let filteredUsers = usersData;
+        // Apply search filter and exclude deleted users (client-side)
+        let filteredUsers = usersData.filter(user => !user.isDeleted);
+        
         if (filters.search) {
           const searchLower = filters.search.toLowerCase();
-          filteredUsers = usersData.filter(
+          filteredUsers = filteredUsers.filter(
             (user) =>
               user.displayName.toLowerCase().includes(searchLower) ||
               user.email.toLowerCase().includes(searchLower) ||
@@ -637,6 +639,31 @@ export default function UsersManagementPage() {
       },
     },
     {
+      id: 'delete',
+      label: 'Delete Users',
+      icon: <Trash2 className="w-4 h-4" />,
+      variant: 'destructive',
+      requiresConfirmation: true,
+      confirmationMessage:
+        'Are you sure you want to permanently delete these users? This action cannot be undone. All user data, projects, and history will be lost.',
+      handler: async (selectedIds: string[]) => {
+        const batch = writeBatch(db);
+        selectedIds.forEach((id) => {
+          // Mark as deleted instead of actual deletion for data integrity
+          batch.update(doc(db, 'users', id), {
+            isDeleted: true,
+            deletedAt: new Date(),
+            isActive: false,
+            updatedAt: new Date(),
+          });
+        });
+        await batch.commit();
+
+        // Remove from local state
+        setUsers(prevUsers => prevUsers.filter(user => !selectedIds.includes(user.uid)));
+      },
+    },
+    {
       id: 'send-notification',
       label: 'Send Notification',
       icon: <Send className="w-4 h-4" />,
@@ -660,7 +687,48 @@ export default function UsersManagementPage() {
       icon: <Download className="w-4 h-4" />,
       handler: async (selectedIds: string[]) => {
         const selectedUsers = users.filter((u) => selectedIds.includes(u.uid));
-        // Export logic here
+        
+        // Use existing export logic
+        const exportData = selectedUsers.map((user) => ({
+          id: user.uid,
+          email: user.email,
+          name: user.displayName,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          role: user.role,
+          accountType: user.accountType,
+          company: user.company,
+          jobTitle: user.jobTitle,
+          status: user.isActive ? 'active' : 'inactive',
+          verified: user.isVerified,
+          createdAt: format(user.createdAt, 'yyyy-MM-dd HH:mm:ss'),
+          lastLoginAt: format(user.lastLoginAt, 'yyyy-MM-dd HH:mm:ss'),
+          projectsCount: user.stats.projectsCount,
+          consultationsCount: user.stats.consultationsCount,
+          messagesCount: user.stats.messagesCount,
+          totalSpent: user.stats.totalSpent,
+        }));
+
+        // Convert to CSV
+        const headers = Object.keys(exportData[0] || {}).join(',');
+        const rows = exportData.map((row) =>
+          Object.values(row)
+            .map((value) =>
+              typeof value === 'string' && value.includes(',') ? `"${value}"` : value
+            )
+            .join(',')
+        );
+        const csv = [headers, ...rows].join('\n');
+
+        // Download CSV
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `selected_users_export_${format(new Date(), 'yyyy-MM-dd')}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
         toast({
           title: 'Export completed',
           description: `Exported ${selectedUsers.length} users.`,
@@ -901,11 +969,19 @@ export default function UsersManagementPage() {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <Checkbox
-                        checked={isSelected}
-                        onChange={onToggle}
-                        onClick={(e) => e.stopPropagation()}
-                      />
+                      <div 
+                        className="flex items-center justify-center w-6 h-6 cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onToggle();
+                        }}
+                      >
+                        <Checkbox
+                          checked={isSelected}
+                          onChange={() => {}}
+                          className="w-5 h-5"
+                        />
+                      </div>
                       <Avatar className="w-12 h-12">
                         <AvatarImage
                           src={user.photoURL || ''}
@@ -915,7 +991,13 @@ export default function UsersManagementPage() {
                           {user.displayName?.charAt(0) || user.email.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="flex-1" onClick={() => handleUserSelect(user)}>
+                      <div 
+                        className="flex-1 cursor-pointer" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleUserSelect(user);
+                        }}
+                      >
                         <div className="flex items-center gap-2">
                           <h3 className="font-medium text-white">
                             {user.displayName || 'Unnamed User'}
