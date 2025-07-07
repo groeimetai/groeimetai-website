@@ -391,7 +391,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="fixed bottom-6 left-4 z-50"
+          className="fixed bottom-6 right-4 z-40"
         >
           <Button
             className="bg-orange hover:bg-orange/90 rounded-full w-14 h-14 shadow-lg"
