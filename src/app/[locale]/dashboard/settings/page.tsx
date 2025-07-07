@@ -54,7 +54,7 @@ import {
 } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
 import { Link } from '@/i18n/routing';
-import { userSettingsService } from '@/services/userSettingsService';
+import { userSettingsService } from '@/services/userSettingsService-firebase';
 import { accountDeletionService } from '@/services/accountDeletionService';
 import { UserSettings } from '@/types';
 import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';

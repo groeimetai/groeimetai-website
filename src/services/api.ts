@@ -2,7 +2,7 @@ import { auth } from '@/lib/firebase/config';
 import { ApiResponse, PaginatedResponse } from '@/types';
 
 // API Configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
 const API_VERSION = process.env.NEXT_PUBLIC_API_VERSION || '1.0';
 
 // Custom error class for API errors
