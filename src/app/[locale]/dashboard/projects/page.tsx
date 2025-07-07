@@ -45,7 +45,7 @@ import { firestoreProjectService as projectService } from '@/services/firestore/
 import { Project, ProjectStatus, ProjectPriority } from '@/types';
 import { ProjectRequestDialog } from '@/components/dialogs/ProjectRequestDialog';
 import { db } from '@/lib/firebase/config';
-import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, orderBy, onSnapshot, doc } from 'firebase/firestore';
 
 export default function ProjectsPage() {
   const router = useRouter();
@@ -53,6 +53,7 @@ export default function ProjectsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<ProjectStatus | 'all'>('all');
   const [projects, setProjects] = useState<Project[]>([]);
+  const [projectTimelines, setProjectTimelines] = useState<{ [key: string]: any }>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showRequestModal, setShowRequestModal] = useState(false);
@@ -182,6 +183,41 @@ export default function ProjectsPage() {
     };
   }, [user, statusFilter, searchQuery]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Subscribe to timeline updates for all projects
+  useEffect(() => {
+    if (!projects.length) return;
+
+    const unsubscribes: (() => void)[] = [];
+
+    projects.forEach((project) => {
+      const timelineRef = doc(db, 'projectTimelines', project.id);
+      
+      const unsubscribe = onSnapshot(
+        timelineRef,
+        (docSnapshot) => {
+          if (docSnapshot.exists()) {
+            setProjectTimelines((prev) => ({
+              ...prev,
+              [project.id]: docSnapshot.data(),
+            }));
+          }
+        },
+        (error) => {
+          // Ignore permission errors for timeline
+          if (error.code !== 'permission-denied') {
+            console.error('Error loading timeline:', error);
+          }
+        }
+      );
+      
+      unsubscribes.push(unsubscribe);
+    });
+
+    return () => {
+      unsubscribes.forEach((unsubscribe) => unsubscribe());
+    };
+  }, [projects]);
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -236,6 +272,20 @@ export default function ProjectsPage() {
     }
   };
 
+  // Calculate project progress based on timeline
+  const calculateProjectProgress = (projectId: string): number => {
+    const timeline = projectTimelines[projectId];
+    if (!timeline?.stages || timeline.stages.length === 0) {
+      return 0;
+    }
+    
+    const completedStages = timeline.stages.filter((s: any) => s.status === 'completed').length;
+    const currentStage = timeline.stages.find((s: any) => s.status === 'current');
+    const currentProgress = currentStage?.progress || 0;
+    
+    return Math.round((completedStages * 100 + currentProgress) / timeline.stages.length);
+  };
+
   useEffect(() => {
     if (!authLoading && !user) {
       router.push('/login');
@@ -274,8 +324,15 @@ export default function ProjectsPage() {
     return status.replace('_', ' ').charAt(0).toUpperCase() + status.slice(1).replace('_', ' ');
   };
 
-  // Calculate actual progress based on milestones
+  // Calculate actual progress based on timeline or milestones
   const calculateProgress = (project: Project): number => {
+    // First, try to use timeline data
+    const timelineProgress = calculateProjectProgress(project.id);
+    if (timelineProgress > 0) {
+      return timelineProgress;
+    }
+    
+    // Fallback to milestones if no timeline data
     if (!project.milestones || project.milestones.length === 0) return 0;
     const completedMilestones = project.milestones.filter((m) => m.status === 'completed').length;
     return Math.round((completedMilestones / project.milestones.length) * 100);

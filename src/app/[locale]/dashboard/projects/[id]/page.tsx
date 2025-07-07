@@ -39,12 +39,14 @@ import { Project, ProjectStatus, ProjectPriority } from '@/types';
 import { format } from 'date-fns';
 import { db } from '@/lib/firebase/config';
 import { doc, onSnapshot } from 'firebase/firestore';
+import { Briefcase as BriefcaseIcon, Target as TargetIcon, Rocket, Flag } from 'lucide-react';
 
 export default function ProjectDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [project, setProject] = useState<Project | null>(null);
+  const [timelineData, setTimelineData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -64,6 +66,7 @@ export default function ProjectDetailPage() {
     // Try both collections since projects can be stored in either
     let unsubscribeQuote: (() => void) | undefined;
     let unsubscribeProject: (() => void) | undefined;
+    let unsubscribeTimeline: (() => void) | undefined;
 
     // Listen to quotes collection
     unsubscribeQuote = onSnapshot(
@@ -107,6 +110,23 @@ export default function ProjectDetailPage() {
           };
 
           setProject(projectData);
+          
+          // Also set up timeline listener for this project
+          const timelineRef = doc(db, 'projectTimelines', docSnapshot.id);
+          unsubscribeTimeline = onSnapshot(timelineRef, 
+            (timelineDoc) => {
+              if (timelineDoc.exists()) {
+                setTimelineData(timelineDoc.data());
+              }
+            },
+            (error) => {
+              // Ignore permission errors for timeline
+              if (error.code !== 'permission-denied') {
+                console.error('Error loading timeline:', error);
+              }
+            }
+          );
+          
           setIsLoading(false);
         }
       },
@@ -146,6 +166,23 @@ export default function ProjectDetailPage() {
           } as Project;
 
           setProject(projectData);
+          
+          // Also set up timeline listener for this project
+          const timelineRef = doc(db, 'projectTimelines', docSnapshot.id);
+          unsubscribeTimeline = onSnapshot(timelineRef, 
+            (timelineDoc) => {
+              if (timelineDoc.exists()) {
+                setTimelineData(timelineDoc.data());
+              }
+            },
+            (error) => {
+              // Ignore permission errors for timeline
+              if (error.code !== 'permission-denied') {
+                console.error('Error loading timeline:', error);
+              }
+            }
+          );
+          
           setIsLoading(false);
         } else {
           // If not found in projects collection, rely on quotes collection
@@ -172,6 +209,7 @@ export default function ProjectDetailPage() {
     return () => {
       if (unsubscribeQuote) unsubscribeQuote();
       if (unsubscribeProject) unsubscribeProject();
+      if (unsubscribeTimeline) unsubscribeTimeline();
     };
   }, [user, projectId]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -361,6 +399,7 @@ export default function ProjectDetailPage() {
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="bg-white/5 border-white/10 flex-wrap h-auto">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="timeline">Timeline</TabsTrigger>
             <TabsTrigger value="milestones">Milestones</TabsTrigger>
             <TabsTrigger value="deliverables">Deliverables</TabsTrigger>
             <TabsTrigger value="documents">Documents</TabsTrigger>
@@ -496,6 +535,116 @@ export default function ProjectDetailPage() {
                 </div>
               </Card>
             </div>
+          </TabsContent>
+
+          {/* Timeline Tab */}
+          <TabsContent value="timeline">
+            <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6">
+              <h3 className="text-lg font-semibold text-white mb-6">Project Timeline</h3>
+              {timelineData?.stages && timelineData.stages.length > 0 ? (
+                <div className="space-y-6">
+                  {timelineData.stages.map((stage: any, index: number) => {
+                    const StageIcon = stage.icon === 'briefcase' ? BriefcaseIcon : 
+                                     stage.icon === 'target' ? TargetIcon :
+                                     stage.icon === 'rocket' ? Rocket : Flag;
+                    
+                    return (
+                      <div key={stage.id || index} className="relative">
+                        {/* Connection Line */}
+                        {index < timelineData.stages.length - 1 && (
+                          <div
+                            className={`absolute left-5 top-10 bottom-0 w-0.5 ${
+                              stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
+                            }`}
+                          />
+                        )}
+                        
+                        <div className="flex items-start space-x-4">
+                          {/* Stage Icon */}
+                          <div
+                            className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center ${
+                              stage.status === 'completed'
+                                ? 'bg-green-500'
+                                : stage.status === 'current'
+                                  ? 'bg-orange'
+                                  : 'bg-white/20'
+                            }`}
+                          >
+                            {stage.status === 'completed' ? (
+                              <CheckCircle className="w-5 h-5 text-white" />
+                            ) : stage.status === 'current' ? (
+                              <Circle className="w-5 h-5 text-white animate-pulse" />
+                            ) : (
+                              <StageIcon className="w-5 h-5 text-white/60" />
+                            )}
+                          </div>
+                          
+                          {/* Stage Details */}
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <h4
+                                className={`font-medium ${
+                                  stage.status === 'completed'
+                                    ? 'text-white'
+                                    : stage.status === 'current'
+                                      ? 'text-white'
+                                      : 'text-white/60'
+                                }`}
+                              >
+                                {stage.name}
+                              </h4>
+                              {stage.estimatedCompletion && (
+                                <span className="text-sm text-white/60">
+                                  Est. {format(new Date(stage.estimatedCompletion), 'MMM dd, yyyy')}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-sm text-white/60 mt-1">{stage.description}</p>
+                            
+                            {/* Stage Progress Bar (for current stage) */}
+                            {stage.status === 'current' && stage.progress !== undefined && (
+                              <div className="mt-3">
+                                <div className="flex justify-between text-xs mb-1">
+                                  <span className="text-white/60">Progress</span>
+                                  <span className="text-white">{stage.progress}%</span>
+                                </div>
+                                <Progress value={stage.progress} className="h-1" />
+                              </div>
+                            )}
+                            
+                            {/* Completion info */}
+                            {stage.status === 'completed' && stage.completedAt && (
+                              <p className="text-xs text-green-500 mt-2">
+                                Completed on {format(new Date(stage.completedAt), 'MMM dd, yyyy')}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  
+                  {/* Next Milestone */}
+                  {timelineData.milestone && (
+                    <div className="mt-6 p-4 bg-orange/10 rounded-lg border border-orange/20">
+                      <div className="flex items-center space-x-2">
+                        <Target className="w-5 h-5 text-orange" />
+                        <div>
+                          <p className="text-sm font-medium text-white">Next Milestone</p>
+                          <p className="text-xs text-white/60">{timelineData.milestone}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Target className="w-12 h-12 text-white/20 mx-auto mb-3" />
+                  <p className="text-white/60">No timeline data available yet</p>
+                  <p className="text-white/40 text-sm mt-1">Timeline will be updated as the project progresses</p>
+                </div>
+              )}
+            </Card>
           </TabsContent>
 
           {/* Milestones Tab */}
