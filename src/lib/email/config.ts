@@ -17,7 +17,7 @@ export const emailConfig = {
     const port = parseInt(process.env.SMTP_PORT || '587');
     const isNamecheap = process.env.SMTP_HOST?.includes('privateemail.com');
 
-    return {
+    const config: any = {
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: port,
       secure: port === 465, // true for 465, false for other ports
@@ -25,21 +25,17 @@ export const emailConfig = {
         user: process.env.SMTP_USER || '', // Full email address for Namecheap
         pass: process.env.SMTP_PASS || '', // Email password or app password
       },
-      // Additional settings
-      requireTLS: true,
-      connectionTimeout: 10000, // 10 seconds
-      greetingTimeout: 10000,
-      socketTimeout: 10000,
-      // Namecheap specific settings
-      ...(isNamecheap && {
-        tls: {
-          rejectUnauthorized: false, // May be needed for some Namecheap configs
-          minVersion: 'TLSv1.2',
-          ciphers: 'SSLv3',
-        },
-        authMethod: 'PLAIN', // Try PLAIN auth method
-      }),
     };
+    
+    // Add Namecheap specific settings that match the working test script
+    if (isNamecheap) {
+      config.tls = {
+        rejectUnauthorized: false,
+        minVersion: 'TLSv1.2',
+      };
+    }
+    
+    return config;
   },
 };
 
