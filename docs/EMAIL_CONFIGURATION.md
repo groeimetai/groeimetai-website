@@ -7,6 +7,23 @@ GroeimetAI uses two email systems:
 1. **Firebase Authentication Emails** - For verification emails, password resets, etc.
 2. **SMTP/Custom Emails** - For project notifications, quotes, and custom emails
 
+## ✅ Recent Fixes Applied
+
+### Email Logo Display
+- **Problem**: SVG logo not displaying in email clients (especially Outlook, Gmail)
+- **Solution**: Replaced SVG with HTML/CSS text styling that works in all email clients
+- **Status**: ✅ Fixed - Logo now displays correctly with orange stroke effect
+
+### Email Links Point to Production
+- **Problem**: Email links redirected to `localhost:3000` instead of `groeimetai.io`
+- **Solution**: Added `NEXT_PUBLIC_APP_URL` environment variable
+- **Status**: ✅ Fixed - Links now point to production domain
+
+### Namecheap Email Compatibility
+- **Problem**: Custom emails not working with Namecheap SMTP
+- **Solution**: Updated SMTP configuration for better compatibility
+- **Status**: ✅ Fixed - Works with Namecheap hosting
+
 ## 1. Firebase Authentication Email Configuration
 
 ### Problem
@@ -211,7 +228,35 @@ Run: `node scripts/test-email.js`
 
 ## 7. Production Deployment
 
-For Vercel/Production:
+### Required Environment Variable
+
+**CRITICAL**: Set this environment variable in production to ensure email links work correctly:
+
+```bash
+NEXT_PUBLIC_APP_URL=https://groeimetai.io
+```
+
+**Where to set this:**
+
+#### Vercel
+1. Go to Vercel dashboard → Project → Settings → Environment Variables
+2. Add: `NEXT_PUBLIC_APP_URL` = `https://groeimetai.io`
+
+#### Docker/Railway/Other
+```yaml
+environment:
+  - NEXT_PUBLIC_APP_URL=https://groeimetai.io
+```
+
+#### GitHub Actions Secrets
+- Name: `NEXT_PUBLIC_APP_URL`
+- Value: `https://groeimetai.io`
+
+**What this fixes:**
+- ❌ Before: Email links point to `http://localhost:3000/nl/auth/action?mode=verifyEmail&oobCode=...`
+- ✅ After: Email links point to `https://groeimetai.io/nl/auth/action?mode=verifyEmail&oobCode=...`
+
+### Other Production Settings
 
 1. Add environment variables in Vercel dashboard
 2. Use SendGrid for better deliverability
