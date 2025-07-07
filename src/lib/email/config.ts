@@ -14,14 +14,24 @@ export const emailConfig = {
 
   // SMTP configuration getter to evaluate environment variables at runtime
   get smtp() {
+    const port = parseInt(process.env.SMTP_PORT || '587');
+    const isNamecheap = process.env.SMTP_HOST?.includes('privateemail.com');
+    
     return {
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: false, // true for 465, false for other ports
+      port: port,
+      secure: port === 465, // true for 465, false for other ports
       auth: {
-        user: process.env.SMTP_USER || '', // niels@groeimetai.io
-        pass: process.env.SMTP_PASS || '', // App password
+        user: process.env.SMTP_USER || '', // Full email address for Namecheap
+        pass: process.env.SMTP_PASS || '', // Email password or app password
       },
+      // Namecheap specific settings
+      ...(isNamecheap && {
+        tls: {
+          rejectUnauthorized: false, // May be needed for some Namecheap configs
+          minVersion: 'TLSv1.2',
+        },
+      }),
     };
   },
 };

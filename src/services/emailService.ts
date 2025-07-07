@@ -10,7 +10,7 @@ export interface EmailOptions {
 }
 
 class EmailService {
-  private async sendEmail(options: EmailOptions) {
+  async sendEmail(options: EmailOptions) {
     // Verify email configuration
     const isConnected = await verifyEmailConnection();
     if (!isConnected) {
