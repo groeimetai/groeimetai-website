@@ -391,7 +391,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="fixed bottom-6 right-4 z-40"
+          className="fixed bottom-6 left-4 z-40"
         >
           <Button
             className="bg-orange hover:bg-orange/90 rounded-full w-14 h-14 shadow-lg"
@@ -549,7 +549,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
 
       {/* Help Center Dialog */}
       <Dialog open={isHelpCenterOpen} onOpenChange={setIsHelpCenterOpen}>
-        <DialogContent className="bg-black/95 border-white/20 max-w-4xl max-h-[80vh] overflow-hidden">
+        <DialogContent className="bg-black/95 border-white/20 max-w-4xl max-h-[90vh] md:max-h-[80vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle className="text-2xl text-white">Help Center</DialogTitle>
             <DialogDescription className="text-white/60">
@@ -557,7 +557,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
             </DialogDescription>
           </DialogHeader>
 
-          <Tabs defaultValue="articles" className="mt-6">
+          <Tabs defaultValue="articles" className="mt-6 flex-1 flex flex-col overflow-hidden">
             <TabsList className="grid w-full grid-cols-4 bg-white/5">
               <TabsTrigger value="articles">Articles</TabsTrigger>
               <TabsTrigger value="tutorials">Tutorials</TabsTrigger>
@@ -565,8 +565,8 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
               <TabsTrigger value="contact">Contact</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="articles" className="mt-6">
-              <div className="space-y-4">
+            <div className="flex-1 overflow-y-auto px-1 mt-6">
+              <TabsContent value="articles" className="space-y-4">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/40 w-4 h-4" />
                   <Input
@@ -577,7 +577,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                   />
                 </div>
 
-                <ScrollArea className="h-[400px]">
+                <ScrollArea className="h-[50vh] md:h-[400px]">
                   <div className="space-y-3">
                     {filteredArticles.map((article) => (
                       <Card
@@ -606,11 +606,9 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                     ))}
                   </div>
                 </ScrollArea>
-              </div>
-            </TabsContent>
+              </TabsContent>
 
-            <TabsContent value="tutorials" className="mt-6">
-              <div className="grid gap-4">
+              <TabsContent value="tutorials" className="grid gap-4">
                 {TUTORIALS.map((tutorial) => (
                   <Card
                     key={tutorial.id}
@@ -634,11 +632,9 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                     </CardContent>
                   </Card>
                 ))}
-              </div>
-            </TabsContent>
+              </TabsContent>
 
-            <TabsContent value="videos" className="mt-6">
-              <div className="text-center py-12">
+              <TabsContent value="videos" className="text-center py-12">
                 <Video className="w-16 h-16 text-white/20 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-white mb-2">
                   Video Tutorials Coming Soon
@@ -646,11 +642,9 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                 <p className="text-white/60">
                   We&apos;re creating helpful video content to guide you
                 </p>
-              </div>
-            </TabsContent>
+              </TabsContent>
 
-            <TabsContent value="contact" className="mt-6">
-              <div className="space-y-6">
+              <TabsContent value="contact" className="space-y-6">
                 <Card className="bg-white/5 border-white/10">
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
@@ -713,8 +707,8 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                     </div>
                   </CardContent>
                 </Card>
-              </div>
-            </TabsContent>
+              </TabsContent>
+            </div>
           </Tabs>
         </DialogContent>
       </Dialog>
