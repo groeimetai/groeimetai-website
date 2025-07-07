@@ -870,7 +870,9 @@
         "emailNotVerified": "Please verify your email address first. We've sent you a new verification email.",
         "tooManyRequests": "Too many failed attempts. Please try again later.",
         "invalidCode": "Invalid verification code. Please try again.",
-        "general": "An error occurred. Please try again."
+        "networkError": "No internet connection. Please check your connection and try again.",
+        "userDisabled": "This account has been disabled. Please contact support for assistance.",
+        "general": "Login failed. Please check your credentials and try again."
       },
       "orDivider": "OR",
       "continueWithGoogle": "Continue with Google",

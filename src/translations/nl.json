@@ -860,7 +860,9 @@
         "emailNotVerified": "Verifieer eerst uw e-mailadres. We hebben u een nieuwe verificatie-e-mail gestuurd.",
         "tooManyRequests": "Te veel mislukte pogingen. Probeer het later opnieuw.",
         "invalidCode": "Ongeldige verificatiecode. Probeer het opnieuw.",
-        "general": "Er is een fout opgetreden. Probeer het opnieuw."
+        "networkError": "Geen internetverbinding. Controleer uw verbinding en probeer het opnieuw.",
+        "userDisabled": "Dit account is uitgeschakeld. Neem contact op met support voor hulp.",
+        "general": "Inloggen mislukt. Controleer uw gegevens en probeer het opnieuw."
       },
       "orDivider": "OF",
       "continueWithGoogle": "Ga verder met Google",
