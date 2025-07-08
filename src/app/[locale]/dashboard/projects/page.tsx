@@ -74,14 +74,23 @@ export default function ProjectsPage() {
     // Build queries for both quotes and projects collections
     const queries = [];
 
-    // Query for approved quotes (these are projects)
+    // Query for all quotes (including pending ones waiting for approval)
     const quotesQuery = query(
       collection(db, 'quotes'),
       where('userId', '==', user.uid),
-      where('status', '==', 'approved'),
       orderBy('createdAt', 'desc')
     );
     queries.push({ query: quotesQuery, type: 'quote' });
+
+    // Also query for quotes by email (fallback for quotes created before account creation)
+    if (user.email) {
+      const quotesEmailQuery = query(
+        collection(db, 'quotes'),
+        where('email', '==', user.email),
+        orderBy('createdAt', 'desc')
+      );
+      queries.push({ query: quotesEmailQuery, type: 'quote' });
+    }
 
     // Query for projects collection
     const projectsQuery = query(
@@ -103,14 +112,29 @@ export default function ProjectsPage() {
 
             if (type === 'quote') {
               // Transform quote to project format
+              // Map quote status to appropriate project status
+              const getProjectStatus = (quoteStatus: string): ProjectStatus => {
+                switch (quoteStatus) {
+                  case 'pending':
+                  case 'reviewed':
+                    return 'pending_approval';
+                  case 'approved':
+                    return 'active';
+                  case 'rejected':
+                    return 'cancelled';
+                  default:
+                    return 'pending_approval';
+                }
+              };
+
               const project: Project = {
                 id: doc.id,
                 name: data.projectName || 'Untitled Project',
                 description: data.projectDetails || '',
                 type: 'consultation' as const,
-                status: 'active' as const,
+                status: getProjectStatus(data.status),
                 priority: (data.priority || 'medium') as ProjectPriority,
-                clientId: data.userId,
+                clientId: data.userId || user.uid,
                 consultantId: '',
                 teamIds: [],
                 startDate: data.startDate?.toDate?.() || new Date(),
@@ -126,9 +150,14 @@ export default function ProjectsPage() {
                 meetingIds: [],
                 createdAt: data.createdAt?.toDate?.() || new Date(),
                 updatedAt: data.updatedAt?.toDate?.() || new Date(),
-                createdBy: data.userId || '',
+                createdBy: data.userId || user.uid,
+                // Store original quote status for better display
+                originalQuoteStatus: data.status,
               };
-              allProjects[doc.id] = project;
+              // Only add if not already present (avoid duplicates from email/userId queries)
+              if (!allProjects[doc.id]) {
+                allProjects[doc.id] = project;
+              }
             } else {
               // Direct project format
               allProjects[doc.id] = {
@@ -303,8 +332,26 @@ export default function ProjectsPage() {
     );
   }
 
-  const getStatusColor = (status: ProjectStatus) => {
-    switch (status) {
+  const getStatusColor = (project: Project) => {
+    // Check if this is a quote-based project and show appropriate color
+    if ((project as any).originalQuoteStatus) {
+      const quoteStatus = (project as any).originalQuoteStatus;
+      switch (quoteStatus) {
+        case 'pending':
+          return 'bg-yellow-500';
+        case 'reviewed':
+          return 'bg-blue-500';
+        case 'approved':
+          return 'bg-green-500';
+        case 'rejected':
+          return 'bg-red-500';
+        default:
+          return 'bg-gray-500';
+      }
+    }
+    
+    // Fallback to regular project status colors
+    switch (project.status) {
       case 'active':
         return 'bg-green-500';
       case 'completed':
@@ -313,6 +360,8 @@ export default function ProjectsPage() {
         return 'bg-yellow-500';
       case 'draft':
         return 'bg-gray-500';
+      case 'pending_approval':
+        return 'bg-yellow-500';
       case 'cancelled':
         return 'bg-red-500';
       default:
@@ -320,8 +369,31 @@ export default function ProjectsPage() {
     }
   };
 
-  const getStatusLabel = (status: ProjectStatus) => {
-    return status.replace('_', ' ').charAt(0).toUpperCase() + status.slice(1).replace('_', ' ');
+  const getStatusLabel = (project: Project) => {
+    // Check if this is a quote-based project and show appropriate label
+    if ((project as any).originalQuoteStatus) {
+      const quoteStatus = (project as any).originalQuoteStatus;
+      switch (quoteStatus) {
+        case 'pending':
+          return 'Pending Approval';
+        case 'reviewed':
+          return 'Under Review';
+        case 'approved':
+          return 'Active';
+        case 'rejected':
+          return 'Rejected';
+        default:
+          return 'Draft';
+      }
+    }
+    
+    // Handle the new pending_approval status
+    if (project.status === 'pending_approval') {
+      return 'Pending Approval';
+    }
+    
+    // Fallback to regular project status
+    return project.status.replace('_', ' ').charAt(0).toUpperCase() + project.status.slice(1).replace('_', ' ');
   };
 
   // Calculate actual progress based on timeline or milestones
@@ -410,11 +482,11 @@ export default function ProjectsPage() {
               Active
             </Button>
             <Button
-              variant={statusFilter === 'draft' ? 'default' : 'outline'}
-              onClick={() => setStatusFilter('draft')}
-              className={statusFilter === 'draft' ? 'bg-orange' : ''}
+              variant={statusFilter === 'pending_approval' ? 'default' : 'outline'}
+              onClick={() => setStatusFilter('pending_approval')}
+              className={statusFilter === 'pending_approval' ? 'bg-orange' : ''}
             >
-              Draft
+              Pending Approval
             </Button>
             <Button
               variant={statusFilter === 'completed' ? 'default' : 'outline'}
@@ -422,6 +494,13 @@ export default function ProjectsPage() {
               className={statusFilter === 'completed' ? 'bg-orange' : ''}
             >
               Completed
+            </Button>
+            <Button
+              variant={statusFilter === 'cancelled' ? 'default' : 'outline'}
+              onClick={() => setStatusFilter('cancelled')}
+              className={statusFilter === 'cancelled' ? 'bg-orange' : ''}
+            >
+              Rejected
             </Button>
           </div>
         </div>
@@ -468,9 +547,9 @@ export default function ProjectsPage() {
                         <h3 className="font-semibold text-white">{project.name}</h3>
                         <Badge
                           variant="outline"
-                          className={`${getStatusColor(project.status)} bg-opacity-20 border-0 mt-1`}
+                          className={`${getStatusColor(project)} bg-opacity-20 border-0 mt-1`}
                         >
-                          {getStatusLabel(project.status)}
+                          {getStatusLabel(project)}
                         </Badge>
                       </div>
                     </div>

@@ -31,6 +31,7 @@ export interface User {
   subscriptionStatus?: SubscriptionStatus;
   subscriptionPlan?: SubscriptionPlan;
   stats: UserStats;
+  isDeleted?: boolean;
 }
 
 export type UserRole = 'admin' | 'consultant' | 'client' | 'guest';
@@ -140,10 +141,11 @@ export interface Project {
   updatedAt: Date;
   createdBy: string;
   completedAt?: Date;
+  originalQuoteStatus?: string;
 }
 
 export type ProjectType = 'consultation' | 'implementation' | 'support' | 'training';
-export type ProjectStatus = 'draft' | 'active' | 'on_hold' | 'completed' | 'cancelled';
+export type ProjectStatus = 'draft' | 'active' | 'on_hold' | 'completed' | 'cancelled' | 'pending_approval';
 export type ProjectPriority = 'low' | 'medium' | 'high' | 'urgent';
 
 export interface ProjectBudget {

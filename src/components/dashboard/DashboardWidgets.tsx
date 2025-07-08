@@ -997,10 +997,11 @@ const AdminProjectProgress = ({
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-hidden">
       {allProjects.length > 0 ? (
-        <ScrollArea className="flex-1">
-          {allProjects.map((project) => {
+        <ScrollArea className="flex-1 h-full">
+          <div className="p-3 space-y-2">
+            {allProjects.map((project) => {
             const timeline = projectTimelines[project.id];
             const stages = timeline?.stages || defaultStages;
             const progress = calculateProjectProgress(stages);
@@ -1009,7 +1010,7 @@ const AdminProjectProgress = ({
             return (
               <div
                 key={project.id}
-                className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer mb-2"
+                className="p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
                 onClick={() => handleProjectClick(project)}
               >
                 <div className="flex justify-between items-start mb-2">
@@ -1036,6 +1037,7 @@ const AdminProjectProgress = ({
               </div>
             );
           })}
+          </div>
         </ScrollArea>
       ) : (
         <div className="text-center py-8">
@@ -2718,7 +2720,7 @@ export default function DashboardWidgets() {
             </div>
           </CardHeader>
           <CardContent
-            className={`flex-1 ${widget.type === 'messages' ? 'p-0 overflow-hidden' : 'p-6 pt-0'}`}
+            className={`flex-1 ${widget.type === 'messages' || widget.type === 'projectProgress' ? 'p-0 overflow-hidden' : 'p-6 pt-0'}`}
           >
             <WidgetContent />
           </CardContent>
