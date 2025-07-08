@@ -870,11 +870,11 @@ const AdminProjectProgress = ({
     },
   ];
 
-  // Fetch all approved quotes and their timelines with real-time updates
+  // Fetch all approved and pending quotes and their timelines with real-time updates
   useEffect(() => {
     const q = query(
       collection(db, 'quotes'),
-      where('status', '==', 'approved'),
+      where('status', 'in', ['approved', 'pending']),
       orderBy('createdAt', 'desc')
     );
 
@@ -997,9 +997,9 @@ const AdminProjectProgress = ({
   };
 
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col h-full">
       {allProjects.length > 0 ? (
-        <ScrollArea className="h-[400px]">
+        <ScrollArea className="flex-1">
           {allProjects.map((project) => {
             const timeline = projectTimelines[project.id];
             const stages = timeline?.stages || defaultStages;
@@ -1020,9 +1020,16 @@ const AdminProjectProgress = ({
                       {project.userName}
                     </p>
                   </div>
-                  <Badge variant="outline" className="text-xs">
-                    {currentStage?.name || 'Planning'}
-                  </Badge>
+                  <div className="flex flex-col items-end gap-1">
+                    {project.status === 'pending' && (
+                      <Badge variant="outline" className="text-xs bg-orange/20 text-orange border-orange">
+                        Pending Approval
+                      </Badge>
+                    )}
+                    <Badge variant="outline" className="text-xs">
+                      {currentStage?.name || 'Planning'}
+                    </Badge>
+                  </div>
                 </div>
                 <Progress value={progress} className="h-2" />
                 <p className="text-white/60 text-xs text-right mt-1">{Math.round(progress)}%</p>
@@ -1033,7 +1040,7 @@ const AdminProjectProgress = ({
       ) : (
         <div className="text-center py-8">
           <Target className="w-12 h-12 text-white/20 mx-auto mb-3" />
-          <p className="text-white/60 text-sm">No approved projects yet</p>
+          <p className="text-white/60 text-sm">No projects yet</p>
         </div>
       )}
 
@@ -1390,6 +1397,8 @@ export default function DashboardWidgets() {
   const [widgetData, setWidgetData] = useState<WidgetData>({
     timelineProgress: 0,
     timelineStages: [],
+    allProjects: [], // SECURITY: Always initialize as empty array
+    projectProgress: [], // Initialize for consistency
   });
   const [isDragging, setIsDragging] = useState<string | null>(null);
   const [draggedWidget, setDraggedWidget] = useState<Widget | null>(null);
@@ -1444,6 +1453,24 @@ export default function DashboardWidgets() {
     loadWidgetPreferences();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isAdmin]);
+
+  // SECURITY: Clear sensitive data when user role changes
+  useEffect(() => {
+    if (!isAdmin) {
+      // Clear any admin-only data when user is not an admin
+      setWidgetData((prevData) => ({
+        ...prevData,
+        allProjects: [], // Clear all projects data
+        stats: undefined, // Clear admin stats
+        activeChats: undefined, // Clear admin chats
+        totalRevenue: undefined,
+        monthlyRevenue: undefined,
+        pendingRevenue: undefined,
+        revenueGrowth: undefined,
+        upcomingMeetings: undefined,
+      }));
+    }
+  }, [isAdmin]);
 
   // Save widget preferences with proper error handling
   const saveWidgetPreferences = async (updatedWidgets?: Widget[]) => {
@@ -1604,7 +1631,7 @@ export default function DashboardWidgets() {
           // Fetch all projects for admin projectProgress widget
           const allQuotesQuery = query(
             collection(db, 'quotes'),
-            where('status', '==', 'approved'),
+            where('status', 'in', ['approved', 'pending']),
             orderBy('createdAt', 'desc')
           );
           const allApprovedQuotesSnapshot = await getDocs(allQuotesQuery);
@@ -1623,14 +1650,75 @@ export default function DashboardWidgets() {
           });
         } else {
           // User data fetching
-          const projectsQuery = query(
-            collection(db, 'projects'),
-            where('clientId', '==', user.uid)
+          // CRITICAL SECURITY FIX: Explicitly clear allProjects for non-admin users
+          data.allProjects = [];
+          
+          // Query quotes by userId
+          const quotesQuery = query(
+            collection(db, 'quotes'), 
+            where('userId', '==', user.uid),
+            orderBy('createdAt', 'desc')
           );
-          const projectsSnapshot = await getDocs(projectsQuery);
-
-          const quotesQuery = query(collection(db, 'quotes'), where('userId', '==', user.uid));
           const quotesSnapshot = await getDocs(quotesQuery);
+          
+          // Also query for quotes by email (fallback for quotes created before account creation)
+          let quotesEmailSnapshot: any = { docs: [] };
+          if (user.email) {
+            const quotesEmailQuery = query(
+              collection(db, 'quotes'),
+              where('email', '==', user.email),
+              orderBy('createdAt', 'desc')
+            );
+            quotesEmailSnapshot = await getDocs(quotesEmailQuery);
+          }
+          
+          // Combine quotes from both queries, avoiding duplicates
+          const allQuoteDocs = new Map();
+          quotesSnapshot.docs.forEach(doc => allQuoteDocs.set(doc.id, doc));
+          quotesEmailSnapshot.docs.forEach((doc: any) => {
+            if (!allQuoteDocs.has(doc.id)) {
+              allQuoteDocs.set(doc.id, doc);
+            }
+          });
+          
+          // Transform quotes to project format
+          const projectsFromQuotes = Array.from(allQuoteDocs.values()).map(doc => {
+            const data = doc.data();
+            
+            // Map quote status to appropriate project status
+            const getProjectStatus = (quoteStatus: string) => {
+              switch (quoteStatus) {
+                case 'pending':
+                case 'reviewed':
+                  return 'pending_approval';
+                case 'approved':
+                  return 'active';
+                case 'rejected':
+                  return 'cancelled';
+                default:
+                  return 'pending_approval';
+              }
+            };
+            
+            return {
+              id: doc.id,
+              data() {
+                return {
+                  name: data.projectName || 'Untitled Project',
+                  status: getProjectStatus(data.status),
+                  clientId: data.userId || user.uid,
+                  estimatedCompletion: data.estimatedCompletion,
+                  ...data
+                };
+              }
+            };
+          });
+          
+          // Use transformed quotes as "projects" for consistency
+          const projectsSnapshot = { 
+            docs: projectsFromQuotes, 
+            size: projectsFromQuotes.length 
+          };
 
           // For project timeline widget - check both projects and approved quotes
           let activeProject = null;
@@ -1653,19 +1741,23 @@ export default function DashboardWidgets() {
             }
           }
 
-          // If no projects, check for approved quotes
-          if (!activeProject && quotesSnapshot.docs.length > 0) {
-            const approvedQuotes = quotesSnapshot.docs.filter(
-              (doc) => doc.data().status === 'approved'
+          // If no active projects found, check for approved or pending quotes (already transformed to projects)
+          if (!activeProject && projectsSnapshot.docs.length > 0) {
+            // Find projects with 'active' or 'pending_approval' status (which come from approved/pending quotes)
+            const availableProjects = projectsSnapshot.docs.filter(
+              (doc) => {
+                const projectData = doc.data();
+                return projectData.status === 'active' || projectData.status === 'pending_approval';
+              }
             );
-            if (approvedQuotes.length > 0) {
-              const quote = approvedQuotes[0].data();
+            if (availableProjects.length > 0) {
+              const projectData = availableProjects[0].data();
               activeProject = {
-                name: quote.projectName || 'My AI Project',
+                name: projectData.name || 'My AI Project',
                 status: 'active',
-                estimatedCompletion: quote.estimatedCompletion,
+                estimatedCompletion: projectData.estimatedCompletion,
               };
-              activeProjectId = approvedQuotes[0].id;
+              activeProjectId = availableProjects[0].id;
             }
           }
 
@@ -1799,7 +1891,7 @@ export default function DashboardWidgets() {
             projects: projectsSnapshot.size,
             activeProjects: projectsSnapshot.docs.filter((doc) => doc.data().status === 'active')
               .length,
-            quotes: quotesSnapshot.size,
+            quotes: projectsSnapshot.size, // Same as projects since they're transformed quotes
             documents: data.recentDocuments?.length || 0,
           };
 
@@ -1873,16 +1965,25 @@ export default function DashboardWidgets() {
           });
         }
 
-        setWidgetData((prevData) => ({
-          ...prevData,
-          ...data,
-          // Preserve timeline data if it was already set by real-time listener
-          timelineStages: prevData.timelineStages || data.timelineStages,
-          timelineProgress:
-            prevData.timelineProgress !== undefined
-              ? prevData.timelineProgress
-              : data.timelineProgress,
-        }));
+        setWidgetData((prevData) => {
+          // SECURITY: Final check to ensure non-admin users never get allProjects data
+          const sanitizedData = { ...data };
+          if (!isAdmin && sanitizedData.allProjects && sanitizedData.allProjects.length > 0) {
+            console.error('SECURITY: Preventing allProjects data leak to non-admin user');
+            sanitizedData.allProjects = [];
+          }
+          
+          return {
+            ...prevData,
+            ...sanitizedData,
+            // Preserve timeline data if it was already set by real-time listener
+            timelineStages: prevData.timelineStages || sanitizedData.timelineStages,
+            timelineProgress:
+              prevData.timelineProgress !== undefined
+                ? prevData.timelineProgress
+                : sanitizedData.timelineProgress,
+          };
+        });
       } catch (error) {
         // Only log actual errors, not permission issues that are already handled
         if (
@@ -2088,11 +2189,19 @@ export default function DashboardWidgets() {
 
         case 'projectProgress':
           if (!isAdmin) {
-            // For non-admin users, show simple project list
+            // SECURITY: For non-admin users, ONLY show their own projects
+            // Double-check that we're not accidentally using allProjects
+            const userProjects = widgetData.projectProgress || [];
+            
+            // Additional security check: ensure no allProjects data leaks to non-admin users
+            if (widgetData.allProjects && widgetData.allProjects.length > 0) {
+              console.error('SECURITY WARNING: allProjects should be empty for non-admin users');
+            }
+            
             return (
               <div className="space-y-3">
-                {widgetData.projectProgress?.length > 0 ? (
-                  widgetData.projectProgress.map((project: any) => (
+                {userProjects.length > 0 ? (
+                  userProjects.map((project: any) => (
                     <div key={project.id} className="space-y-2">
                       <div className="flex justify-between items-center">
                         <h4 className="text-white text-sm font-medium">{project.name}</h4>
@@ -2112,9 +2221,15 @@ export default function DashboardWidgets() {
           }
 
           // Admin version with clickable projects and timeline editing
-          return (
-            <AdminProjectProgress projects={widgetData.allProjects || []} onRefresh={() => {}} />
-          );
+          // SECURITY: Double-check admin status before showing all projects
+          if (isAdmin && widgetData.allProjects) {
+            return (
+              <AdminProjectProgress projects={widgetData.allProjects} onRefresh={() => {}} />
+            );
+          }
+          
+          // Fallback: If somehow we reach here, show empty state
+          return <p className="text-white/60 text-center py-4">No projects available</p>;
 
         case 'quickActions':
           return (
@@ -2580,7 +2695,11 @@ export default function DashboardWidgets() {
     return (
       <div key={widget.id} className={`${widgetSizeClass}`}>
         <Card
-          className={`bg-white/5 border-white/10 h-full flex flex-col ${isTopWidget ? 'min-h-[650px] max-h-[650px]' : ''}`}
+          className={`bg-white/5 border-white/10 h-full flex flex-col ${
+            isTopWidget
+              ? 'min-h-[650px]'
+              : ''
+          }`}
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-white">{widget.title}</CardTitle>
@@ -2599,7 +2718,7 @@ export default function DashboardWidgets() {
             </div>
           </CardHeader>
           <CardContent
-            className={`flex-1 ${widget.type === 'messages' ? 'p-0 overflow-hidden' : ''}`}
+            className={`flex-1 ${widget.type === 'messages' ? 'p-0 overflow-hidden' : 'p-6 pt-0'}`}
           >
             <WidgetContent />
           </CardContent>
