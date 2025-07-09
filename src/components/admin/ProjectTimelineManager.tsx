@@ -82,27 +82,34 @@ interface UserProject {
 const defaultStages: ProjectStage[] = [
   {
     id: 1,
+    name: 'Approval',
+    icon: 'shield',
+    status: 'current',
+    description: 'Awaiting admin approval',
+  },
+  {
+    id: 2,
     name: 'Discovery',
     icon: 'briefcase',
     status: 'upcoming',
     description: 'Understanding your needs',
   },
   {
-    id: 2,
+    id: 3,
     name: 'Planning',
     icon: 'target',
     status: 'upcoming',
     description: 'Defining project scope',
   },
   {
-    id: 3,
+    id: 4,
     name: 'Development',
     icon: 'rocket',
     status: 'upcoming',
     description: 'Building your solution',
   },
   {
-    id: 4,
+    id: 5,
     name: 'Delivery',
     icon: 'flag',
     status: 'upcoming',
@@ -120,6 +127,7 @@ export default function ProjectTimelineManager() {
 
   // Icon components mapping
   const stageIcons = {
+    shield: Shield,
     briefcase: Briefcase,
     target: Target,
     rocket: Rocket,

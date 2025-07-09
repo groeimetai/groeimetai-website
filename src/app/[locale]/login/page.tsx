@@ -174,7 +174,7 @@ export default function LoginPage() {
             <div className="mb-8">
               <Link
                 href="/"
-                className="inline-flex items-center text-white/60 hover:text-orange mb-6 transition-colors"
+                className="inline-flex items-center text-white/60 hover:text-orange mb-8 sm:mb-12 transition-colors"
               >
                 <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
                 {t('backToHome')}

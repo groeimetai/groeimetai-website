@@ -92,6 +92,7 @@ export default function DashboardPage() {
   const [timelineData, setTimelineData] = useState<TimelineData | null>(null);
   const [isLoadingTimeline, setIsLoadingTimeline] = useState(true);
   const [userQuoteId, setUserQuoteId] = useState<string | null>(null);
+  const [userQuoteStatus, setUserQuoteStatus] = useState<string | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
@@ -113,42 +114,55 @@ export default function DashboardPage() {
     },
   ]);
 
-  const defaultProjectStages: ProjectStage[] = [
-    {
-      id: 1,
-      name: 'Discovery',
-      icon: 'briefcase',
-      status: 'upcoming',
-      description: 'Understanding your needs',
-      progress: undefined,
-    },
-    {
-      id: 2,
-      name: 'Planning',
-      icon: 'target',
-      status: 'upcoming',
-      description: 'Defining project scope',
-      progress: undefined,
-    },
-    {
-      id: 3,
-      name: 'Development',
-      icon: 'rocket',
-      status: 'upcoming',
-      description: 'Building your solution',
-      progress: undefined,
-    },
-    {
-      id: 4,
-      name: 'Delivery',
-      icon: 'flag',
-      status: 'upcoming',
-      description: 'Final implementation',
-      progress: undefined,
-    },
-  ];
+  const getDefaultProjectStages = (): ProjectStage[] => {
+    const isApproved = userQuoteStatus === 'approved';
+    const stages: ProjectStage[] = [
+      {
+        id: 1,
+        name: 'Approval',
+        icon: 'shield',
+        status: isApproved ? 'completed' : 'current',
+        description: isApproved ? 'Project approved' : 'Awaiting admin approval',
+        progress: isApproved ? 100 : undefined,
+        completedAt: isApproved ? new Date() : undefined,
+      },
+      {
+        id: 2,
+        name: 'Discovery',
+        icon: 'briefcase',
+        status: isApproved ? 'current' : 'upcoming',
+        description: 'Understanding your needs',
+        progress: undefined,
+      },
+      {
+        id: 3,
+        name: 'Planning',
+        icon: 'target',
+        status: 'upcoming',
+        description: 'Defining project scope',
+        progress: undefined,
+      },
+      {
+        id: 4,
+        name: 'Development',
+        icon: 'rocket',
+        status: 'upcoming',
+        description: 'Building your solution',
+        progress: undefined,
+      },
+      {
+        id: 5,
+        name: 'Delivery',
+        icon: 'flag',
+        status: 'upcoming',
+        description: 'Final implementation',
+        progress: undefined,
+      },
+    ];
+    return stages;
+  };
 
-  const projectStages = timelineData?.stages || defaultProjectStages;
+  const projectStages = timelineData?.stages || getDefaultProjectStages();
 
   const currentStage = projectStages.find((stage) => stage.status === 'current');
   const completedCount = projectStages.filter((stage) => stage.status === 'completed').length;
@@ -268,6 +282,7 @@ export default function DashboardPage() {
         const selectedQuote = approvedQuote || latestQuote;
         if (selectedQuote) {
           setUserQuoteId(selectedQuote.id);
+          setUserQuoteStatus(selectedQuote.status);
 
           // Subscribe to the timeline for this quote
           const timelineRef = doc(db, 'projectTimelines', selectedQuote.id);
@@ -496,6 +511,7 @@ export default function DashboardPage() {
                 {projectStages.map((stage, index) => {
                   // Map icon strings to components
                   const stageIcons = {
+                    shield: Shield,
                     briefcase: Briefcase,
                     target: Target,
                     rocket: Rocket,
@@ -569,7 +585,9 @@ export default function DashboardPage() {
                       <p className="text-sm font-medium text-white">Next Milestone</p>
                       <p className="text-xs text-white/60">
                         {timelineData?.milestone ||
-                          'Your project timeline will be updated once your request is approved'}
+                          (userQuoteStatus === 'approved' 
+                            ? 'Starting discovery phase - our team will contact you soon'
+                            : 'Your project is awaiting admin approval')}
                       </p>
                     </div>
                   </div>
