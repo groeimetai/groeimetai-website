@@ -236,7 +236,7 @@ export default function AdminProjectDetailPage() {
         userId: project.clientId,
         type: 'project_status_update',
         title: 'Project Status Updated',
-        message: `Your project "${project.name}" status has been updated to ${newStatus}`,
+        message: `Your project &quot;${project.name}&quot; status has been updated to ${newStatus}`,
         createdAt: serverTimestamp(),
         read: false,
         projectId: projectId,
@@ -720,7 +720,7 @@ export default function AdminProjectDetailPage() {
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the project
-              "{project.name}" and all associated data.
+              &quot;{project.name}&quot; and all associated data.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
