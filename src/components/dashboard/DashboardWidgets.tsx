@@ -2421,49 +2421,51 @@ export default function DashboardWidgets() {
       switch (widget.type) {
         case 'stats':
           return (
-            <div className="grid grid-cols-2 gap-4 overflow-y-auto h-full">
-              {isAdmin ? (
-                // Admin stats - more comprehensive business metrics
-                <>
-                  <div className="bg-white/5 rounded-lg p-4">
-                    <p className="text-white/60 text-sm">Active Projects</p>
-                    <p className="text-2xl font-bold text-green-500">
-                      {widgetData.stats?.activeProjects || 0}
-                    </p>
-                  </div>
-                  <div className="bg-white/5 rounded-lg p-4">
-                    <p className="text-white/60 text-sm">Total Clients</p>
-                    <p className="text-2xl font-bold text-white">
-                      {widgetData.stats?.totalClients || 0}
-                    </p>
-                  </div>
-                  <div className="bg-white/5 rounded-lg p-4">
-                    <p className="text-white/60 text-sm">Revenue</p>
-                    <p className="text-2xl font-bold text-orange">
-                      €{(widgetData.stats?.revenue || 0).toLocaleString()}
-                    </p>
-                  </div>
-                  <div className="bg-white/5 rounded-lg p-4">
-                    <p className="text-white/60 text-sm">Pending Quotes</p>
-                    <p className="text-2xl font-bold text-yellow-500">
-                      {widgetData.stats?.pendingQuotes || 0}
-                    </p>
-                  </div>
-                </>
-              ) : (
-                // User stats - simplified view focused on their projects
-                <>
-                  <div className="bg-white/5 rounded-lg p-4 col-span-2">
-                    <p className="text-white/60 text-sm mb-1">Your Active Projects</p>
-                    <p className="text-3xl font-bold text-green-500">
-                      {widgetData.stats?.activeProjects || 0}
-                    </p>
-                    <p className="text-white/40 text-xs mt-1">
-                      {widgetData.stats?.projects || 0} total projects with GroeimetAI
-                    </p>
-                  </div>
-                </>
-              )}
+            <div className="h-full overflow-hidden p-2">
+              <div className="grid grid-cols-2 gap-3 h-full">
+                {isAdmin ? (
+                  // Admin stats - more comprehensive business metrics
+                  <>
+                    <div className="bg-white/5 rounded-lg p-3">
+                      <p className="text-white/60 text-xs">Active Projects</p>
+                      <p className="text-xl font-bold text-green-500">
+                        {widgetData.stats?.activeProjects || 0}
+                      </p>
+                    </div>
+                    <div className="bg-white/5 rounded-lg p-3">
+                      <p className="text-white/60 text-xs">Total Clients</p>
+                      <p className="text-xl font-bold text-white">
+                        {widgetData.stats?.totalClients || 0}
+                      </p>
+                    </div>
+                    <div className="bg-white/5 rounded-lg p-3">
+                      <p className="text-white/60 text-xs">Revenue</p>
+                      <p className="text-xl font-bold text-orange">
+                        €{(widgetData.stats?.revenue || 0).toLocaleString()}
+                      </p>
+                    </div>
+                    <div className="bg-white/5 rounded-lg p-3">
+                      <p className="text-white/60 text-xs">Pending Quotes</p>
+                      <p className="text-xl font-bold text-yellow-500">
+                        {widgetData.stats?.pendingQuotes || 0}
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  // User stats - simplified view focused on their projects
+                  <>
+                    <div className="bg-white/5 rounded-lg p-3 col-span-2">
+                      <p className="text-white/60 text-xs mb-1">Your Active Projects</p>
+                      <p className="text-2xl font-bold text-green-500">
+                        {widgetData.stats?.activeProjects || 0}
+                      </p>
+                      <p className="text-white/40 text-xs mt-1">
+                        {widgetData.stats?.projects || 0} total projects with GroeimetAI
+                      </p>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           );
 
@@ -3034,7 +3036,7 @@ export default function DashboardWidgets() {
             </div>
           </CardHeader>
           <CardContent
-            className={`flex-1 ${widget.type === 'messages' || widget.type === 'projectProgress' || widget.type === 'recentActivity' ? 'p-0 overflow-hidden' : 'p-6 pt-0'}`}
+            className={`flex-1 ${widget.type === 'messages' || widget.type === 'projectProgress' || widget.type === 'recentActivity' || widget.type === 'stats' ? 'p-0 overflow-hidden' : 'p-6 pt-0'}`}
           >
             <WidgetContent />
           </CardContent>
