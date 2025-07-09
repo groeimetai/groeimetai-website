@@ -785,9 +785,9 @@ export default function AdminProjectsPage() {
                           <TableCell>
                             <div>
                               <p className="text-white">
-                                {project.budget.currency} {project.budget.amount.toLocaleString()}
+                                {project.budget?.currency || 'USD'} {project.budget?.amount ? project.budget.amount.toLocaleString() : '0'}
                               </p>
-                              <p className="text-xs text-white/60">{project.budget.type}</p>
+                              <p className="text-xs text-white/60">{project.budget?.type || 'Fixed'}</p>
                             </div>
                           </TableCell>
                           <TableCell>
