@@ -448,7 +448,8 @@ export default function MessagesPageFirebase() {
             user.uid,
             user.displayName || user.email || 'Unknown User',
             user.email || '',
-            selectedConversation.projectId
+            selectedConversation.projectId,
+            selectedConversation.projectName
           )
         );
         attachments = await Promise.all(uploadPromises);

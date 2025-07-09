@@ -609,7 +609,8 @@ const MessagingWidget = ({
             user.uid,
             user.displayName || user.email || 'Unknown User',
             user.email || '',
-            selectedChat.projectId
+            selectedChat.projectId,
+            selectedChat.projectName
           )
         );
         attachments = await Promise.all(uploadPromises);

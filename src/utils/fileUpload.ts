@@ -17,7 +17,8 @@ export const uploadFile = async (
   userId: string,
   userName: string,
   userEmail: string,
-  projectId?: string
+  projectId?: string,
+  projectName?: string
 ): Promise<FileAttachment> => {
   try {
     // Generate unique filename
@@ -41,19 +42,25 @@ export const uploadFile = async (
     };
 
     // Save to documents collection for /dashboard/documents visibility
+    // Using the same structure as firebaseDocumentService
     await addDoc(collection(db, 'documents'), {
+      name: file.name,
+      type: getDetailedDocumentType(file),
+      size: file.size,
+      mimeType: file.type,
+      uploadedAt: serverTimestamp(),
       uploadedBy: {
         uid: userId,
-        name: userName,
         email: userEmail,
+        name: userName,
       },
-      name: file.name,
-      type: getDocumentType(file.type),
-      size: file.size,
+      projectId: projectId || null,
+      projectName: projectName || null,
       url: downloadURL,
       storagePath,
-      projectId,
-      createdAt: serverTimestamp(),
+      description: 'Shared via chat',
+      tags: ['chat', 'message-attachment'],
+      isArchived: false,
       sharedInMessage: true,
     });
 
@@ -71,6 +78,29 @@ export const getDocumentType = (mimeType: string): string => {
   if (mimeType.includes('word') || mimeType.includes('document')) return 'document';
   if (mimeType.includes('sheet') || mimeType.includes('excel')) return 'spreadsheet';
   if (mimeType.includes('presentation') || mimeType.includes('powerpoint')) return 'presentation';
+  return 'other';
+};
+
+// Get document type that matches firebaseDocumentService types
+export const getDetailedDocumentType = (file: File): 'contract' | 'proposal' | 'report' | 'invoice' | 'presentation' | 'other' => {
+  const mimeType = file.type;
+  const fileName = file.name.toLowerCase();
+
+  // Check filename for specific document types
+  if (fileName.includes('contract')) return 'contract';
+  if (fileName.includes('proposal')) return 'proposal';
+  if (fileName.includes('report')) return 'report';
+  if (fileName.includes('invoice')) return 'invoice';
+  
+  // Check for presentation files
+  if (
+    mimeType.includes('presentation') ||
+    fileName.endsWith('.ppt') ||
+    fileName.endsWith('.pptx')
+  ) {
+    return 'presentation';
+  }
+
   return 'other';
 };
 
