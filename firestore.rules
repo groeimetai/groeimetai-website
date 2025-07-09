@@ -190,10 +190,11 @@ service cloud.firestore {
     
     // Meetings collection
     match /meetings/{meetingId} {
-      // Users can read meetings they're involved in
+      // Users can read meetings they're involved in, admins can read all
       allow read: if isAuthenticated() && (
         resource.data.userId == request.auth.uid ||
-        request.auth.uid in resource.data.participantIds
+        request.auth.uid in resource.data.participantIds ||
+        isAdmin()
       );
       
       // Users can create meetings
