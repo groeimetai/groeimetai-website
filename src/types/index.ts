@@ -119,10 +119,16 @@ export interface Project {
   type: ProjectType;
   status: ProjectStatus;
   priority: ProjectPriority;
+  progress?: number;
   clientId: string;
+  clientName?: string;
+  clientEmail?: string;
+  clientPhone?: string;
+  clientCompany?: string;
   organizationId?: string;
   consultantId: string;
   teamIds: string[];
+  assignedTo?: string[];
   startDate: Date;
   endDate?: Date;
   actualStartDate?: Date;
@@ -142,6 +148,8 @@ export interface Project {
   createdBy: string;
   completedAt?: Date;
   originalQuoteStatus?: string;
+  quoteData?: any;
+  isFromQuote?: boolean;
 }
 
 export type ProjectType = 'consultation' | 'implementation' | 'support' | 'training';
