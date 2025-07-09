@@ -1,0 +1,402 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      // Users can read their own profile
+      allow read: if isOwner(userId) || isAdmin();
+      
+      // Users can create their own profile during registration
+      allow create: if isOwner(userId);
+      
+      // Users can update their own profile
+      allow update: if isOwner(userId) || isAdmin();
+      
+      // Only admins can delete user profiles
+      allow delete: if isAdmin();
+    }
+    
+    // Quotes collection
+    match /quotes/{quoteId} {
+      // Anyone can create a quote (including guests)
+      allow create: if true;
+      
+      // Users can read their own quotes, admins can read all
+      allow read: if isAuthenticated() && (
+                    (resource.data.userId == request.auth.uid) || 
+                    (resource.data.email == request.auth.token.email) ||
+                    isAdmin()
+                    );
+      
+      // Users can update their own quotes, admins can update all
+      allow update: if isAuthenticated() && (
+                      (resource.data.userId == request.auth.uid) || 
+                      isAdmin()
+                      );
+      
+      // Only admins can delete quotes
+      allow delete: if isAdmin();
+      
+      // Messages subcollection
+      match /messages/{messageId} {
+        // Users can read messages if they can read the parent quote
+        allow read: if isAuthenticated() && (
+                      get(/databases/$(database)/documents/quotes/$(quoteId)).data.userId == request.auth.uid ||
+                      get(/databases/$(database)/documents/quotes/$(quoteId)).data.email == request.auth.token.email ||
+                      isAdmin()
+                      );
+        
+        // Users can create messages if they can read the parent quote
+        allow create: if isAuthenticated() && (
+                        get(/databases/$(database)/documents/quotes/$(quoteId)).data.userId == request.auth.uid ||
+                        get(/databases/$(database)/documents/quotes/$(quoteId)).data.email == request.auth.token.email ||
+                        isAdmin()
+                        );
+        
+        // No updates or deletes allowed
+        allow update: if false;
+        allow delete: if false;
+      }
+    }
+    
+    // Projects collection
+    match /projects/{projectId} {
+      // Users can read projects they're involved in
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.clientId == request.auth.uid ||
+        resource.data.consultantId == request.auth.uid ||
+        request.auth.uid in resource.data.teamIds ||
+        isAdmin()
+      );
+      
+      // Authenticated users can create projects (for quote requests)
+      // Admins and consultants have full create permissions
+      allow create: if isAuthenticated() && (
+        request.resource.data.userId == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'consultant']
+      );
+      
+      // Project participants and admins can update
+      allow update: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.consultantId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Only admins can delete projects
+      allow delete: if isAdmin();
+    }
+    
+    // Messages collection
+    match /messages/{messageId} {
+      // Users can read messages in conversations they're part of
+      allow read: if isAuthenticated() && 
+        exists(/databases/$(database)/documents/conversations/$(resource.data.conversationId)) &&
+        request.auth.uid in get(/databases/$(database)/documents/conversations/$(resource.data.conversationId)).data.participantIds;
+      
+      // Users can create messages in conversations they're part of
+      allow create: if isAuthenticated() && 
+        exists(/databases/$(database)/documents/conversations/$(request.data.conversationId)) &&
+        request.auth.uid in get(/databases/$(database)/documents/conversations/$(request.data.conversationId)).data.participantIds;
+      
+      // Users can update their own messages
+      allow update: if isAuthenticated() && resource.data.senderId == request.auth.uid;
+      
+      // Only message sender or admin can delete
+      allow delete: if isAuthenticated() && (resource.data.senderId == request.auth.uid || isAdmin());
+    }
+    
+    // Conversations collection
+    match /conversations/{conversationId} {
+      // Participants can read conversations
+      allow read: if isAuthenticated() && request.auth.uid in resource.data.participantIds;
+      
+      // Authenticated users can create conversations
+      allow create: if isAuthenticated() && request.auth.uid in request.data.participantIds;
+      
+      // Participants can update conversations
+      allow update: if isAuthenticated() && request.auth.uid in resource.data.participantIds;
+      
+      // Only admins can delete conversations
+      allow delete: if isAdmin();
+    }
+    
+    // Consultations collection
+    match /consultations/{consultationId} {
+      // Users can read their own consultations
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Authenticated users can create consultations
+      allow create: if isAuthenticated();
+      
+      // Users can update their own consultations
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Only admins can delete consultations
+      allow delete: if isAdmin();
+    }
+    
+    // Notifications collection
+    match /notifications/{notificationId} {
+      // Users can only read their own notifications
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Only system (admin) can create notifications
+      allow create: if isAdmin();
+      
+      // Users can update their own notifications (mark as read)
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Users can delete their own notifications
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+    
+    // Documents collection
+    match /documents/{documentId} {
+      // Users can read their own documents, admins can read all
+      allow read: if isAuthenticated() && (
+        resource.data.uploadedBy.uid == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Users can create their own documents
+      allow create: if isAuthenticated() && request.resource.data.uploadedBy.uid == request.auth.uid;
+      
+      // Users can update their own documents
+      allow update: if isAuthenticated() && resource.data.uploadedBy.uid == request.auth.uid;
+      
+      // Users can delete their own documents
+      allow delete: if isAuthenticated() && resource.data.uploadedBy.uid == request.auth.uid;
+    }
+    
+    // Meetings collection
+    match /meetings/{meetingId} {
+      // Users can read meetings they're involved in
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        request.auth.uid in resource.data.participantIds
+      );
+      
+      // Users can create meetings
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      
+      // Users can update meetings they created or are participants in
+      allow update: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        request.auth.uid in resource.data.participantIds
+      );
+      
+      // Users can delete meetings they created
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+    
+    // UserSettings collection
+    match /userSettings/{userId} {
+      // Users can read their own settings
+      allow read: if isOwner(userId);
+      
+      // Users can create their own settings
+      allow create: if isOwner(userId);
+      
+      // Users can update their own settings
+      allow update: if isOwner(userId);
+      
+      // Users can delete their own settings
+      allow delete: if isOwner(userId);
+    }
+    
+    // Project Timelines collection
+    match /projectTimelines/{quoteId} {
+      // Users can read timelines for their quotes
+      allow read: if isAuthenticated() && (
+        get(/databases/$(database)/documents/quotes/$(quoteId)).data.userId == request.auth.uid ||
+        get(/databases/$(database)/documents/quotes/$(quoteId)).data.email == request.auth.token.email ||
+        isAdmin()
+      );
+      
+      // Only admins can create/update timelines
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Support Chats collection
+    match /supportChats/{chatId} {
+      // Check if the chatId matches the expected format for the user
+      function isUserChat() {
+        return chatId == ('support_' + request.auth.uid);
+      }
+      
+      // Users can read their own support chats
+      allow read: if isAuthenticated() && (isUserChat() || isAdmin());
+      
+      // Users can create their own support chats with correct ID
+      allow create: if isAuthenticated() && isUserChat();
+      
+      // Users and admins can update chats
+      allow update: if isAuthenticated() && (
+        isUserChat() ||
+        isAdmin()
+      );
+      
+      // Only admins can delete support chats
+      allow delete: if isAdmin();
+      
+      // Messages subcollection
+      match /messages/{messageId} {
+        // Simplified rules - if user can access parent chat, they can access messages
+        allow read: if isAuthenticated() && (
+          isUserChat() ||
+          isAdmin()
+        );
+        
+        // Users can create messages in their own chats
+        allow create: if isAuthenticated() && (
+          isUserChat() ||
+          isAdmin()
+        );
+        
+        // No updates or deletes allowed
+        allow update: if false;
+        allow delete: if false;
+      }
+    }
+    
+    // Project Chats collection
+    match /projectChats/{chatId} {
+      // Users can read chats they're participants in
+      allow read: if isAuthenticated() && (
+        request.auth.uid in resource.data.participantIds ||
+        isAdmin()
+      );
+      
+      // Users can create chats they're part of
+      allow create: if isAuthenticated() && 
+        request.auth.uid in request.resource.data.participantIds;
+      
+      // Participants can update chat metadata
+      allow update: if isAuthenticated() && (
+        request.auth.uid in resource.data.participantIds ||
+        isAdmin()
+      );
+      
+      // Only admins can delete chats
+      allow delete: if isAdmin();
+      
+      // Messages subcollection
+      match /messages/{messageId} {
+        allow read: if isAuthenticated() && (
+          request.auth.uid in get(/databases/$(database)/documents/projectChats/$(chatId)).data.participantIds ||
+          isAdmin()
+        );
+        
+        allow create: if isAuthenticated() && 
+          request.auth.uid in get(/databases/$(database)/documents/projectChats/$(chatId)).data.participantIds &&
+          request.resource.data.senderId == request.auth.uid;
+        
+        allow update: if false;
+        allow delete: if false;
+      }
+    }
+    
+    // General Chats collection
+    match /chats/{chatId} {
+      // Users can read chats they're participants in
+      allow read: if isAuthenticated() && (
+        request.auth.uid in resource.data.participantIds ||
+        isAdmin()
+      );
+      
+      // Users can create chats they're part of
+      allow create: if isAuthenticated() && 
+        request.auth.uid in request.resource.data.participantIds &&
+        request.resource.data.keys().hasAll(['participantIds', 'createdAt', 'type']);
+      
+      // Participants can update chat metadata
+      allow update: if isAuthenticated() && (
+        request.auth.uid in resource.data.participantIds ||
+        isAdmin()
+      );
+      
+      // Only admins can delete chats
+      allow delete: if isAdmin();
+      
+      // Messages subcollection
+      match /messages/{messageId} {
+        allow read: if isAuthenticated() && (
+          request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participantIds ||
+          isAdmin()
+        );
+        
+        allow create: if isAuthenticated() && 
+          request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participantIds &&
+          request.resource.data.senderId == request.auth.uid &&
+          request.resource.data.timestamp == request.time;
+        
+        allow update: if false;
+        allow delete: if false;
+      }
+    }
+    
+    // Activity Logs collection
+    match /activityLogs/{logId} {
+      // Users can read their own activity logs, admins can read all
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid || 
+        isAdmin()
+      );
+      
+      // Users can create logs for their own activities
+      // Simplified rule - just check if authenticated user is logging their own activity
+      allow create: if isAuthenticated();
+      
+      // No updates allowed (audit trail integrity)
+      allow update: if false;
+      
+      // Only admins can delete logs
+      allow delete: if isAdmin();
+    }
+    
+    // Invoices collection
+    match /invoices/{invoiceId} {
+      // Users can read their own invoices, admins can read all
+      allow read: if isAuthenticated() && (
+        resource.data.clientId == request.auth.uid ||
+        resource.data.clientEmail == request.auth.token.email ||
+        isAdmin()
+      );
+      
+      // Only admins can create invoices
+      allow create: if isAdmin();
+      
+      // Only admins can update invoices
+      allow update: if isAdmin();
+      
+      // Only admins can delete invoices
+      allow delete: if isAdmin();
+    }
+    
+    // Catch-all rule - deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

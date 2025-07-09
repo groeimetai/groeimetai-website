@@ -1,0 +1,154 @@
+# Cloud Build configuration for automated deployment
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/groeimetai-app:$COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/groeimetai-app:latest'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_API_KEY=$_NEXT_PUBLIC_FIREBASE_API_KEY'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=$_NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_PROJECT_ID=$_NEXT_PUBLIC_FIREBASE_PROJECT_ID'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=$_NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=$_NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_APP_ID=$_NEXT_PUBLIC_FIREBASE_APP_ID'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=$_NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_GEMINI_API_KEY=$_NEXT_PUBLIC_GEMINI_API_KEY'
+      - '.'
+
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/groeimetai-app:$COMMIT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/groeimetai-app:latest']
+
+  # Deploy container image to Cloud Run (staging)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'groeimetai-app-staging'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/groeimetai-app:$COMMIT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--memory'
+      - '2Gi'
+      - '--cpu'
+      - '2'
+      - '--min-instances'
+      - '1'
+      - '--max-instances'
+      - '10'
+      - '--concurrency'
+      - '100'
+      - '--set-env-vars'
+      - 'NODE_ENV=staging'
+      - '--tag'
+      - 'staging'
+
+  # Run smoke tests on staging
+  - name: 'gcr.io/cloud-builders/npm'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        npm install --legacy-peer-deps
+        export STAGING_URL=$(gcloud run services describe groeimetai-app-staging --platform managed --region us-central1 --format 'value(status.url)')
+        npm run test:smoke -- --url=$STAGING_URL
+
+  # Deploy to production (only on main branch)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if [[ "$BRANCH_NAME" == "main" ]]; then
+          gcloud run deploy groeimetai-app \
+            --image gcr.io/$PROJECT_ID/groeimetai-app:$COMMIT_SHA \
+            --region us-central1 \
+            --platform managed \
+            --allow-unauthenticated \
+            --memory 2Gi \
+            --cpu 2 \
+            --min-instances 2 \
+            --max-instances 100 \
+            --concurrency 100 \
+            --set-env-vars NODE_ENV=production
+        fi
+
+  # Build search index after every deployment
+  - name: 'gcr.io/cloud-builders/npm'
+    id: 'index-content'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Building search index for $BRANCH_NAME branch..."
+
+        # Install dependencies
+        npm install --legacy-peer-deps --legacy-peer-deps
+
+        # Set environment and base URL based on branch
+        if [[ "$BRANCH_NAME" == "main" ]]; then
+          export INDEX_ENVIRONMENT="production"
+          export BASE_URL="https://app.groeimetai.io"
+          echo "Indexing production site: $BASE_URL"
+        else
+          export INDEX_ENVIRONMENT="staging"
+          # Get staging URL dynamically
+          export BASE_URL=$(gcloud run services describe groeimetai-app-staging --platform managed --region us-central1 --format 'value(status.url)')
+          echo "Indexing staging site: $BASE_URL"
+        fi
+
+        echo "Indexing content for $INDEX_ENVIRONMENT environment..."
+
+        # Wait a bit for deployment to stabilize
+        echo "Waiting 30 seconds for deployment to stabilize..."
+        sleep 30
+
+        # Run the indexing script with live crawling
+        npm run build:search-index
+
+        echo "Search index updated successfully!"
+    env:
+      - 'PINECONE_API_KEY=$_PINECONE_API_KEY'
+      - 'OPENAI_API_KEY=$_OPENAI_API_KEY'
+      - 'BRANCH_NAME=$BRANCH_NAME'
+    timeout: '900s' # Increased timeout for crawling
+
+# Build timeout
+timeout: '1200s'
+
+# Substitutions for environment variables
+substitutions:
+  _NEXT_PUBLIC_FIREBASE_API_KEY: ''
+  _NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ''
+  _NEXT_PUBLIC_FIREBASE_PROJECT_ID: ''
+  _NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ''
+  _NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ''
+  _NEXT_PUBLIC_FIREBASE_APP_ID: ''
+  _NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ''
+  _NEXT_PUBLIC_GEMINI_API_KEY: ''
+  _PINECONE_API_KEY: ''
+  _OPENAI_API_KEY: ''
+
+# Build logs will be stored in Cloud Storage
+options:
+  logging: GCS_ONLY
+  logsBucket: 'gs://groeimetai-build-logs'

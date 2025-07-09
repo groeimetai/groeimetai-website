@@ -1,0 +1,121 @@
+graph TB
+    subgraph "Frontend Layer"
+        A[Next.js 14 App] --> B[Vercel Edge Network]
+        B --> C[React Components]
+        C --> D[Tailwind CSS + Shadcn/UI]
+    end
+
+    subgraph "Authentication"
+        E[Firebase Auth]
+        E --> F[Google OAuth]
+        E --> G[LinkedIn OAuth]
+        E --> H[Email/Password]
+        E --> I[Custom Claims/RBAC]
+    end
+
+    subgraph "Backend Services"
+        J[Cloud Functions]
+        K[Express.js REST API]
+        L[Apollo GraphQL]
+        M[Socket.io WebSockets]
+        J --> K
+        J --> L
+        J --> M
+    end
+
+    subgraph "Database Layer"
+        N[Cloud Firestore]
+        O[Firebase Realtime DB]
+        P[Cloud Storage]
+        Q[Vertex AI Vector DB]
+    end
+
+    subgraph "AI Services"
+        R[Gemini Pro API]
+        S[Gemini Vision API]
+        T[Embeddings API]
+        U[LangChain]
+        V[RAG Pipeline]
+        U --> V
+        V --> Q
+        V --> R
+    end
+
+    subgraph "Communication"
+        W[Real-time Chat]
+        X[Video Consultations]
+        Y[Email Notifications]
+        Z[Push Notifications]
+        W --> O
+        X --> AA[Google Meet API]
+        Z --> AB[Firebase Cloud Messaging]
+    end
+
+    subgraph "Payment & Billing"
+        AC[Stripe API]
+        AD[Subscription Management]
+        AE[Invoice Generation]
+        AF[Usage Tracking]
+        AC --> AD
+        AC --> AE
+        AC --> AF
+    end
+
+    subgraph "Monitoring & Analytics"
+        AG[Google Analytics 4]
+        AH[Firebase Performance]
+        AI[Cloud Logging]
+        AJ[Cloud Monitoring]
+    end
+
+    subgraph "Security"
+        AK[Cloud Armor]
+        AL[Secret Manager]
+        AM[Identity Platform]
+        AN[VPC]
+    end
+
+    %% Connections
+    A --> E
+    A --> J
+    C --> N
+    C --> W
+    J --> N
+    J --> O
+    J --> P
+    J --> R
+    J --> AC
+    K --> N
+    L --> N
+    M --> O
+    
+    %% User Flow
+    AO[User] --> B
+    B --> E
+    E --> A
+    A --> N
+    
+    %% AI Flow
+    AO --> |Consultation Request| J
+    J --> V
+    V --> R
+    R --> |AI Response| J
+    J --> |Stream Response| A
+
+    %% Payment Flow
+    AO --> |Payment| AC
+    AC --> |Webhook| J
+    J --> |Update| N
+
+    %% Styling
+    classDef frontend fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef backend fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef database fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    classDef ai fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef security fill:#ffebee,stroke:#b71c1c,stroke-width:2px
+    
+    class A,B,C,D frontend
+    class J,K,L,M backend
+    class N,O,P,Q database
+    class R,S,T,U,V ai
+    class AK,AL,AM,AN security

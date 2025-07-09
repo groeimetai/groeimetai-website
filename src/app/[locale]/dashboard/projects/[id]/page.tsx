@@ -39,7 +39,7 @@ import { Project, ProjectStatus, ProjectPriority } from '@/types';
 import { format } from 'date-fns';
 import { db } from '@/lib/firebase/config';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { Briefcase as BriefcaseIcon, Target as TargetIcon, Rocket, Flag } from 'lucide-react';
+import { Briefcase as BriefcaseIcon, Target as TargetIcon, Rocket, Flag, Shield } from 'lucide-react';
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -72,7 +72,7 @@ export default function ProjectDetailPage() {
     unsubscribeQuote = onSnapshot(
       quoteRef,
       (docSnapshot) => {
-        if (docSnapshot.exists() && docSnapshot.data().status === 'approved') {
+        if (docSnapshot.exists()) {
           const data = docSnapshot.data();
 
           // Verify user has access
@@ -83,12 +83,27 @@ export default function ProjectDetailPage() {
           }
 
           // Transform quote data to project format
+          // Map quote status to project status
+          const getProjectStatus = (quoteStatus: string): ProjectStatus => {
+            switch (quoteStatus) {
+              case 'pending':
+              case 'reviewed':
+                return 'pending_approval';
+              case 'approved':
+                return 'active';
+              case 'rejected':
+                return 'cancelled';
+              default:
+                return 'draft';
+            }
+          };
+
           const projectData: Project = {
             id: docSnapshot.id,
             name: data.projectName || 'Untitled Project',
             description: data.projectDetails || '',
             type: 'consultation' as const,
-            status: 'active' as const,
+            status: getProjectStatus(data.status),
             priority: (data.priority || 'medium') as ProjectPriority,
             clientId: data.userId,
             consultantId: '',
@@ -107,6 +122,7 @@ export default function ProjectDetailPage() {
             createdAt: data.createdAt?.toDate?.() || new Date(),
             updatedAt: data.updatedAt?.toDate?.() || new Date(),
             createdBy: data.userId || '',
+            originalQuoteStatus: data.status,
           };
 
           setProject(projectData);
@@ -266,8 +282,26 @@ export default function ProjectDetailPage() {
     );
   }
 
-  const getStatusColor = (status: ProjectStatus) => {
-    switch (status) {
+  const getStatusColor = (project: Project) => {
+    // Check if this is a quote-based project and show appropriate color
+    if ((project as any).originalQuoteStatus) {
+      const quoteStatus = (project as any).originalQuoteStatus;
+      switch (quoteStatus) {
+        case 'pending':
+          return 'bg-yellow-500';
+        case 'reviewed':
+          return 'bg-blue-500';
+        case 'approved':
+          return 'bg-green-500';
+        case 'rejected':
+          return 'bg-red-500';
+        default:
+          return 'bg-gray-500';
+      }
+    }
+    
+    // Fallback to regular project status colors
+    switch (project.status) {
       case 'active':
         return 'bg-green-500';
       case 'completed':
@@ -276,6 +310,8 @@ export default function ProjectDetailPage() {
         return 'bg-yellow-500';
       case 'draft':
         return 'bg-gray-500';
+      case 'pending_approval':
+        return 'bg-yellow-500';
       case 'cancelled':
         return 'bg-red-500';
       default:
@@ -283,8 +319,31 @@ export default function ProjectDetailPage() {
     }
   };
 
-  const getStatusLabel = (status: ProjectStatus) => {
-    return status.replace('_', ' ').charAt(0).toUpperCase() + status.slice(1).replace('_', ' ');
+  const getStatusLabel = (project: Project) => {
+    // Check if this is a quote-based project and show appropriate label
+    if ((project as any).originalQuoteStatus) {
+      const quoteStatus = (project as any).originalQuoteStatus;
+      switch (quoteStatus) {
+        case 'pending':
+          return 'Pending Approval';
+        case 'reviewed':
+          return 'Under Review';
+        case 'approved':
+          return 'Active';
+        case 'rejected':
+          return 'Rejected';
+        default:
+          return 'Draft';
+      }
+    }
+    
+    // Handle the new pending_approval status
+    if (project.status === 'pending_approval') {
+      return 'Pending Approval';
+    }
+    
+    // Fallback to regular project status
+    return project.status.replace('_', ' ').charAt(0).toUpperCase() + project.status.slice(1).replace('_', ' ');
   };
 
   // Calculate actual progress based on timeline or milestones
@@ -366,9 +425,9 @@ export default function ProjectDetailPage() {
                   <h1 className="text-3xl font-bold text-white">{project.name}</h1>
                   <Badge
                     variant="outline"
-                    className={`${getStatusColor(project.status)} bg-opacity-20 border-0 mt-1`}
+                    className={`${getStatusColor(project)} bg-opacity-20 border-0 mt-1`}
                   >
-                    {getStatusLabel(project.status)}
+                    {getStatusLabel(project)}
                   </Badge>
                 </div>
               </div>
@@ -593,13 +652,15 @@ export default function ProjectDetailPage() {
                 <div className="space-y-6">
                   {timelineData.stages.map((stage: any, index: number) => {
                     const StageIcon =
-                      stage.icon === 'briefcase'
-                        ? BriefcaseIcon
-                        : stage.icon === 'target'
-                          ? TargetIcon
-                          : stage.icon === 'rocket'
-                            ? Rocket
-                            : Flag;
+                      stage.icon === 'shield'
+                        ? Shield
+                        : stage.icon === 'briefcase'
+                          ? BriefcaseIcon
+                          : stage.icon === 'target'
+                            ? TargetIcon
+                            : stage.icon === 'rocket'
+                              ? Rocket
+                              : Flag;
 
                     return (
                       <div key={stage.id || index} className="relative">

@@ -245,15 +245,34 @@ service cloud.firestore {
         return chatId == ('support_' + request.auth.uid);
       }
       
-      // Users can read their own support chats
-      allow read: if isAuthenticated() && (isUserChat() || isAdmin());
+      // Check if user owns the chat based on userId field
+      function isUserOwner() {
+        return resource.data.userId == request.auth.uid;
+      }
       
-      // Users can create their own support chats with correct ID
-      allow create: if isAuthenticated() && isUserChat();
+      // Extract userId from chatId (format: support_userId)
+      function getChatUserId() {
+        return chatId.split('_')[1];
+      }
+      
+      // Users can read their own support chats, admins can read all
+      allow read: if isAuthenticated() && (
+        isUserChat() || 
+        isUserOwner() ||
+        isAdmin()
+      );
+      
+      // Users can create their own support chats, admins can create any
+      allow create: if isAuthenticated() && (
+        isUserChat() ||
+        request.resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
       
       // Users and admins can update chats
       allow update: if isAuthenticated() && (
         isUserChat() ||
+        isUserOwner() ||
         isAdmin()
       );
       
@@ -262,15 +281,15 @@ service cloud.firestore {
       
       // Messages subcollection
       match /messages/{messageId} {
-        // Simplified rules - if user can access parent chat, they can access messages
+        // Users can read messages in their own chat, admins can read all
         allow read: if isAuthenticated() && (
-          isUserChat() ||
+          getChatUserId() == request.auth.uid ||
           isAdmin()
         );
         
-        // Users can create messages in their own chats
+        // Users can create messages in their own chats, admins can create in any chat
         allow create: if isAuthenticated() && (
-          isUserChat() ||
+          getChatUserId() == request.auth.uid ||
           isAdmin()
         );
         

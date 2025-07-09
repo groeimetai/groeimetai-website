@@ -418,15 +418,25 @@ export default function MessagesPageFirebase() {
 
       if (!chatDoc.exists()) {
         // Create chat document for new chats
-        await setDoc(chatRef, {
+        const chatData: any = {
           userId: selectedConversation.userId || user.uid,
           userName: selectedConversation.userName,
-          projectId: selectedConversation.projectId,
-          projectName: selectedConversation.projectName,
           createdAt: serverTimestamp(),
           lastMessageAt: serverTimestamp(),
           status: 'active',
-        });
+        };
+        
+        // Only add projectId if it exists
+        if (selectedConversation.projectId) {
+          chatData.projectId = selectedConversation.projectId;
+        }
+        
+        // Only add projectName if it exists
+        if (selectedConversation.projectName) {
+          chatData.projectName = selectedConversation.projectName;
+        }
+        
+        await setDoc(chatRef, chatData);
       }
 
       // Upload files if any

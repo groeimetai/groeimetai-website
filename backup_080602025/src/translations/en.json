@@ -1,0 +1,2437 @@
+{
+  "metadata": {
+    "title": "GroeimetAI - AI Consultancy & Innovation",
+    "description": "Strategic AI consultancy guiding executive teams through digital transformation. We deliver actionable insights for process optimization, cost reduction, and sustainable growth."
+  },
+  "navigation": {
+    "services": "Services",
+    "cases": "Cases",
+    "about": "About Us",
+    "contact": "Contact",
+    "signIn": "Sign In",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "badge": "Leading AI Strategy & Business Transformation",
+    "title": "Accelerate Business Value",
+    "subtitle": "Through AI Excellence",
+    "description": "We guide executive teams through the complexity of AI adoption. Our strategic advisory focuses on business outcomes - process optimization, cost reduction, and revenue growth through intelligent AI implementation.",
+    "cta": {
+      "consultation": "Schedule Consultation",
+      "services": "Our Advisory Services",
+      "dashboard": "Go to Dashboard"
+    }
+  },
+  "services": {
+    "title": "Our Advisory Services",
+    "subtitle": "Strategic guidance to help leaders navigate AI complexity and unlock transformative business value through intelligent process optimization",
+    "items": {
+      "strategy": {
+        "title": "AI Strategy & Roadmap",
+        "description": "Define your AI vision and create actionable roadmaps that align technology investments with business objectives and measurable ROI.",
+        "features": ["Executive Advisory", "Opportunity Assessment", "Strategic Planning"]
+      },
+      "transformation": {
+        "title": "Digital Transformation",
+        "description": "Navigate complex digital ecosystems with comprehensive transformation strategies focused on process optimization and cost efficiency.",
+        "features": ["Operating Model Design", "Process Redesign", "Value Realization"]
+      },
+      "governance": {
+        "title": "Risk & Governance",
+        "description": "Establish responsible AI frameworks that balance innovation with ethics, compliance and security.",
+        "features": ["AI Ethics Framework", "Regulatory Compliance", "Risk Management"]
+      },
+      "innovation": {
+        "title": "Innovation Labs",
+        "description": "Accelerate innovation through strategic pilots and proof-of-concepts that demonstrate clear business value and ROI.",
+        "features": ["Use Case Discovery", "Pilot Programs", "Innovation Workshops"]
+      },
+      "advisory": {
+        "title": "Technology Advisory",
+        "description": "Make informed decisions with independent technology assessments and vendor evaluations.",
+        "features": ["Architecture Review", "Vendor Selection", "Technology Due Diligence"]
+      },
+      "adoption": {
+        "title": "Change & Adoption",
+        "description": "Ensure successful AI adoption through comprehensive change management and capability building.",
+        "features": ["Leadership Alignment", "Culture Transformation", "Skills Development"]
+      }
+    }
+  },
+  "servicesPage": {
+    "hero": {
+      "title": "Our AI Services",
+      "description": "From strategy to value realization - we guide your AI transformation journey with focus on measurable business outcomes"
+    },
+    "cta": {
+      "start": "Start Your AI Journey",
+      "consultation": "Request a Consultation",
+      "caseStudies": "View Case Studies"
+    },
+    "process": {
+      "title": "Our Approach",
+      "steps": {
+        "discovery": {
+          "title": "Discovery",
+          "description": "We analyze your business processes and identify high-impact AI opportunities for optimization"
+        },
+        "strategy": {
+          "title": "Strategy",
+          "description": "Development of tailored AI strategy aligned with your business goals and ROI targets"
+        },
+        "implementation": {
+          "title": "Implementation",
+          "description": "Step-by-step implementation with proven methodologies"
+        },
+        "optimization": {
+          "title": "Optimization",
+          "description": "Continuous improvement and scalability of AI solutions"
+        }
+      }
+    },
+    "whyUs": {
+      "title": "Why GroeimetAI?",
+      "expertise": {
+        "title": "Proven Expertise",
+        "items": [
+          "Strategic advisory focused on measurable business outcomes",
+          "Deep expertise in AI strategy and business transformation",
+          "Strategic partnerships with leading technology providers",
+          "Focus on European market and regulations"
+        ]
+      },
+      "approach": {
+        "title": "Our Working Method",
+        "items": [
+          "Agile methodology for fast results",
+          "Transparent communication and reporting",
+          "Knowledge transfer to your team",
+          "24/7 support and monitoring"
+        ]
+      }
+    },
+    "readyToStart": {
+      "title": "Ready for the next step?",
+      "description": "Let us help you with your AI transformation"
+    }
+  },
+  "serviceDetails": {
+    "backToServices": "Back to Services",
+    "startProject": "Start This Project",
+    "downloadBrochure": "Download Brochure",
+    "benefits": "Benefits",
+    "features": "Core Features",
+    "process": "Our Process",
+    "deliverables": "Deliverables",
+    "technologies": "Technologies",
+    "projectInfo": "Project Info",
+    "duration": "Duration",
+    "investment": "Investment",
+    "onRequest": "On request",
+    "readyToStart": "Ready to start with {service}?",
+    "letsRealize": "Let's realize your AI ambitions together",
+    "moreInfo": "More Information",
+    "genai": {
+      "title": "GenAI Consultancy",
+      "subtitle": "Strategic Generative AI Implementation",
+      "description": "Transform your organization with cutting-edge Generative AI technology.",
+      "longDescription": "Our GenAI consultancy service helps organizations navigate the complex landscape of generative AI. From strategic planning to implementation, we guide you through every step to maximize AI value.",
+      "benefits": [
+        "Increased productivity up to 40%",
+        "Improved customer experience",
+        "Cost reduction through automation",
+        "Competitive advantage in your market",
+        "Scalable AI solutions"
+      ],
+      "features": [
+        {
+          "title": "AI Strategy Development",
+          "description": "Custom AI strategy aligned with your business goals"
+        },
+        {
+          "title": "Use Case Identification",
+          "description": "Identify high-impact AI applications within your organization"
+        },
+        {
+          "title": "Proof of Concept",
+          "description": "Rapid validation of AI solutions with measurable results"
+        },
+        {
+          "title": "Implementation Roadmap",
+          "description": "Detailed step-by-step plan for successful AI adoption"
+        }
+      ],
+      "process": [
+        {
+          "title": "Assessment",
+          "description": "Evaluation of your current situation and AI readiness"
+        },
+        {
+          "title": "Strategy Design",
+          "description": "Development of a comprehensive AI strategy"
+        },
+        {
+          "title": "Pilot Project",
+          "description": "Implementation of a pilot for validation"
+        },
+        {
+          "title": "Scaling",
+          "description": "Rollout and scaling of successful AI initiatives"
+        }
+      ],
+      "deliverables": [
+        "AI Readiness Assessment Report",
+        "Strategic AI Roadmap",
+        "Business Case & ROI Analysis",
+        "Implementation Plan",
+        "Training & Change Management Plan"
+      ],
+      "technologies": ["OpenAI GPT-4", "Claude 3", "Google Gemini", "Custom Models", "Fine-tuning"],
+      "duration": "8-12 weeks"
+    },
+    "llm": {
+      "title": "LLM Integration",
+      "subtitle": "Enterprise Large Language Model Implementation",
+      "description": "Integrate the power of modern language models into your systems.",
+      "longDescription": "Our LLM integration service provides end-to-end solutions for implementing Large Language Models in your enterprise environment. From API integration to custom model deployment.",
+      "benefits": [
+        "Automated content generation",
+        "Intelligent chatbots and assistants",
+        "Enhanced data analysis",
+        "Multi-language support",
+        "Real-time processing"
+      ],
+      "features": [
+        {
+          "title": "Multi-Model Orchestration",
+          "description": "Combine different LLMs for optimal results"
+        },
+        {
+          "title": "API Development",
+          "description": "Robust APIs for seamless integration"
+        },
+        {
+          "title": "Context Management",
+          "description": "Advanced context management for better responses"
+        },
+        {
+          "title": "Security & Compliance",
+          "description": "Enterprise-grade security and data privacy"
+        }
+      ],
+      "process": [
+        {
+          "title": "Requirements Analysis",
+          "description": "Detailed analysis of your LLM needs"
+        },
+        {
+          "title": "Architecture Design",
+          "description": "Design of scalable LLM architecture"
+        },
+        {
+          "title": "Integration",
+          "description": "Implementation and integration with existing systems"
+        },
+        {
+          "title": "Optimization",
+          "description": "Performance tuning and cost optimization"
+        }
+      ],
+      "deliverables": [
+        "Technical Architecture Document",
+        "API Documentation",
+        "Integration Guidelines",
+        "Performance Benchmarks",
+        "Maintenance Manual"
+      ],
+      "technologies": ["Claude API", "OpenAI API", "Gemini API", "LangChain", "Vector Databases"],
+      "duration": "6-10 weeks"
+    },
+    "rag": {
+      "title": "RAG Architecture",
+      "subtitle": "Retrieval-Augmented Generation Solutions",
+      "description": "Build intelligent systems that combine your knowledge with AI.",
+      "longDescription": "RAG architecture combines the power of Large Language Models with your own data and knowledge. Perfect for knowledge-intensive applications where accuracy is crucial.",
+      "benefits": [
+        "Accurate, context-rich answers",
+        "Utilization of proprietary knowledge",
+        "Reduced hallucinations",
+        "Real-time updates possible",
+        "Scalable knowledge systems"
+      ],
+      "features": [
+        {
+          "title": "Vector Database Design",
+          "description": "Optimal storage and retrieval of embeddings"
+        },
+        {
+          "title": "Document Processing",
+          "description": "Intelligent processing of various document types"
+        },
+        {
+          "title": "Semantic Search",
+          "description": "Advanced search functionality based on meaning"
+        },
+        {
+          "title": "Hybrid Search",
+          "description": "Combination of keyword and semantic search"
+        }
+      ],
+      "process": [
+        {
+          "title": "Data Analysis",
+          "description": "Analysis of your knowledge sources and data"
+        },
+        {
+          "title": "Architecture Design",
+          "description": "Design of optimal RAG pipeline"
+        },
+        {
+          "title": "Implementation",
+          "description": "Build and configuration of RAG system"
+        },
+        {
+          "title": "Validation",
+          "description": "Testing and validation of accuracy"
+        }
+      ],
+      "deliverables": [
+        "RAG Architecture Blueprint",
+        "Data Processing Pipeline",
+        "Search & Retrieval System",
+        "Performance Metrics",
+        "Maintenance Guide"
+      ],
+      "technologies": ["Pinecone", "Weaviate", "ChromaDB", "LlamaIndex", "Embeddings Models"],
+      "duration": "8-14 weeks"
+    },
+    "servicenow": {
+      "title": "ServiceNow AI",
+      "subtitle": "AI-Powered ServiceNow Solutions",
+      "description": "Maximize your ServiceNow investment with AI.",
+      "longDescription": "Our ServiceNow AI services combine the power of the ServiceNow platform with cutting-edge AI capabilities for automated, intelligent workflows.",
+      "benefits": [
+        "Automated ticket routing",
+        "Predictive incident management",
+        "Intelligent virtual agents",
+        "Enhanced employee experience",
+        "Data-driven insights"
+      ],
+      "features": [
+        {
+          "title": "Now Assist Implementation",
+          "description": "Full implementation of ServiceNow AI features"
+        },
+        {
+          "title": "Virtual Agent Development",
+          "description": "Custom conversational AI for ServiceNow"
+        },
+        {
+          "title": "Predictive Intelligence",
+          "description": "ML models for predictive analytics"
+        },
+        {
+          "title": "Process Mining",
+          "description": "AI-driven process optimization"
+        }
+      ],
+      "process": [
+        {
+          "title": "Platform Assessment",
+          "description": "Evaluation of current ServiceNow setup"
+        },
+        {
+          "title": "AI Strategy",
+          "description": "Development of AI use cases"
+        },
+        {
+          "title": "Implementation",
+          "description": "Configuration and deployment"
+        },
+        {
+          "title": "Adoption",
+          "description": "Training and change management"
+        }
+      ],
+      "deliverables": [
+        "ServiceNow AI Assessment",
+        "Implementation Plan",
+        "Configured AI Solutions",
+        "Training Materials",
+        "Best Practices Guide"
+      ],
+      "technologies": [
+        "ServiceNow Now Assist",
+        "Virtual Agent",
+        "Performance Analytics",
+        "IntegrationHub"
+      ],
+      "duration": "10-16 weeks"
+    },
+    "multiAgent": {
+      "title": "Multi-Agent Orchestration",
+      "subtitle": "Autonomous AI Agent Systems",
+      "description": "Build complex AI systems with specialized agents.",
+      "longDescription": "Multi-agent orchestration enables breaking down complex tasks between specialized AI agents that work together to achieve your business goals.",
+      "benefits": [
+        "Complex task automation",
+        "Scalable AI operations",
+        "Parallel processing",
+        "Domain specialization",
+        "Autonomous decision making"
+      ],
+      "features": [
+        {
+          "title": "Agent Architecture",
+          "description": "Design of specialized agent systems"
+        },
+        {
+          "title": "Orchestration Framework",
+          "description": "Robust framework for agent coordination"
+        },
+        {
+          "title": "Communication Protocols",
+          "description": "Efficient inter-agent communication"
+        },
+        {
+          "title": "Monitoring & Control",
+          "description": "Real-time monitoring and governance"
+        }
+      ],
+      "process": [
+        {
+          "title": "Task Analysis",
+          "description": "Decomposition of complex tasks"
+        },
+        {
+          "title": "Agent Design",
+          "description": "Design of specialized agents"
+        },
+        {
+          "title": "Orchestration Build",
+          "description": "Implementation of orchestration layer"
+        },
+        {
+          "title": "System Integration",
+          "description": "Integration with enterprise systems"
+        }
+      ],
+      "deliverables": [
+        "Multi-Agent Architecture",
+        "Agent Specifications",
+        "Orchestration Platform",
+        "Monitoring Dashboard",
+        "Operations Manual"
+      ],
+      "technologies": ["LangChain", "AutoGen", "CrewAI", "Custom Frameworks", "Message Queues"],
+      "duration": "12-20 weeks"
+    },
+    "security": {
+      "title": "Small Projects",
+      "subtitle": "Custom Development Solutions",
+      "description": "Bring your unique ideas to life with custom development.",
+      "longDescription": "From websites and web applications to browser extensions and custom tools, we develop solutions that perfectly fit your specific needs.",
+      "benefits": [
+        "Fast and flexible development",
+        "Cost-effective solutions",
+        "Modern technologies",
+        "Fully customized to your needs",
+        "Ongoing maintenance and support"
+      ],
+      "features": [
+        {
+          "title": "Requirements Analysis",
+          "description": "Full project requirements analysis"
+        },
+        {
+          "title": "Design Phase",
+          "description": "UI/UX design and technical architecture"
+        },
+        {
+          "title": "Development",
+          "description": "Agile development with regular updates"
+        },
+        {
+          "title": "Testing & Delivery",
+          "description": "Thorough testing and smooth deployment"
+        }
+      ],
+      "process": [
+        {
+          "title": "Project Planning",
+          "description": "Custom solution architecture design"
+        },
+        {
+          "title": "Compliance Audit",
+          "description": "Evaluation against regulations"
+        },
+        {
+          "title": "Implementation",
+          "description": "Security measures and controls"
+        },
+        {
+          "title": "Monitoring",
+          "description": "Continuous compliance monitoring"
+        }
+      ],
+      "deliverables": [
+        "Security Assessment Report",
+        "Compliance Roadmap",
+        "Governance Framework",
+        "Policy Documents",
+        "Training Program"
+      ],
+      "technologies": [
+        "Security Frameworks",
+        "Monitoring Tools",
+        "Audit Platforms",
+        "Privacy Tech"
+      ],
+      "duration": "8-12 weeks"
+    },
+    "ai-strategy": {
+      "title": "AI Strategy Consulting",
+      "description": "Develop a comprehensive AI roadmap aligned with your business objectives. We help you identify opportunities, assess readiness, and create a strategic plan for successful AI adoption across your organization.",
+      "features": [
+        "AI maturity assessment and gap analysis",
+        "Strategic roadmap development with clear milestones",
+        "ROI modeling and business case development",
+        "Change management and adoption planning"
+      ],
+      "highlights": [
+        "Executive-level strategic guidance",
+        "Industry-specific AI opportunities",
+        "Risk mitigation strategies"
+      ]
+    },
+    "chatbot-development": {
+      "title": "Intelligent Chatbot Development",
+      "description": "Create sophisticated conversational AI solutions that enhance customer experience and automate support. Our chatbots leverage advanced NLP to provide human-like interactions across multiple channels.",
+      "features": [
+        "Multi-channel deployment (web, mobile, voice)",
+        "Natural language understanding and generation",
+        "Integration with existing CRM and support systems",
+        "Continuous learning and improvement capabilities"
+      ],
+      "highlights": [
+        "24/7 automated customer support",
+        "Multilingual conversation handling",
+        "Sentiment analysis and escalation"
+      ]
+    },
+    "ai-integration": {
+      "title": "AI Systems Integration",
+      "description": "Seamlessly integrate AI capabilities into your existing technology stack. We ensure smooth deployment, optimal performance, and minimal disruption to your current operations.",
+      "features": [
+        "API development and microservices architecture",
+        "Legacy system modernization with AI",
+        "Real-time data pipeline integration",
+        "Scalable cloud-native AI deployment"
+      ],
+      "highlights": [
+        "Enterprise-grade integration solutions",
+        "Performance optimization and monitoring",
+        "Secure data handling and compliance"
+      ]
+    },
+    "prompt-engineering": {
+      "title": "Advanced Prompt Engineering",
+      "description": "Maximize the potential of Large Language Models through expert prompt design and optimization. We create sophisticated prompting strategies that deliver consistent, high-quality AI outputs.",
+      "features": [
+        "Custom prompt libraries for your use cases",
+        "Prompt optimization and A/B testing",
+        "Context management and chaining strategies",
+        "Output validation and quality control"
+      ],
+      "highlights": [
+        "Reduced token costs up to 60%",
+        "Improved accuracy and relevance",
+        "Reusable prompt templates"
+      ]
+    },
+    "workflow-automation": {
+      "title": "AI-Powered Workflow Automation",
+      "description": "Transform manual processes into intelligent automated workflows. We design and implement AI-driven automation that reduces costs, eliminates errors, and accelerates business operations.",
+      "features": [
+        "Process mining and optimization analysis",
+        "Intelligent document processing and extraction",
+        "Decision automation with AI reasoning",
+        "End-to-end workflow orchestration"
+      ],
+      "highlights": [
+        "Up to 80% reduction in processing time",
+        "Zero-touch automation capabilities",
+        "Compliance and audit trail"
+      ]
+    },
+    "compliance-safety": {
+      "title": "AI Compliance & Safety",
+      "description": "Ensure your AI systems meet regulatory requirements and ethical standards. We provide comprehensive governance frameworks, risk assessments, and safety measures for responsible AI deployment.",
+      "features": [
+        "Regulatory compliance assessment (GDPR, AI Act)",
+        "Bias detection and fairness testing",
+        "Model explainability and transparency",
+        "Ethical AI guidelines and policies"
+      ],
+      "highlights": [
+        "Risk mitigation strategies",
+        "Audit-ready documentation",
+        "Continuous compliance monitoring"
+      ]
+    },
+    "data-analysis": {
+      "title": "AI-Enhanced Data Analytics",
+      "description": "Unlock insights from your data using advanced AI and machine learning techniques. We help you discover patterns, predict trends, and make data-driven decisions with confidence.",
+      "features": [
+        "Predictive analytics and forecasting models",
+        "Automated anomaly detection and alerting",
+        "Natural language data querying interfaces",
+        "Real-time analytics dashboards"
+      ],
+      "highlights": [
+        "Actionable business intelligence",
+        "Self-service analytics capabilities",
+        "Proactive decision support"
+      ]
+    },
+    "cloud-migration": {
+      "title": "AI Cloud Migration Services",
+      "description": "Migrate your AI workloads to the cloud for enhanced scalability, performance, and cost efficiency. We ensure seamless transition with minimal downtime and optimal architecture design.",
+      "features": [
+        "Cloud architecture design for AI workloads",
+        "Multi-cloud and hybrid deployment strategies",
+        "Cost optimization and resource management",
+        "Security hardening and compliance setup"
+      ],
+      "highlights": [
+        "Up to 40% cost reduction",
+        "Elastic scaling capabilities",
+        "Global deployment options"
+      ]
+    }
+  },
+  "expertise": {
+    "title": "Deep Industry Expertise Meets AI Innovation",
+    "subtitle": "We combine sector-specific insights with transformative AI capabilities to deliver measurable business impact across all industries.",
+    "industries": {
+      "finance": {
+        "title": "Financial Services",
+        "description": "Transform banking, insurance and investment services with AI-driven insights and automation",
+        "skills": [
+          "Risk Management",
+          "Fraud Detection",
+          "Customer Intelligence",
+          "Regulatory Compliance"
+        ]
+      },
+      "healthcare": {
+        "title": "Healthcare & Life Sciences",
+        "description": "Revolutionize patient care and accelerate research through intelligent systems",
+        "skills": [
+          "Clinical Decision Support",
+          "Drug Discovery",
+          "Patient Experience",
+          "Operational Excellence"
+        ]
+      },
+      "retail": {
+        "title": "Retail & Consumer",
+        "description": "Create personalized experiences and optimize operations across the value chain",
+        "skills": [
+          "Customer Analytics",
+          "Supply Chain AI",
+          "Demand Forecasting",
+          "Omnichannel Strategy"
+        ]
+      },
+      "manufacturing": {
+        "title": "Manufacturing & Industry 4.0",
+        "description": "Drive operational excellence through predictive maintenance and intelligent automation",
+        "skills": [
+          "Predictive Maintenance",
+          "Quality Control",
+          "Supply Chain Optimization",
+          "Digital Twins"
+        ]
+      },
+      "public": {
+        "title": "Public Sector",
+        "description": "Improve citizen services and operational efficiency with responsible AI solutions",
+        "skills": ["Smart Cities", "Digital Government", "Public Safety", "Service Delivery"]
+      },
+      "energy": {
+        "title": "Energy & Utilities",
+        "description": "Optimize resource management and accelerate the transition to sustainable operations",
+        "skills": [
+          "Grid Optimization",
+          "Predictive Analytics",
+          "Sustainability",
+          "Asset Management"
+        ]
+      }
+    }
+  },
+  "whyChooseUs": {
+    "title": "Why Leading Organizations",
+    "subtitle": "Choose GroeimetAI",
+    "description": "We bring together deep industry expertise, advanced AI knowledge and a proven methodology to deliver transformative results for our clients.",
+    "differentiators": {
+      "track": {
+        "title": "Proven Track Record",
+        "description": "Strategic AI advisory with proven results in process optimization and cost reduction",
+        "metric": "€2.8M+ saved annually"
+      },
+      "partnership": {
+        "title": "Executive-Level Partnership",
+        "description": "Direct engagement with C-suite leaders to align AI initiatives with business strategy",
+        "metric": "94% routing accuracy"
+      },
+      "global": {
+        "title": "Global Expertise, Local Presence",
+        "description": "International best practices combined with deep understanding of European markets",
+        "metric": "1500+ hours processed"
+      },
+      "value": {
+        "title": "Value-Driven Approach",
+        "description": "Focus on business outcomes, not technology for technology's sake",
+        "metric": "1B+ tokens processed"
+      },
+      "speed": {
+        "title": "Accelerated Time-to-Value",
+        "description": "Rapid strategy development with clear implementation roadmaps",
+        "metric": "85% faster response"
+      },
+      "risk": {
+        "title": "Risk Mitigation",
+        "description": "Comprehensive approach to AI governance, ethics and regulatory compliance",
+        "metric": "50K+ employees helped"
+      }
+    },
+    "cta": {
+      "ready": "Ready to transform your business with AI?",
+      "discuss": "Let's discuss how we can accelerate your journey to AI excellence."
+    }
+  },
+  "approach": {
+    "title": "Our Proven",
+    "subtitle": "Approach",
+    "description": "A structured methodology that ensures successful AI adoption with measurable business impact at every stage.",
+    "steps": {
+      "discovery": {
+        "title": "Strategic Discovery",
+        "description": "We begin with executive workshops to understand your business objectives, challenges and AI readiness.",
+        "outcomes": ["Business case development", "Opportunity assessment", "Strategic alignment"]
+      },
+      "mapping": {
+        "title": "Value Mapping",
+        "description": "Identify high-impact use cases and create a prioritized roadmap aligned with your strategic goals.",
+        "outcomes": ["Use case prioritization", "ROI projections", "Risk assessment"]
+      },
+      "pilot": {
+        "title": "Pilot & Validate",
+        "description": "Rapid prototyping of selected use cases to demonstrate value and refine the approach.",
+        "outcomes": ["Proof of concept", "Stakeholder buy-in", "Refined business case"]
+      },
+      "scale": {
+        "title": "Scale & Transform",
+        "description": "Systematic rollout with change management, governance frameworks and capability building.",
+        "outcomes": ["Enterprise rollout", "Operating model", "Performance tracking"]
+      }
+    },
+    "metrics": {
+      "time": {
+        "value": "12-16 weeks",
+        "label": "Average time to first value"
+      },
+      "roi": {
+        "value": "3-5x ROI",
+        "label": "Typical return on investment"
+      },
+      "success": {
+        "value": "85%",
+        "label": "Projects exceed targets"
+      },
+      "sponsorship": {
+        "value": "100%",
+        "label": "Executive sponsorship"
+      }
+    }
+  },
+  "trust": {
+    "title": "Why Trust",
+    "subtitle": "GroeimetAI",
+    "description": "Built on proven technology partnerships, real achievements, and enterprise-grade security standards",
+    "factors": {
+      "security": {
+        "title": "Enterprise Security",
+        "description": "GDPR compliant, EU AI Act ready, with bank-level data protection"
+      },
+      "achievement": {
+        "title": "Proven Results",
+        "description": "Real projects delivering millions in savings and operational efficiency"
+      },
+      "scale": {
+        "title": "Enterprise Scale",
+        "description": "Solutions deployed for 50,000+ employees handling millions of interactions"
+      },
+      "innovation": {
+        "title": "Innovation Leader",
+        "description": "Strategic advisory for AI-driven process optimization and business transformation"
+      }
+    },
+    "achievements": {
+      "title": "Real Impact from Real Projects"
+    },
+    "partners": {
+      "title": "Powered by Industry-Leading Technology"
+    },
+    "compliance": {
+      "gdpr": "GDPR Compliant",
+      "euAi": "EU AI Act Ready",
+      "iso": "ISO 27001 Standards",
+      "soc2": "SOC 2 Type II"
+    }
+  },
+  "quote": {
+    "title": "Let's Discuss Your",
+    "subtitle": "AI Strategy",
+    "form": {
+      "accountSetup": "Account Setup",
+      "contactInfo": "Contact Information",
+      "projectDetails": "Project Details",
+      "requirements": "Requirements",
+      "review": "Review & Submit"
+    }
+  },
+  "footer": {
+    "tagline": "Transform your business with cutting-edge AI solutions. We are your partner in AI innovation and digital transformation.",
+    "newsletter": {
+      "title": "Stay updated",
+      "placeholder": "your.email@company.com"
+    },
+    "sections": {
+      "services": "Services",
+      "company": "Company",
+      "legal": "Legal",
+      "contact": "Contact"
+    },
+    "copyright": "© {year} GroeimetAI All rights reserved.",
+    "madeWith": "Made with",
+    "in": "in Apeldoorn"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your GroeimetAI portal",
+      "backToHome": "Back to home",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "you@company.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "forgotPassword": "Forgot password?",
+      "signingIn": "Signing in...",
+      "signIn": "Sign In",
+      "noAccount": "Don't have an account?",
+      "getStarted": "Get Started",
+      "portalTitle": "Your AI Project Portal",
+      "trustMessage": "Join forward-thinking organizations leveraging our AI expertise for strategic transformation",
+      "benefits": {
+        "secure": {
+          "title": "Secure Portal",
+          "description": "Enterprise-grade security for your data"
+        },
+        "updates": {
+          "title": "Real-time Updates",
+          "description": "Stay informed with instant notifications"
+        },
+        "tracking": {
+          "title": "Progress Tracking",
+          "description": "Monitor your project status 24/7"
+        },
+        "insights": {
+          "title": "AI Insights",
+          "description": "Get intelligent recommendations"
+        }
+      },
+      "twoFactor": {
+        "title": "Two-Factor Authentication",
+        "description": "Enter the 6-digit code from your authenticator app",
+        "codeLabel": "Verification Code",
+        "codePlaceholder": "000000",
+        "cancel": "Cancel",
+        "verify": "Verify"
+      },
+      "errors": {
+        "userNotFound": "No account found with this email address.",
+        "wrongPassword": "Incorrect password. Please try again.",
+        "invalidEmail": "Please enter a valid email address.",
+        "emailNotVerified": "Please verify your email address first. We've sent you a new verification email.",
+        "tooManyRequests": "Too many failed attempts. Please try again later.",
+        "invalidCode": "Invalid verification code. Please try again.",
+        "networkError": "No internet connection. Please check your connection and try again.",
+        "userDisabled": "This account has been disabled. Please contact support for assistance.",
+        "general": "Login failed. Please check your credentials and try again."
+      },
+      "orDivider": "OR",
+      "continueWithGoogle": "Continue with Google",
+      "signInWithGoogle": "Sign in with Google",
+      "signUpWithGoogle": "Sign up with Google"
+    },
+    "quoteRequest": {
+      "form": {
+        "accountSetup": "Account Setup",
+        "serviceSelection": "Service Selection",
+        "contactInfo": "Contact Information",
+        "projectDetails": "Project Details",
+        "requirements": "Requirements",
+        "review": "Review & Submit",
+        "services": {
+          "genai": "GenAI Strategy & Consultancy",
+          "genaiDesc": "Strategic AI roadmap and implementation guidance",
+          "llm": "LLM Integration & Optimization",
+          "llmDesc": "Large Language Model implementation for your business",
+          "rag": "RAG Architecture Design",
+          "ragDesc": "Intelligent knowledge retrieval systems",
+          "servicenow": "ServiceNow AI Solutions",
+          "servicenowDesc": "AI-powered ServiceNow enhancements",
+          "multiAgent": "Multi-Agent Orchestration",
+          "multiAgentDesc": "Coordinate multiple AI agents for complex workflows",
+          "security": "Small Projects",
+          "securityDesc": "Custom websites, applications, extensions and more"
+        }
+      },
+      "getStarted": "Get Started",
+      "getStartedDescription": "Create an account for the best experience or continue as guest",
+      "createAccount": "Create Account (Recommended)",
+      "continueAsGuest": "Continue as Guest",
+      "guestDescription": "Submit your request without creating an account",
+      "orDivider": "OR",
+      "continueWithGoogle": "Continue with Google",
+      "loading": "Loading...",
+      "accountBenefits": {
+        "portal": {
+          "title": "Project Portal Access",
+          "description": "Track progress in real-time with dedicated dashboard"
+        },
+        "communication": {
+          "title": "Centralized Communication",
+          "description": "All messages & files in one secure location"
+        },
+        "insights": {
+          "title": "AI-Powered Insights",
+          "description": "Get recommendations based on your project data"
+        },
+        "support": {
+          "title": "Priority Support",
+          "description": "Direct access to our expert team"
+        }
+      },
+      "accountMessage": {
+        "title": "Join leading companies using our portal",
+        "description": "Account holders report 40% faster project completion"
+      },
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Create a strong password",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "passwordMismatch": "Passwords do not match",
+      "contactTitle": "Contact Information",
+      "contactDescription": "Tell us how to reach you",
+      "fullNameLabel": "Full Name *",
+      "fullNamePlaceholder": "John Doe",
+      "emailLabel": "Email *",
+      "emailPlaceholder": "john@company.com",
+      "phoneLabel": "Phone",
+      "phonePlaceholder": "+1 (555) 123-4567",
+      "companyLabel": "Company *",
+      "companyPlaceholder": "Acme Corp",
+      "jobTitleLabel": "Job Title",
+      "jobTitlePlaceholder": "CTO",
+      "projectTitle": "Project Details",
+      "projectDescription": "Tell us about your project",
+      "projectNameLabel": "Project Name *",
+      "projectNamePlaceholder": "AI Customer Service Implementation",
+      "servicesLabel": "Services Required *",
+      "servicesDescription": "Select all that apply",
+      "projectDescriptionLabel": "Project Description *",
+      "projectDescriptionPlaceholder": "Please describe your project goals, challenges, and expected outcomes...",
+      "requirementsTitle": "Requirements",
+      "requirementsDescription": "Help us understand your needs",
+      "budgetLabel": "Budget Range *",
+      "timelineLabel": "Timeline *",
+      "additionalRequirementsLabel": "Additional Requirements",
+      "additionalRequirementsPlaceholder": "Any specific requirements, constraints, or additional information...",
+      "attachmentsLabel": "Attachments",
+      "attachmentsDescription": "Upload any relevant documents (RFP, technical specs, etc.)",
+      "uploadLabel": "Click to upload or drag and drop",
+      "uploadTypes": "PDF, DOC, DOCX up to 10MB each",
+      "reviewTitle": "Review & Submit",
+      "reviewDescription": "Please review your information",
+      "accountDetailsTitle": "Account Details",
+      "accountType": "Account Type:",
+      "fullAccount": "Full Account",
+      "accountInfo": "You'll receive login credentials via email after submission",
+      "contactInfoTitle": "Contact Information",
+      "name": "Name:",
+      "email": "Email:",
+      "phone": "Phone:",
+      "notProvided": "Not provided",
+      "company": "Company:",
+      "projectDetailsTitle": "Project Details",
+      "project": "Project:",
+      "services": "Services:",
+      "description": "Description:",
+      "requirementsSection": "Requirements",
+      "budget": "Budget:",
+      "timeline": "Timeline:",
+      "attachments": "Attachments:",
+      "fileCount": "{count} file(s)",
+      "termsNotice": "By submitting this form, you agree to our terms of service and privacy policy. Our team will review your request and contact you within 24 hours.",
+      "previous": "Previous",
+      "next": "Next",
+      "submitting": "Submitting...",
+      "submitRequest": "Submit Request",
+      "servicesTitle": "What can we help you with?",
+      "servicesSubtitle": "Select one or more services that match your needs",
+      "selectServicesLabel": "Choose the services you're interested in:",
+      "multipleServicesNote": "You can select multiple services. We'll create a comprehensive solution tailored to your needs.",
+      "errors": {
+        "emailInUse": "An account with this email already exists. Please sign in instead.",
+        "weakPassword": "Password should be at least 6 characters.",
+        "accountCreationFailed": "Failed to create account. Please try again.",
+        "submissionFailed": "An error occurred while submitting your request. Please try again."
+      }
+    }
+  },
+  "contact": {
+    "pageTitle": "Contact Us",
+    "pageDescription": "Ready to start your AI transformation? We're here to help.",
+    "infoCards": {
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "hours": "Business Hours"
+    },
+    "form": {
+      "title": "Send us a message",
+      "nameLabel": "Name *",
+      "namePlaceholder": "Your name",
+      "emailLabel": "Email *",
+      "emailPlaceholder": "your.email@company.com",
+      "companyLabel": "Company",
+      "companyPlaceholder": "Your company name",
+      "phoneLabel": "Phone",
+      "phonePlaceholder": "+1 234 567 890",
+      "serviceLabel": "Interest in",
+      "servicePlaceholder": "Select a service",
+      "services": {
+        "genai": "GenAI Consultancy",
+        "llm": "LLM Integration",
+        "rag": "RAG Architecture",
+        "servicenow": "ServiceNow AI",
+        "multiAgent": "Multi-Agent Orchestration",
+        "security": "Small Projects",
+        "other": "Other"
+      },
+      "messageLabel": "Message *",
+      "messagePlaceholder": "Tell us about your project or question...",
+      "privacyLabel": "I agree to the processing of my data according to the {link}. *",
+      "privacyLink": "privacy policy",
+      "sendButton": "Send Message",
+      "sending": "Sending...",
+      "successMessage": "Thank you for your message! We'll get back to you as soon as possible.",
+      "errorMessage": "Something went wrong. Please try again later or contact us by phone."
+    },
+    "additionalInfo": {
+      "directContactTitle": "Direct Contact",
+      "directContactDescription": "For urgent matters, you can reach us directly by phone or email.",
+      "scheduleMeetingTitle": "Schedule a Meeting",
+      "scheduleMeetingDescription": "Prefer a personal conversation? Schedule a meeting directly in our calendar.",
+      "scheduleMeetingButton": "Schedule a Meeting",
+      "followUsTitle": "Follow Us",
+      "followUsDescription": "Stay up to date with the latest AI developments and insights.",
+      "officeHoursTitle": "Office Hours",
+      "mondayFriday": "Monday - Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday",
+      "onAppointment": "By appointment",
+      "closed": "Closed"
+    },
+    "location": {
+      "title": "Our Location",
+      "mapPlaceholder": "Interactive map will be displayed here"
+    },
+    "values": {
+      "amsterdam": "Apeldoorn, Netherlands",
+      "businessHours": "Mon-Fri: 9:00 AM - 6:00 PM"
+    }
+  },
+  "brochure": {
+    "coverTitle": "Transform Your Business with Strategic AI",
+    "coverDescription": "GroeimetAI is your strategic partner in navigating the AI revolution. We help executive teams understand, plan, and implement AI solutions that drive measurable business value.",
+    "footer": "Your Strategic AI Partner",
+    "aboutTitle": "About GroeimetAI",
+    "aboutDescription": "GroeimetAI specializes in strategic AI consultancy, guiding organizations through their digital transformation journey. We don't build AI models - we help you understand how to leverage AI effectively for process optimization, cost reduction, and sustainable growth.",
+    "whyChooseUs": "Why Choose GroeimetAI?",
+    "whyPoint1": "Strategic focus on business outcomes, not technical implementation",
+    "whyPoint2": "Proven track record with major Dutch enterprises",
+    "whyPoint3": "Deep expertise in GenAI, LLM, and ServiceNow integration",
+    "whyPoint4": "100% GDPR compliant and EU AI Act ready",
+    "approachTitle": "Our Approach",
+    "approachDescription": "We believe in a pragmatic, results-driven approach to AI transformation. Our methodology combines strategic thinking with practical implementation guidance, ensuring your AI initiatives deliver real business value.",
+    "servicesTitle": "Our Services",
+    "caseStudiesTitle": "Success Stories",
+    "case1Title": "Enterprise LLM Implementation - Major Dutch Bank",
+    "case1Description": "Transformed an outdated chatbot into an intelligent AI assistant serving 50,000 employees.",
+    "case1Metrics": "Results: 85% faster response times, 72% higher resolution rate, €2.8M annual savings",
+    "case2Title": "Snelnotuleren.nl - AI Transcription Platform",
+    "case2Description": "Built a GDPR-compliant AI transcription platform processing over 1 million tokens.",
+    "case2Metrics": "Results: 1500+ hours transcribed, growing user base, 100% GDPR compliant",
+    "case3Title": "Multi-Agent Learning Platform",
+    "case3Description": "Revolutionary project where AI agents autonomously built a complete learning platform.",
+    "case3Metrics": "Results: 2-week development, 10+ courses created, 95% agent efficiency",
+    "case4Title": "Intelligent Ticket Routing System",
+    "case4Description": "Implemented vector database solution for semantic ticket routing at scale.",
+    "case4Metrics": "Results: 94% routing accuracy, 78% time saved, 65% template reduction",
+    "service1Title": "GenAI Strategy & Consultancy",
+    "service1Description": "Navigate the AI revolution with expert guidance. We help you identify opportunities, develop strategies, and implement AI solutions that deliver real business value.",
+    "service2Title": "LLM Integration & Optimization",
+    "service2Description": "Transform your business processes with Large Language Models. From customer service to internal operations, we implement and optimize LLM solutions.",
+    "service3Title": "Small Projects",
+    "service3Description": "Custom development for your unique needs. From websites and web applications to browser extensions and custom tools, we bring your ideas to life.",
+    "service4Title": "Multi-Agent Orchestration",
+    "service4Description": "Harness the power of multiple AI agents working together. Our orchestration solutions enable complex workflows and autonomous operations.",
+    "service5Title": "RAG Architecture Design",
+    "service5Description": "Build intelligent knowledge systems with Retrieval Augmented Generation. We design and implement RAG solutions that leverage your data effectively.",
+    "service6Title": "ServiceNow AI Solutions",
+    "service6Description": "Enhance your ServiceNow platform with AI capabilities. From intelligent routing to automated responses, we maximize your ServiceNow investment.",
+    "contactTitle": "Let's Start Your AI Journey",
+    "contactDescription": "Ready to transform your business with strategic AI? Our team is here to guide you through every step of your digital transformation journey.",
+    "getInTouch": "Get in Touch",
+    "location": "Location: Apeldoorn, Netherlands",
+    "nextStepsTitle": "Next Steps",
+    "nextStep1": "Schedule a free consultation to discuss your AI ambitions",
+    "nextStep2": "Receive a tailored strategic roadmap for your organization",
+    "nextStep3": "Begin your transformation with expert guidance",
+    "nextStep4": "Achieve measurable business results with AI",
+    "allRightsReserved": "All Rights Reserved",
+    "strategicPartner": "Strategic AI Consultancy - Empowering Digital Transformation"
+  },
+  "about": {
+    "metadata": {
+      "title": "About Us - GroeimetAI",
+      "description": "Discover GroeimetAI - Your partner in AI transformation. Learn more about our mission, vision, and the team behind innovative AI solutions.",
+      "openGraph": {
+        "title": "About GroeimetAI - AI Consultancy & Innovation",
+        "description": "Discover how GroeimetAI helps companies grow with cutting-edge AI technology"
+      }
+    },
+    "hero": {
+      "title": "We are GroeimetAI",
+      "description": "Your partner in AI transformation. We help businesses grow with cutting-edge AI technology and proven expertise."
+    },
+    "stats": {
+      "projects": "Successful Projects",
+      "satisfaction": "Client Satisfaction",
+      "experts": "AI Experts",
+      "support": "Support & Monitoring",
+      "savedAnnually": "Saved Annually",
+      "hoursProcessed": "Hours Processed",
+      "accuracy": "Routing Accuracy",
+      "deliveryTime": "Record Delivery"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "We make advanced AI technology accessible to every business. By delivering practical, results-driven solutions, we help organizations reach their full potential in the AI era."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "A world where every business can harness the power of AI to drive innovation, increase efficiency, and deliver exceptional customer experiences. We are the bridge between cutting-edge technology and practical business value."
+    },
+    "values": {
+      "title": "Our Core Values",
+      "items": {
+        "innovation": {
+          "title": "Innovation",
+          "description": "We believe in the power of innovation to solve complex challenges."
+        },
+        "collaboration": {
+          "title": "Collaboration",
+          "description": "Successful AI integration begins with close collaboration with our clients."
+        },
+        "results": {
+          "title": "Results-Driven",
+          "description": "Measurable results and concrete business value are central."
+        },
+        "excellence": {
+          "title": "Excellence",
+          "description": "We strive for excellence in everything we do."
+        }
+      }
+    },
+    "partners": {
+      "title": "Our Technology Partners",
+      "subtitle": "As a strategic consultancy, we leverage best-in-class technologies to create custom AI solutions tailored to your needs",
+      "categories": {
+        "cloud": "Cloud Infrastructure",
+        "ai": "AI Platform",
+        "speech": "Speech Recognition",
+        "framework": "AI Framework",
+        "models": "Model Hub",
+        "enterprise": "Enterprise Platform",
+        "vector": "Vector Database"
+      },
+      "descriptions": {
+        "gcp": "Our primary cloud infrastructure for scalable, secure AI deployments",
+        "anthropic": "Advanced language models for strategic consulting and analysis",
+        "assemblyai": "State-of-the-art speech recognition and transcription services",
+        "langchain": "Framework for building sophisticated LLM applications",
+        "huggingface": "Access to thousands of pre-trained models and datasets",
+        "servicenow": "Enterprise workflow automation and AI integration",
+        "openai": "Cutting-edge GPT models for various AI applications",
+        "pinecone": "High-performance vector database for RAG implementations"
+      }
+    },
+    "cta": {
+      "title": "Ready to grow with AI?",
+      "subtitle": "Discover how we can transform your organization",
+      "contactButton": "Get in Touch",
+      "servicesButton": "View Our Services"
+    }
+  },
+  "cases": {
+    "metadata": {
+      "title": "Case Studies - GroeimetAI",
+      "description": "Discover how GroeimetAI has helped companies with AI transformation. Read our success stories and results.",
+      "openGraph": {
+        "title": "Case Studies - GroeimetAI Success Stories",
+        "description": "Proven results in AI consultancy and implementation"
+      }
+    },
+    "hero": {
+      "title": "Case Studies",
+      "subtitle": "Discover how we help companies transform with AI",
+      "stats": {
+        "enterpriseProjects": "Enterprise Projects",
+        "annualSavings": "Annual Savings",
+        "endUsers": "End Users",
+        "tokensProcessed": "Tokens Processed"
+      }
+    },
+    "featured": {
+      "title": "Featured Cases",
+      "challenge": "Challenge",
+      "solution": "Solution",
+      "impact": "Impact",
+      "duration": "Project duration",
+      "readMore": "Read More"
+    },
+    "filter": {
+      "title": "Filter by Industry",
+      "allIndustries": "All Industries",
+      "technologies": "Technologies"
+    },
+    "otherProjects": {
+      "title": "Other Projects",
+      "details": "Details"
+    },
+    "metrics": {
+      "title": "Our Impact in Numbers",
+      "annualSavings": "Annual Savings",
+      "fasterResponse": "Faster Response",
+      "employeesHelped": "Employees Helped",
+      "routingAccuracy": "Routing Accuracy"
+    },
+    "cta": {
+      "title": "Ready to Write Your Own Success Story?",
+      "subtitle": "Let's bring your AI ambitions to life",
+      "startProject": "Start Your Project",
+      "exploreServices": "Explore Our Services"
+    },
+    "caseStudies": {
+      "enterprise-llm": {
+        "title": "Enterprise LLM Implementation for 50,000 Employees",
+        "client": "Major Dutch Bank",
+        "industry": "Financial Services",
+        "challenge": "Outdated trigger-based chatbot without NLU for internal support of 50,000 employees. Poor user experience and low resolution rate.",
+        "solution": "Agentic AI framework with Azure OpenAI integration. Agent autonomously decides: live agent transfer, catalog items, knowledge base, direct answers or legacy topics. GPT-4o-mini with intelligent conversation history (last 10 messages).",
+        "details": "Through implementing an intelligent LLM solution, the bank saves €2.8M annually on support costs. With 50,000 employees submitting an average of 2 tickets per month, saving €2.33 per ticket through automated handling.",
+        "metrics": {
+          "responseTime": "Response Time",
+          "resolutionRate": "Resolution Rate",
+          "costSavings": "Cost Savings"
+        }
+      },
+      "snelnotuleren": {
+        "title": "Snelnotuleren.nl - AI Transcription Platform",
+        "client": "GroeimetAI Venture",
+        "industry": "SaaS",
+        "challenge": "Dutch market needed a GDPR-compliant AI transcription service for meetings and interviews.",
+        "solution": "GCP-based platform with Firebase, fully GDPR and EU AI Act compliant. Ingenious algorithm for long transcriptions within token limits.",
+        "details": "Successful AI venture that processed over a million tokens and transcribed 1500+ hours of meetings with perfect GDPR compliance.",
+        "metrics": {
+          "tokensProcessed": "Tokens Processed",
+          "hoursTranscribed": "Hours Transcribed",
+          "activeUsers": "Active Users"
+        }
+      },
+      "learning-platform": {
+        "title": "GroeimetAI Learning Platform - Multi-Agent Development",
+        "client": "GroeimetAI",
+        "industry": "EdTech",
+        "challenge": "Rapidly build a complete learning platform for GenAI and LLM courses with certification.",
+        "solution": "Multi-agent orchestration system that built the complete platform. 10+ courses with 4 modules each and 16 lessons. Blockchain verification for certificates.",
+        "details": "Revolutionary project where AI agents autonomously developed a complete learning platform, including content creation and blockchain certification.",
+        "metrics": {
+          "developmentTime": "Development Time",
+          "coursesBuilt": "Courses Built",
+          "agentEfficiency": "Agent Efficiency"
+        }
+      },
+      "intelligent-routing": {
+        "title": "Intelligent Ticket Routing with Vector Database",
+        "client": "Major Dutch Bank",
+        "industry": "Financial Services",
+        "challenge": "Thousands of Business Service Templates (BSTs) made it impossible for users to find the right template for their issue.",
+        "solution": "LLM-powered widget with vector database for semantic search. User describes problem, AI generates follow-up questions, creates perfect ticket and routes to correct team.",
+        "details": "Vector database implementation enabling semantic search across thousands of service templates, with intelligent follow-up questions for perfect ticket creation.",
+        "metrics": {
+          "routingAccuracy": "Routing Accuracy",
+          "userTimeSaved": "User Time Saved",
+          "bstReduction": "BST Reduction"
+        }
+      }
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back, {name}!",
+    "description": "Track your project progress and communicate with our team.",
+    "loading": "Loading...",
+    "loadingProfile": "Loading your profile...",
+    "refreshPage": "Refresh Page",
+    "createProfile": "Create Profile",
+    "profileError": "Your profile doesn't exist in our database. Click \"Create Profile\" to set it up.",
+    "tryRefreshing": "If this takes too long, try refreshing the page.",
+    "projectTimeline": {
+      "title": "Project Timeline",
+      "overallProgress": "Overall Progress",
+      "planning": "Planning",
+      "stages": {
+        "discovery": "Discovery",
+        "discoveryDesc": "Understanding your needs",
+        "planning": "Planning",
+        "planningDesc": "Defining project scope",
+        "development": "Development",
+        "developmentDesc": "Building your solution",
+        "delivery": "Delivery",
+        "deliveryDesc": "Final implementation"
+      },
+      "nextMilestone": "Next Milestone",
+      "mvpDeployment": "MVP deployment scheduled for next week"
+    },
+    "messaging": {
+      "title": "GroeimetAI Team",
+      "responseTime": "Usually responds within 2 hours",
+      "placeholder": "Type your message...",
+      "welcomeMessage": "Welcome to GroeimetAI! We're excited to work with you on your AI transformation journey.",
+      "thankYouReply": "Thanks! Looking forward to getting started.",
+      "autoReply": "Thanks for your message! Our team will respond within 24 hours."
+    },
+    "quickActions": {
+      "viewProjects": "View All Projects",
+      "documents": "Documents",
+      "scheduleMeeting": "Schedule Meeting",
+      "settings": "Settings"
+    },
+    "projects": {
+      "title": "Your Projects",
+      "description": "Manage and track all your projects in one place",
+      "requestNew": "Request New Project",
+      "searchPlaceholder": "Search projects...",
+      "filters": {
+        "all": "All",
+        "active": "Active",
+        "draft": "Draft",
+        "completed": "Completed"
+      },
+      "statuses": {
+        "active": "Active",
+        "completed": "Completed",
+        "on_hold": "On Hold",
+        "draft": "Draft",
+        "cancelled": "Cancelled"
+      },
+      "viewDetails": "View Details",
+      "noProjects": "No Projects Yet",
+      "noProjectsDescription": "Start your journey with GroeimetAI by requesting a new project. We'll help you transform your business with cutting-edge AI solutions.",
+      "requestFirst": "Request Your First Project",
+      "loadingProjects": "Loading projects...",
+      "errorLoading": "Failed to load projects. Please try again."
+    },
+    "documents": {
+      "title": "Documents",
+      "description": "Access all your project documents and files",
+      "uploadDocument": "Upload Document",
+      "searchPlaceholder": "Search documents...",
+      "filters": {
+        "all": "All",
+        "contracts": "Contracts",
+        "proposals": "Proposals",
+        "reports": "Reports",
+        "invoices": "Invoices"
+      },
+      "uploadDialog": {
+        "title": "Upload Document",
+        "description": "Add a new document to your library",
+        "projectName": "Project Name (Optional)",
+        "projectNamePlaceholder": "e.g., AI Transformation Initiative",
+        "documentDescription": "Description (Optional)",
+        "descriptionPlaceholder": "Brief description of the document...",
+        "tags": "Tags (Optional)",
+        "tagsPlaceholder": "contract, legal, 2025 (comma separated)",
+        "uploading": "Uploading...",
+        "upload": "Upload",
+        "cancel": "Cancel"
+      },
+      "table": {
+        "name": "Name",
+        "project": "Project",
+        "size": "Size",
+        "uploaded": "Uploaded",
+        "actions": "Actions",
+        "view": "View",
+        "download": "Download",
+        "archive": "Archive",
+        "unarchive": "Unarchive",
+        "delete": "Delete"
+      },
+      "storageInfo": {
+        "storageUsed": "Storage Used",
+        "documentsCount": "{count} documents"
+      },
+      "noDocuments": "No documents yet",
+      "noDocumentsDescription": "Start building your document library by uploading your first file. Keep all your important project files organized in one place.",
+      "uploadFirst": "Upload Your First Document",
+      "noMatch": "No documents match your search criteria",
+      "loadingDocuments": "Loading documents...",
+      "errorLoading": "Failed to load documents. Please try again.",
+      "errorUploading": "Failed to upload document. Please try again.",
+      "deleteConfirm": "Are you sure you want to delete this document?",
+      "uploadRequirements": {
+        "imageError": "Please upload an image file",
+        "sizeError": "Image must be less than 5MB"
+      }
+    },
+    "consultations": {
+      "title": "Consultations & Meetings",
+      "description": "Schedule and manage your meetings with our team",
+      "scheduleMeeting": "Schedule Meeting",
+      "upcoming": "Upcoming Meetings",
+      "past": "Past Meetings",
+      "noUpcoming": "No upcoming meetings scheduled",
+      "scheduleFirst": "Schedule Your First Meeting",
+      "noPast": "No past meetings to display",
+      "viewNotes": "View Notes",
+      "scheduleFollowup": "Schedule Follow-up",
+      "reschedule": "Reschedule",
+      "joinMeeting": "Join Meeting",
+      "form": {
+        "scheduleTitle": "Schedule a New Meeting",
+        "rescheduleTitle": "Reschedule Meeting",
+        "meetingTitle": "Meeting Title *",
+        "titlePlaceholder": "e.g., Project Kickoff Meeting",
+        "meetingType": "Meeting Type",
+        "types": {
+          "consultation": "Initial Consultation",
+          "projectUpdate": "Project Update",
+          "technicalReview": "Technical Review",
+          "training": "Training Session"
+        },
+        "platform": "Meeting Platform",
+        "platforms": {
+          "zoom": "Zoom",
+          "teams": "Microsoft Teams",
+          "meet": "Google Meet",
+          "phone": "Phone Call",
+          "inPerson": "In-Person"
+        },
+        "date": "Date *",
+        "time": "Time *",
+        "selectTime": "Select a time",
+        "duration": "Duration (minutes)",
+        "durations": {
+          "30": "30 minutes",
+          "60": "1 hour",
+          "90": "1.5 hours",
+          "120": "2 hours"
+        },
+        "meetingLink": "Meeting Link *",
+        "linkPlaceholder": "https://zoom.us/j/...",
+        "address": "Meeting Address *",
+        "addressPlaceholder": "123 Main St, Apeldoorn",
+        "agenda": "Meeting Agenda / Description",
+        "agendaPlaceholder": "Please describe what you'd like to discuss...",
+        "rescheduling": "Rescheduling...",
+        "scheduling": "Scheduling..."
+      },
+      "validation": {
+        "titleRequired": "Title is required",
+        "dateRequired": "Date is required",
+        "futureDate": "Please select a future date",
+        "timeRequired": "Time is required",
+        "futureTime": "Please select a future time",
+        "addressRequired": "Address is required for in-person meetings",
+        "linkRequired": "Meeting link is required for virtual meetings",
+        "selectDateFirst": "Please select a date first"
+      },
+      "statuses": {
+        "scheduled": "scheduled",
+        "completed": "Completed",
+        "cancelled": "cancelled",
+        "rescheduled": "rescheduled"
+      },
+      "followupPrefix": "Follow-up: {title}",
+      "errorLoading": "Failed to load meetings",
+      "errorScheduling": "Failed to schedule meeting",
+      "errorRescheduling": "Failed to reschedule meeting",
+      "successScheduled": "Meeting scheduled successfully!",
+      "successRescheduled": "Meeting rescheduled successfully!"
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Manage your account settings and preferences",
+      "backToDashboard": "Back to Dashboard",
+      "tabs": {
+        "profile": "Profile",
+        "notifications": "Notifications",
+        "security": "Security",
+        "billing": "Billing"
+      },
+      "profile": {
+        "title": "Profile Information",
+        "changePhoto": "Change Photo",
+        "photoRequirements": "JPG, PNG or GIF. Max size 5MB",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "phone": "Phone",
+        "company": "Company",
+        "jobTitle": "Job Title",
+        "bio": "Bio",
+        "bioPlaceholder": "Tell us a bit about yourself...",
+        "saveChanges": "Save Changes",
+        "updateSuccess": "Profile updated successfully!",
+        "updateError": "Failed to update profile",
+        "photoSuccess": "Profile photo updated!",
+        "photoError": "Failed to upload photo"
+      },
+      "notifications": {
+        "title": "Notification Preferences",
+        "channels": "Notification Channels",
+        "emailNotifications": "Email Notifications",
+        "emailDescription": "Receive updates via email",
+        "pushNotifications": "Push Notifications",
+        "pushDescription": "Receive browser notifications",
+        "smsNotifications": "SMS Notifications",
+        "smsDescription": "Receive text messages for urgent updates",
+        "types": "Notification Types",
+        "projectUpdates": "Project Updates",
+        "projectUpdatesDesc": "Updates about your project progress",
+        "meetingReminders": "Meeting Reminders",
+        "meetingRemindersDesc": "Reminders before scheduled meetings",
+        "newsletters": "Newsletters",
+        "newslettersDesc": "Monthly insights and AI trends",
+        "frequency": "Email Frequency",
+        "frequencies": {
+          "instant": "Instant",
+          "hourly": "Hourly digest",
+          "daily": "Daily digest",
+          "weekly": "Weekly digest"
+        },
+        "savePreferences": "Save Preferences",
+        "saveSuccess": "Notification preferences saved!",
+        "saveError": "Failed to update notifications"
+      },
+      "security": {
+        "title": "Security Settings",
+        "changePassword": "Change Password",
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm New Password",
+        "updatePassword": "Update Password",
+        "passwordSuccess": "Password updated successfully!",
+        "passwordMismatch": "Passwords do not match",
+        "passwordTooShort": "Password must be at least 6 characters",
+        "wrongPassword": "Current password is incorrect",
+        "passwordError": "Failed to update password",
+        "twoFactor": {
+          "title": "Two-Factor Authentication",
+          "description": "Add an extra layer of security to your account",
+          "enabled": "2FA is enabled",
+          "enabledDesc": "Your account is protected with authenticator app verification",
+          "appConfigured": "Authenticator app configured",
+          "enable": "Enable Two-Factor Authentication",
+          "disable": "Disable Two-Factor Authentication",
+          "scanQR": "Scan the QR code with your authenticator app to set up 2FA",
+          "enterCode": "Enter verification code from your app",
+          "verifyEnable": "Verify & Enable",
+          "disableConfirm": "Enter your password to disable 2FA. This will make your account less secure.",
+          "confirmPassword": "Confirm your password",
+          "passwordPlaceholder": "Enter your password",
+          "disable2FA": "Disable 2FA",
+          "disableWarning": "Disabling 2FA will remove an important security layer from your account",
+          "setupSuccess": "2FA enabled successfully!",
+          "setupError": "Failed to complete 2FA setup",
+          "disableSuccess": "2FA disabled successfully!",
+          "disableError": "Failed to disable 2FA",
+          "backupCodes": {
+            "title": "2FA has been successfully enabled!",
+            "saveTitle": "Save your backup codes",
+            "description": "Store these codes in a safe place. You can use them to access your account if you lose your authenticator device.",
+            "copy": "Copy backup codes",
+            "copied": "Backup codes copied to clipboard!"
+          }
+        },
+        "dangerZone": {
+          "title": "Danger Zone",
+          "deleteAccount": "Delete Account",
+          "deleteDescription": "Once you delete your account, there is no going back. All your data will be permanently removed.",
+          "deleteButton": "Delete Account",
+          "deleteDialog": {
+            "title": "Delete Account",
+            "description": "This action cannot be undone. This will permanently delete your account and remove all associated data.",
+            "whatDeleted": "What will be deleted:",
+            "documents": "{count} documents",
+            "projects": "{count} projects",
+            "meetings": "{count} meetings",
+            "storage": "{size} of stored files",
+            "personalInfo": "All personal information and settings",
+            "subscription": "Your subscription and billing history",
+            "confirmEmail": "Type {email} to confirm",
+            "enterEmail": "Enter your email",
+            "enterPassword": "Enter your password",
+            "passwordLabel": "Enter your password",
+            "cancel": "Cancel",
+            "deleting": "Deleting...",
+            "errorMessage": "Please enter your email and password correctly",
+            "errorGeneric": "An unexpected error occurred"
+          },
+          "deletionProgress": {
+            "deletingData": "Deleting your data...",
+            "percentage": "{percent}%"
+          }
+        }
+      },
+      "billing": {
+        "title": "Billing Information",
+        "currentPlan": "Current Plan",
+        "nextBilling": "Your next billing date is {date}",
+        "manageSubscription": "Manage Subscription",
+        "paymentMethod": "Payment Method",
+        "expires": "Expires {month}/{year}",
+        "update": "Update",
+        "billingHistory": "Billing History",
+        "download": "Download"
+      },
+      "done": "Done",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "verify": "Verify"
+    }
+  },
+  "legal": {
+    "terms": {
+      "pageTitle": "Terms of Service",
+      "heroTitle": "Terms of Service",
+      "heroSubtitle": "Professional AI Consultancy Services Agreement",
+      "lastUpdated": "Last updated: July 2, 2025",
+      "effectiveDate": "Effective date: July 2, 2025",
+      "tableOfContents": "Table of Contents",
+      "sections": {
+        "acceptance": {
+          "title": "Acceptance of Terms",
+          "content": "By accessing and using the services provided by GroeimetAI (\"GroeimetAI\", \"we\", \"us\", or \"our\"), you (\"Client\", \"you\", or \"your\") agree to be bound by these Terms of Service (\"Terms\"). If you do not agree to these Terms, please do not use our services.\n\nThese Terms constitute a legally binding agreement between you and GroeimetAI, registered in the Netherlands under Chamber of Commerce number 90102304, with its registered office in Apeldoorn.\n\nBy using our services, you represent that you have the legal capacity to enter into this agreement and that you are at least 18 years of age or have obtained parental consent."
+        },
+        "services": {
+          "title": "Description of Services",
+          "content": "GroeimetAI provides professional AI consultancy services including but not limited to:\n\n    • AI Strategy Development and Implementation\n    • Generative AI (GenAI) Solutions and Integration\n    • Large Language Model (LLM) Implementation and Fine-tuning\n    • Retrieval-Augmented Generation (RAG) Architecture Design\n    • Multi-Agent AI Systems and Orchestration\n    • ServiceNow AI Integration and Automation\n    • Custom AI Solution Development\n    • AI Training and Workshops\n    • AI Governance and Ethics Consulting\n    • Proof of Concept (PoC) Development\n\nAll services are provided on a professional consultancy basis and may be subject to separate service agreements, statements of work, or project specifications."
+        },
+        "aiContent": {
+          "title": "AI-Generated Content and Model Usage",
+          "content": "AI Output and Accuracy:\n    • We utilize various AI models and technologies in our services. While we strive for accuracy, AI-generated content may contain errors, biases, or inaccuracies.\n    • You acknowledge that AI outputs should be reviewed and validated before use in critical applications.\n    • GroeimetAI is not liable for decisions made solely based on AI-generated recommendations without human oversight.\n\nModel Training and Data Usage:\n    • Unless otherwise agreed, your data will not be used to train or improve general AI models.\n    • Any model fine-tuning or training using your data will be done exclusively for your benefit and with your explicit consent.\n    • We maintain strict data isolation between clients to prevent cross-contamination of AI models.\n\nIntellectual Property of AI Outputs:\n    • AI-generated content created specifically for you during our engagement belongs to you, subject to payment of all fees.\n    • Generic AI models, methodologies, and frameworks developed by GroeimetAI remain our intellectual property.\n    • You grant us a license to use anonymized insights from our engagement to improve our services, unless otherwise agreed."
+        },
+        "accounts": {
+          "title": "User Accounts and Responsibilities",
+          "content": "Account Creation and Management:\n    • You may need to create an account to access certain services or platforms we provide.\n    • You are responsible for maintaining the confidentiality of your account credentials.\n    • You must provide accurate, current, and complete information during registration.\n    • You are responsible for all activities that occur under your account.\n\nClient Responsibilities:\n    • Provide timely access to necessary systems, data, and personnel for service delivery.\n    • Ensure all provided data complies with applicable laws and regulations.\n    • Obtain necessary consents for data processing and AI application deployment.\n    • Maintain appropriate backups of your data and systems.\n    • Comply with any specific requirements outlined in service agreements.\n\nProhibited Uses:\n    • Using our services for illegal, harmful, or unethical purposes.\n    • Attempting to reverse engineer, decompile, or extract source code from our proprietary systems.\n    • Using our services to develop competing AI consultancy services.\n    • Sharing access credentials or allowing unauthorized access to our platforms."
+        },
+        "intellectualProperty": {
+          "title": "Intellectual Property Rights",
+          "content": "GroeimetAI Property:\n    • All proprietary methodologies, frameworks, tools, and pre-existing intellectual property remain the exclusive property of GroeimetAI.\n    • This includes but is not limited to our AI orchestration frameworks, assessment tools, and implementation methodologies.\n    • We grant you a limited, non-exclusive license to use our deliverables for your internal business purposes.\n\nClient Property:\n    • You retain all rights to your pre-existing data, content, and intellectual property.\n    • Any custom developments created specifically for you become your property upon full payment.\n    • You grant us a limited license to use your data and content solely for providing our services.\n\nThird-Party Components:\n    • Our services may incorporate third-party AI models, libraries, or tools.\n    • Such components are subject to their respective licenses and terms.\n    • We will inform you of any significant third-party dependencies and their licensing requirements."
+        },
+        "payment": {
+          "title": "Payment Terms and Refunds",
+          "content": "Fees and Payment:\n    • Service fees are specified in separate service agreements or quotations.\n    • All fees are exclusive of VAT and other applicable taxes unless stated otherwise.\n    • Payment terms are NET 30 days from invoice date unless otherwise agreed.\n    • Late payments incur interest at the statutory commercial rate applicable in the Netherlands.\n\nBilling Models:\n    • Fixed Price: For defined scope projects with clear deliverables.\n    • Time & Materials: Billed based on actual hours worked at agreed hourly rates.\n    • Retainer: Monthly fee for ongoing support and consultation.\n    • Success-Based: Fees tied to achieving specific, measurable outcomes (where applicable).\n\nRefunds and Cancellations:\n    • Due to the consultancy nature of our services, refunds are generally not provided for completed work.\n    • Cancellation terms are specified in individual service agreements.\n    • For subscription services, cancellation takes effect at the end of the current billing period.\n    • Disputes regarding fees must be raised within 30 days of invoice date."
+        },
+        "liability": {
+          "title": "Limitation of Liability",
+          "content": "Limitation of Liability:\n    • To the maximum extent permitted by law, GroeimetAI's total liability for any claims arising from these Terms or our services shall not exceed the fees paid by you in the twelve (12) months preceding the claim.\n    • We are not liable for any indirect, incidental, special, consequential, or punitive damages, including lost profits, data loss, or business interruption.\n\nExclusions:\n    • Liability arising from your misuse of AI technologies or failure to implement recommended safeguards.\n    • Damages resulting from third-party AI models or services beyond our control.\n    • Loss or damage caused by circumstances beyond our reasonable control (force majeure).\n    • Consequences of decisions made based on AI outputs without appropriate human oversight.\n\nIndemnification:\n    • You agree to indemnify and hold GroeimetAI harmless from any claims arising from:\n      - Your use of our services in violation of these Terms\n      - Your violation of any laws or third-party rights\n      - Content or data you provide to us\n      - Your deployment or use of AI solutions we help develop"
+        },
+        "confidentiality": {
+          "title": "Confidentiality",
+          "content": "Confidential Information:\n    • Both parties acknowledge that they may have access to confidential information during the engagement.\n    • \"Confidential Information\" includes any non-public information marked as confidential or that would reasonably be considered confidential.\n    • This includes business strategies, technical data, AI models, algorithms, customer data, and pricing information.\n\nObligations:\n    • Both parties agree to maintain the confidentiality of all Confidential Information.\n    • Confidential Information will only be used for purposes related to the services.\n    • Disclosure is limited to employees and contractors who need to know and are bound by confidentiality obligations.\n\nExceptions:\n    • Information that becomes publicly available through no breach of these Terms.\n    • Information independently developed without use of Confidential Information.\n    • Information required to be disclosed by law or court order (with prompt notice to the other party).\n\nDuration:\n    • Confidentiality obligations survive termination of these Terms for a period of five (5) years."
+        },
+        "dataProtection": {
+          "title": "Data Protection",
+          "content": "Data Processing:\n    • We process personal data in accordance with the General Data Protection Regulation (GDPR) and Dutch data protection laws.\n    • Our detailed privacy practices are outlined in our Privacy Policy, which forms part of these Terms.\n    • We act as a data processor for personal data you provide for AI processing purposes.\n\nSecurity Measures:\n    • We implement appropriate technical and organizational measures to protect data.\n    • This includes encryption, access controls, and regular security assessments.\n    • We maintain ISO 27001 compliant information security practices.\n\nData Processing Agreement:\n    • For services involving personal data processing, we will enter into a separate Data Processing Agreement (DPA).\n    • You warrant that you have all necessary consents and legal bases for data processing.\n    • We will assist you in meeting your GDPR obligations related to our services."
+        },
+        "termination": {
+          "title": "Termination",
+          "content": "Termination Rights:\n    • Either party may terminate these Terms by providing 30 days written notice.\n    • Either party may terminate immediately for material breach that remains uncured after 14 days notice.\n    • We may suspend services immediately if you breach payment terms or engage in prohibited uses.\n\nEffects of Termination:\n    • Upon termination, all licenses granted under these Terms cease immediately.\n    • You must pay all outstanding fees for services provided up to the termination date.\n    • We will return or delete your Confidential Information upon written request.\n    • Provisions that by their nature should survive termination will remain in effect.\n\nTransition Assistance:\n    • Upon request and for additional fees, we provide transition assistance for up to 90 days post-termination.\n    • This includes knowledge transfer, documentation, and technical handover support."
+        },
+        "governingLaw": {
+          "title": "Governing Law and Disputes",
+          "content": "Applicable Law:\n    • These Terms are governed by the laws of the Netherlands.\n    • The United Nations Convention on Contracts for the International Sale of Goods does not apply.\n\nDispute Resolution:\n    • Any disputes arising from these Terms shall first be addressed through good faith negotiations.\n    • If negotiations fail, disputes shall be submitted to mediation under the rules of the Netherlands Mediation Institute.\n    • If mediation fails, disputes shall be resolved by the competent courts of Apeldoorn, the Netherlands.\n\nLanguage:\n    • These Terms are drafted in English. In case of translation, the English version prevails.\n    • All communication regarding these Terms shall be in English or Dutch, as mutually agreed."
+        }
+      },
+      "additionalSections": {
+        "modifications": {
+          "title": "Modifications to Terms",
+          "content": "We reserve the right to modify these Terms at any time. Material changes will be notified via:\n\n• Email notification to your registered email address\n• Prominent notice on our website\n• In-platform notifications for active clients\n\nContinued use of our services after notification constitutes acceptance of the modified Terms."
+        },
+        "severability": {
+          "title": "Severability",
+          "content": "If any provision of these Terms is found to be unenforceable or invalid by a court of competent jurisdiction, that provision shall be limited or eliminated to the minimum extent necessary so that these Terms shall otherwise remain in full force and effect and enforceable."
+        },
+        "entireAgreement": {
+          "title": "Entire Agreement",
+          "content": "These Terms, together with any applicable service agreements, statements of work, and our Privacy Policy, constitute the entire agreement between you and GroeimetAI regarding the use of our services. These Terms supersede any prior agreements or understandings, whether written or oral."
+        },
+        "assignment": {
+          "title": "Assignment",
+          "content": "You may not assign or transfer these Terms or any rights granted hereunder without our prior written consent. We may assign our rights and obligations under these Terms without restriction. Any attempted assignment in violation of this provision is void."
+        }
+      },
+      "contact": {
+        "title": "Contact Information",
+        "description": "For questions about these Terms of Service or our services, please contact us:",
+        "company": "GroeimetAI",
+        "registeredIn": "Registered in the Netherlands",
+        "legalEmail": "legal@groeimetai.io",
+        "headquarters": "Headquarters",
+        "location": "Apeldoorn, Netherlands",
+        "legalNotice": {
+          "title": "Legal Notice",
+          "content": "By using our services, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you are entering into these Terms on behalf of a company or other legal entity, you represent that you have the authority to bind such entity to these Terms."
+        }
+      },
+      "printNotice": {
+        "line1": "This document was printed from groeimetai.io/terms",
+        "line2": "For the most current version, please visit our website."
+      }
+    },
+    "privacy": {
+      "pageTitle": "Privacy Policy",
+      "heroTitle": "Privacy Policy",
+      "heroSubtitle": "Your privacy is our priority - Fully GDPR compliant",
+      "version": "Version 2.0",
+      "lastUpdated": "Last updated: July 2, 2025",
+      "effectiveDate": "Effective from: July 2, 2025",
+      "quickActions": {
+        "cookiePolicy": "Cookie Policy",
+        "yourRights": "Your Rights",
+        "contactDPO": "Contact DPO",
+        "authorityWebsite": "DPA Website"
+      },
+      "tableOfContents": "Table of Contents",
+      "sections": {
+        "intro": {
+          "title": "1. Introduction and Identity of Controller",
+          "content": "GroeimetAI (\"we\", \"us\", \"our\" or \"GroeimetAI\") respects your privacy and is committed to protecting your personal data. This privacy policy informs you about how we handle your personal data when you visit our website, use our AI services, and tells you about your privacy rights and how the law protects you.\n\nThis privacy policy applies to all personal data we process from our customers, suppliers, partners, website visitors and other data subjects. We process personal data in accordance with the General Data Protection Regulation (GDPR) and other applicable laws and regulations.\n\n**Identity and contact details:**\nGroeimetAI\nChamber of Commerce number: 90102304\nRegistered office: Apeldoorn, Netherlands\nPhone: +31 (6)81 739 018\nEmail: privacy@groeimetai.io\nWebsite: https://groeimetai.io"
+        },
+        "dpo": {
+          "title": "2. Data Protection Officer (DPO)",
+          "content": "We have appointed a Data Protection Officer who oversees compliance with privacy legislation within our organization.\n\n**DPO contact details:**\nName: [DPO Name]\nEmail: dpo@groeimetai.io\nPhone: +31 (0)20 123 4568\n\nYou can contact our DPO for all questions regarding the processing of your personal data and the exercise of your rights under the GDPR."
+        },
+        "dataCollection": {
+          "title": "3. Categories of Personal Data We Collect",
+          "content": "We collect and process various categories of personal data, depending on your interaction with our services:\n\n**3.1 Data you provide directly to us:**\n• **Identity data:** First and last name, date of birth, gender\n• **Contact data:** Email address, phone number, postal address, company name\n• **Account data:** Username, password (encrypted), account preferences\n• **Financial data:** Billing information, payment information (processed via secure payment processors)\n• **Communication data:** Content of emails, chat messages, support tickets\n• **Professional data:** Job title, work experience, skills (for business customers)\n\n**3.2 Data collected automatically:**\n• **Technical data:** IP address, browser type and version, time zone setting, browser plug-in types and versions, operating system and platform\n• **Usage data:** Information about your visit to our website, including full URL clickstream, page views, page response times, download errors, duration of visits\n• **Location data:** Estimated location based on IP address (country/region level)\n• **Cookie data:** See our [Cookie Policy](/cookies) for detailed information\n\n**3.3 AI interaction data:**\n• **Prompts and queries:** Questions and commands you provide to our AI systems\n• **AI-generated content:** Responses and content generated by our AI\n• **Feedback and corrections:** Your feedback on AI output to improve our services\n• **Usage patterns:** How you use our AI tools, frequency, preferences\n\n**3.4 Data from third parties:**\n• **Social media data:** If you sign up via social media accounts\n• **Partner data:** Information from our business partners for joint projects\n• **Public sources:** Publicly available business information for B2B services"
+        },
+        "legalBasis": {
+          "title": "4. Legal Bases for Processing (GDPR Article 6)",
+          "content": "We only process your personal data when we have a valid legal basis under Article 6 of the GDPR:\n\n**4.1 Performance of a contract (Art. 6(1)(b) GDPR):**\n• Delivery of our AI services and products\n• Creating and managing accounts\n• Providing customer service and support\n• Billing and payment processing\n\n**4.2 Legitimate interest (Art. 6(1)(f) GDPR):**\n• Improving our AI models and services\n• Security and fraud prevention\n• Internal administration and business analysis\n• Direct marketing to existing customers (with opt-out option)\n\nWhen processing based on legitimate interest, we always conduct a balancing test to ensure our interests do not outweigh your interests or fundamental rights and freedoms.\n\n**4.3 Consent (Art. 6(1)(a) GDPR):**\n• Marketing communications to prospects\n• Placing non-essential cookies\n• Participation in research or beta tests\n• Use of AI training data beyond contractual necessity\n\nYou can withdraw your consent at any time via privacy@groeimetai.io.\n\n**4.4 Legal obligation (Art. 6(1)(c) GDPR):**\n• Tax administration and fiscal obligations\n• Compliance with court orders\n• Anti-money laundering checks (where applicable)\n\n**4.5 Vital interest (Art. 6(1)(d) GDPR):**\n• In emergency situations where protection of life or health is necessary"
+        },
+        "dataUse": {
+          "title": "5. Purposes of Data Processing",
+          "content": "We use your personal data for the following specific purposes:\n\n**5.1 Service delivery:**\n• Executing AI consulting and implementation projects\n• Delivering SaaS AI solutions\n• Personalizing AI output based on your preferences\n• Technical support and troubleshooting\n\n**5.2 AI and Machine Learning:**\n• Training and improving our AI models (only with explicit consent or anonymized)\n• Quality control of AI-generated content\n• Research into new AI applications\n• A/B testing and performance optimization\n\n**5.3 Communication:**\n• Answering questions and requests\n• Sending service-related notifications\n• Newsletters and product announcements (with consent)\n• Important updates about privacy or terms\n\n**5.4 Business operations:**\n• Billing and financial administration\n• Risk management and compliance\n• Internal audits and quality control\n• Statistical analysis and reporting\n\n**5.5 Marketing and sales:**\n• Personalized offers (with consent)\n• Market research and customer satisfaction\n• Lead generation and conversion optimization\n• Retargeting (only with cookie consent)\n\n**5.6 Security:**\n• Detection and prevention of fraud\n• Monitoring system security\n• Incident response and forensic investigation\n• Access control and authentication"
+        },
+        "aiSpecific": {
+          "title": "6. AI-Specific Privacy Considerations",
+          "content": "As an AI service provider, we have specific responsibilities regarding your privacy:\n\n**6.1 AI Training and Model Development:**\n• We do NOT use your personal data for training our general AI models without explicit consent\n• Where possible, we use synthetic data or fully anonymized datasets\n• Strict data governance protocols are applied for customer-specific models\n• You have the right to request that your data not be used for training\n\n**6.2 AI Output and Intellectual Property:**\n• AI-generated content based on your input remains your property\n• We claim no rights to content generated for your specific use case\n• Metadata about AI interactions is stored anonymized for performance improvement\n\n**6.3 Bias and Fairness:**\n• We actively monitor for bias in our AI systems\n• Regular audits are conducted to prevent discrimination\n• Transparency about AI decision-making where possible and relevant\n\n**6.4 Explainable AI:**\n• You have the right to explanation about significant AI decisions\n• We document the logic behind our AI systems\n• Human review is available for critical decisions\n\n**6.5 Data Minimization in AI:**\n• We only collect data necessary for AI functionality\n• Automatic data expiration for non-essential AI training data\n• Opt-in for extended data collection for improved personalization"
+        },
+        "dataSharing": {
+          "title": "7. Sharing Data with Third Parties",
+          "content": "We only share your personal data under strict conditions and safeguards:\n\n**7.1 Categories of recipients:**\n\n**Service providers (processors):**\n• Cloud hosting providers (Google Cloud Platform, with adequacy decision)\n• Payment processors (Stripe, Mollie - PCI-DSS compliant)\n• Email service providers (SendGrid - with processor agreement)\n• Analytics services (Google Analytics with IP anonymization)\n• Customer support tools (Intercom - Privacy Shield certified)\n\n**Professional advisors:**\n• Accountants (only for financial audits)\n• Legal advisors (under confidentiality obligation)\n• Compliance consultants (for privacy audits)\n\n**Government authorities:**\n• Tax authorities (legal obligation)\n• Supervisory authorities (Dutch Data Protection Authority)\n• Law enforcement (only with court order)\n\n**7.2 Safeguards when sharing:**\n• Processor agreements in accordance with Art. 28 GDPR\n• Confidentiality agreements where applicable\n• Data minimization - only necessary data\n• Regular audits of third parties\n\n**7.3 International transfers:**\nSee section 8 for details on international data transfers.\n\n**7.4 We NEVER sell your data:**\nGroeimetAI does not sell, rent or lease your personal data to third parties for marketing or other commercial purposes."
+        },
+        "internationalTransfers": {
+          "title": "8. International Data Transfers",
+          "content": "Some of our service providers are located outside the European Economic Area (EEA). We ensure appropriate safeguards:\n\n**8.1 Transfer mechanisms:**\n• **Adequacy decisions:** Where possible, we work with countries with an adequacy decision (e.g., UK, Switzerland, Japan)\n• **Standard Contractual Clauses (SCCs):** For transfers to countries without adequacy decision, we use EU-approved model contracts\n• **Additional measures:** Encryption, pseudonymization, access controls\n\n**8.2 Specific transfers:**\n\n**Google Cloud Platform (US):**\n• Basis: Standard Contractual Clauses + additional technical measures\n• Data location: Primarily EU data centers (Frankfurt, Belgium)\n• Encryption: At-rest and in-transit encryption\n\n**Firebase/Google Services:**\n• Basis: Google's EU Data Protection Terms\n• Compliance: ISO 27001, SOC 2/3 certifications\n• Data residency options where available\n\n**8.3 Your rights regarding international transfers:**\n• You can request a copy of the safeguards used\n• You have the right to object to specific transfers\n• We will inform you of significant new international transfers"
+        },
+        "dataSecurity": {
+          "title": "9. Technical and Organizational Security Measures",
+          "content": "We implement state-of-the-art security to protect your data:\n\n**9.1 Technical measures:**\n• **Encryption:** AES-256 for data at-rest, TLS 1.3 for data in-transit\n• **Access controls:** Multi-factor authentication, role-based access control (RBAC)\n• **Network security:** Firewalls, intrusion detection systems, DDoS protection\n• **Application security:** OWASP Top 10 compliance, regular penetration tests\n• **Backup and recovery:** Daily encrypted backups, disaster recovery plan\n\n**9.2 Organizational measures:**\n• **Personnel:** Background checks, confidentiality agreements, privacy training\n• **Policies:** Information Security Management System (ISMS)\n• **Incident response:** 24/7 security monitoring, incident response team\n• **Vendor management:** Security assessments of all suppliers\n• **Physical security:** Access control to offices and server rooms\n\n**9.3 AI-specific security:**\n• **Model security:** Protection against adversarial attacks\n• **Prompt injection prevention:** Input validation and sanitization\n• **Output filtering:** Prevention of sensitive data leakage\n• **Audit trails:** Logging of all AI interactions\n\n**9.4 Compliance certifications:**\n• ISO 27001 (planned for Q3 2024)\n• SOC 2 Type II (in progress)\n• NEN 7510 for healthcare customers"
+        },
+        "dataBreach": {
+          "title": "10. Data Breach Procedures",
+          "content": "We take data breaches very seriously and have comprehensive procedures:\n\n**10.1 Detection and response:**\n• 24/7 monitoring of security incidents\n• Automatic alerts for suspicious activities\n• Incident response team with clear escalation procedures\n\n**10.2 Notification obligation (Art. 33-34 GDPR):**\n• **Notification to DPA:** Within 72 hours of discovery (unless no risk)\n• **Notification to data subjects:** Without undue delay for high risk\n• **Notification content:** Nature of breach, categories of data subjects/data, consequences, measures taken\n\n**10.3 Documentation:**\n• All incidents are documented in our data breach register\n• Root cause analysis and lessons learned for each significant incident\n• Annual review of security incidents\n\n**10.4 Mitigation measures:**\n• Immediate isolation of affected systems\n• Password resets where necessary\n• Enhanced monitoring of affected accounts\n• Free credit monitoring for significant breaches (where applicable)\n\n**10.5 Communication:**\n• Dedicated page on website for incident updates\n• Direct contact via email/phone for high-risk data subjects\n• Transparent communication about steps taken"
+        },
+        "retention": {
+          "title": "11. Retention Periods",
+          "content": "We do not retain your data longer than necessary for the purposes for which it was collected:\n\n**11.1 General retention periods:**\n\n**Customer data:**\n• Active customers: For the duration of the agreement\n• After termination: 7 years (tax retention obligation)\n• Exception: Basic contact details for legitimate interests\n\n**AI interaction data:**\n• Prompts and outputs: 90 days (unless otherwise agreed)\n• Anonymized training data: Unlimited\n• Performance metrics: 2 years\n\n**Marketing data:**\n• Newsletter subscribers: Until unsubscribe + 1 year\n• Website analytics: 26 months\n• Marketing automation: Until withdrawal of consent\n\n**Application data:**\n• Rejected candidates: 4 weeks after completion of procedure\n• With consent: 1 year for future vacancies\n\n**Support and communication:**\n• Support tickets: 2 years after closure\n• Email correspondence: 2 years\n• Chat logs: 90 days\n\n**11.2 Exceptions:**\n• Longer retention for legal obligations\n• Ongoing legal proceedings\n• Vital interest of data subject\n\n**11.3 Data deletion:**\n• Secure deletion via crypto-shredding\n• Cascade delete in all backup systems\n• Verification of complete deletion"
+        },
+        "yourRights": {
+          "title": "12. Your Rights under the GDPR",
+          "content": "As a data subject, you have extensive rights under the GDPR which we fully respect:\n\n**12.1 Right of access (Art. 15 GDPR):**\n• Confirmation whether we process your data\n• Copy of your personal data\n• Information about processing purposes, categories, recipients\n• **Exercise:** Via privacy@groeimetai.io with copy of ID\n\n**12.2 Right to rectification (Art. 16 GDPR):**\n• Correction of inaccurate data\n• Completion of incomplete data\n• **Directly possible:** Via your account dashboard or support\n\n**12.3 Right to erasure/\"right to be forgotten\" (Art. 17 GDPR):**\n• Deletion when data is no longer necessary\n• Upon withdrawal of consent (and no other legal basis)\n• For unlawful processing\n• **Note:** Not possible with legal retention obligations\n\n**12.4 Right to restriction of processing (Art. 18 GDPR):**\n• Temporary stop on processing for:\n  - Contested accuracy of data\n  - Unlawful processing\n  - Pending objection procedure\n\n**12.5 Right to data portability (Art. 20 GDPR):**\n• Receive your data in structured, commonly used format\n• Direct transfer to another controller where possible\n• **Available for:** Data provided based on consent/contract\n\n**12.6 Right to object (Art. 21 GDPR):**\n• Object to processing based on legitimate interest\n• Object to direct marketing (always honored)\n• **Result:** We stop unless compelling legitimate grounds\n\n**12.7 Rights regarding automated decision-making (Art. 22 GDPR):**\n• Right not to be subject to fully automated decisions\n• Right to human intervention\n• **At GroeimetAI:** Human review always possible for AI decisions\n\n**12.8 Withdrawal of consent:**\n• You can always withdraw consent\n• No consequences for lawfulness of earlier processing\n• **How:** Via account settings or privacy@groeimetai.io\n\n**12.9 Right to lodge a complaint:**\n• With Dutch Data Protection Authority: www.autoriteitpersoonsgegevens.nl\n• With your local supervisory authority (EU-wide)\n• We prefer to resolve your complaint ourselves first\n\n**12.10 Response time:**\n• We respond within 1 month to your request\n• Extension of 2 months possible for complex requests\n• Free of charge, unless requests are manifestly unfounded/excessive"
+        },
+        "children": {
+          "title": "13. Children's Privacy",
+          "content": "We take the protection of children very seriously:\n\n**13.1 Age limit:**\n• Our services are not directed at persons under 16 years of age\n• We do not knowingly collect data from children under 16\n• For B2B educational AI tools: only via schools/institutions\n\n**13.2 Parental consent:**\n• For users aged 13-16, parental consent is required\n• Verification via email to parent/guardian\n• Parents have full control over child data\n\n**13.3 If we accidentally collect child data:**\n• Immediate deletion upon becoming aware\n• Notification to parents if known\n• Review of our age-gating mechanisms\n\n**13.4 Educational AI use:**\n• Only through agreements with educational institutions\n• Strict data minimization\n• No marketing to children\n• Additional security measures\n\n**13.5 Reporting child data:**\nIf you suspect we have inadvertently collected data from a child, please contact us immediately at privacy@groeimetai.io"
+        },
+        "cookies": {
+          "title": "14. Cookies and Tracking Technologies",
+          "content": "We use cookies and similar technologies for various purposes:\n\n**14.1 Types of cookies:**\n\n**Essential cookies:**\n• Session management\n• Security tokens\n• Load balancing\n• **Legal basis:** Necessary for service provision\n\n**Functional cookies:**\n• Language preferences\n• UI personalization\n• Login remember me\n• **Legal basis:** Legitimate interest\n\n**Analytical cookies:**\n• Google Analytics (anonymized)\n• Hotjar (session recordings with consent)\n• Custom analytics\n• **Legal basis:** Consent\n\n**Marketing cookies:**\n• Google Ads remarketing\n• LinkedIn Insight Tag\n• Facebook Pixel\n• **Legal basis:** Consent\n\n**14.2 Cookie management:**\n• Cookie banner on first visit\n• Granular cookie preferences\n• Withdraw consent anytime\n• Cookie-free version of website available\n\n**14.3 Alternative tracking:**\n• Server-side analytics where possible\n• Privacy-friendly alternatives (Plausible)\n• No fingerprinting techniques\n\n**For complete cookie overview, see our [Cookie Policy](/cookies)**"
+        },
+        "thirdParty": {
+          "title": "15. Third Party Integrations",
+          "content": "Transparency about our key technology partners:\n\n**15.1 Infrastructure providers:**\n\n**Google Cloud Platform:**\n• Services: Compute, Storage, AI/ML APIs\n• Data location: EU (primary), global failover\n• Compliance: GDPR processor terms, ISO 27001\n• DPA: cloud.google.com/terms/data-processing-addendum\n\n**Firebase (Google):**\n• Services: Authentication, Realtime Database, Hosting\n• Privacy: Covered under Google Cloud DPA\n• Data residency: EU region configured\n\n**15.2 AI/ML Services:**\n\n**OpenAI API:**\n• Services: GPT model access\n• Data retention: 30 days, no training on customer data\n• Compliance: SOC 2, business associate agreement available\n• API data processing addendum present\n\n**Anthropic Claude API:**\n• Services: Claude model access\n• Zero data retention option available\n• Enterprise privacy controls\n\n**15.3 Business tools:**\n\n**Stripe:**\n• Services: Payment processing\n• PCI-DSS Level 1 compliant\n• No credit card data storage at GroeimetAI\n• EU data processing\n\n**SendGrid:**\n• Services: Transactional email\n• Data location: EU servers\n• GDPR compliant with DPA\n\n**15.4 Due diligence:**\n• Annual privacy review of all vendors\n• Data Processing Agreements with all processors\n• Exit strategies for vendor lock-in\n• Incident notification procedures"
+        },
+        "changes": {
+          "title": "16. Changes to this Privacy Policy",
+          "content": "We may update this privacy policy periodically:\n\n**16.1 Types of changes:**\n\n**Minor changes:**\n• Clarifications or typos\n• Contact information updates\n• New examples or explanations\n• **Notification:** Update date on page\n\n**Material changes:**\n• New processing purposes\n• Changes in data retention\n• New third party recipients\n• Changes in your rights\n• **Notification:** Email + website banner + 30 days notice\n\n**16.2 Version control:**\n• All versions archived and available\n• Changelog with key changes\n• GitHub repository for transparency\n\n**16.3 Your options with changes:**\n• Review period of 30 days\n• Opportunity to object/ask questions\n• Opt-out for specific new processing\n• Account termination without penalty\n\n**16.4 Communication:**\n• Email to all active users\n• In-app notifications\n• Blog post for significant updates\n• Social media announcements\n\n**Current version:** 2.0\n**Last updated:** July 2, 2025\n**Previous version:** [Link to archive]"
+        },
+        "contact": {
+          "title": "17. Contact and Complaints",
+          "content": "We are ready to answer all your privacy-related questions:\n\n**17.1 Primary contact point:**\n**Privacy Office GroeimetAI**\nEmail: privacy@groeimetai.io\nPhone: +31 (6)81 739 018\nResponse time: Within 2 business days\n\n**17.2 Data Protection Officer:**\n**[DPO Name]**\nEmail: dpo@groeimetai.io\nPhone: +31 (0)20 123 4568\nFor: Complex privacy questions, exercise of rights, complaints\n\n**17.3 Postal address:**\nGroeimetAI\nAttn: Privacy Office\n[Street]\n[Postal code] Apeldoorn\nNetherlands\n\n**17.4 Complaints procedure:**\n1. **Internal handling:** We strive to resolve all complaints within 30 days\n2. **Escalation:** To our DPO for complex matters\n3. **Mediation:** We offer free mediation for disputes\n4. **External complaint:** You can always contact the DPA\n\n**17.5 Dutch Data Protection Authority:**\nBezuidenhoutseweg 30\n2594 AV The Hague\nPhone: 0900 - 2001 201\nWebsite: www.autoriteitpersoonsgegevens.nl\n\n**17.6 European supervisory authorities:**\nFor cross-border complaints: ec.europa.eu/info/law/law-topic/data-protection\n\n**17.7 Trade associations:**\nWe are affiliated with:\n• NLdigital (digital economy trade association)\n• Dutch AI Coalition\n[Complaints can also be filed there]"
+        }
+      },
+      "documentOptions": {
+        "title": "Document Options",
+        "printButton": "Print this page",
+        "downloadPDF": "Download as PDF",
+        "physicalCopy": "For a physical copy of this privacy policy, email privacy@groeimetai.io"
+      }
+    },
+    "cookies": {
+      "pageTitle": "Cookie Policy",
+      "heroTitle": "Cookie Policy",
+      "heroSubtitle": "Transparency about how we use cookies",
+      "lastUpdated": "Last updated: July 2, 2025",
+      "quickNavigation": "Quick Navigation",
+      "sections": {
+        "whatAreCookies": {
+          "title": "What are cookies?",
+          "content": "Cookies are small text files that are stored on your computer or mobile device when you visit a website. They are widely used to make websites work or work more efficiently, as well as to provide information to the owners of the website.\n\nCookies enable a website to remember your actions or preferences over time. They can contain information about your language preference, font size and other preferences, so you don't have to re-enter them every time you visit the website or navigate from one page to another."
+        },
+        "howWeUse": {
+          "title": "How we use cookies",
+          "content": "GroeimetAI uses cookies to:\n\n    • Improve the performance of our website\n    • Remember your preferences and settings\n    • Sign you in and keep your session secure\n    • Analyze and understand the use of our website\n    • Personalize our services\n    • Measure the effectiveness of our marketing campaigns\n    • Prevent fraud and improve security\n\nWe respect your privacy and will only use cookies as described in this policy and in accordance with the GDPR and Dutch Telecommunications Act."
+        },
+        "typesOfCookies": {
+          "title": "Types of cookies we use",
+          "content": "We use the following categories of cookies on our website:"
+        },
+        "thirdParty": {
+          "title": "Third-party cookies",
+          "content": "Some of our pages may contain third-party cookies. These are placed by external service providers that help us analyze, secure or provide functionality to our website.\n\nImportant third parties whose cookies we use:\n\n    • Google Analytics - For website analysis\n    • Google reCAPTCHA - For security against spam\n    • Stripe - For secure payment processing\n    • Intercom - For customer service chat\n\nThese third parties have their own privacy and cookie policies. We have no control over these cookies and refer you to their respective policies for more information."
+        },
+        "cookieManagement": {
+          "title": "Managing and deleting cookies",
+          "content": "You have control over cookies and can manage them in various ways:"
+        }
+      },
+      "cookieTypes": {
+        "necessary": {
+          "name": "Necessary cookies",
+          "description": "These cookies are essential for the website to function and cannot be disabled.",
+          "examples": [
+            "Authentication and security",
+            "Shopping cart functionality",
+            "Cookie preferences",
+            "Fraud prevention"
+          ]
+        },
+        "analytical": {
+          "name": "Analytical cookies",
+          "description": "These cookies help us understand how visitors use our website.",
+          "examples": [
+            "Google Analytics tracking",
+            "Performance measurements",
+            "A/B testing cookies",
+            "Heatmap tracking"
+          ]
+        },
+        "functional": {
+          "name": "Functional cookies",
+          "description": "These cookies remember your preferences and personalize your experience.",
+          "examples": [
+            "Language preferences",
+            "Region settings",
+            "UI theme preferences",
+            "Recently viewed items"
+          ]
+        },
+        "marketing": {
+          "name": "Marketing cookies",
+          "description": "These cookies are used to measure the effectiveness of advertisements (only with consent).",
+          "examples": [
+            "Conversion tracking",
+            "Remarketing pixels",
+            "Social media pixels",
+            "Ad targeting"
+          ]
+        }
+      },
+      "cookieSettings": {
+        "title": "Adjust cookie settings",
+        "description": "You can adjust your cookie preferences at any time via our cookie settings.",
+        "button": "Open cookie settings"
+      },
+      "browserInstructions": {
+        "title": "Browser-specific instructions",
+        "description": "You can also manage cookies via your browser settings. Below are instructions for popular browsers:",
+        "moreInfo": "More info",
+        "steps": {
+          "chrome": [
+            "Click the three dots in the top right",
+            "Select 'Settings'",
+            "Click 'Privacy and security'",
+            "Click 'Cookies and other site data'",
+            "Adjust your preferences"
+          ],
+          "firefox": [
+            "Click the menu icon",
+            "Select 'Settings'",
+            "Go to 'Privacy & Security'",
+            "Scroll to 'Cookies and Site Data'",
+            "Manage your cookie settings"
+          ],
+          "edge": [
+            "Click the three dots in the top right",
+            "Select 'Settings'",
+            "Click 'Privacy, search, and services'",
+            "Under 'Clear browsing data'",
+            "Choose what you want to delete"
+          ],
+          "safari": [
+            "Open Safari preferences",
+            "Click 'Privacy'",
+            "Click 'Manage Website Data'",
+            "Select websites and click 'Remove'",
+            "Or click 'Remove All'"
+          ]
+        }
+      },
+      "warning": {
+        "title": "Note:",
+        "content": "Disabling cookies may limit the functionality of our website. Some features may not work properly without cookies."
+      },
+      "cookieTable": {
+        "title": "Cookie Overview",
+        "description": "Below is a detailed overview of all cookies we use:",
+        "headers": {
+          "name": "Cookie name",
+          "purpose": "Purpose",
+          "type": "Type",
+          "duration": "Retention period"
+        },
+        "types": {
+          "necessary": "Necessary",
+          "analytical": "Analytical",
+          "functional": "Functional"
+        }
+      },
+      "legalBasis": {
+        "title": "Legal basis",
+        "description": "Our use of cookies is based on:",
+        "consent": "Your consent: For analytical and marketing cookies",
+        "legitimateInterest": "Legitimate interest: For functional cookies that improve user experience",
+        "contractualNecessity": "Contractual necessity: For essential cookies needed to provide our services",
+        "legalObligation": "Legal obligation: For cookies needed for security and fraud prevention"
+      },
+      "changes": {
+        "title": "Changes to this cookie policy",
+        "content": "We may update this cookie policy from time to time to reflect changes in our practices or for other operational, legal or regulatory reasons. We will notify you of significant changes by posting a notice on our website."
+      },
+      "relatedPolicies": {
+        "title": "Related policies",
+        "description": "For more information about how we handle your data, please refer to:",
+        "privacyPolicy": "Privacy Policy",
+        "termsOfService": "Terms of Service"
+      },
+      "contactSection": {
+        "title": "Contact for cookie-related questions",
+        "description": "If you have questions about our cookie policy or how we use cookies, please contact us:",
+        "company": "GroeimetAI",
+        "location": "Apeldoorn, Netherlands",
+        "authority": {
+          "title": "Dutch Data Protection Authority",
+          "content": "You have the right to file a complaint with the Dutch Data Protection Authority if you believe we are using cookies in a way that does not comply with the law."
+        }
+      }
+    }
+  },
+  "cases": {
+    "metadata": {
+      "title": "Case Studies - GroeimetAI",
+      "description": "Discover how GroeimetAI has helped companies with AI transformation. Read our success stories and results.",
+      "openGraphTitle": "Case Studies - GroeimetAI Success Stories",
+      "openGraphDescription": "Proven results in AI consultancy and implementation"
+    },
+    "hero": {
+      "title": "Case Studies",
+      "subtitle": "Discover how we help companies transform with AI",
+      "stats": {
+        "projects": "Enterprise Projects",
+        "savings": "Annual Savings",
+        "users": "End Users",
+        "tokens": "Tokens Processed"
+      }
+    },
+    "sections": {
+      "featured": "Featured Cases",
+      "otherProjects": "Other Projects",
+      "challenge": "Challenge",
+      "solution": "Solution",
+      "impact": "Impact",
+      "technologies": "Technologies",
+      "projectDuration": "Project duration",
+      "readMore": "Read More",
+      "details": "Details"
+    },
+    "filters": {
+      "title": "Filter by Industry",
+      "allIndustries": "All Industries",
+      "technologies": "Technologies"
+    },
+    "industries": {
+      "financialServices": "Financial Services",
+      "saas": "SaaS",
+      "edtech": "EdTech"
+    },
+    "metrics": {
+      "title": "Our Impact in Numbers",
+      "annualSavings": "Annual Savings",
+      "fasterResponse": "Faster Response",
+      "employeesHelped": "Employees Helped",
+      "routingAccuracy": "Routing Accuracy"
+    },
+    "cta": {
+      "title": "Ready to Write Your Own Success Story?",
+      "subtitle": "Let's bring your AI ambitions to life",
+      "startProject": "Start Your Project",
+      "exploreServices": "Explore Our Services"
+    },
+    "individual": {
+      "backToCases": "Back to Case Studies",
+      "solutionArchitecture": "Solution Architecture",
+      "theChallenge": "The Challenge",
+      "ourSolution": "Our Solution",
+      "implementationJourney": "Implementation Journey",
+      "resultsImpact": "Results & Impact",
+      "keyFeatures": "Key Features",
+      "technologiesUsed": "Technologies Used",
+      "readyToTransform": "Ready to Transform Your Business?",
+      "discussResults": "Let's discuss how we can help you achieve similar results"
+    },
+    "studies": {
+      "enterpriseLLM": {
+        "title": "Enterprise LLM Implementation for 50,000 Employees",
+        "client": "Major Dutch Bank",
+        "challenge": "Outdated trigger-based chatbot without NLU for internal support of 50,000 employees. Poor user experience and low resolution rate.",
+        "solution": "Agentic AI framework with Azure OpenAI integration. Agent autonomously decides: live agent transfer, catalog items, knowledge base, direct answers or legacy topics. GPT-4o-mini with intelligent conversation history (last 10 messages).",
+        "details": "Through implementing an intelligent LLM solution, the bank saves €2.8M annually on support costs. With 50,000 employees submitting an average of 2 tickets per month, saving €2.33 per ticket through automated handling.",
+        "overview": "Transformed an outdated trigger-based chatbot into an intelligent AI assistant serving 50,000 employees, achieving 85% faster response times and €2.8M annual savings.",
+        "challengePoints": [
+          "Legacy chatbot with no Natural Language Understanding (NLU)",
+          "Poor user experience leading to low adoption rates",
+          "High volume of unresolved tickets requiring manual intervention",
+          "Inefficient trigger-based system causing user frustration"
+        ],
+        "solutionPoints": [
+          "Implemented Azure OpenAI with GPT-4o-mini for intelligent responses",
+          "Built an agentic framework for autonomous decision-making",
+          "Integrated with ServiceNow for seamless ticket management",
+          "Designed smart conversation history (last 10 messages) for context"
+        ],
+        "implementationPhases": {
+          "discovery": {
+            "name": "Discovery & Planning",
+            "description": "Analyzed existing system, identified pain points, and designed architecture"
+          },
+          "development": {
+            "name": "Development & Integration",
+            "description": "Built AI framework, integrated with Azure OpenAI and ServiceNow"
+          },
+          "testing": {
+            "name": "Testing & Optimization",
+            "description": "Extensive testing with pilot groups and performance optimization"
+          },
+          "rollout": {
+            "name": "Rollout & Adoption",
+            "description": "Phased rollout to all 50,000 employees with training"
+          }
+        },
+        "results": {
+          "responseTime": {
+            "metric": "85%",
+            "value": "Faster Response Time",
+            "description": "Reduced average response time from minutes to seconds"
+          },
+          "resolutionRate": {
+            "metric": "72%",
+            "value": "Higher Resolution Rate",
+            "description": "Increased first-contact resolution dramatically"
+          },
+          "savings": {
+            "metric": "€2.8M",
+            "value": "Annual Savings",
+            "description": "Through automated ticket handling and reduced support costs"
+          }
+        },
+        "keyFeatures": [
+          "Live agent transfer capability",
+          "Catalog item search and retrieval",
+          "Knowledge base integration",
+          "Direct answer generation",
+          "Legacy topic activation"
+        ]
+      },
+      "snelnotuleren": {
+        "title": "Snelnotuleren.nl - AI Transcription Platform",
+        "client": "GroeimetAI Venture",
+        "challenge": "Dutch market needed a GDPR-compliant AI transcription service for meetings and interviews.",
+        "solution": "GCP-based platform with Firebase, fully GDPR and EU AI Act compliant. Ingenious algorithm for long transcriptions within token limits.",
+        "details": "Successful AI venture that processed over a million tokens and transcribed 1500+ hours of meetings with perfect GDPR compliance.",
+        "overview": "Built a GDPR-compliant AI transcription platform that processed over 1 million tokens and transcribed 1500+ hours of meetings for a growing user base.",
+        "challengePoints": [
+          "Dutch market lacked GDPR-compliant transcription services",
+          "Existing solutions had token limitations for long meetings",
+          "Need for accurate Dutch language transcription",
+          "Strict EU AI Act compliance requirements"
+        ],
+        "solutionPoints": [
+          "Google Cloud Platform infrastructure for scalability",
+          "Firebase for user management and real-time features",
+          "Ingenious algorithm to handle long transcriptions within token limits",
+          "Full GDPR and EU AI Act compliance built-in"
+        ],
+        "implementationPhases": {
+          "research": {
+            "name": "Market Research",
+            "description": "Analyzed Dutch market needs and compliance requirements"
+          },
+          "mvp": {
+            "name": "MVP Development",
+            "description": "Built core transcription engine with Whisper AI"
+          },
+          "launch": {
+            "name": "Platform Launch",
+            "description": "Launched with full features and compliance"
+          },
+          "scale": {
+            "name": "Scale & Optimize",
+            "description": "Scaled to handle thousands of hours of audio"
+          }
+        },
+        "results": {
+          "tokens": {
+            "metric": "1B+",
+            "value": "Tokens Processed",
+            "description": "Successfully processed over a million tokens"
+          },
+          "hours": {
+            "metric": "1500+",
+            "value": "Hours Transcribed",
+            "description": "Transcribed meetings, interviews, and lectures"
+          },
+          "users": {
+            "metric": "Growing",
+            "value": "User Base",
+            "description": "Active users across Netherlands"
+          }
+        },
+        "keyFeatures": [
+          "Real-time transcription",
+          "Multiple speaker detection",
+          "Dutch language optimization",
+          "Export to various formats",
+          "GDPR-compliant data handling"
+        ]
+      },
+      "learningPlatform": {
+        "title": "GroeimetAI Learning Platform - Multi-Agent Development",
+        "client": "GroeimetAI",
+        "challenge": "Rapidly build a complete learning platform for GenAI and LLM courses with certification.",
+        "solution": "Multi-agent orchestration system that built the complete platform. 10+ courses with 4 modules each and 16 lessons. Blockchain verification for certificates.",
+        "details": "Revolutionary project where AI agents autonomously developed a complete learning platform, including content creation and blockchain certification.",
+        "overview": "Revolutionary project where AI agents autonomously built a complete learning platform with 10+ courses, 40+ modules, and blockchain certification in just 2 weeks.",
+        "challengePoints": [
+          "Need to rapidly create comprehensive AI/LLM educational content",
+          "Requirement for scalable course creation system",
+          "Blockchain-verified certification system needed",
+          "Entire platform to be built by AI agents"
+        ],
+        "solutionPoints": [
+          "Multi-agent orchestration system for autonomous development",
+          "AI agents created all course content and structure",
+          "Blockchain integration for tamper-proof certificates",
+          "Fully automated content generation and quality control"
+        ],
+        "implementationPhases": {
+          "setup": {
+            "name": "Agent Setup",
+            "description": "Configured specialized agents for different tasks"
+          },
+          "content": {
+            "name": "Content Creation",
+            "description": "Agents generated 10+ comprehensive courses"
+          },
+          "platform": {
+            "name": "Platform Development",
+            "description": "Agents built the complete web platform"
+          },
+          "blockchain": {
+            "name": "Blockchain Integration",
+            "description": "Implemented certificate verification system"
+          }
+        },
+        "results": {
+          "time": {
+            "metric": "2 weeks",
+            "value": "Total Development Time",
+            "description": "Complete platform built in record time"
+          },
+          "courses": {
+            "metric": "10+",
+            "value": "Courses Created",
+            "description": "Comprehensive courses on GenAI, LLM, and automation"
+          },
+          "efficiency": {
+            "metric": "95%",
+            "value": "Agent Efficiency",
+            "description": "Minimal human intervention required"
+          }
+        },
+        "keyFeatures": [
+          "160+ lessons across all courses",
+          "Interactive learning modules",
+          "Progress tracking",
+          "Blockchain-verified certificates",
+          "AI-generated content"
+        ]
+      },
+      "ticketRouting": {
+        "title": "Intelligent Ticket Routing with Vector Database",
+        "client": "Major Dutch Bank",
+        "challenge": "Thousands of Business Service Templates (BSTs) made it impossible for users to find the right template for their issue.",
+        "solution": "LLM-powered widget with vector database for semantic search. User describes problem, AI generates follow-up questions, creates perfect ticket and routes to correct team.",
+        "details": "Vector database implementation enabling semantic search across thousands of service templates, with intelligent follow-up questions for perfect ticket creation.",
+        "overview": "Revolutionized ticket routing by implementing a vector database solution that reduced thousands of templates to an intelligent system with 94% routing accuracy.",
+        "challengePoints": [
+          "Thousands of Business Service Templates (BSTs) causing confusion",
+          "Users unable to find correct template for their issues",
+          "High rate of misrouted tickets",
+          "Excessive time spent searching for right template"
+        ],
+        "solutionPoints": [
+          "Vector database for semantic search across all templates",
+          "LLM-powered widget for natural language input",
+          "Intelligent follow-up question generation",
+          "Automatic ticket creation and routing"
+        ],
+        "implementationPhases": {
+          "analysis": {
+            "name": "Template Analysis",
+            "description": "Analyzed and vectorized thousands of BSTs"
+          },
+          "vectorDB": {
+            "name": "Vector DB Setup",
+            "description": "Implemented high-performance vector database"
+          },
+          "llmIntegration": {
+            "name": "LLM Integration",
+            "description": "Connected LLM for intelligent question generation"
+          },
+          "serviceNow": {
+            "name": "ServiceNow Integration",
+            "description": "Seamless integration with existing systems"
+          }
+        },
+        "results": {
+          "accuracy": {
+            "metric": "94%",
+            "value": "Routing Accuracy",
+            "description": "Near-perfect ticket routing to correct teams"
+          },
+          "timeSaved": {
+            "metric": "78%",
+            "value": "Time Saved",
+            "description": "Dramatic reduction in ticket creation time"
+          },
+          "bstReduction": {
+            "metric": "65%",
+            "value": "BST Reduction",
+            "description": "Eliminated redundant templates"
+          }
+        },
+        "keyFeatures": [
+          "Semantic search capability",
+          "Natural language processing",
+          "Dynamic follow-up questions",
+          "Automatic categorization",
+          "Smart routing logic"
+        ]
+      }
+    },
+    "metrics": {
+      "responseTime": "Response Time",
+      "resolutionRate": "Resolution Rate",
+      "costSavings": "Cost Savings",
+      "tokensProcessed": "Tokens Processed",
+      "hoursTranscribed": "Hours Transcribed",
+      "activeUsers": "Active Users",
+      "developmentTime": "Development Time",
+      "coursesBuilt": "Courses Built",
+      "agentEfficiency": "Agent Efficiency",
+      "routingAccuracy": "Routing Accuracy",
+      "userTimeSaved": "User Time Saved",
+      "bstReduction": "BST Reduction"
+    },
+    "durations": {
+      "months": "months",
+      "weeks": "weeks",
+      "days": "days",
+      "ongoing": "Ongoing"
+    }
+  },
+  "aiCapabilities": {
+    "heading": {
+      "why": "Why Multi-Agent Orchestration",
+      "transforms": "Transforms",
+      "yourBusiness": "Your Business"
+    },
+    "subtitle": "Traditional AI gives you one perspective. Our orchestrated agents give you an entire team of specialists working in perfect harmony, delivering results that single models simply can't match.",
+    "capabilities": {
+      "autonomous": {
+        "title": "Autonomous Agents",
+        "description": "Self-organizing AI teams that adapt to your challenges",
+        "features": {
+          "selfHealing": "Self-healing systems",
+          "dynamicAllocation": "Dynamic task allocation",
+          "continuousLearning": "Continuous learning"
+        }
+      },
+      "parallel": {
+        "title": "Parallel Processing",
+        "description": "Multiple agents working simultaneously on different aspects",
+        "features": {
+          "fasterDelivery": "10x faster delivery",
+          "noBottlenecks": "No bottlenecks",
+          "optimalUsage": "Optimal resource usage"
+        }
+      },
+      "collective": {
+        "title": "Collective Intelligence",
+        "description": "Combined expertise of specialized agents for superior results",
+        "features": {
+          "domainExpertise": "Domain expertise",
+          "crossValidation": "Cross-validation",
+          "knowledgeSynthesis": "Knowledge synthesis"
+        }
+      },
+      "quality": {
+        "title": "Built-in Quality",
+        "description": "Automatic validation and testing by dedicated agents",
+        "features": {
+          "codeReview": "Code review agents",
+          "securityScanning": "Security scanning",
+          "performanceOptimization": "Performance optimization"
+        }
+      },
+      "creative": {
+        "title": "Creative Solutions",
+        "description": "Emergent innovation from agent collaboration",
+        "features": {
+          "novelApproaches": "Novel approaches",
+          "patternRecognition": "Pattern recognition",
+          "solutionEvolution": "Solution evolution"
+        }
+      },
+      "monitoring": {
+        "title": "Real-time Monitoring",
+        "description": "Complete visibility into agent performance and progress",
+        "features": {
+          "liveDashboards": "Live dashboards",
+          "performanceMetrics": "Performance metrics",
+          "predictiveInsights": "Predictive insights"
+        }
+      }
+    },
+    "cta": {
+      "question": "Ready to experience the power of orchestrated AI intelligence?",
+      "startJourney": "Start Your AI Journey",
+      "exploreServices": "Explore Our Services"
+    }
+  },
+  "common": {
+    "startProject": "Start Project",
+    "goToDashboard": "Go to Dashboard"
+  },
+  "projectDialog": {
+    "title": "Start Your AI Project"
+  },
+  "meetingScheduler": {
+    "title": "Schedule a Meeting",
+    "description": "Select a convenient time for your consultation",
+    "success": "Meeting request sent successfully!",
+    "error": "Failed to schedule meeting. Please try again.",
+    "next": "Next",
+    "back": "Back",
+    "scheduling": "Scheduling...",
+    "confirmSchedule": "Confirm Meeting",
+    "selectDateFirst": "Please select a date first",
+    "steps": {
+      "contact": {
+        "title": "Contact Information"
+      },
+      "datetime": {
+        "title": "Select Date & Time"
+      },
+      "confirm": {
+        "title": "Confirm Details"
+      }
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "company": "Company",
+      "phone": "Phone",
+      "topic": "Meeting Topic",
+      "topicPlaceholder": "What would you like to discuss?",
+      "description": "Additional Details",
+      "descriptionPlaceholder": "Any specific questions or areas you'd like to cover?",
+      "selectDate": "Select Date",
+      "selectTime": "Select Time",
+      "meetingType": "Meeting Type",
+      "date": "Date",
+      "time": "Time"
+    },
+    "meetingTypes": {
+      "video": "Video Call",
+      "phone": "Phone Call",
+      "inPerson": "In Person"
+    }
+  }
+}

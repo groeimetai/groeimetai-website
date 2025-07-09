@@ -51,6 +51,7 @@ import {
   Mail,
   Calendar,
   AlertCircle,
+  Shield,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 

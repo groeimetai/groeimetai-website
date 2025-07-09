@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Briefcase, Target, Rocket, Flag, Save, AlertCircle, Loader2 } from 'lucide-react';
+import { Briefcase, Target, Rocket, Flag, Save, AlertCircle, Loader2, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface ProjectStage {

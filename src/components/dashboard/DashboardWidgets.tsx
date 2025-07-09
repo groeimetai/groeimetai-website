@@ -40,6 +40,7 @@ import {
   Paperclip,
   Image as ImageIcon,
   Download,
+  Shield,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -2175,25 +2176,29 @@ export default function DashboardWidgets() {
 
         case 'recentActivity':
           return (
-            <div className="space-y-3 overflow-y-auto h-full">
-              {widgetData.recentActivity?.length > 0 ? (
-                widgetData.recentActivity.map((activity: any) => (
-                  <div
-                    key={activity.id}
-                    className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
-                  >
-                    <div>
-                      <p className="text-white text-sm">{activity.title}</p>
-                      <p className="text-white/40 text-xs">
-                        {formatDistanceToNow(activity.time, { addSuffix: true })}
-                      </p>
-                    </div>
-                    <Activity className="w-4 h-4 text-white/60" />
-                  </div>
-                ))
-              ) : (
-                <p className="text-white/60 text-center py-4">No recent activity</p>
-              )}
+            <div className="flex flex-col h-full overflow-hidden">
+              <ScrollArea className="flex-1">
+                <div className="p-3 space-y-2">
+                  {widgetData.recentActivity?.length > 0 ? (
+                    widgetData.recentActivity.slice(0, 5).map((activity: any) => (
+                      <div
+                        key={activity.id}
+                        className="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="text-white text-sm truncate">{activity.title}</p>
+                          <p className="text-white/40 text-xs">
+                            {formatDistanceToNow(activity.time, { addSuffix: true })}
+                          </p>
+                        </div>
+                        <Activity className="w-4 h-4 text-white/60 ml-2 flex-shrink-0" />
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-white/60 text-center py-4">No recent activity</p>
+                  )}
+                </div>
+              </ScrollArea>
             </div>
           );
 
@@ -2736,7 +2741,7 @@ export default function DashboardWidgets() {
             </div>
           </CardHeader>
           <CardContent
-            className={`flex-1 ${widget.type === 'messages' || widget.type === 'projectProgress' ? 'p-0 overflow-hidden' : 'p-6 pt-0'}`}
+            className={`flex-1 ${widget.type === 'messages' || widget.type === 'projectProgress' || widget.type === 'recentActivity' ? 'p-0 overflow-hidden' : 'p-6 pt-0'}`}
           >
             <WidgetContent />
           </CardContent>

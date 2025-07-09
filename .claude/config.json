@@ -3,11 +3,11 @@
   "project": {
     "name": "groeimetai_multiple_agent_orchestration",
     "type": "claude-flow",
-    "created": "2025-07-05T12:13:05.352Z"
+    "created": "2025-07-09T16:33:36.777Z"
   },
   "features": {
     "swarm": true,
-    "sparc": true,
+    "sparc": false,
     "memory": true,
     "terminal": true,
     "mcp": true
