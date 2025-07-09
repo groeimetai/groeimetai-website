@@ -672,7 +672,7 @@ export default function AdminInvoicesPage() {
 
   return (
     <main className="min-h-screen bg-black">
-      <div className="container mx-auto px-4 py-8 mt-20">
+      <div className="container mx-auto px-4 pt-24 pb-8">
         {/* Header */}
         <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>

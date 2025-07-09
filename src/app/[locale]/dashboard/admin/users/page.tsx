@@ -796,7 +796,7 @@ export default function UsersManagementPage() {
   return (
     <TooltipProvider>
       <main className="min-h-screen bg-black">
-        <div className="container mx-auto px-4 py-8 mt-20">
+        <div className="container mx-auto px-4 pt-24 pb-8">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">User Management</h1>
