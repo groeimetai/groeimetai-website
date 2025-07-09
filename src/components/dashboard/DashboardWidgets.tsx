@@ -70,6 +70,10 @@ import {
   serverTimestamp,
   setDoc,
   writeBatch,
+  limitToLast,
+  startBefore,
+  endBefore,
+  QueryDocumentSnapshot,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
@@ -168,26 +172,32 @@ const MessagingWidget = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  
+  // Pagination state
+  const [hasMoreMessages, setHasMoreMessages] = useState(true);
+  const [loadingMoreMessages, setLoadingMoreMessages] = useState(false);
+  const [firstVisible, setFirstVisible] = useState<QueryDocumentSnapshot | null>(null);
+  const MESSAGES_PER_PAGE = 10;
 
   const scrollToBottom = () => {
     if (scrollAreaRef.current) {
-      const scrollContainer = scrollAreaRef.current.querySelector(
-        '[data-radix-scroll-area-viewport]'
-      );
-      if (scrollContainer) {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
-      }
+      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
     }
   };
 
   useEffect(() => {
-    // Only scroll to bottom on new messages, not on initial load
-    if (messages.length > 0 && hasScrolledToBottom) {
-      scrollToBottom();
-    } else if (messages.length > 0 && !hasScrolledToBottom) {
-      setHasScrolledToBottom(true);
+    // Scroll to bottom on initial load and when new messages are added
+    if (messages.length > 0) {
+      // Small delay to ensure DOM is updated
+      setTimeout(() => {
+        scrollToBottom();
+      }, 50);
+      
+      if (!hasScrolledToBottom) {
+        setHasScrolledToBottom(true);
+      }
     }
-  }, [messages.length, hasScrolledToBottom]);
+  }, [messages]);
 
   // Load chats based on user role
   useEffect(() => {
@@ -313,6 +323,10 @@ const MessagingWidget = ({
     if (!selectedChat || !user) return;
 
     setIsLoading(true);
+    // Reset pagination state when switching chats
+    setMessages([]);
+    setHasMoreMessages(true);
+    setFirstVisible(null);
     let unsubscribe: (() => void) | undefined;
 
     // Mark notifications as read when opening chat
@@ -357,21 +371,64 @@ const MessagingWidget = ({
       try {
         const collectionName = selectedChat.type === 'support' ? 'supportChats' : 'projectChats';
         const messagesRef = collection(db, collectionName, selectedChat.id, 'messages');
-        const q = query(messagesRef, orderBy('createdAt', 'asc'));
-
+        
+        // Load only the last 10 messages initially
+        const initialQuery = query(
+          messagesRef, 
+          orderBy('createdAt', 'desc'), 
+          limit(MESSAGES_PER_PAGE)
+        );
+        
+        const snapshot = await getDocs(initialQuery);
+        
+        if (snapshot.empty) {
+          setMessages([]);
+          setHasMoreMessages(false);
+          setIsLoading(false);
+          return;
+        }
+        
+        const initialMessages: Message[] = [];
+        snapshot.forEach((doc) => {
+          initialMessages.push({ id: doc.id, ...doc.data() } as Message);
+        });
+        
+        // Reverse to show in chronological order
+        initialMessages.reverse();
+        setMessages(initialMessages);
+        
+        // Save the first document for pagination
+        setFirstVisible(snapshot.docs[0]);
+        
+        // Check if there are more messages
+        setHasMoreMessages(snapshot.docs.length === MESSAGES_PER_PAGE);
+        setIsLoading(false);
+        
+        // Set up real-time listener for new messages only
+        const realtimeQuery = query(
+          messagesRef,
+          orderBy('createdAt', 'desc'),
+          limit(1)
+        );
+        
         unsubscribe = onSnapshot(
-          q,
+          realtimeQuery,
           (snapshot) => {
-            const newMessages: Message[] = [];
-            snapshot.forEach((doc) => {
-              newMessages.push({ id: doc.id, ...doc.data() } as Message);
+            snapshot.docChanges().forEach((change) => {
+              if (change.type === 'added') {
+                const newMessage = { id: change.doc.id, ...change.doc.data() } as Message;
+                setMessages((prev) => {
+                  // Check if message already exists
+                  if (prev.some(msg => msg.id === newMessage.id)) {
+                    return prev;
+                  }
+                  return [...prev, newMessage];
+                });
+              }
             });
-            setMessages(newMessages);
-            setIsLoading(false);
           },
           (error) => {
-            console.error('Error loading messages:', error);
-            setIsLoading(false);
+            console.error('Error in real-time listener:', error);
           }
         );
       } catch (error) {
@@ -388,6 +445,78 @@ const MessagingWidget = ({
       }
     };
   }, [selectedChat, user]);
+
+  // Load more messages when scrolling up
+  const loadMoreMessages = async () => {
+    if (!selectedChat || !firstVisible || !hasMoreMessages || loadingMoreMessages) return;
+
+    setLoadingMoreMessages(true);
+    
+    // Save current scroll height before loading more messages
+    const scrollContainer = scrollAreaRef.current;
+    const previousScrollHeight = scrollContainer?.scrollHeight || 0;
+    
+    try {
+      const collectionName = selectedChat.type === 'support' ? 'supportChats' : 'projectChats';
+      const messagesRef = collection(db, collectionName, selectedChat.id, 'messages');
+      
+      const moreQuery = query(
+        messagesRef,
+        orderBy('createdAt', 'desc'),
+        startBefore(firstVisible),
+        limit(MESSAGES_PER_PAGE)
+      );
+      
+      const snapshot = await getDocs(moreQuery);
+      
+      if (snapshot.empty) {
+        setHasMoreMessages(false);
+        setLoadingMoreMessages(false);
+        return;
+      }
+      
+      const moreMessages: Message[] = [];
+      snapshot.forEach((doc) => {
+        moreMessages.push({ id: doc.id, ...doc.data() } as Message);
+      });
+      
+      // Reverse to show in chronological order
+      moreMessages.reverse();
+      
+      // Prepend the new messages
+      setMessages((prev) => [...moreMessages, ...prev]);
+      
+      // Update the first visible document
+      setFirstVisible(snapshot.docs[0]);
+      
+      // Check if there are more messages
+      setHasMoreMessages(snapshot.docs.length === MESSAGES_PER_PAGE);
+      
+      // Restore scroll position after DOM update
+      setTimeout(() => {
+        if (scrollContainer) {
+          const newScrollHeight = scrollContainer.scrollHeight;
+          const scrollDiff = newScrollHeight - previousScrollHeight;
+          scrollContainer.scrollTop = scrollDiff;
+        }
+      }, 50);
+    } catch (error) {
+      console.error('Error loading more messages:', error);
+    } finally {
+      setLoadingMoreMessages(false);
+    }
+  };
+
+  // Handle scroll to detect when to load more messages
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const scrollContainer = e.currentTarget;
+    const { scrollTop } = scrollContainer;
+    
+    // Load more messages when scrolled to top
+    if (scrollTop === 0 && hasMoreMessages && !loadingMoreMessages) {
+      loadMoreMessages();
+    }
+  };
 
   // Handle file selection
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -626,9 +755,33 @@ const MessagingWidget = ({
 
             {/* Messages */}
             <div className="flex-1 min-h-0 overflow-hidden">
-              <ScrollArea ref={scrollAreaRef} className="h-full p-3 pb-0">
+              <div 
+                ref={scrollAreaRef} 
+                className="h-full overflow-auto p-3 pb-0 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
+                onScroll={handleScroll}
+              >
                 <div className="space-y-3">
-                  {isLoading && (
+                  {/* Loading more messages indicator */}
+                  {loadingMoreMessages && (
+                    <div className="flex items-center justify-center py-2">
+                      <Loader2 className="w-4 h-4 animate-spin text-orange mr-2" />
+                      <span className="text-xs text-white/60">Loading more messages...</span>
+                    </div>
+                  )}
+                  
+                  {/* Load more button (optional - shown when there are more messages) */}
+                  {!loadingMoreMessages && hasMoreMessages && messages.length > 0 && (
+                    <div className="flex justify-center py-2">
+                      <button
+                        onClick={loadMoreMessages}
+                        className="text-xs text-orange hover:text-orange/80 transition-colors"
+                      >
+                        Load older messages
+                      </button>
+                    </div>
+                  )}
+
+                  {isLoading && messages.length === 0 && (
                     <div className="flex items-center justify-center py-8">
                       <Loader2 className="w-5 h-5 animate-spin text-orange" />
                     </div>
