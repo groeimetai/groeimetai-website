@@ -38,7 +38,7 @@ import { firestoreProjectService as projectService } from '@/services/firestore/
 import { Project, ProjectStatus, ProjectPriority } from '@/types';
 import { format } from 'date-fns';
 import { db } from '@/lib/firebase/config';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot, collection, query, where, orderBy, limit } from 'firebase/firestore';
 import { Briefcase as BriefcaseIcon, Target as TargetIcon, Rocket, Flag, Shield } from 'lucide-react';
 
 export default function ProjectDetailPage() {
@@ -47,6 +47,7 @@ export default function ProjectDetailPage() {
   const { user, loading: authLoading } = useAuth();
   const [project, setProject] = useState<Project | null>(null);
   const [timelineData, setTimelineData] = useState<any>(null);
+  const [activityLogs, setActivityLogs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -144,6 +145,23 @@ export default function ProjectDetailPage() {
             }
           );
 
+          // Fetch activity logs for this project
+          const activityQuery = query(
+            collection(db, 'activityLogs'),
+            where('entityId', '==', docSnapshot.id),
+            where('entityType', '==', 'project'),
+            orderBy('createdAt', 'desc'),
+            limit(20)
+          );
+
+          onSnapshot(activityQuery, (snapshot) => {
+            const logs = snapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data()
+            }));
+            setActivityLogs(logs);
+          });
+
           setIsLoading(false);
         }
       },
@@ -200,6 +218,23 @@ export default function ProjectDetailPage() {
                 }
               }
             );
+
+            // Fetch activity logs for this project
+            const activityQuery = query(
+              collection(db, 'activityLogs'),
+              where('entityId', '==', docSnapshot.id),
+              where('entityType', '==', 'project'),
+              orderBy('createdAt', 'desc'),
+              limit(20)
+            );
+
+            onSnapshot(activityQuery, (snapshot) => {
+              const logs = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+              }));
+              setActivityLogs(logs);
+            });
 
             setIsLoading(false);
           } else {
@@ -826,10 +861,6 @@ export default function ProjectDetailPage() {
             <Card className="bg-white/5 backdrop-blur-sm border-white/10 p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-white">Project Deliverables</h3>
-                <Button variant="outline" size="sm">
-                  <PlusCircle className="w-4 h-4 mr-2" />
-                  Add Deliverable
-                </Button>
               </div>
 
               {project.milestones && project.milestones.length > 0 ? (
@@ -1021,54 +1052,64 @@ export default function ProjectDetailPage() {
                 Recent Activity
               </h3>
               <div className="space-y-4">
-                {/* Recent activities - mock data */}
-                <div className="flex gap-3 pb-4 border-b border-white/10">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                  <div className="flex-1">
-                    <p className="text-white">Project created</p>
-                    <p className="text-white/60 text-sm">
-                      Project initialized with requirements and timeline
-                    </p>
-                    <p className="text-white/40 text-xs mt-1">
-                      {project.createdAt
-                        ? formatDate(project.createdAt, 'MMM dd, yyyy at HH:mm') || 'Recently'
-                        : 'Recently'}
-                    </p>
-                  </div>
-                </div>
+                {activityLogs.length > 0 ? (
+                  activityLogs.map((log, index) => {
+                    const getActivityColor = () => {
+                      switch (log.action) {
+                        case 'created':
+                          return 'bg-green-500';
+                        case 'updated':
+                          return 'bg-blue-500';
+                        case 'status_changed':
+                          return 'bg-orange';
+                        case 'document_uploaded':
+                          return 'bg-purple-500';
+                        case 'message_sent':
+                          return 'bg-indigo-500';
+                        default:
+                          return 'bg-gray-500';
+                      }
+                    };
 
-                <div className="flex gap-3 pb-4 border-b border-white/10">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                  <div className="flex-1">
-                    <p className="text-white">Team assigned</p>
-                    <p className="text-white/60 text-sm">
-                      Project manager and technical lead assigned
-                    </p>
-                    <p className="text-white/40 text-xs mt-1">2 days ago</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 pb-4 border-b border-white/10">
-                  <div className="w-2 h-2 bg-orange rounded-full mt-2"></div>
-                  <div className="flex-1">
-                    <p className="text-white">Kickoff meeting scheduled</p>
-                    <p className="text-white/60 text-sm">
-                      Initial project meeting set for next week
-                    </p>
-                    <p className="text-white/40 text-xs mt-1">1 day ago</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
-                  <div className="flex-1">
-                    <p className="text-white">Documents uploaded</p>
-                    <p className="text-white/60 text-sm">
-                      Project proposal and technical specs added
-                    </p>
-                    <p className="text-white/40 text-xs mt-1">Today at 14:30</p>
-                  </div>
-                </div>
+                    return (
+                      <div
+                        key={log.id}
+                        className={`flex gap-3 ${index < activityLogs.length - 1 ? 'pb-4 border-b border-white/10' : ''}`}
+                      >
+                        <div className={`w-2 h-2 ${getActivityColor()} rounded-full mt-2`}></div>
+                        <div className="flex-1">
+                          <p className="text-white">{log.description || log.action}</p>
+                          {log.details && (
+                            <p className="text-white/60 text-sm">{log.details}</p>
+                          )}
+                          <p className="text-white/40 text-xs mt-1">
+                            {log.createdAt?.toDate
+                              ? formatDate(log.createdAt.toDate(), 'MMM dd, yyyy at HH:mm')
+                              : 'Recently'}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <>
+                    {/* Fallback to show project creation if no logs */}
+                    <div className="flex gap-3 pb-4 border-b border-white/10">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                      <div className="flex-1">
+                        <p className="text-white">Project created</p>
+                        <p className="text-white/60 text-sm">
+                          Project initialized with requirements and timeline
+                        </p>
+                        <p className="text-white/40 text-xs mt-1">
+                          {project.createdAt
+                            ? formatDate(project.createdAt, 'MMM dd, yyyy at HH:mm') || 'Recently'
+                            : 'Recently'}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="mt-6 pt-6 border-t border-white/10">

@@ -529,6 +529,93 @@ export default function AdminProjectDetailPage() {
               </Button>
             </CardContent>
           </Card>
+
+          {/* Deliverables Management */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Project Deliverables</CardTitle>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    // TODO: Add deliverable dialog
+                    toast.success('Deliverable management coming soon');
+                  }}
+                >
+                  <PlusCircle className="w-4 h-4 mr-2" />
+                  Add Deliverable
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {project.milestones && project.milestones.length > 0 ? (
+                <div className="space-y-4">
+                  {project.milestones.map((milestone) => (
+                    <div key={milestone.id} className="border border-white/10 rounded-lg p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <h4 className="font-semibold text-white">{milestone.name}</h4>
+                        <Badge
+                          variant="outline"
+                          className={
+                            milestone.status === 'completed'
+                              ? 'border-green-500 text-green-500'
+                              : 'border-orange text-orange'
+                          }
+                        >
+                          {milestone.status}
+                        </Badge>
+                      </div>
+                      <div className="space-y-2">
+                        {milestone.deliverables?.map((deliverable, idx) => (
+                          <div key={idx} className="flex items-center gap-2 text-sm">
+                            {milestone.status === 'completed' ? (
+                              <CheckCircle className="w-4 h-4 text-green-500" />
+                            ) : (
+                              <Circle className="w-4 h-4 text-white/40" />
+                            )}
+                            <span className="text-white/80">{deliverable}</span>
+                          </div>
+                        )) || <p className="text-white/60 text-sm">No deliverables specified</p>}
+                      </div>
+                      <div className="mt-3 pt-3 border-t border-white/10 flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            // TODO: Edit deliverables
+                            toast.info('Edit functionality coming soon');
+                          }}
+                        >
+                          <Edit className="w-3 h-3 mr-1" />
+                          Edit
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="text-red-500 hover:text-red-400"
+                          onClick={() => {
+                            // TODO: Remove milestone
+                            toast.info('Remove functionality coming soon');
+                          }}
+                        >
+                          <Trash2 className="w-3 h-3 mr-1" />
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Target className="w-12 h-12 text-white/20 mx-auto mb-3" />
+                  <p className="text-white/60">No deliverables defined yet</p>
+                  <p className="text-white/40 text-sm mt-1">
+                    Add deliverables to track project milestones
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
 
         {/* Right Column - Client Info */}
