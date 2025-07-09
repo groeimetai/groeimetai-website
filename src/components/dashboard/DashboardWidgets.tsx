@@ -72,8 +72,8 @@ import {
   setDoc,
   writeBatch,
   limitToLast,
-  startBefore,
-  endBefore,
+  startAfter,
+  endAt,
   QueryDocumentSnapshot,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
@@ -503,7 +503,7 @@ const MessagingWidget = ({
       const moreQuery = query(
         messagesRef,
         orderBy('createdAt', 'desc'),
-        startBefore(firstVisible),
+        startAfter(firstVisible),
         limit(MESSAGES_PER_PAGE)
       );
       

@@ -62,6 +62,14 @@ service firebase.storage {
       allow delete: if isOwner(userId) || hasRole('admin');
     }
     
+    // User documents in root documents folder
+    match /documents/{userId}/{document=**} {
+      allow read: if isOwner(userId) || hasRole('admin');
+      allow write: if isOwner(userId) && 
+        isValidFileSize(50 * 1024 * 1024); // 50MB max
+      allow delete: if isOwner(userId) || hasRole('admin');
+    }
+    
     // Consultation files
     match /consultations/{consultationId}/files/{fileName} {
       allow read: if isAuthenticated() && 
@@ -113,6 +121,19 @@ service firebase.storage {
         isValidFileSize(10 * 1024 * 1024); // 10MB max
       
       allow delete: if false; // Messages and attachments are immutable
+    }
+    
+    // User uploads (for chat attachments and general file sharing)
+    match /uploads/{userId}/{fileName=**} {
+      allow read: if isAuthenticated(); // Any authenticated user can read shared files
+      
+      allow create: if isOwner(userId) &&
+        isValidFileSize(10 * 1024 * 1024); // 10MB max
+      
+      allow write: if isOwner(userId) &&
+        isValidFileSize(10 * 1024 * 1024); // 10MB max
+      
+      allow delete: if isOwner(userId) || hasRole('admin');
     }
     
     // Video consultation recordings
