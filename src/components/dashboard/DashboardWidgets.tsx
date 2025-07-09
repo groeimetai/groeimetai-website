@@ -41,6 +41,7 @@ import {
   Image as ImageIcon,
   Download,
   Shield,
+  ChevronDown,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -177,27 +178,43 @@ const MessagingWidget = ({
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const [loadingMoreMessages, setLoadingMoreMessages] = useState(false);
   const [firstVisible, setFirstVisible] = useState<QueryDocumentSnapshot | null>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
   const MESSAGES_PER_PAGE = 10;
 
-  const scrollToBottom = () => {
+  const scrollToBottom = (smooth = false) => {
     if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+      if (smooth) {
+        scrollAreaRef.current.scrollTo({
+          top: scrollAreaRef.current.scrollHeight,
+          behavior: 'smooth'
+        });
+      } else {
+        scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+      }
     }
   };
 
+  const isAtBottom = () => {
+    if (!scrollAreaRef.current) return false;
+    const { scrollTop, scrollHeight, clientHeight } = scrollAreaRef.current;
+    return scrollHeight - scrollTop - clientHeight < 50; // 50px threshold
+  };
+
   useEffect(() => {
-    // Scroll to bottom on initial load and when new messages are added
-    if (messages.length > 0) {
+    // Scroll to bottom only on initial load
+    if (messages.length > 0 && isInitialLoad) {
       // Small delay to ensure DOM is updated
       setTimeout(() => {
         scrollToBottom();
-      }, 50);
+        setIsInitialLoad(false);
+      }, 100);
       
       if (!hasScrolledToBottom) {
         setHasScrolledToBottom(true);
       }
     }
-  }, [messages]);
+  }, [messages.length, isInitialLoad]);
 
   // Load chats based on user role
   useEffect(() => {
@@ -327,6 +344,7 @@ const MessagingWidget = ({
     setMessages([]);
     setHasMoreMessages(true);
     setFirstVisible(null);
+    setIsInitialLoad(true); // Reset initial load flag
     let unsubscribe: (() => void) | undefined;
 
     // Mark notifications as read when opening chat
@@ -417,6 +435,10 @@ const MessagingWidget = ({
             snapshot.docChanges().forEach((change) => {
               if (change.type === 'added') {
                 const newMessage = { id: change.doc.id, ...change.doc.data() } as Message;
+                
+                // Check if user is at bottom before adding new message
+                const wasAtBottom = isAtBottom();
+                
                 setMessages((prev) => {
                   // Check if message already exists
                   if (prev.some(msg => msg.id === newMessage.id)) {
@@ -424,6 +446,13 @@ const MessagingWidget = ({
                   }
                   return [...prev, newMessage];
                 });
+                
+                // If user was at bottom, scroll to show new message
+                if (wasAtBottom) {
+                  setTimeout(() => {
+                    scrollToBottom();
+                  }, 50);
+                }
               }
             });
           },
@@ -516,6 +545,10 @@ const MessagingWidget = ({
     if (scrollTop === 0 && hasMoreMessages && !loadingMoreMessages) {
       loadMoreMessages();
     }
+    
+    // Show/hide scroll to bottom button
+    const atBottom = isAtBottom();
+    setShowScrollToBottom(!atBottom && messages.length > 0);
   };
 
   // Handle file selection
@@ -754,7 +787,7 @@ const MessagingWidget = ({
             </div>
 
             {/* Messages */}
-            <div className="flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 min-h-0 overflow-hidden relative">
               <div 
                 ref={scrollAreaRef} 
                 className="h-full overflow-auto p-3 pb-0 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
@@ -865,7 +898,21 @@ const MessagingWidget = ({
                   })}
                   <div ref={messagesEndRef} style={{ height: 1 }} />
                 </div>
-              </ScrollArea>
+              </div>
+              
+              {/* Scroll to bottom button */}
+              {showScrollToBottom && (
+                <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10">
+                  <Button
+                    onClick={() => scrollToBottom(true)}
+                    size="sm"
+                    className="bg-orange hover:bg-orange/90 shadow-lg flex items-center gap-1 px-3 py-1"
+                  >
+                    <ChevronDown className="w-3 h-3" />
+                    <span className="text-xs">New messages</span>
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* Message Input */}
