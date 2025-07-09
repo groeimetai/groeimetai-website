@@ -426,8 +426,8 @@ const MessagingWidget = ({
         initialMessages.reverse();
         setMessages(initialMessages);
         
-        // Save the first document for pagination
-        setFirstVisible(snapshot.docs[0]);
+        // Save the last document for pagination (oldest in this batch)
+        setFirstVisible(snapshot.docs[snapshot.docs.length - 1]);
         
         // Check if there are more messages
         setHasMoreMessages(snapshot.docs.length === MESSAGES_PER_PAGE);
@@ -523,14 +523,29 @@ const MessagingWidget = ({
       // Reverse to show in chronological order
       moreMessages.reverse();
       
-      // Prepend the new messages
-      setMessages((prev) => [...moreMessages, ...prev]);
+      // Prepend the new messages, filtering out duplicates
+      let uniqueNewMessages: Message[] = [];
+      setMessages((prev) => {
+        // Create a Set of existing message IDs for fast lookup
+        const existingIds = new Set(prev.map(msg => msg.id));
+        
+        // Filter out any messages that already exist
+        uniqueNewMessages = moreMessages.filter(msg => !existingIds.has(msg.id));
+        
+        return [...uniqueNewMessages, ...prev];
+      });
       
-      // Update the first visible document
-      setFirstVisible(snapshot.docs[0]);
-      
-      // Check if there are more messages
-      setHasMoreMessages(snapshot.docs.length === MESSAGES_PER_PAGE);
+      // Only update pagination state if we actually added new messages
+      if (uniqueNewMessages.length > 0) {
+        // Update the first visible document (oldest in this batch)
+        setFirstVisible(snapshot.docs[snapshot.docs.length - 1]);
+        
+        // Check if there are more messages
+        setHasMoreMessages(snapshot.docs.length === MESSAGES_PER_PAGE);
+      } else {
+        // No new messages were added, so we've reached the end
+        setHasMoreMessages(false);
+      }
       
       // Restore scroll position after DOM update
       setTimeout(() => {
