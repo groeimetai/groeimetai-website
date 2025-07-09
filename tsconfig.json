@@ -31,6 +31,9 @@
     "**/*.test.tsx",
     "**/*.spec.ts",
     "**/*.spec.tsx",
-    "src/**/__tests__/**"
+    "src/**/__tests__/**",
+    "backup*",
+    "backups/**",
+    "*.backup"
   ]
 }

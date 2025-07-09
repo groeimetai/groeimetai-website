@@ -8,8 +8,9 @@ yarn-error.log
 # Testing
 coverage
 .nyc_output
-cypress/videos
-cypress/screenshots
+cypress/
+cypress.config.ts
+cypress.json
 
 # Next.js
 .next
@@ -76,3 +77,8 @@ memory
 *.tmp
 *.temp
 .cache
+
+# Backup folders
+backup*
+backups/
+*.backup
