@@ -173,6 +173,7 @@ const MessagingWidget = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [filePreviewUrls, setFilePreviewUrls] = useState<Map<string, string>>(new Map());
   
   // Pagination state
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
@@ -215,6 +216,16 @@ const MessagingWidget = ({
       }
     }
   }, [messages.length, isInitialLoad]);
+
+  // Cleanup preview URLs on unmount
+  useEffect(() => {
+    return () => {
+      // Clean up all preview URLs when component unmounts
+      filePreviewUrls.forEach((url) => {
+        URL.revokeObjectURL(url);
+      });
+    };
+  }, []);
 
   // Load chats based on user role
   useEffect(() => {
@@ -566,11 +577,33 @@ const MessagingWidget = ({
       return true;
     });
 
+    // Create preview URLs for images
+    const newPreviewUrls = new Map(filePreviewUrls);
+    validFiles.forEach((file) => {
+      if (file.type.startsWith('image/')) {
+        const url = URL.createObjectURL(file);
+        newPreviewUrls.set(file.name, url);
+      }
+    });
+    setFilePreviewUrls(newPreviewUrls);
+
     setSelectedFiles((prev) => [...prev, ...validFiles]);
   };
 
   // Remove selected file
   const removeSelectedFile = (index: number) => {
+    const fileToRemove = selectedFiles[index];
+    
+    // Clean up preview URL if it's an image
+    if (fileToRemove && filePreviewUrls.has(fileToRemove.name)) {
+      const url = filePreviewUrls.get(fileToRemove.name);
+      if (url) URL.revokeObjectURL(url);
+      
+      const newPreviewUrls = new Map(filePreviewUrls);
+      newPreviewUrls.delete(fileToRemove.name);
+      setFilePreviewUrls(newPreviewUrls);
+    }
+    
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -680,6 +713,13 @@ const MessagingWidget = ({
       );
 
       setNewMessage('');
+      
+      // Clean up preview URLs
+      filePreviewUrls.forEach((url) => {
+        URL.revokeObjectURL(url);
+      });
+      setFilePreviewUrls(new Map());
+      
       setSelectedFiles([]);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
@@ -859,28 +899,51 @@ const MessagingWidget = ({
                           >
                             {msg.content && <p className="text-sm break-words">{msg.content}</p>}
                             {msg.attachments && msg.attachments.length > 0 && (
-                              <div className="mt-2 space-y-1">
+                              <div className="mt-2 space-y-2">
                                 {msg.attachments.map((attachment, idx) => (
-                                  <div
-                                    key={idx}
-                                    className="flex items-center justify-between bg-white/10 rounded px-2 py-1"
-                                  >
-                                    <div className="flex items-center gap-2 text-xs min-w-0">
-                                      {attachment.type.startsWith('image/') ? (
-                                        <ImageIcon className="w-3 h-3 flex-shrink-0" />
-                                      ) : (
-                                        <FileText className="w-3 h-3 flex-shrink-0" />
-                                      )}
-                                      <span className="truncate">{attachment.name}</span>
-                                    </div>
-                                    <a
-                                      href={attachment.url}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-white/60 hover:text-white ml-2 flex-shrink-0"
-                                    >
-                                      <Download className="w-3 h-3" />
-                                    </a>
+                                  <div key={idx}>
+                                    {attachment.type.startsWith('image/') ? (
+                                      // Image preview
+                                      <div className="relative group">
+                                        <a
+                                          href={attachment.url}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="block"
+                                        >
+                                          <img
+                                            src={attachment.url}
+                                            alt={attachment.name}
+                                            className="max-w-full max-h-48 rounded-lg object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                                          />
+                                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                                            <ExternalLink className="w-6 h-6 text-white" />
+                                          </div>
+                                        </a>
+                                        <div className="mt-1 text-xs text-white/60">
+                                          {attachment.name} • {formatFileSize(attachment.size)}
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      // Other file types
+                                      <div className="flex items-center justify-between bg-white/10 rounded-lg px-3 py-2">
+                                        <div className="flex items-center gap-2 text-xs min-w-0">
+                                          <FileText className="w-4 h-4 flex-shrink-0 text-white/60" />
+                                          <div className="min-w-0">
+                                            <p className="truncate font-medium">{attachment.name}</p>
+                                            <p className="text-white/40">{formatFileSize(attachment.size)}</p>
+                                          </div>
+                                        </div>
+                                        <a
+                                          href={attachment.url}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-white/60 hover:text-white ml-2 flex-shrink-0 p-1 hover:bg-white/10 rounded transition-colors"
+                                        >
+                                          <Download className="w-4 h-4" />
+                                        </a>
+                                      </div>
+                                    )}
                                   </div>
                                 ))}
                               </div>
@@ -921,35 +984,49 @@ const MessagingWidget = ({
               <form onSubmit={sendMessage} className="p-3">
                 {/* Selected Files Preview */}
                 {selectedFiles.length > 0 && (
-                  <ScrollArea className="max-h-[80px] mb-2">
-                    <div className="space-y-1 pr-2">
-                      {selectedFiles.map((file, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between bg-white/5 rounded p-1.5 text-xs"
-                        >
-                          <div className="flex items-center gap-1.5 min-w-0">
-                            {file.type.startsWith('image/') ? (
-                              <ImageIcon className="w-3 h-3 text-white/60 flex-shrink-0" />
-                            ) : (
-                              <FileText className="w-3 h-3 text-white/60 flex-shrink-0" />
-                            )}
-                            <div className="min-w-0">
-                              <p className="text-white truncate">{file.name}</p>
-                              <p className="text-white/40">{formatFileSize(file.size)}</p>
-                            </div>
-                          </div>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => removeSelectedFile(index)}
-                            className="text-white/60 hover:text-white h-5 w-5 p-0"
+                  <ScrollArea className="max-h-[120px] mb-2">
+                    <div className="space-y-2 pr-2">
+                      {selectedFiles.map((file, index) => {
+                        const isImage = file.type.startsWith('image/');
+                        const previewUrl = filePreviewUrls.get(file.name);
+                        
+                        return (
+                          <div
+                            key={index}
+                            className="flex items-center gap-2 bg-white/5 rounded p-2"
                           >
-                            <X className="w-3 h-3" />
-                          </Button>
-                        </div>
-                      ))}
+                            {/* File preview */}
+                            {isImage && previewUrl ? (
+                              <img
+                                src={previewUrl}
+                                alt={file.name}
+                                className="w-12 h-12 object-cover rounded flex-shrink-0"
+                              />
+                            ) : (
+                              <div className="w-12 h-12 bg-white/10 rounded flex items-center justify-center flex-shrink-0">
+                                <FileText className="w-6 h-6 text-white/60" />
+                              </div>
+                            )}
+                            
+                            {/* File info */}
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm text-white truncate">{file.name}</p>
+                              <p className="text-xs text-white/40">{formatFileSize(file.size)}</p>
+                            </div>
+                            
+                            {/* Remove button */}
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeSelectedFile(index)}
+                              className="text-white/60 hover:text-white h-6 w-6 p-0 flex-shrink-0"
+                            >
+                              <X className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        );
+                      })}
                     </div>
                   </ScrollArea>
                 )}
