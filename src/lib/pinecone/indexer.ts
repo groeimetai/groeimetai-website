@@ -1,6 +1,6 @@
 import { getIndex } from './client';
 import { generateEmbeddings, chunkText } from '../embeddings/openai';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import matter from 'gray-matter';
 
@@ -29,13 +29,22 @@ export interface IndexableContent {
 // Extract content from different page types
 export async function extractPageContent(
   pagePath: string,
-  locale: 'en' | 'nl'
+  locale: 'en' | 'nl',
+  params?: { slug?: string }
 ): Promise<IndexableContent[]> {
   const content: IndexableContent[] = [];
 
   try {
-    // Read page file
-    const filePath = join(process.cwd(), 'src/app', `[locale]`, pagePath);
+    // Read page.tsx file from the directory
+    const dirPath = join(process.cwd(), 'src/app', `[locale]`, pagePath);
+    const filePath = join(dirPath, 'page.tsx');
+    
+    // Check if file exists
+    if (!existsSync(filePath)) {
+      console.log(`  Page file not found: ${filePath}`);
+      return content;
+    }
+    
     const fileContent = readFileSync(filePath, 'utf-8');
 
     // Extract metadata and content (simplified - would need proper parsing)

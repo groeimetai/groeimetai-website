@@ -5,29 +5,45 @@ import { crawlWebsite } from '../src/lib/pinecone/crawler';
 import { getIndex } from '../src/lib/pinecone/client';
 import type { IndexableContent } from '../src/lib/pinecone/indexer';
 
-// Pages to index
+// Helper functions for extracting dynamic pages
+async function extractServicePage(slug: string, locale: 'en' | 'nl'): Promise<IndexableContent[]> {
+  // Services use [slug] dynamic route
+  return extractPageContent(`/services/[slug]`, locale, { slug });
+}
+
+async function extractCasePage(slug: string, locale: 'en' | 'nl'): Promise<IndexableContent[]> {
+  // Cases use [slug] dynamic route
+  return extractPageContent(`/cases/[slug]`, locale, { slug });
+}
+
+// Pages to index (actual existing pages)
 const PAGES_TO_INDEX = [
   '/about',
   '/services',
-  '/services/ai-consulting',
-  '/services/automation',
-  '/services/data-intelligence',
-  '/services/ml-engineering',
-  '/services/nlp-solutions',
-  '/services/genai-assistants',
-  '/services/small-projects',
-  '/services/strategy',
-  '/services/transformation',
-  '/services/governance',
-  '/services/innovation',
-  '/services/advisory',
-  '/services/adoption',
   '/advisory-services',
   '/cases',
   '/contact',
   '/privacy',
   '/terms',
   '/cookies',
+];
+
+// Dynamic service pages to index
+const SERVICE_SLUGS = [
+  'strategy',
+  'transformation',
+  'governance',
+  'innovation',
+  'advisory',
+  'adoption',
+];
+
+// Dynamic case study pages
+const CASE_SLUGS = [
+  'enterprise-llm-implementation',
+  'snelnotuleren-ai-transcription',
+  'groeimetai-learning-platform',
+  'intelligent-routing-system',
 ];
 
 async function buildSearchIndex() {
@@ -72,6 +88,20 @@ async function buildSearchIndex() {
         for (const page of PAGES_TO_INDEX) {
           console.log(`  - Extracting ${page}`);
           const pageContent = await extractPageContent(page, locale);
+          allContent.push(...pageContent);
+        }
+
+        // Extract service pages
+        for (const slug of SERVICE_SLUGS) {
+          console.log(`  - Extracting /services/${slug}`);
+          const pageContent = await extractServicePage(slug, locale);
+          allContent.push(...pageContent);
+        }
+
+        // Extract case study pages
+        for (const slug of CASE_SLUGS) {
+          console.log(`  - Extracting /cases/${slug}`);
+          const pageContent = await extractCasePage(slug, locale);
           allContent.push(...pageContent);
         }
 

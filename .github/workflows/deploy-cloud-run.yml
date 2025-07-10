@@ -124,7 +124,7 @@ jobs:
           sleep 30
           
           # Run the indexing script
-          npm run build:search-index
+          npm run index:content
           
           echo "✅ Search index built successfully!"
         env:
