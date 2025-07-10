@@ -14,6 +14,7 @@ import {
   doc,
   addDoc,
   deleteDoc,
+  onSnapshot,
   Timestamp,
   serverTimestamp,
 } from 'firebase/firestore';
@@ -126,18 +127,20 @@ export default function AdminQuotesPage() {
     }
   }, [user, isAdmin, loading, router]);
 
-  // Fetch quotes
+  // Fetch quotes - using real-time listener to catch any changes
   useEffect(() => {
     if (!user || !isAdmin) return;
 
-    const fetchQuotes = async () => {
-      setIsLoading(true);
-      try {
-        const quotesQuery = query(collection(db, 'quotes'), orderBy('createdAt', 'desc'));
-        const quotesSnapshot = await getDocs(quotesQuery);
-
+    setIsLoading(true);
+    
+    // Use real-time listener instead of one-time fetch
+    const quotesQuery = query(collection(db, 'quotes'), orderBy('createdAt', 'desc'));
+    
+    const unsubscribe = onSnapshot(
+      quotesQuery,
+      (snapshot) => {
         const quotesData: Quote[] = [];
-        quotesSnapshot.forEach((doc) => {
+        snapshot.forEach((doc) => {
           const quote = { id: doc.id, ...doc.data() } as Quote;
           quotesData.push(quote);
           // Log any quotes that are already rejected
@@ -146,16 +149,18 @@ export default function AdminQuotesPage() {
           }
         });
 
-        console.log(`Fetched ${quotesData.length} quotes total`);
+        console.log(`Real-time update: ${quotesData.length} quotes total`);
         setQuotes(quotesData);
-      } catch (error) {
+        setIsLoading(false);
+      },
+      (error) => {
         console.error('Error fetching quotes:', error);
-      } finally {
         setIsLoading(false);
       }
-    };
+    );
 
-    fetchQuotes();
+    // Cleanup subscription
+    return () => unsubscribe();
   }, [user, isAdmin]);
 
   // Filter and sort quotes

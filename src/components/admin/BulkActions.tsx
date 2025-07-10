@@ -353,7 +353,10 @@ export function BulkActions({
                       <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() => handleAction('delete')}
+                        onClick={() => {
+                          console.log('Delete button clicked directly');
+                          handleAction('delete');
+                        }}
                         disabled={isProcessing}
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
