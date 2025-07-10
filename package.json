@@ -12,8 +12,8 @@
     "typecheck": "tsc --noEmit --skipLibCheck",
     "websocket": "node server/websocket.js",
     "setup-admin": "node scripts/setup-admin-accounts.js",
-    "build:search-index": "tsx scripts/build-search-index.ts",
-    "index:content": "tsx scripts/generate-content-index.ts"
+    "build:search-index": "npx tsx scripts/build-search-index.ts",
+    "index:content": "npx tsx scripts/generate-content-index.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.5.0",
