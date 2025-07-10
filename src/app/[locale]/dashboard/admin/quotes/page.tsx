@@ -138,9 +138,15 @@ export default function AdminQuotesPage() {
 
         const quotesData: Quote[] = [];
         quotesSnapshot.forEach((doc) => {
-          quotesData.push({ id: doc.id, ...doc.data() } as Quote);
+          const quote = { id: doc.id, ...doc.data() } as Quote;
+          quotesData.push(quote);
+          // Log any quotes that are already rejected
+          if (quote.status === 'rejected') {
+            console.log('Found rejected quote:', quote.id, quote.projectName);
+          }
         });
 
+        console.log(`Fetched ${quotesData.length} quotes total`);
         setQuotes(quotesData);
       } catch (error) {
         console.error('Error fetching quotes:', error);

@@ -114,6 +114,8 @@ export function BulkActions({
   // Execute action
   const executeAction = useCallback(
     async (action: BulkActionType, data?: any) => {
+      console.log('BulkActions executeAction called:', action, data);
+      console.log('Selected IDs:', Array.from(selectedIds));
       setIsProcessing(true);
       setProgress({
         total: selectedIds.size,
@@ -134,6 +136,7 @@ export function BulkActions({
           });
         }, 100);
 
+        console.log('Calling onAction with:', action, { ids: Array.from(selectedIds), ...data });
         await onAction(action, { ids: Array.from(selectedIds), ...data });
 
         clearInterval(updateInterval);
@@ -170,7 +173,9 @@ export function BulkActions({
   // Handle actions
   const handleAction = useCallback(
     async (action: BulkActionType, data?: any) => {
+      console.log('BulkActions handleAction called:', action, data);
       if (action === 'delete' || action === 'archive') {
+        console.log('Setting up confirmation dialog for:', action);
         setPendingAction(action);
         setActionData(data);
         setIsConfirmOpen(true);
@@ -403,7 +408,12 @@ export function BulkActions({
             </Button>
             <Button
               variant={pendingAction === 'delete' ? 'destructive' : 'default'}
-              onClick={() => pendingAction && executeAction(pendingAction, actionData)}
+              onClick={() => {
+                console.log('Confirmation dialog button clicked, pendingAction:', pendingAction, 'actionData:', actionData);
+                if (pendingAction) {
+                  executeAction(pendingAction, actionData);
+                }
+              }}
             >
               {isProcessing && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
               {pendingAction === 'delete' ? 'Delete' : 'Archive'}
