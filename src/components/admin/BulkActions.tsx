@@ -293,7 +293,7 @@ export function BulkActions({
                         <SelectTrigger className="w-[140px]" disabled={isProcessing}>
                           <SelectValue placeholder="Update status" />
                         </SelectTrigger>
-                        <SelectContent position="popper" side="top" align="start" sideOffset={5}>
+                        <SelectContent position="top">
                           {statusOptions.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
                               {option.label}
@@ -310,7 +310,7 @@ export function BulkActions({
                         <SelectTrigger className="w-[140px]" disabled={isProcessing}>
                           <SelectValue placeholder="Assign to" />
                         </SelectTrigger>
-                        <SelectContent position="popper" side="top" align="start" sideOffset={5}>
+                        <SelectContent position="top">
                           {assigneeOptions.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
                               {option.label}

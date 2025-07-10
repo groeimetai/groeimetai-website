@@ -63,26 +63,32 @@ const SelectValue = ({ placeholder }: { placeholder?: string }) => {
   return <span>{value || placeholder || 'Select...'}</span>;
 };
 
-const SelectContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, children, ...props }, ref) => {
-    const { open } = React.useContext(SelectContext);
+const SelectContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & { position?: 'top' | 'bottom' }
+>(({ className, children, position = 'bottom', ...props }, ref) => {
+  const { open } = React.useContext(SelectContext);
 
-    if (!open) return null;
+  if (!open) return null;
 
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          'absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95',
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  }
-);
+  const positionClasses = position === 'top' 
+    ? 'bottom-full mb-1' 
+    : 'top-full mt-1';
+
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        'absolute z-50 max-h-60 w-full overflow-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95',
+        positionClasses,
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+});
 SelectContent.displayName = 'SelectContent';
 
 const SelectItem = React.forwardRef<
