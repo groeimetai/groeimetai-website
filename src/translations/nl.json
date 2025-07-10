@@ -31,22 +31,22 @@
       "strategy": {
         "title": "AI Strategie & Roadmap",
         "description": "Definieer uw AI-visie en creëer uitvoerbare roadmaps die technologie-investeringen afstemmen op bedrijfsdoelstellingen en meetbare ROI.",
-        "features": ["Executive Advisory", "Kansen Assessment", "Strategische Planning"]
+        "features": ["Directie Advies", "Kansen Analyse", "Strategische Planning"]
       },
       "transformation": {
         "title": "Digitale Transformatie",
         "description": "Navigeer door complexe digitale ecosystemen met uitgebreide transformatiestrategieën gericht op procesoptimalisatie en kostenefficiëntie.",
-        "features": ["Operating Model Ontwerp", "Proces Herontwerp", "Waarde Realisatie"]
+        "features": ["Operating Model Ontwerp", "Proces Herontwerp", "Waarderealisatie"]
       },
       "governance": {
         "title": "Risico & Governance",
         "description": "Etableer verantwoorde AI-kaders die innovatie balanceren met ethiek, compliance en beveiliging.",
-        "features": ["AI Ethiek Framework", "Regelgevende Compliance", "Risicomanagement"]
+        "features": ["AI Ethisch Kader", "Wet- en Regelgeving Compliance", "Risicomanagement"]
       },
       "innovation": {
         "title": "Innovatie Labs",
         "description": "Versnel innovatie door strategische pilots en proof-of-concepts die duidelijke bedrijfswaarde en ROI aantonen.",
-        "features": ["Use Case Ontdekking", "Pilot Programma's", "Innovatie Workshops"]
+        "features": ["Use Case Ontdekking", "Pilot Programma's", "Innovatieworkshops"]
       },
       "advisory": {
         "title": "Technologie Advisory",
@@ -56,7 +56,7 @@
       "adoption": {
         "title": "Verandering & Adoptie",
         "description": "Zorg voor succesvolle AI-adoptie door uitgebreid verandermanagement en capaciteitsopbouw.",
-        "features": ["Leadership Alignment", "Cultuur Transformatie", "Vaardigheden Ontwikkeling"]
+        "features": ["Leiderschap Afstemming", "Cultuurtransformatie", "Competentieontwikkeling"]
       }
     }
   },
@@ -74,19 +74,19 @@
       "title": "Onze Aanpak",
       "steps": {
         "discovery": {
-          "title": "Discovery",
+          "title": "Ontdekking",
           "description": "We analyseren uw bedrijfsprocessen en identificeren high-impact AI-kansen voor optimalisatie"
         },
         "strategy": {
-          "title": "Strategy",
+          "title": "Strategie",
           "description": "Ontwikkeling van op maat gemaakte AI-strategie afgestemd op uw bedrijfsdoelen en ROI-targets"
         },
         "implementation": {
-          "title": "Implementation",
+          "title": "Implementatie",
           "description": "Stapsgewijze implementatie met bewezen methodologieën"
         },
         "optimization": {
-          "title": "Optimization",
+          "title": "Optimalisatie",
           "description": "Continue verbetering en schaalbaarheid van AI-oplossingen"
         }
       }
@@ -99,7 +99,7 @@
           "Strategisch advies gericht op meetbare bedrijfsresultaten",
           "Diepgaande expertise in AI-strategie en business transformatie",
           "Strategische partnerschappen met toonaangevende technologieleveranciers",
-          "Focus op Nederlandse markt en regelgeving"
+          "Focus op Europese markt en regelgeving"
         ]
       },
       "approach": {
@@ -135,7 +135,7 @@
     "moreInfo": "Meer Informatie",
     "genai": {
       "title": "GenAI Consultancy",
-      "subtitle": "Strategische Generative AI Implementatie",
+      "subtitle": "Strategische Generatieve AI Implementatie",
       "description": "Transformeer uw organisatie met cutting-edge Generative AI technologie.",
       "longDescription": "Onze GenAI consultancy service helpt organisaties bij het navigeren door het complexe landschap van generative AI. Van strategische planning tot implementatie, wij begeleiden u bij elke stap om maximale waarde uit AI te halen.",
       "benefits": [
@@ -165,28 +165,28 @@
       ],
       "process": [
         {
-          "title": "Assessment",
+          "title": "Analyse",
           "description": "Evaluatie van uw huidige situatie en AI-readiness"
         },
         {
-          "title": "Strategy Design",
+          "title": "Strategie Ontwerp",
           "description": "Ontwikkeling van een comprehensive AI-strategie"
         },
         {
-          "title": "Pilot Project",
+          "title": "Pilotproject",
           "description": "Implementatie van een pilot voor validatie"
         },
         {
-          "title": "Scaling",
+          "title": "Opschaling",
           "description": "Uitrol en schaling van succesvolle AI-initiatieven"
         }
       ],
       "deliverables": [
-        "AI Readiness Assessment Report",
-        "Strategic AI Roadmap",
-        "Business Case & ROI Analysis",
-        "Implementation Plan",
-        "Training & Change Management Plan"
+        "AI Gereedheidsanalyse Rapport",
+        "Strategische AI Roadmap",
+        "Business Case & ROI Analyse",
+        "Implementatieplan",
+        "Training & Verandermanagement Plan"
       ],
       "technologies": ["OpenAI GPT-4", "Claude 3", "Google Gemini", "Custom Models", "Fine-tuning"],
       "duration": "8-12 weken"
@@ -197,10 +197,10 @@
       "description": "Integreer de kracht van moderne taalmodellen in uw systemen.",
       "longDescription": "Onze LLM integratie service biedt end-to-end oplossingen voor het implementeren van Large Language Models in uw enterprise omgeving. Van API integratie tot custom model deployment.",
       "benefits": [
-        "Geautomatiseerde content generatie",
+        "Geautomatiseerde contentgeneratie",
         "Intelligente chatbots en assistenten",
         "Verbeterde data analyse",
-        "Multi-language support",
+        "Meertalige ondersteuning",
         "Real-time verwerking"
       ],
       "features": [
@@ -223,28 +223,28 @@
       ],
       "process": [
         {
-          "title": "Requirements Analysis",
+          "title": "Vereisten Analyse",
           "description": "Gedetailleerde analyse van uw LLM behoeften"
         },
         {
-          "title": "Architecture Design",
+          "title": "Architectuur Ontwerp",
           "description": "Ontwerp van schaalbare LLM architectuur"
         },
         {
-          "title": "Integration",
+          "title": "Integratie",
           "description": "Implementatie en integratie met bestaande systemen"
         },
         {
-          "title": "Optimization",
+          "title": "Optimalisatie",
           "description": "Performance tuning en cost optimization"
         }
       ],
       "deliverables": [
-        "Technical Architecture Document",
-        "API Documentation",
-        "Integration Guidelines",
-        "Performance Benchmarks",
-        "Maintenance Manual"
+        "Technisch Architectuur Document",
+        "API Documentatie",
+        "Integratierichtlijnen",
+        "Prestatiebenchmarks",
+        "Onderhoudshandleiding"
       ],
       "technologies": ["Claude API", "OpenAI API", "Gemini API", "LangChain", "Vector Databases"],
       "duration": "6-10 weken"
@@ -257,7 +257,7 @@
       "benefits": [
         "Accurate, contextrijke antwoorden",
         "Gebruik van eigen bedrijfskennis",
-        "Reduced hallucinations",
+        "Verminderde hallucinaties",
         "Real-time updates mogelijk",
         "Schaalbare kennissystemen"
       ],
@@ -281,28 +281,28 @@
       ],
       "process": [
         {
-          "title": "Data Analysis",
+          "title": "Data Analyse",
           "description": "Analyse van uw kennisbronnen en data"
         },
         {
-          "title": "Architecture Design",
+          "title": "Architectuur Ontwerp",
           "description": "Ontwerp van optimale RAG pipeline"
         },
         {
-          "title": "Implementation",
+          "title": "Implementatie",
           "description": "Bouw en configuratie van RAG systeem"
         },
         {
-          "title": "Validation",
+          "title": "Validatie",
           "description": "Testing en validatie van accuracy"
         }
       ],
       "deliverables": [
-        "RAG Architecture Blueprint",
-        "Data Processing Pipeline",
-        "Search & Retrieval System",
-        "Performance Metrics",
-        "Maintenance Guide"
+        "RAG Architectuur Blauwdruk",
+        "Dataverwerkingspijplijn",
+        "Zoek- & Ophaalsysteem",
+        "Prestatiemetrieken",
+        "Onderhoudshandleiding"
       ],
       "technologies": ["Pinecone", "Weaviate", "ChromaDB", "LlamaIndex", "Embeddings Models"],
       "duration": "8-14 weken"
@@ -314,10 +314,10 @@
       "longDescription": "Onze ServiceNow AI services combineren de kracht van het ServiceNow platform met cutting-edge AI capabilities voor geautomatiseerde, intelligente workflows.",
       "benefits": [
         "Geautomatiseerde ticket routing",
-        "Predictive incident management",
+        "Voorspellend incidentbeheer",
         "Intelligente virtual agents",
         "Verbeterde employee experience",
-        "Data-driven insights"
+        "Datagedreven inzichten"
       ],
       "features": [
         {
@@ -334,33 +334,33 @@
         },
         {
           "title": "Process Mining",
-          "description": "AI-driven process optimization"
+          "description": "AI-gedreven procesoptimalisatie"
         }
       ],
       "process": [
         {
-          "title": "Platform Assessment",
+          "title": "Platform Analyse",
           "description": "Evaluatie van huidige ServiceNow setup"
         },
         {
-          "title": "AI Strategy",
+          "title": "AI Strategie",
           "description": "Ontwikkeling van AI use cases"
         },
         {
-          "title": "Implementation",
+          "title": "Implementatie",
           "description": "Configuratie en deployment"
         },
         {
-          "title": "Adoption",
+          "title": "Adoptie",
           "description": "Training en change management"
         }
       ],
       "deliverables": [
-        "ServiceNow AI Assessment",
-        "Implementation Plan",
-        "Configured AI Solutions",
-        "Training Materials",
-        "Best Practices Guide"
+        "ServiceNow AI Analyse",
+        "Implementatieplan",
+        "Geconfigureerde AI Oplossingen",
+        "Trainingsmateriaal",
+        "Best Practices Handleiding"
       ],
       "technologies": [
         "ServiceNow Now Assist",
@@ -402,28 +402,28 @@
       ],
       "process": [
         {
-          "title": "Task Analysis",
+          "title": "Taakanalyse",
           "description": "Decompositie van complexe taken"
         },
         {
-          "title": "Agent Design",
+          "title": "Agent Ontwerp",
           "description": "Ontwerp van gespecialiseerde agents"
         },
         {
-          "title": "Orchestration Build",
+          "title": "Orchestratie Opbouw",
           "description": "Implementatie van orchestratie layer"
         },
         {
-          "title": "System Integration",
+          "title": "Systeemintegratie",
           "description": "Integratie met enterprise systemen"
         }
       ],
       "deliverables": [
-        "Multi-Agent Architecture",
-        "Agent Specifications",
-        "Orchestration Platform",
+        "Multi-Agent Architectuur",
+        "Agent Specificaties",
+        "Orchestratieplatform",
         "Monitoring Dashboard",
-        "Operations Manual"
+        "Operationeel Handboek"
       ],
       "technologies": ["LangChain", "AutoGen", "CrewAI", "Custom Frameworks", "Message Queues"],
       "duration": "12-20 weken"
@@ -468,7 +468,7 @@
           "description": "Evaluatie tegen regelgeving"
         },
         {
-          "title": "Implementation",
+          "title": "Implementatie",
           "description": "Security measures en controls"
         },
         {
@@ -477,11 +477,11 @@
         }
       ],
       "deliverables": [
-        "Security Assessment Report",
+        "Beveiligingsanalyse Rapport",
         "Compliance Roadmap",
-        "Governance Framework",
-        "Policy Documents",
-        "Training Program"
+        "Governance Raamwerk",
+        "Beleidsdocumenten",
+        "Trainingsprogramma"
       ],
       "technologies": [
         "Security Frameworks",
@@ -1009,6 +1009,37 @@
       "backToLogin": "Terug naar Inloggen"
     }
   },
+  "errorPages": {
+    "404": {
+      "title": "Pagina Niet Gevonden",
+      "heading": "Oeps! Deze pagina bestaat niet.",
+      "message": "De pagina die u zoekt is mogelijk verplaatst, hernoemd of bestaat niet.",
+      "backHome": "Terug naar home",
+      "contactSupport": "Contact support"
+    },
+    "500": {
+      "title": "Server Fout",
+      "heading": "Er is iets misgegaan aan onze kant.",
+      "message": "We ondervinden technische problemen. Ons team is op de hoogte gesteld en werkt aan een oplossing.",
+      "tryAgain": "Probeer opnieuw",
+      "backHome": "Terug naar home",
+      "statusPage": "Bekijk status pagina"
+    },
+    "403": {
+      "title": "Toegang Geweigerd",
+      "heading": "U heeft geen toestemming om deze pagina te bekijken.",
+      "message": "Controleer uw inloggegevens of neem contact op met uw beheerder voor toegang.",
+      "backHome": "Terug naar home",
+      "login": "Ga naar inloggen"
+    },
+    "maintenance": {
+      "title": "Onderhoudsmodus",
+      "heading": "We zijn zo terug!",
+      "message": "We voeren gepland onderhoud uit. Probeer het over een paar minuten opnieuw.",
+      "estimatedTime": "Geschatte downtime: 30 minuten",
+      "contactInfo": "Voor dringende zaken, contacteer ons op support@groeimetai.io"
+    }
+  },
   "contact": {
     "pageTitle": "Neem Contact Op",
     "pageDescription": "Klaar om uw AI-transformatie te starten? Wij helpen u graag verder.",
@@ -1071,6 +1102,35 @@
       "amsterdam": "Apeldoorn, Nederland",
       "businessHours": "Ma-Vr: 9:00 - 18:00"
     }
+  },
+  "cookieBanner": {
+    "title": "Wij waarderen uw privacy",
+    "description": "Wij gebruiken cookies om uw browse-ervaring te verbeteren, gepersonaliseerde content te tonen en ons verkeer te analyseren. Door op 'Alles Accepteren' te klikken, stemt u in met ons gebruik van cookies.",
+    "acceptAll": "Alles Accepteren",
+    "rejectAll": "Alles Weigeren",
+    "customize": "Aanpassen",
+    "save": "Voorkeuren Opslaan",
+    "settings": {
+      "title": "Cookie Instellingen",
+      "description": "Kies welke cookies u wilt accepteren. Essentiële cookies kunnen niet worden uitgeschakeld omdat ze noodzakelijk zijn voor het functioneren van de website.",
+      "essential": {
+        "title": "Essentiële Cookies",
+        "description": "Deze cookies zijn noodzakelijk voor het functioneren van de website en kunnen niet worden uitgeschakeld."
+      },
+      "functional": {
+        "title": "Functionele Cookies",
+        "description": "Deze cookies maken gepersonaliseerde functies mogelijk en onthouden uw voorkeuren."
+      },
+      "analytical": {
+        "title": "Analytische Cookies",
+        "description": "Deze cookies helpen ons begrijpen hoe bezoekers met onze website omgaan."
+      },
+      "marketing": {
+        "title": "Marketing Cookies",
+        "description": "Deze cookies worden gebruikt om relevante advertenties te leveren en de effectiviteit van campagnes te meten."
+      }
+    },
+    "readMore": "Lees ons cookiebeleid"
   },
   "brochure": {
     "coverTitle": "Transformeer Uw Bedrijf met Strategische AI",
@@ -1335,6 +1395,59 @@
       },
       "nextMilestone": "Volgende Mijlpaal",
       "mvpDeployment": "MVP-implementatie gepland voor volgende week"
+    },
+    "navigation": {
+      "dashboard": "Dashboard",
+      "messages": "Berichten",
+      "projects": "Projecten",
+      "consultations": "Consultaties",
+      "settings": "Instellingen",
+      "helpSupport": "Help & Ondersteuning"
+    },
+    "userMenu": {
+      "profile": "Profiel",
+      "settings": "Instellingen",
+      "logout": "Uitloggen",
+      "loggingOut": "Uitloggen..."
+    },
+    "overview": {
+      "welcomeBack": "Welkom terug, {name}!",
+      "subtitle": "Dit is wat er gaande is met uw projecten en consultaties.",
+      "stats": {
+        "activeProjects": "Actieve Projecten",
+        "messages": "Berichten",
+        "consultations": "Consultaties",
+        "teamMembers": "Teamleden",
+        "fromLastMonth": "van vorige maand"
+      },
+      "recentProjects": {
+        "title": "Recente Projecten",
+        "description": "Uw actieve en recente projecten",
+        "viewAll": "Bekijk Alle Projecten"
+      },
+      "upcomingConsultations": {
+        "title": "Komende Consultaties",
+        "description": "Uw geplande vergaderingen en consultaties",
+        "viewCalendar": "Bekijk Kalender",
+        "today": "Vandaag",
+        "tomorrow": "Morgen"
+      },
+      "quickActions": {
+        "title": "Snelle Acties",
+        "description": "Veelvoorkomende taken en acties",
+        "newProject": "Nieuw Project",
+        "scheduleConsultation": "Plan Consultatie",
+        "sendMessage": "Verstuur Bericht",
+        "inviteTeamMember": "Nodig Teamlid Uit"
+      }
+    },
+    "adminSupport": {
+      "supportChatWith": "Support Chat met {userName}",
+      "respondToInquiries": "Reageer op klantvragen",
+      "noMessages": "Nog geen berichten in dit gesprek.",
+      "typeMessage": "Typ uw bericht...",
+      "justNow": "Zojuist",
+      "admin": "Admin"
     },
     "messaging": {
       "title": "GroeimetAI Team",

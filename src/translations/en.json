@@ -1319,6 +1319,66 @@
       }
     }
   },
+  "errorPages": {
+    "404": {
+      "title": "Page Not Found",
+      "heading": "Oops! This page doesn't exist.",
+      "message": "The page you're looking for might have been moved, renamed, or doesn't exist.",
+      "backHome": "Go back home",
+      "contactSupport": "Contact support"
+    },
+    "500": {
+      "title": "Server Error",
+      "heading": "Something went wrong on our end.",
+      "message": "We're experiencing technical difficulties. Our team has been notified and is working on a fix.",
+      "tryAgain": "Try again",
+      "backHome": "Go back home",
+      "statusPage": "Check status page"
+    },
+    "403": {
+      "title": "Access Denied",
+      "heading": "You don't have permission to access this page.",
+      "message": "Please check your credentials or contact your administrator for access.",
+      "backHome": "Go back home",
+      "login": "Go to login"
+    },
+    "maintenance": {
+      "title": "Maintenance Mode",
+      "heading": "We'll be back soon!",
+      "message": "We're performing scheduled maintenance. Please check back in a few minutes.",
+      "estimatedTime": "Estimated downtime: 30 minutes",
+      "contactInfo": "For urgent matters, contact us at support@groeimetai.io"
+    }
+  },
+  "cookieBanner": {
+    "title": "We value your privacy",
+    "description": "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking 'Accept All', you consent to our use of cookies.",
+    "acceptAll": "Accept All",
+    "rejectAll": "Reject All",
+    "customize": "Customize",
+    "save": "Save Preferences",
+    "settings": {
+      "title": "Cookie Settings",
+      "description": "Choose which cookies you want to accept. Essential cookies cannot be disabled as they are necessary for the website to function properly.",
+      "essential": {
+        "title": "Essential Cookies",
+        "description": "These cookies are necessary for the website to function and cannot be switched off."
+      },
+      "functional": {
+        "title": "Functional Cookies",
+        "description": "These cookies enable personalized features and remember your preferences."
+      },
+      "analytical": {
+        "title": "Analytical Cookies",
+        "description": "These cookies help us understand how visitors interact with our website."
+      },
+      "marketing": {
+        "title": "Marketing Cookies",
+        "description": "These cookies are used to deliver relevant advertisements and track campaign effectiveness."
+      }
+    },
+    "readMore": "Read our cookie policy"
+  },
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome back, {name}!",
@@ -1345,6 +1405,59 @@
       },
       "nextMilestone": "Next Milestone",
       "mvpDeployment": "MVP deployment scheduled for next week"
+    },
+    "navigation": {
+      "dashboard": "Dashboard",
+      "messages": "Messages",
+      "projects": "Projects",
+      "consultations": "Consultations",
+      "settings": "Settings",
+      "helpSupport": "Help & Support"
+    },
+    "userMenu": {
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Log out",
+      "loggingOut": "Logging out..."
+    },
+    "overview": {
+      "welcomeBack": "Welcome back, {name}!",
+      "subtitle": "Here's what's happening with your projects and consultations.",
+      "stats": {
+        "activeProjects": "Active Projects",
+        "messages": "Messages",
+        "consultations": "Consultations",
+        "teamMembers": "Team Members",
+        "fromLastMonth": "from last month"
+      },
+      "recentProjects": {
+        "title": "Recent Projects",
+        "description": "Your active and recent projects",
+        "viewAll": "View All Projects"
+      },
+      "upcomingConsultations": {
+        "title": "Upcoming Consultations",
+        "description": "Your scheduled meetings and consultations",
+        "viewCalendar": "View Calendar",
+        "today": "Today",
+        "tomorrow": "Tomorrow"
+      },
+      "quickActions": {
+        "title": "Quick Actions",
+        "description": "Common tasks and actions",
+        "newProject": "New Project",
+        "scheduleConsultation": "Schedule Consultation",
+        "sendMessage": "Send Message",
+        "inviteTeamMember": "Invite Team Member"
+      }
+    },
+    "adminSupport": {
+      "supportChatWith": "Support Chat with {userName}",
+      "respondToInquiries": "Respond to customer inquiries",
+      "noMessages": "No messages yet in this conversation.",
+      "typeMessage": "Type your message...",
+      "justNow": "Just now",
+      "admin": "Admin"
     },
     "messaging": {
       "title": "GroeimetAI Team",
