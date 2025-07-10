@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { checkRateLimit, validateChatContent, getClientIp } from '@/lib/rate-limiter';
 import { addSecurityHeaders } from '@/lib/security-headers';
+import { searchContent } from '@/lib/pinecone/search';
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
@@ -68,15 +69,42 @@ export async function POST(request: NextRequest) {
     // Preview models require special access
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
+    // Search for relevant context in Pinecone if available
+    let ragContext = '';
+    if (process.env.PINECONE_API_KEY && process.env.OPENAI_API_KEY) {
+      try {
+        const searchResults = await searchContent({
+          query: message,
+          locale: 'nl', // Default to Dutch
+          limit: 3, // Get top 3 most relevant results
+          includeContext: true, // Get RAG response
+        });
+
+        if (searchResults.context) {
+          ragContext = searchResults.context;
+        } else if (searchResults.results.length > 0) {
+          // Fallback to concatenating search results if no context
+          ragContext = searchResults.results
+            .map((r) => `${r.title}: ${r.description}\n${r.highlight}`)
+            .join('\n\n');
+        }
+      } catch (error) {
+        console.error('RAG search error:', error);
+        // Continue without RAG context if search fails
+      }
+    }
+
     // Create context for the chatbot
     const context = `Je bent de behulpzame assistent van GroeimetAI. Je helpt gebruikers onze AI consultancy diensten te begrijpen, waaronder:
 - GenAI & LLM implementatie
 - ServiceNow AI integratie 
 - Multi-agent orchestration systemen
 - RAG architectuur design
-- Kleine projecten (websites, apps, extensies)
+- Maatwerk AI Oplossingen (voorheen kleine projecten)
 
 Wees vriendelijk, professioneel en gefocust op hoe we hun bedrijf kunnen transformeren met AI. Houd antwoorden beknopt en actiegerecht. Antwoord ALTIJD in het Nederlands.
+
+${ragContext ? `Relevante informatie uit onze kennisbank:\n${ragContext}\n\n` : ''}
 
 Vorig gesprek:
 ${limitedHistory?.map((msg: any) => `${msg.role}: ${msg.content}`).join('\n') || 'Geen'}

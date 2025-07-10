@@ -103,3 +103,30 @@ jobs:
         run: |
           echo "🚀 Deployed to Cloud Run!"
           echo "Service URL: $(gcloud run services describe ${{ env.SERVICE }} --region ${{ env.REGION }} --format 'value(status.url)')"
+      
+      - name: Build Search Index
+        run: |
+          echo "🔍 Building search index for Pinecone..."
+          
+          # Set environment based on branch
+          if [[ "${{ github.ref }}" == "refs/heads/production" ]]; then
+            export INDEX_ENVIRONMENT="production"
+            export BASE_URL="https://app.groeimetai.io"
+          else
+            export INDEX_ENVIRONMENT="staging"
+            export BASE_URL="$(gcloud run services describe ${{ env.SERVICE }} --region ${{ env.REGION }} --format 'value(status.url)')"
+          fi
+          
+          echo "Indexing $INDEX_ENVIRONMENT environment at $BASE_URL"
+          
+          # Wait for deployment to stabilize
+          echo "Waiting 30 seconds for deployment to stabilize..."
+          sleep 30
+          
+          # Run the indexing script
+          npm run build:search-index
+          
+          echo "✅ Search index built successfully!"
+        env:
+          PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
