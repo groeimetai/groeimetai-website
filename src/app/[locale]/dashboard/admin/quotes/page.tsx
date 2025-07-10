@@ -344,15 +344,19 @@ export default function AdminQuotesPage() {
 
   // Handle bulk actions
   const handleBulkAction = async (action: BulkActionType, data?: any) => {
+    console.log('handleBulkAction called with action:', action, 'data:', data);
     try {
       switch (action) {
         case 'delete':
+          console.log('Delete action triggered for quotes:', data.ids);
           // Actually delete the quotes from Firestore
           for (const quoteId of data.ids) {
+            console.log('Deleting quote:', quoteId);
             await deleteDoc(doc(db, 'quotes', quoteId));
           }
           // Remove from local state
           setQuotes(quotes.filter((q) => !data.ids.includes(q.id)));
+          console.log('Quotes deleted successfully');
           break;
 
         case 'updateStatus':
