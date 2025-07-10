@@ -150,6 +150,7 @@ export default function AdminProjectDetailPage() {
             categories: data.categories || [],
             technologies: data.technologies || [],
             documentIds: data.documentIds || [],
+            meetingIds: data.meetingIds || [],
             createdAt: data.createdAt?.toDate() || new Date(),
             updatedAt: data.updatedAt?.toDate() || new Date(),
             createdBy: data.createdBy || data.userId || '',
