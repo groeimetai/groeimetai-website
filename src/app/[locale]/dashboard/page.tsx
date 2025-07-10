@@ -264,8 +264,8 @@ export default function DashboardPage() {
 
       if (snapshot && !snapshot.empty) {
         // Find the first approved quote
-        let approvedQuote = null;
-        let latestQuote = null;
+        let approvedQuote: any = null;
+        let latestQuote: any = null;
 
         for (const doc of snapshot.docs) {
           const data = doc.data();

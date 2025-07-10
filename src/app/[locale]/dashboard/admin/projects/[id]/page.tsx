@@ -594,7 +594,7 @@ export default function AdminProjectDetailPage() {
                           variant="ghost"
                           onClick={() => {
                             // TODO: Edit deliverables
-                            toast.info('Edit functionality coming soon');
+                            toast('Edit functionality coming soon');
                           }}
                         >
                           <Edit className="w-3 h-3 mr-1" />
@@ -606,7 +606,7 @@ export default function AdminProjectDetailPage() {
                           className="text-red-500 hover:text-red-400"
                           onClick={() => {
                             // TODO: Remove milestone
-                            toast.info('Remove functionality coming soon');
+                            toast('Remove functionality coming soon');
                           }}
                         >
                           <Trash2 className="w-3 h-3 mr-1" />

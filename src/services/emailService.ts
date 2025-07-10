@@ -1,5 +1,5 @@
 import { createTransporter, emailConfig, verifyEmailConnection } from '@/lib/email/config';
-import { getEmailTemplate } from '@/lib/email/templates';
+import { getEmailTemplate } from '@/lib/email/templates/index';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
