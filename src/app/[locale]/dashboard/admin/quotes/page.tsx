@@ -39,6 +39,7 @@ import {
   Loader2,
   AlertCircle,
   ArrowUpDown,
+  Trash2,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -808,6 +809,39 @@ export default function AdminQuotesPage() {
                               }}
                             >
                               <Mail className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={async () => {
+                                console.log('Individual delete clicked for quote:', quote.id);
+                                
+                                // First test: try to read the quote
+                                try {
+                                  const testDoc = await getDoc(doc(db, 'quotes', quote.id));
+                                  console.log('Can read quote:', testDoc.exists());
+                                  if (testDoc.exists()) {
+                                    console.log('Quote data:', testDoc.data());
+                                  }
+                                } catch (readError: any) {
+                                  console.error('Cannot even read quote:', readError);
+                                }
+                                
+                                // Now try to delete
+                                try {
+                                  await deleteDoc(doc(db, 'quotes', quote.id));
+                                  console.log('Individual delete successful');
+                                  toast.success('Quote deleted successfully');
+                                } catch (error: any) {
+                                  console.error('Individual delete failed:', error);
+                                  console.error('Error code:', error?.code);
+                                  console.error('Error message:', error?.message);
+                                  toast.error(`Failed to delete: ${error?.message || 'Unknown error'}`);
+                                }
+                              }}
+                              className="text-red-500 hover:text-red-700"
+                            >
+                              <Trash2 className="w-4 h-4" />
                             </Button>
                             {quote.status === 'pending' && (
                               <>
