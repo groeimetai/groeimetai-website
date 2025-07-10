@@ -108,6 +108,10 @@ jobs:
         run: |
           echo "🔍 Building search index for Pinecone..."
           
+          # Install required dependencies for indexing
+          echo "Installing dependencies for indexing script..."
+          npm install @pinecone-database/pinecone openai
+          
           # Set environment based on branch
           if [[ "${{ github.ref }}" == "refs/heads/production" ]]; then
             export INDEX_ENVIRONMENT="production"
