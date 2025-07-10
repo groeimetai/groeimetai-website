@@ -13,6 +13,7 @@ import {
   updateDoc,
   doc,
   addDoc,
+  deleteDoc,
   Timestamp,
   serverTimestamp,
 } from 'firebase/firestore';
@@ -346,12 +347,11 @@ export default function AdminQuotesPage() {
     try {
       switch (action) {
         case 'delete':
+          // Actually delete the quotes from Firestore
           for (const quoteId of data.ids) {
-            await updateDoc(doc(db, 'quotes', quoteId), {
-              status: 'rejected',
-              updatedAt: serverTimestamp(),
-            });
+            await deleteDoc(doc(db, 'quotes', quoteId));
           }
+          // Remove from local state
           setQuotes(quotes.filter((q) => !data.ids.includes(q.id)));
           break;
 
