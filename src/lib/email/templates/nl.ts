@@ -309,6 +309,229 @@ Bekijk meeting aanvraag: ${process.env.NEXT_PUBLIC_APP_URL}/dashboard/consultati
 Dit is een automatische notificatie van GroeimetAI.
       `,
     }),
+
+    // Email template voor het versturen van facturen (naar klant)
+    sendInvoice: (data: EmailTemplateData) => ({
+      subject: `Factuur #${data.invoice?.invoiceNumber} van GroeimetAI`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              .header { background-color: #FF6600; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
+              .content { background-color: #f4f4f4; padding: 20px; border-radius: 0 0 5px 5px; }
+              .invoice-details { background-color: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
+              .amount { font-size: 24px; font-weight: bold; color: #FF6600; }
+              .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+              .button { display: inline-block; padding: 10px 20px; background-color: #FF6600; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>Factuur</h1>
+              </div>
+              <div class="content">
+                <p>Beste ${data.recipientName || 'klant'},</p>
+                <p>Hierbij ontvangt u uw factuur van GroeimetAI.</p>
+                
+                <div class="invoice-details">
+                  <p><strong>Factuurnummer:</strong> ${data.invoice?.invoiceNumber}</p>
+                  <p><strong>Datum:</strong> ${new Date(data.invoice?.createdAt || Date.now()).toLocaleDateString('nl-NL')}</p>
+                  <p><strong>Vervaldatum:</strong> ${new Date(data.invoice?.dueDate || Date.now()).toLocaleDateString('nl-NL')}</p>
+                  <p class="amount">Totaal: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}</p>
+                </div>
+                
+                ${data.pdfUrl ? `
+                  <p style="margin-top: 20px;">
+                    <a href="${data.pdfUrl}" class="button">
+                      Download Factuur PDF
+                    </a>
+                  </p>
+                ` : ''}
+                
+                <p style="margin-top: 20px;">
+                  Heeft u vragen over deze factuur? Aarzel niet om contact met ons op te nemen.
+                </p>
+              </div>
+              <div class="footer">
+                <p>© ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.</p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+      text: `
+Beste ${data.recipientName || 'klant'},
+
+Hierbij ontvangt u uw factuur van GroeimetAI.
+
+Factuurnummer: ${data.invoice?.invoiceNumber}
+Datum: ${new Date(data.invoice?.createdAt || Date.now()).toLocaleDateString('nl-NL')}
+Vervaldatum: ${new Date(data.invoice?.dueDate || Date.now()).toLocaleDateString('nl-NL')}
+Totaal: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}
+
+${data.pdfUrl ? `Download Factuur PDF: ${data.pdfUrl}\n` : ''}
+
+Heeft u vragen over deze factuur? Aarzel niet om contact met ons op te nemen.
+
+© ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.
+      `,
+    }),
+
+    // Email template voor factuur herinneringen
+    sendInvoiceReminder: (data: EmailTemplateData) => {
+      const reminderMessages = {
+        due_soon: {
+          subject: `Herinnering: Factuur #${data.invoice?.invoiceNumber} vervalt binnenkort`,
+          intro: 'Dit is een vriendelijke herinnering dat uw factuur binnenkort vervalt.',
+        },
+        overdue: {
+          subject: `Betalingsherinnering: Factuur #${data.invoice?.invoiceNumber}`,
+          intro: 'Dit is een herinnering dat uw factuur inmiddels is vervallen.',
+        },
+        final_notice: {
+          subject: `Laatste Herinnering: Factuur #${data.invoice?.invoiceNumber}`,
+          intro: 'Dit is een laatste herinnering betreffende uw openstaande factuur.',
+        },
+      };
+
+      const reminder = reminderMessages[data.reminderType || 'due_soon'];
+
+      return {
+        subject: reminder.subject,
+        html: `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                .header { background-color: #FF6600; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
+                .content { background-color: #f4f4f4; padding: 20px; border-radius: 0 0 5px 5px; }
+                .invoice-details { background-color: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
+                .amount { font-size: 24px; font-weight: bold; color: ${data.reminderType === 'final_notice' ? '#f44336' : '#FF6600'}; }
+                .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+                .button { display: inline-block; padding: 10px 20px; background-color: #FF6600; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <div class="header">
+                  <h1>Factuur Herinnering</h1>
+                </div>
+                <div class="content">
+                  <p>Beste ${data.recipientName || 'klant'},</p>
+                  <p>${reminder.intro}</p>
+                  
+                  <div class="invoice-details">
+                    <p><strong>Factuurnummer:</strong> ${data.invoice?.invoiceNumber}</p>
+                    <p><strong>Factuurdatum:</strong> ${new Date(data.invoice?.createdAt || Date.now()).toLocaleDateString('nl-NL')}</p>
+                    <p><strong>Vervaldatum:</strong> ${new Date(data.invoice?.dueDate || Date.now()).toLocaleDateString('nl-NL')}</p>
+                    <p class="amount">Openstaand bedrag: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}</p>
+                  </div>
+                  
+                  <p>Wij verzoeken u vriendelijk om de betaling zo spoedig mogelijk te voldoen om eventuele kosten of onderbreking van diensten te voorkomen.</p>
+                  
+                  <p style="margin-top: 20px;">
+                    <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/invoices/${data.invoice?.id}" class="button">
+                      Bekijk Factuur
+                    </a>
+                  </p>
+                </div>
+                <div class="footer">
+                  <p>© ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.</p>
+                </div>
+              </div>
+            </body>
+          </html>
+        `,
+        text: `
+Beste ${data.recipientName || 'klant'},
+
+${reminder.intro}
+
+Factuurnummer: ${data.invoice?.invoiceNumber}
+Factuurdatum: ${new Date(data.invoice?.createdAt || Date.now()).toLocaleDateString('nl-NL')}
+Vervaldatum: ${new Date(data.invoice?.dueDate || Date.now()).toLocaleDateString('nl-NL')}
+Openstaand bedrag: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}
+
+Wij verzoeken u vriendelijk om de betaling zo spoedig mogelijk te voldoen om eventuele kosten of onderbreking van diensten te voorkomen.
+
+Bekijk Factuur: ${process.env.NEXT_PUBLIC_APP_URL}/dashboard/invoices/${data.invoice?.id}
+
+© ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.
+        `,
+      };
+    },
+
+    // Email template voor betalingsbevestiging
+    sendPaymentConfirmation: (data: EmailTemplateData) => ({
+      subject: `Betaling Ontvangen - Factuur #${data.invoice?.invoiceNumber}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              .header { background-color: #4CAF50; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
+              .content { background-color: #f4f4f4; padding: 20px; border-radius: 0 0 5px 5px; }
+              .payment-details { background-color: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
+              .amount { font-size: 24px; font-weight: bold; color: #4CAF50; }
+              .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>Betaling Ontvangen</h1>
+              </div>
+              <div class="content">
+                <p>Beste ${data.recipientName || 'klant'},</p>
+                <p>Bedankt! We hebben uw betaling ontvangen.</p>
+                
+                <div class="payment-details">
+                  <p><strong>Factuurnummer:</strong> ${data.invoice?.invoiceNumber}</p>
+                  <p><strong>Betalingsdatum:</strong> ${new Date().toLocaleDateString('nl-NL')}</p>
+                  <p><strong>Betalingsmethode:</strong> ${data.paymentMethod}</p>
+                  <p><strong>Transactie ID:</strong> ${data.transactionId}</p>
+                  <p class="amount">Betaald bedrag: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}</p>
+                </div>
+                
+                <p>Uw account is bijgewerkt en de factuur is gemarkeerd als betaald.</p>
+                
+                <p style="margin-top: 20px;">
+                  Als u een kwitantie nodig heeft of vragen heeft, aarzel dan niet om contact met ons op te nemen.
+                </p>
+              </div>
+              <div class="footer">
+                <p>© ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.</p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+      text: `
+Beste ${data.recipientName || 'klant'},
+
+Bedankt! We hebben uw betaling ontvangen.
+
+Factuurnummer: ${data.invoice?.invoiceNumber}
+Betalingsdatum: ${new Date().toLocaleDateString('nl-NL')}
+Betalingsmethode: ${data.paymentMethod}
+Transactie ID: ${data.transactionId}
+Betaald bedrag: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}
+
+Uw account is bijgewerkt en de factuur is gemarkeerd als betaald.
+
+Als u een kwitantie nodig heeft of vragen heeft, aarzel dan niet om contact met ons op te nemen.
+
+© ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.
+      `,
+    }),
   };
 }
 

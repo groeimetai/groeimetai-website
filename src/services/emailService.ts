@@ -167,6 +167,9 @@ class EmailService {
     invoice: any;
     pdfUrl?: string;
   }) {
+    // Get user's preferred language
+    const userLanguage = await this.getUserLanguage(data.recipientEmail);
+    const emailTemplates = getEmailTemplate(userLanguage);
     const template = emailTemplates.sendInvoice(data);
 
     await this.sendEmail({
@@ -184,6 +187,9 @@ class EmailService {
     invoice: any;
     reminderType: 'due_soon' | 'overdue' | 'final_notice';
   }) {
+    // Get user's preferred language
+    const userLanguage = await this.getUserLanguage(data.recipientEmail);
+    const emailTemplates = getEmailTemplate(userLanguage);
     const template = emailTemplates.sendInvoiceReminder(data);
 
     await this.sendEmail({
@@ -202,6 +208,9 @@ class EmailService {
     paymentMethod: string;
     transactionId: string;
   }) {
+    // Get user's preferred language
+    const userLanguage = await this.getUserLanguage(data.recipientEmail);
+    const emailTemplates = getEmailTemplate(userLanguage);
     const template = emailTemplates.sendPaymentConfirmation(data);
 
     await this.sendEmail({
