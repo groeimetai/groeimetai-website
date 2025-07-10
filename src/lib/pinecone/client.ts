@@ -9,9 +9,17 @@ export const getPineconeClient = () => {
     if (!apiKey) {
       throw new Error('PINECONE_API_KEY is not configured');
     }
-    pineconeClient = new Pinecone({
-      apiKey: apiKey,
-    });
+    
+    try {
+      pineconeClient = new Pinecone({
+        apiKey: apiKey.trim(), // Remove any whitespace
+      });
+    } catch (error) {
+      console.error('Failed to initialize Pinecone client:', error);
+      console.log('API Key length:', apiKey.length);
+      console.log('API Key preview:', apiKey.substring(0, 8) + '...');
+      throw error;
+    }
   }
   return pineconeClient;
 };

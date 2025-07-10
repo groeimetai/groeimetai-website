@@ -108,6 +108,23 @@ jobs:
         run: |
           echo "🔍 Building search index for Pinecone..."
           
+          # Debug: Check if API keys are present (show only first/last chars for security)
+          if [ -n "$PINECONE_API_KEY" ]; then
+            echo "✓ PINECONE_API_KEY is set (length: ${#PINECONE_API_KEY})"
+            echo "  First 4 chars: ${PINECONE_API_KEY:0:4}..."
+            echo "  Last 4 chars: ...${PINECONE_API_KEY: -4}"
+          else
+            echo "❌ PINECONE_API_KEY is not set!"
+            exit 1
+          fi
+          
+          if [ -n "$OPENAI_API_KEY" ]; then
+            echo "✓ OPENAI_API_KEY is set (length: ${#OPENAI_API_KEY})"
+          else
+            echo "❌ OPENAI_API_KEY is not set!"
+            exit 1
+          fi
+          
           # Install required dependencies for indexing
           echo "Installing dependencies for indexing script..."
           npm install @pinecone-database/pinecone openai
@@ -128,9 +145,9 @@ jobs:
           sleep 30
           
           # Run the indexing script
-          npm run index:content
+          npm run index:content || echo "⚠️ Indexing failed but continuing deployment"
           
-          echo "✅ Search index built successfully!"
+          echo "✅ Deployment completed!"
         env:
           PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

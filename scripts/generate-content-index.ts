@@ -341,12 +341,28 @@ async function buildSearchIndex() {
 // Check for required environment variables
 if (!process.env.PINECONE_API_KEY) {
   console.error('❌ PINECONE_API_KEY environment variable is required');
+  console.log('🔧 This is likely a GitHub Secrets configuration issue.');
+  console.log('📝 Please check that PINECONE_API_KEY is set in GitHub repository secrets.');
   process.exit(1);
 }
 
 if (!process.env.OPENAI_API_KEY) {
   console.error('❌ OPENAI_API_KEY environment variable is required');
+  console.log('🔧 This is likely a GitHub Secrets configuration issue.');
+  console.log('📝 Please check that OPENAI_API_KEY is set in GitHub repository secrets.');
   process.exit(1);
+}
+
+// Debug API key format
+const pineconeKey = process.env.PINECONE_API_KEY;
+console.log(`🔑 Pinecone API key format check:`);
+console.log(`   Length: ${pineconeKey.length}`);
+console.log(`   Starts with: ${pineconeKey.substring(0, 8)}...`);
+console.log(`   Contains dashes: ${pineconeKey.includes('-') ? 'Yes' : 'No'}`);
+console.log(`   Format appears valid: ${pineconeKey.length > 30 && pineconeKey.includes('-') ? 'Yes' : 'No'}`);
+
+if (pineconeKey.length < 30 || !pineconeKey.includes('-')) {
+  console.error('⚠️  API key format looks suspicious - Pinecone keys are typically 36+ chars with dashes');
 }
 
 // Run the indexing
