@@ -204,18 +204,48 @@ async function buildSearchIndex() {
   const locales: ('en' | 'nl')[] = ['en', 'nl'];
 
   try {
-    // Try to clear existing index (may fail with limited API key permissions)
-    console.log('Checking existing index...');
+    // Clear existing content by deleting known IDs
+    console.log('Clearing existing content...');
     const pineconeIndex = getIndex();
 
+    // Generate all IDs that we will be creating
+    const allIds: string[] = [];
+    for (const locale of locales) {
+      const content = SITE_CONTENT[locale];
+      
+      // Page IDs
+      content.pages.forEach(page => {
+        allIds.push(`${locale}-${page.path.replace(/\//g, '-')}-main`);
+      });
+      
+      // Service IDs  
+      content.services.forEach(service => {
+        allIds.push(`${locale}-services-${service.slug}-main`);
+      });
+      
+      // Case study IDs
+      content.cases.forEach(caseStudy => {
+        allIds.push(`${locale}-cases-${caseStudy.slug}-main`);
+      });
+      
+      // Blog IDs
+      content.blog.forEach(blog => {
+        allIds.push(`${locale}-blog-${blog.slug}-main`);
+      });
+    }
+
+    // Delete existing vectors by ID to prevent duplicates
     for (const locale of locales) {
       const namespace = `${environment}-${locale}`;
-      try {
-        await pineconeIndex.namespace(namespace).deleteAll();
-        console.log(`  ✓ Cleared ${namespace} namespace`);
-      } catch (error) {
-        console.log(`  ⚠️  Could not clear ${namespace} namespace (API key may have limited permissions)`);
-        console.log(`     New vectors will be upserted (existing vectors with same IDs will be updated)`);
+      const localeIds = allIds.filter(id => id.startsWith(locale));
+      
+      if (localeIds.length > 0) {
+        try {
+          await pineconeIndex.namespace(namespace).deleteMany(localeIds);
+          console.log(`  ✓ Cleared ${localeIds.length} existing vectors from ${namespace} namespace`);
+        } catch (error) {
+          console.log(`  ⚠️  Could not delete specific vectors from ${namespace} (will rely on upsert to replace)`);
+        }
       }
     }
 
