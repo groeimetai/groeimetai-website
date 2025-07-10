@@ -8,6 +8,7 @@ import {
   collection,
   query,
   getDocs,
+  getDoc,
   where,
   orderBy,
   updateDoc,
@@ -103,6 +104,32 @@ interface Quote {
 export default function AdminQuotesPage() {
   const router = useRouter();
   const { user, isAdmin, loading } = useAuth();
+  
+  // Debug: Log admin status
+  useEffect(() => {
+    if (user && !loading) {
+      console.log('Current user ID:', user.uid);
+      console.log('User role:', user.role);
+      console.log('Is admin:', isAdmin);
+      console.log('User email:', user.email);
+      
+      // Double-check the user document in Firestore
+      const checkUserRole = async () => {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            console.log('User doc data:', userDoc.data());
+            console.log('User role from Firestore:', userDoc.data().role);
+          } else {
+            console.log('User document does not exist in Firestore');
+          }
+        } catch (err) {
+          console.error('Error checking user role:', err);
+        }
+      };
+      checkUserRole();
+    }
+  }, [user, isAdmin, loading]);
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -180,16 +207,35 @@ export default function AdminQuotesPage() {
     try {
       switch (action) {
         case 'delete':
+          // Check current user and admin status
+          console.log('Delete action - Current user:', user?.uid);
+          console.log('Delete action - Is admin:', isAdmin);
+          
           // Actually delete the quotes from Firestore
           const deletedIds: string[] = [];
           const failedIds: string[] = [];
           
           for (const quoteId of data.ids) {
             try {
-              await deleteDoc(doc(db, 'quotes', quoteId));
+              console.log('Attempting to delete quote:', quoteId);
+              const quoteRef = doc(db, 'quotes', quoteId);
+              
+              // Try to delete the document
+              await deleteDoc(quoteRef);
+              
+              console.log('Successfully deleted quote:', quoteId);
               deletedIds.push(quoteId);
-            } catch (deleteError) {
-              console.error('Failed to delete quote:', quoteId, deleteError);
+            } catch (deleteError: any) {
+              console.error('Failed to delete quote:', quoteId);
+              console.error('Error details:', deleteError);
+              console.error('Error code:', deleteError?.code);
+              console.error('Error message:', deleteError?.message);
+              
+              // Check if it's a permission error
+              if (deleteError?.code === 'permission-denied') {
+                console.error('Permission denied - user may not have admin rights in Firestore');
+              }
+              
               failedIds.push(quoteId);
             }
           }
