@@ -73,20 +73,30 @@ export async function POST(request: NextRequest) {
     let ragContext = '';
     if (process.env.PINECONE_API_KEY && process.env.OPENAI_API_KEY) {
       try {
+        // Detect language - simple heuristic based on common words
+        const isEnglish = /\b(what|how|can|you|the|are|is|do|does|have|has|will|would|could|should)\b/i.test(message);
+        const searchLocale = isEnglish ? 'en' : 'nl';
+        
+        console.log(`🔍 Searching in ${searchLocale} locale for: "${message.substring(0, 50)}..."`);
+        
         const searchResults = await searchContent({
           query: message,
-          locale: 'nl', // Default to Dutch
-          limit: 3, // Get top 3 most relevant results
+          locale: searchLocale,
+          limit: 5, // Get top 5 most relevant results for better coverage
           includeContext: true, // Get RAG response
         });
 
         if (searchResults.context) {
           ragContext = searchResults.context;
+          console.log(`✓ Found RAG context (${ragContext.length} chars)`);
         } else if (searchResults.results.length > 0) {
           // Fallback to concatenating search results if no context
           ragContext = searchResults.results
             .map((r) => `${r.title}: ${r.description}\n${r.highlight}`)
             .join('\n\n');
+          console.log(`✓ Using search results as context (${searchResults.results.length} results)`);
+        } else {
+          console.log('⚠️ No search results found');
         }
       } catch (error) {
         console.error('RAG search error:', error);
