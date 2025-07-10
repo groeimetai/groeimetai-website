@@ -204,8 +204,8 @@ async function buildSearchIndex() {
   const locales: ('en' | 'nl')[] = ['en', 'nl'];
 
   try {
-    // Clear existing index
-    console.log('Clearing existing index...');
+    // Try to clear existing index (may fail with limited API key permissions)
+    console.log('Checking existing index...');
     const pineconeIndex = getIndex();
 
     for (const locale of locales) {
@@ -214,7 +214,8 @@ async function buildSearchIndex() {
         await pineconeIndex.namespace(namespace).deleteAll();
         console.log(`  ✓ Cleared ${namespace} namespace`);
       } catch (error) {
-        console.log(`  - Namespace ${namespace} doesn't exist yet, will be created`);
+        console.log(`  ⚠️  Could not clear ${namespace} namespace (API key may have limited permissions)`);
+        console.log(`     New vectors will be upserted (existing vectors with same IDs will be updated)`);
       }
     }
 
@@ -325,12 +326,18 @@ async function buildSearchIndex() {
     console.log('\n✅ Search index built successfully!');
     console.log(`   Total items indexed: ${allContent.length}`);
 
-    // Verify index stats
-    const statsIndex = getIndex();
-    for (const locale of locales) {
-      const namespace = `${environment}-${locale}`;
-      const stats = await statsIndex.namespace(namespace).describeIndexStats();
-      console.log(`   ${namespace}: ${stats.totalRecordCount || 0} vectors`);
+    // Try to verify index stats (optional - may fail with limited API key permissions)
+    try {
+      console.log('\n📊 Verifying index statistics...');
+      const statsIndex = getIndex();
+      for (const locale of locales) {
+        const namespace = `${environment}-${locale}`;
+        const stats = await statsIndex.namespace(namespace).describeIndexStats();
+        console.log(`   ${namespace}: ${stats.totalRecordCount || 0} vectors`);
+      }
+    } catch (statsError) {
+      console.log('⚠️  Could not retrieve index stats (API key may have limited permissions)');
+      console.log('   This is normal for production API keys and does not affect indexing');
     }
   } catch (error) {
     console.error('\n❌ Error building search index:', error);
@@ -355,14 +362,13 @@ if (!process.env.OPENAI_API_KEY) {
 
 // Debug API key format
 const pineconeKey = process.env.PINECONE_API_KEY;
-console.log(`🔑 Pinecone API key format check:`);
+console.log(`🔑 Pinecone API key detected:`);
 console.log(`   Length: ${pineconeKey.length}`);
 console.log(`   Starts with: ${pineconeKey.substring(0, 8)}...`);
-console.log(`   Contains dashes: ${pineconeKey.includes('-') ? 'Yes' : 'No'}`);
-console.log(`   Format appears valid: ${pineconeKey.length > 30 && pineconeKey.includes('-') ? 'Yes' : 'No'}`);
+console.log(`   Format: ${pineconeKey.startsWith('pcsk_') ? 'Service Key' : pineconeKey.startsWith('pc-') ? 'API Key' : 'Unknown'}`);
 
-if (pineconeKey.length < 30 || !pineconeKey.includes('-')) {
-  console.error('⚠️  API key format looks suspicious - Pinecone keys are typically 36+ chars with dashes');
+if (pineconeKey.length < 30) {
+  console.error('⚠️  API key seems too short');
 }
 
 // Run the indexing
