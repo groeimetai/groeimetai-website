@@ -34,6 +34,8 @@ import {
   MoreVertical,
   UserCheck,
   Shield,
+  Rocket,
+  Flag,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -45,7 +47,7 @@ import { firestoreProjectService as projectService } from '@/services/firestore/
 import { Project, ProjectStatus, ProjectPriority, ProjectType } from '@/types';
 import { format } from 'date-fns';
 import { db } from '@/lib/firebase/config';
-import { doc, onSnapshot, updateDoc, deleteDoc, collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, deleteDoc, collection, query, where, getDocs, addDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import {
@@ -67,6 +69,13 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import toast from 'react-hot-toast';
 
 export default function AdminProjectDetailPage() {
@@ -80,6 +89,58 @@ export default function AdminProjectDetailPage() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [adminNotes, setAdminNotes] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
+  const [editingTimeline, setEditingTimeline] = useState(false);
+  const [timelineStages, setTimelineStages] = useState<any[]>([]);
+  const [isSavingTimeline, setIsSavingTimeline] = useState(false);
+
+  // Default timeline stages structure
+  interface TimelineStage {
+    id: number;
+    name: string;
+    icon: string;
+    status: 'upcoming' | 'current' | 'completed';
+    description: string;
+    progress?: number;
+    completedAt?: Date | any;
+  }
+  
+  const defaultStages: TimelineStage[] = [
+    {
+      id: 1,
+      name: 'Approval',
+      icon: 'shield',
+      status: 'upcoming',
+      description: 'Awaiting admin approval',
+    },
+    {
+      id: 2,
+      name: 'Discovery',
+      icon: 'briefcase',
+      status: 'upcoming',
+      description: 'Understanding your needs',
+    },
+    {
+      id: 3,
+      name: 'Planning',
+      icon: 'target',
+      status: 'upcoming',
+      description: 'Defining project scope',
+    },
+    {
+      id: 4,
+      name: 'Development',
+      icon: 'rocket',
+      status: 'upcoming',
+      description: 'Building your solution',
+    },
+    {
+      id: 5,
+      name: 'Delivery',
+      icon: 'flag',
+      status: 'upcoming',
+      description: 'Final implementation',
+    },
+  ];
 
   const projectId = params.id as string;
 
@@ -166,7 +227,21 @@ export default function AdminProjectDetailPage() {
           const timelineRef = doc(db, 'projectTimelines', projectId);
           unsubscribeTimeline = onSnapshot(timelineRef, (timelineDoc) => {
             if (timelineDoc.exists()) {
-              setTimelineData(timelineDoc.data());
+              const data = timelineDoc.data();
+              setTimelineData(data);
+              setTimelineStages(data.stages || defaultStages);
+            } else {
+              // If no timeline data exists, use default stages
+              // Initialize based on project status
+              const initialStages = [...defaultStages];
+              if (data.status === 'approved' || getProjectStatus(data.status) === 'active') {
+                initialStages[0].status = 'completed';
+                initialStages[0].progress = 100;
+                initialStages[0].completedAt = data.updatedAt || new Date();
+                initialStages[1].status = 'current';
+                initialStages[1].progress = 0;
+              }
+              setTimelineStages(initialStages);
             }
           });
         } else {
@@ -186,6 +261,28 @@ export default function AdminProjectDetailPage() {
                 } as Project);
                 setAdminNotes(data.adminNotes || '');
                 setIsLoading(false);
+
+                // Subscribe to timeline updates for projects collection
+                const timelineRef = doc(db, 'projectTimelines', projectId);
+                unsubscribeTimeline = onSnapshot(timelineRef, (timelineDoc) => {
+                  if (timelineDoc.exists()) {
+                    const timelineData = timelineDoc.data();
+                    setTimelineData(timelineData);
+                    setTimelineStages(timelineData.stages || defaultStages);
+                  } else {
+                    // If no timeline data exists, use default stages
+                    // Initialize based on project status
+                    const initialStages = [...defaultStages];
+                    if (data.status === 'active') {
+                      initialStages[0].status = 'completed';
+                      initialStages[0].progress = 100;
+                      initialStages[0].completedAt = data.updatedAt || new Date();
+                      initialStages[1].status = 'current';
+                      initialStages[1].progress = 0;
+                    }
+                    setTimelineStages(initialStages);
+                  }
+                });
               } else {
                 setError('Project not found');
                 setIsLoading(false);
@@ -305,6 +402,107 @@ export default function AdminProjectDetailPage() {
       setIsUpdating(false);
       setShowDeleteDialog(false);
     }
+  };
+
+  // Timeline management functions
+  const updateTimelineStage = (stageId: number, updates: any) => {
+    const newStages = [...timelineStages];
+    const stageIndex = newStages.findIndex(s => s.id === stageId);
+    
+    if (stageIndex === -1) return;
+    
+    // Handle status updates
+    if (updates.status) {
+      // Reset all stages to upcoming if setting an earlier stage as current
+      if (updates.status === 'current') {
+        newStages.forEach((stage, idx) => {
+          if (idx > stageIndex) {
+            stage.status = 'upcoming';
+            stage.progress = undefined;
+            stage.completedAt = undefined;
+          } else if (idx < stageIndex) {
+            stage.status = 'completed';
+            stage.progress = 100;
+            if (!stage.completedAt) {
+              stage.completedAt = new Date();
+            }
+          }
+        });
+      }
+      
+      // If marking as completed, update all previous stages
+      if (updates.status === 'completed') {
+        newStages.forEach((stage, idx) => {
+          if (idx <= stageIndex) {
+            stage.status = 'completed';
+            stage.progress = 100;
+            if (!stage.completedAt) {
+              stage.completedAt = new Date();
+            }
+          }
+        });
+        
+        // Set next stage as current if exists
+        if (stageIndex < newStages.length - 1) {
+          newStages[stageIndex + 1].status = 'current';
+          newStages[stageIndex + 1].progress = 0;
+        }
+      }
+    }
+    
+    // Apply the updates
+    newStages[stageIndex] = { ...newStages[stageIndex], ...updates };
+    
+    setTimelineStages(newStages);
+  };
+
+  const saveTimeline = async () => {
+    if (!project) return;
+
+    setIsSavingTimeline(true);
+    try {
+      const timelineRef = doc(db, 'projectTimelines', projectId);
+      
+      // Calculate overall progress based on stages
+      const completedStages = timelineStages.filter(stage => stage.completed).length;
+      const overallProgress = timelineStages.length > 0 
+        ? Math.round((completedStages / timelineStages.length) * 100)
+        : 0;
+
+      await setDoc(timelineRef, {
+        projectId,
+        stages: timelineStages,
+        updatedAt: serverTimestamp(),
+        updatedBy: user?.uid,
+        overallProgress,
+      }, { merge: true });
+
+      // Update project progress if it's different
+      if (project.progress !== overallProgress) {
+        const projectRef = project.isFromQuote 
+          ? doc(db, 'quotes', projectId)
+          : doc(db, 'projects', projectId);
+        
+        await updateDoc(projectRef, {
+          progress: overallProgress,
+          updatedAt: serverTimestamp(),
+        });
+      }
+
+      toast.success('Timeline updated successfully');
+      setEditingTimeline(false);
+    } catch (error) {
+      console.error('Error saving timeline:', error);
+      toast.error('Failed to save timeline');
+    } finally {
+      setIsSavingTimeline(false);
+    }
+  };
+
+  const cancelTimelineEdit = () => {
+    // Reset to original timeline data
+    setTimelineStages(timelineData?.stages || defaultStages);
+    setEditingTimeline(false);
   };
 
   if (authLoading || isLoading) {
@@ -691,36 +889,180 @@ export default function AdminProjectDetailPage() {
           </Card>
 
           {/* Project Timeline */}
-          {timelineData && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Project Timeline</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {timelineData.stages?.map((stage: any, index: number) => (
-                    <div key={index} className="flex items-center gap-3">
-                      {stage.completed ? (
-                        <CheckCircle className="w-5 h-5 text-green-500" />
-                      ) : (
-                        <Circle className="w-5 h-5 text-gray-400" />
-                      )}
-                      <div className="flex-1">
-                        <p className={stage.completed ? 'line-through text-muted-foreground' : ''}>
-                          {stage.name}
-                        </p>
-                        {stage.completedAt && (
-                          <p className="text-xs text-muted-foreground">
-                            {format(stage.completedAt.toDate(), 'MMM d, yyyy')}
-                          </p>
-                        )}
+          <Card>
+            <CardHeader>
+              <CardTitle>Project Timeline</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {editingTimeline ? (
+                <div className="space-y-4">
+                  {timelineStages.map((stage) => {
+                    // Map icon strings to components
+                    const stageIcons = {
+                      shield: Shield,
+                      briefcase: Briefcase,
+                      target: Target,
+                      rocket: Rocket,
+                      flag: Flag,
+                    };
+                    const StageIcon = stageIcons[stage.icon as keyof typeof stageIcons] || Briefcase;
+                    
+                    return (
+                      <div key={stage.id} className="border border-white/10 rounded-lg p-4">
+                        <div className="flex items-start gap-3">
+                          <div
+                            className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                              stage.status === 'completed'
+                                ? 'bg-green-500'
+                                : stage.status === 'current'
+                                  ? 'bg-orange'
+                                  : 'bg-white/20'
+                            }`}
+                          >
+                            {stage.status === 'completed' ? (
+                              <CheckCircle className="w-5 h-5 text-white" />
+                            ) : stage.status === 'current' ? (
+                              <Circle className="w-5 h-5 text-white animate-pulse" />
+                            ) : (
+                              <StageIcon className="w-5 h-5 text-white/60" />
+                            )}
+                          </div>
+                          <div className="flex-1 space-y-3">
+                            <div>
+                              <h4 className="font-medium text-white">{stage.name}</h4>
+                              <p className="text-sm text-white/60 mt-1">{stage.description}</p>
+                            </div>
+                            
+                            <div className="flex items-center gap-3">
+                              <Label className="text-sm">Status:</Label>
+                              <Select
+                                value={stage.status}
+                                onValueChange={(value) => updateTimelineStage(stage.id, { status: value })}
+                              >
+                                <SelectTrigger className="w-40">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="upcoming">Upcoming</SelectItem>
+                                  <SelectItem value="current">Current</SelectItem>
+                                  <SelectItem value="completed">Completed</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            
+                            {stage.status === 'current' && (
+                              <div className="flex items-center gap-3">
+                                <Label className="text-sm">Progress:</Label>
+                                <Input
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  value={stage.progress || 0}
+                                  onChange={(e) => updateTimelineStage(stage.id, { progress: parseInt(e.target.value) || 0 })}
+                                  className="w-20"
+                                />
+                                <span className="text-sm text-muted-foreground">%</span>
+                                <Progress value={stage.progress || 0} className="flex-1 h-2" />
+                              </div>
+                            )}
+                            
+                            {stage.status === 'completed' && stage.completedAt && (
+                              <p className="text-xs text-muted-foreground">
+                                Completed: {stage.completedAt instanceof Date ? format(stage.completedAt, 'MMM d, yyyy') : format(stage.completedAt.toDate(), 'MMM d, yyyy')}
+                              </p>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
+                  <div className="flex gap-2 pt-4">
+                    <Button onClick={saveTimeline} disabled={isSavingTimeline}>
+                      {isSavingTimeline ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Saving...
+                        </>
+                      ) : (
+                        'Save Timeline'
+                      )}
+                    </Button>
+                    <Button variant="outline" onClick={cancelTimelineEdit}>
+                      Cancel
+                    </Button>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          )}
+              ) : (
+                <div className="space-y-3">
+                  {timelineStages.map((stage) => {
+                    // Map icon strings to components
+                    const stageIcons = {
+                      shield: Shield,
+                      briefcase: Briefcase,
+                      target: Target,
+                      rocket: Rocket,
+                      flag: Flag,
+                    };
+                    const StageIcon = stageIcons[stage.icon as keyof typeof stageIcons] || Briefcase;
+                    
+                    return (
+                      <div key={stage.id} className="flex items-center gap-3">
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            stage.status === 'completed'
+                              ? 'bg-green-500'
+                              : stage.status === 'current'
+                                ? 'bg-orange'
+                                : 'bg-white/20'
+                          }`}
+                        >
+                          {stage.status === 'completed' ? (
+                            <CheckCircle className="w-5 h-5 text-white" />
+                          ) : stage.status === 'current' ? (
+                            <Circle className="w-5 h-5 text-white animate-pulse" />
+                          ) : (
+                            <StageIcon className="w-5 h-5 text-white/60" />
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className={`font-medium ${
+                                stage.status === 'completed' ? 'text-white/60' : 'text-white'
+                              }`}>
+                                {stage.name}
+                              </p>
+                              <p className="text-xs text-white/60">{stage.description}</p>
+                            </div>
+                            {stage.status === 'current' && stage.progress !== undefined && (
+                              <span className="text-sm text-muted-foreground">{stage.progress}%</span>
+                            )}
+                          </div>
+                          {stage.status === 'current' && stage.progress !== undefined && (
+                            <Progress value={stage.progress} className="h-1 mt-2" />
+                          )}
+                          {stage.status === 'completed' && stage.completedAt && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Completed: {stage.completedAt instanceof Date ? format(stage.completedAt, 'MMM d, yyyy') : format(stage.completedAt.toDate(), 'MMM d, yyyy')}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setEditingTimeline(true)}
+                    className="mt-4"
+                  >
+                    <Edit className="w-4 h-4 mr-2" />
+                    Edit Timeline
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
 

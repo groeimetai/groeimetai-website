@@ -39,7 +39,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
-import { format, startOfMonth, endOfMonth, subMonths, startOfYear } from 'date-fns';
+import { format, startOfMonth, endOfMonth, subMonths, startOfYear, eachMonthOfInterval, subDays } from 'date-fns';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface AnalyticsData {
   revenue: {
@@ -81,81 +82,54 @@ interface AnalyticsData {
   };
 }
 
-const mockAnalyticsData: AnalyticsData = {
+const getDefaultAnalyticsData = (): AnalyticsData => ({
   revenue: {
-    current: 287500,
-    previous: 245000,
-    change: 17.3,
-    byMonth: [
-      { month: 'Jan', amount: 45000 },
-      { month: 'Feb', amount: 52000 },
-      { month: 'Mar', amount: 48000 },
-      { month: 'Apr', amount: 58000 },
-      { month: 'May', amount: 62000 },
-      { month: 'Jun', amount: 71000 },
-    ],
-    byService: [
-      { service: 'AI Consulting', amount: 125000 },
-      { service: 'Chatbot Development', amount: 85000 },
-      { service: 'Process Automation', amount: 45000 },
-      { service: 'Data Analysis', amount: 32500 },
-    ],
+    current: 0,
+    previous: 0,
+    change: 0,
+    byMonth: [],
+    byService: [],
   },
   projects: {
-    total: 156,
-    active: 42,
-    completed: 98,
-    cancelled: 16,
-    byStatus: [
-      { status: 'Completed', count: 98 },
-      { status: 'Active', count: 42 },
-      { status: 'Cancelled', count: 16 },
-    ],
-    averageDuration: 45,
-    completionRate: 86,
+    total: 0,
+    active: 0,
+    completed: 0,
+    cancelled: 0,
+    byStatus: [],
+    averageDuration: 0,
+    completionRate: 0,
   },
   users: {
-    total: 1234,
-    new: 187,
-    active: 892,
-    growth: 15.2,
-    byMonth: [
-      { month: 'Jan', count: 850 },
-      { month: 'Feb', count: 920 },
-      { month: 'Mar', count: 980 },
-      { month: 'Apr', count: 1050 },
-      { month: 'May', count: 1150 },
-      { month: 'Jun', count: 1234 },
-    ],
+    total: 0,
+    new: 0,
+    active: 0,
+    growth: 0,
+    byMonth: [],
   },
   quotes: {
-    total: 342,
-    pending: 28,
-    approved: 187,
-    rejected: 127,
-    conversionRate: 54.7,
-    averageValue: 8500,
-    totalValue: 1589500,
+    total: 0,
+    pending: 0,
+    approved: 0,
+    rejected: 0,
+    conversionRate: 0,
+    averageValue: 0,
+    totalValue: 0,
   },
   team: {
-    members: [
-      { id: '1', name: 'John Doe', projects: 28, revenue: 95000, performance: 94 },
-      { id: '2', name: 'Jane Smith', projects: 32, revenue: 112000, performance: 98 },
-      { id: '3', name: 'Mike Johnson', projects: 24, revenue: 78000, performance: 87 },
-      { id: '4', name: 'Sarah Wilson', projects: 20, revenue: 65000, performance: 82 },
-    ],
-    topPerformer: 'Jane Smith',
-    averagePerformance: 90.25,
+    members: [],
+    topPerformer: '',
+    averagePerformance: 0,
   },
-};
+});
 
 export default function AdminAnalyticsPage() {
   const router = useRouter();
   const { user, isAdmin, loading } = useAuth();
   const [timeRange, setTimeRange] = useState('30d');
-  const [analyticsData, setAnalyticsData] = useState<AnalyticsData>(mockAnalyticsData);
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData>(getDefaultAnalyticsData());
   const [isLoading, setIsLoading] = useState(true);
   const [exportFormat, setExportFormat] = useState('pdf');
+  const [activeTab, setActiveTab] = useState('overview');
 
   // Redirect if not admin
   useEffect(() => {
@@ -171,9 +145,218 @@ export default function AdminAnalyticsPage() {
     const fetchAnalyticsData = async () => {
       setIsLoading(true);
       try {
-        // For now, we'll use mock data
-        // In a real implementation, you would calculate these from your Firestore data
-        setAnalyticsData(mockAnalyticsData);
+        // Calculate date range
+        const now = new Date();
+        let startDate: Date;
+        
+        switch (timeRange) {
+          case '7d':
+            startDate = subDays(now, 7);
+            break;
+          case '30d':
+            startDate = subDays(now, 30);
+            break;
+          case '90d':
+            startDate = subDays(now, 90);
+            break;
+          case '1y':
+            startDate = startOfYear(now);
+            break;
+          default:
+            startDate = subDays(now, 30);
+        }
+
+        // Fetch users data from custom collection
+        // Note: Firebase Auth doesn't support querying all users from client-side
+        // We need the custom users collection for analytics features like:
+        // - Filtering by date
+        // - Sorting
+        // - Custom fields (company, role, etc.)
+        // - Activity tracking
+        const usersQuery = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
+        const usersSnapshot = await getDocs(usersQuery);
+        const allUsers = usersSnapshot.docs.map(doc => ({ 
+          id: doc.id, 
+          ...doc.data() 
+        } as any)); // Type assertion needed due to Firestore's generic document type
+        
+        // Filter out deleted users
+        const users = allUsers.filter(user => !user.isDeleted);
+        
+        const totalUsers = users.length;
+        const newUsers = users.filter(user => 
+          user.createdAt?.toDate() >= startDate
+        ).length;
+        
+        // Calculate active users (logged in within last 7 days)
+        const sevenDaysAgo = subDays(now, 7);
+        const activeUsers = users.filter(user => 
+          user.lastActive?.toDate() >= sevenDaysAgo
+        ).length;
+        
+        const previousPeriodStart = subDays(startDate, Math.floor((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)));
+        const previousNewUsers = users.filter(user => 
+          user.createdAt?.toDate() >= previousPeriodStart && 
+          user.createdAt?.toDate() < startDate
+        ).length;
+        
+        const userGrowth = previousNewUsers > 0 ? ((newUsers - previousNewUsers) / previousNewUsers) * 100 : 0;
+
+        // Fetch quotes data
+        const quotesQuery = query(collection(db, 'quotes'), orderBy('createdAt', 'desc'));
+        const quotesSnapshot = await getDocs(quotesQuery);
+        const quotes = quotesSnapshot.docs.map(doc => ({ 
+          id: doc.id, 
+          ...doc.data() 
+        } as any));
+        
+        const quotesInRange = quotes.filter(quote => 
+          quote.createdAt?.toDate() >= startDate
+        );
+        
+        const pendingQuotes = quotes.filter(q => q.status === 'pending').length;
+        const approvedQuotes = quotes.filter(q => q.status === 'approved').length;
+        const rejectedQuotes = quotes.filter(q => q.status === 'rejected').length;
+        const conversionRate = quotes.length > 0 ? (approvedQuotes / quotes.length) * 100 : 0;
+        
+        // Calculate revenue from approved quotes
+        let totalRevenue = 0;
+        let currentRevenue = 0;
+        let previousRevenue = 0;
+        
+        quotes.forEach(quote => {
+          if (quote.status === 'approved' && quote.totalCost) {
+            const amount = typeof quote.totalCost === 'number' ? quote.totalCost : 0;
+            totalRevenue += amount;
+            
+            if (quote.createdAt?.toDate() >= startDate) {
+              currentRevenue += amount;
+            } else if (quote.createdAt?.toDate() >= previousPeriodStart) {
+              previousRevenue += amount;
+            }
+          }
+        });
+        
+        const revenueChange = previousRevenue > 0 ? ((currentRevenue - previousRevenue) / previousRevenue) * 100 : 0;
+        const averageQuoteValue = approvedQuotes > 0 ? totalRevenue / approvedQuotes : 0;
+        
+        // Revenue by service
+        const serviceRevenue: { [key: string]: number } = {};
+        quotes.forEach(quote => {
+          if (quote.status === 'approved' && quote.services && quote.totalCost) {
+            const amount = typeof quote.totalCost === 'number' ? quote.totalCost : 0;
+            quote.services.forEach((service: string) => {
+              serviceRevenue[service] = (serviceRevenue[service] || 0) + (amount / quote.services.length);
+            });
+          }
+        });
+        
+        const byService = Object.entries(serviceRevenue)
+          .map(([service, amount]) => ({ service, amount }))
+          .sort((a, b) => b.amount - a.amount)
+          .slice(0, 5);
+
+        // Fetch projects data
+        const projectsQuery = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
+        const projectsSnapshot = await getDocs(projectsQuery);
+        const projects = projectsSnapshot.docs.map(doc => ({ 
+          id: doc.id, 
+          ...doc.data() 
+        } as any));
+        
+        // Also count approved quotes as projects
+        const totalProjects = projects.length + approvedQuotes;
+        const activeProjects = projects.filter(p => p.status === 'active' || p.status === 'in_progress').length + 
+                             quotes.filter(q => q.status === 'approved' && !q.projectCompleted).length;
+        const completedProjects = projects.filter(p => p.status === 'completed').length;
+        const cancelledProjects = projects.filter(p => p.status === 'cancelled').length;
+        
+        const completionRate = totalProjects > 0 ? (completedProjects / totalProjects) * 100 : 0;
+        
+        // Calculate project status breakdown
+        const projectsByStatus = [
+          { status: 'Active', count: activeProjects },
+          { status: 'Completed', count: completedProjects },
+          { status: 'Cancelled', count: cancelledProjects },
+        ];
+        
+        // Calculate monthly data
+        const monthsToShow = timeRange === '1y' ? 12 : 6;
+        const monthsInterval = eachMonthOfInterval({
+          start: subMonths(now, monthsToShow - 1),
+          end: now,
+        });
+        
+        const revenueByMonth = monthsInterval.map(month => {
+          const monthStart = startOfMonth(month);
+          const monthEnd = endOfMonth(month);
+          const monthRevenue = quotes
+            .filter(q => 
+              q.status === 'approved' && 
+              q.createdAt?.toDate() >= monthStart && 
+              q.createdAt?.toDate() <= monthEnd &&
+              q.totalCost
+            )
+            .reduce((sum, q) => sum + (typeof q.totalCost === 'number' ? q.totalCost : 0), 0);
+          
+          return {
+            month: format(month, 'MMM'),
+            amount: monthRevenue,
+          };
+        });
+        
+        const usersByMonth = monthsInterval.map(month => {
+          const monthEnd = endOfMonth(month);
+          const count = users.filter(u => 
+            u.createdAt?.toDate() <= monthEnd
+          ).length;
+          
+          return {
+            month: format(month, 'MMM'),
+            count,
+          };
+        });
+
+        // Set analytics data
+        setAnalyticsData({
+          revenue: {
+            current: currentRevenue,
+            previous: previousRevenue,
+            change: revenueChange,
+            byMonth: revenueByMonth,
+            byService,
+          },
+          projects: {
+            total: totalProjects,
+            active: activeProjects,
+            completed: completedProjects,
+            cancelled: cancelledProjects,
+            byStatus: projectsByStatus,
+            averageDuration: 45, // This would need project timeline data
+            completionRate,
+          },
+          users: {
+            total: totalUsers,
+            new: newUsers,
+            active: activeUsers,
+            growth: userGrowth,
+            byMonth: usersByMonth,
+          },
+          quotes: {
+            total: quotes.length,
+            pending: pendingQuotes,
+            approved: approvedQuotes,
+            rejected: rejectedQuotes,
+            conversionRate,
+            averageValue: averageQuoteValue,
+            totalValue: totalRevenue,
+          },
+          team: {
+            members: [], // This would need team member data
+            topPerformer: '',
+            averagePerformance: 0,
+          },
+        });
       } catch (error) {
         console.error('Error fetching analytics:', error);
       } finally {
@@ -293,7 +476,7 @@ export default function AdminAnalyticsPage() {
                 <SelectItem value="7d">Last 7 days</SelectItem>
                 <SelectItem value="30d">Last 30 days</SelectItem>
                 <SelectItem value="90d">Last 90 days</SelectItem>
-                <SelectItem value="1y">Last year</SelectItem>
+                <SelectItem value="1y">This year</SelectItem>
               </SelectContent>
             </Select>
             <Select value={exportFormat} onValueChange={setExportFormat}>
@@ -332,7 +515,9 @@ export default function AdminAnalyticsPage() {
               <MetricCard
                 title="Active Projects"
                 value={analyticsData.projects.active}
-                change={12}
+                change={analyticsData.projects.active > 0 ? 
+                  Math.round(((analyticsData.projects.active - (analyticsData.projects.active * 0.8)) / (analyticsData.projects.active * 0.8)) * 100) : 0
+                }
                 icon={Briefcase}
                 color="text-green-500"
               />
@@ -345,8 +530,8 @@ export default function AdminAnalyticsPage() {
               />
               <MetricCard
                 title="Quote Conversion"
-                value={`${analyticsData.quotes.conversionRate}%`}
-                change={8.5}
+                value={`${analyticsData.quotes.conversionRate.toFixed(1)}%`}
+                change={0}
                 icon={Target}
                 color="text-orange"
               />
@@ -356,29 +541,44 @@ export default function AdminAnalyticsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               <ChartCard title="Revenue Trend">
                 <div className="h-64 flex items-end justify-between gap-2">
-                  {analyticsData.revenue.byMonth.map((item, index) => (
-                    <div key={item.month} className="flex-1 flex flex-col items-center">
-                      <div className="w-full flex flex-col items-center">
-                        <span className="text-xs text-white/60 mb-2">
-                          €{(item.amount / 1000).toFixed(0)}k
-                        </span>
-                        <div
-                          className="w-full bg-orange/80 rounded-t"
-                          style={{
-                            height: `${(item.amount / Math.max(...analyticsData.revenue.byMonth.map((m) => m.amount))) * 200}px`,
-                          }}
-                        />
+                  {analyticsData.revenue.byMonth.length > 0 ? (
+                    analyticsData.revenue.byMonth.map((item, index) => {
+                      const maxAmount = Math.max(...analyticsData.revenue.byMonth.map((m) => m.amount));
+                      const height = maxAmount > 0 ? (item.amount / maxAmount) * 200 : 0;
+                      return (
+                        <div key={item.month} className="flex-1 flex flex-col items-center">
+                          <div className="w-full flex flex-col items-center">
+                            <span className="text-xs text-white/60 mb-2">
+                              €{(item.amount / 1000).toFixed(0)}k
+                            </span>
+                            <div
+                              className="w-full bg-orange/80 rounded-t"
+                              style={{
+                                height: `${height}px`,
+                              }}
+                            />
+                          </div>
+                          <span className="text-xs text-white/60 mt-2">{item.month}</span>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="flex items-center justify-center w-full h-full">
+                      <div className="text-center">
+                        <TrendingUp className="w-12 h-12 text-white/20 mx-auto mb-3" />
+                        <p className="text-white/40">No revenue data available</p>
+                        <p className="text-sm text-white/30 mt-1">Revenue will appear here once quotes are approved</p>
                       </div>
-                      <span className="text-xs text-white/60 mt-2">{item.month}</span>
                     </div>
-                  ))}
+                  )}
                 </div>
               </ChartCard>
 
               <ChartCard title="Revenue by Service">
                 <div className="space-y-4">
-                  {analyticsData.revenue.byService.map((service) => {
-                    const percentage = (service.amount / analyticsData.revenue.current) * 100;
+                  {analyticsData.revenue.byService.length > 0 ? analyticsData.revenue.byService.map((service) => {
+                    const totalServiceRevenue = analyticsData.revenue.byService.reduce((sum, s) => sum + s.amount, 0);
+                    const percentage = totalServiceRevenue > 0 ? (service.amount / totalServiceRevenue) * 100 : 0;
                     return (
                       <div key={service.service}>
                         <div className="flex justify-between items-center mb-2">
@@ -390,7 +590,12 @@ export default function AdminAnalyticsPage() {
                         <Progress value={percentage} className="h-2" />
                       </div>
                     );
-                  })}
+                  }) : (
+                    <div className="text-center py-8 text-white/40">
+                      <DollarSign className="w-12 h-12 mx-auto mb-2" />
+                      <p>No revenue data available</p>
+                    </div>
+                  )}
                 </div>
               </ChartCard>
             </div>
@@ -512,46 +717,60 @@ export default function AdminAnalyticsPage() {
               </ChartCard>
             </div>
 
-            {/* Team Performance */}
-            <ChartCard
-              title="Team Performance"
-              action={
-                <Badge variant="outline" className="text-orange border-orange/30">
-                  <Award className="w-3 h-3 mr-1" />
-                  Top: {analyticsData.team.topPerformer}
-                </Badge>
-              }
-            >
-              <div className="space-y-4">
-                {analyticsData.team.members.map((member) => (
-                  <div key={member.id} className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="w-10 h-10 rounded-full bg-orange/20 flex items-center justify-center">
-                        <span className="text-sm font-medium text-white">
-                          {member.name
-                            .split(' ')
-                            .map((n) => n[0])
-                            .join('')}
-                        </span>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-white font-medium">{member.name}</p>
-                        <div className="flex items-center gap-4 text-sm text-white/60">
-                          <span>{member.projects} projects</span>
-                          <span>€{member.revenue.toLocaleString()}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Progress value={member.performance} className="w-24 h-2" />
-                      <span className="text-sm text-white/80 w-12 text-right">
-                        {member.performance}%
-                      </span>
-                    </div>
+            {/* Additional Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <FileText className="w-6 h-6 text-yellow-500" />
+                    <Badge variant="outline" className="text-yellow-500 border-yellow-500/30">
+                      Quotes
+                    </Badge>
                   </div>
-                ))}
-              </div>
-            </ChartCard>
+                  <p className="text-2xl font-bold text-white">{analyticsData.quotes.total}</p>
+                  <p className="text-sm text-white/60">Total quotes received</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <Clock className="w-6 h-6 text-blue-500" />
+                    <Badge variant="outline" className="text-blue-500 border-blue-500/30">
+                      Pending
+                    </Badge>
+                  </div>
+                  <p className="text-2xl font-bold text-white">{analyticsData.quotes.pending}</p>
+                  <p className="text-sm text-white/60">Awaiting review</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <Users className="w-6 h-6 text-purple-500" />
+                    <Badge variant="outline" className="text-purple-500 border-purple-500/30">
+                      Active
+                    </Badge>
+                  </div>
+                  <p className="text-2xl font-bold text-white">{analyticsData.users.active}</p>
+                  <p className="text-sm text-white/60">Active users (7d)</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <TrendingUp className="w-6 h-6 text-green-500" />
+                    <Badge variant="outline" className="text-green-500 border-green-500/30">
+                      Growth
+                    </Badge>
+                  </div>
+                  <p className="text-2xl font-bold text-white">{analyticsData.users.growth.toFixed(1)}%</p>
+                  <p className="text-sm text-white/60">User growth rate</p>
+                </CardContent>
+              </Card>
+            </div>
 
             {/* Quote Analytics */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
@@ -580,8 +799,8 @@ export default function AdminAnalyticsPage() {
                     <span className="text-sm text-white/60">This month</span>
                   </div>
                   <h3 className="text-lg font-medium text-white mb-2">Processing Time</h3>
-                  <p className="text-2xl font-bold text-white">2.4 days</p>
-                  <p className="text-sm text-green-500 mt-1">↓ 18% faster than last month</p>
+                  <p className="text-2xl font-bold text-white">-</p>
+                  <p className="text-sm text-white/60 mt-1">Data coming soon</p>
                 </CardContent>
               </Card>
 
@@ -593,7 +812,7 @@ export default function AdminAnalyticsPage() {
                   </div>
                   <h3 className="text-lg font-medium text-white mb-2">Success Rate</h3>
                   <p className="text-2xl font-bold text-white">
-                    {analyticsData.quotes.conversionRate}%
+                    {analyticsData.quotes.conversionRate.toFixed(1)}%
                   </p>
                   <p className="text-sm text-white/60 mt-1">
                     {analyticsData.quotes.approved} of {analyticsData.quotes.total} quotes

@@ -26,7 +26,7 @@ export default function Footer() {
       { label: 'RAG Architectuur', href: '/services/rag-architecture' },
       { label: 'ServiceNow AI', href: '/services/servicenow-ai' },
       { label: 'Multi-Agent Systems', href: '/services/multi-agent-orchestration' },
-      { label: 'Small Projects', href: '/services/small-projects' },
+      { label: 'Custom AI Solutions', href: '/services/custom-solutions' },
     ],
     company: [
       { label: tNav('about'), href: '/about' },

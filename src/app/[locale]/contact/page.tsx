@@ -239,7 +239,7 @@ export default function ContactPage() {
                           <SelectItem value="multi-agent">
                             {t('form.services.multiAgent')}
                           </SelectItem>
-                          <SelectItem value="small-projects">
+                          <SelectItem value="custom-solutions">
                             {t('form.services.security')}
                           </SelectItem>
                           <SelectItem value="other">{t('form.services.other')}</SelectItem>

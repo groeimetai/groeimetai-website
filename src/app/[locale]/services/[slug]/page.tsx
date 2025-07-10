@@ -69,7 +69,7 @@ const iconMap = {
   'rag-architecture': Layers,
   'servicenow-ai': Workflow,
   'multi-agent-orchestration': Sparkles,
-  'small-projects': Chrome,
+  'custom-solutions': Chrome,
 };
 
 function getServiceDataFromTranslations(slug: string, t: any): ServiceDetailData | null {
@@ -87,7 +87,7 @@ function getServiceDataFromTranslations(slug: string, t: any): ServiceDetailData
     'rag-architecture': 'rag',
     'servicenow-ai': 'servicenow',
     'multi-agent-orchestration': 'multiAgent',
-    'small-projects': 'security',
+    'custom-solutions': 'security',
   }[slug];
 
   if (!serviceKey) return null;
@@ -150,7 +150,7 @@ export async function generateMetadata({
     'rag-architecture': 'rag',
     'servicenow-ai': 'servicenow',
     'multi-agent-orchestration': 'multiAgent',
-    'small-projects': 'security',
+    'custom-solutions': 'security',
   }[params.slug];
 
   if (!serviceKey) {

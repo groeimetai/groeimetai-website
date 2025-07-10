@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/select';
 import { CustomRadioGroup, CustomRadioGroupItem } from '@/components/ui/custom-radio';
 import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase/config';
 import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
@@ -745,7 +746,7 @@ export default function QuoteRequestForm({
                       icon: Users,
                     },
                     {
-                      id: 'small-projects',
+                      id: 'custom-solutions',
                       title: t('form.services.security'),
                       description: t('form.services.securityDesc'),
                       icon: Chrome,
@@ -933,37 +934,34 @@ export default function QuoteRequestForm({
                 />
               </div>
 
-              <div>
-                <Label className="text-white">{t('servicesLabel')}</Label>
-                <p className="text-sm text-white/60 mb-3">{t('servicesDescription')}</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {[
-                    t('form.services.genai'),
-                    t('form.services.llm'),
-                    t('form.services.rag'),
-                    t('form.services.servicenow'),
-                    t('form.services.multiAgent'),
-                    t('form.services.security'),
-                  ].map((service) => (
-                    <label
-                      key={service}
-                      className={`flex items-center p-3 rounded-lg border cursor-pointer transition-colors ${
-                        formData.services.includes(service)
-                          ? 'border-primary bg-primary/5'
-                          : 'border-white/20 hover:bg-white/10'
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData.services.includes(service)}
-                        onChange={() => handleServiceToggle(service)}
-                        className="mr-3"
-                      />
-                      <span className="text-sm text-white">{service}</span>
-                    </label>
-                  ))}
+              {/* Show selected services as read-only */}
+              {formData.services.length > 0 && (
+                <div className="bg-orange/10 border border-orange/20 rounded-lg p-4">
+                  <Label className="text-white mb-2 block">{t('servicesLabel')}</Label>
+                  <div className="flex flex-wrap gap-2">
+                    {formData.services.map((serviceId) => {
+                      // Map service IDs to translated names
+                      const serviceNames: { [key: string]: string } = {
+                        'genai-consultancy': t('form.services.genai'),
+                        'llm-integration': t('form.services.llm'),
+                        'rag-architecture': t('form.services.rag'),
+                        'servicenow-ai': t('form.services.servicenow'),
+                        'multi-agent': t('form.services.multiAgent'),
+                        'custom-solutions': t('form.services.security'),
+                      };
+                      return (
+                        <Badge 
+                          key={serviceId} 
+                          variant="outline" 
+                          className="text-orange border-orange/50"
+                        >
+                          {serviceNames[serviceId] || serviceId}
+                        </Badge>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div>
                 <Label htmlFor="projectDescription" className="text-white">

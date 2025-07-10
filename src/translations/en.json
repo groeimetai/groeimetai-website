@@ -429,10 +429,10 @@
       "duration": "12-20 weeks"
     },
     "security": {
-      "title": "Small Projects",
-      "subtitle": "Custom Development Solutions",
-      "description": "Bring your unique ideas to life with custom development.",
-      "longDescription": "From websites and web applications to browser extensions and custom tools, we develop solutions that perfectly fit your specific needs.",
+      "title": "Custom AI Solutions",
+      "subtitle": "Tailored Technology Development",
+      "description": "Enterprise-grade custom AI applications and integrations.",
+      "longDescription": "We develop sophisticated AI-powered solutions tailored to your specific business needs. From intelligent web applications to custom AI integrations and specialized tools, we deliver enterprise-ready technology.",
       "benefits": [
         "Fast and flexible development",
         "Cost-effective solutions",
@@ -898,8 +898,8 @@
           "servicenowDesc": "AI-powered ServiceNow enhancements",
           "multiAgent": "Multi-Agent Orchestration",
           "multiAgentDesc": "Coordinate multiple AI agents for complex workflows",
-          "security": "Small Projects",
-          "securityDesc": "Custom websites, applications, extensions and more"
+          "security": "Custom AI Solutions",
+          "securityDesc": "Tailored AI applications, integrations and digital tools for your specific needs"
         }
       },
       "getStarted": "Get Started",
@@ -1032,7 +1032,7 @@
         "rag": "RAG Architecture",
         "servicenow": "ServiceNow AI",
         "multiAgent": "Multi-Agent Orchestration",
-        "security": "Small Projects",
+        "security": "Custom AI Solutions",
         "other": "Other"
       },
       "messageLabel": "Message *",
@@ -1099,8 +1099,8 @@
     "service1Description": "Navigate the AI revolution with expert guidance. We help you identify opportunities, develop strategies, and implement AI solutions that deliver real business value.",
     "service2Title": "LLM Integration & Optimization",
     "service2Description": "Transform your business processes with Large Language Models. From customer service to internal operations, we implement and optimize LLM solutions.",
-    "service3Title": "Small Projects",
-    "service3Description": "Custom development for your unique needs. From websites and web applications to browser extensions and custom tools, we bring your ideas to life.",
+    "service3Title": "Custom AI Solutions",
+    "service3Description": "Enterprise-grade custom AI development for your unique business challenges. We create sophisticated AI-powered applications, integrations, and digital tools tailored to your specific requirements.",
     "service4Title": "Multi-Agent Orchestration",
     "service4Description": "Harness the power of multiple AI agents working together. Our orchestration solutions enable complex workflows and autonomous operations.",
     "service5Title": "RAG Architecture Design",

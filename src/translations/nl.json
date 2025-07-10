@@ -429,10 +429,10 @@
       "duration": "12-20 weken"
     },
     "security": {
-      "title": "Kleine Projecten",
-      "subtitle": "Maatwerk Ontwikkeling",
-      "description": "Laat uw unieke ideeën tot leven komen met maatwerk ontwikkeling.",
-      "longDescription": "Van websites en webapplicaties tot browser extensies en custom tools - wij ontwikkelen oplossingen die perfect aansluiten bij uw specifieke behoeften.",
+      "title": "Maatwerk AI Oplossingen",
+      "subtitle": "Op Maat Gemaakte Technologie",
+      "description": "Enterprise-grade AI applicaties en integraties op maat.",
+      "longDescription": "Wij ontwikkelen geavanceerde AI-aangedreven oplossingen die perfect aansluiten bij uw specifieke bedrijfsbehoeften. Van intelligente webapplicaties tot maatwerk AI-integraties en gespecialiseerde tools - wij leveren enterprise-ready technologie.",
       "benefits": [
         "Snelle en flexibele ontwikkeling",
         "Kosteneffectieve oplossingen",
@@ -888,8 +888,8 @@
           "servicenowDesc": "AI-aangedreven ServiceNow verbeteringen",
           "multiAgent": "Multi-Agent Orkestratie",
           "multiAgentDesc": "Coördineer meerdere AI-agenten voor complexe workflows",
-          "security": "Kleine Projecten",
-          "securityDesc": "Maatwerk websites, applicaties, extensies en meer"
+          "security": "Maatwerk AI Oplossingen",
+          "securityDesc": "Op maat gemaakte AI-applicaties, integraties en digitale tools voor uw specifieke behoeften"
         }
       },
       "getStarted": "Aan de Slag",
@@ -1022,7 +1022,7 @@
         "rag": "RAG Architectuur",
         "servicenow": "ServiceNow AI",
         "multiAgent": "Multi-Agent Orchestration",
-        "security": "Kleine Projecten",
+        "security": "Maatwerk AI Oplossingen",
         "other": "Anders"
       },
       "messageLabel": "Bericht *",
@@ -1100,8 +1100,8 @@
     "service1Description": "Navigeer de AI-revolutie met deskundige begeleiding. Wij helpen u kansen te identificeren, strategieën te ontwikkelen en AI-oplossingen te implementeren die echte bedrijfswaarde leveren.",
     "service2Title": "LLM Integratie & Optimalisatie",
     "service2Description": "Transformeer uw bedrijfsprocessen met Large Language Models. Van klantenservice tot interne operaties, wij implementeren en optimaliseren LLM-oplossingen.",
-    "service3Title": "Kleine Projecten",
-    "service3Description": "Maatwerk ontwikkeling voor uw unieke behoeften. Van websites en webapplicaties tot browser extensies en custom tools, wij brengen uw ideeën tot leven.",
+    "service3Title": "Maatwerk AI Oplossingen",
+    "service3Description": "Enterprise-grade maatwerk AI-ontwikkeling voor uw unieke zakelijke uitdagingen. Wij creëren geavanceerde AI-aangedreven applicaties, integraties en digitale tools die specifiek zijn afgestemd op uw vereisten.",
     "service4Title": "Multi-Agent Orkestratie",
     "service4Description": "Benut de kracht van meerdere AI-agenten die samenwerken. Onze orkestratieoplossingen maken complexe workflows en autonome operaties mogelijk.",
     "service5Title": "RAG Architectuur Ontwerp",

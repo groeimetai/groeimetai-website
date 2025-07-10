@@ -12,7 +12,7 @@ export const PAGES_TO_CRAWL = [
   '/services/ml-engineering',
   '/services/nlp-solutions',
   '/services/genai-assistants',
-  '/services/small-projects',
+  '/services/custom-solutions',
   '/services/strategy',
   '/services/transformation',
   '/services/governance',
