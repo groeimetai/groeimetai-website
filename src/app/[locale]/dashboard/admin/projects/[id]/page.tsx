@@ -42,7 +42,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from '@/i18n/routing';
 import { firestoreProjectService as projectService } from '@/services/firestore/projects';
-import { Project, ProjectStatus, ProjectPriority } from '@/types';
+import { Project, ProjectStatus, ProjectPriority, ProjectType } from '@/types';
 import { format } from 'date-fns';
 import { db } from '@/lib/firebase/config';
 import { doc, onSnapshot, updateDoc, deleteDoc, collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';

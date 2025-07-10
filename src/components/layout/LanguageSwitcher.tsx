@@ -5,11 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Globe } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import { useTransition, useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
 
 export default function LanguageSwitcher() {
   const router = useRouter();
   const pathname = usePathname();
   const locale = useLocale();
+  const { user } = useAuth();
   const [isPending, startTransition] = useTransition();
   const [mounted, setMounted] = useState(false);
 
@@ -18,9 +22,22 @@ export default function LanguageSwitcher() {
     setMounted(true);
   }, []);
 
-  const handleLanguageChange = () => {
+  const handleLanguageChange = async () => {
     // Toggle between nl and en
     const newLocale = locale === 'nl' ? 'en' : 'nl';
+
+    // Update user preferences if logged in
+    if (user?.uid) {
+      try {
+        const userRef = doc(db, 'users', user.uid);
+        await updateDoc(userRef, {
+          'preferences.language': newLocale,
+          updatedAt: new Date()
+        });
+      } catch (error) {
+        console.error('Error updating user language preference:', error);
+      }
+    }
 
     // Navigate to the new locale with transition
     if (mounted) {

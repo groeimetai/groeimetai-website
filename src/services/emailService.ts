@@ -1,5 +1,7 @@
 import { createTransporter, emailConfig, verifyEmailConnection } from '@/lib/email/config';
-import { emailTemplates } from '@/lib/email/templates';
+import { getEmailTemplate } from '@/lib/email/templates';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
 
 export interface EmailOptions {
   to: string | string[];
@@ -10,6 +12,26 @@ export interface EmailOptions {
 }
 
 class EmailService {
+  private async getUserLanguage(email: string): Promise<string> {
+    try {
+      // Query users collection by email
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('email', '==', email));
+      const querySnapshot = await getDocs(q);
+      
+      if (!querySnapshot.empty) {
+        const userData = querySnapshot.docs[0].data();
+        return userData?.preferences?.language || 'en';
+      }
+      
+      // Default to English if user not found
+      return 'en';
+    } catch (error) {
+      console.error('Error getting user language:', error);
+      return 'en';
+    }
+  }
+
   async sendEmail(options: EmailOptions) {
     // Skip email in development if not configured
     if (process.env.NODE_ENV === 'development' && !process.env.SMTP_PASS) {
@@ -64,6 +86,9 @@ class EmailService {
     description: string;
     requestId: string;
   }) {
+    // For admin emails, we'll use the language of the user who submitted the request
+    const userLanguage = await this.getUserLanguage(data.recipientEmail);
+    const emailTemplates = getEmailTemplate(userLanguage);
     const template = emailTemplates.newProjectRequest(data);
 
     // Send to all admin emails
@@ -86,6 +111,9 @@ class EmailService {
     message?: string;
     quoteId: string;
   }) {
+    // Get user's preferred language
+    const userLanguage = await this.getUserLanguage(data.recipientEmail);
+    const emailTemplates = getEmailTemplate(userLanguage);
     const template = emailTemplates.quoteStatusChange(data);
 
     await this.sendEmail({
@@ -108,6 +136,9 @@ class EmailService {
     description?: string;
     meetingId: string;
   }) {
+    // For admin emails, we'll use the language of the user who submitted the request
+    const userLanguage = await this.getUserLanguage(data.requesterEmail);
+    const emailTemplates = getEmailTemplate(userLanguage);
     const template = emailTemplates.newMeetingRequest({
       ...data,
       recipientName: 'Admin',
