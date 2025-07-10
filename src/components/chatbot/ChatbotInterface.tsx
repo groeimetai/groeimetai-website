@@ -15,11 +15,13 @@ interface Message {
 interface ChatbotInterfaceProps {
   className?: string;
   initialMessage?: string;
+  onClose?: () => void;
 }
 
 export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
   className,
   initialMessage = 'Welkom bij GroeimetAI! 👋 Ik ben uw AI-assistent. Hoe kan ik u helpen met onze AI consultancy diensten? U kunt mij vragen stellen over GenAI, multi-agent orchestration, ServiceNow integratie of een van onze andere expertise gebieden.',
+  onClose,
 }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -35,6 +37,7 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -49,6 +52,20 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
       inputRef.current.focus();
     }
   }, [isMinimized]);
+
+  useEffect(() => {
+    // Check if device is mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -135,13 +152,17 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
   return (
     <div
       className={cn(
-        'fixed bottom-4 right-4 z-50 transition-all duration-300',
-        isMinimized ? 'w-80' : 'w-96',
+        'fixed z-50 transition-all duration-300',
+        isMobile ? 'bottom-0 right-0 left-0' : 'bottom-4 right-4',
+        isMinimized ? 'w-80' : (isMobile ? 'w-full' : 'w-96'),
         className
       )}
     >
       {/* Chat Header */}
-      <div className="bg-black rounded-t-lg p-4 flex items-center justify-between shadow-lg border-b-2 border-orange">
+      <div className={cn(
+        "bg-black p-4 flex items-center justify-between shadow-lg border-b-2 border-orange",
+        isMobile ? "rounded-none" : "rounded-t-lg"
+      )}>
         <div className="flex items-center space-x-3">
           <div className="relative">
             <div className="h-10 w-10 rounded-full bg-gradient-to-br from-orange to-orange-600 flex items-center justify-center">
@@ -156,11 +177,17 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
         </div>
         <div className="flex items-center space-x-2">
           <button
-            onClick={() => setIsMinimized(!isMinimized)}
+            onClick={() => {
+              if (isMobile && onClose) {
+                onClose();
+              } else {
+                setIsMinimized(!isMinimized);
+              }
+            }}
             className="hover:bg-white/20 p-1 rounded transition-colors"
-            aria-label={isMinimized ? 'Maximize chat' : 'Minimize chat'}
+            aria-label={isMobile ? 'Close chat' : (isMinimized ? 'Maximize chat' : 'Minimize chat')}
           >
-            {isMinimized ? <Maximize2 className="h-5 w-5" /> : <Minimize2 className="h-5 w-5" />}
+            {isMobile ? <X className="h-5 w-5" /> : (isMinimized ? <Maximize2 className="h-5 w-5" /> : <Minimize2 className="h-5 w-5" />)}
           </button>
         </div>
       </div>
@@ -168,7 +195,10 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
       {/* Chat Messages */}
       {!isMinimized && (
         <div className="bg-black border-x border-white/10 shadow-lg">
-          <div className="h-96 overflow-y-auto p-4 space-y-4">
+          <div className={cn(
+            "overflow-y-auto p-4 space-y-4",
+            isMobile ? "h-[70vh]" : "h-96"
+          )}>
             {messages.map((message) => (
               <div
                 key={message.id}

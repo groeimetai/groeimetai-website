@@ -81,7 +81,7 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
   };
 
   if (isOpen) {
-    return <ChatbotInterface />;
+    return <ChatbotInterface onClose={handleClose} />;
   }
 
   return (
