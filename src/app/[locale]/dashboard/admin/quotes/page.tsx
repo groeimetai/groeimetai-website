@@ -118,6 +118,158 @@ export default function AdminQuotesPage() {
   const [emailMessage, setEmailMessage] = useState('');
   const [sendingEmail, setSendingEmail] = useState(false);
 
+  // Update quote status - Define this before handleBulkAction
+  const updateQuoteStatus = async (quoteId: string, newStatus: Quote['status']) => {
+    try {
+      const quote = quotes.find((q) => q.id === quoteId);
+      if (!quote) return;
+
+      await updateDoc(doc(db, 'quotes', quoteId), {
+        status: newStatus,
+        updatedAt: serverTimestamp(),
+        reviewedBy: user?.uid,
+        reviewedAt: serverTimestamp(),
+      });
+
+      // Send email notification
+      try {
+        await fetch('/api/email/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'quote-status-change',
+            data: {
+              recipientName: quote.fullName,
+              recipientEmail: quote.email,
+              projectName: quote.projectName,
+              oldStatus: quote.status,
+              newStatus: newStatus,
+              quoteId: quoteId,
+            },
+          }),
+        });
+      } catch (emailError) {
+        console.error('Failed to send email notification:', emailError);
+      }
+
+      // Send in-app notification
+      if (quote.userId) {
+        await notificationService.sendToUser(
+          quote.userId,
+          notificationService.templates.quoteStatusUpdate(quote.projectName, newStatus)
+        );
+      }
+
+      // Update local state
+      setQuotes(
+        quotes.map((q) =>
+          q.id === quoteId
+            ? { ...q, status: newStatus, reviewedBy: user?.uid, reviewedAt: Timestamp.now() }
+            : q
+        )
+      );
+    } catch (error) {
+      console.error('Error updating quote status:', error);
+    }
+  };
+
+  // Handle bulk actions - Define this BEFORE using it
+  const handleBulkAction = async (action: BulkActionType, data?: any) => {
+    try {
+      switch (action) {
+        case 'delete':
+          // Actually delete the quotes from Firestore
+          const deletedIds: string[] = [];
+          const failedIds: string[] = [];
+          
+          for (const quoteId of data.ids) {
+            try {
+              await deleteDoc(doc(db, 'quotes', quoteId));
+              deletedIds.push(quoteId);
+            } catch (deleteError) {
+              console.error('Failed to delete quote:', quoteId, deleteError);
+              failedIds.push(quoteId);
+            }
+          }
+          
+          // Show success message if any quotes were deleted
+          if (deletedIds.length > 0) {
+            // Don't update local state manually - let the real-time listener handle it
+            toast.success(`Successfully deleted ${deletedIds.length} quote(s)`);
+          }
+          
+          if (failedIds.length > 0) {
+            console.error('Failed to delete some quotes:', failedIds);
+            toast.error(`Failed to delete ${failedIds.length} quote(s). Check console for details.`);
+          }
+          break;
+
+        case 'updateStatus':
+          for (const quoteId of data.ids) {
+            await updateQuoteStatus(quoteId, data.status);
+          }
+          break;
+
+        case 'export':
+          const selectedQuotes = quotes.filter((q) => data.ids.includes(q.id));
+          const csv = [
+            [
+              'ID',
+              'Project Name',
+              'Company',
+              'Contact',
+              'Email',
+              'Status',
+              'Budget',
+              'Timeline',
+              'Services',
+              'Created',
+            ],
+            ...selectedQuotes.map((q) => [
+              q.id,
+              q.projectName,
+              q.company,
+              q.fullName,
+              q.email,
+              q.status,
+              q.budget,
+              q.timeline,
+              q.services.join('; '),
+              format(q.createdAt?.toDate() || new Date(), 'yyyy-MM-dd'),
+            ]),
+          ]
+            .map((row) => row.map((cell) => `"${cell}"`).join(','))
+            .join('\n');
+
+          const blob = new Blob([csv], { type: 'text/csv' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `quotes-export-${new Date().toISOString().split('T')[0]}.csv`;
+          a.click();
+          URL.revokeObjectURL(url);
+          break;
+
+        case 'archive':
+          for (const quoteId of data.ids) {
+            await updateDoc(doc(db, 'quotes', quoteId), {
+              status: 'expired',
+              archivedAt: serverTimestamp(),
+              updatedAt: serverTimestamp(),
+            });
+          }
+          break;
+      }
+
+      clearSelection();
+    } catch (error) {
+      console.error('Error executing bulk action:', error);
+      toast.error('An error occurred while executing the bulk action. Check console for details.');
+    }
+  };
+
   const { selectedIds, setSelectedIds, toggleSelection, clearSelection } = useBulkSelection(quotes);
 
   // Redirect if not admin
@@ -143,13 +295,7 @@ export default function AdminQuotesPage() {
         snapshot.forEach((doc) => {
           const quote = { id: doc.id, ...doc.data() } as Quote;
           quotesData.push(quote);
-          // Log any quotes that are already rejected
-          if (quote.status === 'rejected') {
-            console.log('Found rejected quote:', quote.id, quote.projectName);
-          }
         });
-
-        console.log(`Real-time update: ${quotesData.length} quotes total`);
         setQuotes(quotesData);
         setIsLoading(false);
       },
@@ -221,63 +367,6 @@ export default function AdminQuotesPage() {
 
       return sortOrder === 'asc' ? compareValue : -compareValue;
     });
-
-  // Update quote status
-  const updateQuoteStatus = async (quoteId: string, newStatus: Quote['status']) => {
-    try {
-      const quote = quotes.find((q) => q.id === quoteId);
-      if (!quote) return;
-
-      await updateDoc(doc(db, 'quotes', quoteId), {
-        status: newStatus,
-        updatedAt: serverTimestamp(),
-        reviewedBy: user?.uid,
-        reviewedAt: serverTimestamp(),
-      });
-
-      // Send email notification
-      try {
-        await fetch('/api/email/send', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            type: 'quote-status-change',
-            data: {
-              recipientName: quote.fullName,
-              recipientEmail: quote.email,
-              projectName: quote.projectName,
-              oldStatus: quote.status,
-              newStatus: newStatus,
-              quoteId: quoteId,
-            },
-          }),
-        });
-      } catch (emailError) {
-        console.error('Failed to send email notification:', emailError);
-      }
-
-      // Send in-app notification
-      if (quote.userId) {
-        await notificationService.sendToUser(
-          quote.userId,
-          notificationService.templates.quoteStatusUpdate(quote.projectName, newStatus)
-        );
-      }
-
-      // Update local state
-      setQuotes(
-        quotes.map((q) =>
-          q.id === quoteId
-            ? { ...q, status: newStatus, reviewedBy: user?.uid, reviewedAt: Timestamp.now() }
-            : q
-        )
-      );
-    } catch (error) {
-      console.error('Error updating quote status:', error);
-    }
-  };
 
   // Convert quote to project
   const convertToProject = async (quote: Quote) => {
@@ -351,105 +440,6 @@ export default function AdminQuotesPage() {
       console.error('Error sending email:', error);
     } finally {
       setSendingEmail(false);
-    }
-  };
-
-  // Handle bulk actions
-  const handleBulkAction = async (action: BulkActionType, data?: any) => {
-    console.log('handleBulkAction called with action:', action, 'data:', data);
-    try {
-      switch (action) {
-        case 'delete':
-          console.log('Delete action triggered for quotes:', data.ids);
-          // Actually delete the quotes from Firestore
-          const deletedIds: string[] = [];
-          const failedIds: string[] = [];
-          
-          for (const quoteId of data.ids) {
-            try {
-              console.log('Deleting quote:', quoteId);
-              await deleteDoc(doc(db, 'quotes', quoteId));
-              deletedIds.push(quoteId);
-              console.log('Successfully deleted quote:', quoteId);
-            } catch (deleteError) {
-              console.error('Failed to delete quote:', quoteId, deleteError);
-              failedIds.push(quoteId);
-            }
-          }
-          
-          // Remove successfully deleted quotes from local state
-          if (deletedIds.length > 0) {
-            setQuotes(quotes.filter((q) => !deletedIds.includes(q.id)));
-            console.log('Quotes deleted successfully:', deletedIds);
-          }
-          
-          if (failedIds.length > 0) {
-            console.error('Failed to delete some quotes:', failedIds);
-            toast.error(`Failed to delete ${failedIds.length} quote(s). Check console for details.`);
-          }
-          break;
-
-        case 'updateStatus':
-          for (const quoteId of data.ids) {
-            await updateQuoteStatus(quoteId, data.status);
-          }
-          break;
-
-        case 'export':
-          const selectedQuotes = quotes.filter((q) => data.ids.includes(q.id));
-          const csv = [
-            [
-              'ID',
-              'Project Name',
-              'Company',
-              'Contact',
-              'Email',
-              'Status',
-              'Budget',
-              'Timeline',
-              'Services',
-              'Created',
-            ],
-            ...selectedQuotes.map((q) => [
-              q.id,
-              q.projectName,
-              q.company,
-              q.fullName,
-              q.email,
-              q.status,
-              q.budget,
-              q.timeline,
-              q.services.join('; '),
-              format(q.createdAt?.toDate() || new Date(), 'yyyy-MM-dd'),
-            ]),
-          ]
-            .map((row) => row.map((cell) => `"${cell}"`).join(','))
-            .join('\n');
-
-          const blob = new Blob([csv], { type: 'text/csv' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `quotes-export-${new Date().toISOString().split('T')[0]}.csv`;
-          a.click();
-          URL.revokeObjectURL(url);
-          break;
-
-        case 'archive':
-          for (const quoteId of data.ids) {
-            await updateDoc(doc(db, 'quotes', quoteId), {
-              status: 'expired',
-              archivedAt: serverTimestamp(),
-              updatedAt: serverTimestamp(),
-            });
-          }
-          break;
-      }
-
-      clearSelection();
-    } catch (error) {
-      console.error('Error executing bulk action:', error);
-      toast.error('An error occurred while executing the bulk action. Check console for details.');
     }
   };
 
