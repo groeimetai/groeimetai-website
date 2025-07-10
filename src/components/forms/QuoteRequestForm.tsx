@@ -85,6 +85,7 @@ export default function QuoteRequestForm({
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [error, setError] = useState('');
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [emailVerificationSent, setEmailVerificationSent] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   // Ensure we're on the client side
@@ -254,9 +255,12 @@ export default function QuoteRequestForm({
             accountType: 'customer',
           });
 
-          // Get the current user ID after registration
-          const auth = await import('firebase/auth').then((m) => m.getAuth());
-          userId = auth.currentUser?.uid || null;
+          // The register function now signs out the user after registration
+          // so they need to verify their email first
+          setEmailVerificationSent(true);
+          
+          // User is signed out, so no userId
+          userId = null;
         } catch (authError: any) {
           console.error('Failed to create account:', authError);
           if (authError.code === 'auth/email-already-in-use') {
@@ -399,7 +403,12 @@ export default function QuoteRequestForm({
         onSuccess();
       } else {
         if (mounted) {
-          router.push('/quote-success');
+          // If email verification was sent, redirect to a page that tells them to verify
+          if (emailVerificationSent) {
+            router.push('/verify-email?email=' + encodeURIComponent(formData.email));
+          } else {
+            router.push('/quote-success');
+          }
         }
       }
     } catch (error: any) {

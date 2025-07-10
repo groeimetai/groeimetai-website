@@ -993,6 +993,20 @@
         "accountCreationFailed": "Account aanmaken mislukt. Probeer het opnieuw.",
         "submissionFailed": "Er is een fout opgetreden bij het indienen van uw aanvraag. Probeer het opnieuw."
       }
+    },
+    "verifyEmail": {
+      "title": "Verifieer Uw E-mailadres",
+      "subtitle": "We hebben u een verificatie e-mail gestuurd",
+      "message": "Controleer uw e-mail en klik op de verificatielink om uw account te activeren:",
+      "nextSteps": {
+        "title": "Volgende Stappen",
+        "step1": "Open uw e-mail inbox",
+        "step2": "Klik op de verificatielink in onze e-mail",
+        "step3": "Log in met uw gegevens"
+      },
+      "didntReceive": "E-mail niet ontvangen?",
+      "checkSpam": "Controleer uw spammap of neem contact op met support.",
+      "backToLogin": "Terug naar Inloggen"
     }
   },
   "contact": {

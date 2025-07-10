@@ -1003,6 +1003,20 @@
         "accountCreationFailed": "Failed to create account. Please try again.",
         "submissionFailed": "An error occurred while submitting your request. Please try again."
       }
+    },
+    "verifyEmail": {
+      "title": "Verify Your Email",
+      "subtitle": "We've sent you a verification email",
+      "message": "Please check your email and click the verification link to activate your account:",
+      "nextSteps": {
+        "title": "Next Steps",
+        "step1": "Open your email inbox",
+        "step2": "Click the verification link in our email",
+        "step3": "Log in with your credentials"
+      },
+      "didntReceive": "Didn't receive the email?",
+      "checkSpam": "Check your spam folder or contact support.",
+      "backToLogin": "Back to Login"
     }
   },
   "contact": {

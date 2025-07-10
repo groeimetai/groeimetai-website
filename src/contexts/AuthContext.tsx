@@ -262,8 +262,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Create user document
       const newUser = await createOrUpdateUserDoc(credential.user, userData);
-      setUser(newUser);
-
+      
       // Log successful registration (wrap in try-catch to prevent permission errors)
       try {
         await logAuthActivity('auth.register', credential.user.uid, credential.user.email || '', {
@@ -274,6 +273,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       } catch (logError) {
         console.error('Failed to log activity:', logError);
       }
+
+      // Sign out the user immediately after registration
+      // They need to verify their email before logging in
+      await signOut(auth);
+      
+      // Don't set the user state, as we've signed them out
+      // setUser(newUser);
     } catch (error: any) {
       setError(error.message);
 
