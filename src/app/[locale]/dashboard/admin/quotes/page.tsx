@@ -71,6 +71,7 @@ import { BulkActions, useBulkSelection } from '@/components/admin/BulkActions';
 import type { BulkActionType } from '@/components/admin/BulkActions';
 import { notificationService } from '@/services/notificationService';
 import QuoteChat from '@/components/QuoteChat';
+import toast from 'react-hot-toast';
 
 interface Quote {
   id: string;
@@ -350,13 +351,31 @@ export default function AdminQuotesPage() {
         case 'delete':
           console.log('Delete action triggered for quotes:', data.ids);
           // Actually delete the quotes from Firestore
+          const deletedIds: string[] = [];
+          const failedIds: string[] = [];
+          
           for (const quoteId of data.ids) {
-            console.log('Deleting quote:', quoteId);
-            await deleteDoc(doc(db, 'quotes', quoteId));
+            try {
+              console.log('Deleting quote:', quoteId);
+              await deleteDoc(doc(db, 'quotes', quoteId));
+              deletedIds.push(quoteId);
+              console.log('Successfully deleted quote:', quoteId);
+            } catch (deleteError) {
+              console.error('Failed to delete quote:', quoteId, deleteError);
+              failedIds.push(quoteId);
+            }
           }
-          // Remove from local state
-          setQuotes(quotes.filter((q) => !data.ids.includes(q.id)));
-          console.log('Quotes deleted successfully');
+          
+          // Remove successfully deleted quotes from local state
+          if (deletedIds.length > 0) {
+            setQuotes(quotes.filter((q) => !deletedIds.includes(q.id)));
+            console.log('Quotes deleted successfully:', deletedIds);
+          }
+          
+          if (failedIds.length > 0) {
+            console.error('Failed to delete some quotes:', failedIds);
+            toast.error(`Failed to delete ${failedIds.length} quote(s). Check console for details.`);
+          }
           break;
 
         case 'updateStatus':
@@ -419,6 +438,7 @@ export default function AdminQuotesPage() {
       clearSelection();
     } catch (error) {
       console.error('Error executing bulk action:', error);
+      toast.error('An error occurred while executing the bulk action. Check console for details.');
     }
   };
 
