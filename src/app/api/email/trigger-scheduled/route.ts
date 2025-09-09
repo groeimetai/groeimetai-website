@@ -6,9 +6,25 @@ import { db } from '@/lib/firebase/config';
 // Call this from a simple cron service like cron-job.org or UptimeRobot
 export async function GET(req: NextRequest) {
   try {
-    console.log('🔄 Checking for due emails...');
+    console.log('🔄 Checking for due emails at:', new Date().toISOString());
+    
+    // Test Firestore connection first
+    try {
+      const testCollection = collection(db, 'scheduled_emails');
+      console.log('✅ Firestore connection successful');
+    } catch (dbError) {
+      console.error('❌ Firestore connection failed:', dbError);
+      return NextResponse.json(
+        { 
+          error: 'Database connection failed', 
+          details: dbError instanceof Error ? dbError.message : 'Unknown DB error'
+        },
+        { status: 500 }
+      );
+    }
     
     const now = new Date();
+    console.log('🕒 Looking for emails scheduled before:', now.toISOString());
     
     // Get scheduled emails that are due
     const q = query(
@@ -17,7 +33,9 @@ export async function GET(req: NextRequest) {
       where('scheduledFor', '<=', now)
     );
     
+    console.log('📝 Executing Firestore query...');
     const snapshot = await getDocs(q);
+    console.log(`📊 Query returned ${snapshot.size} documents`);
     
     if (snapshot.empty) {
       console.log('📭 No emails due');
@@ -85,8 +103,18 @@ export async function GET(req: NextRequest) {
     
   } catch (error) {
     console.error('❌ Email trigger error:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : 'UnknownError'
+    });
+    
     return NextResponse.json(
-      { error: 'Failed to process scheduled emails' },
+      { 
+        error: 'Failed to process scheduled emails',
+        details: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      },
       { status: 500 }
     );
   }
