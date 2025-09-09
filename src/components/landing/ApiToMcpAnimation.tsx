@@ -323,6 +323,10 @@ export default function ApiToMcpAnimation() {
                       left: mcpPositions[i].left + 3 // 3% naar rechts voor betere symmetrie
                     };
                     const m = getBoxCenter(mcpEndPos, stageSize); // MCP connection point
+                    
+                    // Determine stroke dash array based on phase
+                    const dashArray = currentPhase === 1 ? '6 8' : undefined;
+                    
                     return (
                       <motion.line
                         key={`a-m-${i}`}
@@ -333,10 +337,10 @@ export default function ApiToMcpAnimation() {
                         stroke={lineColorAPIMCP}
                         strokeWidth={3}
                         strokeLinecap="round"
+                        strokeDasharray={dashArray}
                         initial={{ pathLength: 0, opacity: 0.0 }}
                         animate={{ pathLength: 1, opacity: 0.4 }}
                         transition={{ delay: 0.6 + i * 0.15, duration: 0.8 }}
-                        strokeDasharray={currentPhase === 1 ? '6 8' : ''}
                       />
                     );
                   })}
