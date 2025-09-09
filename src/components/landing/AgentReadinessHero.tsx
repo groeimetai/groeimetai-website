@@ -13,9 +13,10 @@ export default function AgentReadinessHero() {
   const t = useTranslations('hero');
   
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#080D14' }}>
-      {/* Orange Glow Effect */}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-8 sm:py-16" style={{ backgroundColor: '#080D14' }}>
+      {/* Luxe Moving Orange Glow Effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Main Central Glow - Slow Orbital Movement */}
         <motion.div 
           className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-30 blur-3xl"
           style={{
@@ -23,50 +24,81 @@ export default function AgentReadinessHero() {
             filter: 'blur(60px)'
           }}
           animate={{ 
-            scale: [1, 1.1, 1],
-            opacity: [0.3, 0.4, 0.3]
+            x: [0, 30, -20, 0],
+            y: [0, -15, 25, 0],
+            scale: [1, 1.1, 0.95, 1],
+            opacity: [0.3, 0.4, 0.25, 0.3]
           }}
           transition={{ 
-            duration: 4,
+            duration: 8,
             repeat: Infinity,
             ease: "easeInOut"
           }}
         ></motion.div>
+        
+        {/* Secondary Glow - Figure-8 Movement */}
         <motion.div 
-          className="absolute top-1/3 right-1/4 w-64 h-64 rounded-full opacity-15 blur-2xl"
+          className="absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full opacity-20 blur-2xl"
           style={{
-            background: 'radial-gradient(circle, rgba(255,133,51,0.3) 0%, rgba(255,133,51,0.05) 70%, transparent 100%)'
+            background: 'radial-gradient(circle, rgba(255,133,51,0.4) 0%, rgba(255,133,51,0.1) 50%, rgba(248,115,21,0.05) 80%, transparent 100%)',
+            filter: 'blur(40px)'
           }}
           animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.15, 0.2, 0.15]
+            x: [0, 40, 0, -40, 0],
+            y: [0, -30, 0, 30, 0],
+            scale: [1, 1.3, 1.1, 1.2, 1],
+            opacity: [0.2, 0.3, 0.15, 0.25, 0.2]
           }}
           transition={{ 
-            duration: 6,
+            duration: 12,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 1
+            delay: 1.5
           }}
         ></motion.div>
+        
+        {/* Accent Glow - Gentle Drift */}
         <motion.div 
-          className="absolute bottom-1/3 left-1/4 w-80 h-80 rounded-full opacity-10 blur-3xl"
+          className="absolute bottom-1/3 left-1/4 w-[350px] h-[350px] rounded-full opacity-15 blur-3xl"
           style={{
-            background: 'radial-gradient(circle, rgba(248,115,21,0.25) 0%, rgba(248,115,21,0.05) 60%, transparent 100%)'
+            background: 'radial-gradient(circle, rgba(248,115,21,0.4) 0%, rgba(255,165,0,0.15) 60%, rgba(248,115,21,0.03) 80%, transparent 100%)',
+            filter: 'blur(50px)'
           }}
           animate={{ 
-            scale: [1, 1.15, 1],
-            opacity: [0.1, 0.15, 0.1]
+            x: [0, -25, 35, -10, 0],
+            y: [0, 20, -10, 15, 0],
+            scale: [1, 1.15, 1.05, 1.2, 1],
+            opacity: [0.15, 0.25, 0.1, 0.2, 0.15]
           }}
           transition={{ 
-            duration: 5,
+            duration: 10,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 2
+            delay: 3
+          }}
+        ></motion.div>
+        
+        {/* Ambient Background Glow - Subtle Overall Warmth */}
+        <motion.div 
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] rounded-full opacity-10"
+          style={{
+            background: 'radial-gradient(ellipse, rgba(248,115,21,0.2) 0%, rgba(248,115,21,0.05) 50%, transparent 100%)',
+            filter: 'blur(80px)'
+          }}
+          animate={{ 
+            scale: [1, 1.05, 1.02, 1],
+            opacity: [0.1, 0.15, 0.08, 0.1]
+          }}
+          transition={{ 
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 0.5
           }}
         ></motion.div>
       </div>
       
-      <div className="container mx-auto px-4 text-center relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -80,7 +112,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-4 sm:mb-6 leading-tight"
           >
             {t('title')}{' '}
             <span
@@ -95,7 +127,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl md:text-2xl text-white/90 mb-4 max-w-4xl mx-auto font-light leading-relaxed"
+            className="text-lg sm:text-xl md:text-2xl text-white/90 mb-3 sm:mb-4 max-w-4xl mx-auto font-light leading-relaxed px-2 sm:px-0"
           >
             {t('subtitle')}
           </motion.p>
@@ -104,7 +136,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-lg text-white/80 mb-8 max-w-3xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg text-white/80 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed px-2 sm:px-0"
           >
             {t('description')}
           </motion.p>
@@ -116,11 +148,11 @@ export default function AgentReadinessHero() {
             className="space-y-8 mb-12"
           >
             {!showQuickCheck ? (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4 sm:px-0">
                 <Button
                   onClick={() => setShowQuickCheck(true)}
                   size="lg"
-                  className="group text-white border-0 shadow-xl hover-lift transform transition-all duration-300"
+                  className="group text-white border-0 shadow-xl hover-lift transform transition-all duration-300 w-full sm:w-auto min-h-[44px] text-base sm:text-lg px-6 py-3"
                   style={{ 
                     backgroundColor: '#F87315',
                     boxShadow: '0 10px 25px -5px rgba(248, 115, 21, 0.25)'
@@ -130,11 +162,11 @@ export default function AgentReadinessHero() {
                   {t('cta.quickCheck')}
                   <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Button>
-                <Link href="/cases">
+                <Link href="/cases" className="w-full sm:w-auto">
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-white/20 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300"
+                    className="border-white/20 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 w-full sm:w-auto min-h-[44px] text-base sm:text-lg px-6 py-3"
                   >
                     {t('cta.seeHow')}
                   </Button>
@@ -148,7 +180,7 @@ export default function AgentReadinessHero() {
                   <Button
                     onClick={() => setShowQuickCheck(false)}
                     variant="outline"
-                    className="border-white/20 text-white/70 hover:bg-white/5"
+                    className="border-white/20 text-white/70 hover:bg-white/5 min-h-[44px] px-4 py-2 text-sm"
                   >
                     {t('cta.back')}
                   </Button>
@@ -163,10 +195,10 @@ export default function AgentReadinessHero() {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="text-center"
           >
-            <p className="text-sm text-white/50 mb-2">
+            <p className="text-xs sm:text-sm text-white/50 mb-2 px-2 text-center">
               {t('badge')}
             </p>
-            <p className="text-lg font-semibold text-white/90">
+            <p className="text-sm sm:text-base md:text-lg font-semibold text-white/90 px-2 text-center leading-relaxed">
               {t('explanation')}{' '}
               <span style={{ color: '#F87315' }}>{t('reason')}</span>
             </p>
