@@ -199,13 +199,6 @@ const nextConfig = {
   // Generate ETags
   generateEtags: true,
 
-  // Disable API route pre-rendering during build
-  experimental: {
-    ...((typeof nextConfig.experimental === 'object' && nextConfig.experimental) || {}),
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-*', 'framer-motion'],
-    webVitalsAttribution: ['CLS', 'LCP', 'FCP', 'FID', 'TTFB'],
-    isrMemoryCacheSize: 0, // Disable ISR cache during build
-  },
 
   // Page extensions
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
