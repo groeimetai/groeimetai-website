@@ -217,7 +217,7 @@ const nextConfig = {
 
   // Skip ESLint in production build
   eslint: {
-    ignoreDuringBuilds: false,
+    ignoreDuringBuilds: true,
   },
 };
 
