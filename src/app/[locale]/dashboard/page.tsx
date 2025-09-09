@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,7 +19,7 @@ import {
   Brain, Monitor, RefreshCw, Target, ArrowRight
 } from 'lucide-react';
 
-export default function DashboardPage() {
+function DashboardPageContent() {
   const t = useTranslations('dashboard');
   const [activeTab, setActiveTab] = useState('overview');
   const [isLiveMode, setIsLiveMode] = useState(true);
@@ -727,5 +727,17 @@ export default function DashboardPage() {
         </Tabs>
       </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white">Loading Dashboard...</div>
+      </div>
+    }>
+      <DashboardPageContent />
+    </Suspense>
   );
 }

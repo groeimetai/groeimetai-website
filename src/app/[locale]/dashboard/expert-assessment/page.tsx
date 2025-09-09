@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
@@ -29,7 +29,7 @@ interface ExpertAssessment {
   paidAt: any;
 }
 
-export default function ExpertAssessmentDashboard() {
+function ExpertAssessmentDashboardContent() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState('overview');
@@ -362,5 +362,17 @@ export default function ExpertAssessmentDashboard() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ExpertAssessmentDashboard() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white">Loading Expert Assessment...</div>
+      </div>
+    }>
+      <ExpertAssessmentDashboardContent />
+    </Suspense>
   );
 }
