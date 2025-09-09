@@ -336,7 +336,7 @@ export default function ApiToMcpAnimation() {
                         initial={{ pathLength: 0, opacity: 0.0 }}
                         animate={{ pathLength: 1, opacity: 0.4 }}
                         transition={{ delay: 0.6 + i * 0.15, duration: 0.8 }}
-                        style={currentPhase === 1 ? { strokeDasharray: '6 8' } : undefined}
+                        style={currentPhase === 1 ? { strokeDasharray: '6 8' } : {}}
                       />
                     );
                   })}
