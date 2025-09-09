@@ -187,8 +187,11 @@ const nextConfig = {
     return config;
   },
 
-  // Output configuration
+  // Output configuration  
   output: 'standalone',
+  
+  // Disable static optimization during build
+  distDir: '.next',
 
   // PoweredByHeader
   poweredByHeader: false,
