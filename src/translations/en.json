@@ -3275,8 +3275,8 @@
         "subtitle": "The chatbot that thinks and decides",
         "capabilities": {
           "liveAgent": "Need live agent? → Warm handoff with context",
-          "knowledgeArticle": "Knowledge article? → Get the right one instantly",
-          "catalog": "Catalog item? → Automatically request and track",
+          "knowledge": "Knowledge article? → Get the right one instantly",
+          "catalog": "Catalog item? → Automatically request and track", 
           "simple": "Simple question? → Instant accurate answer"
         },
         "tagline": "50,000 employees, one intelligent assistant"
