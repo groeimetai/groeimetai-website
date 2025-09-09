@@ -54,32 +54,32 @@ export default function AgentBlindnessProblems() {
   ];
 
   return (
-    <section className="py-24 relative" style={{ backgroundColor: '#080D14' }}>
-      <div className="container mx-auto px-4">
+    <section className="py-12 sm:py-16 lg:py-24 relative" style={{ backgroundColor: '#080D14' }}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-20"
+            className="text-center mb-12 sm:mb-16 lg:mb-20 px-2 sm:px-0"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
               {t('title')}{' '}
               <span className="text-red-400">{t('titleHighlight')}</span>
             </h2>
-            <div className="max-w-5xl mx-auto bg-gradient-to-r from-white/5 to-white/10 border border-white/10 rounded-xl p-8 mb-8">
-              <p className="text-xl md:text-2xl text-white/90 leading-relaxed mb-4">
+            <div className="max-w-5xl mx-auto bg-gradient-to-r from-white/5 to-white/10 border border-white/10 rounded-xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
+              <p className="text-lg sm:text-xl md:text-2xl text-white/90 leading-relaxed mb-3 sm:mb-4">
                 <strong>{t('bridgeStatement')}</strong>
               </p>
-              <p className="text-lg text-white/70 leading-relaxed">
+              <p className="text-base sm:text-lg text-white/70 leading-relaxed">
                 {t('bridgeDescription')}
               </p>
             </div>
           </motion.div>
 
-          <div className="grid lg:grid-cols-3 gap-8 mb-20 items-stretch">
+          <div className="grid lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16 lg:mb-20 items-stretch">
             {/* System Cards - 2 wide, 3 high */}
-            <div className="lg:col-span-2 grid grid-cols-2 gap-6">
+            <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {systems.map((system, index) => (
               <motion.div
                 key={system.system}
@@ -88,13 +88,13 @@ export default function AgentBlindnessProblems() {
                 transition={{ duration: 0.8, delay: index * 0.1 }}
                 className="relative group"
               >
-                <div className="bg-white/5 border-l-4 rounded-r-xl p-6 h-full hover:bg-white/10 transition-all duration-300 shadow-lg" style={{ borderLeftColor: '#F87315' }}>
+                <div className="bg-white/5 border-l-4 rounded-r-xl p-4 sm:p-6 h-full hover:bg-white/10 transition-all duration-300 shadow-lg" style={{ borderLeftColor: '#F87315' }}>
                   {/* System Header */}
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mr-4" style={{ backgroundColor: '#F87315' }}>
-                      <system.icon className="w-6 h-6 text-white" />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0" style={{ backgroundColor: '#F87315' }}>
+                      <system.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-white">{system.system}</h3>
+                    <h3 className="text-lg sm:text-xl font-bold text-white leading-tight">{system.system}</h3>
                   </div>
 
                   {/* Current State */}

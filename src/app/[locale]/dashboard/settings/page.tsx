@@ -627,7 +627,7 @@ export default function SettingsPage() {
 
   return (
     <main className="min-h-screen bg-black">
-      <div className="container mx-auto px-4 py-8 mt-20 max-w-4xl">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 mt-16 sm:mt-20 max-w-4xl">
         {/* Header */}
         <div className="mb-8">
           <Link

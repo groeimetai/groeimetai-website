@@ -172,7 +172,7 @@ export default function Navigation() {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden relative p-2"
+              className="md:hidden relative p-2 min-h-[44px] min-w-[44px] touch-manipulation"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? (

@@ -174,12 +174,7 @@ export function AgentReadinessQuickCheck() {
 
   if (isCompleted) {
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-xl p-8 text-center"
-      >
+      <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-xl p-4 sm:p-6 lg:p-8 text-center">
         <div className="mb-6">
           <div
             className="w-24 h-24 rounded-full mx-auto flex items-center justify-center text-3xl font-bold text-white mb-4"
@@ -189,20 +184,20 @@ export function AgentReadinessQuickCheck() {
           >
             {score}%
           </div>
-          <h3 className="text-2xl font-bold text-white mb-2">{level}</h3>
-          <p className="text-white/80 mb-6">{getLevelDescription(score)}</p>
+          <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 leading-tight">{level}</h3>
+          <p className="text-sm sm:text-base text-white/80 mb-4 sm:mb-6">{getLevelDescription(score)}</p>
         </div>
 
         <div className="space-y-4">
           {/* FOMO Trigger */}
-          <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-lg p-5 mb-4">
+          <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-lg p-3 sm:p-4 lg:p-5 mb-4"
             <div className="flex items-start space-x-4">
               <div className="text-3xl">🤔</div>
               <div className="flex-1">
-                <p className="text-white font-bold text-lg mb-3">
+                <p className="text-white font-bold text-base sm:text-lg mb-2 sm:mb-3"
                   {t('results.fomoTitle', { level: level.split(':')[0] })}
                 </p>
-                <div className="grid grid-cols-1 gap-2 text-sm text-white/90">
+                <div className="grid grid-cols-1 gap-1 sm:gap-2 text-xs sm:text-sm text-white/90"
                   <div className="flex items-center space-x-2">
                     <span className="text-orange-400">❓</span>
                     <span>
@@ -259,7 +254,7 @@ export function AgentReadinessQuickCheck() {
               });
               window.location.href = `/agent-readiness?${params.toString()}`;
             }}
-            className="w-full text-white font-semibold text-lg py-4"
+            className="w-full text-white font-semibold text-base sm:text-lg py-3 sm:py-4 min-h-[44px] touch-manipulation"
             style={{ backgroundColor: '#F87315' }}
           >
             <Target className="mr-2 w-6 h-6" />
@@ -280,7 +275,7 @@ export function AgentReadinessQuickCheck() {
             <p className="text-white/70 text-sm ml-9">{t('results.benefits.1')}</p>
           </div>
         </div>
-      </motion.div>
+      </div>
     );
   }
 
@@ -288,11 +283,11 @@ export function AgentReadinessQuickCheck() {
     <Card className="bg-white/5 border border-white/20 overflow-hidden">
       <CardContent className="p-0">
         {/* Header */}
-        <div className="bg-gradient-to-r from-orange-500/20 to-orange-600/20 p-6 border-b border-white/10">
+        <div className="bg-gradient-to-r from-orange-500/20 to-orange-600/20 p-4 sm:p-6 border-b border-white/10">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-2xl font-bold text-white mb-2">🎯 {t('title')}</h3>
-              <p className="text-white/70">{t('subtitle')}</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 leading-tight">🎯 {t('title')}</h3>
+              <p className="text-sm sm:text-base text-white/70">{t('subtitle')}</p>
             </div>
             <div className="text-right">
               <div className="text-white/60 text-sm">
@@ -312,7 +307,7 @@ export function AgentReadinessQuickCheck() {
         </div>
 
         {/* Questions */}
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <AnimatePresence mode="wait">
             {/* Question 1: APIs */}
             {currentStep === 1 && (
@@ -601,7 +596,7 @@ export function AgentReadinessQuickCheck() {
           </AnimatePresence>
 
           {/* Navigation */}
-          <div className="flex justify-between mt-8 pt-4 border-t border-white/10">
+          <div className="flex justify-between mt-6 sm:mt-8 pt-3 sm:pt-4 border-t border-white/10 gap-3">
             <Button
               variant="outline"
               onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}

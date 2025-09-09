@@ -168,9 +168,9 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <section className="py-32 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
+      <section className="py-16 sm:py-24 lg:py-32 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
         
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
             
             {/* Content Column */}
@@ -236,9 +236,9 @@ export default function ServicesPage() {
 
 
       {/* Core Services */}
-      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
+      <section className="py-12 sm:py-16 lg:py-20 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
         
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto space-y-16">
             {coreServices.map((service, index) => (
               <motion.div
@@ -337,9 +337,9 @@ export default function ServicesPage() {
       </section>
 
       {/* The Journey */}
-      <section className="py-20 relative overflow-hidden bg-black">
+      <section className="py-12 sm:py-16 lg:py-20 relative overflow-hidden bg-black">
         
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -451,9 +451,9 @@ export default function ServicesPage() {
       </section>
 
       {/* Specialist Services */}
-      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
+      <section className="py-12 sm:py-16 lg:py-20 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
         
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -553,9 +553,9 @@ export default function ServicesPage() {
       </section>
 
       {/* Why This Approach Works */}
-      <section className="py-20 relative overflow-hidden bg-black">
+      <section className="py-12 sm:py-16 lg:py-20 relative overflow-hidden bg-black">
         
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -598,7 +598,7 @@ export default function ServicesPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-20" style={{ backgroundColor: '#080D14' }}>
+      <section className="py-12 sm:py-16 lg:py-20" style={{ backgroundColor: '#080D14' }}>
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <motion.div
@@ -633,9 +633,9 @@ export default function ServicesPage() {
       </section>
 
       {/* Final CTA with 3 Options */}
-      <section className="py-20 relative overflow-hidden bg-black">
+      <section className="py-12 sm:py-16 lg:py-20 relative overflow-hidden bg-black">
         
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
