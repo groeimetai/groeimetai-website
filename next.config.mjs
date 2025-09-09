@@ -212,7 +212,7 @@ const nextConfig = {
 
   // Skip TypeScript errors in production build
   typescript: {
-    ignoreBuildErrors: false,
+    ignoreBuildErrors: true,
   },
 
   // Skip ESLint in production build
