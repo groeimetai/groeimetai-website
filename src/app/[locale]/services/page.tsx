@@ -402,7 +402,7 @@ export default function ServicesPage() {
               
               <div className="mb-8">
                 <h4 className="text-lg font-bold text-white mb-4 text-center">{t('investmentCalculator.subtitle')}:</h4>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-6">
                   <div className="text-center p-4 bg-white/5 rounded-lg">
                     <div className="text-xl font-bold text-green-400">FREE</div>
                     <div className="text-white/60 text-sm">{t('investmentCalculator.steps.consult')}</div>
@@ -568,7 +568,7 @@ export default function ServicesPage() {
               </h2>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {[
                 { title: t('benefits.0.title'), desc: t('benefits.0.description'), icon: Users },
                 { title: t('benefits.1.title'), desc: t('benefits.1.description'), icon: TrendingUp },

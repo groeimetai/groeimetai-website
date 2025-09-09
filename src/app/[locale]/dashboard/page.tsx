@@ -358,7 +358,7 @@ function DashboardPageContent() {
             {/* Service Request Cards */}
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-white mb-6">{t('overview.readyForMore')}</h3>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 <Card className="bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300">
                   <CardContent className="p-6">
                     <div 

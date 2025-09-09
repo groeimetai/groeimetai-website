@@ -29,12 +29,12 @@ export default function SnowFlowShowcase() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 md:mb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 md:mb-16">
             {/* De Context - Waarom ServiceNow */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
             >
               <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">{t('whyServiceNow.title')}</h3>
               <p className="text-white/80 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4">
