@@ -699,7 +699,7 @@ export default function McpKennisPage() {
               </StartProjectButton>
               <Link href="https://github.com/GroeimetAI/snow-flow" target="_blank">
                 <Button size="lg" variant="outline" className="hover-lift">
-                  <GitHubIcon className="w-4 h-4 mr-2" />
+                  <Github className="w-4 h-4 mr-2" />
                   Probeer Snow-flow
                 </Button>
               </Link>
