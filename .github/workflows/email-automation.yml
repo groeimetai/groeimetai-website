@@ -1,0 +1,44 @@
+name: Email Automation
+
+# Run every 15 minutes to process scheduled emails
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+jobs:
+  process-scheduled-emails:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Process Scheduled Emails
+        run: |
+          echo "🔄 Processing scheduled emails..."
+          
+          # Call our API endpoint to process due emails
+          RESPONSE=$(curl -s -w "HTTPSTATUS:%{http_code}" \
+            -X GET "https://groeimetai.io/api/email/trigger-scheduled")
+          
+          # Extract response body and status code
+          HTTP_BODY=$(echo $RESPONSE | sed -E 's/HTTPSTATUS\:[0-9]{3}$//')
+          HTTP_STATUS=$(echo $RESPONSE | tr -d '\n' | sed -E 's/.*HTTPSTATUS:([0-9]{3})$/\1/')
+          
+          echo "📊 Response Status: $HTTP_STATUS"
+          echo "📧 Response Body: $HTTP_BODY"
+          
+          # Check if successful
+          if [ $HTTP_STATUS -eq 200 ]; then
+            echo "✅ Email processing completed successfully"
+            echo "$HTTP_BODY" | jq '.'
+          else
+            echo "❌ Email processing failed with status: $HTTP_STATUS"
+            echo "Response: $HTTP_BODY"
+            exit 1
+          fi
+
+      - name: Log Results
+        if: always()
+        run: |
+          echo "📊 Email automation run completed at $(date)"
+          echo "🔗 Check logs at: https://groeimetai.io/api/email/trigger-scheduled"
