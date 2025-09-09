@@ -517,7 +517,7 @@ export default function AgentReadinessPage() {
 
           {/* Assessment Form */}
           <Card className="bg-white/5 border border-white/10">
-            <CardContent className="p-4 sm:p-6 md:p-8"
+            <CardContent className="p-4 sm:p-6 md:p-8">
               <AnimatePresence mode="wait">
                 {/* Step 1: Core Business */}
                 {currentStep === 1 && (
