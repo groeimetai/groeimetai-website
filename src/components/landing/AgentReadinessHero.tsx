@@ -13,7 +13,7 @@ export default function AgentReadinessHero() {
   const t = useTranslations('hero');
   
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-8 sm:py-16" style={{ backgroundColor: '#080D14' }}>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-4 sm:py-8 md:py-16" style={{ backgroundColor: '#080D14' }}>
       {/* Luxe Moving Orange Glow Effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Main Central Glow - Slow Orbital Movement */}
@@ -98,7 +98,7 @@ export default function AgentReadinessHero() {
         ></motion.div>
       </div>
       
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 text-center relative z-10">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -112,7 +112,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-4 sm:mb-6 leading-tight"
+            className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-3 sm:mb-4 md:mb-6 leading-tight"
           >
             {t('title')}{' '}
             <span
@@ -127,7 +127,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-lg sm:text-xl md:text-2xl text-white/90 mb-3 sm:mb-4 max-w-4xl mx-auto font-light leading-relaxed px-2 sm:px-0"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-2 sm:mb-3 md:mb-4 max-w-4xl mx-auto font-light leading-relaxed px-1 sm:px-2 md:px-0"
           >
             {t('subtitle')}
           </motion.p>
@@ -136,7 +136,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-base sm:text-lg text-white/80 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed px-2 sm:px-0"
+            className="text-sm sm:text-base md:text-lg text-white/80 mb-4 sm:mb-6 md:mb-8 max-w-3xl mx-auto leading-relaxed px-1 sm:px-2 md:px-0"
           >
             {t('description')}
           </motion.p>
@@ -145,14 +145,14 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="space-y-8 mb-12"
+            className="space-y-4 sm:space-y-6 md:space-y-8 mb-6 sm:mb-8 md:mb-12"
           >
             {!showQuickCheck ? (
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4 sm:px-0">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center items-center px-2 sm:px-4 md:px-0">
                 <Button
                   onClick={() => setShowQuickCheck(true)}
                   size="lg"
-                  className="group text-white border-0 shadow-xl hover-lift transform transition-all duration-300 w-full sm:w-auto min-h-[44px] text-base sm:text-lg px-6 py-3"
+                  className="group text-white border-0 shadow-xl hover-lift transform transition-all duration-300 w-full sm:w-auto min-h-[48px] text-sm sm:text-base md:text-lg px-4 sm:px-6 py-3 sm:py-4"
                   style={{ 
                     backgroundColor: '#F87315',
                     boxShadow: '0 10px 25px -5px rgba(248, 115, 21, 0.25)'
@@ -166,21 +166,21 @@ export default function AgentReadinessHero() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-white/20 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 w-full sm:w-auto min-h-[44px] text-base sm:text-lg px-6 py-3"
+                    className="border-white/20 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 w-full sm:w-auto min-h-[48px] text-sm sm:text-base md:text-lg px-4 sm:px-6 py-3 sm:py-4"
                   >
                     {t('cta.seeHow')}
                   </Button>
                 </Link>
               </div>
             ) : (
-              <div className="max-w-2xl mx-auto">
+              <div className="max-w-2xl mx-auto px-2 sm:px-4">
                 <AgentReadinessQuickCheck />
                 
-                <div className="text-center mt-6">
+                <div className="text-center mt-4 sm:mt-6">
                   <Button
                     onClick={() => setShowQuickCheck(false)}
                     variant="outline"
-                    className="border-white/20 text-white/70 hover:bg-white/5 min-h-[44px] px-4 py-2 text-sm"
+                    className="border-white/20 text-white/70 hover:bg-white/5 min-h-[44px] px-3 sm:px-4 py-2 text-xs sm:text-sm"
                   >
                     {t('cta.back')}
                   </Button>
@@ -195,10 +195,10 @@ export default function AgentReadinessHero() {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="text-center"
           >
-            <p className="text-xs sm:text-sm text-white/50 mb-2 px-2 text-center">
+            <p className="text-xs sm:text-sm text-white/50 mb-2 px-1 sm:px-2 text-center">
               {t('badge')}
             </p>
-            <p className="text-sm sm:text-base md:text-lg font-semibold text-white/90 px-2 text-center leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white/90 px-1 sm:px-2 text-center leading-relaxed">
               {t('explanation')}{' '}
               <span style={{ color: '#F87315' }}>{t('reason')}</span>
             </p>

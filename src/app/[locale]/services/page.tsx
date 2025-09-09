@@ -168,10 +168,10 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <section className="py-16 sm:py-24 lg:py-32 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
+      <section className="py-8 sm:py-12 md:py-16 lg:py-24 xl:py-32 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
         
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+        <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 relative z-10">
+          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-center">
             
             {/* Content Column */}
             <div className="text-center lg:text-left">
@@ -180,19 +180,19 @@ export default function ServicesPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
               >
-                <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight">
                   <span
-                    className="text-white px-4 py-2 inline-block"
+                    className="text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 inline-block"
                     style={{ background: 'linear-gradient(135deg, #F87315, #FF8533)' }}
                   >
                     {t('hero.titleHighlight')}
                   </span>{' '}
                   {t('hero.title')}
                 </h1>
-                <p className="text-xl text-white/80 max-w-4xl mx-auto lg:mx-0 mb-4">
+                <p className="text-base sm:text-lg md:text-xl text-white/80 max-w-4xl mx-auto lg:mx-0 mb-3 sm:mb-4">
                   {t('hero.description')}
                 </p>
-                <p className="text-lg max-w-3xl mx-auto lg:mx-0 mb-8" style={{ color: '#F87315' }}>
+                <p className="text-sm sm:text-base md:text-lg max-w-3xl mx-auto lg:mx-0 mb-4 sm:mb-6 md:mb-8" style={{ color: '#F87315' }}>
                   {t('hero.tagline')}
                 </p>
               </motion.div>
@@ -236,19 +236,19 @@ export default function ServicesPage() {
 
 
       {/* Core Services */}
-      <section className="py-12 sm:py-16 lg:py-20 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
+      <section className="py-8 sm:py-12 md:py-16 lg:py-20 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-6xl mx-auto space-y-16">
+          <div className="max-w-6xl mx-auto space-y-8 sm:space-y-12 md:space-y-16">
             {coreServices.map((service, index) => (
               <motion.div
                 key={service.number}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
-                className="bg-white/5 border border-white/10 rounded-xl p-8 lg:p-12"
+                className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-6 md:p-8 lg:p-12"
               >
-                <div className="grid lg:grid-cols-3 gap-8">
+                <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
                   {/* Service Info */}
                   <div className="lg:col-span-1">
                     <div className="flex items-center mb-6">
@@ -259,8 +259,8 @@ export default function ServicesPage() {
                         {service.number}
                       </div>
                       <div>
-                        <h2 className="text-3xl font-bold text-white">{service.title}</h2>
-                        <p className="text-xl" style={{ color: service.color }}>{service.subtitle}</p>
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{service.title}</h2>
+                        <p className="text-base sm:text-lg md:text-xl" style={{ color: service.color }}>{service.subtitle}</p>
                       </div>
                     </div>
                     <p className="text-white/80 text-lg leading-relaxed mb-6">
@@ -451,7 +451,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Specialist Services */}
-      <section className="py-12 sm:py-16 lg:py-20 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
+      <section className="py-8 sm:py-12 md:py-16 lg:py-20 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto">

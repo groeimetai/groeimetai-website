@@ -81,7 +81,7 @@ export default function AICapabilities() {
   ];
 
   return (
-    <section className="py-20 bg-black relative overflow-hidden">
+    <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-black relative overflow-hidden">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div
@@ -94,23 +94,23 @@ export default function AICapabilities() {
         />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-2 sm:px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-8 sm:mb-12 md:mb-16"
         >
-          <h2 className="mb-4 text-white">
+          <h2 className="mb-3 sm:mb-4 text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight">
             {t('heading.why')}
             <span className="text-orange-500"> {t('heading.transforms')} </span>
             {t('heading.yourBusiness')}
           </h2>
-          <p className="text-xl text-white/70 max-w-3xl mx-auto">{t('subtitle')}</p>
+          <p className="text-base sm:text-lg md:text-xl text-white/70 max-w-3xl mx-auto px-2 sm:px-0">{t('subtitle')}</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {capabilities.map((capability, index) => {
             const Icon = capability.icon;
             const isHovered = hoveredIndex === index;
@@ -128,7 +128,7 @@ export default function AICapabilities() {
               >
                 <div
                   className={`
-                  relative bg-black/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8
+                  relative bg-black/50 backdrop-blur-sm border border-white/10 rounded-2xl p-4 sm:p-6 md:p-8
                   transition-all duration-300 hover:border-orange-500/50 hover:shadow-2xl
                   ${isHovered ? 'scale-105' : ''}
                 `}
@@ -144,16 +144,16 @@ export default function AICapabilities() {
                   {/* Icon */}
                   <div
                     className={`
-                    relative mb-6 inline-flex p-4 rounded-xl
+                    relative mb-4 sm:mb-6 inline-flex p-3 sm:p-4 rounded-xl
                     bg-gradient-to-br ${capability.color}
                   `}
                   >
-                    <Icon className="w-8 h-8 text-white" />
+                    <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-2xl font-bold mb-3 text-white">{capability.title}</h3>
-                  <p className="text-white/70 mb-6">{capability.description}</p>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 text-white">{capability.title}</h3>
+                  <p className="text-sm sm:text-base text-white/70 mb-4 sm:mb-6">{capability.description}</p>
 
                   {/* Features */}
                   <ul className="space-y-2">
@@ -166,7 +166,7 @@ export default function AICapabilities() {
                           x: isHovered ? 0 : -10,
                         }}
                         transition={{ delay: featureIndex * 0.1 }}
-                        className="flex items-center gap-2 text-sm text-white/60"
+                        className="flex items-start gap-2 text-xs sm:text-sm text-white/60"
                       >
                         <div className="w-1.5 h-1.5 bg-orange-500 rounded-full" />
                         {feature}
@@ -195,12 +195,12 @@ export default function AICapabilities() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 text-center"
+          className="mt-8 sm:mt-12 md:mt-16 text-center"
         >
-          <p className="text-xl text-white/70 mb-8">{t('cta.question')}</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <p className="text-base sm:text-lg md:text-xl text-white/70 mb-4 sm:mb-6 md:mb-8 px-2 sm:px-0">{t('cta.question')}</p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center px-2 sm:px-0">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <StartProjectButton className="px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all">
+              <StartProjectButton className="px-4 sm:px-6 md:px-8 py-3 sm:py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all text-sm sm:text-base min-h-[44px] w-full sm:w-auto">
                 {t('cta.startJourney')}
               </StartProjectButton>
             </motion.div>
@@ -208,7 +208,7 @@ export default function AICapabilities() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all cursor-pointer"
+                className="px-4 sm:px-6 md:px-8 py-3 sm:py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all cursor-pointer text-sm sm:text-base min-h-[44px] w-full sm:w-auto"
               >
                 {t('cta.exploreServices')}
               </motion.div>

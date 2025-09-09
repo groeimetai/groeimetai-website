@@ -9,8 +9,8 @@ export default function SnowFlowShowcase() {
   const t = useTranslations('snowflow');
   
   return (
-    <section className="py-24 relative" style={{ backgroundColor: '#080D14' }}>
-      <div className="container mx-auto px-4">
+    <section className="py-8 sm:py-12 md:py-16 lg:py-24 relative" style={{ backgroundColor: '#080D14' }}>
+      <div className="container mx-auto px-2 sm:px-4">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -18,38 +18,38 @@ export default function SnowFlowShowcase() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
               {t('title')}{' '}
               <span style={{ color: '#F87315' }}>{t('titleHighlight')}</span>
             </h2>
-            <p className="text-xl text-white/70 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-white/70 max-w-4xl mx-auto leading-relaxed px-2 sm:px-0">
               {t('subtitle')}
               <br />
               <strong className="text-white">{t('subtitleHighlight')}</strong>
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 md:mb-16">
             {/* De Context - Waarom ServiceNow */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h3 className="text-xl font-bold text-white mb-4">{t('whyServiceNow.title')}</h3>
-              <p className="text-white/80 text-sm leading-relaxed mb-4">
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">{t('whyServiceNow.title')}</h3>
+              <p className="text-white/80 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4">
                 {t('whyServiceNow.description')}
               </p>
-              <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4 mb-4">
-                <p className="text-white/90 text-sm font-medium">
+              <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
+                <p className="text-white/90 text-xs sm:text-sm font-medium">
                   {t('whyServiceNow.problem')}
                 </p>
               </div>
-              <p className="text-white/70 text-sm">
+              <p className="text-white/70 text-xs sm:text-sm">
                 {t('whyServiceNow.solution')}
               </p>
               <div className="mt-4 pt-4 border-t border-white/10">
-                <p className="text-xs" style={{ color: '#F87315' }}>
+                <p className="text-xs sm:text-sm" style={{ color: '#F87315' }}>
                   <strong>{t('whyServiceNow.conclusion')}</strong>
                 </p>
               </div>
@@ -61,15 +61,15 @@ export default function SnowFlowShowcase() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
             >
-              <h3 className="text-xl font-bold text-white mb-4">{t('problemSolution.problemTitle')}</h3>
-              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-4">
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">{t('problemSolution.problemTitle')}</h3>
+              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
                 <p className="text-white/80 text-sm leading-relaxed">
                   {t('problemSolution.problemDescription')}
                 </p>
               </div>
               
-              <h4 className="text-lg font-bold text-white mb-3">{t('problemSolution.solutionTitle')}</h4>
-              <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+              <h4 className="text-base sm:text-lg font-bold text-white mb-2 sm:mb-3">{t('problemSolution.solutionTitle')}</h4>
+              <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 sm:p-4">
                 <p className="text-white/80 text-sm leading-relaxed">
                   {t('problemSolution.solutionDescription')}
                 </p>
@@ -82,11 +82,11 @@ export default function SnowFlowShowcase() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <h3 className="text-xl font-bold text-white mb-6">{t('agentCapabilities.title')}</h3>
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6">{t('agentCapabilities.title')}</h3>
               
-              <div className="space-y-4 mb-6">
-                <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#F87315' }}>
+              <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+                <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white/5 rounded-lg">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F87315' }}>
                     <Zap className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -95,8 +95,8 @@ export default function SnowFlowShowcase() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#F87315' }}>
+                <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white/5 rounded-lg">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F87315' }}>
                     <Activity className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -105,8 +105,8 @@ export default function SnowFlowShowcase() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#F87315' }}>
+                <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white/5 rounded-lg">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F87315' }}>
                     <Shield className="w-5 h-5 text-white" />
                   </div>
                   <div>

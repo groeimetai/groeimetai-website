@@ -461,7 +461,7 @@ export default function AgentReadinessPage() {
 
   return (
     <div className="min-h-screen bg-black">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
+      <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-24 xl:py-32">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <motion.div
@@ -470,24 +470,24 @@ export default function AgentReadinessPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-3 sm:mb-4 md:mb-6 leading-tight">
               <span
-                className="text-white px-4 py-2 inline-block"
+                className="text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 inline-block text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl"
                 style={{ background: 'linear-gradient(135deg, #F87315, #FF8533)' }}
               >
                 Agent Readiness
               </span>{' '}
               Assessment
             </h1>
-            <p className="text-xl text-white/80 mb-4">
+            <p className="text-base sm:text-lg md:text-xl text-white/80 mb-3 sm:mb-4">
               14 vragen, 5-8 minuten - kom achter je complete agent readiness score
             </p>
-            <p className="text-lg text-white/60 mb-8">
+            <p className="text-sm sm:text-base md:text-lg text-white/60 mb-4 sm:mb-6 md:mb-8">
               Puur focus op: kunnen agents met jouw systemen werken?
             </p>
 
             {/* Progress Bar */}
-            <div className="max-w-md mx-auto mb-8">
+            <div className="max-w-sm sm:max-w-md mx-auto mb-6 sm:mb-8">
               <div className="flex justify-between text-sm text-white/60 mb-2">
                 <span>Vraag {Math.min(currentStep + getSkippedQuestionCount(), 15)} van 15</span>
                 <span>{getAdjustedProgress()}%</span>
@@ -517,7 +517,7 @@ export default function AgentReadinessPage() {
 
           {/* Assessment Form */}
           <Card className="bg-white/5 border border-white/10">
-            <CardContent className="p-8">
+            <CardContent className="p-4 sm:p-6 md:p-8"
               <AnimatePresence mode="wait">
                 {/* Step 1: Core Business */}
                 {currentStep === 1 && (
@@ -528,7 +528,7 @@ export default function AgentReadinessPage() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       💼 Wat is jullie core business?
                     </h2>
                     <p className="text-white/70 mb-6">In één zin: wat doet jullie bedrijf voor klanten?</p>
@@ -562,7 +562,7 @@ export default function AgentReadinessPage() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       🏗️ Welke systemen MOETEN agent-ready worden?
                     </h2>
                     <p className="text-white/70 mb-6">Selecteer maximaal 3 systemen</p>
@@ -623,7 +623,7 @@ export default function AgentReadinessPage() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       🎯 Welk systeem heeft de GROOTSTE impact als het agent-ready wordt?
                     </h2>
                     <p className="text-white/70 mb-6">Kies uit de systemen die je net selecteerde</p>
@@ -666,7 +666,7 @@ export default function AgentReadinessPage() {
                         </div>
                       </div>
                     )}
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       🔗 Hebben deze systemen APIs?
                     </h2>
                     <p className="text-white/70 mb-6">Agents moeten kunnen verbinden met je systemen</p>
@@ -711,7 +711,7 @@ export default function AgentReadinessPage() {
                         </div>
                       </div>
                     )}
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       📊 Kun je snel klantdata vinden?
                     </h2>
                     <p className="text-white/70 mb-6">
@@ -750,7 +750,7 @@ export default function AgentReadinessPage() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       📍 Waar staat die klantdata?
                     </h2>
                     <p className="text-white/70 mb-6">Hoe verspreid is je data over systemen?</p>
@@ -787,7 +787,7 @@ export default function AgentReadinessPage() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       📋 Staan jullie processen beschreven?
                     </h2>
                     <p className="text-white/70 mb-6">
@@ -826,7 +826,7 @@ export default function AgentReadinessPage() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       🤖 Welke automation gebruik je al?
                     </h2>
                     
@@ -862,7 +862,7 @@ export default function AgentReadinessPage() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       🧠 Heb je al een voorkeur voor AI platform?
                     </h2>
                     <p className="text-white/70 mb-6">We willen weten of je al specifieke wensen hebt</p>
@@ -940,7 +940,7 @@ export default function AgentReadinessPage() {
                   >
                     {formData.agentPlatformPreference === 'yes' ? (
                       <>
-                        <h2 className="text-2xl font-bold text-white mb-4">
+                        <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                           🧠 Welke AI platforms heb je op het oog?
                         </h2>
                         <p className="text-white/70 mb-6">Selecteer alle die van toepassing zijn</p>
@@ -974,7 +974,7 @@ export default function AgentReadinessPage() {
                       </>
                     ) : (
                       <>
-                        <h2 className="text-2xl font-bold text-white mb-4">
+                        <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                           ✅ Perfect!
                         </h2>
                         <div className="bg-white/5 rounded-lg p-6 border border-white/10">
@@ -1009,7 +1009,7 @@ export default function AgentReadinessPage() {
                         </div>
                       </div>
                     )}
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       ⚠️ Wat is je grootste blocker voor automation?
                     </h2>
                     
@@ -1044,7 +1044,7 @@ export default function AgentReadinessPage() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       ⚡ Hoe snel kan jullie team nieuwe tools adopteren?
                     </h2>
                     
@@ -1080,7 +1080,7 @@ export default function AgentReadinessPage() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       💰 Wat is jullie grootste operational kostenpost die je zou willen optimaliseren?
                     </h2>
                     <p className="text-white/70 mb-6">Dit helpt agents prioriteren waar de grootste impact ligt</p>
@@ -1115,7 +1115,7 @@ export default function AgentReadinessPage() {
                         </div>
                       </div>
                     )}
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       💰 Wat is realistisch voor agent infrastructure dit jaar?
                     </h2>
                     <p className="text-white/70 mb-6">Zodat we realistische aanbevelingen kunnen doen</p>
@@ -1156,7 +1156,7 @@ export default function AgentReadinessPage() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <h2 className="text-2xl font-bold text-white mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       🔧 Hoe worden systemen nu beheerd?
                     </h2>
                     <p className="text-white/70 mb-6">Dit helpt ons inschatten wie de implementatie gaat doen</p>
