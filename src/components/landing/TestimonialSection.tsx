@@ -42,7 +42,7 @@ export default function TestimonialSection() {
                 </div>
                 
                 <blockquote className="text-white/90 leading-relaxed mb-4 italic">
-                  "That someone could put this together so quickly not only shows how much talent is out there in the greater ServiceNow community, but also indicates how much <strong>the entire development process is now changing</strong>. Niels van der Werf is just one of thousands who are out there now putting AI tools to work, and we're still truly in the early days of applying this tech."
+                  &ldquo;That someone could put this together so quickly not only shows how much talent is out there in the greater ServiceNow community, but also indicates how much <strong>the entire development process is now changing</strong>. Niels van der Werf is just one of thousands who are out there now putting AI tools to work, and we&rsquo;re still truly in the early days of applying this tech.&rdquo;
                 </blockquote>
                 
                 <div className="flex items-center gap-2 text-blue-300 text-sm">
