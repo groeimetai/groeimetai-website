@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "GroeimetAI - AI Consultancy & Innovation",
-    "description": "Strategic AI consultancy guiding executive teams through digital transformation. We deliver actionable insights for process optimization, cost reduction, and sustainable growth."
+    "title": "GroeimetAI - Agent Infrastructure Specialists",
+    "description": "Agent Infrastructure specialists making your APIs agent-ready. From REST to MCP - we build the bridge between your systems and AI agents."
   },
   "navigation": {
     "services": "Services",
@@ -14,14 +14,152 @@
     "getStarted": "Get Started"
   },
   "hero": {
-    "badge": "Leading AI Strategy & Business Transformation",
-    "title": "Accelerate Business Value",
-    "subtitle": "Through AI Excellence",
-    "description": "We guide executive teams through the complexity of AI adoption. Our strategic advisory focuses on business outcomes - process optimization, cost reduction, and revenue growth through intelligent AI implementation.",
+    "title": "From APIs to",
+    "highlight": "MCP-ready",
+    "subtitle": "You have APIs, but agents can't talk to them.",
+    "description": "We make your existing APIs agent-compatible via MCP - no rebuilding required.",
+    "badge": "AI implementation expertise since 2023",
+    "explanation": "Your APIs work perfectly. But Claude, GPT and other agents can't access them.",
+    "reason": "Not because your APIs are bad. But because agents speak MCP protocol, not REST.",
     "cta": {
-      "consultation": "Schedule Consultation",
-      "services": "Our Advisory Services",
-      "dashboard": "Go to Dashboard"
+      "quickCheck": "Quick Check - 2 minutes",
+      "seeHow": "See how",
+      "back": "Back"
+    }
+  },
+  "mcpAnimation": {
+    "title": "How",
+    "highlight": "GroeimetAI",
+    "titleEnd": "Builds the Agent Bridge",
+    "subtitle": "From agent-blind APIs to agent-ready systems - we make your APIs agent-compatible",
+    "comparison": {
+      "traditional": {
+        "title": "Traditional API Integration",
+        "description": "Complex point-to-point connections requiring custom development"
+      },
+      "arrow": "API → MCP",
+      "mcp": {
+        "title": "MCP Protocol Solution", 
+        "description": "Universal connection standard enabling seamless AI agent integration"
+      }
+    },
+    "phases": {
+      "before": {
+        "title": "Before GroeimetAI",
+        "subtitle": "Your APIs are agent-blind...",
+        "description": "Agents can't communicate with your existing APIs"
+      },
+      "during": {
+        "title": "GroeimetAI Builds MCP",
+        "subtitle": "We build the bridge for agents...",
+        "description": "GroeimetAI implements MCP servers for your APIs"
+      },
+      "after": {
+        "title": "After GroeimetAI",
+        "subtitle": "Your APIs are agent-ready",
+        "description": "All agents can now talk to your APIs via MCP"
+      }
+    },
+    "agent": {
+      "cantConnect": "Can't connect",
+      "waitingForMcp": "Waiting for MCP...",
+      "allConnected": "All APIs Connected"
+    },
+    "benefits": {
+      "faster": {
+        "title": "Faster",
+        "description": "From 40-80 hours per agent to one-time 120-160 hour setup"
+      },
+      "universal": {
+        "title": "Universal",
+        "description": "Every agent speaks MCP - no custom integrations needed"
+      },
+      "roi": {
+        "title": "ROI",
+        "description": "Break-even at 2nd agent, 80% maintenance reduction"
+      }
+    }
+  },
+  "pricing": {
+    "title": "For every business with",
+    "highlight": "APIs",
+    "subtitle": "From pilot to enterprise - Always the same 3 steps. Transparent pricing, fixed deliverables, no surprises.",
+    "steps": {
+      "step1": {
+        "number": "Step 1",
+        "title": "Discover where you stand",
+        "subtitle": "Agent Readiness Assessment",
+        "pricing": "FREE",
+        "timeframe": "10 questions • 6 minutes",
+        "description": "Get immediate insights into how agent-ready your APIs and systems are.",
+        "features": {
+          "0": "Agent readiness score (0-100)",
+          "1": "Gap analysis per category",
+          "2": "Professional PDF report",
+          "3": "LinkedIn certificate"
+        },
+        "cta": "Start Free Assessment"
+      },
+      "step2": {
+        "number": "Step 2",
+        "title": "Get concrete roadmap",
+        "subtitle": "Expert Assessment",
+        "pricing": "€2,500",
+        "timeframe": "2-4 hours • Fixed price",
+        "description": "Personal deep-dive into your systems with hands-on implementation planning.",
+        "features": {
+          "0": "Personal API analysis",
+          "1": "System-specific roadmap",
+          "2": "ROI calculation & business case",
+          "3": "Fixed price implementation quote"
+        },
+        "cta": "Book Expert Assessment"
+      },
+      "step3": {
+        "number": "Step 3",
+        "title": "Implementation",
+        "subtitle": "API→MCP Conversion",
+        "pricing": "€15-75k",
+        "timeframe": "2-12 weeks • Fixed price",
+        "description": "From your existing APIs to agent-compatible MCP systems. No rebuild.",
+        "features": {
+          "0": "API→MCP translation layer",
+          "1": "Agent configuration & testing",
+          "2": "Phased rollout planning",
+          "3": "ROI guarantee in contract"
+        },
+        "cta": "Request Implementation Quote"
+      }
+    },
+    "explanation": {
+      "title": "Why this approach?",
+      "transparentPricing": {
+        "title": "Transparent Pricing",
+        "description": "We always start with an Expert Assessment (€2.500). We analyze your APIs thoroughly and provide a fixed price quote for implementation.",
+        "ranges": {
+          "0": "Pilot projects: €15-25k",
+          "1": "Departmental implementation: €25-50k",
+          "2": "Enterprise infrastructure: €50-75k"
+        }
+      },
+      "roiGuarantee": {
+        "title": "ROI Guaranteed",
+        "description": "Every implementation starts with an ROI calculation. We only proceed if the business case works for you - otherwise you get your money back.",
+        "stats": {
+          "0": "Typical ROI: 300-800% within 12 months",
+          "1": "Average payback time: 3-6 months",
+          "2": "Contractual ROI guarantee"
+        }
+      },
+      "noLockIn": {
+        "title": "No Vendor Lock-in",
+        "description": "We work with ANY software - from Excel spreadsheets to enterprise platforms. Your existing systems keep working, we just make them agent-compatible via MCP."
+      },
+      "guarantees": {
+        "fixedPrice": "100% Fixed price guarantee after Expert Assessment",
+        "timeframe": "2-12 Weeks implementation time (not months)",
+        "downtime": "0 Downtime - phased rollout planning"
+      }
     }
   },
   "services": {
@@ -31,90 +169,363 @@
       "strategy": {
         "title": "AI Strategy & Roadmap",
         "description": "Define your AI vision and create actionable roadmaps that align technology investments with business objectives and measurable ROI.",
-        "features": ["Executive Advisory", "Opportunity Assessment", "Strategic Planning"]
+        "features": [
+          "Executive Advisory",
+          "Opportunity Assessment",
+          "Strategic Planning"
+        ]
       },
       "transformation": {
         "title": "Digital Transformation",
         "description": "Navigate complex digital ecosystems with comprehensive transformation strategies focused on process optimization and cost efficiency.",
-        "features": ["Operating Model Design", "Process Redesign", "Value Realization"]
+        "features": [
+          "Operating Model Design",
+          "Process Redesign",
+          "Value Realization"
+        ]
       },
       "governance": {
         "title": "Risk & Governance",
         "description": "Establish responsible AI frameworks that balance innovation with ethics, compliance and security.",
-        "features": ["AI Ethics Framework", "Regulatory Compliance", "Risk Management"]
+        "features": [
+          "AI Ethics Framework",
+          "Regulatory Compliance",
+          "Risk Management"
+        ]
       },
       "innovation": {
         "title": "Innovation Labs",
         "description": "Accelerate innovation through strategic pilots and proof-of-concepts that demonstrate clear business value and ROI.",
-        "features": ["Use Case Discovery", "Pilot Programs", "Innovation Workshops"]
+        "features": [
+          "Use Case Discovery",
+          "Pilot Programs",
+          "Innovation Workshops"
+        ]
       },
       "advisory": {
         "title": "Technology Advisory",
         "description": "Make informed decisions with independent technology assessments and vendor evaluations.",
-        "features": ["Architecture Review", "Vendor Selection", "Technology Due Diligence"]
+        "features": [
+          "Architecture Review",
+          "Vendor Selection",
+          "Technology Due Diligence"
+        ]
       },
       "adoption": {
         "title": "Change & Adoption",
         "description": "Ensure successful AI adoption through comprehensive change management and capability building.",
-        "features": ["Leadership Alignment", "Culture Transformation", "Skills Development"]
+        "features": [
+          "Leadership Alignment",
+          "Culture Transformation",
+          "Skills Development"
+        ]
+      }
+    }
+  },
+  "agentBlindness": {
+    "title": "Your systems have APIs.",
+    "titleHighlight": "Agents can't access them.",
+    "bridgeStatement": "We build the bridge - for EVERY system.",
+    "bridgeDescription": "From SaaS to legacy, from custom to Excel - if it has data, we make it agent-ready.",
+    "apisWork": "Your APIs work. They're missing just one thing:",
+    "apisWorkHighlight": "A language agents understand.",
+    "keepExisting": "Keep your existing APIs - no rebuild",
+    "worksWithEverything": "Works with EVERY software - no exceptions",
+    "apiToMcp": "From API to MCP - we handle the translation",
+    "systemExamples": "ServiceNow? SAP? Excel? Custom system?",
+    "systemsPromise": "Doesn't matter. If it has data, we make it agent-ready.",
+    "systems": {
+      "customer": {
+        "name": "Customer System",
+        "current": "Your API: Live customer data",
+        "agent": "For agents: Unreachable",
+        "solution": "We make it: Agent-ready"
+      },
+      "inventory": {
+        "name": "Inventory System",
+        "current": "Your API: Live data",
+        "agent": "For agents: Unreachable",
+        "solution": "We make it: Agent-ready"
+      },
+      "crm": {
+        "name": "CRM",
+        "current": "Your API: Customer data available",
+        "agent": "For agents: Unknown protocol",
+        "solution": "We make it: Agent-ready"
+      },
+      "knowledge": {
+        "name": "Knowledge Base",
+        "current": "Your API: Documentation database",
+        "agent": "For agents: Unreadable",
+        "solution": "We make it: Agent-ready"
+      },
+      "planning": {
+        "name": "Planning Tools",
+        "current": "Your API: Calendar & resources",
+        "agent": "For agents: Agent-blind",
+        "solution": "We make it: Agent-ready"
+      },
+      "custom": {
+        "name": "Custom Software",
+        "current": "Your API: Custom built",
+        "agent": "For agents: Unknown protocol",
+        "solution": "We make it: Agent-ready"
       }
     }
   },
   "servicesPage": {
     "hero": {
-      "title": "Our AI Services",
-      "description": "From strategy to value realization - we guide your AI transformation journey with focus on measurable business outcomes"
+      "title": "Services",
+      "titleHighlight": "Agent Infrastructure",
+      "description": "From first conversation to complete agent automation.",
+      "tagline": "Clear path. Fixed prices. Proven results."
     },
-    "cta": {
-      "start": "Start Your AI Journey",
-      "consultation": "Request a Consultation",
-      "caseStudies": "View Case Studies"
+    "labels": {
+      "whatWeDo": "What we do",
+      "whatYouGet": "What you get"
     },
-    "process": {
-      "title": "Our Approach",
+    "coreServices": {
+      "0": {
+        "title": "FREE CONSULT",
+        "subtitle": "Exploratory Conversation",
+        "description": "Is becoming agent-ready something for you?",
+        "features": {
+          "0": "Situation overview of your systems",
+          "1": "Agent opportunities identification",
+          "2": "MCP protocol explanation",
+          "3": "No-obligation strategic advice",
+          "4": "Concrete next steps"
+        },
+        "deliverables": {
+          "0": "Free - 30 minutes",
+          "1": "Video call or on-site",
+          "2": "Direct insights",
+          "3": "No sales pitch",
+          "4": "No-obligation advice"
+        },
+        "pricing": "Free",
+        "subtext": "30 minute investment",
+        "cta": "Schedule Call"
+      },
+      "1": {
+        "title": "ASSESS",
+        "subtitle": "Agent Readiness Scan",
+        "description": "Discover where you stand in the agent revolution",
+        "features": {
+          "0": "Complete system & API inventory",
+          "1": "Agent accessibility scoring per system",
+          "2": "MCP implementation roadmap",
+          "3": "ROI calculation & quick wins",
+          "4": "Business impact prioritization"
+        },
+        "deliverables": {
+          "0": "30-min intake conversation",
+          "1": "2-4 hours on-site assessment",
+          "2": "Detailed readiness report",
+          "3": "Concrete 90-day action plan",
+          "4": "Go/No-Go recommendation"
+        },
+        "pricing": "€2,500",
+        "subtext": "Deductible with follow-up project",
+        "cta": "Start Online Assessment"
+      },
+      "2": {
+        "title": "PILOT",
+        "subtitle": "Proof of Concept",
+        "description": "See it working for your system",
+        "features": {
+          "0": "One system agent-ready (basic)",
+          "1": "20-50 most used functions",
+          "2": "3 concrete use cases working",
+          "3": "Before/after metrics",
+          "4": "Scalability assessment"
+        },
+        "deliverables": {
+          "0": "Working MCP server",
+          "1": "Live agent demonstration",
+          "2": "ROI measurement setup",
+          "3": "Scaling roadmap",
+          "4": "2-4 weeks implementation"
+        },
+        "pricing": "Pilot budget",
+        "subtext": "Depends on complexity",
+        "cta": "Discuss Pilot Options"
+      },
+      "3": {
+        "title": "BUILD",
+        "subtitle": "Full Implementation",
+        "description": "Complete agent infrastructure for your organization",
+        "features": {
+          "0": "Multi-system MCP servers",
+          "1": "Agent orchestration platform",
+          "2": "Custom integrations and workflows",
+          "3": "Security & authentication layers",
+          "4": "Complete documentation & training"
+        },
+        "deliverables": {
+          "0": "Starter: Basic implementation (1-2 systems, 50-100 functions, 3 months support)",
+          "1": "Growth: Extended setup (3-5 systems, 200+ functions, agent orchestration, 6 months)",
+          "2": "Enterprise: Full integration (unlimited systems, custom agents, dedicated architect, 12 months)",
+          "3": "2-6 months implementation",
+          "4": "Complete agent ecosystem"
+        },
+        "pricing": "Based on assessment",
+        "subtext": "Based on number of systems",
+        "cta": "Get Implementation Proposal"
+      },
+      "4": {
+        "title": "MONITOR",
+        "subtitle": "Agent Economy Intelligence",
+        "description": "Stay ahead in the agent economy",
+        "features": {
+          "0": "Which agents are using your systems?",
+          "1": "Performance & usage analytics",
+          "2": "New agent capabilities alerts",
+          "3": "Competitor agent watch",
+          "4": "Monthly strategy calls"
+        },
+        "deliverables": {
+          "0": "Basic: Dashboard + weekly emails + monthly report",
+          "1": "Growth: + real-time alerts + quarterly optimization + new integrations (1/quarter)",
+          "2": "Real-time monitoring dashboard",
+          "3": "Priority support level",
+          "4": "Early access to new features"
+        },
+        "pricing": "€2,000 - €5,000/month",
+        "subtext": "Scalable with number of systems",
+        "cta": "Request Demo Dashboard"
+      }
+    },
+    "journey": {
+      "title": "The Journey",
+      "from": "From",
+      "scan": "Scan",
+      "to": "to",
+      "scale": "Scale"
+    },
+    "timeline": {
+      "step1": {
+        "time": "Week 1-2",
+        "title": "Assessment"
+      },
+      "step2": {
+        "time": "Week 3-6",
+        "title": "First MCP Live"
+      },
+      "step3": {
+        "time": "Month 2+",
+        "title": "Full Monitoring"
+      }
+    },
+    "investmentCalculator": {
+      "title": "Example Journey",
+      "subtitle": "How your journey could look",
       "steps": {
-        "discovery": {
-          "title": "Discovery",
-          "description": "We analyze your business processes and identify high-impact AI opportunities for optimization"
+        "consult": "Free Consultation",
+        "assessment": "Assessment",
+        "pilot": "Proof of Concept", 
+        "implementation": "Full Implementation",
+        "monitoring": "Ongoing Support"
+      }
+    },
+    "roi": {
+      "year1Investment": "Startup Phase",
+      "year1Note": "From conversation to live monitoring",
+      "monthsROI": "Months ROI", 
+      "roiNote": "Average payback time",
+      "year2Savings": "Structural Savings",
+      "year2Note": "Year-on-year benefits"
+    },
+    "specialistSection": {
+      "title": "Plus",
+      "titleHighlight": "Specialist Services",
+      "description": "For specific challenges we also offer:"
+    },
+    "specialistServices": {
+      "0": {
+        "title": "Extreme Context Processing",
+        "description": "Our proprietary system for 100,000+ tokens",
+        "pricing": "€5k setup + €500/month",
+        "note": "For unlimited document processing"
+      },
+      "1": {
+        "title": "Multi-Agent Orchestration",
+        "description": "Agent teams that work together",
+        "pricing": "€10k for agent team setup",
+        "note": "3-5 agents for complex workflows"
+      },
+      "2": {
+        "title": "Legacy System Bridging",
+        "description": "Make old systems agent-accessible",
+        "pricing": "€7.5k per legacy system",
+        "note": "When \"it's not possible\" isn't an option"
+      }
+    },
+    "notSure": {
+      "title": "Not sure which package?",
+      "advice": "Always start with free consult.",
+      "note": "No two companies are the same."
+    },
+    "whyThisWorks": {
+      "title": "Why this approach",
+      "titleHighlight": "works"
+    },
+    "benefits": {
+      "0": {
+        "title": "Start small",
+        "description": "Assessment provides clarity without big commitment"
+      },
+      "1": {
+        "title": "Prove value",
+        "description": "First system shows direct ROI"
+      },
+      "2": {
+        "title": "Scale smart",
+        "description": "Rollout based on learned lessons"
+      },
+      "3": {
+        "title": "Stay ahead",
+        "description": "Continuous monitoring keeps you ahead of the curve"
+      }
+    },
+    "faq": {
+      "title": "FAQ",
+      "questions": {
+        "0": {
+          "question": "Why not everything at once?",
+          "answer": "Phased approach reduces risk and maximizes learnings."
         },
-        "strategy": {
-          "title": "Strategy",
-          "description": "Development of tailored AI strategy aligned with your business goals and ROI targets"
+        "1": {
+          "question": "Can I do just assessment?",
+          "answer": "Yes, no obligation for follow-up."
         },
-        "implementation": {
-          "title": "Implementation",
-          "description": "Step-by-step implementation with proven methodologies"
-        },
-        "optimization": {
-          "title": "Optimization",
-          "description": "Continuous improvement and scalability of AI solutions"
+        "2": {
+          "question": "What if we don't have APIs?",
+          "answer": "Then we build those first (separate quote)."
         }
       }
     },
-    "whyUs": {
-      "title": "Why GroeimetAI?",
-      "expertise": {
-        "title": "Proven Expertise",
-        "items": [
-          "Strategic advisory focused on measurable business outcomes",
-          "Deep expertise in AI strategy and business transformation",
-          "Strategic partnerships with leading technology providers",
-          "Focus on European market and regulations"
-        ]
+    "finalCta": {
+      "title": "Ready to get started?",
+      "recommended": "Recommended",
+      "option1": {
+        "title": "Option 1:",
+        "description": "Free 30-min exploratory conversation",
+        "cta": "Schedule Call"
       },
-      "approach": {
-        "title": "Our Working Method",
-        "items": [
-          "Agile methodology for fast results",
-          "Transparent communication and reporting",
-          "Knowledge transfer to your team",
-          "24/7 support and monitoring"
-        ]
+      "option2": {
+        "title": "Option 2:",
+        "description": "Book Assessment directly (€2.5k)",
+        "cta": "Book Assessment"
+      },
+      "option3": {
+        "title": "Option 3:",
+        "description": "Download MCP Readiness Checklist",
+        "cta": "Download Checklist"
       }
     },
-    "readyToStart": {
-      "title": "Ready for the next step?",
-      "description": "Let us help you with your AI transformation"
+    "cta": {
+      "planCall": "Schedule Call"
     }
   },
   "serviceDetails": {
@@ -188,7 +599,13 @@
         "Implementation Plan",
         "Training & Change Management Plan"
       ],
-      "technologies": ["OpenAI GPT-4", "Claude 3", "Google Gemini", "Custom Models", "Fine-tuning"],
+      "technologies": [
+        "OpenAI GPT-4",
+        "Claude 3",
+        "Google Gemini",
+        "Custom Models",
+        "Fine-tuning"
+      ],
       "duration": "8-12 weeks"
     },
     "llm": {
@@ -246,7 +663,13 @@
         "Performance Benchmarks",
         "Maintenance Manual"
       ],
-      "technologies": ["Claude API", "OpenAI API", "Gemini API", "LangChain", "Vector Databases"],
+      "technologies": [
+        "Claude API",
+        "OpenAI API",
+        "Gemini API",
+        "LangChain",
+        "Vector Databases"
+      ],
       "duration": "6-10 weeks"
     },
     "rag": {
@@ -304,7 +727,13 @@
         "Performance Metrics",
         "Maintenance Guide"
       ],
-      "technologies": ["Pinecone", "Weaviate", "ChromaDB", "LlamaIndex", "Embeddings Models"],
+      "technologies": [
+        "Pinecone",
+        "Weaviate",
+        "ChromaDB",
+        "LlamaIndex",
+        "Embeddings Models"
+      ],
       "duration": "8-14 weeks"
     },
     "servicenow": {
@@ -425,7 +854,13 @@
         "Monitoring Dashboard",
         "Operations Manual"
       ],
-      "technologies": ["LangChain", "AutoGen", "CrewAI", "Custom Frameworks", "Message Queues"],
+      "technologies": [
+        "LangChain",
+        "AutoGen",
+        "CrewAI",
+        "Custom Frameworks",
+        "Message Queues"
+      ],
       "duration": "12-20 weeks"
     },
     "security": {
@@ -659,7 +1094,12 @@
       "public": {
         "title": "Public Sector",
         "description": "Improve citizen services and operational efficiency with responsible AI solutions",
-        "skills": ["Smart Cities", "Digital Government", "Public Safety", "Service Delivery"]
+        "skills": [
+          "Smart Cities",
+          "Digital Government",
+          "Public Safety",
+          "Service Delivery"
+        ]
       },
       "energy": {
         "title": "Energy & Utilities",
@@ -722,22 +1162,38 @@
       "discovery": {
         "title": "Strategic Discovery",
         "description": "We begin with executive workshops to understand your business objectives, challenges and AI readiness.",
-        "outcomes": ["Business case development", "Opportunity assessment", "Strategic alignment"]
+        "outcomes": [
+          "Business case development",
+          "Opportunity assessment",
+          "Strategic alignment"
+        ]
       },
       "mapping": {
         "title": "Value Mapping",
         "description": "Identify high-impact use cases and create a prioritized roadmap aligned with your strategic goals.",
-        "outcomes": ["Use case prioritization", "ROI projections", "Risk assessment"]
+        "outcomes": [
+          "Use case prioritization",
+          "ROI projections",
+          "Risk assessment"
+        ]
       },
       "pilot": {
         "title": "Pilot & Validate",
         "description": "Rapid prototyping of selected use cases to demonstrate value and refine the approach.",
-        "outcomes": ["Proof of concept", "Stakeholder buy-in", "Refined business case"]
+        "outcomes": [
+          "Proof of concept",
+          "Stakeholder buy-in",
+          "Refined business case"
+        ]
       },
       "scale": {
         "title": "Scale & Transform",
         "description": "Systematic rollout with change management, governance frameworks and capability building.",
-        "outcomes": ["Enterprise rollout", "Operating model", "Performance tracking"]
+        "outcomes": [
+          "Enterprise rollout",
+          "Operating model",
+          "Performance tracking"
+        ]
       }
     },
     "metrics": {
@@ -806,20 +1262,78 @@
     }
   },
   "footer": {
-    "tagline": "Transform your business with cutting-edge AI solutions. We are your partner in AI innovation and digital transformation.",
+    "tagline": "We make companies agent-ready. From API to MCP. From blind to connected. From manual to autonomous.",
     "newsletter": {
       "title": "Stay updated",
-      "placeholder": "your.email@company.com"
+      "placeholder": "you@company.com",
+      "subscribedMessage": "✓ Subscribed for agent economy insights",
+      "description": "Receive monthly agent economy insights"
     },
     "sections": {
       "services": "Services",
+      "resources": "Resources",
       "company": "Company",
-      "legal": "Legal",
+      "developers": "Developers",
+      "support": "Support"
+    },
+    "services": {
+      "agentReadiness": "Agent Readiness Assessment",
+      "mcpImplementation": "MCP Implementation",
+      "pilotProjects": "Pilot Projects",
+      "agentMonitoring": "Agent Monitoring",
+      "multiAgentOrchestration": "Multi-Agent Orchestration",
+      "legacyBridging": "Legacy System Bridging"
+    },
+    "resources": {
+      "mcpGuide": "MCP Guide (PDF)",
+      "snowFlowGithub": "Snow-flow GitHub",
+      "agentReadinessTest": "Agent Readiness Test",
+      "blog": "Blog",
+      "documentation": "Documentation",
+      "apiStatus": "API Status"
+    },
+    "developers": {
+      "mcpFormatGuide": "MCP Format Guide",
+      "agentSetup": "Claude vs GPT Setup",
+      "apiDocs": "API Documentation"
+    },
+    "company": {
+      "about": "About Us",
+      "cases": "Cases",
+      "roadmap": "Roadmap",
+      "team": "Team",
+      "partners": "Partners",
       "contact": "Contact"
     },
-    "copyright": "© {year} GroeimetAI All rights reserved.",
-    "madeWith": "Made with",
-    "in": "in Apeldoorn"
+    "support": {
+      "clientPortal": "Client Portal",
+      "helpCenter": "Help Center",
+      "systemStatus": "System Status",
+      "reportIssue": "Report Issue",
+      "scheduleCall": "Schedule Call"
+    },
+    "contact": {
+      "email": "info@groeimetai.io",
+      "phone": "+31 (6) 81 739 018",
+      "location": "Apeldoorn, Netherlands"
+    },
+    "cta": {
+      "title": "Ready for Agent Season?",
+      "description": "Start your Agent Readiness journey today",
+      "startAssessment": "Start Assessment",
+      "planCall": "Schedule Call"
+    },
+    "legal": {
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "cookies": "Cookies",
+      "status": "Status"
+    },
+    "copyright": "© 2025 GroeimetAI",
+    "taglines": {
+      "agentReady": "Agent-ready since 2023",
+      "openSource": "Snow-flow™ is open source"
+    }
   },
   "auth": {
     "login": {
@@ -1147,14 +1661,10 @@
       "description": "Your partner in AI transformation. We help businesses grow with cutting-edge AI technology and proven expertise."
     },
     "stats": {
-      "projects": "Successful Projects",
-      "satisfaction": "Client Satisfaction",
-      "experts": "AI Experts",
-      "support": "Support & Monitoring",
-      "savedAnnually": "Saved Annually",
-      "hoursProcessed": "Hours Processed",
-      "accuracy": "Routing Accuracy",
-      "deliveryTime": "Record Delivery"
+      "experience": "Years AI Expertise",
+      "tokens": "Tokens Processed",
+      "gdpr": "GDPR Compliant",
+      "users": "End Users Helped"
     },
     "mission": {
       "title": "Our Mission",
@@ -1213,50 +1723,75 @@
       "subtitle": "Discover how we can transform your organization",
       "contactButton": "Get in Touch",
       "servicesButton": "View Our Services"
+    },
+    "tagline": "AI pioneers making businesses agent-ready.",
+    "subtitle": "No consultancy fluff, just working code.",
+    "philosophy": {
+      "openSource": {
+        "title": "Open Source First",
+        "description": "Snow-flow on GitHub - transparency and community"
+      },
+      "practical": {
+        "title": "Practical > Theoretical",
+        "description": "We build what works, not PowerPoints"
+      },
+      "agentFocus": {
+        "title": "Agent Infrastructure Focus",
+        "description": "Specialized in MCP, multi-agent systems and API orchestration"
+      }
     }
   },
   "cases": {
     "metadata": {
       "title": "Case Studies - GroeimetAI",
       "description": "Discover how GroeimetAI has helped companies with AI transformation. Read our success stories and results.",
-      "openGraph": {
-        "title": "Case Studies - GroeimetAI Success Stories",
-        "description": "Proven results in AI consultancy and implementation"
-      }
+      "openGraphTitle": "Case Studies - GroeimetAI Success Stories",
+      "openGraphDescription": "Proven results in AI consultancy and implementation"
     },
     "hero": {
       "title": "Case Studies",
       "subtitle": "Discover how we help companies transform with AI",
       "stats": {
-        "enterpriseProjects": "Enterprise Projects",
-        "annualSavings": "Annual Savings",
-        "endUsers": "End Users",
-        "tokensProcessed": "Tokens Processed"
+        "projects": "Enterprise Projects",
+        "savings": "Annual Savings",
+        "users": "End Users",
+        "tokens": "Tokens Processed"
       }
     },
-    "featured": {
-      "title": "Featured Cases",
+    "sections": {
+      "featured": "Featured Cases",
+      "otherProjects": "Other Projects",
       "challenge": "Challenge",
       "solution": "Solution",
       "impact": "Impact",
-      "duration": "Project duration",
-      "readMore": "Read More"
+      "technologies": "Technologies",
+      "projectDuration": "Project duration",
+      "readMore": "Read More",
+      "details": "Details"
     },
-    "filter": {
+    "filters": {
       "title": "Filter by Industry",
       "allIndustries": "All Industries",
       "technologies": "Technologies"
     },
-    "otherProjects": {
-      "title": "Other Projects",
-      "details": "Details"
+    "industries": {
+      "financialServices": "Financial Services",
+      "saas": "SaaS",
+      "edtech": "EdTech"
     },
     "metrics": {
-      "title": "Our Impact in Numbers",
-      "annualSavings": "Annual Savings",
-      "fasterResponse": "Faster Response",
-      "employeesHelped": "Employees Helped",
-      "routingAccuracy": "Routing Accuracy"
+      "responseTime": "Response Time",
+      "resolutionRate": "Resolution Rate",
+      "costSavings": "Cost Savings",
+      "tokensProcessed": "Tokens Processed",
+      "hoursTranscribed": "Hours Transcribed",
+      "activeUsers": "Active Users",
+      "developmentTime": "Development Time",
+      "coursesBuilt": "Courses Built",
+      "agentEfficiency": "Agent Efficiency",
+      "routingAccuracy": "Routing Accuracy",
+      "userTimeSaved": "User Time Saved",
+      "bstReduction": "BST Reduction"
     },
     "cta": {
       "title": "Ready to Write Your Own Success Story?",
@@ -1264,62 +1799,283 @@
       "startProject": "Start Your Project",
       "exploreServices": "Explore Our Services"
     },
-    "caseStudies": {
-      "enterprise-llm": {
+    "individual": {
+      "backToCases": "Back to Case Studies",
+      "solutionArchitecture": "Solution Architecture",
+      "theChallenge": "The Challenge",
+      "ourSolution": "Our Solution",
+      "implementationJourney": "Implementation Journey",
+      "resultsImpact": "Results & Impact",
+      "keyFeatures": "Key Features",
+      "technologiesUsed": "Technologies Used",
+      "readyToTransform": "Ready to Transform Your Business?",
+      "discussResults": "Let's discuss how we can help you achieve similar results"
+    },
+    "studies": {
+      "enterpriseLLM": {
         "title": "Enterprise LLM Implementation for 50,000 Employees",
         "client": "Major Dutch Bank",
-        "industry": "Financial Services",
         "challenge": "Outdated trigger-based chatbot without NLU for internal support of 50,000 employees. Poor user experience and low resolution rate.",
         "solution": "Agentic AI framework with Azure OpenAI integration. Agent autonomously decides: live agent transfer, catalog items, knowledge base, direct answers or legacy topics. GPT-4o-mini with intelligent conversation history (last 10 messages).",
         "details": "Through implementing an intelligent LLM solution, the bank saves €2.8M annually on support costs. With 50,000 employees submitting an average of 2 tickets per month, saving €2.33 per ticket through automated handling.",
-        "metrics": {
-          "responseTime": "Response Time",
-          "resolutionRate": "Resolution Rate",
-          "costSavings": "Cost Savings"
-        }
+        "overview": "Transformed an outdated trigger-based chatbot into an intelligent AI assistant serving 50,000 employees, achieving 85% faster response times and €2.8M annual savings.",
+        "challengePoints": [
+          "Legacy chatbot with no Natural Language Understanding (NLU)",
+          "Poor user experience leading to low adoption rates",
+          "High volume of unresolved tickets requiring manual intervention",
+          "Inefficient trigger-based system causing user frustration"
+        ],
+        "solutionPoints": [
+          "Implemented Azure OpenAI with GPT-4o-mini for intelligent responses",
+          "Built an agentic framework for autonomous decision-making",
+          "Integrated with ServiceNow for seamless ticket management",
+          "Designed smart conversation history (last 10 messages) for context"
+        ],
+        "implementationPhases": {
+          "discovery": {
+            "name": "Discovery & Planning",
+            "description": "Analyzed existing system, identified pain points, and designed architecture"
+          },
+          "development": {
+            "name": "Development & Integration",
+            "description": "Built AI framework, integrated with Azure OpenAI and ServiceNow"
+          },
+          "testing": {
+            "name": "Testing & Optimization",
+            "description": "Extensive testing with pilot groups and performance optimization"
+          },
+          "rollout": {
+            "name": "Rollout & Adoption",
+            "description": "Phased rollout to all 50,000 employees with training"
+          }
+        },
+        "results": {
+          "responseTime": {
+            "metric": "85%",
+            "value": "Faster Response Time",
+            "description": "Reduced average response time from minutes to seconds"
+          },
+          "resolutionRate": {
+            "metric": "72%",
+            "value": "Higher Resolution Rate",
+            "description": "Increased first-contact resolution dramatically"
+          },
+          "savings": {
+            "metric": "€2.8M",
+            "value": "Annual Savings",
+            "description": "Through automated ticket handling and reduced support costs"
+          }
+        },
+        "keyFeatures": [
+          "Live agent transfer capability",
+          "Catalog item search and retrieval",
+          "Knowledge base integration",
+          "Direct answer generation",
+          "Legacy topic activation"
+        ]
       },
       "snelnotuleren": {
         "title": "Snelnotuleren.nl - AI Transcription Platform",
         "client": "GroeimetAI Venture",
-        "industry": "SaaS",
         "challenge": "Dutch market needed a GDPR-compliant AI transcription service for meetings and interviews.",
         "solution": "GCP-based platform with Firebase, fully GDPR and EU AI Act compliant. Ingenious algorithm for long transcriptions within token limits.",
         "details": "Successful AI venture that processed over a million tokens and transcribed 1500+ hours of meetings with perfect GDPR compliance.",
-        "metrics": {
-          "tokensProcessed": "Tokens Processed",
-          "hoursTranscribed": "Hours Transcribed",
-          "activeUsers": "Active Users"
-        }
+        "overview": "Built a GDPR-compliant AI transcription platform that processed over 1 million tokens and transcribed 1500+ hours of meetings for a growing user base.",
+        "challengePoints": [
+          "Dutch market lacked GDPR-compliant transcription services",
+          "Existing solutions had token limitations for long meetings",
+          "Need for accurate Dutch language transcription",
+          "Strict EU AI Act compliance requirements"
+        ],
+        "solutionPoints": [
+          "Google Cloud Platform infrastructure for scalability",
+          "Firebase for user management and real-time features",
+          "Ingenious algorithm to handle long transcriptions within token limits",
+          "Full GDPR and EU AI Act compliance built-in"
+        ],
+        "implementationPhases": {
+          "research": {
+            "name": "Market Research",
+            "description": "Analyzed Dutch market needs and compliance requirements"
+          },
+          "mvp": {
+            "name": "MVP Development",
+            "description": "Built core transcription engine with Whisper AI"
+          },
+          "launch": {
+            "name": "Platform Launch",
+            "description": "Launched with full features and compliance"
+          },
+          "scale": {
+            "name": "Scale & Optimize",
+            "description": "Scaled to handle thousands of hours of audio"
+          }
+        },
+        "results": {
+          "tokens": {
+            "metric": "1B+",
+            "value": "Tokens Processed",
+            "description": "Successfully processed over a million tokens"
+          },
+          "hours": {
+            "metric": "1500+",
+            "value": "Hours Transcribed",
+            "description": "Transcribed meetings, interviews, and lectures"
+          },
+          "users": {
+            "metric": "Growing",
+            "value": "User Base",
+            "description": "Active users across Netherlands"
+          }
+        },
+        "keyFeatures": [
+          "Real-time transcription",
+          "Multiple speaker detection",
+          "Dutch language optimization",
+          "Export to various formats",
+          "GDPR-compliant data handling"
+        ]
       },
-      "learning-platform": {
+      "learningPlatform": {
         "title": "GroeimetAI Learning Platform - Multi-Agent Development",
         "client": "GroeimetAI",
-        "industry": "EdTech",
         "challenge": "Rapidly build a complete learning platform for GenAI and LLM courses with certification.",
         "solution": "Multi-agent orchestration system that built the complete platform. 10+ courses with 4 modules each and 16 lessons. Blockchain verification for certificates.",
         "details": "Revolutionary project where AI agents autonomously developed a complete learning platform, including content creation and blockchain certification.",
-        "metrics": {
-          "developmentTime": "Development Time",
-          "coursesBuilt": "Courses Built",
-          "agentEfficiency": "Agent Efficiency"
-        }
+        "overview": "Revolutionary project where AI agents autonomously built a complete learning platform with 10+ courses, 40+ modules, and blockchain certification in just 2 weeks.",
+        "challengePoints": [
+          "Need to rapidly create comprehensive AI/LLM educational content",
+          "Requirement for scalable course creation system",
+          "Blockchain-verified certification system needed",
+          "Entire platform to be built by AI agents"
+        ],
+        "solutionPoints": [
+          "Multi-agent orchestration system for autonomous development",
+          "AI agents created all course content and structure",
+          "Blockchain integration for tamper-proof certificates",
+          "Fully automated content generation and quality control"
+        ],
+        "implementationPhases": {
+          "setup": {
+            "name": "Agent Setup",
+            "description": "Configured specialized agents for different tasks"
+          },
+          "content": {
+            "name": "Content Creation",
+            "description": "Agents generated 10+ comprehensive courses"
+          },
+          "platform": {
+            "name": "Platform Development",
+            "description": "Agents built the complete web platform"
+          },
+          "blockchain": {
+            "name": "Blockchain Integration",
+            "description": "Implemented certificate verification system"
+          }
+        },
+        "results": {
+          "time": {
+            "metric": "2 weeks",
+            "value": "Total Development Time",
+            "description": "Complete platform built in record time"
+          },
+          "courses": {
+            "metric": "10+",
+            "value": "Courses Created",
+            "description": "Comprehensive courses on GenAI, LLM, and automation"
+          },
+          "efficiency": {
+            "metric": "95%",
+            "value": "Agent Efficiency",
+            "description": "Minimal human intervention required"
+          }
+        },
+        "keyFeatures": [
+          "160+ lessons across all courses",
+          "Interactive learning modules",
+          "Progress tracking",
+          "Blockchain-verified certificates",
+          "AI-generated content"
+        ]
       },
-      "intelligent-routing": {
+      "ticketRouting": {
         "title": "Intelligent Ticket Routing with Vector Database",
         "client": "Major Dutch Bank",
-        "industry": "Financial Services",
         "challenge": "Thousands of Business Service Templates (BSTs) made it impossible for users to find the right template for their issue.",
         "solution": "LLM-powered widget with vector database for semantic search. User describes problem, AI generates follow-up questions, creates perfect ticket and routes to correct team.",
         "details": "Vector database implementation enabling semantic search across thousands of service templates, with intelligent follow-up questions for perfect ticket creation.",
-        "metrics": {
-          "routingAccuracy": "Routing Accuracy",
-          "userTimeSaved": "User Time Saved",
-          "bstReduction": "BST Reduction"
-        }
+        "overview": "Revolutionized ticket routing by implementing a vector database solution that reduced thousands of templates to an intelligent system with 94% routing accuracy.",
+        "challengePoints": [
+          "Thousands of Business Service Templates (BSTs) causing confusion",
+          "Users unable to find correct template for their issues",
+          "High rate of misrouted tickets",
+          "Excessive time spent searching for right template"
+        ],
+        "solutionPoints": [
+          "Vector database for semantic search across all templates",
+          "LLM-powered widget for natural language input",
+          "Intelligent follow-up question generation",
+          "Automatic ticket creation and routing"
+        ],
+        "implementationPhases": {
+          "analysis": {
+            "name": "Template Analysis",
+            "description": "Analyzed and vectorized thousands of BSTs"
+          },
+          "vectorDB": {
+            "name": "Vector DB Setup",
+            "description": "Implemented high-performance vector database"
+          },
+          "llmIntegration": {
+            "name": "LLM Integration",
+            "description": "Connected LLM for intelligent question generation"
+          },
+          "serviceNow": {
+            "name": "ServiceNow Integration",
+            "description": "Seamless integration with existing systems"
+          }
+        },
+        "results": {
+          "accuracy": {
+            "metric": "94%",
+            "value": "Routing Accuracy",
+            "description": "Near-perfect ticket routing to correct teams"
+          },
+          "timeSaved": {
+            "metric": "78%",
+            "value": "Time Saved",
+            "description": "Dramatic reduction in ticket creation time"
+          },
+          "bstReduction": {
+            "metric": "65%",
+            "value": "BST Reduction",
+            "description": "Eliminated redundant templates"
+          }
+        },
+        "keyFeatures": [
+          "Semantic search capability",
+          "Natural language processing",
+          "Dynamic follow-up questions",
+          "Automatic categorization",
+          "Smart routing logic"
+        ]
       }
+    },
+    "durations": {
+      "months": "months",
+      "weeks": "weeks",
+      "days": "days",
+      "ongoing": "Ongoing"
     }
   },
   "errorPages": {
+    "403": {
+      "title": "Access Denied",
+      "heading": "You don't have permission to access this page.",
+      "message": "Please check your credentials or contact your administrator for access.",
+      "backHome": "Go back home",
+      "login": "Go to login"
+    },
     "404": {
       "title": "Page Not Found",
       "heading": "Oops! This page doesn't exist.",
@@ -1334,13 +2090,6 @@
       "tryAgain": "Try again",
       "backHome": "Go back home",
       "statusPage": "Check status page"
-    },
-    "403": {
-      "title": "Access Denied",
-      "heading": "You don't have permission to access this page.",
-      "message": "Please check your credentials or contact your administrator for access.",
-      "backHome": "Go back home",
-      "login": "Go to login"
     },
     "maintenance": {
       "title": "Maintenance Mode",
@@ -1407,12 +2156,10 @@
       "mvpDeployment": "MVP deployment scheduled for next week"
     },
     "navigation": {
-      "dashboard": "Dashboard",
-      "messages": "Messages",
-      "projects": "Projects",
-      "consultations": "Consultations",
-      "settings": "Settings",
-      "helpSupport": "Help & Support"
+      "newAssessment": "+ New Assessment",
+      "requestPilot": "Request Pilot",
+      "addSystem": "Add System",
+      "getHelp": "Get Help"
     },
     "userMenu": {
       "profile": "Profile",
@@ -1421,35 +2168,15 @@
       "loggingOut": "Logging out..."
     },
     "overview": {
-      "welcomeBack": "Welcome back, {name}!",
-      "subtitle": "Here's what's happening with your projects and consultations.",
-      "stats": {
-        "activeProjects": "Active Projects",
-        "messages": "Messages",
-        "consultations": "Consultations",
-        "teamMembers": "Team Members",
-        "fromLastMonth": "from last month"
-      },
-      "recentProjects": {
-        "title": "Recent Projects",
-        "description": "Your active and recent projects",
-        "viewAll": "View All Projects"
-      },
-      "upcomingConsultations": {
-        "title": "Upcoming Consultations",
-        "description": "Your scheduled meetings and consultations",
-        "viewCalendar": "View Calendar",
-        "today": "Today",
-        "tomorrow": "Tomorrow"
-      },
-      "quickActions": {
-        "title": "Quick Actions",
-        "description": "Common tasks and actions",
-        "newProject": "New Project",
-        "scheduleConsultation": "Schedule Consultation",
-        "sendMessage": "Send Message",
-        "inviteTeamMember": "Invite Team Member"
-      }
+      "readyForMore": "Ready for More?",
+      "scheduleAssessment": "Schedule New Assessment",
+      "assessmentDescription": "Update your readiness score\nSee new opportunities",
+      "startAssessment": "Start Assessment",
+      "agentReadiness": "Agent Readiness",
+      "connected": "Connected",
+      "systems": "systems",
+      "active": "Active",
+      "agents": "agents"
     },
     "adminSupport": {
       "supportChatWith": "Support Chat with {userName}",
@@ -1472,6 +2199,34 @@
       "documents": "Documents",
       "scheduleMeeting": "Schedule Meeting",
       "settings": "Settings"
+    },
+    "loadingDashboard": "Loading dashboard...",
+    "breadcrumb": {
+      "dashboard": "Dashboard",
+      "overview": "Overview"
+    },
+    "lastLogin": "Last login: {date}",
+    "assessmentResults": {
+      "title": "Your Agent Readiness Assessment",
+      "calculating": "Score is being calculated... 📊",
+      "processing": "Your assessment is being processed. The report will be sent via email within 2 minutes and shown here.",
+      "assessmentId": "Assessment ID",
+      "submitted": "Submitted",
+      "expertAssessmentInterest": "Interested in Expert Assessment?",
+      "close": "Close"
+    },
+    "nextStep": {
+      "title": "Recommended Next Step",
+      "assessmentTitle": "\"Start with Agent Readiness Assessment\"",
+      "assessmentDescription": "Understand your current position and opportunities in the agent economy.",
+      "startAssessment": "Start Assessment",
+      "notNow": "Not Now"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "assessments": "Assessments",
+      "monitoring": "Monitoring",
+      "reports": "Reports"
     },
     "projects": {
       "title": "Your Projects",
@@ -1497,6 +2252,39 @@
       "requestFirst": "Request Your First Project",
       "loadingProjects": "Loading projects...",
       "errorLoading": "Failed to load projects. Please try again."
+    },
+    "monitoring": {
+      "title": "MCP Server Status",
+      "notActive": "Monitoring Not Active",
+      "description": "See what your agents are doing in real-time",
+      "enable": "Enable Monitoring",
+      "seeDemo": "See Demo"
+    },
+    "assessments": {
+      "title": "Agent Readiness Assessments",
+      "agentReadinessAssessment": "Agent Readiness Assessment",
+      "processing": "Processing...",
+      "details": "Assessment Details",
+      "id": "ID",
+      "date": "Date",
+      "score": "Score",
+      "level": "Level",
+      "status": "Status",
+      "emailSent": "Email sent",
+      "generating": "Report being generated...",
+      "expectedResults": "Expected Results",
+      "resultsDescription": "📊 Agent Readiness Score (0-100)\n📋 Breakdown per category\n📄 PDF report via email\n🏆 LinkedIn certificate",
+      "contactSupport": "Contact Support",
+      "upgradeExpert": "Upgrade to Expert Assessment (€2,500)",
+      "noAssessments": "No Assessments",
+      "startFirst": "Start with your first Agent Readiness Assessment",
+      "startAssessment": "Start Assessment"
+    },
+    "reports": {
+      "title": "Generated Reports",
+      "noReports": "No Reports Yet",
+      "description": "Reports will appear here once you have active projects",
+      "startJourney": "Start Your Journey"
     },
     "documents": {
       "title": "Documents",
@@ -2109,340 +2897,6 @@
       }
     }
   },
-  "cases": {
-    "metadata": {
-      "title": "Case Studies - GroeimetAI",
-      "description": "Discover how GroeimetAI has helped companies with AI transformation. Read our success stories and results.",
-      "openGraphTitle": "Case Studies - GroeimetAI Success Stories",
-      "openGraphDescription": "Proven results in AI consultancy and implementation"
-    },
-    "hero": {
-      "title": "Case Studies",
-      "subtitle": "Discover how we help companies transform with AI",
-      "stats": {
-        "projects": "Enterprise Projects",
-        "savings": "Annual Savings",
-        "users": "End Users",
-        "tokens": "Tokens Processed"
-      }
-    },
-    "sections": {
-      "featured": "Featured Cases",
-      "otherProjects": "Other Projects",
-      "challenge": "Challenge",
-      "solution": "Solution",
-      "impact": "Impact",
-      "technologies": "Technologies",
-      "projectDuration": "Project duration",
-      "readMore": "Read More",
-      "details": "Details"
-    },
-    "filters": {
-      "title": "Filter by Industry",
-      "allIndustries": "All Industries",
-      "technologies": "Technologies"
-    },
-    "industries": {
-      "financialServices": "Financial Services",
-      "saas": "SaaS",
-      "edtech": "EdTech"
-    },
-    "metrics": {
-      "title": "Our Impact in Numbers",
-      "annualSavings": "Annual Savings",
-      "fasterResponse": "Faster Response",
-      "employeesHelped": "Employees Helped",
-      "routingAccuracy": "Routing Accuracy"
-    },
-    "cta": {
-      "title": "Ready to Write Your Own Success Story?",
-      "subtitle": "Let's bring your AI ambitions to life",
-      "startProject": "Start Your Project",
-      "exploreServices": "Explore Our Services"
-    },
-    "individual": {
-      "backToCases": "Back to Case Studies",
-      "solutionArchitecture": "Solution Architecture",
-      "theChallenge": "The Challenge",
-      "ourSolution": "Our Solution",
-      "implementationJourney": "Implementation Journey",
-      "resultsImpact": "Results & Impact",
-      "keyFeatures": "Key Features",
-      "technologiesUsed": "Technologies Used",
-      "readyToTransform": "Ready to Transform Your Business?",
-      "discussResults": "Let's discuss how we can help you achieve similar results"
-    },
-    "studies": {
-      "enterpriseLLM": {
-        "title": "Enterprise LLM Implementation for 50,000 Employees",
-        "client": "Major Dutch Bank",
-        "challenge": "Outdated trigger-based chatbot without NLU for internal support of 50,000 employees. Poor user experience and low resolution rate.",
-        "solution": "Agentic AI framework with Azure OpenAI integration. Agent autonomously decides: live agent transfer, catalog items, knowledge base, direct answers or legacy topics. GPT-4o-mini with intelligent conversation history (last 10 messages).",
-        "details": "Through implementing an intelligent LLM solution, the bank saves €2.8M annually on support costs. With 50,000 employees submitting an average of 2 tickets per month, saving €2.33 per ticket through automated handling.",
-        "overview": "Transformed an outdated trigger-based chatbot into an intelligent AI assistant serving 50,000 employees, achieving 85% faster response times and €2.8M annual savings.",
-        "challengePoints": [
-          "Legacy chatbot with no Natural Language Understanding (NLU)",
-          "Poor user experience leading to low adoption rates",
-          "High volume of unresolved tickets requiring manual intervention",
-          "Inefficient trigger-based system causing user frustration"
-        ],
-        "solutionPoints": [
-          "Implemented Azure OpenAI with GPT-4o-mini for intelligent responses",
-          "Built an agentic framework for autonomous decision-making",
-          "Integrated with ServiceNow for seamless ticket management",
-          "Designed smart conversation history (last 10 messages) for context"
-        ],
-        "implementationPhases": {
-          "discovery": {
-            "name": "Discovery & Planning",
-            "description": "Analyzed existing system, identified pain points, and designed architecture"
-          },
-          "development": {
-            "name": "Development & Integration",
-            "description": "Built AI framework, integrated with Azure OpenAI and ServiceNow"
-          },
-          "testing": {
-            "name": "Testing & Optimization",
-            "description": "Extensive testing with pilot groups and performance optimization"
-          },
-          "rollout": {
-            "name": "Rollout & Adoption",
-            "description": "Phased rollout to all 50,000 employees with training"
-          }
-        },
-        "results": {
-          "responseTime": {
-            "metric": "85%",
-            "value": "Faster Response Time",
-            "description": "Reduced average response time from minutes to seconds"
-          },
-          "resolutionRate": {
-            "metric": "72%",
-            "value": "Higher Resolution Rate",
-            "description": "Increased first-contact resolution dramatically"
-          },
-          "savings": {
-            "metric": "€2.8M",
-            "value": "Annual Savings",
-            "description": "Through automated ticket handling and reduced support costs"
-          }
-        },
-        "keyFeatures": [
-          "Live agent transfer capability",
-          "Catalog item search and retrieval",
-          "Knowledge base integration",
-          "Direct answer generation",
-          "Legacy topic activation"
-        ]
-      },
-      "snelnotuleren": {
-        "title": "Snelnotuleren.nl - AI Transcription Platform",
-        "client": "GroeimetAI Venture",
-        "challenge": "Dutch market needed a GDPR-compliant AI transcription service for meetings and interviews.",
-        "solution": "GCP-based platform with Firebase, fully GDPR and EU AI Act compliant. Ingenious algorithm for long transcriptions within token limits.",
-        "details": "Successful AI venture that processed over a million tokens and transcribed 1500+ hours of meetings with perfect GDPR compliance.",
-        "overview": "Built a GDPR-compliant AI transcription platform that processed over 1 million tokens and transcribed 1500+ hours of meetings for a growing user base.",
-        "challengePoints": [
-          "Dutch market lacked GDPR-compliant transcription services",
-          "Existing solutions had token limitations for long meetings",
-          "Need for accurate Dutch language transcription",
-          "Strict EU AI Act compliance requirements"
-        ],
-        "solutionPoints": [
-          "Google Cloud Platform infrastructure for scalability",
-          "Firebase for user management and real-time features",
-          "Ingenious algorithm to handle long transcriptions within token limits",
-          "Full GDPR and EU AI Act compliance built-in"
-        ],
-        "implementationPhases": {
-          "research": {
-            "name": "Market Research",
-            "description": "Analyzed Dutch market needs and compliance requirements"
-          },
-          "mvp": {
-            "name": "MVP Development",
-            "description": "Built core transcription engine with Whisper AI"
-          },
-          "launch": {
-            "name": "Platform Launch",
-            "description": "Launched with full features and compliance"
-          },
-          "scale": {
-            "name": "Scale & Optimize",
-            "description": "Scaled to handle thousands of hours of audio"
-          }
-        },
-        "results": {
-          "tokens": {
-            "metric": "1B+",
-            "value": "Tokens Processed",
-            "description": "Successfully processed over a million tokens"
-          },
-          "hours": {
-            "metric": "1500+",
-            "value": "Hours Transcribed",
-            "description": "Transcribed meetings, interviews, and lectures"
-          },
-          "users": {
-            "metric": "Growing",
-            "value": "User Base",
-            "description": "Active users across Netherlands"
-          }
-        },
-        "keyFeatures": [
-          "Real-time transcription",
-          "Multiple speaker detection",
-          "Dutch language optimization",
-          "Export to various formats",
-          "GDPR-compliant data handling"
-        ]
-      },
-      "learningPlatform": {
-        "title": "GroeimetAI Learning Platform - Multi-Agent Development",
-        "client": "GroeimetAI",
-        "challenge": "Rapidly build a complete learning platform for GenAI and LLM courses with certification.",
-        "solution": "Multi-agent orchestration system that built the complete platform. 10+ courses with 4 modules each and 16 lessons. Blockchain verification for certificates.",
-        "details": "Revolutionary project where AI agents autonomously developed a complete learning platform, including content creation and blockchain certification.",
-        "overview": "Revolutionary project where AI agents autonomously built a complete learning platform with 10+ courses, 40+ modules, and blockchain certification in just 2 weeks.",
-        "challengePoints": [
-          "Need to rapidly create comprehensive AI/LLM educational content",
-          "Requirement for scalable course creation system",
-          "Blockchain-verified certification system needed",
-          "Entire platform to be built by AI agents"
-        ],
-        "solutionPoints": [
-          "Multi-agent orchestration system for autonomous development",
-          "AI agents created all course content and structure",
-          "Blockchain integration for tamper-proof certificates",
-          "Fully automated content generation and quality control"
-        ],
-        "implementationPhases": {
-          "setup": {
-            "name": "Agent Setup",
-            "description": "Configured specialized agents for different tasks"
-          },
-          "content": {
-            "name": "Content Creation",
-            "description": "Agents generated 10+ comprehensive courses"
-          },
-          "platform": {
-            "name": "Platform Development",
-            "description": "Agents built the complete web platform"
-          },
-          "blockchain": {
-            "name": "Blockchain Integration",
-            "description": "Implemented certificate verification system"
-          }
-        },
-        "results": {
-          "time": {
-            "metric": "2 weeks",
-            "value": "Total Development Time",
-            "description": "Complete platform built in record time"
-          },
-          "courses": {
-            "metric": "10+",
-            "value": "Courses Created",
-            "description": "Comprehensive courses on GenAI, LLM, and automation"
-          },
-          "efficiency": {
-            "metric": "95%",
-            "value": "Agent Efficiency",
-            "description": "Minimal human intervention required"
-          }
-        },
-        "keyFeatures": [
-          "160+ lessons across all courses",
-          "Interactive learning modules",
-          "Progress tracking",
-          "Blockchain-verified certificates",
-          "AI-generated content"
-        ]
-      },
-      "ticketRouting": {
-        "title": "Intelligent Ticket Routing with Vector Database",
-        "client": "Major Dutch Bank",
-        "challenge": "Thousands of Business Service Templates (BSTs) made it impossible for users to find the right template for their issue.",
-        "solution": "LLM-powered widget with vector database for semantic search. User describes problem, AI generates follow-up questions, creates perfect ticket and routes to correct team.",
-        "details": "Vector database implementation enabling semantic search across thousands of service templates, with intelligent follow-up questions for perfect ticket creation.",
-        "overview": "Revolutionized ticket routing by implementing a vector database solution that reduced thousands of templates to an intelligent system with 94% routing accuracy.",
-        "challengePoints": [
-          "Thousands of Business Service Templates (BSTs) causing confusion",
-          "Users unable to find correct template for their issues",
-          "High rate of misrouted tickets",
-          "Excessive time spent searching for right template"
-        ],
-        "solutionPoints": [
-          "Vector database for semantic search across all templates",
-          "LLM-powered widget for natural language input",
-          "Intelligent follow-up question generation",
-          "Automatic ticket creation and routing"
-        ],
-        "implementationPhases": {
-          "analysis": {
-            "name": "Template Analysis",
-            "description": "Analyzed and vectorized thousands of BSTs"
-          },
-          "vectorDB": {
-            "name": "Vector DB Setup",
-            "description": "Implemented high-performance vector database"
-          },
-          "llmIntegration": {
-            "name": "LLM Integration",
-            "description": "Connected LLM for intelligent question generation"
-          },
-          "serviceNow": {
-            "name": "ServiceNow Integration",
-            "description": "Seamless integration with existing systems"
-          }
-        },
-        "results": {
-          "accuracy": {
-            "metric": "94%",
-            "value": "Routing Accuracy",
-            "description": "Near-perfect ticket routing to correct teams"
-          },
-          "timeSaved": {
-            "metric": "78%",
-            "value": "Time Saved",
-            "description": "Dramatic reduction in ticket creation time"
-          },
-          "bstReduction": {
-            "metric": "65%",
-            "value": "BST Reduction",
-            "description": "Eliminated redundant templates"
-          }
-        },
-        "keyFeatures": [
-          "Semantic search capability",
-          "Natural language processing",
-          "Dynamic follow-up questions",
-          "Automatic categorization",
-          "Smart routing logic"
-        ]
-      }
-    },
-    "metrics": {
-      "responseTime": "Response Time",
-      "resolutionRate": "Resolution Rate",
-      "costSavings": "Cost Savings",
-      "tokensProcessed": "Tokens Processed",
-      "hoursTranscribed": "Hours Transcribed",
-      "activeUsers": "Active Users",
-      "developmentTime": "Development Time",
-      "coursesBuilt": "Courses Built",
-      "agentEfficiency": "Agent Efficiency",
-      "routingAccuracy": "Routing Accuracy",
-      "userTimeSaved": "User Time Saved",
-      "bstReduction": "BST Reduction"
-    },
-    "durations": {
-      "months": "months",
-      "weeks": "weeks",
-      "days": "days",
-      "ongoing": "Ongoing"
-    }
-  },
   "aiCapabilities": {
     "heading": {
       "why": "Why Multi-Agent Orchestration",
@@ -2559,6 +3013,876 @@
       "video": "Video Call",
       "phone": "Phone Call",
       "inPerson": "In Person"
+    }
+  },
+  "onzeRol": {
+    "title": "We are your",
+    "titleHighlight": "Agent Infrastructure",
+    "titleEnd": "Partner",
+    "subtitle": "Not just technical, but especially strategic. We help you:",
+    "noOneSize": "No one-size-fits-all.",
+    "uniqueJourney": "Every journey is unique.",
+    "listeningFirst": "That's why we always start by listening to your specific situation.",
+    "roles": {
+      "strategy": {
+        "title": "Strategy",
+        "description": "Which systems first? Which agents are relevant?",
+        "action": "We create the roadmap.",
+        "details": {
+          "0": "System prioritization based on business impact",
+          "1": "Agent use case scenarios development",
+          "2": "ROI calculation per system",
+          "3": "Realistic timeline creation"
+        }
+      },
+      "implementation": {
+        "title": "Implementation",
+        "description": "From API to MCP. We build the bridge between",
+        "action": "your systems and AI agents.",
+        "details": {
+          "0": "Custom MCP server development",
+          "1": "Secure authentication layers",
+          "2": "Agent testing & validation",
+          "3": "Team training & documentation"
+        }
+      },
+      "optimization": {
+        "title": "Optimization",
+        "description": "Measure, learn, improve. Continuous guidance",
+        "action": "toward maximum agent value.",
+        "details": {
+          "0": "Performance monitoring setup",
+          "1": "Usage analytics & insights",
+          "2": "Agent behavior optimization",
+          "3": "New opportunities identification"
+        }
+      }
+    }
+  },
+  "timeline": {
+    "title": "We see the",
+    "titleHighlight": "waves coming",
+    "subtitle": "For 2+ years we've been leading AI implementations. Not because we can, but because we believe in the transformation AI brings.",
+    "finalQuestion": "The question isn't if AI agents are coming.",
+    "readyQuestion": "The question is: are you ready?",
+    "weAreReady": "We are. For 2 years already.",
+    "milestones": {
+      "0": {
+        "date": "June 2023",
+        "title": "Prompt Chaining Pioneers",
+        "description": "Complex multi-step AI chains in production when ChatGPT was still a toy",
+        "impact": "Automation of complex business processes"
+      },
+      "1": {
+        "date": "August 2023",
+        "title": "RAG before it was cool",
+        "description": "Knowledge retrieval without hallucinations - 8 months before the hype",
+        "impact": "10x faster information access without AI errors"
+      },
+      "2": {
+        "date": "September 2023",
+        "title": "First Autonomous Agent",
+        "description": "Content creation: idea → text → image → publication → comment responses. Fully autonomous.",
+        "impact": "Transformation of content workflows"
+      },
+      "3": {
+        "date": "Q1 2024",
+        "title": "Microsoft Copilot from day 1",
+        "description": "Enterprise Copilot implementations while others were still reading",
+        "impact": "Productivity boost for enterprise clients"
+      },
+      "4": {
+        "date": "Q2-Q3 2024",
+        "title": "Extreme Context Processing",
+        "description": "Custom prompt orchestration system: 100,000+ tokens without context loss or RAG",
+        "impact": "Proof that smart architecture > brute force computing"
+      },
+      "5": {
+        "date": "Q4 2024",
+        "title": "Open Source LLMs in Production",
+        "description": "HuggingFace, Llama, Mistral - GDPR-compliant on-premise AI",
+        "impact": "Privacy-safe AI for regulated industries"
+      },
+      "6": {
+        "date": "Q1-Q2 2025",
+        "title": "Agent Infrastructure Platform",
+        "description": "Snow-flow MCP + Multi-agent orchestration: From API to agent-ready ecosystem",
+        "impact": "Complete agent infrastructure for Dutch businesses"
+      }
+    },
+    "statusLabels": {
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "impact": "Impact:"
+    }
+  },
+  "snowflow": {
+    "title": "Example:",
+    "titleHighlight": "How we made ServiceNow agent-ready",
+    "subtitle": "Snow-flow shows our approach: from problem analysis to working solution.",
+    "subtitleHighlight": "We can do this for YOUR systems too.",
+    "openSourceTitle": "Open Source & Transparent",
+    "futureTitle": "This is the future for YOUR systems",
+    "futureDescription": "Snow-flow shows what becomes possible. From known platforms to custom - if it has APIs, we can make it agent-ready.",
+    "ctaButton": "Discover your Agent Readiness with us",
+    "whyServiceNow": {
+      "title": "Why ServiceNow?",
+      "description": "ServiceNow itself is very active with AI - NowAssist, AI Search, Process Optimization. Fortune 500 companies invest millions in AI within ServiceNow.",
+      "problem": "But even these AI-forward companies had no idea how to give agents access.",
+      "solution": "That's why we took it upon ourselves: ServiceNow as the IDEAL example case. If Fortune 500 companies with incredible AI expertise don't know - then nobody understands it.",
+      "conclusion": "That's what we're here for. We make it simple."
+    },
+    "problemSolution": {
+      "problemTitle": "The Problem",
+      "problemDescription": "Despite all AI investments: the ticket system was completely closed to external agents. No agent could create tickets, trigger workflows, or retrieve data.",
+      "solutionTitle": "The Solution",
+      "solutionDescription": "We implemented MCP servers that convert ServiceNow APIs into agent-accessible interfaces. Now agents can integrate seamlessly."
+    },
+    "agentCapabilities": {
+      "title": "What Agents Can Do Now",
+      "tickets": {
+        "title": "Create & Manage Tickets",
+        "description": "Full CRUD operations on incidents"
+      },
+      "workflows": {
+        "title": "Trigger Workflows",
+        "description": "Start business processes automatically"
+      },
+      "knowledge": {
+        "title": "Search Knowledge Base",
+        "description": "Intelligent information retrieval"
+      }
+    },
+    "technicalImplementation": {
+      "title": "Technical Implementation",
+      "features": {
+        "0": "MCP Protocol standard",
+        "1": "200+ ServiceNow functions exposed",
+        "2": "Secure authentication layers",
+        "3": "Real-time bidirectional communication",
+        "4": "Open source: github.com/GroeimetAI/snow-flow"
+      }
+    },
+    "github": {
+      "subtitle": "@GroeimetAI/snow-flow on GitHub",
+      "openSourceBadge": "Open Source",
+      "transparency": "Transparent & Community",
+      "stats": {
+        "integrations": "Growing",
+        "integrationsLabel": "Integrations",
+        "functions": "200+",
+        "functionsLabel": "Functions",
+        "community": "Active",
+        "communityLabel": "Community"
+      },
+      "buttons": {
+        "github": "View on GitHub",
+        "demo": "Try Live Demo"
+      }
+    }
+  },
+  "objections": {
+    "title": "Frequently Asked",
+    "titleHighlight": "Questions",
+    "subtitle": "We understand the concerns. Here are honest answers:",
+    "stillDoubts": "Still have doubts?",
+    "freeConsultation": "Start with a free 30-min exploratory conversation. No obligations, just insights.",
+    "faqs": {
+      "0": {
+        "question": "Does this work for our own software too?",
+        "answer": "Yes! If it has APIs (or we can build them), we make it agent-ready. From Excel to enterprise - any software can become agent-accessible."
+      },
+      "1": {
+        "question": "Isn't this only for large companies?",
+        "answer": "No, we start from €2,500 assessment. Small businesses often benefit most from agent automation - fewer resources, more impact."
+      },
+      "2": {
+        "question": "What if we don't have technical expertise?",
+        "answer": "That's exactly why we're here. From strategy to implementation - we guide you through it. Training and documentation included."
+      },
+      "3": {
+        "question": "Won't this take way too long?",
+        "answer": "Assessment within 1 week, first agent interactions within 2-4 weeks. We ensure quick wins while building the foundation."
+      }
+    }
+  },
+  "nextSteps": {
+    "title": "Our",
+    "titleHighlight": "Transparent",
+    "titleEnd": "Approach",
+    "subtitle": "From pilot to enterprise - Always the same 3 steps. Transparent prices, fixed deliverables, no surprises.",
+    "howWeWork": "How do we work?",
+    "noHourlyRates": "No hourly rates",
+    "assessmentFirst": "Assessment first, then quote",
+    "fixedPrices": "Fixed prices per phase",
+    "roiGuarantee": "ROI guarantee in contract",
+    "startAssessment": "Start with Free Assessment"
+  },
+  "casesPage": {
+    "hero": {
+      "title": "Case Studies",
+      "titleSuffix": "& Innovations",
+      "subtitle": "From concept to reality - our journey in agent infrastructure"
+    },
+    "openSource": {
+      "title": "Open Source",
+      "titleHighlight": "Initiative",
+      "project": {
+        "title": "Snow-flow: MCP Server for ServiceNow",
+        "subtitle": "Our flagship open source project"
+      },
+      "whatItIs": {
+        "title": "What it is",
+        "features": {
+          "proof": "Proof of concept for MCP implementation",
+          "functions": "200+ ServiceNow functions exposed",
+          "opensource": "Fully open source on GitHub",
+          "active": "Active development & community"
+        }
+      },
+      "whyImportant": {
+        "title": "Why important",
+        "description": "This demonstrates what's possible when enterprise systems become agent-accessible. From closed silo to open platform."
+      },
+      "buttons": {
+        "github": "View on GitHub",
+        "demo": "Try Demo"
+      },
+      "stats": {
+        "title": "Repository Stats",
+        "stars": {
+          "label": "Stars",
+          "value": "Growing"
+        },
+        "contributors": {
+          "label": "Contributors",
+          "value": "Community"
+        },
+        "license": {
+          "label": "License",
+          "value": "MIT"
+        },
+        "status": {
+          "label": "Status",
+          "value": "Active"
+        }
+      }
+    },
+    "liveImplementations": {
+      "title": "Live",
+      "titleHighlight": "Implementations",
+      "keyFeatures": "Key Features",
+      "impactMetrics": "Impact Metrics",
+      "snelnotuleren": {
+        "title": "Snelnotuleren.nl",
+        "subtitle": "Extreme Context Processing in Production",
+        "stats": {
+          "meetings": {
+            "value": "1500+",
+            "label": "hours of meetings processed"
+          },
+          "tokens": {
+            "value": "1M+",
+            "label": "tokens processed"
+          },
+          "gdpr": {
+            "value": "100%",
+            "label": "GDPR compliant"
+          }
+        },
+        "highlight": "Proof that smart architecture > expensive RAG systems",
+        "features": {
+          "orchestration": "Proprietary prompt orchestration",
+          "noVector": "No vector databases needed",
+          "zeroContext": "Zero context degradation",
+          "privacy": "Enterprise privacy compliance"
+        },
+        "status": "Live in production"
+      },
+      "enterprise": {
+        "title": "Enterprise LLM Implementation",
+        "subtitle": "50,000 employees, one AI system",
+        "stats": {
+          "users": {
+            "value": "50k",
+            "label": "users"
+          },
+          "availability": {
+            "value": "24/7",
+            "label": "availability"
+          },
+          "nda": {
+            "value": "NDA",
+            "label": "details"
+          }
+        },
+        "highlight": "Substantial cost savings vs cloud LLM APIs",
+        "features": {
+          "routing": "Intelligent ticket routing",
+          "agentic": "Agentic decision framework",
+          "azure": "Azure OpenAI integration",
+          "workflow": "Custom workflow automation"
+        },
+        "status": "Details under NDA"
+      }
+    },
+    "technologyLeadership": {
+      "title": "Technology",
+      "titleHighlight": "Leadership",
+      "intelligentTicket": {
+        "title": "Intelligent Ticket Classification",
+        "subtitle": "Deep ITSM expertise meets AI innovation",
+        "description": "Our system doesn't just understand tickets - it understands processes. From incident to HR query: every request in the right place.",
+        "tagline": "ITSM expertise + AI = Operational excellence"
+      },
+      "agenticAI": {
+        "title": "Agentic Conversational AI",
+        "subtitle": "The chatbot that thinks and decides",
+        "capabilities": {
+          "liveAgent": "Need live agent? → Warm handoff with context",
+          "knowledgeArticle": "Knowledge article? → Get the right one instantly",
+          "catalog": "Catalog item? → Automatically request and track",
+          "simple": "Simple question? → Instant accurate answer"
+        },
+        "tagline": "50,000 employees, one intelligent assistant"
+      },
+      "multiAgent": {
+        "title": "Multi-Agent Orchestration",
+        "subtitle": "We determine HOW it works best",
+        "description": "We're not researching if it can be done. Agent teams collaborating on complex business challenges.",
+        "tagline": "First implementations live"
+      },
+      "extremeContext": {
+        "title": "Extreme Context Processing",
+        "subtitle": "In production. 1M+ tokens without RAG",
+        "description": "Our proprietary technology proves that intelligent prompt orchestration works better than expensive vector databases.",
+        "tagline": "Technology available for customers"
+      },
+      "mcpExcellence": {
+        "title": "MCP Excellence",
+        "subtitle": "Snow-flow is a statement",
+        "description": "We contribute to the MCP standard that the industry will use. Open source, transparent, and proven effective.",
+        "tagline": "This is the standard"
+      }
+    },
+    "focusAreas": {
+      "title": "Our",
+      "titleHighlight": "Focus Areas",
+      "subtitle": "These solutions are no accident. They emerge from our focus on:",
+      "mcpExpertise": {
+        "title": "MCP Protocol Expertise",
+        "description": "Snow-flow is the beginning. We develop expertise in making ANY software agent-ready - not specific brands."
+      },
+      "customImplementations": {
+        "title": "Custom Implementations",
+        "description": "Every company has unique systems. We build custom MCP servers, not predetermined connectors."
+      },
+      "openSource": {
+        "title": "Open Source Contribution",
+        "description": "We share our knowledge. Snow-flow is open source so the entire community can learn and contribute."
+      }
+    },
+    "testimonials": {
+      "title": "Client",
+      "titleHighlight": "Testimonials",
+      "first": {
+        "quote": "That someone could put this together so quickly not only shows how much talent is out there in the greater ServiceNow community, but also indicates how much the entire development process is now changing. Niels van der Werf is just one of thousands who are out there now putting AI tools to work, and we're still truly in the early days of applying this tech.",
+        "author": "- Manager, AI Product Content at ServiceNow"
+      },
+      "second": {
+        "quote": "From meeting to minutes in minutes. Snelnotuleren has transformed our team.",
+        "author": "- Project Manager, Consultancy"
+      }
+    },
+    "cta": {
+      "title": "Start Your Project",
+      "subtitle": "We don't build one-size-fits-all solutions.",
+      "statement": "We build what",
+      "statementHighlight": "YOU",
+      "statementEnd": "need.",
+      "buttons": {
+        "discuss": "Discuss your use case",
+        "downloadGuide": "Download MCP Guide"
+      },
+      "note": "Every project starts with a free assessment of your specific situation"
+    }
+  },
+  "contactPage": {
+    "header": {
+      "title": "Schedule a",
+      "highlight": "free consultation",
+      "subtitle": "30 minutes discussing your agent opportunities"
+    },
+    "conversationTypes": {
+      "title": "Choose your conversation type:",
+      "exploratory": {
+        "title": "Exploratory Conversation",
+        "subtitle": "First meeting",
+        "features": [
+          "Is agent-ready right for us?",
+          "What quick wins are available?",
+          "Non-committal advice"
+        ],
+        "cta": "Schedule this conversation"
+      },
+      "debrief": {
+        "title": "Assessment Debrief",
+        "subtitle": "Assessment already done",
+        "features": [
+          "Review report",
+          "Determine priorities",
+          "Discuss next steps"
+        ],
+        "cta": "Schedule debrief"
+      },
+      "kickoff": {
+        "title": "Project Kickoff",
+        "subtitle": "Ready to start",
+        "features": [
+          "Pilot planning",
+          "Align timeline",
+          "Team introduction"
+        ],
+        "cta": "Schedule kickoff"
+      }
+    },
+    "directContact": {
+      "title": "Direct contact:",
+      "name": "Niels van der Werf",
+      "role": "Agent Infrastructure Architect",
+      "email": "niels@groeimetai.io",
+      "phone": "+31 (6) 81 739 018",
+      "hours": "Mon-Fri 9:00-17:00"
+    },
+    "form": {
+      "title": "Or fill out the form:",
+      "fields": {
+        "name": {
+          "label": "Name"
+        },
+        "company": {
+          "label": "Company"
+        },
+        "email": {
+          "label": "Email"
+        },
+        "phone": {
+          "label": "Phone"
+        },
+        "message": {
+          "label": "What would you like to discuss?",
+          "placeholder": "Briefly describe what you need help with..."
+        },
+        "preferredDate": {
+          "label": "Preferred date"
+        },
+        "preferredTime": {
+          "label": "Preferred time",
+          "placeholder": "Select...",
+          "options": {
+            "morning": "Morning (9:00-12:00)",
+            "afternoon": "Afternoon (12:00-17:00)"
+          }
+        }
+      },
+      "submit": "Send request",
+      "responseTime": "Response within 4 hours during business hours"
+    }
+  },
+  "agentReadinessQuiz": {
+    "title": "Agent Readiness Check",
+    "subtitle": "5 questions, 2 minutes",
+    "step": "Step",
+    "of": "of",
+    "questions": {
+      "apis": {
+        "title": "Do your systems have APIs?",
+        "options": {
+          "most": "Yes, most of them do",
+          "some": "Some do",
+          "unknown": "No idea",
+          "none": "No"
+        }
+      },
+      "dataAccess": {
+        "title": "Can you quickly find customer data?",
+        "options": {
+          "instant": "Few clicks",
+          "minutes": "2-3 systems",
+          "difficult": "Hard to search",
+          "impossible": "Not digital"
+        }
+      },
+      "budget": {
+        "title": "What's realistic for agent infrastructure this year?",
+        "options": {
+          "enterprise": "EUR100k+ - Enterprise rollout",
+          "multiple": "EUR25-100k - Multiple systems",
+          "single": "EUR10-25k - One system seriously",
+          "pilot": "< EUR10k - Pilot/experiment",
+          "businessCase": "Need business case first"
+        }
+      },
+      "blocker": {
+        "title": "What's your biggest blocker?",
+        "options": {
+          "knowledge": "Technical knowledge missing",
+          "integration": "Systems don't talk to each other",
+          "guidance": "No idea where to start",
+          "budget": "Budget/resources limited",
+          "security": "Security/compliance concerns",
+          "resistance": "Team resistance to change",
+          "data": "Data is too messy/scattered",
+          "other": "Other"
+        }
+      },
+      "impact": {
+        "title": "Which system would have the biggest impact?",
+        "subtitle": "For AI agent implementation",
+        "options": {
+          "helpdesk": "Customer Service/Helpdesk",
+          "crm": "CRM/Sales",
+          "erp": "ERP/Finance",
+          "planning": "Planning/Logistics",
+          "knowledge": "Knowledge Base/Documentation",
+          "hr": "HR/Personnel",
+          "custom": "Custom software/Bespoke",
+          "other": "Other"
+        }
+      }
+    },
+    "navigation": {
+      "previous": "Previous",
+      "next": "Next",
+      "showScore": "Show my score"
+    },
+    "results": {
+      "levels": {
+        "level5": "Level 5: Agent-Ready",
+        "level4": "Level 4: Integration-Ready",
+        "level3": "Level 3: Digitalization-Ready",
+        "level2": "Level 2: Foundation-Building",
+        "level1": "Level 1: Pre-Digital"
+      },
+      "descriptions": {
+        "level5": "Agents can go live within weeks! 🚀",
+        "level4": "2-3 months prep and you're agent-ready 🔄",
+        "level3": "6-12 months modernization needed 🛠️",
+        "level2": "1-2 years infrastructure work 🏗️",
+        "level1": "Start with digitalization fundamentals 📚"
+      },
+      "fomoTitle": "But HOW do you get from {level} to Level 5: Agent-Ready?",
+      "questions": [
+        "Which of your {count} should you tackle FIRST?",
+        "Where exactly are your data/API/process gaps?",
+        "What are the biggest blockers holding you back?",
+        "And how much time/budget will you lose without a plan?"
+      ],
+      "cta": {
+        "high": "Discover what you're missing for Level 5",
+        "low": "Discover your biggest blockers"
+      },
+      "benefits": [
+        "25-question assessment measures exactly what's missing",
+        "System prioritization • Budget reality • Blockers analysis • Implementation roadmap"
+      ]
+    }
+  },
+  "agentReadinessAssessment": {
+    "title": "Agent Readiness Assessment",
+    "subtitle": "14 questions, 5-8 minutes - discover your complete agent readiness score",
+    "description": "Pure focus on: can agents work with your systems?",
+    "progress": {
+      "question": "Question",
+      "of": "of",
+      "preFilled": "Quick check answers have been filled in"
+    },
+    "questions": {
+      "business": {
+        "title": "💼 What is your core business?",
+        "subtitle": "In one sentence: what does your company do for customers?",
+        "placeholder": "We are a [type of company] that [what you do] for [target group]",
+        "example": "We deliver IT hardware to SME businesses"
+      },
+      "systems": {
+        "title": "🏗️ Which systems MUST become agent-ready?",
+        "subtitle": "Select maximum 3 systems",
+        "selected": "Selected: {count}/3 systems",
+        "options": [
+          "Customer Service/Helpdesk",
+          "CRM/Sales", 
+          "ERP/Finance",
+          "HR/Personnel",
+          "Knowledge Base/Documentation",
+          "Planning/Logistics",
+          "Custom software/Bespoke",
+          "Other"
+        ]
+      },
+      "highestImpact": {
+        "title": "🎯 Which system has the BIGGEST impact when it becomes agent-ready?",
+        "subtitle": "Choose from the systems you just selected"
+      },
+      "apis": {
+        "title": "🔗 Do these systems have APIs?",
+        "subtitle": "Agents must be able to connect to your systems",
+        "preFilled": "Answer taken from quick check",
+        "options": {
+          "most": "Yes, most have APIs",
+          "some": "Some do, some don't",
+          "unknown": "No idea actually",
+          "none": "No, no APIs yet"
+        }
+      },
+      "dataAccess": {
+        "title": "📊 Can you quickly find customer data?",
+        "subtitle": "Test: Can you find all data for customer \"John Smith\" within 5 minutes?",
+        "preFilled": "Answer taken from quick check",
+        "options": {
+          "instant": "Yes, few clicks and I have everything",
+          "minutes": "Yes, but need to go through 2-3 systems",
+          "difficult": "Difficult, data is scattered",
+          "impossible": "No, much data is not digital"
+        }
+      },
+      "dataLocation": {
+        "title": "📍 Where is that customer data stored?",
+        "subtitle": "How scattered is your data across systems?",
+        "options": {
+          "central": "One central system",
+          "few": "2-3 systems",
+          "many": "5+ systems",
+          "paper": "Partly still on paper/Excel"
+        }
+      },
+      "processes": {
+        "title": "📋 Are your processes documented?",
+        "subtitle": "Agents need to know what to do",
+        "options": {
+          "documented": "Yes, everything documented",
+          "partially": "Most important processes yes",
+          "tribal": "No, it's in employees' heads",
+          "chaos": "Everyone does it differently"
+        }
+      },
+      "automation": {
+        "title": "🤖 What automation do you already use?",
+        "options": {
+          "advanced": "Zapier, Power Automate, RPA tools",
+          "basic": "Email automation, basic workflows",
+          "trying": "Trying things, but often breaks",
+          "none": "No, everything still manual"
+        }
+      },
+      "aiPlatform": {
+        "title": "🧠 Do you have a preference for AI platform?",
+        "subtitle": "We want to know if you have specific wishes",
+        "options": {
+          "yes": "Yes, namely:",
+          "no": "No, need advice",
+          "depends": "Depends on cost/compliance"
+        }
+      },
+      "aiPlatforms": {
+        "title": "🧠 Which AI platforms are you considering?",
+        "subtitle": "Select all that apply",
+        "perfect": "Perfect!",
+        "advice": "We'll advise you on the best AI platforms for your situation.",
+        "compliance": "We take cost and compliance requirements into account in our recommendations.",
+        "report": "In your report you'll get a comparison of platforms that fit your infrastructure and budget.",
+        "platforms": [
+          "Claude (Anthropic)",
+          "GPT (OpenAI)",
+          "Gemini (Google)",
+          "Custom/Own agents",
+          "Don't know yet",
+          "Other"
+        ]
+      },
+      "blocker": {
+        "title": "⚠️ What's your biggest blocker for automation?",
+        "preFilled": "Answer taken from quick check",
+        "options": [
+          "Technical knowledge missing",
+          "Systems don't talk to each other",
+          "No idea where to start",
+          "Budget/resources limited",
+          "Security/compliance concerns",
+          "Team resistance to change",
+          "Data is too messy/scattered",
+          "Other"
+        ]
+      },
+      "adoption": {
+        "title": "⚡ How quickly can your team adopt new tools?",
+        "options": {
+          "veryFast": "Very fast (weeks)",
+          "reasonable": "Reasonable (months)",
+          "slow": "Slow (quarters)",
+          "verySlow": "Very slow (years)"
+        }
+      },
+      "costOptimization": {
+        "title": "💰 What's your biggest operational cost item you'd like to optimize?",
+        "subtitle": "This helps agents prioritize where the biggest impact lies",
+        "options": [
+          "Personnel costs / manual work",
+          "Customer service / support costs",
+          "Data entry / administration",
+          "Communication between departments",
+          "Errors / rework costs",
+          "Planning / coordination overhead",
+          "Other"
+        ]
+      },
+      "budget": {
+        "title": "💰 What's realistic for agent infrastructure this year?",
+        "subtitle": "So we can make realistic recommendations",
+        "preFilled": "Answer taken from quick check",
+        "options": {
+          "pilot": "< €10k - Pilot/experiment",
+          "single": "€10-25k - One system seriously",
+          "multiple": "€25-100k - Multiple systems",
+          "enterprise": "€100k+ - Enterprise rollout",
+          "businessCase": "Need business case first"
+        }
+      },
+      "itMaturity": {
+        "title": "🔧 How are systems currently managed?",
+        "subtitle": "This helps us assess who will do the implementation",
+        "options": {
+          "internal": "Internal IT department",
+          "external": "External IT partner",
+          "mixed": "Bit of both",
+          "adhoc": "Ad-hoc/no one specific"
+        }
+      },
+      "contact": {
+        "title": "Your Agent Readiness Report",
+        "name": "Name",
+        "role": "Role",
+        "company": "Company",
+        "email": "Email",
+        "phone": "Phone",
+        "guide": "Yes, I also want the Agent Readiness Guide (PDF)",
+        "account": {
+          "title": "✨ Create an account right away",
+          "description": "Get access to your personal Agent Infrastructure dashboard",
+          "benefits": [
+            "Assessment saved",
+            "Direct Expert upgrade (€2.500)",
+            "Snow-flow demo access",
+            "Roadmap updates",
+            "Premium features",
+            "Live metrics dashboard"
+          ],
+          "confirmation": "Account will be created with {email}",
+          "redirect": "You'll be redirected directly to your personal dashboard with assessment results"
+        }
+      }
+    },
+    "navigation": {
+      "previous": "Previous",
+      "next": "Next",
+      "submit": "Discover my complete readiness score"
+    },
+    "completion": {
+      "title": "Your Agent Readiness Report is being generated...",
+      "video": {
+        "title": "While you wait:",
+        "description": "See how ServiceNow became agent-ready in 2 weeks",
+        "cta": "Watch Video"
+      },
+      "includes": [
+        "Agent Readiness Score (0-100)",
+        "Breakdown per infrastructure category",
+        "General best practices per level",
+        "Indication of time to Agent-Ready",
+        "GroeimetAI certificate + badge"
+      ],
+      "summary": "Your free report is being generated!",
+      "details": "Your Agent Readiness Score and general insights will arrive within 2 minutes via email.",
+      "upgrade": "Want a concrete roadmap? Expert Assessment (€2.500) provides specific gaps analysis and implementation plan for your business."
+    }
+  },
+  "nextSteps": {
+    "title": "Your API",
+    "highlight": "Transformation",
+    "titleEnd": "in 3 steps", 
+    "subtitle": "Always in three steps - First assessment, then quote. Fixed prices per phase. No surprises.",
+    "steps": {
+      "step1": {
+        "title": "Online Quick Scan",
+        "subtitle": "Free API Assessment",
+        "description": "10 questions about your current APIs. Instant score and general report.",
+        "pricing": "FREE",
+        "timeframe": "5 min",
+        "features": [
+          "API inventory analysis",
+          "Agent readiness score", 
+          "General recommendations",
+          "No obligations"
+        ],
+        "cta": "Start Quick Scan"
+      },
+      "step2": {
+        "title": "Expert Assessment",
+        "subtitle": "Deep Dive Analysis", 
+        "description": "2-4 hour deep dive with concrete roadmap and custom quote.",
+        "pricing": "€2,500",
+        "timeframe": "2-4 hours",
+        "features": [
+          "Technical gap analysis",
+          "Concrete implementation roadmap",
+          "ROI calculation",
+          "Fixed price quote"
+        ],
+        "cta": "Book Expert Assessment"
+      },
+      "step3": {
+        "title": "Implementation",
+        "subtitle": "Agent-Ready Realization",
+        "description": "Fixed price per project implementation. From plan to working agent-ready APIs.",
+        "pricing": "Custom",
+        "timeframe": "2-12 weeks", 
+        "features": [
+          "MCP server development",
+          "API wrapper implementation",
+          "Testing and validation",
+          "Go-live support"
+        ],
+        "cta": "Get Implementation Quote"
+      }
+    },
+    "explanation": {
+      "title": "Transparent Collaboration",
+      "transparentPricing": {
+        "title": "Clear Approach",
+        "description": "No hidden costs or surprises",
+        "ranges": [
+          "Quick Scan: Always free",
+          "Expert Assessment: Fixed price known upfront", 
+          "Implementation: Based on assessment"
+        ]
+      },
+      "roiGuarantee": {
+        "title": "Focus on Results",
+        "description": "We only work with companies where we can add value",
+        "stats": [
+          "Sustainable efficiency gains",
+          "Measurable savings",
+          "Long-term partnership"
+        ]
+      },
+      "noLockIn": {
+        "title": "Your Ownership",
+        "description": "All code and systems remain fully yours"
+      },
+      "guarantees": {
+        "fixedPrice": "Transparent prices",
+        "timeframe": "Realistic planning",
+        "downtime": "Minimal impact"
+      }
     }
   }
 }

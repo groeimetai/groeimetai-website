@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "GroeimetAI - AI Consultancy & Innovatie",
-    "description": "Strategisch AI-adviesbureau dat directieteams begeleidt door digitale transformatie. Wij leveren uitvoerbare inzichten voor procesoptimalisatie, kostenreductie en duurzame groei."
+    "title": "GroeimetAI - Agent Infrastructure Specialists",
+    "description": "Agent Infrastructure specialists die jouw APIs agent-ready maken. Van REST naar MCP - wij bouwen de brug tussen jouw systemen en AI agents."
   },
   "navigation": {
     "services": "Diensten",
@@ -14,14 +14,613 @@
     "getStarted": "Aan de slag"
   },
   "hero": {
-    "badge": "Toonaangevende AI Strategie & Business Transformatie",
-    "title": "Versneld Bedrijfswaarde",
-    "subtitle": "Door AI Excellentie",
-    "description": "Wij begeleiden directieteams door de complexiteit van AI-adoptie. Onze strategische advisory focust op bedrijfsresultaten - procesoptimalisatie, kostenreductie en omzetgroei door intelligente AI-implementatie.",
+    "title": "Van APIs naar",
+    "highlight": "MCP-ready",
+    "subtitle": "Je hebt APIs, maar agents kunnen er niet mee praten.",
+    "description": "Wij maken je bestaande APIs agent-compatible via MCP - zonder rebuilding.",
+    "badge": "AI implementatie expertise sinds 2023",
+    "explanation": "Je APIs werken perfect. Maar Claude, GPT en andere agents kunnen er niet bij.",
+    "reason": "Niet omdat je APIs slecht zijn. Maar omdat agents MCP protocol spreken, niet REST.",
     "cta": {
-      "consultation": "Consultatie Plannen",
-      "services": "Onze Advisory Services",
-      "dashboard": "Ga naar Dashboard"
+      "quickCheck": "Quick Check - 2 minuten",
+      "seeHow": "Zie hoe",
+      "back": "Terug"
+    }
+  },
+  "mcpAnimation": {
+    "title": "Hoe",
+    "highlight": "GroeimetAI",
+    "titleEnd": "de Agent Brug Bouwt",
+    "subtitle": "Van agent-blind APIs naar agent-ready systemen - wij maken je APIs agent-compatible",
+    "comparison": {
+      "traditional": {
+        "title": "Traditionele API Integratie",
+        "description": "Complexe punt-tot-punt verbindingen die custom development vereisen"
+      },
+      "arrow": "API → MCP",
+      "mcp": {
+        "title": "MCP Protocol Oplossing", 
+        "description": "Universele verbindingsstandaard voor naadloze AI agent integratie"
+      }
+    },
+    "phases": {
+      "before": {
+        "title": "Voor GroeimetAI",
+        "subtitle": "Je APIs zijn agent-blind...",
+        "description": "Agents kunnen niet met je bestaande APIs communiceren"
+      },
+      "during": {
+        "title": "GroeimetAI Bouwt MCP",
+        "subtitle": "Wij bouwen de brug voor agents...",
+        "description": "GroeimetAI implementeert MCP servers voor je APIs"
+      },
+      "after": {
+        "title": "Na GroeimetAI",
+        "subtitle": "Je APIs zijn agent-ready",
+        "description": "Alle agents kunnen nu met je APIs praten via MCP"
+      }
+    },
+    "agent": {
+      "cantConnect": "Can't connect",
+      "waitingForMcp": "Waiting for MCP...",
+      "allConnected": "All APIs Connected"
+    },
+    "benefits": {
+      "faster": {
+        "title": "Sneller",
+        "description": "Van 40-80 uur per agent naar eenmalige 120-160 uur setup"
+      },
+      "universal": {
+        "title": "Universeel",
+        "description": "Elke agent spreekt MCP - geen custom integraties meer"
+      },
+      "roi": {
+        "title": "ROI",
+        "description": "Break-even bij 2e agent, 80% maintenance reductie"
+      }
+    }
+  },
+  "pricing": {
+    "title": "Voor elk bedrijf met",
+    "highlight": "APIs",
+    "subtitle": "Van pilot tot enterprise - Altijd dezelfde 3 stappen. Transparante prijzen, vaste deliverables, geen verrassingen.",
+    "benefits": [
+      "Geen uurtje-factuurtje",
+      "Eerst assessment, dann offerte",
+      "Vaste prijzen per fase",
+      "ROI garantie"
+    ],
+    "steps": {
+      "step1": {
+        "number": "Stap 1",
+        "title": "Ontdek waar je staat",
+        "subtitle": "Agent Readiness Assessment",
+        "pricing": "GRATIS",
+        "timeframe": "10 vragen • 6 minuten",
+        "description": "Krijg direct inzicht in hoe agent-ready jouw APIs en systemen zijn.",
+        "features": {
+          "0": "Agent readiness score (0-100)",
+          "1": "Gap analyse per categorie",
+          "2": "Professional PDF rapport",
+          "3": "LinkedIn certificaat"
+        },
+        "cta": "Start Gratis Assessment"
+      },
+      "step2": {
+        "number": "Stap 2",
+        "title": "Krijg concrete roadmap",
+        "subtitle": "Expert Assessment",
+        "pricing": "€2.500",
+        "timeframe": "2-4 uur • Vaste prijs",
+        "description": "Personal deep-dive in jouw systemen met hands-on implementation planning.",
+        "features": {
+          "0": "Persoonlijke analyse van APIs",
+          "1": "System-specifieke roadmap",
+          "2": "ROI berekening & business case",
+          "3": "Vaste prijs implementatie offerte"
+        },
+        "cta": "Boek Expert Assessment"
+      },
+      "step3": {
+        "number": "Stap 3",
+        "title": "Implementation",
+        "subtitle": "API→MCP Conversie",
+        "pricing": "Op basis van assessment",
+        "timeframe": "2-12 weken • Vast traject",
+        "description": "Van je bestaande APIs naar agent-compatible MCP systemen. Geen rebuild.",
+        "features": {
+          "0": "API→MCP translation layer",
+          "1": "Agent configuratie & testing",
+          "2": "Phased rollout planning",
+          "3": "ROI garantie in contract"
+        },
+        "cta": "Vraag Implementatie Offerte"
+      }
+    },
+    "bottomCta": {
+      "title": "Hoe werken wij?",
+      "benefits": [
+        "Geen uurtje-factuurtje",
+        "Eerst assessment, dan pas offerte",
+        "Vaste prijzen per fase",
+        "ROI garantie in contract"
+      ],
+      "projectInfo": "Typische projecten: €15-75k • Doorlooptijd: 2-12 weken • ROI: 3-6 maanden",
+      "cta": "Begin met Gratis Assessment"
+    },
+    "explanation": {
+      "title": "Waarom deze aanpak?",
+      "transparentPricing": {
+        "title": "Transparante Pricing",
+        "description": "We beginnen altijd met een Expert Assessment (€2.500). Hierin analyseren we jouw APIs grondig en geven een vaste prijs offerte voor implementatie.",
+        "ranges": {
+          "0": "Pilot projecten: €15-25k",
+          "1": "Departmentale implementatie: €25-50k",
+          "2": "Enterprise infrastructuur: €50-75k"
+        }
+      },
+      "roiGuarantee": {
+        "title": "ROI Gegarandeerd",
+        "description": "Elke implementatie start met een ROI berekening. We gaan alleen door als de business case voor jou klopt - anders krijg je je geld terug.",
+        "stats": {
+          "0": "Typische ROI: 300-800% binnen 12 maanden",
+          "1": "Gemiddelde terugverdientijd: 3-6 maanden",
+          "2": "Contractuele ROI garantie"
+        }
+      },
+      "noLockIn": {
+        "title": "Geen Vendor Lock-in",
+        "description": "We werken met ELKE software - van Excel spreadsheets tot enterprise platforms. Jouw bestaande systemen blijven werken, we maken ze alleen agent-compatible via MCP."
+      },
+      "guarantees": {
+        "fixedPrice": "100% Vaste prijs garantie na Expert Assessment",
+        "timeframe": "2-12 Weken implementatie tijd (geen maanden)",
+        "downtime": "0 Downtime - phased rollout planning"
+      }
+    }
+  },
+  "servicesPage": {
+    "hero": {
+      "title": "Services",
+      "titleHighlight": "Agent Infrastructure",
+      "description": "Van eerste gesprek tot volledige agent automatisering.",
+      "tagline": "Clear path. Fixed prices. Proven results."
+    },
+    "labels": {
+      "whatWeDo": "Wat we doen",
+      "whatYouGet": "Wat je krijgt"
+    },
+    "coreServices": {
+      "0": {
+        "title": "GRATIS CONSULT",
+        "subtitle": "Verkennend Gesprek",
+        "description": "Is agent-ready worden iets voor jou?",
+        "features": {
+          "0": "Situatie schets van jouw systemen",
+          "1": "Agent opportunities identificatie",
+          "2": "MCP protocol uitleg",
+          "3": "Vrijblijvend strategisch advies",
+          "4": "Concrete next steps"
+        },
+        "deliverables": {
+          "0": "Gratis - 30 minuten",
+          "1": "Video call of op locatie",
+          "2": "Directe inzichten",
+          "3": "Geen sales pitch",
+          "4": "Vrijblijvend advies"
+        },
+        "pricing": "Gratis",
+        "subtext": "30 minuten investering",
+        "cta": "Plan Gesprek"
+      },
+      "1": {
+        "title": "ASSESS",
+        "subtitle": "Agent Readiness Scan",
+        "description": "Ontdek waar je staat in de agent revolutie",
+        "features": {
+          "0": "Complete system & API inventory",
+          "1": "Agent accessibility scoring per systeem",
+          "2": "MCP implementation roadmap",
+          "3": "ROI berekening & quick wins",
+          "4": "Prioritering op business impact"
+        },
+        "deliverables": {
+          "0": "30-min intake gesprek",
+          "1": "2-4 uur on-site assessment",
+          "2": "Detailed readiness rapport",
+          "3": "Concrete 90-dagen actieplan",
+          "4": "Go/No-Go advies"
+        },
+        "pricing": "€2.500",
+        "subtext": "Aftrekbaar bij vervolgproject",
+        "cta": "Start Online Assessment"
+      },
+      "2": {
+        "title": "PILOT",
+        "subtitle": "Proof of Concept",
+        "description": "Zie het werkend voor jouw systeem",
+        "features": {
+          "0": "Één systeem agent-ready (basis)",
+          "1": "20-50 meest gebruikte functies",
+          "2": "3 concrete use cases werkend",
+          "3": "Before/after metrics",
+          "4": "Schaalbaarheid assessment"
+        },
+        "deliverables": {
+          "0": "Werkende MCP server",
+          "1": "Live agent demonstratie",
+          "2": "ROI measurement setup",
+          "3": "Scaling roadmap",
+          "4": "2-4 weken implementatie"
+        },
+        "pricing": "Vanaf pilot budget",
+        "subtext": "Afhankelijk van complexiteit",
+        "cta": "Bespreek Pilot Opties"
+      },
+      "3": {
+        "title": "BUILD",
+        "subtitle": "Full Implementation",
+        "description": "Complete agent infrastructure voor jouw organisatie",
+        "features": {
+          "0": "Multi-system MCP servers",
+          "1": "Agent orchestration platform",
+          "2": "Custom integrations en workflows",
+          "3": "Security & authentication layers",
+          "4": "Complete documentatie & training"
+        },
+        "deliverables": {
+          "0": "Starter: Basis implementatie (1-2 systemen, 50-100 functies, 3 maanden support)",
+          "1": "Growth: Uitgebreide setup (3-5 systemen, 200+ functies, agent orchestration, 6 maanden)",
+          "2": "Enterprise: Volledige integratie (unlimited systemen, custom agents, dedicated architect, 12 maanden)",
+          "3": "2-6 maanden implementatie",
+          "4": "Volledige agent ecosysteem"
+        },
+        "pricing": "Op basis van assessment",
+        "subtext": "Gebaseerd op aantal systemen",
+        "cta": "Krijg Implementation Proposal"
+      },
+      "4": {
+        "title": "MONITOR",
+        "subtitle": "Agent Economy Intelligence",
+        "description": "Stay ahead in de agent economie",
+        "features": {
+          "0": "Welke agents gebruiken jouw systemen?",
+          "1": "Performance & usage analytics",
+          "2": "Nieuwe agent capabilities alerts",
+          "3": "Competitor agent watch",
+          "4": "Maandelijkse strategy calls"
+        },
+        "deliverables": {
+          "0": "Basic: Dashboard + weekly emails + maandrapport",
+          "1": "Growth: + real-time alerts + quarterly optimization + nieuwe integraties (1/kwartaal)",
+          "2": "Real-time monitoring dashboard",
+          "3": "Priority support niveau",
+          "4": "Eerste toegang tot nieuwe features"
+        },
+        "pricing": "Subscription model",
+        "subtext": "Schaalbaar met aantal systemen",
+        "cta": "Request Demo Dashboard"
+      }
+    },
+    "journey": {
+      "title": "De Journey",
+      "from": "Van",
+      "scan": "Scan",
+      "to": "naar",
+      "scale": "Scale"
+    },
+    "timeline": {
+      "step1": {
+        "time": "Week 1-2",
+        "title": "Assessment"
+      },
+      "step2": {
+        "time": "Week 3-6",
+        "title": "First MCP Live"
+      },
+      "step3": {
+        "time": "Maand 2+",
+        "title": "Full Monitoring"
+      }
+    },
+    "investmentCalculator": {
+      "title": "Investment Calculator",
+      "subtitle": "Typisch MKB traject",
+      "steps": {
+        "consult": "Consult",
+        "assessment": "Assessment",
+        "pilot": "Pilot",
+        "implementation": "Implementation",
+        "monitoring": "Monitoring"
+      }
+    },
+    "roi": {
+      "year1Investment": "Jaar 1 Investment",
+      "year1Note": "Tot monitoring start",
+      "monthsROI": "Maanden ROI",
+      "roiNote": "Realistischer terugverdientijd",
+      "year2Savings": "Jaar 2 Besparing",
+      "year2Note": "Na terugverdienen"
+    },
+    "specialistSection": {
+      "title": "Plus",
+      "titleHighlight": "Specialist Services",
+      "description": "Voor specifieke challenges bieden we ook:"
+    },
+    "specialistServices": {
+      "0": {
+        "title": "Extreme Context Processing",
+        "description": "Ons proprietary systeem voor 100.000+ tokens",
+        "pricing": "Setup + maandelijks",
+        "note": "Voor unlimited document processing"
+      },
+      "1": {
+        "title": "Multi-Agent Orchestration",
+        "description": "Agent teams die samenwerken",
+        "pricing": "Team setup fee",
+        "note": "3-5 agents voor complexe workflows"
+      },
+      "2": {
+        "title": "Legacy System Bridging",
+        "description": "Oude systemen agent-accessible maken",
+        "pricing": "Per systeem",
+        "note": "Wanneer \"het kan niet\" geen optie is"
+      }
+    },
+    "notSure": {
+      "title": "Niet zeker welk pakket?",
+      "advice": "Start altijd met gratis consult.",
+      "note": "Geen één bedrijf is hetzelfde."
+    },
+    "whyThisWorks": {
+      "title": "Waarom deze aanpak",
+      "titleHighlight": "werkt"
+    },
+    "benefits": {
+      "0": {
+        "title": "Start klein",
+        "description": "Assessment geeft duidelijkheid zonder grote commitment"
+      },
+      "1": {
+        "title": "Bewijs waarde",
+        "description": "Eerste systeem toont direct ROI"
+      },
+      "2": {
+        "title": "Schaal slim",
+        "description": "Uitrol op basis van geleerde lessen"
+      },
+      "3": {
+        "title": "Blijf voorop",
+        "description": "Continue monitoring houdt je ahead of the curve"
+      }
+    },
+    "faq": {
+      "title": "FAQ",
+      "questions": {
+        "0": {
+          "question": "Waarom niet alles in één keer?",
+          "answer": "Gefaseerde aanpak vermindert risico en maximaliseert learnings."
+        },
+        "1": {
+          "question": "Kan ik alleen assessment doen?",
+          "answer": "Ja, geen verplichting voor vervolg."
+        },
+        "2": {
+          "question": "Wat als wij geen APIs hebben?",
+          "answer": "Dan bouwen we die eerst (aparte offerte)."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "Ready om te starten?",
+      "recommended": "Aanbevolen",
+      "option1": {
+        "title": "Optie 1:",
+        "description": "Gratis 30-min verkennend gesprek",
+        "cta": "Plan Gesprek"
+      },
+      "option2": {
+        "title": "Optie 2:",
+        "description": "Direct Assessment boeken (€2.5k)",
+        "cta": "Boek Assessment"
+      },
+      "option3": {
+        "title": "Optie 3:",
+        "description": "Download MCP Readiness Checklist",
+        "cta": "Download Checklist"
+      }
+    },
+    "cta": {
+      "planCall": "Plan Gesprek"
+    }
+  },
+  "casesPage": {
+    "hero": {
+      "title": "Case Studies",
+      "titleSuffix": "& Innovations",
+      "subtitle": "Van concept naar realiteit - onze journey in agent infrastructure"
+    },
+    "openSource": {
+      "title": "Open Source",
+      "titleHighlight": "Initiative",
+      "project": {
+        "title": "Snow-flow: MCP Server voor ServiceNow",
+        "subtitle": "Ons vlaggenschip open source project"
+      },
+      "whatItIs": {
+        "title": "Wat het is",
+        "features": {
+          "proof": "Proof of concept voor MCP implementatie",
+          "functions": "200+ ServiceNow functies exposed",
+          "opensource": "Volledig open source op GitHub",
+          "active": "Actieve development & community"
+        }
+      },
+      "whyImportant": {
+        "title": "Waarom belangrijk",
+        "description": "Dit toont aan wat mogelijk is wanneer enterprise systemen agent-accessible worden. Van gesloten silo naar open platform."
+      },
+      "buttons": {
+        "github": "View on GitHub",
+        "demo": "Try Demo"
+      },
+      "stats": {
+        "title": "Repository Stats",
+        "stars": {
+          "label": "Stars",
+          "value": "Growing"
+        },
+        "contributors": {
+          "label": "Contributors",
+          "value": "Community"
+        },
+        "license": {
+          "label": "License",
+          "value": "MIT"
+        },
+        "status": {
+          "label": "Status",
+          "value": "Active"
+        }
+      }
+    },
+    "liveImplementations": {
+      "title": "Live",
+      "titleHighlight": "Implementations",
+      "keyFeatures": "Key Features",
+      "impactMetrics": "Impact Metrics",
+      "snelnotuleren": {
+        "title": "Snelnotuleren.nl",
+        "subtitle": "Extreme Context Processing in Productie",
+        "stats": {
+          "meetings": {
+            "value": "1500+",
+            "label": "uur meetings verwerkt"
+          },
+          "tokens": {
+            "value": "1M+",
+            "label": "tokens processed"
+          },
+          "gdpr": {
+            "value": "100%",
+            "label": "GDPR compliant"
+          }
+        },
+        "highlight": "Bewijs dat slimme architectuur > dure RAG systemen",
+        "features": {
+          "orchestration": "Proprietary prompt orchestration",
+          "noVector": "Geen vector databases nodig",
+          "zeroContext": "Zero context degradation",
+          "privacy": "Enterprise privacy compliance"
+        },
+        "status": "Live in productie"
+      },
+      "enterprise": {
+        "title": "Enterprise LLM Implementation",
+        "subtitle": "50.000 medewerkers, één AI systeem",
+        "stats": {
+          "users": {
+            "value": "50k",
+            "label": "gebruikers"
+          },
+          "availability": {
+            "value": "24/7",
+            "label": "beschikbaarheid"
+          },
+          "nda": {
+            "value": "NDA",
+            "label": "details"
+          }
+        },
+        "highlight": "Substantiële kostenbesparing vs cloud LLM APIs",
+        "features": {
+          "routing": "Intelligente ticket routing",
+          "agentic": "Agentic beslissingsframework",
+          "azure": "Azure OpenAI integratie",
+          "workflow": "Custom workflow automation"
+        },
+        "status": "Details onder NDA"
+      }
+    },
+    "technologyLeadership": {
+      "title": "Technology",
+      "titleHighlight": "Leadership",
+      "intelligentTicket": {
+        "title": "Intelligent Ticket Classification",
+        "subtitle": "Diepgaande ITSM expertise meets AI innovation",
+        "description": "Ons systeem begrijpt niet alleen tickets - het begrijpt processen. Van incident tot HR query: elk verzoek op de juiste plek.",
+        "tagline": "ITSM expertise + AI = Operationele excellentie"
+      },
+      "agenticAI": {
+        "title": "Agentic Conversational AI",
+        "subtitle": "De chatbot die zelf denkt en beslist",
+        "capabilities": {
+          "liveAgent": "Live agent nodig? → Warme overdracht met context",
+          "knowledge": "Knowledge artikel? → Direct het juiste ophalen",
+          "catalog": "Catalog item? → Automatisch aanvragen en tracken",
+          "simple": "Simpele vraag? → Instant accuraat antwoord"
+        },
+        "tagline": "50.000 medewerkers, één intelligente assistant"
+      },
+      "multiAgent": {
+        "title": "Multi-Agent Orchestration",
+        "subtitle": "We bepalen HOE het het beste werkt",
+        "description": "We zijn niet aan het onderzoeken óf het kan. Agent teams die samenwerken aan complexe business challenges.",
+        "tagline": "Eerste implementaties live"
+      },
+      "extremeContext": {
+        "title": "Extreme Context Processing",
+        "subtitle": "In productie. 1M+ tokens zonder RAG",
+        "description": "Onze proprietary technologie bewijst dat intelligent prompt orchestration beter werkt dan dure vector databases.",
+        "tagline": "Technologie beschikbaar voor klanten"
+      },
+      "mcpExcellence": {
+        "title": "MCP Excellence",
+        "subtitle": "Snow-flow is een statement",
+        "description": "We schrijven mee aan de MCP standaard die de industrie gaat gebruiken. Open source, transparant, en bewezen effectief.",
+        "tagline": "Dit is de standaard"
+      }
+    },
+    "focusAreas": {
+      "title": "Onze",
+      "titleHighlight": "Focus Gebieden",
+      "subtitle": "Deze oplossingen zijn geen toeval. Ze komen voort uit onze focus op:",
+      "mcpExpertise": {
+        "title": "MCP Protocol Expertise",
+        "description": "Snow-flow is het begin. We ontwikkelen expertise in het agent-ready maken van ELKE software - niet specifieke merken."
+      },
+      "customImplementations": {
+        "title": "Custom Implementations",
+        "description": "Elk bedrijf heeft unieke systemen. We bouwen MCP servers op maat, niet vooraf bepaalde connectors."
+      },
+      "openSource": {
+        "title": "Open Source Contributie",
+        "description": "We delen onze kennis. Snow-flow is open source zodat de hele community kan leren en bijdragen."
+      }
+    },
+    "testimonials": {
+      "title": "Client",
+      "titleHighlight": "Testimonials",
+      "first": {
+        "quote": "Dat iemand dit zo snel kon opzetten toont niet alleen hoeveel talent er is in de ServiceNow community, maar geeft ook aan hoe het hele ontwikkelproces nu verandert. Niels van der Werf is een van duizenden die nu AI tools aan het werk zetten, en we zijn nog steeds in de vroege dagen van deze tech.",
+        "author": "- Manager, AI Product Content bij ServiceNow"
+      },
+      "second": {
+        "quote": "Van meeting naar notulen in minuten. Snelnotuleren heeft ons team getransformeerd.",
+        "author": "- Project Manager, Consultancy"
+      }
+    },
+    "cta": {
+      "title": "Start Jouw Project",
+      "subtitle": "We bouwen geen one-size-fits-all oplossingen.",
+      "statement": "We bouwen wat",
+      "statementHighlight": "JIJ",
+      "statementEnd": "nodig hebt.",
+      "buttons": {
+        "discuss": "Bespreek jouw use case",
+        "downloadGuide": "Download MCP Guide"
+      },
+      "note": "Elk project start met een gratis assessment van jouw specifieke situation"
     }
   },
   "services": {
@@ -31,90 +630,57 @@
       "strategy": {
         "title": "AI Strategie & Roadmap",
         "description": "Definieer uw AI-visie en creëer uitvoerbare roadmaps die technologie-investeringen afstemmen op bedrijfsdoelstellingen en meetbare ROI.",
-        "features": ["Directie Advies", "Kansen Analyse", "Strategische Planning"]
+        "features": [
+          "Directie Advies",
+          "Kansen Analyse",
+          "Strategische Planning"
+        ]
       },
       "transformation": {
         "title": "Digitale Transformatie",
         "description": "Navigeer door complexe digitale ecosystemen met uitgebreide transformatiestrategieën gericht op procesoptimalisatie en kostenefficiëntie.",
-        "features": ["Operating Model Ontwerp", "Proces Herontwerp", "Waarderealisatie"]
+        "features": [
+          "Operating Model Ontwerp",
+          "Proces Herontwerp",
+          "Waarderealisatie"
+        ]
       },
       "governance": {
         "title": "Risico & Governance",
         "description": "Etableer verantwoorde AI-kaders die innovatie balanceren met ethiek, compliance en beveiliging.",
-        "features": ["AI Ethisch Kader", "Wet- en Regelgeving Compliance", "Risicomanagement"]
+        "features": [
+          "AI Ethisch Kader",
+          "Wet- en Regelgeving Compliance",
+          "Risicomanagement"
+        ]
       },
       "innovation": {
         "title": "Innovatie Labs",
         "description": "Versnel innovatie door strategische pilots en proof-of-concepts die duidelijke bedrijfswaarde en ROI aantonen.",
-        "features": ["Use Case Ontdekking", "Pilot Programma's", "Innovatieworkshops"]
+        "features": [
+          "Use Case Ontdekking",
+          "Pilot Programma's",
+          "Innovatieworkshops"
+        ]
       },
       "advisory": {
         "title": "Technologie Advisory",
         "description": "Neem geïnformeerde beslissingen met onafhankelijke technologie-assessments en leveranciersevaluaties.",
-        "features": ["Architectuur Review", "Leveranciersselectie", "Technology Due Diligence"]
+        "features": [
+          "Architectuur Review",
+          "Leveranciersselectie",
+          "Technology Due Diligence"
+        ]
       },
       "adoption": {
         "title": "Verandering & Adoptie",
         "description": "Zorg voor succesvolle AI-adoptie door uitgebreid verandermanagement en capaciteitsopbouw.",
-        "features": ["Leiderschap Afstemming", "Cultuurtransformatie", "Competentieontwikkeling"]
-      }
-    }
-  },
-  "servicesPage": {
-    "hero": {
-      "title": "Onze AI Diensten",
-      "description": "Van strategie tot waarderealisatie - wij begeleiden uw AI-transformatiereis met focus op meetbare bedrijfsresultaten"
-    },
-    "cta": {
-      "start": "Start Uw AI Journey",
-      "consultation": "Vraag een Consultatie Aan",
-      "caseStudies": "Bekijk Case Studies"
-    },
-    "process": {
-      "title": "Onze Aanpak",
-      "steps": {
-        "discovery": {
-          "title": "Ontdekking",
-          "description": "We analyseren uw bedrijfsprocessen en identificeren high-impact AI-kansen voor optimalisatie"
-        },
-        "strategy": {
-          "title": "Strategie",
-          "description": "Ontwikkeling van op maat gemaakte AI-strategie afgestemd op uw bedrijfsdoelen en ROI-targets"
-        },
-        "implementation": {
-          "title": "Implementatie",
-          "description": "Stapsgewijze implementatie met bewezen methodologieën"
-        },
-        "optimization": {
-          "title": "Optimalisatie",
-          "description": "Continue verbetering en schaalbaarheid van AI-oplossingen"
-        }
-      }
-    },
-    "whyUs": {
-      "title": "Waarom GroeimetAI?",
-      "expertise": {
-        "title": "Bewezen Expertise",
-        "items": [
-          "Strategisch advies gericht op meetbare bedrijfsresultaten",
-          "Diepgaande expertise in AI-strategie en business transformatie",
-          "Strategische partnerschappen met toonaangevende technologieleveranciers",
-          "Focus op Europese markt en regelgeving"
-        ]
-      },
-      "approach": {
-        "title": "Onze Werkwijze",
-        "items": [
-          "Agile methodologie voor snelle resultaten",
-          "Transparante communicatie en rapportage",
-          "Knowledge transfer naar uw team",
-          "24/7 support en monitoring"
+        "features": [
+          "Leiderschap Afstemming",
+          "Cultuurtransformatie",
+          "Competentieontwikkeling"
         ]
       }
-    },
-    "readyToStart": {
-      "title": "Klaar voor de volgende stap?",
-      "description": "Laat ons u helpen met uw AI-transformatie"
     }
   },
   "serviceDetails": {
@@ -188,7 +754,13 @@
         "Implementatieplan",
         "Training & Verandermanagement Plan"
       ],
-      "technologies": ["OpenAI GPT-4", "Claude 3", "Google Gemini", "Custom Models", "Fine-tuning"],
+      "technologies": [
+        "OpenAI GPT-4",
+        "Claude 3",
+        "Google Gemini",
+        "Custom Models",
+        "Fine-tuning"
+      ],
       "duration": "8-12 weken"
     },
     "llm": {
@@ -246,7 +818,13 @@
         "Prestatiebenchmarks",
         "Onderhoudshandleiding"
       ],
-      "technologies": ["Claude API", "OpenAI API", "Gemini API", "LangChain", "Vector Databases"],
+      "technologies": [
+        "Claude API",
+        "OpenAI API",
+        "Gemini API",
+        "LangChain",
+        "Vector Databases"
+      ],
       "duration": "6-10 weken"
     },
     "rag": {
@@ -304,7 +882,13 @@
         "Prestatiemetrieken",
         "Onderhoudshandleiding"
       ],
-      "technologies": ["Pinecone", "Weaviate", "ChromaDB", "LlamaIndex", "Embeddings Models"],
+      "technologies": [
+        "Pinecone",
+        "Weaviate",
+        "ChromaDB",
+        "LlamaIndex",
+        "Embeddings Models"
+      ],
       "duration": "8-14 weken"
     },
     "servicenow": {
@@ -425,7 +1009,13 @@
         "Monitoring Dashboard",
         "Operationeel Handboek"
       ],
-      "technologies": ["LangChain", "AutoGen", "CrewAI", "Custom Frameworks", "Message Queues"],
+      "technologies": [
+        "LangChain",
+        "AutoGen",
+        "CrewAI",
+        "Custom Frameworks",
+        "Message Queues"
+      ],
       "duration": "12-20 weken"
     },
     "security": {
@@ -639,7 +1229,12 @@
       "retail": {
         "title": "Retail & Consument",
         "description": "Creëer gepersonaliseerde ervaringen en optimaliseer operaties over de waardeketen",
-        "skills": ["Klantanalyse", "Supply Chain AI", "Vraagvoorspelling", "Omnichannel Strategie"]
+        "skills": [
+          "Klantanalyse",
+          "Supply Chain AI",
+          "Vraagvoorspelling",
+          "Omnichannel Strategie"
+        ]
       },
       "manufacturing": {
         "title": "Productie & Industrie 4.0",
@@ -654,12 +1249,22 @@
       "public": {
         "title": "Publieke Sector",
         "description": "Verbeter burgerdiensten en operationele efficiëntie met verantwoorde AI-oplossingen",
-        "skills": ["Smart Cities", "Digitale Overheid", "Openbare Veiligheid", "Dienstverlening"]
+        "skills": [
+          "Smart Cities",
+          "Digitale Overheid",
+          "Openbare Veiligheid",
+          "Dienstverlening"
+        ]
       },
       "energy": {
         "title": "Energie & Nutsbedrijven",
         "description": "Optimaliseer resourcebeheer en versnel de transitie naar duurzame operaties",
-        "skills": ["Netoptimalisatie", "Voorspellende Analyse", "Duurzaamheid", "Asset Management"]
+        "skills": [
+          "Netoptimalisatie",
+          "Voorspellende Analyse",
+          "Duurzaamheid",
+          "Asset Management"
+        ]
       }
     }
   },
@@ -712,22 +1317,38 @@
       "discovery": {
         "title": "Strategische Ontdekking",
         "description": "We beginnen met executive workshops om uw bedrijfsdoelstellingen, uitdagingen en AI-gereedheid te begrijpen.",
-        "outcomes": ["Business case ontwikkeling", "Kansen assessment", "Strategische afstemming"]
+        "outcomes": [
+          "Business case ontwikkeling",
+          "Kansen assessment",
+          "Strategische afstemming"
+        ]
       },
       "mapping": {
         "title": "Waarde Mapping",
         "description": "Identificeer high-impact use cases en creëer een geprioriteerde roadmap afgestemd op uw strategische doelen.",
-        "outcomes": ["Use case prioritering", "ROI projecties", "Risico assessment"]
+        "outcomes": [
+          "Use case prioritering",
+          "ROI projecties",
+          "Risico assessment"
+        ]
       },
       "pilot": {
         "title": "Pilot & Valideer",
         "description": "Snelle prototyping van geselecteerde use cases om waarde aan te tonen en de aanpak te verfijnen.",
-        "outcomes": ["Proof of concept", "Stakeholder buy-in", "Verfijnde business case"]
+        "outcomes": [
+          "Proof of concept",
+          "Stakeholder buy-in",
+          "Verfijnde business case"
+        ]
       },
       "scale": {
         "title": "Schaal & Transformeer",
         "description": "Systematische uitrol met verandermanagement, governance frameworks en capaciteitsopbouw.",
-        "outcomes": ["Enterprise uitrol", "Operating model", "Prestatie tracking"]
+        "outcomes": [
+          "Enterprise uitrol",
+          "Operating model",
+          "Prestatie tracking"
+        ]
       }
     },
     "metrics": {
@@ -796,20 +1417,78 @@
     }
   },
   "footer": {
-    "tagline": "Transformeer uw bedrijf met cutting-edge AI oplossingen. Wij zijn uw partner in AI-innovatie en digitale transformatie.",
+    "tagline": "Wij maken bedrijven agent-ready. Van API naar MCP. Van blind naar connected. Van handmatig naar autonoom.",
     "newsletter": {
       "title": "Blijf op de hoogte",
-      "placeholder": "uw.email@bedrijf.nl"
+      "placeholder": "je@bedrijf.nl",
+      "subscribedMessage": "✓ Subscribed voor agent economy insights",
+      "description": "Ontvang maandelijks agent economy insights"
     },
     "sections": {
-      "services": "Diensten",
+      "services": "Services",
+      "resources": "Resources",
       "company": "Bedrijf",
-      "legal": "Juridisch",
+      "developers": "Developers",
+      "support": "Support"
+    },
+    "services": {
+      "agentReadiness": "Agent Readiness Assessment",
+      "mcpImplementation": "MCP Implementation",
+      "pilotProjects": "Pilot Projects",
+      "agentMonitoring": "Agent Monitoring",
+      "multiAgentOrchestration": "Multi-Agent Orchestration",
+      "legacyBridging": "Legacy System Bridging"
+    },
+    "resources": {
+      "mcpGuide": "MCP Guide (PDF)",
+      "snowFlowGithub": "Snow-flow GitHub",
+      "agentReadinessTest": "Agent Readiness Test",
+      "blog": "Blog",
+      "documentation": "Documentation",
+      "apiStatus": "API Status"
+    },
+    "developers": {
+      "mcpFormatGuide": "MCP Format Guide",
+      "agentSetup": "Claude vs GPT Setup",
+      "apiDocs": "API Documentation"
+    },
+    "company": {
+      "about": "Over Ons",
+      "cases": "Cases",
+      "roadmap": "Roadmap",
+      "team": "Team",
+      "partners": "Partners",
       "contact": "Contact"
     },
-    "copyright": "© {year} GroeimetAI Alle rechten voorbehouden.",
-    "madeWith": "Gemaakt met",
-    "in": "in Apeldoorn"
+    "support": {
+      "clientPortal": "Client Portal",
+      "helpCenter": "Help Center",
+      "systemStatus": "System Status",
+      "reportIssue": "Report Issue",
+      "scheduleCall": "Schedule Call"
+    },
+    "contact": {
+      "email": "info@groeimetai.io",
+      "phone": "+31 (6) 81 739 018",
+      "location": "Apeldoorn, Nederland"
+    },
+    "cta": {
+      "title": "Ready voor Agent Season?",
+      "description": "Start vandaag met je Agent Readiness journey",
+      "startAssessment": "Start Assessment",
+      "planCall": "Plan Gesprek"
+    },
+    "legal": {
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "cookies": "Cookies",
+      "status": "Status"
+    },
+    "copyright": "© 2025 GroeimetAI",
+    "taglines": {
+      "agentReady": "Agent-ready sinds 2023",
+      "openSource": "Snow-flow™ is open source"
+    }
   },
   "auth": {
     "login": {
@@ -1010,6 +1689,13 @@
     }
   },
   "errorPages": {
+    "403": {
+      "title": "Toegang Geweigerd",
+      "heading": "U heeft geen toestemming om deze pagina te bekijken.",
+      "message": "Controleer uw inloggegevens of neem contact op met uw beheerder voor toegang.",
+      "backHome": "Terug naar home",
+      "login": "Ga naar inloggen"
+    },
     "404": {
       "title": "Pagina Niet Gevonden",
       "heading": "Oeps! Deze pagina bestaat niet.",
@@ -1024,13 +1710,6 @@
       "tryAgain": "Probeer opnieuw",
       "backHome": "Terug naar home",
       "statusPage": "Bekijk status pagina"
-    },
-    "403": {
-      "title": "Toegang Geweigerd",
-      "heading": "U heeft geen toestemming om deze pagina te bekijken.",
-      "message": "Controleer uw inloggegevens of neem contact op met uw beheerder voor toegang.",
-      "backHome": "Terug naar home",
-      "login": "Ga naar inloggen"
     },
     "maintenance": {
       "title": "Onderhoudsmodus",
@@ -1197,14 +1876,10 @@
       "description": "Uw partner in AI-transformatie. Wij helpen Nederlandse bedrijven groeien met cutting-edge AI technologie en bewezen expertise."
     },
     "stats": {
-      "projects": "Succesvolle Projecten",
-      "satisfaction": "Klanttevredenheid",
-      "experts": "AI Experts",
-      "support": "Support & Monitoring",
-      "savedAnnually": "Jaarlijks Bespaard",
-      "hoursProcessed": "Uren Verwerkt",
-      "accuracy": "Routing Nauwkeurigheid",
-      "deliveryTime": "Record Levertijd"
+      "experience": "Jaar AI Expertise",
+      "tokens": "Tokens Verwerkt",
+      "gdpr": "GDPR Compliant",
+      "users": "End Users Geholpen"
     },
     "mission": {
       "title": "Onze Missie",
@@ -1263,634 +1938,22 @@
       "subtitle": "Ontdek hoe wij uw organisatie kunnen transformeren",
       "contactButton": "Neem Contact Op",
       "servicesButton": "Bekijk Onze Diensten"
-    }
-  },
-  "cases": {
-    "metadata": {
-      "title": "Case Studies - GroeimetAI",
-      "description": "Ontdek hoe GroeimetAI bedrijven heeft geholpen met AI-transformatie. Lees onze succesverhalen en resultaten.",
-      "openGraph": {
-        "title": "Case Studies - GroeimetAI Succesverhalen",
-        "description": "Bewezen resultaten in AI consultancy en implementatie"
+    },
+    "tagline": "AI pioniers die bedrijven agent-ready maken.",
+    "subtitle": "Geen consultancy fluff, maar werkende code.",
+    "philosophy": {
+      "openSource": {
+        "title": "Open Source First",
+        "description": "Snow-flow op GitHub - transparantie en community"
+      },
+      "practical": {
+        "title": "Praktisch > Theoretisch",
+        "description": "We bouwen wat werkt, geen PowerPoints"
+      },
+      "agentFocus": {
+        "title": "Agent Infrastructure Focus",
+        "description": "Specialized in MCP, multi-agent systems en API orchestration"
       }
-    },
-    "hero": {
-      "title": "Case Studies",
-      "subtitle": "Ontdek hoe wij bedrijven helpen transformeren met AI",
-      "stats": {
-        "enterpriseProjects": "Enterprise Projecten",
-        "annualSavings": "Jaarlijkse Besparingen",
-        "endUsers": "Eindgebruikers",
-        "tokensProcessed": "Verwerkte Tokens"
-      }
-    },
-    "featured": {
-      "title": "Uitgelichte Cases",
-      "challenge": "Uitdaging",
-      "solution": "Oplossing",
-      "impact": "Impact",
-      "duration": "Projectduur",
-      "readMore": "Lees Meer"
-    },
-    "filter": {
-      "title": "Filter op Industrie",
-      "allIndustries": "Alle Industrieën",
-      "technologies": "Technologieën"
-    },
-    "otherProjects": {
-      "title": "Andere Projecten",
-      "details": "Details"
-    },
-    "metrics": {
-      "title": "Onze Impact in Cijfers",
-      "annualSavings": "Jaarlijkse Besparingen",
-      "fasterResponse": "Snellere Respons",
-      "employeesHelped": "Geholpen Medewerkers",
-      "routingAccuracy": "Routing Nauwkeurigheid"
-    },
-    "cta": {
-      "title": "Klaar om Uw Eigen Succesverhaal te Schrijven?",
-      "subtitle": "Laten we uw AI-ambities tot leven brengen",
-      "startProject": "Start Uw Project",
-      "exploreServices": "Bekijk Onze Diensten"
-    },
-    "caseStudies": {
-      "enterprise-llm": {
-        "title": "Enterprise LLM Implementatie voor 50.000 Medewerkers",
-        "client": "Grote Nederlandse Bank",
-        "industry": "Financiële Diensten",
-        "challenge": "Verouderde trigger-gebaseerde chatbot zonder NLU voor interne ondersteuning van 50.000 medewerkers. Slechte gebruikerservaring en lage resolutiegraad.",
-        "solution": "Agentic AI framework met Azure OpenAI integratie. Agent beslist autonoom: live agent overdracht, catalogus items, kennisbank, directe antwoorden of legacy onderwerpen. GPT-4o-mini met intelligente gespreksgeschiedenis (laatste 10 berichten).",
-        "details": "Door het implementeren van een intelligente LLM-oplossing bespaart de bank jaarlijks €2,8M op ondersteuningskosten. Met 50.000 medewerkers die gemiddeld 2 tickets per maand indienen, wordt €2,33 per ticket bespaard door geautomatiseerde afhandeling.",
-        "metrics": {
-          "responseTime": "Responstijd",
-          "resolutionRate": "Resolutiegraad",
-          "costSavings": "Kostenbesparingen"
-        }
-      },
-      "snelnotuleren": {
-        "title": "Snelnotuleren.nl - AI Transcriptie Platform",
-        "client": "GroeimetAI Venture",
-        "industry": "SaaS",
-        "challenge": "Nederlandse markt had behoefte aan een AVG-conforme AI transcriptieservice voor vergaderingen en interviews.",
-        "solution": "GCP-gebaseerd platform met Firebase, volledig AVG en EU AI Act compliant. Ingenieus algoritme voor lange transcripties binnen token limieten.",
-        "details": "Succesvolle AI venture die meer dan een miljoen tokens verwerkte en 1500+ uur aan vergaderingen transcribeerde met perfecte AVG-compliance.",
-        "metrics": {
-          "tokensProcessed": "Verwerkte Tokens",
-          "hoursTranscribed": "Getranscribeerde Uren",
-          "activeUsers": "Actieve Gebruikers"
-        }
-      },
-      "learning-platform": {
-        "title": "GroeimetAI Learning Platform - Multi-Agent Ontwikkeling",
-        "client": "GroeimetAI",
-        "industry": "EdTech",
-        "challenge": "Snel een compleet leerplatform bouwen voor GenAI en LLM cursussen met certificering.",
-        "solution": "Multi-agent orchestratie systeem dat het complete platform bouwde. 10+ cursussen met elk 4 modules en 16 lessen. Blockchain verificatie voor certificaten.",
-        "details": "Revolutionair project waarbij AI-agents autonoom een compleet leerplatform ontwikkelden, inclusief content creatie en blockchain certificering.",
-        "metrics": {
-          "developmentTime": "Ontwikkeltijd",
-          "coursesBuilt": "Gebouwde Cursussen",
-          "agentEfficiency": "Agent Efficiëntie"
-        }
-      },
-      "intelligent-routing": {
-        "title": "Intelligente Ticket Routing met Vector Database",
-        "client": "Grote Nederlandse Bank",
-        "industry": "Financiële Diensten",
-        "challenge": "Duizenden Business Service Templates (BSTs) maakten het onmogelijk voor gebruikers om het juiste template voor hun probleem te vinden.",
-        "solution": "LLM-aangedreven widget met vector database voor semantische zoekfunctie. Gebruiker beschrijft probleem, AI genereert vervolgvragen, creëert perfect ticket en routeert naar het juiste team.",
-        "details": "Vector database implementatie die semantisch zoeken mogelijk maakt over duizenden service templates, met intelligente vervolgvragen voor perfecte ticket creatie.",
-        "metrics": {
-          "routingAccuracy": "Routing Nauwkeurigheid",
-          "userTimeSaved": "Gebruikerstijd Bespaard",
-          "bstReduction": "BST Reductie"
-        }
-      }
-    }
-  },
-  "dashboard": {
-    "title": "Dashboard",
-    "welcome": "Welkom terug, {name}!",
-    "description": "Volg uw projectvoortgang en communiceer met ons team.",
-    "loading": "Laden...",
-    "loadingProfile": "Uw profiel wordt geladen...",
-    "refreshPage": "Pagina vernieuwen",
-    "createProfile": "Profiel aanmaken",
-    "profileError": "Uw profiel bestaat niet in onze database. Klik op \"Profiel aanmaken\" om het in te stellen.",
-    "tryRefreshing": "Als dit te lang duurt, probeer de pagina te vernieuwen.",
-    "projectTimeline": {
-      "title": "Project Tijdlijn",
-      "overallProgress": "Algehele Voortgang",
-      "planning": "Planning",
-      "stages": {
-        "discovery": "Ontdekking",
-        "discoveryDesc": "Uw behoeften begrijpen",
-        "planning": "Planning",
-        "planningDesc": "Projectomvang definiëren",
-        "development": "Ontwikkeling",
-        "developmentDesc": "Uw oplossing bouwen",
-        "delivery": "Levering",
-        "deliveryDesc": "Definitieve implementatie"
-      },
-      "nextMilestone": "Volgende Mijlpaal",
-      "mvpDeployment": "MVP-implementatie gepland voor volgende week"
-    },
-    "navigation": {
-      "dashboard": "Dashboard",
-      "messages": "Berichten",
-      "projects": "Projecten",
-      "consultations": "Consultaties",
-      "settings": "Instellingen",
-      "helpSupport": "Help & Ondersteuning"
-    },
-    "userMenu": {
-      "profile": "Profiel",
-      "settings": "Instellingen",
-      "logout": "Uitloggen",
-      "loggingOut": "Uitloggen..."
-    },
-    "overview": {
-      "welcomeBack": "Welkom terug, {name}!",
-      "subtitle": "Dit is wat er gaande is met uw projecten en consultaties.",
-      "stats": {
-        "activeProjects": "Actieve Projecten",
-        "messages": "Berichten",
-        "consultations": "Consultaties",
-        "teamMembers": "Teamleden",
-        "fromLastMonth": "van vorige maand"
-      },
-      "recentProjects": {
-        "title": "Recente Projecten",
-        "description": "Uw actieve en recente projecten",
-        "viewAll": "Bekijk Alle Projecten"
-      },
-      "upcomingConsultations": {
-        "title": "Komende Consultaties",
-        "description": "Uw geplande vergaderingen en consultaties",
-        "viewCalendar": "Bekijk Kalender",
-        "today": "Vandaag",
-        "tomorrow": "Morgen"
-      },
-      "quickActions": {
-        "title": "Snelle Acties",
-        "description": "Veelvoorkomende taken en acties",
-        "newProject": "Nieuw Project",
-        "scheduleConsultation": "Plan Consultatie",
-        "sendMessage": "Verstuur Bericht",
-        "inviteTeamMember": "Nodig Teamlid Uit"
-      }
-    },
-    "adminSupport": {
-      "supportChatWith": "Support Chat met {userName}",
-      "respondToInquiries": "Reageer op klantvragen",
-      "noMessages": "Nog geen berichten in dit gesprek.",
-      "typeMessage": "Typ uw bericht...",
-      "justNow": "Zojuist",
-      "admin": "Admin"
-    },
-    "messaging": {
-      "title": "GroeimetAI Team",
-      "responseTime": "Reageert meestal binnen 2 uur",
-      "placeholder": "Typ uw bericht...",
-      "welcomeMessage": "Welkom bij GroeimetAI! We zijn enthousiast om met u te werken aan uw AI-transformatiereis.",
-      "thankYouReply": "Bedankt! Ik kijk ernaar uit om te beginnen.",
-      "autoReply": "Bedankt voor uw bericht! Ons team zal binnen 24 uur reageren."
-    },
-    "quickActions": {
-      "viewProjects": "Bekijk Alle Projecten",
-      "documents": "Documenten",
-      "scheduleMeeting": "Plan Meeting",
-      "settings": "Instellingen"
-    },
-    "projects": {
-      "title": "Uw Projecten",
-      "description": "Beheer en volg al uw projecten op één plek",
-      "requestNew": "Nieuw Project Aanvragen",
-      "searchPlaceholder": "Zoek projecten...",
-      "filters": {
-        "all": "Alle",
-        "active": "Actief",
-        "draft": "Concept",
-        "completed": "Voltooid"
-      },
-      "statuses": {
-        "active": "Actief",
-        "completed": "Voltooid",
-        "on_hold": "In de wacht",
-        "draft": "Concept",
-        "cancelled": "Geannuleerd"
-      },
-      "viewDetails": "Bekijk Details",
-      "noProjects": "Nog Geen Projecten",
-      "noProjectsDescription": "Start uw reis met GroeimetAI door een nieuw project aan te vragen. Wij helpen u uw bedrijf te transformeren met geavanceerde AI-oplossingen.",
-      "requestFirst": "Vraag Uw Eerste Project Aan",
-      "loadingProjects": "Projecten laden...",
-      "errorLoading": "Projecten laden mislukt. Probeer het opnieuw."
-    },
-    "documents": {
-      "title": "Documenten",
-      "description": "Toegang tot al uw projectdocumenten en bestanden",
-      "uploadDocument": "Document Uploaden",
-      "searchPlaceholder": "Zoek documenten...",
-      "filters": {
-        "all": "Alle",
-        "contracts": "Contracten",
-        "proposals": "Voorstellen",
-        "reports": "Rapporten",
-        "invoices": "Facturen"
-      },
-      "uploadDialog": {
-        "title": "Document Uploaden",
-        "description": "Voeg een nieuw document toe aan uw bibliotheek",
-        "projectName": "Projectnaam (Optioneel)",
-        "projectNamePlaceholder": "bijv. AI Transformatie Initiatief",
-        "documentDescription": "Beschrijving (Optioneel)",
-        "descriptionPlaceholder": "Korte beschrijving van het document...",
-        "tags": "Tags (Optioneel)",
-        "tagsPlaceholder": "contract, juridisch, 2025 (komma gescheiden)",
-        "uploading": "Uploaden...",
-        "upload": "Upload",
-        "cancel": "Annuleren"
-      },
-      "table": {
-        "name": "Naam",
-        "project": "Project",
-        "size": "Grootte",
-        "uploaded": "Geüpload",
-        "actions": "Acties",
-        "view": "Bekijken",
-        "download": "Downloaden",
-        "archive": "Archiveren",
-        "unarchive": "Uit archief halen",
-        "delete": "Verwijderen"
-      },
-      "storageInfo": {
-        "storageUsed": "Opslag Gebruikt",
-        "documentsCount": "{count} documenten"
-      },
-      "noDocuments": "Nog geen documenten",
-      "noDocumentsDescription": "Begin met het opbouwen van uw documentenbibliotheek door uw eerste bestand te uploaden. Houd al uw belangrijke projectbestanden georganiseerd op één plek.",
-      "uploadFirst": "Upload Uw Eerste Document",
-      "noMatch": "Geen documenten komen overeen met uw zoekcriteria",
-      "loadingDocuments": "Documenten laden...",
-      "errorLoading": "Documenten laden mislukt. Probeer het opnieuw.",
-      "errorUploading": "Document uploaden mislukt. Probeer het opnieuw.",
-      "deleteConfirm": "Weet u zeker dat u dit document wilt verwijderen?",
-      "uploadRequirements": {
-        "imageError": "Upload een afbeeldingsbestand",
-        "sizeError": "Afbeelding moet kleiner zijn dan 5MB"
-      }
-    },
-    "consultations": {
-      "title": "Consultaties & Meetings",
-      "description": "Plan en beheer uw meetings met ons team",
-      "scheduleMeeting": "Meeting Plannen",
-      "upcoming": "Aankomende Meetings",
-      "past": "Afgelopen Meetings",
-      "noUpcoming": "Geen aankomende meetings gepland",
-      "scheduleFirst": "Plan Uw Eerste Meeting",
-      "noPast": "Geen afgelopen meetings om weer te geven",
-      "viewNotes": "Bekijk Notities",
-      "scheduleFollowup": "Plan Vervolg",
-      "reschedule": "Opnieuw plannen",
-      "joinMeeting": "Deelnemen aan Meeting",
-      "form": {
-        "scheduleTitle": "Plan een Nieuwe Meeting",
-        "rescheduleTitle": "Meeting Opnieuw Plannen",
-        "meetingTitle": "Meeting Titel *",
-        "titlePlaceholder": "bijv. Project Kickoff Meeting",
-        "meetingType": "Meeting Type",
-        "types": {
-          "consultation": "Eerste Consultatie",
-          "projectUpdate": "Project Update",
-          "technicalReview": "Technische Review",
-          "training": "Training Sessie"
-        },
-        "platform": "Meeting Platform",
-        "platforms": {
-          "zoom": "Zoom",
-          "teams": "Microsoft Teams",
-          "meet": "Google Meet",
-          "phone": "Telefonisch",
-          "inPerson": "Persoonlijk"
-        },
-        "date": "Datum *",
-        "time": "Tijd *",
-        "selectTime": "Selecteer een tijd",
-        "duration": "Duur (minuten)",
-        "durations": {
-          "30": "30 minuten",
-          "60": "1 uur",
-          "90": "1,5 uur",
-          "120": "2 uur"
-        },
-        "meetingLink": "Meeting Link *",
-        "linkPlaceholder": "https://zoom.us/j/...",
-        "address": "Meeting Adres *",
-        "addressPlaceholder": "Hoofdstraat 123, Apeldoorn",
-        "agenda": "Meeting Agenda / Beschrijving",
-        "agendaPlaceholder": "Beschrijf wat u wilt bespreken...",
-        "rescheduling": "Opnieuw plannen...",
-        "scheduling": "Plannen..."
-      },
-      "validation": {
-        "titleRequired": "Titel is verplicht",
-        "dateRequired": "Datum is verplicht",
-        "futureDate": "Selecteer een toekomstige datum",
-        "timeRequired": "Tijd is verplicht",
-        "futureTime": "Selecteer een toekomstige tijd",
-        "addressRequired": "Adres is verplicht voor persoonlijke meetings",
-        "linkRequired": "Meeting link is verplicht voor virtuele meetings",
-        "selectDateFirst": "Selecteer eerst een datum"
-      },
-      "statuses": {
-        "scheduled": "gepland",
-        "completed": "Voltooid",
-        "cancelled": "geannuleerd",
-        "rescheduled": "opnieuw gepland"
-      },
-      "followupPrefix": "Vervolg: {title}",
-      "errorLoading": "Meetings laden mislukt",
-      "errorScheduling": "Meeting plannen mislukt",
-      "errorRescheduling": "Meeting opnieuw plannen mislukt",
-      "successScheduled": "Meeting succesvol gepland!",
-      "successRescheduled": "Meeting succesvol opnieuw gepland!"
-    },
-    "settings": {
-      "title": "Instellingen",
-      "description": "Beheer uw accountinstellingen en voorkeuren",
-      "backToDashboard": "Terug naar Dashboard",
-      "tabs": {
-        "profile": "Profiel",
-        "notifications": "Meldingen",
-        "security": "Beveiliging",
-        "billing": "Facturering"
-      },
-      "profile": {
-        "title": "Profielinformatie",
-        "changePhoto": "Foto Wijzigen",
-        "photoRequirements": "JPG, PNG of GIF. Max grootte 5MB",
-        "firstName": "Voornaam",
-        "lastName": "Achternaam",
-        "email": "E-mail",
-        "phone": "Telefoon",
-        "company": "Bedrijf",
-        "jobTitle": "Functietitel",
-        "bio": "Bio",
-        "bioPlaceholder": "Vertel ons iets over uzelf...",
-        "saveChanges": "Wijzigingen Opslaan",
-        "updateSuccess": "Profiel succesvol bijgewerkt!",
-        "updateError": "Profiel bijwerken mislukt",
-        "photoSuccess": "Profielfoto bijgewerkt!",
-        "photoError": "Foto uploaden mislukt"
-      },
-      "notifications": {
-        "title": "Meldingsvoorkeuren",
-        "channels": "Meldingskanalen",
-        "emailNotifications": "E-mailmeldingen",
-        "emailDescription": "Ontvang updates via e-mail",
-        "pushNotifications": "Push Meldingen",
-        "pushDescription": "Ontvang browsermeldingen",
-        "smsNotifications": "SMS Meldingen",
-        "smsDescription": "Ontvang sms-berichten voor urgente updates",
-        "types": "Meldingstypen",
-        "projectUpdates": "Project Updates",
-        "projectUpdatesDesc": "Updates over uw projectvoortgang",
-        "meetingReminders": "Meeting Herinneringen",
-        "meetingRemindersDesc": "Herinneringen voor geplande meetings",
-        "newsletters": "Nieuwsbrieven",
-        "newslettersDesc": "Maandelijkse inzichten en AI-trends",
-        "frequency": "E-mailfrequentie",
-        "frequencies": {
-          "instant": "Direct",
-          "hourly": "Elk uur",
-          "daily": "Dagelijks",
-          "weekly": "Wekelijks"
-        },
-        "savePreferences": "Voorkeuren Opslaan",
-        "saveSuccess": "Meldingsvoorkeuren opgeslagen!",
-        "saveError": "Meldingen bijwerken mislukt"
-      },
-      "security": {
-        "title": "Beveiligingsinstellingen",
-        "changePassword": "Wachtwoord Wijzigen",
-        "currentPassword": "Huidig Wachtwoord",
-        "newPassword": "Nieuw Wachtwoord",
-        "confirmPassword": "Bevestig Nieuw Wachtwoord",
-        "updatePassword": "Wachtwoord Bijwerken",
-        "passwordSuccess": "Wachtwoord succesvol bijgewerkt!",
-        "passwordMismatch": "Wachtwoorden komen niet overeen",
-        "passwordTooShort": "Wachtwoord moet minimaal 6 tekens bevatten",
-        "wrongPassword": "Huidig wachtwoord is onjuist",
-        "passwordError": "Wachtwoord bijwerken mislukt",
-        "twoFactor": {
-          "title": "Twee-Factor Authenticatie",
-          "description": "Voeg een extra beveiligingslaag toe aan uw account",
-          "enabled": "2FA is ingeschakeld",
-          "enabledDesc": "Uw account is beveiligd met authenticator app verificatie",
-          "appConfigured": "Authenticator app geconfigureerd",
-          "enable": "Twee-Factor Authenticatie Inschakelen",
-          "disable": "Twee-Factor Authenticatie Uitschakelen",
-          "scanQR": "Scan de QR-code met uw authenticator app om 2FA in te stellen",
-          "enterCode": "Voer verificatiecode van uw app in",
-          "verifyEnable": "Verifiëren & Inschakelen",
-          "disableConfirm": "Voer uw wachtwoord in om 2FA uit te schakelen. Dit maakt uw account minder veilig.",
-          "confirmPassword": "Bevestig uw wachtwoord",
-          "passwordPlaceholder": "Voer uw wachtwoord in",
-          "disable2FA": "2FA Uitschakelen",
-          "disableWarning": "Het uitschakelen van 2FA verwijdert een belangrijke beveiligingslaag van uw account",
-          "setupSuccess": "2FA succesvol ingeschakeld!",
-          "setupError": "2FA setup voltooien mislukt",
-          "disableSuccess": "2FA succesvol uitgeschakeld!",
-          "disableError": "2FA uitschakelen mislukt",
-          "backupCodes": {
-            "title": "2FA is succesvol ingeschakeld!",
-            "saveTitle": "Bewaar uw backup codes",
-            "description": "Bewaar deze codes op een veilige plek. U kunt ze gebruiken om toegang te krijgen tot uw account als u uw authenticator apparaat verliest.",
-            "copy": "Kopieer backup codes",
-            "copied": "Backup codes gekopieerd naar klembord!"
-          }
-        },
-        "dangerZone": {
-          "title": "Gevaren Zone",
-          "deleteAccount": "Account Verwijderen",
-          "deleteDescription": "Als u uw account verwijdert, is er geen weg terug. Al uw gegevens worden permanent verwijderd.",
-          "deleteButton": "Account Verwijderen",
-          "deleteDialog": {
-            "title": "Account Verwijderen",
-            "description": "Deze actie kan niet ongedaan worden gemaakt. Dit zal uw account permanent verwijderen en alle bijbehorende gegevens verwijderen.",
-            "whatDeleted": "Wat wordt verwijderd:",
-            "documents": "{count} documenten",
-            "projects": "{count} projecten",
-            "meetings": "{count} meetings",
-            "storage": "{size} aan opgeslagen bestanden",
-            "personalInfo": "Alle persoonlijke informatie en instellingen",
-            "subscription": "Uw abonnement en factureringsgeschiedenis",
-            "confirmEmail": "Typ {email} om te bevestigen",
-            "enterEmail": "Voer uw e-mail in",
-            "enterPassword": "Voer uw wachtwoord in",
-            "passwordLabel": "Voer uw wachtwoord in",
-            "cancel": "Annuleren",
-            "deleting": "Verwijderen...",
-            "errorMessage": "Voer uw e-mail en wachtwoord correct in",
-            "errorGeneric": "Er is een onverwachte fout opgetreden"
-          },
-          "deletionProgress": {
-            "deletingData": "Uw gegevens verwijderen...",
-            "percentage": "{percent}%"
-          }
-        }
-      },
-      "billing": {
-        "title": "Factureringsinformatie",
-        "currentPlan": "Huidig Abonnement",
-        "nextBilling": "Uw volgende factureringsdatum is {date}",
-        "manageSubscription": "Abonnement Beheren",
-        "paymentMethod": "Betaalmethode",
-        "expires": "Verloopt {month}/{year}",
-        "update": "Bijwerken",
-        "billingHistory": "Factureringsgeschiedenis",
-        "download": "Downloaden"
-      },
-      "done": "Klaar",
-      "saving": "Opslaan...",
-      "cancel": "Annuleren",
-      "verify": "Verifiëren"
-    }
-  },
-  "dashboard": {
-    "welcome": "Welkom terug, {name}!",
-    "subtitle": "Volg uw projectvoortgang en communiceer met ons team.",
-    "projectTimeline": {
-      "title": "Project Tijdlijn",
-      "currentStage": "Huidige Fase",
-      "overallProgress": "Totale Voortgang",
-      "stages": {
-        "discovery": {
-          "name": "Ontdekking",
-          "description": "Uw behoeften begrijpen"
-        },
-        "planning": {
-          "name": "Planning",
-          "description": "Projectscope definiëren"
-        },
-        "development": {
-          "name": "Ontwikkeling",
-          "description": "Uw oplossing bouwen"
-        },
-        "delivery": {
-          "name": "Oplevering",
-          "description": "Finale implementatie"
-        }
-      },
-      "nextMilestone": "Volgende Mijlpaal",
-      "scheduledFor": "Gepland voor volgende week"
-    },
-    "messaging": {
-      "title": "GroeimetAI Team",
-      "subtitle": "Reageert meestal binnen 2 uur",
-      "placeholder": "Typ uw bericht...",
-      "send": "Verstuur"
-    },
-    "quickActions": {
-      "viewProjects": "Bekijk Alle Projecten",
-      "documents": "Documenten",
-      "scheduleMeeting": "Plan Afspraak",
-      "settings": "Instellingen"
-    }
-  },
-  "projects": {
-    "title": "Uw Projecten",
-    "subtitle": "Beheer en volg al uw projecten op één plek",
-    "newProject": "Nieuw Project Aanvragen",
-    "search": "Zoek projecten...",
-    "filters": {
-      "all": "Alle",
-      "active": "Actief",
-      "planning": "Planning",
-      "completed": "Voltooid",
-      "onHold": "In Wacht"
-    },
-    "status": {
-      "active": "actief",
-      "planning": "planning",
-      "completed": "voltooid",
-      "onHold": "in wacht"
-    },
-    "viewDetails": "Bekijk Details",
-    "noProjects": "Geen projecten gevonden",
-    "progress": "Voortgang"
-  },
-  "documents": {
-    "title": "Documenten",
-    "subtitle": "Toegang tot al uw projectdocumenten en bestanden",
-    "upload": "Document Uploaden",
-    "search": "Zoek documenten...",
-    "filters": {
-      "all": "Alle",
-      "contracts": "Contracten",
-      "proposals": "Voorstellen",
-      "reports": "Rapporten",
-      "invoices": "Facturen"
-    },
-    "actions": {
-      "view": "Bekijken",
-      "download": "Downloaden",
-      "archive": "Archiveren",
-      "delete": "Verwijderen"
-    },
-    "noDocuments": "Geen documenten gevonden",
-    "storage": {
-      "used": "Gebruikte Opslag",
-      "of": "van"
-    }
-  },
-  "consultations": {
-    "title": "Consultaties & Afspraken",
-    "subtitle": "Plan en beheer uw afspraken met ons team",
-    "scheduleMeeting": "Afspraak Plannen",
-    "upcoming": "Komende Afspraken",
-    "past": "Afgelopen Afspraken",
-    "noUpcoming": "Geen komende afspraken gepland",
-    "noPast": "Geen afgelopen afspraken",
-    "form": {
-      "title": "Plan een Nieuwe Afspraak",
-      "type": "Type Afspraak",
-      "location": "Locatie Afspraak",
-      "date": "Voorkeursdatum",
-      "time": "Voorkeurstijd",
-      "description": "Vergaderagenda / Beschrijving",
-      "descriptionPlaceholder": "Beschrijf wat u wilt bespreken...",
-      "selectTime": "Selecteer een tijd",
-      "sendRequest": "Afspraakverzoek Versturen",
-      "cancel": "Annuleren"
-    },
-    "types": {
-      "consultation": "Eerste Consultatie",
-      "projectUpdate": "Project Update",
-      "technicalReview": "Technische Review",
-      "training": "Training Sessie"
-    },
-    "locations": {
-      "video": "Video Gesprek (Zoom/Teams)",
-      "phone": "Telefonisch",
-      "office": "In Persoon (Apeldoorn Kantoor)"
-    },
-    "actions": {
-      "reschedule": "Verzetten",
-      "join": "Deelnemen aan Afspraak",
-      "viewNotes": "Bekijk Notities"
-    }
-  },
-  "settings": {
-    "title": "Instellingen",
-    "subtitle": "Beheer uw accountinstellingen en voorkeuren",
-    "tabs": {
-      "profile": "Profiel",
-      "notifications": "Meldingen",
-      "security": "Beveiliging",
-      "billing": "Facturering"
     }
   },
   "cases": {
@@ -1932,11 +1995,18 @@
       "edtech": "EdTech"
     },
     "metrics": {
-      "title": "Onze Impact in Cijfers",
-      "annualSavings": "Jaarlijkse Besparing",
-      "fasterResponse": "Snellere Respons",
-      "employeesHelped": "Geholpen Medewerkers",
-      "routingAccuracy": "Routerings Nauwkeurigheid"
+      "responseTime": "Responstijd",
+      "resolutionRate": "Oplossingsgraad",
+      "costSavings": "Kostenbesparing",
+      "tokensProcessed": "Verwerkte Tokens",
+      "hoursTranscribed": "Uren Getranscribeerd",
+      "activeUsers": "Actieve Gebruikers",
+      "developmentTime": "Ontwikkeltijd",
+      "coursesBuilt": "Gebouwde Cursussen",
+      "agentEfficiency": "Agent Efficiëntie",
+      "routingAccuracy": "Routerings Nauwkeurigheid",
+      "userTimeSaved": "Gebruikerstijd Bespaard",
+      "bstReduction": "BST Reductie"
     },
     "cta": {
       "title": "Klaar om Uw Eigen Succesverhaal te Schrijven?",
@@ -2206,25 +2276,231 @@
         ]
       }
     },
-    "metrics": {
-      "responseTime": "Responstijd",
-      "resolutionRate": "Oplossingsgraad",
-      "costSavings": "Kostenbesparing",
-      "tokensProcessed": "Verwerkte Tokens",
-      "hoursTranscribed": "Uren Getranscribeerd",
-      "activeUsers": "Actieve Gebruikers",
-      "developmentTime": "Ontwikkeltijd",
-      "coursesBuilt": "Gebouwde Cursussen",
-      "agentEfficiency": "Agent Efficiëntie",
-      "routingAccuracy": "Routerings Nauwkeurigheid",
-      "userTimeSaved": "Gebruikerstijd Bespaard",
-      "bstReduction": "BST Reductie"
-    },
     "durations": {
       "months": "maanden",
       "weeks": "weken",
       "days": "dagen",
       "ongoing": "Doorlopend"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard", 
+    "welcome": "Welkom terug, {name}!",
+    "subtitle": "Volg uw projectvoortgang en communiceer met ons team.",
+    "projectTimeline": {
+      "title": "Project Tijdlijn",
+      "currentStage": "Huidige Fase",
+      "overallProgress": "Totale Voortgang",
+      "stages": {
+        "discovery": {
+          "name": "Ontdekking",
+          "description": "Uw behoeften begrijpen"
+        },
+        "planning": {
+          "name": "Planning",
+          "description": "Projectscope definiëren"
+        },
+        "development": {
+          "name": "Ontwikkeling",
+          "description": "Uw oplossing bouwen"
+        },
+        "delivery": {
+          "name": "Oplevering",
+          "description": "Finale implementatie"
+        }
+      },
+      "nextMilestone": "Volgende Mijlpaal",
+      "scheduledFor": "Gepland voor volgende week"
+    },
+    "messaging": {
+      "title": "GroeimetAI Team",
+      "subtitle": "Reageert meestal binnen 2 uur",
+      "placeholder": "Typ uw bericht...",
+      "send": "Verstuur"
+    },
+    "quickActions": {
+      "viewProjects": "Bekijk Alle Projecten",
+      "documents": "Documenten",
+      "scheduleMeeting": "Plan Afspraak",
+      "settings": "Instellingen"
+    },
+    "loadingDashboard": "Dashboard laden...",
+    "breadcrumb": {
+      "dashboard": "Dashboard",
+      "overview": "Overzicht"
+    },
+    "lastLogin": "Laatste login: {date}",
+    "navigation": {
+      "newAssessment": "+ Nieuwe Assessment",
+      "requestPilot": "Pilot Aanvragen",
+      "addSystem": "Systeem Toevoegen",
+      "getHelp": "Hulp Krijgen"
+    },
+    "assessmentResults": {
+      "title": "Je Agent Readiness Assessment",
+      "calculating": "Score wordt berekend... 📊",
+      "processing": "Je assessment wordt verwerkt. Het rapport komt binnen 2 minuten via email en wordt hier getoond.",
+      "assessmentId": "Assessment ID",
+      "submitted": "Ingediend",
+      "expertAssessmentInterest": "Interesse in Expert Assessment?",
+      "close": "Sluiten"
+    },
+    "nextStep": {
+      "title": "Aanbevolen Volgende Stap",
+      "assessmentTitle": "\"Start met Agent Readiness Assessment\"",
+      "assessmentDescription": "Begrijp je huidige positie en kansen in de agent economie.",
+      "startAssessment": "Start Assessment",
+      "notNow": "Nu Niet"
+    },
+    "tabs": {
+      "overview": "Overzicht",
+      "assessments": "Assessments",
+      "monitoring": "Monitoring",
+      "reports": "Rapporten"
+    },
+    "overview": {
+      "readyForMore": "Klaar voor Meer?",
+      "scheduleAssessment": "Plan Nieuwe Assessment",
+      "assessmentDescription": "Update je gereedheidscore\nZie nieuwe kansen",
+      "startAssessment": "Start Assessment",
+      "agentReadiness": "Agent Gereedheid",
+      "connected": "Verbonden",
+      "systems": "systemen",
+      "active": "Actief",
+      "agents": "agents"
+    },
+    "projects": {
+      "title": "Actieve Projecten",
+      "noActiveProjects": "Geen Actieve Projecten",
+      "readyToStart": "Klaar om je eerste systeem agent-ready te maken?",
+      "startWithAssessment": "Start met Assessment",
+      "bookConsult": "Boek Gratis Consult"
+    },
+    "monitoring": {
+      "title": "MCP Server Status",
+      "notActive": "Monitoring Niet Actief",
+      "description": "Zie wat je agents in real-time doen",
+      "enable": "Monitoring Inschakelen",
+      "seeDemo": "Zie Demo"
+    },
+    "assessments": {
+      "title": "Agent Readiness Assessments",
+      "agentReadinessAssessment": "Agent Readiness Assessment",
+      "processing": "Verwerking...",
+      "details": "Assessment Details",
+      "id": "ID",
+      "date": "Datum",
+      "score": "Score",
+      "level": "Level",
+      "status": "Status",
+      "emailSent": "Email verstuurd",
+      "generating": "Rapport wordt gegenereerd...",
+      "expectedResults": "Verwacht Resultaat",
+      "resultsDescription": "📊 Agent Readiness Score (0-100)\n📋 Breakdown per categorie\n📄 PDF rapport via email\n🏆 LinkedIn certificaat",
+      "contactSupport": "Contact Support",
+      "upgradeExpert": "Upgrade naar Expert Assessment (€2.500)",
+      "noAssessments": "Geen Assessments",
+      "startFirst": "Start met je eerste Agent Readiness Assessment",
+      "startAssessment": "Start Assessment"
+    },
+    "reports": {
+      "title": "Gegenereerde Rapporten",
+      "noReports": "Nog Geen Rapporten",
+      "description": "Rapporten verschijnen hier zodra je actieve projecten hebt",
+      "startJourney": "Start Je Reis"
+    }
+  },
+  "projects": {
+    "title": "Uw Projecten",
+    "subtitle": "Beheer en volg al uw projecten op één plek",
+    "newProject": "Nieuw Project Aanvragen",
+    "search": "Zoek projecten...",
+    "filters": {
+      "all": "Alle",
+      "active": "Actief",
+      "planning": "Planning",
+      "completed": "Voltooid",
+      "onHold": "In Wacht"
+    },
+    "status": {
+      "active": "actief",
+      "planning": "planning",
+      "completed": "voltooid",
+      "onHold": "in wacht"
+    },
+    "viewDetails": "Bekijk Details",
+    "noProjects": "Geen projecten gevonden",
+    "progress": "Voortgang"
+  },
+  "documents": {
+    "title": "Documenten",
+    "subtitle": "Toegang tot al uw projectdocumenten en bestanden",
+    "upload": "Document Uploaden",
+    "search": "Zoek documenten...",
+    "filters": {
+      "all": "Alle",
+      "contracts": "Contracten",
+      "proposals": "Voorstellen",
+      "reports": "Rapporten",
+      "invoices": "Facturen"
+    },
+    "actions": {
+      "view": "Bekijken",
+      "download": "Downloaden",
+      "archive": "Archiveren",
+      "delete": "Verwijderen"
+    },
+    "noDocuments": "Geen documenten gevonden",
+    "storage": {
+      "used": "Gebruikte Opslag",
+      "of": "van"
+    }
+  },
+  "consultations": {
+    "title": "Consultaties & Afspraken",
+    "subtitle": "Plan en beheer uw afspraken met ons team",
+    "scheduleMeeting": "Afspraak Plannen",
+    "upcoming": "Komende Afspraken",
+    "past": "Afgelopen Afspraken",
+    "noUpcoming": "Geen komende afspraken gepland",
+    "noPast": "Geen afgelopen afspraken",
+    "form": {
+      "title": "Plan een Nieuwe Afspraak",
+      "type": "Type Afspraak",
+      "location": "Locatie Afspraak",
+      "date": "Voorkeursdatum",
+      "time": "Voorkeurstijd",
+      "description": "Vergaderagenda / Beschrijving",
+      "descriptionPlaceholder": "Beschrijf wat u wilt bespreken...",
+      "selectTime": "Selecteer een tijd",
+      "sendRequest": "Afspraakverzoek Versturen",
+      "cancel": "Annuleren"
+    },
+    "types": {
+      "consultation": "Eerste Consultatie",
+      "projectUpdate": "Project Update",
+      "technicalReview": "Technische Review",
+      "training": "Training Sessie"
+    },
+    "locations": {
+      "video": "Video Gesprek (Zoom/Teams)",
+      "phone": "Telefonisch",
+      "office": "In Persoon (Apeldoorn Kantoor)"
+    },
+    "actions": {
+      "reschedule": "Verzetten",
+      "join": "Deelnemen aan Afspraak",
+      "viewNotes": "Bekijk Notities"
+    }
+  },
+  "settings": {
+    "title": "Instellingen",
+    "subtitle": "Beheer uw accountinstellingen en voorkeuren",
+    "tabs": {
+      "profile": "Profiel",
+      "notifications": "Meldingen",
+      "security": "Beveiliging",
+      "billing": "Facturering"
     }
   },
   "legal": {
@@ -2683,6 +2959,763 @@
       "video": "Videogesprek",
       "phone": "Telefoongesprek",
       "inPerson": "Persoonlijk"
+    }
+  },
+  "agentBlindness": {
+    "title": "Jouw systemen hebben APIs.",
+    "titleHighlight": "Agents kunnen er niet bij.",
+    "bridgeStatement": "Wij bouwen de brug - voor ELK systeem.",
+    "bridgeDescription": "Van SaaS tot legacy, van maatwerk tot Excel - als het data heeft, maken we het agent-ready.",
+    "apisWork": "Jouw APIs werken. Ze missen alleen één ding:",
+    "apisWorkHighlight": "Een taal die agents verstaan.",
+    "keepExisting": "Behoud je bestaande APIs - geen rebuild",
+    "worksWithEverything": "Werk met ELKE software - geen uitzonderingen",
+    "apiToMcp": "Van API naar MCP - wij regelen de vertaling",
+    "systemExamples": "ServiceNow? SAP? Excel? Eigen systeem?",
+    "systemsPromise": "Maakt niet uit. Als het data heeft, maken we het agent-ready.",
+    "systems": {
+      "customer": {
+        "name": "Klantsysteem",
+        "current": "Jouw API: Klantgegevens live",
+        "agent": "Voor agents: Onvindbaar",
+        "solution": "Wij maken het: Agent-ready"
+      },
+      "inventory": {
+        "name": "Voorraadsysteem",
+        "current": "Jouw API: Live data",
+        "agent": "Voor agents: Onbereikbaar",
+        "solution": "Wij maken het: Agent-ready"
+      },
+      "crm": {
+        "name": "CRM",
+        "current": "Jouw API: Klantdata beschikbaar",
+        "agent": "Voor agents: Niet vindbaar",
+        "solution": "Wij maken het: Agent-ready"
+      },
+      "knowledge": {
+        "name": "Kennisbank",
+        "current": "Jouw API: Documentatie database",
+        "agent": "Voor agents: Onleesbaar",
+        "solution": "Wij maken het: Agent-ready"
+      },
+      "planning": {
+        "name": "Planning tools",
+        "current": "Jouw API: Agenda & resources",
+        "agent": "Voor agents: Agent-blind",
+        "solution": "Wij maken het: Agent-ready"
+      },
+      "custom": {
+        "name": "Eigen software",
+        "current": "Jouw API: Custom gebouwd",
+        "agent": "Voor agents: Onbekend protocol",
+        "solution": "Wij maken het: Agent-ready"
+      }
+    }
+  },
+  "onzeRol": {
+    "title": "Wij zijn je",
+    "titleHighlight": "Agent Infrastructure",
+    "titleEnd": "Partner",
+    "subtitle": "Niet alleen technisch, maar vooral strategisch. We helpen je:",
+    "noOneSize": "Geen one-size-fits-all.",
+    "uniqueJourney": "Elke journey is uniek.",
+    "listeningFirst": "Daarom beginnen we altijd met luisteren naar jouw specifieke situatie.",
+    "roles": {
+      "strategy": {
+        "title": "Strategie",
+        "description": "Welke systemen eerst? Welke agents zijn relevant?",
+        "action": "Wij maken de roadmap.",
+        "details": {
+          "0": "Systeem prioritering op business impact",
+          "1": "Agent gebruik scenario's uitwerken",
+          "2": "ROI berekening per systeem",
+          "3": "Realistische tijdlijn opstellen"
+        }
+      },
+      "implementation": {
+        "title": "Implementatie",
+        "description": "Van API naar MCP. Wij bouwen de brug tussen",
+        "action": "jouw systemen en AI agents.",
+        "details": {
+          "0": "Custom MCP server development",
+          "1": "Veilige authentication layers",
+          "2": "Agent testing & validatie",
+          "3": "Team training & documentatie"
+        }
+      },
+      "optimization": {
+        "title": "Optimalisatie",
+        "description": "Meten, leren, verbeteren. Continue begeleiding",
+        "action": "naar maximale agent-waarde.",
+        "details": {
+          "0": "Performance monitoring setup",
+          "1": "Usage analytics & insights",
+          "2": "Agent gedrag optimalisatie",
+          "3": "Nieuwe mogelijkheden identificatie"
+        }
+      }
+    }
+  },
+  "timeline": {
+    "title": "Wij zien de",
+    "titleHighlight": "golven aankomen",
+    "subtitle": "Al 2+ jaar lopen we voorop in AI implementaties. Niet omdat het kan, maar omdat we geloven in de transformatie die AI brengt.",
+    "finalQuestion": "De vraag is niet óf AI agents komen.",
+    "readyQuestion": "De vraag is: ben jij er klaar voor?",
+    "weAreReady": "Wij wel. Al 2 jaar.",
+    "milestones": [
+      {
+        "date": "Juni 2023",
+        "title": "Prompt Chaining Pioniers",
+        "description": "Complexe multi-step AI chains in productie toen ChatGPT nog een speeltje was",
+        "impact": "Automatisering van complexe bedrijfsprocessen"
+      },
+      {
+        "date": "Augustus 2023",
+        "title": "RAG voor het cool was",
+        "description": "Knowledge retrieval zonder hallucinations - 8 maanden voor de hype",
+        "impact": "10x snellere informatie toegang zonder AI-fouten"
+      },
+      {
+        "date": "September 2023",
+        "title": "Eerste Autonome Agent",
+        "description": "Content creatie: idee → tekst → afbeelding → publicatie → comment responses. Volledig autonoom.",
+        "impact": "Transformatie van content workflows"
+      },
+      {
+        "date": "Q1 2024",
+        "title": "Microsoft Copilot vanaf dag 1",
+        "description": "Enterprise Copilot implementaties terwijl anderen nog aan het lezen waren",
+        "impact": "Productivity boost voor enterprise klanten"
+      },
+      {
+        "date": "Q2-Q3 2024",
+        "title": "Extreme Context Processing",
+        "description": "Eigen prompt orchestration systeem: 100.000+ tokens zonder context verlies of RAG",
+        "impact": "Bewijs dat slimme architectuur > brute force computing"
+      },
+      {
+        "date": "Q4 2024",
+        "title": "Open Source LLMs in Productie",
+        "description": "HuggingFace, Llama, Mistral - GDPR-compliant on-premise AI",
+        "impact": "Privacy-safe AI voor regulated industries"
+      },
+      {
+        "date": "Q1-Q2 2025",
+        "title": "Agent Infrastructure Platform",
+        "description": "Snow-flow MCP + Multi-agent orchestration: Van API naar agent-ready ecosysteem",
+        "impact": "Complete agent infrastructure voor Nederlandse bedrijven"
+      }
+    ],
+    "statusLabels": {
+      "completed": "Gerealiseerd",
+      "inProgress": "In uitvoering",
+      "impact": "Impact:"
+    }
+  },
+  "snowflow": {
+    "title": "Voorbeeld:",
+    "titleHighlight": "Hoe wij ServiceNow agent-ready maakten",
+    "subtitle": "Snow-flow toont onze aanpak: van probleem-analyse tot werkende oplossing.",
+    "subtitleHighlight": "Dit kunnen we voor JOUW systemen ook.",
+    "openSourceTitle": "Open Source & Transparant",
+    "futureTitle": "Dit is de toekomst voor JOUW systemen",
+    "futureDescription": "Snow-flow toont wat mogelijk wordt. Van bekende platforms tot maatwerk - als het APIs heeft, kunnen we het agent-ready maken.",
+    "ctaButton": "Ontdek jouw Agent Readiness samen met ons",
+    "whyServiceNow": {
+      "title": "Waarom ServiceNow?",
+      "description": "ServiceNow zelf is heel actief met AI - NowAssist, AI Search, Process Optimization. Fortune 500 bedrijven investeren miljoenen in AI binnen ServiceNow.",
+      "problem": "Maar zelfs dit AI-forward bedrijf had geen idee hoe ze agents toegang moesten geven.",
+      "solution": "Daarom namen wij het op ons: ServiceNow als IDEALE voorbeeld case. Als Fortune 500 bedrijven met ongelooflijke AI expertise het niet weten - dan begrijpt niemand het.",
+      "conclusion": "Dat is waar wij voor zijn. We maken het simpel."
+    },
+    "problemSolution": {
+      "problemTitle": "Het Probleem",
+      "problemDescription": "Ondanks alle AI investeringen: het ticketsysteem was volledig gesloten voor externe agents. Geen enkele agent kon tickets aanmaken, workflows triggeren, of data ophalen.",
+      "solutionTitle": "De Oplossing",
+      "solutionDescription": "We implementeerden MCP servers die ServiceNow APIs omzetten naar agent-toegankelijke interfaces. Nu kunnen agents seamless integreren."
+    },
+    "agentCapabilities": {
+      "title": "Wat Agents Nu Kunnen",
+      "tickets": {
+        "title": "Tickets beheren",
+        "description": "Aanmaken, updaten, prioriteren"
+      },
+      "workflows": {
+        "title": "Workflows triggeren",
+        "description": "Geautomatiseerde processen starten"
+      },
+      "knowledge": {
+        "title": "Kennisbank doorzoeken",
+        "description": "Intelligente informatie retrieval"
+      }
+    },
+    "technicalImplementation": {
+      "title": "Technische Implementatie",
+      "features": {
+        "0": "MCP Protocol standaard",
+        "1": "200+ ServiceNow functies exposed",
+        "2": "Veilige authentication layers",
+        "3": "Real-time bidirectionele communicatie",
+        "4": "Open source: github.com/GroeimetAI/snow-flow"
+      }
+    },
+    "github": {
+      "subtitle": "@GroeimetAI/snow-flow op GitHub",
+      "openSourceBadge": "Open Source",
+      "transparency": "Transparant & Community",
+      "stats": {
+        "integrations": "Groeiend",
+        "integrationsLabel": "MCP Integraties",
+        "functions": "200+",
+        "functionsLabel": "ServiceNow Functies",
+        "community": "Community",
+        "communityLabel": "Driven Development"
+      },
+      "buttons": {
+        "github": "View on GitHub",
+        "demo": "Live Demo"
+      }
+    }
+  },
+  "objections": {
+    "title": "Veelgestelde",
+    "titleHighlight": "Vragen",
+    "subtitle": "We begrijpen de zorgen. Hier zijn eerlijke antwoorden:",
+    "stillDoubts": "Nog steeds twijfels?",
+    "freeConsultation": "Start met een gratis 30-min verkennend gesprek. Geen verplichtingen, alleen inzicht.",
+    "faqs": {
+      "0": {
+        "question": "Werkt dit ook voor onze eigen software?",
+        "answer": "Ja! Als het APIs heeft (of we kunnen ze bouwen), maken we het agent-ready. Van Excel tot enterprise - elke software kan agent-accessible worden."
+      },
+      "1": {
+        "question": "Is dit niet alleen voor grote bedrijven?",
+        "answer": "Nee, we beginnen vanaf €2.500 assessment. Kleine bedrijven hebben vaak de meeste baat bij agent-automatisering - minder resources, meer impact."
+      },
+      "2": {
+        "question": "Wat als we geen technische expertise hebben?",
+        "answer": "Dat is precies waarom we er zijn. Van strategie tot implementatie - we nemen je bij de hand. Training en documentatie inbegrepen."
+      },
+      "3": {
+        "question": "Duurt dit niet veel te lang?",
+        "answer": "Assessment binnen 1 week, eerste agent interacties binnen 2-4 weken. We zorgen voor snelle wins terwijl we de fundamenten leggen."
+      }
+    }
+  },
+  "nextSteps": {
+    "title": "Onze",
+    "titleHighlight": "Transparante",
+    "titleEnd": "Aanpak",
+    "subtitle": "Van pilot tot enterprise - Altijd dezelfde 3 stappen. Transparante prijzen, vaste deliverables, geen verrassingen.",
+    "howWeWork": "Hoe werken wij?",
+    "noHourlyRates": "Geen uurtje-factuurtje",
+    "assessmentFirst": "Eerst assessment, dan pas offerte",
+    "fixedPrices": "Vaste prijzen per fase",
+    "roiGuarantee": "ROI garantie in contract",
+    "startAssessment": "Begin met Gratis Assessment",
+    "steps": [
+      {
+        "number": "1️⃣",
+        "title": "Online Quick Scan",
+        "description": "GRATIS - 10 vragen over je huidige APIs. Direct je score en algemeen rapport.",
+        "price": "GRATIS",
+        "time": "5 min"
+      },
+      {
+        "number": "2️⃣",
+        "title": "Expert Assessment",
+        "description": "€2.500 vaste prijs - 2-4 uur deep dive. Concrete roadmap en offerte op maat.",
+        "price": "€2.500",
+        "time": "2-4 uur"
+      },
+      {
+        "number": "3️⃣",
+        "title": "Implementation",
+        "description": "Op basis van assessment - Vaste prijs per project. Geen uurtje-factuurtje.",
+        "price": "Op maat",
+        "time": "2-12 weken"
+      }
+    ],
+    "projectInfo": "Typische projecten: €15-75k • Doorlooptijd: 2-12 weken • ROI: 3-6 maanden",
+    "timeLabel": "Tijd:"
+  },
+  "contactPage": {
+    "header": {
+      "title": "Plan een",
+      "highlight": "gratis gesprek",
+      "subtitle": "30 minuten sparren over jouw agent mogelijkheden"
+    },
+    "conversationTypes": {
+      "title": "Kies je gesprekstype:",
+      "exploratory": {
+        "title": "Verkennend Gesprek",
+        "subtitle": "Eerste kennismaking",
+        "features": [
+          "Is agent-ready iets voor ons?",
+          "Welke quick wins zijn er?",
+          "Vrijblijvend advies"
+        ],
+        "cta": "Plan dit gesprek"
+      },
+      "debrief": {
+        "title": "Assessment Debrief",
+        "subtitle": "Assessment al gedaan",
+        "features": [
+          "Rapport doornemen",
+          "Prioriteiten bepalen",
+          "Next steps bespreken"
+        ],
+        "cta": "Plan debrief"
+      },
+      "kickoff": {
+        "title": "Project Kickoff",
+        "subtitle": "Ready to start",
+        "features": [
+          "Pilot planning",
+          "Timeline afstemmen",
+          "Team introductie"
+        ],
+        "cta": "Plan kickoff"
+      }
+    },
+    "directContact": {
+      "title": "Direct contact:",
+      "name": "Niels van der Werf",
+      "role": "Agent Infrastructure Architect",
+      "email": "niels@groeimetai.io",
+      "phone": "+31 (6) 81 739 018",
+      "hours": "Ma-Vr 9:00-17:00"
+    },
+    "form": {
+      "title": "Of vul het formulier in:",
+      "fields": {
+        "name": {
+          "label": "Naam"
+        },
+        "company": {
+          "label": "Bedrijf"
+        },
+        "email": {
+          "label": "Email"
+        },
+        "phone": {
+          "label": "Telefoon"
+        },
+        "message": {
+          "label": "Waar wil je over praten?",
+          "placeholder": "Beschrijf kort waar je hulp bij wilt..."
+        },
+        "preferredDate": {
+          "label": "Voorkeur datum"
+        },
+        "preferredTime": {
+          "label": "Voorkeur tijd",
+          "placeholder": "Selecteer...",
+          "options": {
+            "morning": "Ochtend (9:00-12:00)",
+            "afternoon": "Middag (12:00-17:00)"
+          }
+        }
+      },
+      "submit": "Verstuur aanvraag",
+      "responseTime": "Response binnen 4 uur tijdens kantooruren"
+    }
+  },
+  "agentReadinessQuiz": {
+    "title": "Agent Readiness Check",
+    "subtitle": "5 vragen, 2 minuten",
+    "step": "Stap",
+    "of": "van",
+    "questions": {
+      "apis": {
+        "title": "Hebben jullie systemen APIs?",
+        "options": {
+          "most": "Ja, de meeste wel",
+          "some": "Sommige wel",
+          "unknown": "Geen idee",
+          "none": "Nee"
+        }
+      },
+      "dataAccess": {
+        "title": "Kun je snel klantdata vinden?",
+        "options": {
+          "instant": "Paar clicks",
+          "minutes": "2-3 systemen",
+          "difficult": "Lastig zoeken",
+          "impossible": "Niet digitaal"
+        }
+      },
+      "budget": {
+        "title": "Wat is realistisch voor agent infrastructure dit jaar?",
+        "options": {
+          "enterprise": "EUR100k+ - Enterprise rollout",
+          "multiple": "EUR25-100k - Meerdere systemen",
+          "single": "EUR10-25k - Één systeem serieus",
+          "pilot": "< EUR10k - Pilot/experiment",
+          "businessCase": "Eerst business case nodig"
+        }
+      },
+      "blocker": {
+        "title": "Wat is je grootste blocker?",
+        "options": {
+          "knowledge": "Technische kennis ontbreekt",
+          "integration": "Systemen praten niet met elkaar",
+          "guidance": "Geen idee waar te beginnen",
+          "budget": "Budget/resources beperkt",
+          "security": "Security/compliance zorgen",
+          "resistance": "Team weerstand tegen verandering",
+          "data": "Data is te rommelig/verspreid",
+          "other": "Anders"
+        }
+      },
+      "impact": {
+        "title": "Welk systeem zou grootste impact hebben?",
+        "subtitle": "Voor AI agent implementatie",
+        "options": {
+          "helpdesk": "Klantenservice/Helpdesk",
+          "crm": "CRM/Sales",
+          "erp": "ERP/Finance",
+          "planning": "Planning/Logistics",
+          "knowledge": "Kennisbank/Documentatie",
+          "hr": "HR/Personeelszaken",
+          "custom": "Eigen software/Maatwerk",
+          "other": "Anders"
+        }
+      }
+    },
+    "navigation": {
+      "previous": "Vorige",
+      "next": "Volgende",
+      "showScore": "Toon mijn score"
+    },
+    "results": {
+      "levels": {
+        "level5": "Level 5: Agent-Ready",
+        "level4": "Level 4: Integration-Ready",
+        "level3": "Level 3: Digitalization-Ready",
+        "level2": "Level 2: Foundation-Building",
+        "level1": "Level 1: Pre-Digital"
+      },
+      "descriptions": {
+        "level5": "Agents kunnen binnen weken live gaan! 🚀",
+        "level4": "2-3 maanden prep en je bent agent-ready 🔄",
+        "level3": "6-12 maanden modernisering nodig 🛠️",
+        "level2": "1-2 jaar infrastructure werk 🏗️",
+        "level1": "Start met digitalisering fundamenten 📚"
+      },
+      "fomoTitle": "Maar HOE kom je van {level} naar Level 5: Agent-Ready?",
+      "questions": [
+        "Welke van je {count} systemen moet je EERST aanpakken?",
+        "Waar precies zitten je data/API/proces gaps?",
+        "Wat zijn de grootste blockers die je tegen houdt?",
+        "En hoeveel tijd/budget ga je verliezen zonder plan?"
+      ],
+      "cta": {
+        "high": "Ontdek wat je nog mist voor Level 5",
+        "low": "Ontdek je grootste blockers"
+      },
+      "benefits": [
+        "25-vraag assessment meet exact wat er ontbreekt",
+        "Systeem prioritering • Budget reality • Blockers analysis • Implementation roadmap"
+      ]
+    }
+  },
+  "agentReadinessAssessment": {
+    "title": "Agent Readiness Assessment",
+    "subtitle": "14 vragen, 5-8 minuten - kom achter je complete agent readiness score",
+    "description": "Puur focus op: kunnen agents met jouw systemen werken?",
+    "progress": {
+      "question": "Vraag",
+      "of": "van",
+      "preFilled": "Quick check antwoorden zijn ingevuld"
+    },
+    "questions": {
+      "business": {
+        "title": "💼 Wat is jullie core business?",
+        "subtitle": "In één zin: wat doet jullie bedrijf voor klanten?",
+        "placeholder": "We zijn een [type bedrijf] die [wat jullie doen] voor [doelgroep]",
+        "example": "We leveren IT hardware aan MKB bedrijven"
+      },
+      "systems": {
+        "title": "🏗️ Welke systemen MOETEN agent-ready worden?",
+        "subtitle": "Selecteer maximaal 3 systemen",
+        "selected": "Geselecteerd: {count}/3 systemen",
+        "options": [
+          "Klantenservice/Helpdesk",
+          "CRM/Sales",
+          "ERP/Finance",
+          "HR/Personeelszaken",
+          "Kennisbank/Documentatie",
+          "Planning/Logistics",
+          "Eigen software/Maatwerk",
+          "Anders"
+        ]
+      },
+      "highestImpact": {
+        "title": "🎯 Welk systeem heeft de GROOTSTE impact als het agent-ready wordt?",
+        "subtitle": "Kies uit de systemen die je net selecteerde"
+      },
+      "apis": {
+        "title": "🔗 Hebben deze systemen APIs?",
+        "subtitle": "Agents moeten kunnen verbinden met je systemen",
+        "preFilled": "Antwoord overgenomen uit quick check",
+        "options": {
+          "most": "Ja, de meeste hebben APIs",
+          "some": "Sommige wel, sommige niet",
+          "unknown": "Geen idee eigenlijk",
+          "none": "Nee, nog geen APIs"
+        }
+      },
+      "dataAccess": {
+        "title": "📊 Kun je snel klantdata vinden?",
+        "subtitle": "Test: Kun je binnen 5 minuten alle data van klant \"Jan de Vries\" vinden?",
+        "preFilled": "Antwoord overgenomen uit quick check",
+        "options": {
+          "instant": "Ja, paar clicks en ik heb alles",
+          "minutes": "Ja, maar moet door 2-3 systemen",
+          "difficult": "Lastig, data zit verspreid",
+          "impossible": "Nee, veel data is niet digitaal"
+        }
+      },
+      "dataLocation": {
+        "title": "📍 Waar staat die klantdata?",
+        "subtitle": "Hoe verspreid is je data over systemen?",
+        "options": {
+          "central": "Één centraal systeem",
+          "few": "2-3 systemen",
+          "many": "5+ systemen",
+          "paper": "Deels nog op papier/Excel"
+        }
+      },
+      "processes": {
+        "title": "📋 Staan jullie processen beschreven?",
+        "subtitle": "Agents moeten weten wat ze moeten doen",
+        "options": {
+          "documented": "Ja, alles gedocumenteerd",
+          "partially": "Belangrijkste processen wel",
+          "tribal": "Nee, zit in hoofden van medewerkers",
+          "chaos": "Iedereen doet het anders"
+        }
+      },
+      "automation": {
+        "title": "🤖 Welke automation gebruik je al?",
+        "options": {
+          "advanced": "Zapier, Power Automate, RPA tools",
+          "basic": "Email automation, basis workflows",
+          "trying": "Proberen dingen, maar breekt vaak",
+          "none": "Nee, alles nog handmatig"
+        }
+      },
+      "aiPlatform": {
+        "title": "🧠 Heb je al een voorkeur voor AI platform?",
+        "subtitle": "We willen weten of je al specifieke wensen hebt",
+        "options": {
+          "yes": "Ja, namelijk:",
+          "no": "Nee, advies nodig",
+          "depends": "Hangt af van kosten/compliance"
+        }
+      },
+      "aiPlatforms": {
+        "title": "🧠 Welke AI platforms heb je op het oog?",
+        "subtitle": "Selecteer alle die van toepassing zijn",
+        "perfect": "Perfect!",
+        "advice": "We gaan je advies geven over de beste AI platforms voor jouw situatie.",
+        "compliance": "We houden rekening met kosten en compliance eisen bij onze aanbevelingen.",
+        "report": "In je rapport krijg je een vergelijking van platforms die passen bij jouw infrastructure en budget.",
+        "platforms": [
+          "Claude (Anthropic)",
+          "GPT (OpenAI)",
+          "Gemini (Google)",
+          "Eigen/Custom agents",
+          "Weet nog niet",
+          "Anders"
+        ]
+      },
+      "blocker": {
+        "title": "⚠️ Wat is je grootste blocker voor automation?",
+        "preFilled": "Antwoord overgenomen uit quick check",
+        "options": [
+          "Technische kennis ontbreekt",
+          "Systemen praten niet met elkaar",
+          "Geen idee waar te beginnen",
+          "Budget/resources beperkt",
+          "Security/compliance zorgen",
+          "Team weerstand tegen verandering",
+          "Data is te rommelig/verspreid",
+          "Anders"
+        ]
+      },
+      "adoption": {
+        "title": "⚡ Hoe snel kan jullie team nieuwe tools adopteren?",
+        "options": {
+          "veryFast": "Zeer snel (weken)",
+          "reasonable": "Redelijk (maanden)",
+          "slow": "Traag (kwartalen)",
+          "verySlow": "Zeer traag (jaren)"
+        }
+      },
+      "costOptimization": {
+        "title": "💰 Wat is jullie grootste operational kostenpost die je zou willen optimaliseren?",
+        "subtitle": "Dit helpt agents prioriteren waar de grootste impact ligt",
+        "options": [
+          "Personeelskosten / handmatig werk",
+          "Customer service / support kosten",
+          "Data entry / administratie",
+          "Communicatie tussen afdelingen",
+          "Fouten / rework kosten",
+          "Planning / coordination overhead",
+          "Anders"
+        ]
+      },
+      "budget": {
+        "title": "💰 Wat is realistisch voor agent infrastructure dit jaar?",
+        "subtitle": "Zodat we realistische aanbevelingen kunnen doen",
+        "preFilled": "Antwoord overgenomen uit quick check",
+        "options": {
+          "pilot": "< €10k - Pilot/experiment",
+          "single": "€10-25k - Één systeem serieus",
+          "multiple": "€25-100k - Meerdere systemen",
+          "enterprise": "€100k+ - Enterprise rollout",
+          "businessCase": "Eerst business case nodig"
+        }
+      },
+      "itMaturity": {
+        "title": "🔧 Hoe worden systemen nu beheerd?",
+        "subtitle": "Dit helpt ons inschatten wie de implementatie gaat doen",
+        "options": {
+          "internal": "Interne IT afdeling",
+          "external": "Externe IT partner",
+          "mixed": "Beetje van beide",
+          "adhoc": "Ad-hoc/niemand specifiek"
+        }
+      },
+      "contact": {
+        "title": "Jouw Agent Readiness Report",
+        "name": "Naam",
+        "role": "Functie",
+        "company": "Bedrijf",
+        "email": "Email",
+        "phone": "Telefoon",
+        "guide": "Ja, ik wil ook de Agent Readiness Guide (PDF)",
+        "account": {
+          "title": "✨ Maak direct een account aan",
+          "description": "Krijg toegang tot je persoonlijke Agent Infrastructure dashboard",
+          "benefits": [
+            "Assessment opgeslagen",
+            "Direct Expert upgrade (€2.500)",
+            "Snow-flow demo toegang",
+            "Roadmap updates",
+            "Premium features",
+            "Live metrics dashboard"
+          ],
+          "confirmation": "Account wordt aangemaakt met {email}",
+          "redirect": "Je wordt direct doorgestuurd naar je persoonlijke dashboard met assessment resultaten"
+        }
+      }
+    },
+    "navigation": {
+      "previous": "Vorige",
+      "next": "Volgende",
+      "submit": "Kom achter mijn complete readiness score"
+    },
+    "completion": {
+      "title": "Je Agent Readiness Report wordt gegenereerd...",
+      "video": {
+        "title": "Terwijl je wacht:",
+        "description": "Bekijk hoe ServiceNow agent-ready werd in 2 weken",
+        "cta": "Bekijk Video"
+      },
+      "includes": [
+        "Agent Readiness Score (0-100)",
+        "Breakdown per infrastructuur categorie",
+        "Algemene best practices per level",
+        "Indicatie tijd tot Agent-Ready",
+        "GroeimetAI certificaat + badge"
+      ],
+      "summary": "Je gratis rapport wordt gegenereerd!",
+      "details": "Je Agent Readiness Score en algemene inzichten komen binnen 2 minuten via email.",
+      "upgrade": "Wil je een concrete roadmap? Expert Assessment (€2.500) geeft specifieke gaps analyse en implementatie plan voor jouw bedrijf."
+    }
+  },
+  "nextSteps": {
+    "title": "Jouw API",
+    "highlight": "Transformatie",
+    "titleEnd": "in 3 stappen",
+    "subtitle": "Altijd in drie stappen - Eerst assessment, dan pas offerte. Vaste prijzen per fase. Geen verrassingen.",
+    "steps": {
+      "step1": {
+        "title": "Online Quick Scan",
+        "subtitle": "Gratis API Assessment",
+        "description": "10 vragen over je huidige APIs. Direct je score en algemeen rapport.",
+        "pricing": "GRATIS",
+        "timeframe": "5 min",
+        "features": [
+          "API inventarisatie",
+          "Agent readiness score",
+          "Algemene aanbevelingen",
+          "Geen verplichtingen"
+        ],
+        "cta": "Start Quick Scan"
+      },
+      "step2": {
+        "title": "Expert Assessment", 
+        "subtitle": "Diepgaande Analyse",
+        "description": "2-4 uur deep dive met concrete roadmap en offerte op maat.",
+        "pricing": "€2.500",
+        "timeframe": "2-4 uur",
+        "features": [
+          "Technische gap analyse",
+          "Concrete implementatie roadmap",
+          "ROI berekening",
+          "Vaste prijs offerte"
+        ],
+        "cta": "Boek Expert Assessment"
+      },
+      "step3": {
+        "title": "Implementation",
+        "subtitle": "Agent-Ready Realisatie",
+        "description": "Vaste prijs per project implementatie. Van plan naar werkende agent-ready APIs.",
+        "pricing": "Op maat", 
+        "timeframe": "2-12 weken",
+        "features": [
+          "MCP server development",
+          "API wrapper implementatie",
+          "Testing en validatie",
+          "Go-live ondersteuning"
+        ],
+        "cta": "Krijg Implementation Quote"
+      }
+    },
+    "explanation": {
+      "title": "Transparante Samenwerking",
+      "transparentPricing": {
+        "title": "Duidelijke Aanpak",
+        "description": "Geen verborgen kosten of verrassingen",
+        "ranges": [
+          "Quick Scan: Altijd gratis",
+          "Expert Assessment: Vaste prijs vooraf bekend",
+          "Implementation: Op basis van assessment"
+        ]
+      },
+      "roiGuarantee": {
+        "title": "Focus op Resultaat",
+        "description": "We werken alleen met bedrijven waar we waarde kunnen toevoegen",
+        "stats": [
+          "Duurzame efficiency gains",
+          "Meetbare besparingen",
+          "Lange termijn partnership"
+        ]
+      },
+      "noLockIn": {
+        "title": "Jouw Eigendom",
+        "description": "Alle code en systemen blijven volledig van jou"
+      },
+      "guarantees": {
+        "fixedPrice": "Transparante prijzen",
+        "timeframe": "Realistische planning",
+        "downtime": "Minimale impact"
+      }
     }
   }
 }
