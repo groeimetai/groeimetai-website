@@ -159,6 +159,7 @@ export default function ApiToMcpAnimation() {
   }, [autoPlay]);
 
   const isPhase = (n: number) => currentPhase === n;
+  const isPhaseOne = currentPhase === 1;
 
   // NODE VARIANTS (stijl verandert per fase, positie blijft)
   const apiVariant = (index: number) => {
@@ -325,7 +326,7 @@ export default function ApiToMcpAnimation() {
                     const m = getBoxCenter(mcpEndPos, stageSize); // MCP connection point
                     
                     // Determine stroke dash array based on phase
-                    const dashArray = currentPhase === 1 ? '6 8' : undefined;
+                    const dashArray = isPhaseOne ? '6 8' : undefined;
                     
                     return (
                       <motion.line
