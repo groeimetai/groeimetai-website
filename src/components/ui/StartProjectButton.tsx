@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { ProjectRequestDialog } from '@/components/dialogs/ProjectRequestDialog';
+import { AgentReadinessDialog } from '@/components/dialogs/AgentReadinessDialog';
 import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/contexts/AuthContext';
@@ -41,8 +41,13 @@ export function StartProjectButton({
         router.push('/dashboard');
       }
     } else {
-      // If not logged in, show the project request dialog
-      setDialogOpen(true);
+      // Check if we're on login page
+      if (mounted && window.location.pathname.includes('/login')) {
+        router.push('/register');
+      } else {
+        // If not logged in and not on login page, show the agent readiness dialog
+        setDialogOpen(true);
+      }
     }
   };
 
@@ -63,10 +68,9 @@ export function StartProjectButton({
           </>
         )}
       </Button>
-      <ProjectRequestDialog
+      <AgentReadinessDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
-        preselectedService={preselectedService}
       />
     </>
   );

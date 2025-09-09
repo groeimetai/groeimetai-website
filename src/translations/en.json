@@ -39,7 +39,7 @@
       },
       "arrow": "API → MCP",
       "mcp": {
-        "title": "MCP Protocol Solution", 
+        "title": "MCP Protocol Solution",
         "description": "Universal connection standard enabling seamless AI agent integration"
       }
     },
@@ -169,56 +169,32 @@
       "strategy": {
         "title": "AI Strategy & Roadmap",
         "description": "Define your AI vision and create actionable roadmaps that align technology investments with business objectives and measurable ROI.",
-        "features": [
-          "Executive Advisory",
-          "Opportunity Assessment",
-          "Strategic Planning"
-        ]
+        "features": ["Executive Advisory", "Opportunity Assessment", "Strategic Planning"]
       },
       "transformation": {
         "title": "Digital Transformation",
         "description": "Navigate complex digital ecosystems with comprehensive transformation strategies focused on process optimization and cost efficiency.",
-        "features": [
-          "Operating Model Design",
-          "Process Redesign",
-          "Value Realization"
-        ]
+        "features": ["Operating Model Design", "Process Redesign", "Value Realization"]
       },
       "governance": {
         "title": "Risk & Governance",
         "description": "Establish responsible AI frameworks that balance innovation with ethics, compliance and security.",
-        "features": [
-          "AI Ethics Framework",
-          "Regulatory Compliance",
-          "Risk Management"
-        ]
+        "features": ["AI Ethics Framework", "Regulatory Compliance", "Risk Management"]
       },
       "innovation": {
         "title": "Innovation Labs",
         "description": "Accelerate innovation through strategic pilots and proof-of-concepts that demonstrate clear business value and ROI.",
-        "features": [
-          "Use Case Discovery",
-          "Pilot Programs",
-          "Innovation Workshops"
-        ]
+        "features": ["Use Case Discovery", "Pilot Programs", "Innovation Workshops"]
       },
       "advisory": {
         "title": "Technology Advisory",
         "description": "Make informed decisions with independent technology assessments and vendor evaluations.",
-        "features": [
-          "Architecture Review",
-          "Vendor Selection",
-          "Technology Due Diligence"
-        ]
+        "features": ["Architecture Review", "Vendor Selection", "Technology Due Diligence"]
       },
       "adoption": {
         "title": "Change & Adoption",
         "description": "Ensure successful AI adoption through comprehensive change management and capability building.",
-        "features": [
-          "Leadership Alignment",
-          "Culture Transformation",
-          "Skills Development"
-        ]
+        "features": ["Leadership Alignment", "Culture Transformation", "Skills Development"]
       }
     }
   },
@@ -423,7 +399,7 @@
       "steps": {
         "consult": "Free Consultation",
         "assessment": "Assessment",
-        "pilot": "Proof of Concept", 
+        "pilot": "Proof of Concept",
         "implementation": "Full Implementation",
         "monitoring": "Ongoing Support"
       }
@@ -431,7 +407,7 @@
     "roi": {
       "year1Investment": "Startup Phase",
       "year1Note": "From conversation to live monitoring",
-      "monthsROI": "Months ROI", 
+      "monthsROI": "Months ROI",
       "roiNote": "Average payback time",
       "year2Savings": "Structural Savings",
       "year2Note": "Year-on-year benefits"
@@ -599,13 +575,7 @@
         "Implementation Plan",
         "Training & Change Management Plan"
       ],
-      "technologies": [
-        "OpenAI GPT-4",
-        "Claude 3",
-        "Google Gemini",
-        "Custom Models",
-        "Fine-tuning"
-      ],
+      "technologies": ["OpenAI GPT-4", "Claude 3", "Google Gemini", "Custom Models", "Fine-tuning"],
       "duration": "8-12 weeks"
     },
     "llm": {
@@ -663,13 +633,7 @@
         "Performance Benchmarks",
         "Maintenance Manual"
       ],
-      "technologies": [
-        "Claude API",
-        "OpenAI API",
-        "Gemini API",
-        "LangChain",
-        "Vector Databases"
-      ],
+      "technologies": ["Claude API", "OpenAI API", "Gemini API", "LangChain", "Vector Databases"],
       "duration": "6-10 weeks"
     },
     "rag": {
@@ -727,13 +691,7 @@
         "Performance Metrics",
         "Maintenance Guide"
       ],
-      "technologies": [
-        "Pinecone",
-        "Weaviate",
-        "ChromaDB",
-        "LlamaIndex",
-        "Embeddings Models"
-      ],
+      "technologies": ["Pinecone", "Weaviate", "ChromaDB", "LlamaIndex", "Embeddings Models"],
       "duration": "8-14 weeks"
     },
     "servicenow": {
@@ -854,13 +812,7 @@
         "Monitoring Dashboard",
         "Operations Manual"
       ],
-      "technologies": [
-        "LangChain",
-        "AutoGen",
-        "CrewAI",
-        "Custom Frameworks",
-        "Message Queues"
-      ],
+      "technologies": ["LangChain", "AutoGen", "CrewAI", "Custom Frameworks", "Message Queues"],
       "duration": "12-20 weeks"
     },
     "security": {
@@ -1094,12 +1046,7 @@
       "public": {
         "title": "Public Sector",
         "description": "Improve citizen services and operational efficiency with responsible AI solutions",
-        "skills": [
-          "Smart Cities",
-          "Digital Government",
-          "Public Safety",
-          "Service Delivery"
-        ]
+        "skills": ["Smart Cities", "Digital Government", "Public Safety", "Service Delivery"]
       },
       "energy": {
         "title": "Energy & Utilities",
@@ -1162,38 +1109,22 @@
       "discovery": {
         "title": "Strategic Discovery",
         "description": "We begin with executive workshops to understand your business objectives, challenges and AI readiness.",
-        "outcomes": [
-          "Business case development",
-          "Opportunity assessment",
-          "Strategic alignment"
-        ]
+        "outcomes": ["Business case development", "Opportunity assessment", "Strategic alignment"]
       },
       "mapping": {
         "title": "Value Mapping",
         "description": "Identify high-impact use cases and create a prioritized roadmap aligned with your strategic goals.",
-        "outcomes": [
-          "Use case prioritization",
-          "ROI projections",
-          "Risk assessment"
-        ]
+        "outcomes": ["Use case prioritization", "ROI projections", "Risk assessment"]
       },
       "pilot": {
         "title": "Pilot & Validate",
         "description": "Rapid prototyping of selected use cases to demonstrate value and refine the approach.",
-        "outcomes": [
-          "Proof of concept",
-          "Stakeholder buy-in",
-          "Refined business case"
-        ]
+        "outcomes": ["Proof of concept", "Stakeholder buy-in", "Refined business case"]
       },
       "scale": {
         "title": "Scale & Transform",
         "description": "Systematic rollout with change management, governance frameworks and capability building.",
-        "outcomes": [
-          "Enterprise rollout",
-          "Operating model",
-          "Performance tracking"
-        ]
+        "outcomes": ["Enterprise rollout", "Operating model", "Performance tracking"]
       }
     },
     "metrics": {
@@ -3428,21 +3359,13 @@
       "debrief": {
         "title": "Assessment Debrief",
         "subtitle": "Assessment already done",
-        "features": [
-          "Review report",
-          "Determine priorities",
-          "Discuss next steps"
-        ],
+        "features": ["Review report", "Determine priorities", "Discuss next steps"],
         "cta": "Schedule debrief"
       },
       "kickoff": {
         "title": "Project Kickoff",
         "subtitle": "Ready to start",
-        "features": [
-          "Pilot planning",
-          "Align timeline",
-          "Team introduction"
-        ],
+        "features": ["Pilot planning", "Align timeline", "Team introduction"],
         "cta": "Schedule kickoff"
       }
     },
@@ -3610,7 +3533,7 @@
         "selected": "Selected: {count}/3 systems",
         "options": [
           "Customer Service/Helpdesk",
-          "CRM/Sales", 
+          "CRM/Sales",
           "ERP/Finance",
           "HR/Personnel",
           "Knowledge Base/Documentation",
@@ -3808,7 +3731,7 @@
   "nextSteps": {
     "title": "Your API",
     "highlight": "Transformation",
-    "titleEnd": "in 3 steps", 
+    "titleEnd": "in 3 steps",
     "subtitle": "Always in three steps - First assessment, then quote. Fixed prices per phase. No surprises.",
     "steps": {
       "step1": {
@@ -3819,7 +3742,7 @@
         "timeframe": "5 min",
         "features": [
           "API inventory analysis",
-          "Agent readiness score", 
+          "Agent readiness score",
           "General recommendations",
           "No obligations"
         ],
@@ -3827,7 +3750,7 @@
       },
       "step2": {
         "title": "Expert Assessment",
-        "subtitle": "Deep Dive Analysis", 
+        "subtitle": "Deep Dive Analysis",
         "description": "2-4 hour deep dive with concrete roadmap and custom quote.",
         "pricing": "€2,500",
         "timeframe": "2-4 hours",
@@ -3844,7 +3767,7 @@
         "subtitle": "Agent-Ready Realization",
         "description": "Fixed price per project implementation. From plan to working agent-ready APIs.",
         "pricing": "Custom",
-        "timeframe": "2-12 weeks", 
+        "timeframe": "2-12 weeks",
         "features": [
           "MCP server development",
           "API wrapper implementation",
@@ -3861,18 +3784,14 @@
         "description": "No hidden costs or surprises",
         "ranges": [
           "Quick Scan: Always free",
-          "Expert Assessment: Fixed price known upfront", 
+          "Expert Assessment: Fixed price known upfront",
           "Implementation: Based on assessment"
         ]
       },
       "roiGuarantee": {
         "title": "Focus on Results",
         "description": "We only work with companies where we can add value",
-        "stats": [
-          "Sustainable efficiency gains",
-          "Measurable savings",
-          "Long-term partnership"
-        ]
+        "stats": ["Sustainable efficiency gains", "Measurable savings", "Long-term partnership"]
       },
       "noLockIn": {
         "title": "Your Ownership",

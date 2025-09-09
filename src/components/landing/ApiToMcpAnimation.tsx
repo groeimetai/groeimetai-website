@@ -16,11 +16,11 @@ function useElementSize<T extends HTMLElement>() {
   const [size, setSize] = useState({ width: 800, height: 520 }); // Better initial size
   useEffect(() => {
     if (!ref.current) return;
-    
+
     // Get initial size immediately
     const rect = ref.current.getBoundingClientRect();
     setSize({ width: rect.width, height: rect.height });
-    
+
     const obs = new ResizeObserver(([entry]) => {
       const cr = entry.contentRect;
       setSize({ width: cr.width, height: cr.height });
@@ -43,7 +43,7 @@ function radialPositions(count: number, radiusPct = 40, startDeg = -90) {
   });
 }
 
-// Lerp tussen center (50,50) en een target positie (in %), fractie f [0..1]  
+// Lerp tussen center (50,50) en een target positie (in %), fractie f [0..1]
 function betweenCenter(pos: { top: number; left: number }, f = 0.6) {
   const cx = 50; // Agent blijft in center, maar MCP volgt API shift
   const cy = 50;
@@ -54,10 +54,7 @@ function betweenCenter(pos: { top: number; left: number }, f = 0.6) {
 }
 
 // Helper: % -> px met container size, accounting for centered elements
-function pctToPx(
-  pct: { top: number; left: number },
-  size: { width: number; height: number }
-) {
+function pctToPx(pct: { top: number; left: number }, size: { width: number; height: number }) {
   // The CSS elements use transform: -translate-x-1/2 -translate-y-1/2
   // So the actual center of the element is at the percentage position
   // No additional offset needed - the percentage IS the center
@@ -68,18 +65,17 @@ function pctToPx(
 }
 
 // Helper: Get exact center coordinates matching CSS positioned elements
-function getBoxCenter(
-  pct: { top: number; left: number },
-  size: { width: number; height: number }
-) {
+function getBoxCenter(pct: { top: number; left: number }, size: { width: number; height: number }) {
   // CSS positioning: top: X%, left: Y%, transform: -translate-x-1/2 -translate-y-1/2
   // This means the CENTER of the element is at the percentage position
   // So SVG line should point to exactly that percentage position converted to pixels
   const centerX = (pct.left / 100) * size.width;
   const centerY = (pct.top / 100) * size.height;
-  
-  console.log(`Position ${pct.top}%/${pct.left}% → Pixel ${centerX},${centerY} (Container: ${size.width}×${size.height})`);
-  
+
+  console.log(
+    `Position ${pct.top}%/${pct.left}% → Pixel ${centerX},${centerY} (Container: ${size.width}×${size.height})`
+  );
+
   return { x: centerX, y: centerY };
 }
 
@@ -91,20 +87,20 @@ function getApiConnectionPoint(
 ) {
   const centerX = (pct.left / 100) * size.width;
   const centerY = (pct.top / 100) * size.height;
-  
+
   // For the top node (index 0, which is at -90 degrees), start from bottom edge of box
   if (index === 0) {
     // API boxes are about 60px tall, so bottom is center + half height
     return { x: centerX, y: centerY + 40 }; // +40px to start from actual bottom of API box
   }
-  
+
   // For all other nodes, use center
   return { x: centerX, y: centerY };
 }
 
 export default function ApiToMcpAnimation() {
   const t = useTranslations('mcpAnimation');
-  
+
   const phases = [
     {
       id: 0,
@@ -141,7 +137,7 @@ export default function ApiToMcpAnimation() {
     // MCP positions based on center (50,50) NOT shifted API positions
     const centerPositions = radialPositions(apis.length, 38, -90).map((p) => ({
       top: 50 + (p.top - 50) * 0.62, // Between center and original API position
-      left: 50 + (p.left - 50) * 0.62
+      left: 50 + (p.left - 50) * 0.62,
     }));
     return centerPositions;
   }, [apis.length]);
@@ -219,7 +215,7 @@ export default function ApiToMcpAnimation() {
 
   // Lijnstijl per fase - toon volledige connectie in Phase 3
   const lineColorAPIMCP = GREEN; // Altijd groen voor final state
-  const lineColorMCPAgent = GREEN; // Altijd groen voor final state  
+  const lineColorMCPAgent = GREEN; // Altijd groen voor final state
   const showLinesAPIMCP = currentPhase === 2; // Toon API→MCP in Phase 3
   const showLinesMCPAgent = currentPhase === 2; // Toon MCP→Agent in Phase 3
   const showMCP = currentPhase >= 1;
@@ -300,7 +296,10 @@ export default function ApiToMcpAnimation() {
             <div
               ref={stageRef}
               className="relative h-96 lg:h-[520px] mb-8 overflow-hidden rounded-xl border border-white/10"
-              style={{ background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.04), rgba(255,255,255,0.02))' }}
+              style={{
+                background:
+                  'radial-gradient(ellipse at center, rgba(255,255,255,0.04), rgba(255,255,255,0.02))',
+              }}
             >
               {/* SVG lijnen: ACHTER ALLE wolkjes */}
               <svg
@@ -315,19 +314,19 @@ export default function ApiToMcpAnimation() {
                     // Shift line start 5% right to compensate for API shift left
                     const lineStartPos = {
                       top: apiPositions[i].top,
-                      left: apiPositions[i].left + 5 // 5% naar rechts voor symmetrie
+                      left: apiPositions[i].left + 5, // 5% naar rechts voor symmetrie
                     };
                     const a = getApiConnectionPoint(lineStartPos, stageSize, i); // Use new function for API connection
                     // MCP end point - shifted right for symmetry
                     const mcpEndPos = {
                       top: mcpPositions[i].top,
-                      left: mcpPositions[i].left + 3 // 3% naar rechts voor betere symmetrie
+                      left: mcpPositions[i].left + 3, // 3% naar rechts voor betere symmetrie
                     };
                     const m = getBoxCenter(mcpEndPos, stageSize); // MCP connection point
-                    
+
                     // Determine stroke dash array based on phase
                     const dashArray = isPhaseOne ? '6 8' : undefined;
-                    
+
                     return (
                       <motion.line
                         key={`a-m-${i}`}
@@ -352,10 +351,10 @@ export default function ApiToMcpAnimation() {
                     // Shift MCP connection point right to match API→MCP end points
                     const mcpConnectionPos = {
                       top: p.top,
-                      left: p.left + 3 // Same 3% shift as API→MCP end points
+                      left: p.left + 3, // Same 3% shift as API→MCP end points
                     };
                     const m = getBoxCenter(mcpConnectionPos, stageSize); // MCP connection point
-                    // Agent box center  
+                    // Agent box center
                     const c = getBoxCenter({ top: 55, left: 50 }, stageSize); // Agent connection point (higher for line)
                     return (
                       <motion.line
@@ -368,16 +367,16 @@ export default function ApiToMcpAnimation() {
                         strokeWidth={3}
                         strokeLinecap="round"
                         initial={{ pathLength: 0, opacity: 0.0 }}
-                        animate={{ 
-                          pathLength: 1, 
+                        animate={{
+                          pathLength: 1,
                           opacity: [0.4, 0.8, 0.4],
-                          strokeDashoffset: [0, -16, 0]
+                          strokeDashoffset: [0, -16, 0],
                         }}
-                        transition={{ 
-                          delay: 0.9 + i * 0.12, 
+                        transition={{
+                          delay: 0.9 + i * 0.12,
                           duration: 0.8,
-                          opacity: { repeat: Infinity, duration: 2.5, ease: "easeInOut" },
-                          strokeDashoffset: { repeat: Infinity, duration: 2, ease: "linear" }
+                          opacity: { repeat: Infinity, duration: 2.5, ease: 'easeInOut' },
+                          strokeDashoffset: { repeat: Infinity, duration: 2, ease: 'linear' },
                         }}
                         style={{ strokeDasharray: '10 6' }}
                       />
@@ -386,7 +385,10 @@ export default function ApiToMcpAnimation() {
               </svg>
 
               {/* Agent (center - lower position) */}
-              <div className="absolute -translate-x-1/2 -translate-y-1/2" style={{ top: '60%', left: '50%', zIndex: 35 }}>
+              <div
+                className="absolute -translate-x-1/2 -translate-y-1/2"
+                style={{ top: '60%', left: '50%', zIndex: 35 }}
+              >
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
@@ -453,9 +455,8 @@ export default function ApiToMcpAnimation() {
                         currentPhase === 0
                           ? 'text-red-400'
                           : currentPhase === 1
-                          ? 'text-orange-500'
-                          : 'text-green-500'
-                      + ' text-sm font-medium'
+                            ? 'text-orange-500'
+                            : 'text-green-500' + ' text-sm font-medium'
                       }
                     >
                       Agent
@@ -465,12 +466,15 @@ export default function ApiToMcpAnimation() {
                         currentPhase === 0
                           ? 'text-red-300'
                           : currentPhase === 1
-                          ? 'text-orange-400'
-                          : 'text-green-400'
-                      + ' text-xs'
+                            ? 'text-orange-400'
+                            : 'text-green-400' + ' text-xs'
                       }
                     >
-                      {currentPhase === 0 ? t('agent.cantConnect') : currentPhase === 1 ? t('agent.waitingForMcp') : t('agent.allConnected')}
+                      {currentPhase === 0
+                        ? t('agent.cantConnect')
+                        : currentPhase === 1
+                          ? t('agent.waitingForMcp')
+                          : t('agent.allConnected')}
                     </div>
                   </div>
                 </motion.div>
@@ -492,14 +496,24 @@ export default function ApiToMcpAnimation() {
                     <motion.div
                       animate={
                         currentPhase === 2
-                          ? { borderColor: ['rgba(16,185,129,0.4)', 'rgba(16,185,129,0.8)', 'rgba(16,185,129,0.4)'] }
+                          ? {
+                              borderColor: [
+                                'rgba(16,185,129,0.4)',
+                                'rgba(16,185,129,0.8)',
+                                'rgba(16,185,129,0.4)',
+                              ],
+                            }
                           : {}
                       }
-                      transition={currentPhase === 2 ? { repeat: Infinity, duration: 2, delay: i * 0.15 } : {}}
+                      transition={
+                        currentPhase === 2 ? { repeat: Infinity, duration: 2, delay: i * 0.15 } : {}
+                      }
                       className="rounded-lg p-4 text-center min-w-[105px]"
                       style={{ background: v.bg, border: v.border }}
                     >
-                      <div className={`text-xs font-medium whitespace-nowrap ${v.title}`}>{name}</div>
+                      <div className={`text-xs font-medium whitespace-nowrap ${v.title}`}>
+                        {name}
+                      </div>
                       <div className={`text-xs mt-1 ${v.subColor}`}>{v.sub}</div>
                     </motion.div>
                   </motion.div>
@@ -532,7 +546,6 @@ export default function ApiToMcpAnimation() {
                     );
                   })}
               </AnimatePresence>
-
             </div>
 
             {/* Tekst onder de animatie */}
@@ -543,7 +556,9 @@ export default function ApiToMcpAnimation() {
               transition={{ duration: 0.25 }}
               className="text-center"
             >
-              <h3 className="text-2xl font-bold text-white mb-2">{phases[currentPhase].subtitle}</h3>
+              <h3 className="text-2xl font-bold text-white mb-2">
+                {phases[currentPhase].subtitle}
+              </h3>
               <p className="text-white/70 text-lg">{phases[currentPhase].description}</p>
             </motion.div>
           </div>
@@ -559,42 +574,55 @@ export default function ApiToMcpAnimation() {
               <div className="grid lg:grid-cols-3 gap-6 items-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
                 {/* Traditional API */}
                 <div className="text-center">
-                  <h4 className="text-white/90 font-medium text-lg mb-2">{t('comparison.traditional.title')}</h4>
+                  <h4 className="text-white/90 font-medium text-lg mb-2">
+                    {t('comparison.traditional.title')}
+                  </h4>
                   <p className="text-white/60 text-sm">{t('comparison.traditional.description')}</p>
                 </div>
-                
+
                 {/* Technology Visual */}
                 <div className="flex items-center justify-center h-32 bg-white/5 border border-white/10 rounded-xl">
                   <div className="text-white/60 font-mono text-sm">{t('comparison.arrow')}</div>
                 </div>
-                
+
                 {/* MCP Protocol */}
                 <div className="text-center">
-                  <h4 className="text-white/90 font-medium text-lg mb-2">{t('comparison.mcp.title')}</h4>
+                  <h4 className="text-white/90 font-medium text-lg mb-2">
+                    {t('comparison.mcp.title')}
+                  </h4>
                   <p className="text-white/60 text-sm">{t('comparison.mcp.description')}</p>
                 </div>
               </div>
             </div>
           </motion.div>
-          
+
           {/* Benefits */}
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: ORANGE }}>
+              <div
+                className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                style={{ backgroundColor: ORANGE }}
+              >
                 <span className="text-2xl">⚡</span>
               </div>
               <h3 className="text-xl font-bold text-white mb-2">{t('benefits.faster.title')}</h3>
               <p className="text-white/70">{t('benefits.faster.description')}</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: ORANGE }}>
+              <div
+                className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                style={{ backgroundColor: ORANGE }}
+              >
                 <span className="text-2xl">🔗</span>
               </div>
               <h3 className="text-xl font-bold text-white mb-2">{t('benefits.universal.title')}</h3>
               <p className="text-white/70">{t('benefits.universal.description')}</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: ORANGE }}>
+              <div
+                className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                style={{ backgroundColor: ORANGE }}
+              >
                 <span className="text-2xl">💰</span>
               </div>
               <h3 className="text-xl font-bold text-white mb-2">{t('benefits.roi.title')}</h3>

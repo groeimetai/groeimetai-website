@@ -1,0 +1,276 @@
+/* Beautiful API to MCP Animation Styles */
+
+.beautiful-animation {
+  /* CSS Custom Properties for theming */
+  --color-primary: #6366f1;
+  --color-secondary: #8b5cf6;
+  --color-accent: #06b6d4;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-bg-primary: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.8);
+  --color-text-muted: rgba(255, 255, 255, 0.6);
+  
+  /* Animation timing */
+  --timing-fast: 200ms;
+  --timing-normal: 400ms;
+  --timing-slow: 800ms;
+  --easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --easing-gentle: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Performance optimizations */
+.animation-stage {
+  /* GPU acceleration */
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  
+  /* Contain layout shifts */
+  contain: layout style paint;
+  
+  /* Optimize for animations */
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.api-node {
+  /* Optimize transforms */
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+.connection-line {
+  /* SVG optimization */
+  shape-rendering: geometricPrecision;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Accessibility: Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .beautiful-animation {
+    --timing-fast: 10ms;
+    --timing-normal: 10ms;
+    --timing-slow: 10ms;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transform: none !important;
+  }
+  
+  .connection-line {
+    stroke-dasharray: none !important;
+    animation: none !important;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .beautiful-animation {
+    --color-primary: #ffffff;
+    --color-secondary: #ffffff;
+    --color-accent: #ffffff;
+    --color-success: #00ff00;
+    --color-warning: #ffff00;
+    --color-bg-primary: #000000;
+    --color-bg-secondary: #000000;
+  }
+  
+  .api-node,
+  .mcp-hub,
+  .agent-node {
+    stroke-width: 3px !important;
+    filter: contrast(2) !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .beautiful-animation {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .animation-stage svg {
+    display: block;
+    filter: grayscale(1) contrast(1.2);
+  }
+  
+  .controls,
+  .play-button,
+  .reset-button {
+    display: none !important;
+  }
+  
+  .phase-description {
+    color: black !important;
+    background: white !important;
+    border: 1px solid black !important;
+  }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .animation-stage {
+    /* Reduce complexity on mobile */
+    will-change: auto;
+  }
+  
+  .connection-line {
+    /* Simplify animations on mobile */
+    stroke-dasharray: none;
+  }
+  
+  .api-node,
+  .mcp-hub,
+  .agent-node {
+    /* Larger touch targets */
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 480px) {
+  .beautiful-animation {
+    /* Optimize for small screens */
+    --timing-fast: 150ms;
+    --timing-normal: 300ms;
+    --timing-slow: 600ms;
+  }
+  
+  .phase-controls {
+    /* Stack vertically on tiny screens */
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Focus Styles for Accessibility */
+.play-button:focus,
+.reset-button:focus,
+.phase-button:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Loading States */
+.loading-skeleton {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  background-size: 200px 100%;
+  background-repeat: no-repeat;
+  animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Glass morphism effects */
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Utility classes */
+.animation-paused * {
+  animation-play-state: paused !important;
+}
+
+.animation-running * {
+  animation-play-state: running !important;
+}
+
+/* Custom scrollbar for any overflow areas */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Animation performance monitoring */
+.perf-monitor {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 12px;
+  z-index: 9999;
+  display: none;
+}
+
+.perf-monitor.visible {
+  display: block;
+}
+
+/* Development helpers */
+.dev-grid {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.dev-mode .dev-grid {
+  opacity: 1;
+}
+
+/* Error boundary styles */
+.error-boundary {
+  padding: 2rem;
+  background: #ef4444;
+  color: white;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.error-boundary h2 {
+  margin-bottom: 1rem;
+}
+
+.error-boundary details {
+  text-align: left;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.error-boundary pre {
+  white-space: pre-wrap;
+  font-size: 0.875rem;
+}

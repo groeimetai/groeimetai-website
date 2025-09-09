@@ -39,7 +39,7 @@
       },
       "arrow": "API → MCP",
       "mcp": {
-        "title": "MCP Protocol Oplossing", 
+        "title": "MCP Protocol Oplossing",
         "description": "Universele verbindingsstandaard voor naadloze AI agent integratie"
       }
     },
@@ -630,56 +630,32 @@
       "strategy": {
         "title": "AI Strategie & Roadmap",
         "description": "Definieer uw AI-visie en creëer uitvoerbare roadmaps die technologie-investeringen afstemmen op bedrijfsdoelstellingen en meetbare ROI.",
-        "features": [
-          "Directie Advies",
-          "Kansen Analyse",
-          "Strategische Planning"
-        ]
+        "features": ["Directie Advies", "Kansen Analyse", "Strategische Planning"]
       },
       "transformation": {
         "title": "Digitale Transformatie",
         "description": "Navigeer door complexe digitale ecosystemen met uitgebreide transformatiestrategieën gericht op procesoptimalisatie en kostenefficiëntie.",
-        "features": [
-          "Operating Model Ontwerp",
-          "Proces Herontwerp",
-          "Waarderealisatie"
-        ]
+        "features": ["Operating Model Ontwerp", "Proces Herontwerp", "Waarderealisatie"]
       },
       "governance": {
         "title": "Risico & Governance",
         "description": "Etableer verantwoorde AI-kaders die innovatie balanceren met ethiek, compliance en beveiliging.",
-        "features": [
-          "AI Ethisch Kader",
-          "Wet- en Regelgeving Compliance",
-          "Risicomanagement"
-        ]
+        "features": ["AI Ethisch Kader", "Wet- en Regelgeving Compliance", "Risicomanagement"]
       },
       "innovation": {
         "title": "Innovatie Labs",
         "description": "Versnel innovatie door strategische pilots en proof-of-concepts die duidelijke bedrijfswaarde en ROI aantonen.",
-        "features": [
-          "Use Case Ontdekking",
-          "Pilot Programma's",
-          "Innovatieworkshops"
-        ]
+        "features": ["Use Case Ontdekking", "Pilot Programma's", "Innovatieworkshops"]
       },
       "advisory": {
         "title": "Technologie Advisory",
         "description": "Neem geïnformeerde beslissingen met onafhankelijke technologie-assessments en leveranciersevaluaties.",
-        "features": [
-          "Architectuur Review",
-          "Leveranciersselectie",
-          "Technology Due Diligence"
-        ]
+        "features": ["Architectuur Review", "Leveranciersselectie", "Technology Due Diligence"]
       },
       "adoption": {
         "title": "Verandering & Adoptie",
         "description": "Zorg voor succesvolle AI-adoptie door uitgebreid verandermanagement en capaciteitsopbouw.",
-        "features": [
-          "Leiderschap Afstemming",
-          "Cultuurtransformatie",
-          "Competentieontwikkeling"
-        ]
+        "features": ["Leiderschap Afstemming", "Cultuurtransformatie", "Competentieontwikkeling"]
       }
     }
   },
@@ -754,13 +730,7 @@
         "Implementatieplan",
         "Training & Verandermanagement Plan"
       ],
-      "technologies": [
-        "OpenAI GPT-4",
-        "Claude 3",
-        "Google Gemini",
-        "Custom Models",
-        "Fine-tuning"
-      ],
+      "technologies": ["OpenAI GPT-4", "Claude 3", "Google Gemini", "Custom Models", "Fine-tuning"],
       "duration": "8-12 weken"
     },
     "llm": {
@@ -818,13 +788,7 @@
         "Prestatiebenchmarks",
         "Onderhoudshandleiding"
       ],
-      "technologies": [
-        "Claude API",
-        "OpenAI API",
-        "Gemini API",
-        "LangChain",
-        "Vector Databases"
-      ],
+      "technologies": ["Claude API", "OpenAI API", "Gemini API", "LangChain", "Vector Databases"],
       "duration": "6-10 weken"
     },
     "rag": {
@@ -882,13 +846,7 @@
         "Prestatiemetrieken",
         "Onderhoudshandleiding"
       ],
-      "technologies": [
-        "Pinecone",
-        "Weaviate",
-        "ChromaDB",
-        "LlamaIndex",
-        "Embeddings Models"
-      ],
+      "technologies": ["Pinecone", "Weaviate", "ChromaDB", "LlamaIndex", "Embeddings Models"],
       "duration": "8-14 weken"
     },
     "servicenow": {
@@ -1009,13 +967,7 @@
         "Monitoring Dashboard",
         "Operationeel Handboek"
       ],
-      "technologies": [
-        "LangChain",
-        "AutoGen",
-        "CrewAI",
-        "Custom Frameworks",
-        "Message Queues"
-      ],
+      "technologies": ["LangChain", "AutoGen", "CrewAI", "Custom Frameworks", "Message Queues"],
       "duration": "12-20 weken"
     },
     "security": {
@@ -1229,12 +1181,7 @@
       "retail": {
         "title": "Retail & Consument",
         "description": "Creëer gepersonaliseerde ervaringen en optimaliseer operaties over de waardeketen",
-        "skills": [
-          "Klantanalyse",
-          "Supply Chain AI",
-          "Vraagvoorspelling",
-          "Omnichannel Strategie"
-        ]
+        "skills": ["Klantanalyse", "Supply Chain AI", "Vraagvoorspelling", "Omnichannel Strategie"]
       },
       "manufacturing": {
         "title": "Productie & Industrie 4.0",
@@ -1249,22 +1196,12 @@
       "public": {
         "title": "Publieke Sector",
         "description": "Verbeter burgerdiensten en operationele efficiëntie met verantwoorde AI-oplossingen",
-        "skills": [
-          "Smart Cities",
-          "Digitale Overheid",
-          "Openbare Veiligheid",
-          "Dienstverlening"
-        ]
+        "skills": ["Smart Cities", "Digitale Overheid", "Openbare Veiligheid", "Dienstverlening"]
       },
       "energy": {
         "title": "Energie & Nutsbedrijven",
         "description": "Optimaliseer resourcebeheer en versnel de transitie naar duurzame operaties",
-        "skills": [
-          "Netoptimalisatie",
-          "Voorspellende Analyse",
-          "Duurzaamheid",
-          "Asset Management"
-        ]
+        "skills": ["Netoptimalisatie", "Voorspellende Analyse", "Duurzaamheid", "Asset Management"]
       }
     }
   },
@@ -1317,38 +1254,22 @@
       "discovery": {
         "title": "Strategische Ontdekking",
         "description": "We beginnen met executive workshops om uw bedrijfsdoelstellingen, uitdagingen en AI-gereedheid te begrijpen.",
-        "outcomes": [
-          "Business case ontwikkeling",
-          "Kansen assessment",
-          "Strategische afstemming"
-        ]
+        "outcomes": ["Business case ontwikkeling", "Kansen assessment", "Strategische afstemming"]
       },
       "mapping": {
         "title": "Waarde Mapping",
         "description": "Identificeer high-impact use cases en creëer een geprioriteerde roadmap afgestemd op uw strategische doelen.",
-        "outcomes": [
-          "Use case prioritering",
-          "ROI projecties",
-          "Risico assessment"
-        ]
+        "outcomes": ["Use case prioritering", "ROI projecties", "Risico assessment"]
       },
       "pilot": {
         "title": "Pilot & Valideer",
         "description": "Snelle prototyping van geselecteerde use cases om waarde aan te tonen en de aanpak te verfijnen.",
-        "outcomes": [
-          "Proof of concept",
-          "Stakeholder buy-in",
-          "Verfijnde business case"
-        ]
+        "outcomes": ["Proof of concept", "Stakeholder buy-in", "Verfijnde business case"]
       },
       "scale": {
         "title": "Schaal & Transformeer",
         "description": "Systematische uitrol met verandermanagement, governance frameworks en capaciteitsopbouw.",
-        "outcomes": [
-          "Enterprise uitrol",
-          "Operating model",
-          "Prestatie tracking"
-        ]
+        "outcomes": ["Enterprise uitrol", "Operating model", "Prestatie tracking"]
       }
     },
     "metrics": {
@@ -2284,7 +2205,7 @@
     }
   },
   "dashboard": {
-    "title": "Dashboard", 
+    "title": "Dashboard",
     "welcome": "Welkom terug, {name}!",
     "subtitle": "Volg uw projectvoortgang en communiceer met ons team.",
     "projectTimeline": {
@@ -3261,21 +3182,13 @@
       "debrief": {
         "title": "Assessment Debrief",
         "subtitle": "Assessment al gedaan",
-        "features": [
-          "Rapport doornemen",
-          "Prioriteiten bepalen",
-          "Next steps bespreken"
-        ],
+        "features": ["Rapport doornemen", "Prioriteiten bepalen", "Next steps bespreken"],
         "cta": "Plan debrief"
       },
       "kickoff": {
         "title": "Project Kickoff",
         "subtitle": "Ready to start",
-        "features": [
-          "Pilot planning",
-          "Timeline afstemmen",
-          "Team introductie"
-        ],
+        "features": ["Pilot planning", "Timeline afstemmen", "Team introductie"],
         "cta": "Plan kickoff"
       }
     },
@@ -3659,7 +3572,7 @@
         "cta": "Start Quick Scan"
       },
       "step2": {
-        "title": "Expert Assessment", 
+        "title": "Expert Assessment",
         "subtitle": "Diepgaande Analyse",
         "description": "2-4 uur deep dive met concrete roadmap en offerte op maat.",
         "pricing": "€2.500",
@@ -3676,7 +3589,7 @@
         "title": "Implementation",
         "subtitle": "Agent-Ready Realisatie",
         "description": "Vaste prijs per project implementatie. Van plan naar werkende agent-ready APIs.",
-        "pricing": "Op maat", 
+        "pricing": "Op maat",
         "timeframe": "2-12 weken",
         "features": [
           "MCP server development",
@@ -3701,11 +3614,7 @@
       "roiGuarantee": {
         "title": "Focus op Resultaat",
         "description": "We werken alleen met bedrijven waar we waarde kunnen toevoegen",
-        "stats": [
-          "Duurzame efficiency gains",
-          "Meetbare besparingen",
-          "Lange termijn partnership"
-        ]
+        "stats": ["Duurzame efficiency gains", "Meetbare besparingen", "Lange termijn partnership"]
       },
       "noLockIn": {
         "title": "Jouw Eigendom",

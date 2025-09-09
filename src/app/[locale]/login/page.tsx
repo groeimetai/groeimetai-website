@@ -306,7 +306,7 @@ export default function LoginPage() {
               <p className="text-white/60">
                 {t('noAccount')}{' '}
                 <Link
-                  href="/#quote"
+                  href="/register"
                   className="text-orange hover:text-orange/80 transition-colors font-medium"
                 >
                   {t('getStarted')}

@@ -62,7 +62,7 @@ export default function LanguageSwitcher() {
       aria-label={locale === 'nl' ? 'Switch to English' : 'Schakel naar Nederlands'}
     >
       <Globe className={`w-4 h-4 mr-2 ${isPending ? 'animate-spin' : ''}`} />
-      <span className="font-medium">{locale === 'nl' ? 'EN' : 'NL'}</span>
+      <span className="font-medium">{locale === 'nl' ? 'NL' : 'EN'}</span>
     </Button>
   );
 }

@@ -685,3 +685,73 @@ info@groeimetai.io | groeimetai.io
     `,
   }),
 };
+
+// Assessment Follow-up template for Firebase Send Email Extension
+export function generateAssessmentFollowUpHTML(data: any): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Agent Readiness Assessment Results</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #080D14; font-family: system-ui, sans-serif;">
+  <div style="max-width: 600px; margin: 0 auto; background: #080D14; color: white; padding: 30px;">
+    
+    <div style="text-align: center; margin-bottom: 30px;">
+      <h1 style="color: #F87315; margin: 0 0 10px 0; font-size: 28px; font-weight: bold;">
+        🎯 Je Agent Readiness Results
+      </h1>
+      <p style="color: rgba(255,255,255,0.8); margin: 0; font-size: 18px;">
+        Hoi ${data.name}, hier zijn je assessment resultaten!
+      </p>
+    </div>
+
+    <div style="background: linear-gradient(135deg, rgba(248,115,21,0.15), rgba(255,133,51,0.15)); 
+                border: 1px solid rgba(248,115,21,0.3); 
+                padding: 25px; 
+                border-radius: 12px; 
+                margin-bottom: 25px;
+                text-align: center;">
+      <h2 style="color: #F87315; margin: 0 0 15px 0; font-size: 32px; font-weight: bold;">
+        ${data.score}/100
+      </h2>
+      <p style="color: white; margin: 0 0 10px 0; font-size: 18px; font-weight: 600;">
+        ${data.level}
+      </p>
+      <p style="color: rgba(255,255,255,0.8); margin: 0; font-size: 14px;">
+        ${data.company} • Assessment ID: ${data.assessmentId}
+      </p>
+    </div>
+
+    <div style="text-align: center; margin: 30px 0;">
+      <a href="https://groeimetai.io/dashboard" 
+         style="display: inline-block; 
+                background: #F87315; 
+                color: white; 
+                padding: 15px 30px; 
+                text-decoration: none; 
+                border-radius: 8px; 
+                font-weight: 600; 
+                margin: 10px;">
+        📊 Bekijk Dashboard
+      </a>
+      <a href="https://groeimetai.io/expert-assessment" 
+         style="display: inline-block; 
+                background: transparent; 
+                color: white; 
+                padding: 15px 30px; 
+                text-decoration: none; 
+                border-radius: 8px; 
+                border: 1px solid rgba(255,255,255,0.2); 
+                font-weight: 600; 
+                margin: 10px;">
+        🔓 Expert Assessment (€2.500)
+      </a>
+    </div>
+    
+  </div>
+</body>
+</html>
+  `;
+}

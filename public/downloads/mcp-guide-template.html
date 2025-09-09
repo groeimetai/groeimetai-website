@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Van API naar Agent-Ready - MCP Guide | GroeimetAI</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background: #080D14;
+            font-size: 14px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        
+        /* Header Styling */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #F87315, #FF8533);
+            color: white;
+            border-radius: 12px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+        
+        .header h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .header .author {
+            font-size: 1rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+        
+        /* Chapter Styling */
+        .chapter {
+            margin-bottom: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            page-break-inside: avoid;
+        }
+        
+        .chapter h1 {
+            color: #F87315;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #F87315;
+        }
+        
+        .chapter h2 {
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 25px 0 15px 0;
+        }
+        
+        .chapter h3 {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 20px 0 10px 0;
+        }
+        
+        .chapter p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+        
+        /* Highlight Boxes */
+        .highlight {
+            background: rgba(248, 115, 21, 0.1);
+            border-left: 4px solid #F87315;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .highlight p {
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+        
+        /* Lists */
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #F87315;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Comparison Table */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .comparison-box.bad {
+            border-color: rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.05);
+        }
+        
+        .comparison-box.good {
+            border-color: rgba(248, 115, 21, 0.3);
+            background: rgba(248, 115, 21, 0.05);
+        }
+        
+        .comparison-box h3 {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .comparison-box.bad h3 {
+            color: #ef4444;
+        }
+        
+        .comparison-box.good h3 {
+            color: #F87315;
+        }
+        
+        /* Phase Cards */
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .phase-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(248, 115, 21, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .phase-number {
+            background: #F87315;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 15px auto;
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .footer h2 {
+            color: #F87315;
+            margin-bottom: 15px;
+        }
+        
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .contact-item {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+        
+        /* Print Specific */
+        @media print {
+            body { 
+                font-size: 12px; 
+                background: white;
+                color: black;
+            }
+            .chapter { 
+                page-break-inside: avoid; 
+                border: 1px solid #ddd;
+                background: #f9f9f9;
+            }
+            .highlight { 
+                background: #fff3e0;
+                border-left: 4px solid #F87315;
+            }
+        }
+        
+        /* Typography Improvements */
+        strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        
+        em {
+            color: rgba(255, 255, 255, 0.9);
+            font-style: italic;
+        }
+        
+        .chapter-intro {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 25px;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Van API naar Agent-Ready</h1>
+            <h2>De Praktische MCP Guide</h2>
+            <p class="author">Door GroeimetAI - Agent Infrastructure Specialists</p>
+        </div>
+
+        <!-- Chapter 1: De Agent Revolutie -->
+        <div class="chapter">
+            <h1>🤖 Hoofdstuk 1: De Agent Revolutie</h1>
+            <p class="chapter-intro">
+                <strong>2025 wordt het jaar van AI agents.</strong> Niet chatbots die vragen beantwoorden, 
+                maar autonome systemen die taken uitvoeren, beslissingen nemen, en processen automatiseren.
+            </p>
+            
+            <div class="highlight">
+                <p><strong>Het probleem:</strong> Jouw APIs zijn gemaakt voor mensen, niet voor agents. 
+                Agents "zien" ze niet, begrijpen ze niet, kunnen er niet mee werken.</p>
+            </div>
+            
+            <p>Deze agents hebben één ding nodig: <strong>toegang tot jouw bedrijfssystemen.</strong> 
+            Ze moeten tickets kunnen aanmaken, data kunnen opvragen, workflows kunnen triggeren.</p>
+            
+            <h3>Wat Agents Vandaag Al Doen</h3>
+            <ul>
+                <li>✓ Taken uitvoeren zonder menselijke tussenkomst</li>
+                <li>✓ Beslissingen nemen op basis van bedrijfsregels</li>
+                <li>✓ Processen automatiseren van A tot Z</li>
+                <li>✓ 24/7 beschikbaar zijn voor klanten en collega's</li>
+            </ul>
+        </div>
+
+        <!-- Chapter 2: APIs vs Agents -->
+        <div class="chapter">
+            <h1>⚙️ Hoofdstuk 2: Waarom APIs Niet Genoeg Zijn</h1>
+            
+            <div class="comparison">
+                <div class="comparison-box bad">
+                    <h3>❌ REST APIs - Voor Mensen</h3>
+                    <ul>
+                        <li>Handmatige documentatie</li>
+                        <li>Geen auto-discovery</li>
+                        <li>Complex authentication</li>
+                        <li>Per agent custom integratie</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-box good">
+                    <h3>✅ MCP Servers - Voor Agents</h3>
+                    <ul>
+                        <li>Self-describing interfaces</li>
+                        <li>Automatische discovery</li>
+                        <li>Built-in security</li>
+                        <li>Universal agent compatibility</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>De kern:</strong> APIs zijn perfect voor wat ze doen. MCP is een extra laag die 
+                agents helpt om APIs te ontdekken, begrijpen en gebruiken - automatisch.</p>
+            </div>
+        </div>
+
+        <!-- Chapter 3: Business Case -->
+        <div class="chapter">
+            <h1>📈 Hoofdstuk 3: De Business Case</h1>
+            
+            <h2>Concrete Resultaten van Agent-Ready Systemen</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">70%</span>
+                    <span class="stat-label">Minder handmatig werk</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Beschikbaarheid</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">85%</span>
+                    <span class="stat-label">Snellere afhandeling</span>
+                </div>
+            </div>
+            
+            <h3>Onze Agent Readiness Journey</h3>
+            <p>Eén duidelijke route van ontdekking naar implementatie:</p>
+            
+            <div class="stats-grid" style="grid-template-columns: repeat(5, 1fr); gap: 15px;">
+                <div class="stat-card">
+                    <span class="stat-number">€0</span>
+                    <span class="stat-label">Gratis Assessment</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">€2.5k</span>
+                    <span class="stat-label">Assessment Report</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">€5-15k</span>
+                    <span class="stat-label">Pilot Project</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">€15-50k</span>
+                    <span class="stat-label">Implementatie</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">€2-5k/m</span>
+                    <span class="stat-label">Monitoring</span>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>Geen verrassingen, geen hidden costs.</strong> Elke stap is optioneel - 
+                je committeert alleen aan wat waarde levert voor jouw organisatie.</p>
+            </div>
+        </div>
+
+        <!-- Chapter 4: Implementation -->
+        <div class="chapter">
+            <h1>🚀 Hoofdstuk 4: De GroeimetAI Journey</h1>
+            <p class="chapter-intro">
+                Onze bewezen aanpak: van gratis ontdekking naar volledige agent infrastructure.
+            </p>
+            
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin: 25px 0;">
+                <div class="phase-card">
+                    <div class="phase-number">0</div>
+                    <h3>Gratis</h3>
+                    <p>Assessment</p>
+                    <ul style="text-align: left; margin-top: 15px; font-size: 0.8rem;">
+                        <li>5-min vragenlijst</li>
+                        <li>Agent readiness score</li>
+                        <li>Basic roadmap</li>
+                    </ul>
+                </div>
+                
+                <div class="phase-card">
+                    <div class="phase-number">1</div>
+                    <h3>€2.500</h3>
+                    <p>Assessment</p>
+                    <ul style="text-align: left; margin-top: 15px; font-size: 0.8rem;">
+                        <li>Detailed system analyse</li>
+                        <li>Concrete actieplan</li>
+                        <li>ROI berekening</li>
+                    </ul>
+                </div>
+                
+                <div class="phase-card">
+                    <div class="phase-number">2</div>
+                    <h3>€5-15k</h3>
+                    <p>Pilot</p>
+                    <ul style="text-align: left; margin-top: 15px; font-size: 0.8rem;">
+                        <li>Eén systeem MCP</li>
+                        <li>Agent testing</li>
+                        <li>Proof of value</li>
+                    </ul>
+                </div>
+                
+                <div class="phase-card">
+                    <div class="phase-number">3</div>
+                    <h3>€15-50k</h3>
+                    <p>Implementatie</p>
+                    <ul style="text-align: left; margin-top: 15px; font-size: 0.8rem;">
+                        <li>Multi-system MCP</li>
+                        <li>Agent orchestration</li>
+                        <li>Full deployment</li>
+                    </ul>
+                </div>
+                
+                <div class="phase-card">
+                    <div class="phase-number">4</div>
+                    <h3>€2-5k/m</h3>
+                    <p>Monitoring</p>
+                    <ul style="text-align: left; margin-top: 15px; font-size: 0.8rem;">
+                        <li>Agent intelligence</li>
+                        <li>Performance tracking</li>
+                        <li>Optimalisatie</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>Transparante pricing, gefaseerde aanpak.</strong> Elke stap is optioneel. 
+                Je committeert alleen aan wat bewezen waarde levert.</p>
+            </div>
+        </div>
+
+        <!-- Chapter 5: Security -->
+        <div class="chapter">
+            <h1>🔒 Hoofdstuk 5: Security & Compliance</h1>
+            
+            <h2>Veiligheids Principes</h2>
+            <ul>
+                <li><strong>Least Privilege Access:</strong> Agents krijgen alleen toegang tot wat ze nodig hebben</li>
+                <li><strong>Audit Trails:</strong> Elke agent actie wordt gelogd en is traceerbaar</li>
+                <li><strong>Token-based Auth:</strong> Geen wachtwoorden, alleen tijdelijke toegangstokens</li>
+                <li><strong>Rate Limiting:</strong> Agents kunnen geen systemen overbelasten</li>
+            </ul>
+            
+            <div class="highlight">
+                <p><strong>GDPR & Compliance:</strong> Agent toegang valt onder bestaande data governance. 
+                Geen nieuwe privacy risico's, alleen gecontroleerde automatisering.</p>
+            </div>
+            
+            <h3>Compliance Checklist</h3>
+            <ul>
+                <li>☐ Data processing agreements up-to-date</li>
+                <li>☐ Agent access rights gedocumenteerd</li>
+                <li>☐ Audit logging geconfigureerd</li>
+                <li>☐ Security review uitgevoerd</li>
+            </ul>
+        </div>
+
+        <!-- Chapter 6: Common Challenges -->
+        <div class="chapter">
+            <h1>🛠️ Hoofdstuk 6: Veelvoorkomende Uitdagingen</h1>
+            
+            <h2>"Onze systemen zijn te oud"</h2>
+            <p><strong>Oplossing:</strong> Legacy API wrappers. Elke database, elk systeem kan agent-accessible worden gemaakt. 
+            Geen systeem is te oud voor agent integratie.</p>
+            
+            <h2>"We hebben geen APIs"</h2>
+            <p><strong>Oplossing:</strong> API development als eerste stap. Van database naar REST naar MCP. 
+            We beginnen waar jij bent, niet waar je zou moeten zijn.</p>
+            
+            <h2>"Security concerns"</h2>
+            <p><strong>Oplossing:</strong> Start met read-only toegang. Bewijs veiligheid voordat je write access geeft. 
+            Security door design, niet als afterthought.</p>
+            
+            <h2>"Te complex voor ons team"</h2>
+            <p><strong>Oplossing:</strong> Externe MCP specialists. Focus op je core business, 
+            laat experts de agent infrastructure bouwen.</p>
+        </div>
+
+        <!-- Chapter 7: Next Steps -->
+        <div class="chapter">
+            <h1>🎯 Hoofdstuk 7: Jouw Next Steps</h1>
+            
+            <h2>Agent Readiness Checklist</h2>
+            
+            <div class="comparison">
+                <div class="comparison-box">
+                    <h3>Technisch</h3>
+                    <ul>
+                        <li>☐ System inventory compleet</li>
+                        <li>☐ API documentatie up-to-date</li>
+                        <li>☐ Security requirements gedefinieerd</li>
+                        <li>☐ Pilot use case gekozen</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-box">
+                    <h3>Organisatorisch</h3>
+                    <ul>
+                        <li>☐ Stakeholder buy-in</li>
+                        <li>☐ Budget goedgekeurd</li>
+                        <li>☐ Team capaciteit vrijgemaakt</li>
+                        <li>☐ Success metrics gedefinieerd</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>Ready om te Starten?</h2>
+            <p>Start met de gratis Agent Readiness Assessment:</p>
+            
+            <div class="comparison">
+                <div class="comparison-box good">
+                    <h3>✅ Gratis Assessment</h3>
+                    <ul>
+                        <li>5-minuten vragenlijst</li>
+                        <li>Agent Readiness Score</li>
+                        <li>Basis roadmap inzichten</li>
+                        <li>Geen verplichtingen</li>
+                    </ul>
+                    <p style="margin-top: 15px; text-align: center;">
+                        <strong>👉 groeimetai.io/agent-readiness</strong>
+                    </p>
+                </div>
+                
+                <div class="comparison-box">
+                    <h3>💬 Gratis Consult</h3>
+                    <ul>
+                        <li>30-min strategisch gesprek</li>
+                        <li>Specifieke situatie bespreken</li>
+                        <li>Concrete aanbevelingen</li>
+                        <li>Geen sales pitch</li>
+                    </ul>
+                    <p style="margin-top: 15px; text-align: center;">
+                        <strong>👉 info@groeimetai.io</strong>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>De agent economie wacht niet.</strong> Bedrijven die nu niet voorbereiden, 
+                missen de boot. Start vandaag met je Agent Readiness journey.</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h2>Over GroeimetAI</h2>
+            <p>Wij zijn de Agent Infrastructure specialists van Nederland. Sinds 2023 helpen we bedrijven voorbereiden op de agent economie.</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <strong>📧 Email:</strong><br/>
+                    info@groeimetai.io
+                </div>
+                <div class="contact-item">
+                    <strong>📞 Telefoon:</strong><br/>
+                    +31 (6) 81 739 018
+                </div>
+                <div class="contact-item">
+                    <strong>🌐 Website:</strong><br/>
+                    groeimetai.io
+                </div>
+                <div class="contact-item">
+                    <strong>💻 GitHub:</strong><br/>
+                    github.com/GroeimetAI
+                </div>
+            </div>
+            
+            <p style="margin-top: 30px; font-size: 0.8rem; opacity: 0.7;">
+                © 2025 GroeimetAI. Agent Infrastructure Specialists.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

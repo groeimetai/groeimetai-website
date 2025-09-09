@@ -6,6 +6,7 @@ import { Link } from '@/i18n/routing';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { StartProjectButton } from '@/components/ui/StartProjectButton';
+import { usePathname } from 'next/navigation';
 import {
   Menu,
   X,
@@ -34,6 +35,10 @@ export default function Navigation() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const t = useTranslations('navigation');
+  const pathname = usePathname();
+
+  // Hide navigation on dashboard pages
+  const isDashboardPage = pathname?.includes('/dashboard') || pathname?.includes('/admin-dashboard') || pathname?.includes('/settings');
 
   // Ensure we're on the client side
   useEffect(() => {
@@ -69,6 +74,11 @@ export default function Navigation() {
 
   // Don't render until mounted to avoid SSR issues
   if (!mounted) {
+    return null;
+  }
+
+  // Don't render navigation on dashboard pages
+  if (isDashboardPage) {
     return null;
   }
 
@@ -117,9 +127,6 @@ export default function Navigation() {
             <div className="hidden md:flex items-center space-x-3">
               {user ? (
                 <>
-                  <ClientOnly>
-                    <CommandPaletteButton />
-                  </ClientOnly>
                   <NotificationCenter />
                   <Link href="/dashboard">
                     <Button

@@ -44,15 +44,19 @@ if (typeof window !== 'undefined') {
   isSupported().then((supported) => {
     if (supported) {
       analytics = getAnalytics(app);
-      performance = getPerformance(app);
+      
+      // Only initialize performance if not disabled
+      if (process.env.NEXT_PUBLIC_DISABLE_FIREBASE_PERFORMANCE !== 'true') {
+        performance = getPerformance(app);
 
-      // Disable automatic instrumentation to prevent CSS class attribute errors
-      if (performance) {
-        try {
-          (performance as any).dataCollectionEnabled = false;
-          (performance as any).instrumentationEnabled = false;
-        } catch (error) {
-          console.debug('Failed to configure Firebase Performance:', error);
+        // Disable automatic instrumentation to prevent CSS class attribute errors
+        if (performance) {
+          try {
+            (performance as any).dataCollectionEnabled = false;
+            (performance as any).instrumentationEnabled = false;
+          } catch (error) {
+            console.debug('Failed to configure Firebase Performance:', error);
+          }
         }
       }
     }

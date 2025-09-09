@@ -1,732 +1,731 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from '@/i18n/routing';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import {
-  doc,
-  setDoc,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  collection,
-  query,
-  where,
-  orderBy,
-  limit,
-} from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
-import {
-  LayoutDashboard,
-  FileText,
-  MessageSquare,
-  Calendar,
-  Settings,
-  LogOut,
-  User,
-  Bell,
-  TrendingUp,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  Send,
-  Paperclip,
-  MoreVertical,
-  Circle,
-  ChevronRight,
-  Briefcase,
-  Target,
-  Rocket,
-  Flag,
-  Shield,
-  ClipboardList,
-  Receipt,
-} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Link } from '@/i18n/routing';
-import DashboardChat from '@/components/DashboardChat';
-import ChatManagement from '@/components/admin/ChatManagement';
-import OnboardingFlow from '@/components/OnboardingFlow';
-import DashboardWidgets from '@/components/dashboard/DashboardWidgets';
-import { HelpTrigger } from '@/components/HelpSystem';
-import CommandPalette from '@/components/CommandPalette';
-import QuickActions from '@/components/QuickActions';
-import dynamic from 'next/dynamic';
-
-// Dynamically import ChatbotWidget to avoid SSR issues
-const ChatbotWidget = dynamic(
-  () => import('@/components/chatbot/ChatbotWidget').then((mod) => mod.ChatbotWidget),
-  { ssr: false }
-);
-
-interface ProjectStage {
-  id: number;
-  name: string;
-  icon: string;
-  status: 'completed' | 'current' | 'upcoming';
-  description: string;
-  progress?: number;
-  completedAt?: any;
-  startedAt?: any;
-  estimatedCompletion?: string;
-}
-
-interface TimelineData {
-  stages: ProjectStage[];
-  milestone: string;
-  projectName: string;
-}
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import NotificationCenter from '@/components/NotificationCenter';
+import { useTranslations } from 'next-intl';
+import { 
+  BarChart3, Activity, FileText, Settings, User,
+  TrendingUp, Clock, CheckCircle, AlertTriangle,
+  Pause, Play, Filter, Download, Eye, Calendar, Database,
+  Brain, Monitor, RefreshCw, Target, ArrowRight
+} from 'lucide-react';
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const { user, loading, logout, isAdmin } = useAuth();
-  const userProfile = user; // For now, treat user as userProfile
-  const [message, setMessage] = useState('');
-  const [profileCheckCount, setProfileCheckCount] = useState(0);
-  const [timelineData, setTimelineData] = useState<TimelineData | null>(null);
-  const [isLoadingTimeline, setIsLoadingTimeline] = useState(true);
-  const [userQuoteId, setUserQuoteId] = useState<string | null>(null);
-  const [userQuoteStatus, setUserQuoteStatus] = useState<string | null>(null);
-  const [showOnboarding, setShowOnboarding] = useState(false);
-  const [checkingOnboarding, setCheckingOnboarding] = useState(true);
-  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    {
-      id: '1',
-      sender: 'GroeimetAI Team',
-      content:
-        "Welcome to GroeimetAI! We're excited to work with you on your AI transformation journey.",
-      timestamp: new Date().toISOString(),
-      isGroeimetAI: true,
-    },
-    {
-      id: '2',
-      sender: userProfile?.firstName || 'You',
-      content: 'Thanks! Looking forward to getting started.',
-      timestamp: new Date().toISOString(),
-      isGroeimetAI: false,
-    },
-  ]);
+  const t = useTranslations('dashboard');
+  const [activeTab, setActiveTab] = useState('overview');
+  const [isLiveMode, setIsLiveMode] = useState(true);
+  const [lastUpdate, setLastUpdate] = useState('--:--:--');
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [assessmentData, setAssessmentData] = useState(null);
+  const [expertAssessmentData, setExpertAssessmentData] = useState(null);
+  const [agentReadinessAssessments, setAgentReadinessAssessments] = useState([]);
+  const searchParams = useSearchParams();
 
-  const getDefaultProjectStages = (): ProjectStage[] => {
-    const isApproved = userQuoteStatus === 'approved';
-    const stages: ProjectStage[] = [
-      {
-        id: 1,
-        name: 'Approval',
-        icon: 'shield',
-        status: isApproved ? 'completed' : 'current',
-        description: isApproved ? 'Project approved' : 'Awaiting admin approval',
-        progress: isApproved ? 100 : undefined,
-        completedAt: isApproved ? new Date() : undefined,
-      },
-      {
-        id: 2,
-        name: 'Discovery',
-        icon: 'briefcase',
-        status: isApproved ? 'current' : 'upcoming',
-        description: 'Understanding your needs',
-        progress: undefined,
-      },
-      {
-        id: 3,
-        name: 'Planning',
-        icon: 'target',
-        status: 'upcoming',
-        description: 'Defining project scope',
-        progress: undefined,
-      },
-      {
-        id: 4,
-        name: 'Development',
-        icon: 'rocket',
-        status: 'upcoming',
-        description: 'Building your solution',
-        progress: undefined,
-      },
-      {
-        id: 5,
-        name: 'Delivery',
-        icon: 'flag',
-        status: 'upcoming',
-        description: 'Final implementation',
-        progress: undefined,
-      },
-    ];
-    return stages;
+  // User profile state
+  const [userProfile, setUserProfile] = useState({
+    name: user?.displayName || user?.firstName || user?.email?.split('@')[0] || 'User',
+    company: user?.company || 'Your Company',
+    lastLogin: 'Recent'
+  });
+
+  // Sample data - replace with Firestore calls
+  const projects = [];
+  const activities = [];
+  const systemMetrics = {
+    agentReadiness: 0,
+    connectedSystems: { current: 0, total: 0 },
+    activeAgents: 0,
+    monthlySavings: 0,
+    uptime: 0
   };
 
-  const projectStages = timelineData?.stages || getDefaultProjectStages();
-
-  const currentStage = projectStages.find((stage) => stage.status === 'current');
-  const completedCount = projectStages.filter((stage) => stage.status === 'completed').length;
-  // Calculate progress based on completed stages plus current stage progress
-  const currentStageProgress = currentStage?.progress || 0;
-  const totalProgress = (completedCount * 100 + currentStageProgress) / projectStages.length;
-
+  // Load Expert Assessment data
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
+    if (user) {
+      loadExpertAssessmentData();
+      loadAgentReadinessAssessments();
     }
-  }, [user, loading, router]);
-
-  // Check if user needs onboarding
-  useEffect(() => {
-    const checkOnboardingStatus = async () => {
-      if (!user || loading || isAdmin) {
-        setCheckingOnboarding(false);
-        return;
-      }
-
-      try {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        const userData = userDoc.data();
-
-        if (userData && !userData.onboardingCompleted) {
-          setShowOnboarding(true);
-        }
-      } catch (error) {
-        console.error('Error checking onboarding status:', error);
-      } finally {
-        setCheckingOnboarding(false);
-      }
-    };
-
-    checkOnboardingStatus();
-  }, [user, loading, isAdmin]);
-
-  // Debug profile loading - only check once
-  useEffect(() => {
-    if (user && !loading && profileCheckCount === 0) {
-      console.log('User authenticated:', user.uid);
-      setProfileCheckCount(1);
-    }
-  }, [user, loading, profileCheckCount]);
-
-  // Fetch user's quote and timeline data
-  useEffect(() => {
-    if (!user) {
-      setIsLoadingTimeline(false);
-      return;
-    }
-
-    let unsubscribeTimeline: (() => void) | undefined;
-
-    // Try to fetch quotes by userId first
-    const fetchQuotesByUserId = async () => {
-      try {
-        const quotesQuery = query(
-          collection(db, 'quotes'),
-          where('userId', '==', user.uid),
-          orderBy('createdAt', 'desc')
-        );
-
-        const snapshot = await getDocs(quotesQuery);
-        return snapshot;
-      } catch (error) {
-        console.log('Error fetching by userId, trying by email:', error);
-        return null;
-      }
-    };
-
-    // If no quotes by userId, try by email
-    const fetchQuotesByEmail = async () => {
-      if (!user.email) return null;
-
-      try {
-        const quotesQuery = query(
-          collection(db, 'quotes'),
-          where('email', '==', user.email),
-          orderBy('createdAt', 'desc')
-        );
-
-        const snapshot = await getDocs(quotesQuery);
-        return snapshot;
-      } catch (error) {
-        console.error('Error fetching by email:', error);
-        return null;
-      }
-    };
-
-    // Main fetch logic
-    const fetchQuotes = async () => {
-      let snapshot = await fetchQuotesByUserId();
-
-      if (!snapshot || snapshot.empty) {
-        snapshot = await fetchQuotesByEmail();
-      }
-
-      if (snapshot && !snapshot.empty) {
-        // Find the first approved quote
-        let approvedQuote: any = null;
-        let latestQuote: any = null;
-
-        for (const doc of snapshot.docs) {
-          const data = doc.data();
-          if (!latestQuote) {
-            latestQuote = { id: doc.id, ...data };
-          }
-          if (data.status === 'approved' && !approvedQuote) {
-            approvedQuote = { id: doc.id, ...data };
-            break;
-          }
-        }
-
-        // Use approved quote if available, otherwise use latest quote
-        const selectedQuote = approvedQuote || latestQuote;
-        if (selectedQuote) {
-          setUserQuoteId(selectedQuote.id);
-          setUserQuoteStatus(selectedQuote.status);
-
-          // Subscribe to the timeline for this quote
-          const timelineRef = doc(db, 'projectTimelines', selectedQuote.id);
-          unsubscribeTimeline = onSnapshot(
-            timelineRef,
-            (doc) => {
-              if (doc.exists()) {
-                const data = doc.data() as TimelineData;
-                setTimelineData(data);
-              }
-              setIsLoadingTimeline(false);
-            },
-            (error) => {
-              console.log('Timeline not found or no permission:', error);
-              setIsLoadingTimeline(false);
-            }
-          );
-        } else {
-          setIsLoadingTimeline(false);
-        }
-      } else {
-        setIsLoadingTimeline(false);
-      }
-    };
-
-    fetchQuotes();
-
-    return () => {
-      if (unsubscribeTimeline) {
-        unsubscribeTimeline();
-      }
-    };
   }, [user]);
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      router.push('/');
-    } catch (error) {
-      console.error('Error logging out:', error);
-    }
-  };
-
-  const createUserProfile = async () => {
+  const loadExpertAssessmentData = async () => {
     if (!user) return;
-
+    
     try {
-      const userProfile = {
-        uid: user.uid,
-        email: user.email || '',
-        displayName: user.displayName || '',
-        photoURL: user.photoURL || '',
-        firstName: user.displayName?.split(' ')[0] || '',
-        lastName: user.displayName?.split(' ').slice(1).join(' ') || '',
-        accountType: 'customer',
-        emailVerified: user.isVerified,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        lastLoginAt: new Date(),
-      };
-
-      await setDoc(doc(db, 'users', user.uid), userProfile);
-      console.log('User profile created successfully');
-      window.location.reload(); // Reload to fetch the new profile
+      const response = await fetch(`/api/expert-assessment/get-project?userId=${user.uid}`);
+      const data = await response.json();
+      
+      if (data.success && data.assessment) {
+        setExpertAssessmentData(data.assessment);
+      }
     } catch (error) {
-      console.error('Error creating user profile:', error);
+      console.error('Failed to load Expert Assessment data:', error);
     }
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!message.trim()) return;
-
-    const newMessage = {
-      id: Date.now().toString(),
-      sender: userProfile?.firstName || 'You',
-      content: message,
-      timestamp: new Date().toISOString(),
-      isGroeimetAI: false,
-    };
-
-    setMessages([...messages, newMessage]);
-    setMessage('');
-
-    // Simulate GroeimetAI response
-    setTimeout(() => {
-      const response = {
-        id: (Date.now() + 1).toString(),
-        sender: 'GroeimetAI Team',
-        content: 'Thanks for your message! Our team will respond within 24 hours.',
-        timestamp: new Date().toISOString(),
-        isGroeimetAI: true,
-      };
-      setMessages((prev) => [...prev, response]);
-    }, 1000);
+  const loadAgentReadinessAssessments = async () => {
+    if (!user) return;
+    
+    try {
+      // Try both userId and email to catch assessments
+      const response = await fetch(`/api/assessment/get-user-assessments?userId=${user.uid}&userEmail=${user.email}`);
+      const data = await response.json();
+      
+      if (data.success && data.assessments) {
+        setAgentReadinessAssessments(data.assessments);
+      }
+    } catch (error) {
+      console.error('Failed to load Agent Readiness Assessments:', error);
+    }
   };
 
-  // Handle command palette keyboard shortcut
+  // Handle URL parameters and user data
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        setIsCommandPaletteOpen((prev) => !prev);
-      }
-    };
+    // Check for assessment parameter
+    const assessmentId = searchParams.get('assessment');
+    const isFirstTime = searchParams.get('first') === 'true';
+    const scoreParam = searchParams.get('score');
+    
+    if (assessmentId && isFirstTime) {
+      // Show welcome message for new assessment
+      setActiveTab('assessments');
+      // Show assessment data with score if available
+      setAssessmentData({
+        id: assessmentId,
+        score: scoreParam || 'Loading...',
+        level: scoreParam ? getQuickLevel(parseInt(scoreParam)) : 'Analyzing...',
+        timestamp: new Date().toISOString()
+      });
+    }
+  }, [searchParams]);
+  
+  const getQuickLevel = (score: number): string => {
+    if (score >= 90) return 'Agent-Ready (Level 5)';
+    if (score >= 70) return 'Integration-Ready (Level 4)';
+    if (score >= 50) return 'Digitalization-Ready (Level 3)';
+    if (score >= 30) return 'Foundation-Building (Level 2)';
+    return 'Pre-Digital (Level 1)';
+  };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  // Update user profile when user data changes
+  useEffect(() => {
+    if (user) {
+      setUserProfile({
+        name: user.displayName || user.firstName || user.email?.split('@')[0] || 'User',
+        company: user.company || 'Your Company',
+        lastLogin: user.lastLoginAt ? new Date(user.lastLoginAt.seconds * 1000).toLocaleDateString() : 'Recent'
+      });
+    }
+  }, [user]);
 
-  const handleOnboardingComplete = () => {
-    setShowOnboarding(false);
-    // Optionally refresh the page or update user data
-    window.location.reload();
+  const handleSettings = () => {
+    window.location.href = '/settings';
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange mx-auto"></div>
-          <p className="mt-4 text-white/60">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null;
-  }
-
-  // If user exists but profile is still loading, show a message
-  if (!userProfile) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange mx-auto"></div>
-          <p className="mt-4 text-white/60">Loading your profile...</p>
-          <p className="mt-2 text-sm text-white/40">
-            If this takes too long, try refreshing the page.
-          </p>
-          <div className="mt-4 space-y-2">
-            <Button onClick={() => window.location.reload()} variant="outline" className="mr-2">
-              Refresh Page
-            </Button>
-            <Button onClick={createUserProfile} className="bg-orange hover:bg-orange/90">
-              Create Profile
-            </Button>
-          </div>
-          {profileCheckCount > 0 && (
-            <p className="mt-4 text-sm text-red-400">
-              Your profile doesn&apos;t exist in our database. Click &quot;Create Profile&quot; to
-              set it up.
-            </p>
-          )}
-        </div>
+        <div className="text-white">{t('loadingDashboard')}</div>
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-black" data-help="dashboard-main">
-      {/* Onboarding Flow */}
-      {showOnboarding && !checkingOnboarding && (
-        <OnboardingFlow onComplete={handleOnboardingComplete} />
-      )}
+    <div className="min-h-screen bg-black">
+      {/* Header Navigation */}
+      <header className="bg-white/5 border-b border-white/10">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-8">
+              <div className="flex items-center space-x-4">
+                <Image
+                  src="/groeimet-ai-logo.svg"
+                  alt="GroeimetAI"
+                  width={120}
+                  height={32}
+                  className="h-8 w-auto"
+                />
+                <span className="text-xl font-bold text-white">{t('title')}</span>
+              </div>
+              
+              {/* Quick Actions Bar */}
+              <nav className="hidden lg:flex space-x-6">
+                <Link href="/agent-readiness" className="text-white/70 hover:text-white transition-colors text-sm">
+                  {t('navigation.newAssessment')}
+                </Link>
+                <Link href="/pilot-intake" className="text-white/70 hover:text-white transition-colors text-sm">
+                  {t('navigation.requestPilot')}
+                </Link>
+                <Link href="/implementation-proposal" className="text-white/70 hover:text-white transition-colors text-sm">
+                  {t('navigation.addSystem')}
+                </Link>
+                <Link href="/contact" className="text-white/70 hover:text-white transition-colors text-sm">
+                  {t('navigation.getHelp')}
+                </Link>
+              </nav>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <NotificationCenter />
+              <div className="flex items-center space-x-2 text-white">
+                <User className="w-5 h-5" />
+                <span>{userProfile.name}</span>
+              </div>
+              <button 
+                onClick={handleSettings}
+                className="p-2 text-white/70 hover:text-white transition-colors"
+              >
+                <Settings className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
 
-      <div className="container mx-auto px-4 py-8 mt-20">
+      <div className="container mx-auto px-4 py-24">
+        {/* Breadcrumb */}
+        <div className="mb-6">
+          <div className="text-white/60 text-sm">
+            {t('breadcrumb.dashboard')} &gt; {t('breadcrumb.overview')}
+          </div>
+        </div>
+
         {/* Welcome Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8 }}
           className="mb-8"
         >
-          <h2 className="text-3xl font-bold text-white mb-2" data-help="welcome-header">
-            Welcome back, {userProfile.firstName || userProfile.displayName}!
+          <h2 className="text-3xl font-bold text-white mb-2">
+            {t('welcome', { name: userProfile.name })}
           </h2>
           <p className="text-white/60">
-            Track your project progress and communicate with our team.
+            {t('lastLogin', { date: userProfile.lastLogin })}
           </p>
         </motion.div>
 
-        {/* Dashboard Widgets - now for everyone */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-8"
-          data-help="dashboard-main-widgets"
-        >
-          <DashboardWidgets />
-        </motion.div>
-
-        {/* Legacy support chat - only shown if user has no widgets */}
-        {false && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Project Timeline Widget */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 p-6"
-              data-help="project-timeline"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold text-white">Project Timeline</h3>
-                <Badge variant="outline" className="text-orange border-orange">
-                  {currentStage?.name || 'Planning'}
-                </Badge>
-              </div>
-
-              {/* Overall Progress */}
-              <div className="mb-8">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-white/60">Overall Progress</span>
-                  <span className="text-sm font-medium text-white">
-                    {Math.round(totalProgress)}%
-                  </span>
+        {/* Assessment Results or Next Action */}
+        {assessmentData ? (
+          <Card className="bg-gradient-to-r from-green-500/10 to-green-600/10 border-green-500/30 mb-8">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <CheckCircle className="w-5 h-5 mr-2" style={{ color: '#10B981' }} />
+{t('assessmentResults.title')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-6">
+                <h4 className="text-2xl font-bold text-white mb-3">
+                  {t('assessmentResults.calculating')}
+                </h4>
+                <p className="text-white/80 leading-relaxed mb-4">
+                  {t('assessmentResults.processing')}
+                </p>
+                <div className="bg-white/5 rounded-lg p-4">
+                  <p className="text-white/70 text-sm">
+                    <strong>{t('assessmentResults.assessmentId')}:</strong> {assessmentData.id}<br/>
+                    <strong>{t('assessmentResults.submitted')}:</strong> {new Date().toLocaleString()}
+                  </p>
                 </div>
-                <Progress value={totalProgress} className="h-2" />
               </div>
 
-              {/* Timeline */}
-              <div className="space-y-6">
-                {projectStages.map((stage, index) => {
-                  // Map icon strings to components
-                  const stageIcons = {
-                    shield: Shield,
-                    briefcase: Briefcase,
-                    target: Target,
-                    rocket: Rocket,
-                    flag: Flag,
-                  };
-                  const StageIcon = stageIcons[stage.icon as keyof typeof stageIcons] || Briefcase;
+              <div className="flex gap-3">
+                <Link href="/expert-assessment" className="flex-1">
+                  <Button 
+                    className="w-full text-white font-semibold"
+                    style={{ backgroundColor: '#F87315' }}
+                  >
+                    {t('assessmentResults.expertAssessmentInterest')}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+                <Button 
+                  onClick={() => setAssessmentData(null)}
+                  variant="outline"
+                  className="border-white/20 text-white hover:bg-white/10"
+                >
+{t('assessmentResults.close')}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="bg-gradient-to-r from-orange-500/10 to-orange-600/10 border-orange-500/30 mb-8">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Target className="w-5 h-5 mr-2" style={{ color: '#F87315' }} />
+{t('nextStep.title')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-6">
+                <h4 className="text-xl font-bold text-white mb-3">
+                  {t('nextStep.assessmentTitle')}
+                </h4>
+                <p className="text-white/80 leading-relaxed mb-4">
+                  {t('nextStep.assessmentDescription')}
+                </p>
+              </div>
 
-                  return (
-                    <div key={stage.id} className="relative">
-                      {index < projectStages.length - 1 && (
-                        <div
-                          className={`absolute left-5 top-10 bottom-0 w-0.5 ${
-                            stage.status === 'completed' ? 'bg-green-500' : 'bg-white/20'
-                          }`}
-                        />
-                      )}
+              <div className="flex gap-3">
+                <Link href="/agent-readiness" className="flex-1">
+                  <Button 
+                    className="w-full text-white font-semibold"
+                    style={{ backgroundColor: '#F87315' }}
+                  >
+                    {t('nextStep.startAssessment')}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+                <Button 
+                  variant="outline"
+                  className="border-white/20 text-white hover:bg-white/10"
+                >
+{t('nextStep.notNow')}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-                      <div className="flex items-start space-x-4">
-                        <div
-                          className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center ${
-                            stage.status === 'completed'
-                              ? 'bg-green-500'
-                              : stage.status === 'current'
-                                ? 'bg-orange'
-                                : 'bg-white/20'
-                          }`}
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-4 mb-8">
+            <TabsTrigger value="overview">{t('tabs.overview')}</TabsTrigger>
+            <TabsTrigger value="assessments">{t('tabs.assessments')}</TabsTrigger>
+            <TabsTrigger value="monitoring">{t('tabs.monitoring')}</TabsTrigger>
+            <TabsTrigger value="reports">{t('tabs.reports')}</TabsTrigger>
+          </TabsList>
+
+          {/* OVERVIEW TAB */}
+          <TabsContent value="overview" className="space-y-8">
+            {/* Expert Assessment Status */}
+            {expertAssessmentData && (
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold text-white mb-6">Expert Assessment</h3>
+                <Card className="bg-gradient-to-r from-orange-500/10 to-orange-600/10 border-orange-500/30">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center">
+                        <div 
+                          className="w-12 h-12 rounded-lg flex items-center justify-center mr-4"
+                          style={{ backgroundColor: '#F87315' }}
                         >
-                          {stage.status === 'completed' ? (
-                            <CheckCircle className="w-5 h-5 text-white" />
-                          ) : stage.status === 'current' ? (
-                            <Circle className="w-5 h-5 text-white animate-pulse" />
-                          ) : (
-                            <StageIcon className="w-5 h-5 text-white/60" />
-                          )}
+                          <Target className="w-6 h-6 text-white" />
                         </div>
+                        <div>
+                          <h4 className="text-lg font-bold text-white">Expert Assessment (€2.500)</h4>
+                          <p className="text-white/70 text-sm">
+                            Status: {expertAssessmentData.assessmentStage === 'completed' ? 'Voltooid' : 'In Progress'}
+                          </p>
+                        </div>
+                      </div>
+                      <Badge 
+                        className="bg-orange-500 text-white"
+                        style={{ backgroundColor: '#F87315' }}
+                      >
+                        {expertAssessmentData.status}
+                      </Badge>
+                    </div>
+                    
+                    <p className="text-white/80 text-sm mb-4">
+                      Diepgaande analyse van jouw systemen en concrete roadmap naar agent-ready infrastructuur.
+                    </p>
+                    
+                    <Link href="/dashboard/expert-assessment">
+                      <Button 
+                        className="w-full text-white"
+                        style={{ backgroundColor: '#F87315' }}
+                      >
+                        Bekijk Expert Assessment Dashboard
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
 
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between">
-                            <h4
-                              className={`font-medium ${
-                                stage.status === 'completed'
-                                  ? 'text-white'
-                                  : stage.status === 'current'
-                                    ? 'text-white'
-                                    : 'text-white/60'
-                              }`}
-                            >
-                              {stage.name}
-                            </h4>
-                          </div>
-                          <p className="text-sm text-white/60 mt-1">{stage.description}</p>
+            {/* Service Request Cards */}
+            <div className="mb-8">
+              <h3 className="text-2xl font-bold text-white mb-6">{t('overview.readyForMore')}</h3>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <Card className="bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300">
+                  <CardContent className="p-6">
+                    <div 
+                      className="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
+                      style={{ backgroundColor: '#F87315' }}
+                    >
+                      <BarChart3 className="w-6 h-6 text-white" />
+                    </div>
+                    <h4 className="text-lg font-bold text-white mb-3">{t('overview.scheduleAssessment')}</h4>
+                    <p className="text-white/70 text-sm leading-relaxed mb-6">
+                      {t('overview.assessmentDescription')}
+                    </p>
+                    <Link href="/agent-readiness">
+                      <Button 
+                        className="w-full text-white"
+                        style={{ backgroundColor: '#F87315' }}
+                      >
+                        {t('overview.startAssessment')}
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
 
-                          {stage.status === 'current' && stage.progress && (
-                            <div className="mt-2">
-                              <Progress value={stage.progress} className="h-1" />
-                            </div>
-                          )}
+            {/* System Status */}
+            <div className="grid lg:grid-cols-3 gap-8">
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-6 text-center">
+                  <div className="text-2xl font-bold text-white mb-2">
+                    {systemMetrics.agentReadiness}/100
+                  </div>
+                  <div className="text-white/60 text-sm">{t('overview.agentReadiness')}</div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-white/60 text-sm">{t('overview.connected')}</p>
+                      <p className="text-2xl font-bold text-white">
+                        {systemMetrics.connectedSystems.current}/{systemMetrics.connectedSystems.total}
+                      </p>
+                      <p className="text-white/60 text-xs">{t('overview.systems')}</p>
+                    </div>
+                    <Database className="w-8 h-8" style={{ color: '#F87315' }} />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-white/60 text-sm">{t('overview.active')}</p>
+                      <p className="text-2xl font-bold text-white">{systemMetrics.activeAgents}</p>
+                      <p className="text-white/60 text-xs">{t('overview.agents')}</p>
+                    </div>
+                    <Brain className="w-8 h-8" style={{ color: '#F87315' }} />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* PROJECTS TAB */}
+          <TabsContent value="projects" className="space-y-6">
+            <h3 className="text-2xl font-bold text-white mb-6">{t('projects.title')}</h3>
+            
+            <Card className="bg-white/5 border-white/10">
+              <CardContent className="p-12 text-center">
+                <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-6">
+                  <BarChart3 className="w-8 h-8 text-white/60" />
+                </div>
+                <h4 className="text-xl font-bold text-white mb-4">{t('projects.noActiveProjects')}</h4>
+                <p className="text-white/70 mb-8">
+                  {t('projects.readyToStart')}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link href="/agent-readiness">
+                    <Button
+                      className="text-white"
+                      style={{ backgroundColor: '#F87315' }}
+                    >
+{t('projects.startWithAssessment')}
+                    </Button>
+                  </Link>
+                  <Link href="/contact">
+                    <Button
+                      variant="outline"
+                      className="border-white/20 text-white hover:bg-white/10"
+                    >
+{t('projects.bookConsult')}
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* MONITORING TAB */}
+          <TabsContent value="monitoring" className="space-y-6">
+            <h3 className="text-2xl font-bold text-white">{t('monitoring.title')}</h3>
+            
+            <Card className="bg-white/5 border-white/10">
+              <CardContent className="p-12 text-center">
+                <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-6">
+                  <Activity className="w-8 h-8 text-white/60" />
+                </div>
+                <h4 className="text-xl font-bold text-white mb-4">{t('monitoring.notActive')}</h4>
+                <p className="text-white/70 mb-8">
+                  {t('monitoring.description')}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link href="/services">
+                    <Button
+                      className="text-white"
+                      style={{ backgroundColor: '#F87315' }}
+                    >
+{t('monitoring.enable')}
+                    </Button>
+                  </Link>
+                  <Link href="/demo-request">
+                    <Button
+                      variant="outline"
+                      className="border-white/20 text-white hover:bg-white/10"
+                    >
+{t('monitoring.seeDemo')}
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ASSESSMENTS TAB */}
+          <TabsContent value="assessments" className="space-y-6">
+            <h3 className="text-2xl font-bold text-white">{t('assessments.title')}</h3>
+            
+            {/* Expert Assessment */}
+            {expertAssessmentData && (
+              <Card className="bg-gradient-to-r from-orange-500/10 to-orange-600/10 border-orange-500/30">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center justify-between">
+                    <span className="flex items-center">
+                      <Target className="w-5 h-5 mr-2" style={{ color: '#F87315' }} />
+                      Expert Assessment (€2.500)
+                    </span>
+                    <Badge 
+                      className="bg-orange-500 text-white"
+                      style={{ backgroundColor: '#F87315' }}
+                    >
+                      {expertAssessmentData.assessmentStage === 'completed' ? 'Voltooid' : 'Actief'}
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <p className="text-white/70 text-sm mb-2">Assessment Details</p>
+                        <div className="bg-white/5 rounded-lg p-4">
+                          <p className="text-white text-sm">
+                            <strong>Status:</strong> {expertAssessmentData.status}<br/>
+                            <strong>Stage:</strong> {expertAssessmentData.assessmentStage}<br/>
+                            <strong>Gestart:</strong> {expertAssessmentData.createdAt ? new Date(expertAssessmentData.createdAt.seconds * 1000).toLocaleDateString() : 'Recent'}<br/>
+                            <strong>Betaling:</strong> {expertAssessmentData.paidAt ? 'Voltooid' : 'In behandeling'}
+                          </p>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-white/70 text-sm mb-2">Opgeleverde Deliverables</p>
+                        <div className="bg-gradient-to-r from-green-500/10 to-green-600/10 rounded-lg p-4 border border-green-500/20">
+                          <p className="text-white text-sm">
+                            • 90-dagen roadmap naar agent-ready<br/>
+                            • ROI berekening en business case<br/>
+                            • API architectuur planning<br/>
+                            • Concrete implementatie stappen
+                          </p>
                         </div>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-
-              {/* Next Milestone */}
-              {(timelineData?.milestone || !isLoadingTimeline) && (
-                <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
-                  <div className="flex items-center space-x-2">
-                    <Target className="w-5 h-5 text-orange" />
-                    <div>
-                      <p className="text-sm font-medium text-white">Next Milestone</p>
-                      <p className="text-xs text-white/60">
-                        {timelineData?.milestone ||
-                          (userQuoteStatus === 'approved' 
-                            ? 'Starting discovery phase - our team will contact you soon'
-                            : 'Your project is awaiting admin approval')}
-                      </p>
+                    
+                    <div className="flex gap-3 pt-4 border-t border-white/10">
+                      <Link href="/dashboard/expert-assessment" className="flex-1">
+                        <Button 
+                          className="w-full text-white font-semibold"
+                          style={{ backgroundColor: '#F87315' }}
+                        >
+                          Open Expert Assessment Dashboard
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </Link>
                     </div>
                   </div>
-                </div>
-              )}
-            </motion.div>
-
-            {/* Support Chat Widget / Chat Management */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 flex flex-col h-[600px]"
-              data-help="chat-widget"
-            >
-              {isAdmin ? <ChatManagement /> : <DashboardChat />}
-            </motion.div>
-          </div>
-        )}
-
-        {/* Quick Actions */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"
-          data-help="quick-actions"
-        >
-          <Link href="/dashboard/projects" className="block" data-help="projects-link">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <LayoutDashboard className="w-5 h-5 text-orange" />
-                  <span className="text-white">View All Projects</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
+                </CardContent>
+              </Card>
+            )}
+            
+            {/* Agent Readiness Assessments */}
+            {agentReadinessAssessments.length > 0 && (
+              <div className="space-y-4">
+                <h4 className="text-lg font-bold text-white">Agent Readiness Assessments (Gratis)</h4>
+                {agentReadinessAssessments.map((assessment, index) => (
+                  <Card key={assessment.id} className="bg-gradient-to-r from-green-500/10 to-green-600/10 border-green-500/30">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center">
+                          <div 
+                            className="w-10 h-10 rounded-lg flex items-center justify-center mr-3"
+                            style={{ backgroundColor: '#10B981' }}
+                          >
+                            <CheckCircle className="w-5 h-5 text-white" />
+                          </div>
+                          <div>
+                            <h5 className="text-md font-bold text-white">Agent Readiness Assessment #{index + 1}</h5>
+                            <p className="text-white/70 text-sm">
+                              Score: {assessment.score || 'N/A'}/100 • {assessment.level || 'Calculating...'}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-sm text-white/60">
+                            {assessment.createdAt ? new Date(assessment.createdAt).toLocaleDateString() : 'Recent'}
+                          </div>
+                          <Badge className="bg-green-500 text-white mt-1">
+                            {assessment.status === 'assessment_submitted' ? 'Voltooid' : assessment.status}
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="bg-white/5 rounded-lg p-3">
+                          <p className="text-white/70 text-xs mb-1">Bedrijf & Rol</p>
+                          <p className="text-white text-sm">{assessment.company} • {assessment.role}</p>
+                        </div>
+                        <div className="bg-white/5 rounded-lg p-3">
+                          <p className="text-white/70 text-xs mb-1">Systemen</p>
+                          <p className="text-white text-sm">{assessment.systems ? assessment.systems.join(', ') : 'N/A'}</p>
+                        </div>
+                      </div>
+                      
+                      {assessment.reportId && (
+                        <div className="mt-4 pt-4 border-t border-white/10">
+                          <Button 
+                            onClick={() => window.open(`/api/assessment/download-report?reportId=${assessment.reportId}`)}
+                            variant="outline"
+                            className="border-green-500/30 text-green-400 hover:bg-green-500/10"
+                            size="sm"
+                          >
+                            <Download className="w-4 h-4 mr-2" />
+                            Download Rapport
+                          </Button>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
-            </div>
-          </Link>
-
-          <Link href="/dashboard/documents" className="block">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <FileText className="w-5 h-5 text-orange" />
-                  <span className="text-white">Documents</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/dashboard/consultations" className="block">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <Calendar className="w-5 h-5 text-orange" />
-                  <span className="text-white">Consultations</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/dashboard/messages" className="block">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <MessageSquare className="w-5 h-5 text-orange" />
-                  <span className="text-white">Messages</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/dashboard/invoices" className="block">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <Receipt className="w-5 h-5 text-orange" />
-                  <span className="text-white">Invoices</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/dashboard/quotes" className="block">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <ClipboardList className="w-5 h-5 text-orange" />
-                  <span className="text-white">Project Requests</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/dashboard/settings" className="block">
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <Settings className="w-5 h-5 text-orange" />
-                  <span className="text-white">Settings</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/60" />
-              </div>
-            </div>
-          </Link>
-
-          {isAdmin && (
-            <Link href="/dashboard/admin" className="block">
-              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <Shield className="w-5 h-5 text-orange" />
-                    <span className="text-white">Admin Panel</span>
+            )}
+            
+            {assessmentData ? (
+              <Card className="bg-white/5 border-white/10">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center justify-between">
+                    <span className="flex items-center">
+                      <CheckCircle className="w-5 h-5 mr-2" style={{ color: '#10B981' }} />
+{t('assessments.agentReadinessAssessment')}
+                    </span>
+                    {assessmentData.score !== 'Loading...' ? (
+                      <Badge className="bg-green-500 text-white">Score: {assessmentData.score}</Badge>
+                    ) : (
+                      <Badge className="bg-orange-500 text-white">{t('assessments.processing')}</Badge>
+                    )}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <p className="text-white/70 text-sm mb-2">{t('assessments.details')}</p>
+                        <div className="bg-white/5 rounded-lg p-4">
+                          <p className="text-white text-sm">
+                            <strong>{t('assessments.id')}:</strong> {assessmentData.id}<br/>
+                            <strong>{t('assessments.date')}:</strong> {new Date().toLocaleString()}<br/>
+                            <strong>{t('assessments.score')}:</strong> {assessmentData.score}/100<br/>
+                            <strong>{t('assessments.level')}:</strong> {assessmentData.level}<br/>
+                            <strong>{t('assessments.status')}:</strong> {assessmentData.score !== 'Loading...' ? t('assessments.emailSent') : t('assessments.generating')}
+                          </p>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-white/70 text-sm mb-2">{t('assessments.expectedResults')}</p>
+                        <div className="bg-gradient-to-r from-orange-500/10 to-orange-600/10 rounded-lg p-4 border border-orange-500/20">
+                          <p className="text-white text-sm">
+                            {t('assessments.resultsDescription')}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-3 pt-4 border-t border-white/10">
+                      <Button 
+                        onClick={() => window.open('mailto:hello@groeimetai.io?subject=Assessment Status')}
+                        variant="outline"
+                        className="border-white/20 text-white hover:bg-white/10"
+                      >
+{t('assessments.contactSupport')}
+                      </Button>
+                      <Link href="/expert-assessment" className="flex-1">
+                        <Button 
+                          className="w-full text-white font-semibold"
+                          style={{ backgroundColor: '#F87315' }}
+                        >
+{t('assessments.upgradeExpert')}
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-white/60" />
-                </div>
-              </div>
-            </Link>
-          )}
-        </motion.div>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-12 text-center">
+                  <h4 className="text-xl font-bold text-white mb-4">{t('assessments.noAssessments')}</h4>
+                  <p className="text-white/70 mb-8">
+                    {t('assessments.startFirst')}
+                  </p>
+                  <Link href="/agent-readiness">
+                    <Button
+                      className="text-white"
+                      style={{ backgroundColor: '#F87315' }}
+                    >
+{t('assessments.startAssessment')}
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          {/* REPORTS TAB */}
+          <TabsContent value="reports" className="space-y-6">
+            <h3 className="text-2xl font-bold text-white">{t('reports.title')}</h3>
+            
+            <Card className="bg-white/5 border-white/10">
+              <CardContent className="p-12 text-center">
+                <h4 className="text-xl font-bold text-white mb-4">{t('reports.noReports')}</h4>
+                <p className="text-white/70 mb-8">
+                  {t('reports.description')}
+                </p>
+                <Link href="/agent-readiness">
+                  <Button
+                    className="text-white"
+                    style={{ backgroundColor: '#F87315' }}
+                  >
+{t('reports.startJourney')}
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
-
-      {/* Command Palette */}
-      <CommandPalette
-        isOpen={isCommandPaletteOpen}
-        onClose={() => setIsCommandPaletteOpen(false)}
-      />
-
-      {/* Quick Actions FAB */}
-      <QuickActions onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
-
-      {/* ChatbotWidget - button hidden, opened via QuickActions */}
-      <ChatbotWidget hideButton={true} />
-    </main>
+    </div>
   );
 }

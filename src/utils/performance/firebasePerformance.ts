@@ -35,6 +35,12 @@ export function createTrace(name: string): PerformanceTrace | null {
  * Disable automatic page load traces to prevent CSS class attribute errors
  */
 export function configurePerformanceMonitoring() {
+  // Check if Firebase Performance should be completely disabled
+  if (process.env.NEXT_PUBLIC_DISABLE_FIREBASE_PERFORMANCE === 'true') {
+    console.log('Firebase Performance completely disabled via env variable');
+    return;
+  }
+
   if (performance && typeof window !== 'undefined') {
     try {
       // Disable automatic instrumentation to prevent long CSS class errors

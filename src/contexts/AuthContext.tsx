@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch user data from Firestore
+  // Fetch user data from Firestore with offline handling
   const fetchUserData = async (uid: string): Promise<User | null> => {
     try {
       const userDoc = await getDoc(doc(db, 'users', uid));
@@ -67,8 +67,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return userDoc.data() as User;
       }
       return null;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching user data:', error);
+      
+      // Handle offline mode gracefully
+      if (error?.code === 'failed-precondition' || error?.message?.includes('offline')) {
+        console.log('Operating in offline mode, using cached user data if available');
+        // Could return cached user data or create minimal user object
+        return null;
+      }
+      
       return null;
     }
   };
@@ -569,13 +577,55 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             (p) => p.providerId === 'google.com' || p.providerId === 'linkedin.com'
           )
         ) {
-          const userData = await fetchUserData(firebaseUser.uid);
-          if (userData) {
-            setUser(userData);
-          } else {
-            // User exists in Firebase but not in Firestore, create document
-            const newUser = await createOrUpdateUserDoc(firebaseUser);
-            setUser(newUser);
+          try {
+            const userData = await fetchUserData(firebaseUser.uid);
+            if (userData) {
+              setUser(userData);
+            } else {
+              // User exists in Firebase but not in Firestore, create document
+              const newUser = await createOrUpdateUserDoc(firebaseUser);
+              setUser(newUser);
+            }
+          } catch (firestoreError) {
+            console.error('Firestore error in auth state change:', firestoreError);
+            // Create minimal user object from Firebase data as fallback
+            const fallbackUser: User = {
+              uid: firebaseUser.uid,
+              email: firebaseUser.email!,
+              displayName: firebaseUser.displayName || '',
+              firstName: firebaseUser.displayName?.split(' ')[0] || '',
+              lastName: firebaseUser.displayName?.split(' ')[1] || '',
+              role: 'client' as UserRole,
+              accountType: 'customer',
+              company: '',
+              jobTitle: '',
+              phoneNumber: '',
+              permissions: [],
+              isActive: true,
+              isVerified: firebaseUser.emailVerified,
+              preferences: {
+                language: 'en',
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                notifications: {
+                  email: true,
+                  push: true,
+                  sms: false,
+                  inApp: true,
+                },
+                theme: 'system',
+              },
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              lastLoginAt: new Date(),
+              lastActivityAt: new Date(),
+              stats: {
+                projectsCount: 0,
+                consultationsCount: 0,
+                messagesCount: 0,
+                totalSpent: 0,
+              },
+            };
+            setUser(fallbackUser);
           }
         } else {
           // User exists but email not verified

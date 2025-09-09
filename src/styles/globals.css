@@ -492,6 +492,49 @@
   z-index: 9999 !important;
 }
 
+/* Sfeer images - subtle atmospheric images next to/under content */
+.sfeer-image {
+  @apply rounded-xl overflow-hidden border border-white/10;
+  transition: all 0.3s ease;
+}
+
+.sfeer-image:hover {
+  @apply border-white/20;
+}
+
+.sfeer-image img {
+  @apply object-cover w-full h-full transition-transform duration-300;
+}
+
+.sfeer-image:hover img {
+  transform: scale(1.02);
+}
+
+/* Sfeer image positioning */
+.sfeer-beside {
+  @apply flex-shrink-0;
+  max-width: 264px;
+  height: 158px;
+}
+
+.sfeer-under {
+  height: 198px;
+  max-width: 528px;
+  margin: 2rem auto;
+}
+
+.sfeer-accent {
+  height: 132px;
+  max-width: 330px;
+}
+
+/* Remove overlays from sfeer images */
+.sfeer-image .absolute,
+.sfeer-image h4,
+.sfeer-image p {
+  display: none !important;
+}
+
 /* Loading skeleton animation */
 @keyframes skeleton-loading {
   0% {

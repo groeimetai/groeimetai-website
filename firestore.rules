@@ -24,7 +24,7 @@ service cloud.firestore {
       // Users can create their own profile during registration
       allow create: if isOwner(userId);
       
-      // Users can update their own profile
+      // Users can update their own profile (including adding assessments, proposals, etc.)
       allow update: if isOwner(userId) || isAdmin();
       
       // Only admins can delete user profiles
@@ -223,6 +223,103 @@ service cloud.firestore {
       
       // Users can delete their own settings
       allow delete: if isOwner(userId);
+    }
+    
+    // Assessments collection (separate collection for easier management)
+    match /assessments/{assessmentId} {
+      // Users can read their own assessments, admins can read all
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.email == request.auth.token.email ||
+        isAdmin()
+      );
+      
+      // Users can create assessments
+      allow create: if isAuthenticated();
+      
+      // Users can update their own assessments
+      allow update: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Only admins can delete assessments
+      allow delete: if isAdmin();
+    }
+    
+    // Expert Assessments collection
+    match /expert_assessments/{assessmentId} {
+      // Users can read their own expert assessments, admins can read all
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.email == request.auth.token.email ||
+        isAdmin()
+      );
+      
+      // Authenticated users can create expert assessments
+      allow create: if isAuthenticated();
+      
+      // Users can update their own assessments, admins can update all
+      allow update: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Only admins can delete expert assessments
+      allow delete: if isAdmin();
+    }
+    
+    // Agent Assessments collection (for Agent Readiness Assessments)
+    match /agent_assessments/{assessmentId} {
+      // Users can read their own assessments by userId OR email, admins can read all
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.email == request.auth.token.email ||
+        isAdmin()
+      );
+      
+      // Anyone can create agent assessments (guest users via email)
+      allow create: if true;
+      
+      // Users can update their own assessments, admins can update all
+      allow update: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.email == request.auth.token.email ||
+        isAdmin()
+      );
+      
+      // Only admins can delete agent assessments
+      allow delete: if isAdmin();
+    }
+    
+    // Scheduled Emails collection (for follow-up automation)
+    match /scheduled_emails/{emailId} {
+      // Only admins can read scheduled emails (privacy)
+      allow read: if isAdmin();
+      
+      // System can create scheduled emails
+      allow create: if true;
+      
+      // System can update email status (sent, failed, etc.)
+      allow update: if true;
+      
+      // Only admins can delete scheduled emails
+      allow delete: if isAdmin();
+    }
+    
+    // Mail collection (Firebase Send Email Extension)
+    match /mail/{emailId} {
+      // System can create emails for sending
+      allow create: if true;
+      
+      // Extension can update email status
+      allow update: if true;
+      
+      // Only admins can read email logs (privacy)
+      allow read: if isAdmin();
+      
+      // Only admins can delete emails
+      allow delete: if isAdmin();
     }
     
     // Project Timelines collection

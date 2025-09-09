@@ -2,13 +2,15 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import HeroSection from '@/components/landing/HeroSection';
-import ServicesShowcase from '@/components/landing/ServicesShowcase';
-import Expertise from '@/components/landing/Expertise';
-import WhyChooseUs from '@/components/landing/WhyChooseUs';
-import OurApproach from '@/components/landing/OurApproach';
-import TrustIndicators from '@/components/landing/TrustIndicators';
-import QuoteRequestForm from '@/components/forms/QuoteRequestForm';
+import AgentReadinessHero from '@/components/landing/AgentReadinessHero';
+import AgentBlindnessProblems from '@/components/landing/AgentBlindnessProblems';
+import ApiToMcpAnimation from '@/components/landing/ApiToMcpAnimation';
+import OnzeRolPartner from '@/components/landing/OnzeRolPartner';
+import CompanyTimeline from '@/components/landing/CompanyTimeline';
+import SnowFlowShowcase from '@/components/landing/SnowFlowShowcase';
+import ForEveryBusiness from '@/components/landing/ForEveryBusiness';
+import ObjectionsHandling from '@/components/landing/ObjectionsHandling';
+import TestimonialSection from '@/components/landing/TestimonialSection';
 import AmbientLightingBackground from '@/components/landing/AmbientLightingBackground';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CheckCircle } from 'lucide-react';
@@ -59,32 +61,14 @@ function HomePageContent() {
           )}
         </AnimatePresence>
 
-        <HeroSection />
-        <ServicesShowcase />
-        <Expertise />
-        <WhyChooseUs />
-        <OurApproach />
-        <TrustIndicators />
-
-        <section id="quote" className="py-20 bg-black relative overflow-hidden">
-          <div className="absolute inset-0 opacity-20">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `radial-gradient(circle at 30% 30%, #FF6600 0%, transparent 40%),
-                               radial-gradient(circle at 70% 70%, #0A4A0A 0%, transparent 40%)`,
-              }}
-            />
-          </div>
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-white">
-                Let&apos;s Discuss Your <span className="text-orange-500">AI Strategy</span>
-              </h2>
-              <QuoteRequestForm />
-            </div>
-          </div>
-        </section>
+        <AgentReadinessHero />
+        <AgentBlindnessProblems />
+        <ApiToMcpAnimation />
+        <OnzeRolPartner />
+        <CompanyTimeline />
+        <SnowFlowShowcase />
+        <ObjectionsHandling />
+        <ForEveryBusiness />
       </main>
     </>
   );
@@ -92,7 +76,7 @@ function HomePageContent() {
 
 export default function HomePage() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<div>Loading...</div>}>
       <HomePageContent />
     </Suspense>
   );
