@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
         // Mark as failed
         await updateDoc(doc(db, 'scheduled_emails', emailDoc.id), {
           status: 'failed',
-          error: emailError.message,
+          error: emailError instanceof Error ? emailError.message : String(emailError),
           failedAt: new Date()
         });
         
