@@ -200,3 +200,8 @@ export default function TransparentPricing() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
