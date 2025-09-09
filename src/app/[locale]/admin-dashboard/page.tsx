@@ -257,7 +257,7 @@ export default function AdminDashboardPage() {
                 <div className="grid md:grid-cols-4 gap-6">
                   <div className="text-center">
                     <p className="text-white/60 text-sm mb-2">Revenue</p>
-                    <p className="text-3xl font-bold text-white mb-1">€{businessMetrics.revenue.current.toLocaleString('nl-NL')}</p>
+                    <p className="text-3xl font-bold text-white mb-1">€{businessMetrics.revenue.current.toLocaleString()}</p>
                     <div className="flex items-center justify-center space-x-2 text-sm">
                       <span className="text-green-400">↑ {businessMetrics.revenue.change}%</span>
                       <span className="text-white/60">{businessMetrics.revenue.percentage}% of €{(businessMetrics.revenue.target/1000)}k</span>
