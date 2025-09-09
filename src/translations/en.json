@@ -501,7 +501,9 @@
       }
     },
     "cta": {
-      "planCall": "Schedule Call"
+      "planCall": "Schedule Call",
+      "caseStudies": "View Cases",
+      "consultation": "Schedule Consultation"
     }
   },
   "serviceDetails": {
@@ -1252,7 +1254,9 @@
       "title": "Ready for Agent Season?",
       "description": "Start your Agent Readiness journey today",
       "startAssessment": "Start Assessment",
-      "planCall": "Schedule Call"
+      "planCall": "Schedule Call",
+      "caseStudies": "View Cases",
+      "consultation": "Schedule Consultation"
     },
     "legal": {
       "privacy": "Privacy",

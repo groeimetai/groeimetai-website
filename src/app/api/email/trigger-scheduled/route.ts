@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { collection, query, where, getDocs, updateDoc, doc, addDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
+// Force dynamic rendering to avoid static generation issues  
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 // Manual trigger endpoint for scheduled emails
 // Call this from a simple cron service like cron-job.org or UptimeRobot
 export async function GET(req: NextRequest) {

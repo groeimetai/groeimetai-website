@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Force dynamic rendering to avoid static generation issues
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 // Ultra-simple follow-up email endpoint that uses your existing working email system
 // This bypasses complex Firestore queries and uses the working send-assessment endpoint
 

@@ -431,7 +431,9 @@
       }
     },
     "cta": {
-      "planCall": "Plan Gesprek"
+      "planCall": "Plan Gesprek",
+      "caseStudies": "Bekijk Cases",
+      "consultation": "Plan Consult"
     }
   },
   "casesPage": {
