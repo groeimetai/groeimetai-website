@@ -16,9 +16,9 @@ jobs:
         run: |
           echo "🔄 Processing scheduled emails..."
           
-          # Call our API endpoint to process due emails
+          # Call our simple API endpoint first to test GitHub Actions integration
           RESPONSE=$(curl -s -w "HTTPSTATUS:%{http_code}" \
-            -X GET "https://groeimetai.io/api/email/trigger-scheduled")
+            -X GET "https://groeimetai.io/api/email/simple-followup")
           
           # Extract response body and status code
           HTTP_BODY=$(echo $RESPONSE | sed -E 's/HTTPSTATUS\:[0-9]{3}$//')
