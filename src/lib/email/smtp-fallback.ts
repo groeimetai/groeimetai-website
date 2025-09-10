@@ -12,7 +12,7 @@ export class SMTPFallback {
 
   constructor() {
     // Create SMTP transporter using environment variables
-    this.transporter = nodemailer.createTransporter({
+    this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'mail.privateemail.com',
       port: Number(process.env.SMTP_PORT) || 587,
       secure: false, // true for 465, false for other ports
