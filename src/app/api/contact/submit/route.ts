@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import { SMTPFallback } from '@/lib/email/smtp-fallback';
+import nodemailer from 'nodemailer';
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = 'force-dynamic';
@@ -190,48 +190,32 @@ export async function POST(req: NextRequest) {
 </html>
       `;
 
-      // Try Firebase Email Extension first, fallback to SMTP
-      let adminEmailSent = false;
-      
+      // Use exact same SMTP pattern as working assessment emails
+      const transporter = nodemailer.createTransporter({
+        host: process.env.SMTP_HOST,
+        port: parseInt(process.env.SMTP_PORT || '587'),
+        secure: false,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      });
+
+      // Send admin notification email
       try {
-        await addDoc(collection(db, 'mail'), {
+        const adminEmailResponse = await transporter.sendMail({
+          from: `"GroeimetAI - Contact Aanvraag" <${process.env.SMTP_USER}>`,
           to: process.env.CONTACT_EMAIL || 'info@groeimetai.com',
           replyTo: email,
-          message: {
-            subject: `🆕 Contact Aanvraag - ${company} (${conversationType === 'verkennen' ? 'Verkennend' : 
-                      conversationType === 'debrief' ? 'Debrief' : 
-                      conversationType === 'kickoff' ? 'Kickoff' : 'Algemeen'})`,
-            html: adminEmailHtml
-          },
-          template: {
-            name: 'contact_notification',
-            data: { name, email, company, conversationType }
-          }
+          subject: `🆕 Contact Aanvraag - ${company} (${conversationType === 'verkennen' ? 'Verkennend' : 
+                    conversationType === 'debrief' ? 'Debrief' : 
+                    conversationType === 'kickoff' ? 'Kickoff' : 'Algemeen'})`,
+          html: adminEmailHtml
         });
-        console.log('[Contact API] Admin email queued via Firebase');
-        adminEmailSent = true;
-      } catch (firebaseError) {
-        console.log('[Contact API] Firebase email failed, trying SMTP fallback...');
-        
-        // Fallback to SMTP
-        try {
-          const smtpFallback = new SMTPFallback();
-          const result = await smtpFallback.sendEmail({
-            to: process.env.CONTACT_EMAIL || 'info@groeimetai.com',
-            subject: `🆕 Contact Aanvraag - ${company}`,
-            html: adminEmailHtml,
-            replyTo: email
-          });
-          
-          if (result.success) {
-            console.log('[Contact API] Admin email sent via SMTP');
-            adminEmailSent = true;
-          } else {
-            console.error('[Contact API] SMTP fallback failed:', result.error);
-          }
-        } catch (smtpError) {
-          console.error('[Contact API] SMTP fallback error:', smtpError);
-        }
+
+        console.log('[Contact API] Admin notification email sent successfully:', adminEmailResponse.messageId);
+      } catch (emailError) {
+        console.error('[Contact API] Admin email sending failed:', emailError);
       }
 
       // Send confirmation email to the user
@@ -308,44 +292,18 @@ export async function POST(req: NextRequest) {
 </html>
       `;
 
-      // Send user confirmation email with fallback
-      let userEmailSent = false;
-      
+      // Send user confirmation email using same SMTP pattern
       try {
-        await addDoc(collection(db, 'mail'), {
+        const userEmailResponse = await transporter.sendMail({
+          from: `"GroeimetAI" <${process.env.SMTP_USER}>`,
           to: email,
-          message: {
-            subject: '✅ We hebben je aanvraag ontvangen - GroeimetAI',
-            html: confirmationHtml
-          },
-          template: {
-            name: 'contact_confirmation',
-            data: { name, company, conversationType }
-          }
+          subject: '✅ We hebben je aanvraag ontvangen - GroeimetAI',
+          html: confirmationHtml
         });
-        console.log('[Contact API] User confirmation email queued via Firebase');
-        userEmailSent = true;
-      } catch (firebaseError) {
-        console.log('[Contact API] Firebase confirmation email failed, trying SMTP fallback...');
-        
-        // Fallback to SMTP
-        try {
-          const smtpFallback = new SMTPFallback();
-          const result = await smtpFallback.sendEmail({
-            to: email,
-            subject: '✅ We hebben je aanvraag ontvangen - GroeimetAI',
-            html: confirmationHtml
-          });
-          
-          if (result.success) {
-            console.log('[Contact API] User confirmation email sent via SMTP');
-            userEmailSent = true;
-          } else {
-            console.error('[Contact API] SMTP user email failed:', result.error);
-          }
-        } catch (smtpError) {
-          console.error('[Contact API] SMTP user email error:', smtpError);
-        }
+
+        console.log('[Contact API] User confirmation email sent successfully:', userEmailResponse.messageId);
+      } catch (emailError) {
+        console.error('[Contact API] User confirmation email failed:', emailError);
       }
     } catch (emailError) {
       console.error('[Contact API] Email sending failed (non-critical):', emailError);
