@@ -78,6 +78,7 @@
     "resend": "^6.0.2",
     "socket.io": "^4.7.4",
     "socket.io-client": "^4.7.4",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.1.0",
