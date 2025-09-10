@@ -3308,6 +3308,8 @@
       "yourScore": "Jouw score",
       "retry": "Opnieuw",
       "getFullRoadmap": "Krijg je volledige roadmap",
+      "nextStep": "Volgende stap:",
+      "nextStepDescription": "Krijg je volledige Agent Readiness roadmap met concrete gaps, timeline en stappenplan.",
       "levels": {
         "level5": "Level 5: Agent-Ready",
         "level4": "Level 4: Integration-Ready",

@@ -162,14 +162,13 @@ export function AgentReadinessQuickCheck() {
             {level}
           </h3>
           <p className="text-white/70 text-sm sm:text-base">
-            Je hebt {score} van de 100 punten behaald
+            {t('results.yourScore')}: {score}/100
           </p>
         </div>
 
         <div className="space-y-4 mb-6">
           <p className="text-white/80 text-sm sm:text-base leading-relaxed">
-            🎯 <strong>Volgende stap:</strong> Krijg je volledige Agent Readiness roadmap met concrete gaps, 
-            timeline en stappenplan.
+            🎯 <strong>{t('results.nextStep')}</strong> {t('results.nextStepDescription')}
           </p>
         </div>
 
@@ -201,7 +200,7 @@ export function AgentReadinessQuickCheck() {
             style={{ backgroundColor: '#F87315' }}
           >
             <Target className="mr-2 w-4 h-4" />
-            Krijg je volledige roadmap
+            {t('results.getFullRoadmap')}
             <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
           
@@ -220,7 +219,7 @@ export function AgentReadinessQuickCheck() {
             variant="outline"
             className="border-white/20 text-white hover:bg-white/10 flex-shrink-0"
           >
-            Opnieuw
+            {t('results.retry')}
           </Button>
         </div>
       </div>

@@ -3487,6 +3487,8 @@
       "yourScore": "Your score",
       "retry": "Try again",
       "getFullRoadmap": "Get your full roadmap",
+      "nextStep": "Next step:",
+      "nextStepDescription": "Get your complete Agent Readiness roadmap with concrete gaps, timeline and action plan.",
       "levels": {
         "level5": "Level 5: Agent-Ready",
         "level4": "Level 4: Integration-Ready",
