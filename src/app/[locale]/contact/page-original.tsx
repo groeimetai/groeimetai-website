@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,8 +14,22 @@ import {
   User, Building, Clock, ArrowRight, CheckCircle, Users
 } from 'lucide-react';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 
-export default function SafeContactPage() {
+// Dynamic import to avoid SSR issues
+const MapSection = dynamic(() => import('@/components/contact/MapSection'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[400px] rounded-lg overflow-hidden relative bg-black/20 border border-white/10 flex items-center justify-center">
+      <div className="text-center p-6">
+        <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+        <p className="text-white/60 text-sm">Loading map...</p>
+      </div>
+    </div>
+  )
+});
+
+export default function ContactPage() {
   const t = useTranslations('contactPage');
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,48 +49,45 @@ export default function SafeContactPage() {
     {
       id: 'verkennen',
       icon: MessageCircle,
-      title: 'Verkennend Gesprek',
-      subtitle: 'Ontdek AI mogelijkheden voor uw bedrijf',
+      title: t('conversationTypes.exploratory.title'),
+      subtitle: t('conversationTypes.exploratory.subtitle'),
       features: [
-        'Gratis intake gesprek (30 min)',
-        'AI potentie analyse',
-        'Kosten en tijdlijn inschatting'
+        t('conversationTypes.exploratory.features.0'),
+        t('conversationTypes.exploratory.features.1'),
+        t('conversationTypes.exploratory.features.2')
       ],
-      cta: 'Plan Verkennend Gesprek'
+      cta: t('conversationTypes.exploratory.cta')
     },
     {
       id: 'debrief',
       icon: Target,
-      title: 'Assessment Debrief',
-      subtitle: 'Bespreek uw assessment resultaten',
+      title: t('conversationTypes.debrief.title'), 
+      subtitle: t('conversationTypes.debrief.subtitle'),
       features: [
-        'Persoonlijke assessment review',
-        'Concrete aanbevelingen',
-        'Implementatie roadmap'
+        t('conversationTypes.debrief.features.0'),
+        t('conversationTypes.debrief.features.1'),
+        t('conversationTypes.debrief.features.2')
       ],
-      cta: 'Plan Debrief Gesprek'
+      cta: t('conversationTypes.debrief.cta')
     },
     {
       id: 'kickoff',
       icon: Rocket,
-      title: 'Project Kickoff',
-      subtitle: 'Start uw AI implementatie',
+      title: t('conversationTypes.kickoff.title'),
+      subtitle: t('conversationTypes.kickoff.subtitle'),
       features: [
-        'Project planning sessie',
-        'Team alignment',
-        'Eerste milestone planning'
+        t('conversationTypes.kickoff.features.0'),
+        t('conversationTypes.kickoff.features.1'),
+        t('conversationTypes.kickoff.features.2')
       ],
-      cta: 'Plan Kickoff Meeting'
+      cta: t('conversationTypes.kickoff.cta')
     }
   ];
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate required fields
     if (!formData.name || !formData.email || !formData.company) {
       toast.error('Vul alstublieft alle verplichte velden in');
       return;
@@ -113,7 +125,7 @@ export default function SafeContactPage() {
         });
         setSelectedType(null);
         
-        // Hide success message after 5 seconds
+        // Show success message for 5 seconds
         setTimeout(() => {
           setIsSuccess(false);
         }, 5000);
@@ -128,14 +140,15 @@ export default function SafeContactPage() {
     }
   };
 
-  // Don't render until mounted to prevent hydration issues
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration issues
   if (!mounted) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white text-center">
-          <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p>Loading...</p>
-        </div>
+        <div className="text-white">Loading...</div>
       </div>
     );
   }
@@ -144,22 +157,29 @@ export default function SafeContactPage() {
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
       <div className="relative" style={{ backgroundColor: '#080D14' }}>
+        
         <div className="relative container mx-auto px-4 py-32">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
+            {/* Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-16"
+            >
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                Laten we{' '}
+                {t('header.title')}{' '}
                 <span
                   className="text-white px-4 py-2 inline-block"
                   style={{ background: 'linear-gradient(135deg, #F87315, #FF8533)' }}
                 >
-                  praten
+                  {t('header.highlight')}
                 </span>
               </h1>
               <p className="text-xl text-white/90">
-                Begin uw AI transformatie met een persoonlijk gesprek
+                {t('header.subtitle')}
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -167,19 +187,29 @@ export default function SafeContactPage() {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-20">
         <div className="max-w-6xl mx-auto">
+
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Left: Gesprek Types */}
-            <div className="relative">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="relative"
+            >
+              
+
               <div className="relative">
-                <h2 className="text-2xl font-bold text-white mb-8">Kies uw gesprekstype</h2>
+                <h2 className="text-2xl font-bold text-white mb-8">{t('conversationTypes.title')}</h2>
               </div>
               
               <div className="space-y-6">
                 {gespreksTypes.map((type, index) => {
-                  const Icon = type.icon;
                   return (
-                    <div
+                    <motion.div
                       key={type.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
                       className={`relative border rounded-xl overflow-hidden cursor-pointer transition-all duration-300 ${
                         selectedType === type.id 
                           ? 'border-orange-500/50 bg-orange-500/10' 
@@ -187,13 +217,14 @@ export default function SafeContactPage() {
                       }`}
                       onClick={() => setSelectedType(type.id)}
                     >
+                      
                       <div className="relative p-6">
                         <div className="flex items-center mb-4">
                           <div 
                             className="w-12 h-12 rounded-lg flex items-center justify-center mr-4"
                             style={{ backgroundColor: selectedType === type.id ? '#F87315' : 'rgba(255,255,255,0.1)' }}
                           >
-                            <Icon className="w-6 h-6 text-white" />
+                            <type.icon className="w-6 h-6 text-white" />
                           </div>
                           <div>
                             <h3 className="text-xl font-bold text-white">{type.title}</h3>
@@ -222,7 +253,7 @@ export default function SafeContactPage() {
                           {type.cta}
                         </Button>
                       </div>
-                    </div>
+                    </motion.div>
                   );
                 })}
               </div>
@@ -230,42 +261,49 @@ export default function SafeContactPage() {
               {/* Direct Contact */}
               <Card className="relative bg-white/5 border border-white/10 mt-8 overflow-hidden">
                 <CardContent className="relative p-6">
-                  <h3 className="text-lg font-bold text-white mb-4">Direct Contact</h3>
+                  <h3 className="text-lg font-bold text-white mb-4">{t('directContact.title')}</h3>
                   <div className="space-y-3">
                     <div className="flex items-center">
                       <User className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
                       <div>
-                        <p className="text-white font-medium">Niels van der Werf</p>
-                        <p className="text-white/60 text-sm">AI Consultant & Founder</p>
+                        <p className="text-white font-medium">{t('directContact.name')}</p>
+                        <p className="text-white/60 text-sm">{t('directContact.role')}</p>
                       </div>
                     </div>
                     <div className="flex items-center">
                       <Mail className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
-                      <p className="text-white text-sm">info@groeimetai.com</p>
+                      <p className="text-white text-sm">{t('directContact.email')}</p>
                     </div>
                     <div className="flex items-center">
                       <Phone className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
-                      <p className="text-white text-sm">+31 6 12345678</p>
+                      <p className="text-white text-sm">{t('directContact.phone')}</p>
                     </div>
                     <div className="flex items-center">
                       <Clock className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
-                      <p className="text-white/80 text-sm">Ma-Vr: 9:00-18:00</p>
+                      <p className="text-white/80 text-sm">{t('directContact.hours')}</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
 
             {/* Right: Form */}
-            <div className="relative">
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative"
+            >
+              
               <Card className="relative bg-white/10 border border-white/20 backdrop-blur-sm">
                 <CardContent className="p-8">
-                  <h3 className="text-xl font-bold text-white mb-6">Verstuur uw aanvraag</h3>
+                  <h3 className="text-xl font-bold text-white mb-6">{t('form.title')}</h3>
                   
                   <form className="space-y-6 relative" onSubmit={handleSubmit}>
+                    
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="cname" className="text-white/80">Naam *</Label>
+                        <Label htmlFor="cname" className="text-white/80">{t('form.fields.name.label')} *</Label>
                         <Input
                           id="cname"
                           value={formData.name}
@@ -275,7 +313,7 @@ export default function SafeContactPage() {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="ccompany" className="text-white/80">Bedrijf *</Label>
+                        <Label htmlFor="ccompany" className="text-white/80">{t('form.fields.company.label')} *</Label>
                         <Input
                           id="ccompany"
                           value={formData.company}
@@ -288,7 +326,7 @@ export default function SafeContactPage() {
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="cemail" className="text-white/80">Email *</Label>
+                        <Label htmlFor="cemail" className="text-white/80">{t('form.fields.email.label')} *</Label>
                         <Input
                           id="cemail"
                           type="email"
@@ -299,7 +337,7 @@ export default function SafeContactPage() {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="cphone" className="text-white/80">Telefoon</Label>
+                        <Label htmlFor="cphone" className="text-white/80">{t('form.fields.phone.label')}</Label>
                         <Input
                           id="cphone"
                           value={formData.phone}
@@ -310,20 +348,20 @@ export default function SafeContactPage() {
                     </div>
 
                     <div>
-                      <Label htmlFor="message" className="text-white/80">Bericht</Label>
+                      <Label htmlFor="message" className="text-white/80">{t('form.fields.message.label')}</Label>
                       <Textarea
                         id="message"
                         value={formData.message}
                         onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
                         className="bg-white/5 border-white/20 text-white"
-                        placeholder="Beschrijf kort uw AI uitdagingen of vragen..."
+                        placeholder={t('form.fields.message.placeholder')}
                         rows={4}
                       />
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="date" className="text-white/80">Voorkeur datum</Label>
+                        <Label htmlFor="date" className="text-white/80">{t('form.fields.preferredDate.label')}</Label>
                         <Input
                           id="date"
                           type="date"
@@ -333,15 +371,15 @@ export default function SafeContactPage() {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="time" className="text-white/80">Voorkeur tijd</Label>
+                        <Label htmlFor="time" className="text-white/80">{t('form.fields.preferredTime.label')}</Label>
                         <select
                           value={formData.preferredTime}
                           onChange={(e) => setFormData(prev => ({ ...prev, preferredTime: e.target.value }))}
                           className="w-full bg-white/5 border border-white/20 text-white rounded-md px-3 py-2"
                         >
-                          <option value="">Selecteer tijd</option>
-                          <option value="morning">Ochtend (9:00-12:00)</option>
-                          <option value="afternoon">Middag (13:00-17:00)</option>
+                          <option value="">{t('form.fields.preferredTime.placeholder')}</option>
+                          <option value="morning">{t('form.fields.preferredTime.options.morning')}</option>
+                          <option value="afternoon">{t('form.fields.preferredTime.options.afternoon')}</option>
                         </select>
                       </div>
                     </div>
@@ -365,7 +403,7 @@ export default function SafeContactPage() {
                       ) : (
                         <>
                           <Calendar className="mr-2 w-5 h-5" />
-                          Verstuur Aanvraag
+                          {t('form.submit')}
                           <ArrowRight className="ml-2 w-5 h-5" />
                         </>
                       )}
@@ -379,99 +417,60 @@ export default function SafeContactPage() {
                       </div>
                     ) : (
                       <p className="text-white/60 text-sm text-center">
-                        We reageren binnen 24 uur op uw aanvraag
+                        {t('form.responseTime')}
                       </p>
                     )}
                   </form>
                 </CardContent>
               </Card>
 
-              {/* Atmosphere Image */}
-              <div className="mt-8">
-                <div className="relative h-[300px] w-full rounded-lg overflow-hidden">
+              {/* Sfeer image onder het formulier */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="mt-8"
+              >
+                <div className="sfeer-image" style={{ height: '100%', width: '100%', minHeight: '300px' }}>
                   <Image
                     src="/images/philippe-bontemps-FUfJGhpKITo-unsplash.jpg"
-                    alt="Office atmosphere"
-                    fill
-                    className="object-cover"
-                    priority
+                    alt=""
+                    width={600}
+                    height={300}
+                    className="object-cover w-full h-full"
                   />
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </div>
 
-      {/* Simplified Location Section - No Google Maps */}
+      {/* Google Maps Section */}
       <section className="py-20 bg-black">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-white mb-8">
-              Bezoek Ons Kantoor
-            </h2>
+          <div className="max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-8"
+            >
+              <h2 className="text-3xl font-bold text-white mb-4">
+                Bezoek Ons Kantoor
+              </h2>
+              <p className="text-white/70">
+                Gelegen in het hart van Apeldoorn, Nederland
+              </p>
+            </motion.div>
             
-            <Card className="bg-white/5 border-white/10 p-8">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="text-left">
-                  <h3 className="text-xl font-bold text-white mb-4">GroeimetAI</h3>
-                  <div className="space-y-3 text-white/80">
-                    <div className="flex items-center gap-3">
-                      <Building className="w-5 h-5 text-orange" />
-                      <span>Apeldoorn, Nederland</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Mail className="w-5 h-5 text-orange" />
-                      <span>info@groeimetai.com</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Phone className="w-5 h-5 text-orange" />
-                      <span>+31 6 12345678</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Clock className="w-5 h-5 text-orange" />
-                      <span>Ma-Vr: 9:00-18:00</span>
-                    </div>
-                  </div>
-                  
-                  <Button 
-                    asChild
-                    className="mt-6 bg-orange text-white"
-                  >
-                    <a 
-                      href="https://maps.google.com/?q=GroeimetAI+Apeldoorn" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                    >
-                      <ArrowRight className="w-4 h-4 mr-2" />
-                      Open in Google Maps
-                    </a>
-                  </Button>
-                </div>
-                
-                <div className="bg-gradient-to-br from-orange/20 to-orange/5 rounded-lg p-8 border border-orange/20">
-                  <h4 className="text-white font-semibold mb-4">Waarom een persoonlijk gesprek?</h4>
-                  <ul className="space-y-2 text-white/80 text-sm">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                      <span>Begrijp uw specifieke uitdagingen</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                      <span>Krijg direct bruikbare AI inzichten</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                      <span>Ontdek concrete implementatie mogelijkheden</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                      <span>Plan uw AI roadmap samen</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <MapSection className="mb-6" />
+            </motion.div>
           </div>
         </div>
       </section>
