@@ -205,7 +205,7 @@ export async function POST(req: NextRequest) {
       try {
         const adminEmailResponse = await transporter.sendMail({
           from: `"GroeimetAI - Contact Aanvraag" <${process.env.SMTP_USER}>`,
-          to: process.env.CONTACT_EMAIL || 'info@groeimetai.com',
+          to: process.env.CONTACT_EMAIL || 'info@groeimetai.io',
           replyTo: email,
           subject: `🆕 Contact Aanvraag - ${company} (${conversationType === 'verkennen' ? 'Verkennend' : 
                     conversationType === 'debrief' ? 'Debrief' : 
@@ -280,7 +280,7 @@ export async function POST(req: NextRequest) {
     <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
       <p style="color: rgba(255,255,255,0.5); font-size: 14px; line-height: 1.6;">
         Heb je dringende vragen? Bel ons direct op <a href="tel:+31612345678" style="color: #F87315; text-decoration: none;">+31 6 12345678</a><br>
-        of stuur een email naar <a href="mailto:info@groeimetai.com" style="color: #F87315; text-decoration: none;">info@groeimetai.com</a>
+        of stuur een email naar <a href="mailto:info@groeimetai.io" style="color: #F87315; text-decoration: none;">info@groeimetai.io</a>
       </p>
       
       <p style="color: rgba(255,255,255,0.3); font-size: 12px; margin-top: 20px;">
@@ -336,7 +336,7 @@ export async function POST(req: NextRequest) {
     // Return a user-friendly error but log the real error
     return NextResponse.json(
       { 
-        error: 'Er is een fout opgetreden bij het verzenden van uw aanvraag. Probeer het opnieuw of neem direct contact op via info@groeimetai.com',
+        error: 'Er is een fout opgetreden bij het verzenden van uw aanvraag. Probeer het opnieuw of neem direct contact op via info@groeimetai.io',
         details: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : 'Unknown error') : undefined
       },
       { status: 500 }

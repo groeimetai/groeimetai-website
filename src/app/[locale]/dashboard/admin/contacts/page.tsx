@@ -310,7 +310,7 @@ ${emailContent}
     <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 30px;">
       <p style="color: rgba(255,255,255,0.5); font-size: 14px;">
         GroeimetAI • Transformeer je bedrijf met AI<br>
-        <a href="mailto:info@groeimetai.com" style="color: #F87315; text-decoration: none;">info@groeimetai.com</a>
+        <a href="mailto:info@groeimetai.io" style="color: #F87315; text-decoration: none;">info@groeimetai.io</a>
       </p>
     </div>
   </div>

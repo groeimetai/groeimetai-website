@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
 
     // Create a simple test email with exact same format as working emails
     const testEmail = {
-      to: process.env.CONTACT_EMAIL || 'info@groeimetai.com',
+      to: process.env.CONTACT_EMAIL || 'info@groeimetai.io',
       message: {
         subject: '🧪 Test Email from GroeimetAI',
         html: `
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
       debugInfo: {
         mailCollectionSize: mailSnapshot.size,
         timestampNow: new Date().toISOString(),
-        contactEmail: process.env.CONTACT_EMAIL || 'info@groeimetai.com'
+        contactEmail: process.env.CONTACT_EMAIL || 'info@groeimetai.io'
       }
     });
 

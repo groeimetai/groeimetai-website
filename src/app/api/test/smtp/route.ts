@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
 
     // Send test email
     const testEmail = {
-      to: process.env.CONTACT_EMAIL || 'info@groeimetai.com',
+      to: process.env.CONTACT_EMAIL || 'info@groeimetai.io',
       subject: '🧪 SMTP Test - GroeimetAI',
       html: `
 <!DOCTYPE html>

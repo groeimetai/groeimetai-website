@@ -241,7 +241,7 @@ export default function SafeContactPage() {
                     </div>
                     <div className="flex items-center">
                       <Mail className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
-                      <p className="text-white text-sm">info@groeimetai.com</p>
+                      <p className="text-white text-sm">info@groeimetai.io</p>
                     </div>
                     <div className="flex items-center">
                       <Phone className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
@@ -422,7 +422,7 @@ export default function SafeContactPage() {
                     </div>
                     <div className="flex items-center gap-3">
                       <Mail className="w-5 h-5 text-orange" />
-                      <span>info@groeimetai.com</span>
+                      <span>info@groeimetai.io</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Phone className="w-5 h-5 text-orange" />

@@ -196,7 +196,7 @@ REDIS_URL=redis://localhost:6379
 ## 📞 Support
 
 Voor vragen over de demo of technische ondersteuning:
-- Email: info@groeimetai.com
+- Email: info@groeimetai.io
 - Documentatie: https://groeimetai.com/docs
 - GitHub: https://github.com/groeimetai
 
