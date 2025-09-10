@@ -112,7 +112,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-            className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-3 sm:mb-4 md:mb-6 leading-tight"
+            className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-white mb-3 sm:mb-4 md:mb-6 leading-tight"
           >
             {t('title')}{' '}
             <span
@@ -155,21 +155,21 @@ export default function AgentReadinessHero() {
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center items-center px-2 sm:px-4 md:px-0">
                 <Button
                   onClick={() => setShowQuickCheck(true)}
-                  size="lg"
-                  className="group text-white border-0 hover-lift transform transition-all duration-300 w-full sm:w-auto min-h-[44px] sm:min-h-[48px] text-sm sm:text-base md:text-lg px-3 sm:px-6 py-2.5 sm:py-4 shadow-md sm:shadow-xl"
+                  size="default"
+                  className="group text-white border-0 hover-lift transform transition-all duration-300 w-full sm:w-auto h-10 sm:h-11 text-sm sm:text-base px-4 sm:px-5 py-2 sm:py-2.5 shadow-lg hover:shadow-xl"
                   style={{ 
                     backgroundColor: '#F87315'
                   }}
                 >
-                  <Zap className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
+                  <Zap className="mr-2 w-4 h-4" />
                   {t('cta.quickCheck')}
-                  <ArrowRight className="ml-2 w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="ml-2 w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
                 </Button>
                 <Link href="/cases" className="w-full sm:w-auto">
                   <Button
-                    size="lg"
+                    size="default"
                     variant="outline"
-                    className="border-white/15 sm:border-white/20 text-white/90 sm:text-white hover:bg-white/5 sm:hover:bg-white/10 hover:border-white/25 sm:hover:border-white/40 transition-all duration-300 w-full sm:w-auto min-h-[44px] sm:min-h-[48px] text-sm sm:text-base md:text-lg px-3 sm:px-6 py-2.5 sm:py-4"
+                    className="border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 w-full sm:w-auto h-10 sm:h-11 text-sm sm:text-base px-4 sm:px-5 py-2 sm:py-2.5"
                   >
                     {t('cta.seeHow')}
                   </Button>
