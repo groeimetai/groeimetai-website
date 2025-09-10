@@ -74,49 +74,64 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Sidebar */}
       <motion.aside
         initial={false}
-        animate={{ width: isSidebarCollapsed ? 80 : 240 }}
+        animate={{ 
+          width: isSidebarCollapsed ? 80 : 240,
+          x: isMobileSidebarOpen ? 0 : (typeof window !== 'undefined' && window.innerWidth < 768 ? -240 : 0)
+        }}
         transition={{ duration: 0.3 }}
-        className={`fixed left-0 top-0 bottom-0 z-50 bg-card border-r border-border ${
-          isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0 transition-transform`}
+        className="fixed left-0 top-0 bottom-0 z-50 bg-card border-r border-border md:translate-x-0"
+        style={{ width: isSidebarCollapsed ? 80 : 240 }}
       >
         <div className="flex flex-col h-full">
           {/* Logo section */}
-          <div className="p-6 border-b border-border">
+          <div className="p-4 sm:p-6 border-b border-border">
             <div className="flex items-center justify-between">
               <Link href="/dashboard" className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-lg">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-base sm:text-lg">
                   G
                 </div>
-                {!isSidebarCollapsed && <span className="text-xl font-semibold">GroeimetAI</span>}
+                {!isSidebarCollapsed && <span className="text-lg sm:text-xl font-semibold">GroeimetAI</span>}
               </Link>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                className="hidden md:flex"
-              >
-                <ChevronLeft
-                  className={`h-4 w-4 transition-transform ${
-                    isSidebarCollapsed ? 'rotate-180' : ''
-                  }`}
-                />
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsMobileSidebarOpen(false)}
+                  className="md:hidden"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                  className="hidden md:flex"
+                >
+                  <ChevronLeft
+                    className={`h-4 w-4 transition-transform ${
+                      isSidebarCollapsed ? 'rotate-180' : ''
+                    }`}
+                  />
+                </Button>
+              </div>
             </div>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 p-4">
-            <ul className="space-y-2">
+          <nav className="flex-1 p-3 sm:p-4 overflow-y-auto">
+            <ul className="space-y-1 sm:space-y-2">
               {sidebarItems.map((item) => {
                 const isActive = pathname === item.href;
                 return (
                   <li key={item.href}>
-                    <Link href={item.href}>
+                    <Link 
+                      href={item.href}
+                      onClick={() => setIsMobileSidebarOpen(false)}
+                    >
                       <motion.div
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                        className={`flex items-center gap-3 px-3 py-2.5 sm:py-2 rounded-lg transition-colors ${
                           isActive
                             ? 'bg-primary text-primary-foreground'
                             : 'hover:bg-muted text-muted-foreground hover:text-foreground'
@@ -135,10 +150,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </nav>
 
           {/* Bottom section */}
-          <div className="p-4 border-t border-border">
+          <div className="p-3 sm:p-4 border-t border-border">
             <Button
               variant="ghost"
-              className="w-full justify-start gap-3 text-muted-foreground hover:text-foreground"
+              className="w-full justify-start gap-3 text-muted-foreground hover:text-foreground py-2.5 sm:py-2"
+              onClick={() => setIsMobileSidebarOpen(false)}
             >
               <HelpCircle className="h-5 w-5 flex-shrink-0" />
               {!isSidebarCollapsed && <span className="text-sm">Help & Support</span>}
@@ -153,30 +169,30 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       >
         {/* Top bar */}
         <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-lg border-b border-border">
-          <div className="flex items-center justify-between h-16 px-4 md:px-6">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4 md:px-6">
+            <div className="flex items-center gap-2 sm:gap-4">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsMobileSidebarOpen(true)}
-                className="md:hidden"
+                className="md:hidden h-9 w-9 sm:h-10 sm:w-10"
               >
                 <Menu className="h-5 w-5" />
               </Button>
-              <h1 className="text-lg font-semibold">Dashboard</h1>
+              <h1 className="text-base sm:text-lg font-semibold">Dashboard</h1>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               {/* Notifications */}
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
+              <Button variant="ghost" size="icon" className="relative h-9 w-9 sm:h-10 sm:w-10">
+                <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="absolute top-1 right-1 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-destructive rounded-full" />
               </Button>
 
               {/* User menu */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                  <Button variant="ghost" className="relative h-8 w-8 sm:h-10 sm:w-10 rounded-full">
                     <Avatar>
                       {user?.photoURL && (
                         <AvatarImage src={user.photoURL} alt={user?.displayName || 'User'} />
@@ -222,7 +238,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </header>
 
         {/* Page content */}
-        <main className="p-4 md:p-6">{children}</main>
+        <main className="p-3 sm:p-4 md:p-6">{children}</main>
       </div>
     </div>
   );

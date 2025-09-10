@@ -116,7 +116,7 @@ export default function AgentReadinessHero() {
           >
             {t('title')}{' '}
             <span
-              className="text-white px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 inline-block rounded-sm"
+              className="text-white px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 inline-block"
               style={{ 
                 background: 'linear-gradient(135deg, #F87315, #FF8533)',
                 boxShadow: '0 4px 14px 0 rgba(248, 115, 21, 0.3)'
