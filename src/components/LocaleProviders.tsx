@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { CommandPaletteProvider } from '@/components/CommandPalette';
 import { HelpProvider } from '@/components/HelpSystem';
+import { FirebasePerformanceConfig } from '@/components/FirebasePerformanceConfig';
 
 // Dynamically import ChatbotWidget to avoid SSR issues
 const ChatbotWidget = dynamic(
@@ -25,6 +26,7 @@ export function LocaleProviders({ children }: LocaleProvidersProps) {
   return (
     <HelpProvider>
       <CommandPaletteProvider>
+        <FirebasePerformanceConfig />
         {children}
         {!isDashboardPage && <ChatbotWidget />}
       </CommandPaletteProvider>
