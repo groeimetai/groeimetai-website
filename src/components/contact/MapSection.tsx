@@ -25,11 +25,16 @@ export default function MapSection({ className }: MapSectionProps) {
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const [hasApiKey] = useState(() => !!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
+  const [mounted, setMounted] = useState(false);
+  const [hasApiKey] = useState(() => typeof window !== 'undefined' && !!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
 
   useEffect(() => {
-    // Don't load map if no API key
-    if (!hasApiKey) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    // Don't load map if no API key or not mounted
+    if (!hasApiKey || !mounted) {
       return;
     }
 
@@ -88,7 +93,7 @@ export default function MapSection({ className }: MapSectionProps) {
         markerRef.current.map = null;
       }
     };
-  }, [hasApiKey]);
+  }, [hasApiKey, mounted]);
 
   const initializeMap = async () => {
     if (!mapRef.current || mapInstanceRef.current) return;
@@ -104,34 +109,14 @@ export default function MapSection({ className }: MapSectionProps) {
       const officeLocation = { lat: 52.2112, lng: 5.9699 }; // Apeldoorn coordinates
 
       // Initialize map with better options
+      // Note: When using mapId, styles are controlled via Google Cloud Console
       mapInstanceRef.current = new google.maps.Map(mapRef.current, {
         center: officeLocation,
         zoom: 15,
         mapId: 'groeimetai_dark_map', // Required for AdvancedMarkerElement
         disableDefaultUI: false,
         gestureHandling: 'cooperative', // Better mobile handling
-        styles: [
-          {
-            featureType: 'all',
-            elementType: 'all',
-            stylers: [{ invert_lightness: true }, { saturation: -100 }, { lightness: 33 }],
-          },
-          {
-            featureType: 'water',
-            elementType: 'geometry',
-            stylers: [{ color: '#1a1a1a' }],
-          },
-          {
-            featureType: 'road',
-            elementType: 'geometry',
-            stylers: [{ color: '#2a2a2a' }],
-          },
-          {
-            featureType: 'poi',
-            elementType: 'labels',
-            stylers: [{ visibility: 'off' }],
-          },
-        ],
+        // Removed styles - when mapId is present, styles are controlled via Cloud Console
       });
 
       // Use AdvancedMarkerElement instead of deprecated Marker
@@ -214,7 +199,7 @@ export default function MapSection({ className }: MapSectionProps) {
     }
   };
 
-  // Don't render if no API key
+  // Don't render if no API key or not mounted
   if (!hasApiKey) {
     return (
       <div className={className}>
@@ -222,6 +207,19 @@ export default function MapSection({ className }: MapSectionProps) {
           <div className="text-center p-6">
             <p className="text-white/60 text-sm mb-2">Map view not available</p>
             <p className="text-white/40 text-xs">Google Maps API key not configured</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!mounted) {
+    return (
+      <div className={className}>
+        <div className="w-full h-[400px] rounded-lg overflow-hidden relative bg-black/20 border border-white/10 flex items-center justify-center">
+          <div className="text-center p-6">
+            <Loader2 className="w-8 h-8 text-white/60 animate-spin mx-auto mb-2" />
+            <p className="text-white/60 text-sm">Loading map...</p>
           </div>
         </div>
       </div>

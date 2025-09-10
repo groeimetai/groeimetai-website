@@ -21,6 +21,7 @@ export default function ContactPage() {
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -125,6 +126,19 @@ export default function ContactPage() {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration issues
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black">
