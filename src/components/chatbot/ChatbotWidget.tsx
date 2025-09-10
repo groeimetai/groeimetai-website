@@ -24,9 +24,16 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [showProactive, setShowProactive] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Check if user has interacted before
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    
+    // Check if user has interacted before (only after mount)
     const interacted = localStorage.getItem('chatbot_interacted');
     if (interacted) {
       setHasInteracted(true);
@@ -45,17 +52,21 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
     if (autoOpen && !interacted) {
       setIsOpen(true);
     }
-  }, [autoOpen, delay]);
+  }, [autoOpen, delay, mounted]);
 
   const handleOpen = () => {
     setIsOpen(true);
     setShowProactive(false);
-    localStorage.setItem('chatbot_interacted', 'true');
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('chatbot_interacted', 'true');
+    }
     setHasInteracted(true);
   };
 
   // Listen for custom event to open chatbot
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const handleOpenChatbot = () => {
       setIsOpen(true);
       setShowProactive(false);
@@ -76,9 +87,16 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
 
   const handleDismissProactive = () => {
     setShowProactive(false);
-    localStorage.setItem('chatbot_interacted', 'true');
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('chatbot_interacted', 'true');
+    }
     setHasInteracted(true);
   };
+
+  // Prevent hydration issues
+  if (!mounted) {
+    return null;
+  }
 
   if (isOpen) {
     return <ChatbotInterface onClose={handleClose} />;
