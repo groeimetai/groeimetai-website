@@ -19,6 +19,7 @@ import {
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { nl } from 'date-fns/locale';
+import MeetingScheduler from '@/components/admin/MeetingScheduler';
 
 interface ContactSubmission {
   id: string;
@@ -643,69 +644,21 @@ ${emailContent}
         )}
       </div>
 
-      {/* Schedule Meeting Modal */}
-      <Dialog open={showScheduleModal} onOpenChange={setShowScheduleModal}>
-        <DialogContent className="bg-black border-white/20">
-          <DialogHeader>
-            <DialogTitle className="text-white">Plan Meeting met {selectedContact?.name}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <Label className="text-white/80">Datum</Label>
-              <Input
-                type="date"
-                value={scheduleForm.date}
-                onChange={(e) => setScheduleForm({ ...scheduleForm, date: e.target.value })}
-                className="bg-white/5 border-white/20 text-white"
-              />
-            </div>
-            <div>
-              <Label className="text-white/80">Tijd</Label>
-              <Input
-                type="time"
-                value={scheduleForm.time}
-                onChange={(e) => setScheduleForm({ ...scheduleForm, time: e.target.value })}
-                className="bg-white/5 border-white/20 text-white"
-              />
-            </div>
-            <div>
-              <Label className="text-white/80">Locatie / Meeting Link</Label>
-              <Input
-                value={scheduleForm.location}
-                onChange={(e) => setScheduleForm({ ...scheduleForm, location: e.target.value })}
-                placeholder="Google Meet link of kantoor adres"
-                className="bg-white/5 border-white/20 text-white"
-              />
-            </div>
-            <div>
-              <Label className="text-white/80">Notities</Label>
-              <Textarea
-                value={scheduleForm.notes}
-                onChange={(e) => setScheduleForm({ ...scheduleForm, notes: e.target.value })}
-                placeholder="Agenda punten of opmerkingen..."
-                className="bg-white/5 border-white/20 text-white"
-                rows={3}
-              />
-            </div>
-          </div>
-          <DialogFooter className="mt-6">
-            <Button
-              variant="outline"
-              onClick={() => setShowScheduleModal(false)}
-              className="border-white/20 text-white"
-            >
-              Annuleren
-            </Button>
-            <Button
-              onClick={handleScheduleMeeting}
-              className="bg-orange text-white"
-            >
-              <Send className="mr-2 h-4 w-4" />
-              Plan & Verstuur Uitnodiging
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Enhanced Meeting Scheduler */}
+      {selectedContact && (
+        <MeetingScheduler
+          contact={selectedContact}
+          isOpen={showScheduleModal}
+          onClose={() => {
+            setShowScheduleModal(false);
+            setSelectedContact(null);
+          }}
+          onSuccess={() => {
+            // Refresh contacts or update state as needed
+            toast.success('Meeting succesvol ingepland!');
+          }}
+        />
+      )}
 
       {/* Email Modal */}
       <Dialog open={showEmailModal} onOpenChange={setShowEmailModal}>
