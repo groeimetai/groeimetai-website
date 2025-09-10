@@ -18,16 +18,16 @@ export default function AgentReadinessHero() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none glow-container">
         {/* Main Central Glow - Slow Orbital Movement */}
         <motion.div 
-          className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] lg:w-[500px] lg:h-[500px] rounded-full opacity-15 sm:opacity-25 lg:opacity-30 blur-3xl"
+          className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] sm:w-[400px] sm:h-[400px] lg:w-[500px] lg:h-[500px] rounded-full opacity-25 sm:opacity-25 lg:opacity-30 blur-3xl"
           style={{
-            background: 'radial-gradient(circle, rgba(248,115,21,0.6) 0%, rgba(248,115,21,0.2) 40%, rgba(248,115,21,0.05) 70%, transparent 100%)',
-            filter: 'blur(40px) sm:blur(50px) lg:blur(60px)'
+            background: 'radial-gradient(circle, rgba(248,115,21,0.8) 0%, rgba(248,115,21,0.3) 40%, rgba(248,115,21,0.1) 70%, transparent 100%)',
+            filter: 'blur(30px) sm:blur(50px) lg:blur(60px)'
           }}
           animate={{ 
             x: [0, 5, -3, 0],
             y: [0, -3, 5, 0],
             scale: [1, 1.02, 0.99, 1],
-            opacity: [0.15, 0.20, 0.12, 0.15]
+            opacity: [0.25, 0.30, 0.20, 0.25]
           }}
           transition={{ 
             duration: 8,
@@ -38,16 +38,16 @@ export default function AgentReadinessHero() {
         
         {/* Secondary Glow - Figure-8 Movement */}
         <motion.div 
-          className="absolute top-1/3 right-1/4 w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px] rounded-full opacity-10 sm:opacity-15 lg:opacity-20 blur-2xl"
+          className="absolute top-1/3 right-1/4 w-[150px] h-[150px] sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px] rounded-full opacity-20 sm:opacity-15 lg:opacity-20 blur-2xl"
           style={{
-            background: 'radial-gradient(circle, rgba(255,133,51,0.4) 0%, rgba(255,133,51,0.1) 50%, rgba(248,115,21,0.05) 80%, transparent 100%)',
-            filter: 'blur(40px)'
+            background: 'radial-gradient(circle, rgba(255,133,51,0.6) 0%, rgba(255,133,51,0.2) 50%, rgba(248,115,21,0.1) 80%, transparent 100%)',
+            filter: 'blur(25px) sm:blur(40px)'
           }}
           animate={{ 
             x: [0, 10, 0, -10, 0],
             y: [0, -8, 0, 8, 0],
             scale: [1, 1.05, 1.02, 1.03, 1],
-            opacity: [0.10, 0.15, 0.08, 0.12, 0.10]
+            opacity: [0.20, 0.25, 0.15, 0.20, 0.20]
           }}
           transition={{ 
             duration: 12,
@@ -59,16 +59,16 @@ export default function AgentReadinessHero() {
         
         {/* Accent Glow - Gentle Drift */}
         <motion.div 
-          className="absolute bottom-1/3 left-1/4 w-[350px] h-[350px] rounded-full opacity-15 blur-3xl"
+          className="absolute bottom-1/3 left-1/4 w-[200px] h-[200px] sm:w-[350px] sm:h-[350px] rounded-full opacity-20 sm:opacity-15 blur-3xl"
           style={{
-            background: 'radial-gradient(circle, rgba(248,115,21,0.4) 0%, rgba(255,165,0,0.15) 60%, rgba(248,115,21,0.03) 80%, transparent 100%)',
-            filter: 'blur(50px)'
+            background: 'radial-gradient(circle, rgba(248,115,21,0.5) 0%, rgba(255,165,0,0.2) 60%, rgba(248,115,21,0.05) 80%, transparent 100%)',
+            filter: 'blur(30px) sm:blur(50px)'
           }}
           animate={{ 
             x: [0, -8, 12, -5, 0],
             y: [0, 6, -3, 5, 0],
             scale: [1, 1.03, 1.01, 1.02, 1],
-            opacity: [0.08, 0.12, 0.05, 0.10, 0.08]
+            opacity: [0.20, 0.25, 0.15, 0.20, 0.20]
           }}
           transition={{ 
             duration: 10,

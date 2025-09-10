@@ -88,8 +88,8 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
     <>
       {/* Proactive Message */}
       {showProactive && (
-        <div className="fixed bottom-20 right-4 z-40 animate-fade-in">
-          <div className="bg-black rounded-lg shadow-xl p-4 max-w-xs border border-white/20">
+        <div className="fixed bottom-20 right-2 sm:right-4 z-40 animate-fade-in">
+          <div className="bg-black rounded-lg shadow-xl p-3 sm:p-4 max-w-[280px] sm:max-w-xs border border-white/20">
             <p className="text-sm text-white mb-2">{proactiveMessage}</p>
             <div className="flex justify-end space-x-2">
               <button
@@ -106,7 +106,7 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
               </button>
             </div>
           </div>
-          <div className="absolute -bottom-2 right-8 w-4 h-4 bg-black transform rotate-45 border-r border-b border-white/20"></div>
+          <div className="absolute -bottom-2 right-6 sm:right-8 w-4 h-4 bg-black transform rotate-45 border-r border-b border-white/20"></div>
         </div>
       )}
 
@@ -115,9 +115,9 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
         <button
           onClick={handleOpen}
           className={cn(
-            'fixed bottom-4 right-4 z-40',
+            'fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-40',
             'bg-black border-2 border-orange',
-            'text-orange rounded-full p-4',
+            'text-orange rounded-full p-3 sm:p-4',
             'shadow-lg hover:shadow-xl',
             'transform transition-all duration-300',
             'hover:scale-110 active:scale-95',
@@ -126,11 +126,11 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
           )}
           aria-label="Open chat"
         >
-          <MessageSquare className="h-6 w-6" />
-          <span className="absolute -top-1 -right-1 h-3 w-3 bg-green-400 rounded-full animate-pulse"></span>
+          <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6" />
+          <span className="absolute -top-1 -right-1 h-2.5 w-2.5 sm:h-3 sm:w-3 bg-green-400 rounded-full animate-pulse"></span>
 
           {/* Hover tooltip */}
-          <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+          <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none hidden sm:block">
             <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
               Chat met AI Assistent
             </div>
