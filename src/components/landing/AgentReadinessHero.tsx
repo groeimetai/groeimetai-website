@@ -15,7 +15,7 @@ export default function AgentReadinessHero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-4 sm:py-8 md:py-16" style={{ backgroundColor: '#080D14' }}>
       {/* Luxe Moving Orange Glow Effect */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none glow-container">
         {/* Main Central Glow - Slow Orbital Movement */}
         <motion.div 
           className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] lg:w-[500px] lg:h-[500px] rounded-full opacity-15 sm:opacity-25 lg:opacity-30 blur-3xl"
@@ -24,10 +24,10 @@ export default function AgentReadinessHero() {
             filter: 'blur(40px) sm:blur(50px) lg:blur(60px)'
           }}
           animate={{ 
-            x: [0, 15, -10, 0],
-            y: [0, -8, 12, 0],
-            scale: [1, 1.05, 0.98, 1],
-            opacity: [0.15, 0.25, 0.12, 0.15]
+            x: [0, 5, -3, 0],
+            y: [0, -3, 5, 0],
+            scale: [1, 1.02, 0.99, 1],
+            opacity: [0.15, 0.20, 0.12, 0.15]
           }}
           transition={{ 
             duration: 8,
@@ -44,10 +44,10 @@ export default function AgentReadinessHero() {
             filter: 'blur(40px)'
           }}
           animate={{ 
-            x: [0, 40, 0, -40, 0],
-            y: [0, -30, 0, 30, 0],
-            scale: [1, 1.3, 1.1, 1.2, 1],
-            opacity: [0.2, 0.3, 0.15, 0.25, 0.2]
+            x: [0, 10, 0, -10, 0],
+            y: [0, -8, 0, 8, 0],
+            scale: [1, 1.05, 1.02, 1.03, 1],
+            opacity: [0.10, 0.15, 0.08, 0.12, 0.10]
           }}
           transition={{ 
             duration: 12,
@@ -65,10 +65,10 @@ export default function AgentReadinessHero() {
             filter: 'blur(50px)'
           }}
           animate={{ 
-            x: [0, -25, 35, -10, 0],
-            y: [0, 20, -10, 15, 0],
-            scale: [1, 1.15, 1.05, 1.2, 1],
-            opacity: [0.15, 0.25, 0.1, 0.2, 0.15]
+            x: [0, -8, 12, -5, 0],
+            y: [0, 6, -3, 5, 0],
+            scale: [1, 1.03, 1.01, 1.02, 1],
+            opacity: [0.08, 0.12, 0.05, 0.10, 0.08]
           }}
           transition={{ 
             duration: 10,
@@ -86,8 +86,8 @@ export default function AgentReadinessHero() {
             filter: 'blur(80px)'
           }}
           animate={{ 
-            scale: [1, 1.05, 1.02, 1],
-            opacity: [0.1, 0.15, 0.08, 0.1]
+            scale: [1, 1.01, 1.005, 1],
+            opacity: [0.05, 0.08, 0.04, 0.05]
           }}
           transition={{ 
             duration: 15,
@@ -101,17 +101,17 @@ export default function AgentReadinessHero() {
       <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 text-center relative z-10">
         <div className="max-w-6xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="mb-6"
           >
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
             className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-3 sm:mb-4 md:mb-6 leading-tight"
           >
             {t('title')}{' '}
@@ -124,9 +124,9 @@ export default function AgentReadinessHero() {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
             className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-2 sm:mb-3 md:mb-4 max-w-4xl mx-auto font-light leading-relaxed px-1 sm:px-2 md:px-0"
           >
             {t('subtitle')}
@@ -142,9 +142,9 @@ export default function AgentReadinessHero() {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
             className="space-y-4 sm:space-y-6 md:space-y-8 mb-6 sm:mb-8 md:mb-12"
           >
             {!showQuickCheck ? (
