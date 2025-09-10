@@ -205,24 +205,56 @@ export default function BeautifulApiToMcpAnimation() {
 
   const { currentPhase, setCurrentPhase, reset } = useAnimationState(autoPlay, phases);
   
-  // API nodes configuration
-  const apiNodes: ApiNode[] = useMemo(() => [
-    { id: 'crm', name: 'CRM API', position: { x: 80, y: 120 }, angle: -90 },
-    { id: 'support', name: 'Support API', position: { x: 60, y: 200 }, angle: -45 },
-    { id: 'erp', name: 'ERP API', position: { x: 80, y: 280 }, angle: 0 },
-    { id: 'analytics', name: 'Analytics API', position: { x: 120, y: 320 }, angle: 45 },
-    { id: 'payment', name: 'Payment API', position: { x: 180, y: 300 }, angle: 90 },
-  ], []);
-
-  // MCP hub position
-  const mcpPosition: Position = { x: 300, y: 220 };
+  // Check if we're on mobile (simple check based on typical mobile screen width)
+  const [isMobile, setIsMobile] = useState(false);
   
-  // Agent positions
-  const agentPositions: Position[] = [
-    { x: 500, y: 180 },
-    { x: 520, y: 220 },
-    { x: 500, y: 260 },
-  ];
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // API nodes configuration - responsive positions
+  const apiNodes: ApiNode[] = useMemo(() => {
+    if (isMobile) {
+      // Mobile positions - more compact
+      return [
+        { id: 'crm', name: 'CRM API', position: { x: 50, y: 80 }, angle: -90 },
+        { id: 'support', name: 'Support', position: { x: 40, y: 140 }, angle: -45 },
+        { id: 'erp', name: 'ERP API', position: { x: 50, y: 200 }, angle: 0 },
+        { id: 'analytics', name: 'Analytics', position: { x: 80, y: 240 }, angle: 45 },
+        { id: 'payment', name: 'Payment', position: { x: 120, y: 220 }, angle: 90 },
+      ];
+    }
+    return [
+      { id: 'crm', name: 'CRM API', position: { x: 80, y: 120 }, angle: -90 },
+      { id: 'support', name: 'Support API', position: { x: 60, y: 200 }, angle: -45 },
+      { id: 'erp', name: 'ERP API', position: { x: 80, y: 280 }, angle: 0 },
+      { id: 'analytics', name: 'Analytics API', position: { x: 120, y: 320 }, angle: 45 },
+      { id: 'payment', name: 'Payment API', position: { x: 180, y: 300 }, angle: 90 },
+    ];
+  }, [isMobile]);
+
+  // MCP hub position - responsive
+  const mcpPosition: Position = isMobile 
+    ? { x: 200, y: 160 }
+    : { x: 300, y: 220 };
+  
+  // Agent positions - responsive
+  const agentPositions: Position[] = isMobile
+    ? [
+        { x: 320, y: 130 },
+        { x: 330, y: 160 },
+        { x: 320, y: 190 },
+      ]
+    : [
+        { x: 500, y: 180 },
+        { x: 520, y: 220 },
+        { x: 500, y: 260 },
+      ];
 
   const toggleAutoPlay = useCallback(() => {
     setAutoPlay(prev => !prev);
@@ -321,12 +353,12 @@ export default function BeautifulApiToMcpAnimation() {
           {/* Animation Container */}
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 mb-16">
             {/* Phase Controls */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
               {phases.map((phase, idx) => (
                 <button
                   key={phase.id}
                   onClick={() => handlePhaseClick(idx)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  className={`px-2 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${
                     idx === currentPhase 
                       ? 'text-white shadow-lg' 
                       : 'text-white/70 hover:text-white hover:bg-white/10'
@@ -337,7 +369,8 @@ export default function BeautifulApiToMcpAnimation() {
                       : 'rgba(255,255,255,0.05)',
                   }}
                 >
-                  {idx + 1}. {phase.title}
+                  <span className="hidden sm:inline">{idx + 1}. {phase.title}</span>
+                  <span className="sm:hidden">{idx + 1}</span>
                 </button>
               ))}
               
@@ -366,9 +399,10 @@ export default function BeautifulApiToMcpAnimation() {
             {/* Main Animation SVG */}
             <div className="relative bg-gradient-to-br from-white/5 to-white/2 rounded-xl border border-white/10 overflow-hidden">
               <svg
-                viewBox="0 0 600 400"
-                className="w-full h-96 lg:h-[28rem]"
+                viewBox={isMobile ? "0 0 400 300" : "0 0 600 400"}
+                className="w-full h-64 sm:h-80 md:h-96 lg:h-[28rem]"
                 style={{ background: 'transparent' }}
+                preserveAspectRatio="xMidYMid meet"
               >
                 <defs>
                   {/* Gradients */}
@@ -432,10 +466,10 @@ export default function BeautifulApiToMcpAnimation() {
                         <motion.circle
                           cx={node.position.x}
                           cy={node.position.y}
-                          r="24"
+                          r={isMobile ? "16" : "24"}
                           fill="url(#apiGradient)"
                           stroke={style.stroke}
-                          strokeWidth="2"
+                          strokeWidth={isMobile ? "1.5" : "2"}
                           filter={currentPhase === ANIMATION_CONFIG.phases.connected ? "url(#glow)" : undefined}
                           initial={{ scale: 0.8, opacity: 0 }}
                           animate={{ 
@@ -462,13 +496,13 @@ export default function BeautifulApiToMcpAnimation() {
                           transition={{ delay: index * 0.1 + 0.2 }}
                         >
                           <foreignObject 
-                            x={node.position.x - 12} 
-                            y={node.position.y - 12} 
-                            width="24" 
-                            height="24"
+                            x={node.position.x - (isMobile ? 8 : 12)} 
+                            y={node.position.y - (isMobile ? 8 : 12)} 
+                            width={isMobile ? "16" : "24"} 
+                            height={isMobile ? "16" : "24"}
                           >
                             <ApiIcon 
-                              size={24} 
+                              size={isMobile ? 16 : 24} 
                               className="text-current transition-colors duration-300"
                               style={{ color: style.fill }}
                             />
@@ -478,9 +512,9 @@ export default function BeautifulApiToMcpAnimation() {
                         {/* API Label */}
                         <motion.text
                           x={node.position.x}
-                          y={node.position.y + 40}
+                          y={node.position.y + (isMobile ? 28 : 40)}
                           textAnchor="middle"
-                          className="text-xs font-medium fill-current"
+                          className={`${isMobile ? 'text-[10px]' : 'text-xs'} font-medium fill-current`}
                           style={{ color: style.fill }}
                           initial={{ opacity: 0, y: 5 }}
                           animate={{ opacity: 0.9, y: 0 }}
@@ -517,20 +551,20 @@ export default function BeautifulApiToMcpAnimation() {
                       <circle
                         cx={mcpPosition.x}
                         cy={mcpPosition.y}
-                        r="40"
+                        r={isMobile ? "28" : "40"}
                         fill="url(#mcpGradient)"
                         filter={currentPhase === ANIMATION_CONFIG.phases.connected ? "url(#glow)" : undefined}
                       />
                       
                       {/* MCP Icon */}
                       <foreignObject 
-                        x={mcpPosition.x - 16} 
-                        y={mcpPosition.y - 16} 
-                        width="32" 
-                        height="32"
+                        x={mcpPosition.x - (isMobile ? 12 : 16)} 
+                        y={mcpPosition.y - (isMobile ? 12 : 16)} 
+                        width={isMobile ? "24" : "32"} 
+                        height={isMobile ? "24" : "32"}
                       >
                         <McpIcon 
-                          size={32} 
+                          size={isMobile ? 24 : 32} 
                           className="text-white"
                         />
                       </foreignObject>
@@ -538,9 +572,9 @@ export default function BeautifulApiToMcpAnimation() {
                       {/* MCP Label */}
                       <text
                         x={mcpPosition.x}
-                        y={mcpPosition.y + 60}
+                        y={mcpPosition.y + (isMobile ? 45 : 60)}
                         textAnchor="middle"
-                        className="text-sm font-bold fill-white"
+                        className={`${isMobile ? 'text-xs' : 'text-sm'} font-bold fill-white`}
                       >
                         MCP Protocol
                       </text>
@@ -558,10 +592,10 @@ export default function BeautifulApiToMcpAnimation() {
                         <motion.circle
                           cx={pos.x}
                           cy={pos.y}
-                          r="20"
+                          r={isMobile ? "14" : "20"}
                           fill="url(#apiGradient)"
                           stroke={style.fill}
-                          strokeWidth="2"
+                          strokeWidth={isMobile ? "1.5" : "2"}
                           filter={currentPhase === ANIMATION_CONFIG.phases.connected ? "url(#glow)" : undefined}
                           initial={{ scale: 0.9, opacity: 0.4 }}
                           animate={{ 
@@ -582,13 +616,13 @@ export default function BeautifulApiToMcpAnimation() {
                           transition={{ delay: 0.7 + index * 0.1 }}
                         >
                           <foreignObject 
-                            x={pos.x - 14} 
-                            y={pos.y - 14} 
-                            width="28" 
-                            height="28"
+                            x={pos.x - (isMobile ? 10 : 14)} 
+                            y={pos.y - (isMobile ? 10 : 14)} 
+                            width={isMobile ? "20" : "28"} 
+                            height={isMobile ? "20" : "28"}
                           >
                             <AgentIcon 
-                              size={28} 
+                              size={isMobile ? 20 : 28} 
                               className="text-current"
                               style={{ color: style.fill }}
                             />
@@ -598,9 +632,9 @@ export default function BeautifulApiToMcpAnimation() {
                         {/* Agent Label */}
                         <motion.text
                           x={pos.x}
-                          y={pos.y + 35}
+                          y={pos.y + (isMobile ? 25 : 35)}
                           textAnchor="middle"
-                          className="text-xs font-medium fill-current"
+                          className={`${isMobile ? 'text-[10px]' : 'text-xs'} font-medium fill-current`}
                           style={{ color: style.fill }}
                           initial={{ opacity: 0.4, y: 3 }}
                           animate={{ 
@@ -609,7 +643,7 @@ export default function BeautifulApiToMcpAnimation() {
                           }}
                           transition={{ delay: 0.8 + index * 0.1 }}
                         >
-                          AI Agent {index + 1}
+                          {isMobile ? `Agent ${index + 1}` : `AI Agent ${index + 1}`}
                         </motion.text>
                       </g>
                     );
