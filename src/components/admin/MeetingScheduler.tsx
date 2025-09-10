@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { 
   Calendar, Clock, Video, Phone, Building, Plus, X, Send,
-  Users, MapPin, FileText, Settings
+  Users, MapPin, FileText, Settings, Mail
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -56,6 +56,112 @@ export default function MeetingScheduler({ contact, isOpen, onClose, onSuccess }
   ]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [sendFollowUpEmail, setSendFollowUpEmail] = useState(true);
+  const [selectedEmailTemplate, setSelectedEmailTemplate] = useState('');
+  const [emailPreview, setEmailPreview] = useState('');
+
+  // Auto-select email template based on conversation type
+  useEffect(() => {
+    if (contact.conversationType === 'debrief') {
+      setSelectedEmailTemplate('assessment_debrief_prep');
+    } else if (contact.conversationType === 'kickoff') {
+      setSelectedEmailTemplate('project_kickoff_prep');
+    } else {
+      setSelectedEmailTemplate('meeting_with_prep');
+    }
+  }, [contact.conversationType]);
+
+  // Email templates for different meeting contexts
+  const emailTemplates = [
+    {
+      id: 'meeting_invite_only',
+      name: 'Alleen Meeting Uitnodiging',
+      subject: '📅 Meeting bevestiging',
+      content: 'Meeting details worden automatisch verzonden via calendar uitnodiging.'
+    },
+    {
+      id: 'meeting_with_prep',
+      name: 'Meeting + Voorbereiding Info',
+      subject: '📅 Ons gesprek + voorbereidingstips',
+      content: `Hoi {{name}},
+
+Ons gesprek is bevestigd voor {{meetingDate}} om {{meetingTime}}!
+
+🎯 TER VOORBEREIDING:
+• Denk na over je grootste AI uitdagingen bij {{company}}
+• Bereid 2-3 concrete vragen voor
+• Heb je huidige IT infrastructuur informatie bij de hand
+
+📋 WAT WE GAAN BESPREKEN:
+• Jouw specifieke AI use cases
+• ROI potentie voor {{company}}  
+• Implementatie roadmap en tijdlijnen
+• Budget en resource planning
+
+Tot {{meetingDate}}!
+
+{{senderName}}`
+    },
+    {
+      id: 'assessment_debrief_prep',
+      name: 'Assessment Debrief + Preparation',
+      subject: '🎯 Assessment Debrief Voorbereiding - {{company}}',
+      content: `Hoi {{name}},
+
+Je Assessment Debrief is ingepland! Ik ga je resultaten grondig bespreken en concrete vervolgstappen presenteren.
+
+📊 WAT WE GAAN BESPREKEN:
+• Je Agent Readiness score en wat dit betekent
+• Specifieke aanbevelingen voor {{company}}
+• Quick wins die je direct kunt implementeren
+• Expert Assessment mogelijkheden (€2.500 - vol aftrekbaar)
+
+🎯 BEREID JE VOOR:
+• Heb je assessment resultaten bij de hand
+• Denk na over budget en tijdlijnen
+• Bereid vragen voor over de aanbevelingen
+• Overweeg wie er bij {{company}} betrokken moet worden
+
+📈 DOEL VAN DIT GESPREK:
+Je hebt al de basis assessment gedaan - nu gaan we echt diep op jouw situatie. Het doel is een concrete implementatie roadmap maken die past bij {{company}}.
+
+Zie je ernaar uit!
+
+{{senderName}}`
+    },
+    {
+      id: 'project_kickoff_prep',
+      name: 'Project Kickoff + Team Prep',
+      subject: '🚀 Project Kickoff Voorbereiding - {{company}}',
+      content: `Hoi {{name}},
+
+Tijd voor de project kickoff! Ik ben super enthousiast om te starten met de AI implementatie bij {{company}}.
+
+🚀 KICKOFF AGENDA:
+• Project scope en deliverables definitief maken
+• Team rollen en verantwoordelijkheden
+• Communicatie en werkwijze afspraken
+• Eerste milestone planning en deadlines
+
+📋 VOOR DE KICKOFF HEB IK NODIG:
+• Finale project requirements
+• Overzicht van betrokken team members
+• IT infrastructuur details
+• Gewenste go-live datum
+• Budget approval bevestiging
+
+👥 WIE MOETEN ERBIJ ZIJN:
+• Project stakeholders
+• IT contact persoon  
+• End users (optioneel)
+• Budget owner
+
+Na deze kickoff hebben we een crystal clear project plan en kunnen we direct aan de slag!
+
+{{senderName}}
+GroeimetAI - Je AI Implementation Partner`
+    }
+  ];
 
   const meetingTypes = [
     { value: 'google_meet', label: 'Google Meet', icon: Video, description: 'Online video call' },
@@ -128,7 +234,42 @@ export default function MeetingScheduler({ contact, isOpen, onClose, onSuccess }
       const data = await response.json();
 
       if (response.ok && data.success) {
-        toast.success('Meeting ingepland en uitnodiging verzonden!');
+        // If follow-up email is enabled, send it too
+        if (sendFollowUpEmail && selectedEmailTemplate && selectedEmailTemplate !== 'meeting_invite_only') {
+          try {
+            const selectedTemplate = emailTemplates.find(t => t.id === selectedEmailTemplate);
+            if (selectedTemplate) {
+              console.log('📧 Sending follow-up email with template:', selectedEmailTemplate);
+              
+              // Send additional context email via admin email API
+              const emailResponse = await fetch('/api/admin/send-email', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  to: contact.email,
+                  subject: selectedTemplate.subject.replace('{{company}}', contact.company),
+                  content: selectedTemplate.content,
+                  contactId: contact.id
+                }),
+              });
+
+              const emailData = await emailResponse.json();
+              if (emailData.success) {
+                toast.success('Meeting ingepland én voorbereidingsemail verzonden!');
+              } else {
+                toast.success('Meeting ingepland, maar voorbereidingsemail gefaald');
+              }
+            }
+          } catch (emailError) {
+            console.error('Follow-up email error:', emailError);
+            toast.success('Meeting ingepland, maar voorbereidingsemail gefaald');
+          }
+        } else {
+          toast.success('Meeting ingepland en uitnodiging verzonden!');
+        }
+        
         onSuccess();
         onClose();
       } else {
@@ -385,6 +526,61 @@ export default function MeetingScheduler({ contact, isOpen, onClose, onSuccess }
                 </Button>
               </CardContent>
             </Card>
+
+            {/* Email Template Selection */}
+            <Card className="bg-white/5 border-white/10">
+              <CardHeader>
+                <CardTitle className="text-white text-sm flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  Follow-up Email (automatisch geselecteerd)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label className="text-white/80 text-sm">Verstuur voorbereidingsemail</Label>
+                  <input
+                    type="checkbox"
+                    checked={sendFollowUpEmail}
+                    onChange={(e) => setSendFollowUpEmail(e.target.checked)}
+                    className="w-4 h-4 text-orange focus:ring-orange rounded"
+                  />
+                </div>
+                
+                {sendFollowUpEmail && (
+                  <>
+                    <div>
+                      <Label className="text-white/80 text-sm">Email Template</Label>
+                      <select
+                        value={selectedEmailTemplate}
+                        onChange={(e) => setSelectedEmailTemplate(e.target.value)}
+                        className="w-full bg-white/5 border border-white/20 text-white rounded-md px-3 py-2 text-sm mt-1"
+                      >
+                        {emailTemplates.map((template) => (
+                          <option key={template.id} value={template.id}>
+                            {template.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    {selectedEmailTemplate && (
+                      <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+                        <h4 className="text-white text-sm font-medium mb-2">Email Preview:</h4>
+                        <div className="text-white/70 text-xs space-y-1">
+                          <p><strong>Onderwerp:</strong> {emailTemplates.find(t => t.id === selectedEmailTemplate)?.subject.replace('{{company}}', contact.company)}</p>
+                          <p><strong>Type:</strong> {
+                            selectedEmailTemplate === 'meeting_invite_only' ? 'Alleen calendar uitnodiging' :
+                            selectedEmailTemplate === 'assessment_debrief_prep' ? 'Assessment voorbereiding + meeting' :
+                            selectedEmailTemplate === 'project_kickoff_prep' ? 'Project kickoff voorbereiding + meeting' :
+                            'Algemene meeting voorbereiding + meeting'
+                          }</p>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
 
@@ -409,7 +605,9 @@ export default function MeetingScheduler({ contact, isOpen, onClose, onSuccess }
             ) : (
               <>
                 <Send className="mr-2 h-4 w-4" />
-                Plan Meeting & Verstuur Uitnodiging
+                {sendFollowUpEmail && selectedEmailTemplate !== 'meeting_invite_only' 
+                  ? 'Plan Meeting & Verstuur Emails' 
+                  : 'Plan Meeting & Verstuur Uitnodiging'}
               </>
             )}
           </Button>
