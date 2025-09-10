@@ -14,7 +14,20 @@ import {
   User, Building, Clock, ArrowRight, CheckCircle, Users
 } from 'lucide-react';
 import Image from 'next/image';
-import MapSection from '@/components/contact/MapSection';
+import dynamic from 'next/dynamic';
+
+// Dynamic import to avoid SSR issues
+const MapSection = dynamic(() => import('@/components/contact/MapSection'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[400px] rounded-lg overflow-hidden relative bg-black/20 border border-white/10 flex items-center justify-center">
+      <div className="text-center p-6">
+        <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+        <p className="text-white/60 text-sm">Loading map...</p>
+      </div>
+    </div>
+  )
+});
 
 export default function ContactPage() {
   const t = useTranslations('contactPage');

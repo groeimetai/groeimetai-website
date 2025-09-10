@@ -23,6 +23,7 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
   initialMessage = 'Welkom bij GroeimetAI! 👋 Ik ben uw AI-assistent. Hoe kan ik u helpen met onze AI consultancy diensten? U kunt mij vragen stellen over GenAI, multi-agent orchestration, ServiceNow integratie of een van onze andere expertise gebieden.',
   onClose,
 }) => {
+  const [mounted, setMounted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -40,20 +41,30 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
   const [isMobile, setIsMobile] = useState(false);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (mounted && messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
-    if (!isMinimized && inputRef.current) {
+    if (mounted) {
+      scrollToBottom();
+    }
+  }, [messages, mounted]);
+
+  useEffect(() => {
+    if (mounted && !isMinimized && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isMinimized]);
+  }, [isMinimized, mounted]);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     // Check if device is mobile
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -148,6 +159,11 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
       handleSend();
     }
   };
+
+  // Prevent hydration issues
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div
