@@ -346,14 +346,30 @@ export default function ContactsAdminPage() {
       let emailContent = emailForm.content;
       let emailSubject = emailForm.subject;
 
-      // Replace template variables
+      // Replace template variables (expanded for new templates)
       const replacements = {
         '{{name}}': selectedContact.name,
         '{{company}}': selectedContact.company,
         '{{meetingDate}}': selectedContact.meetingDate || '[DATUM]',
         '{{meetingTime}}': selectedContact.meetingTime || '[TIJD]',
         '{{meetingLocation}}': 'Google Meet',
-        '{{senderName}}': 'Niels van der Werf'
+        '{{senderName}}': 'Niels van der Werf',
+        '{{actionStep1}}': '[Actie 1 - vul aan]',
+        '{{actionStep2}}': '[Actie 2 - vul aan]',
+        '{{actionStep3}}': '[Actie 3 - vul aan]',
+        '{{nextMeetingDate}}': '[Volgende meeting]',
+        '{{budgetRange}}': '[Budget indicatie]',
+        '{{relevantCase}}': 'https://groeimetai.io/cases',
+        '{{personalRecommendation}}': '[Persoonlijke aanbeveling]',
+        '{{expectedROI}}': '[ROI percentage]',
+        '{{implementationTime}}': '[Tijdlijn]',
+        '{{proposalLink}}': '[Voorstel link]',
+        '{{availableSlot1}}': '[Slot 1]',
+        '{{availableSlot2}}': '[Slot 2]',
+        '{{availableSlot3}}': '[Slot 3]',
+        '{{quickWin1}}': '[Quick win 1]',
+        '{{quickWin2}}': '[Quick win 2]',
+        '{{quickWin3}}': '[Quick win 3]'
       };
 
       Object.entries(replacements).forEach(([key, value]) => {
@@ -399,13 +415,25 @@ ${emailContent}
 </html>
       `;
 
-      await addDoc(collection(db, 'mail'), {
-        to: selectedContact.email,
-        message: {
+      // Send via SMTP API instead of Firebase Extension (to avoid SSL errors)
+      const response = await fetch('/api/admin/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to: selectedContact.email,
           subject: emailSubject,
-          html: emailHtml
-        }
+          content: emailContent,
+          contactId: selectedContact.id
+        }),
       });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Email API failed');
+      }
 
       // Update contact status
       await updateDoc(doc(db, 'contact_submissions', selectedContact.id), {
