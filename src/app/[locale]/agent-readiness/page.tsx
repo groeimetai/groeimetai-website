@@ -472,8 +472,11 @@ export default function AgentReadinessPage() {
           >
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-3 sm:mb-4 md:mb-6 leading-tight">
               <span
-                className="text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 inline-block text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl"
-                style={{ background: 'linear-gradient(135deg, #F87315, #FF8533)' }}
+                className="text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 inline-block"
+                style={{ 
+                  background: 'linear-gradient(135deg, #F87315, #FF8533)',
+                  borderRadius: 0
+                }}
               >
                 Agent Readiness
               </span>{' '}
