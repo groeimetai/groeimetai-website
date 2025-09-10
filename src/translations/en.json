@@ -3422,7 +3422,7 @@
     "step": "Step",
     "of": "of",
     "questions": {
-      "apis": {
+      "hasApis": {
         "title": "Do your systems have APIs?",
         "options": {
           "most": "Yes, most of them do",
@@ -3440,7 +3440,7 @@
           "impossible": "Not digital"
         }
       },
-      "budget": {
+      "budgetReality": {
         "title": "What's realistic for agent infrastructure this year?",
         "options": {
           "enterprise": "EUR100k+ - Enterprise rollout",
@@ -3450,7 +3450,7 @@
           "businessCase": "Need business case first"
         }
       },
-      "blocker": {
+      "mainBlocker": {
         "title": "What's your biggest blocker?",
         "options": {
           "knowledge": "Technical knowledge missing",
@@ -3463,7 +3463,7 @@
           "other": "Other"
         }
       },
-      "impact": {
+      "highestImpact": {
         "title": "Which system would have the biggest impact?",
         "subtitle": "For AI agent implementation",
         "options": {
@@ -3484,6 +3484,9 @@
       "showScore": "Show my score"
     },
     "results": {
+      "yourScore": "Your score",
+      "retry": "Try again",
+      "getFullRoadmap": "Get your full roadmap",
       "levels": {
         "level5": "Level 5: Agent-Ready",
         "level4": "Level 4: Integration-Ready",

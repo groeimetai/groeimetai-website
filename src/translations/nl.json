@@ -3243,7 +3243,7 @@
     "step": "Stap",
     "of": "van",
     "questions": {
-      "apis": {
+      "hasApis": {
         "title": "Hebben jullie systemen APIs?",
         "options": {
           "most": "Ja, de meeste wel",
@@ -3261,7 +3261,7 @@
           "impossible": "Niet digitaal"
         }
       },
-      "budget": {
+      "budgetReality": {
         "title": "Wat is realistisch voor agent infrastructure dit jaar?",
         "options": {
           "enterprise": "EUR100k+ - Enterprise rollout",
@@ -3271,7 +3271,7 @@
           "businessCase": "Eerst business case nodig"
         }
       },
-      "blocker": {
+      "mainBlocker": {
         "title": "Wat is je grootste blocker?",
         "options": {
           "knowledge": "Technische kennis ontbreekt",
@@ -3284,7 +3284,7 @@
           "other": "Anders"
         }
       },
-      "impact": {
+      "highestImpact": {
         "title": "Welk systeem zou grootste impact hebben?",
         "subtitle": "Voor AI agent implementatie",
         "options": {
@@ -3305,6 +3305,9 @@
       "showScore": "Toon mijn score"
     },
     "results": {
+      "yourScore": "Jouw score",
+      "retry": "Opnieuw",
+      "getFullRoadmap": "Krijg je volledige roadmap",
       "levels": {
         "level5": "Level 5: Agent-Ready",
         "level4": "Level 4: Integration-Ready",
