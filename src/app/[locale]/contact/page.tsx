@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,8 @@ import MapSection from '@/components/contact/MapSection';
 export default function ContactPage() {
   const t = useTranslations('contactPage');
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -66,6 +69,62 @@ export default function ContactPage() {
       cta: t('conversationTypes.kickoff.cta')
     }
   ];
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validate required fields
+    if (!formData.name || !formData.email || !formData.company) {
+      toast.error('Vul alstublieft alle verplichte velden in');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/contact/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          conversationType: selectedType,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setIsSuccess(true);
+        toast.success('Uw aanvraag is succesvol verzonden!');
+        
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          company: '',
+          message: '',
+          preferredDate: '',
+          preferredTime: ''
+        });
+        setSelectedType(null);
+        
+        // Show success message for 5 seconds
+        setTimeout(() => {
+          setIsSuccess(false);
+        }, 5000);
+      } else {
+        toast.error(data.error || 'Er is een fout opgetreden. Probeer het opnieuw.');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast.error('Er is een fout opgetreden. Probeer het opnieuw.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black">
@@ -213,7 +272,7 @@ export default function ContactPage() {
                 <CardContent className="p-8">
                   <h3 className="text-xl font-bold text-white mb-6">{t('form.title')}</h3>
                   
-                  <form className="space-y-6 relative">
+                  <form className="space-y-6 relative" onSubmit={handleSubmit}>
                     
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
@@ -302,15 +361,38 @@ export default function ContactPage() {
                       type="submit"
                       className="w-full text-white font-semibold py-4"
                       style={{ backgroundColor: '#F87315' }}
+                      disabled={isSubmitting || isSuccess}
                     >
-                      <Calendar className="mr-2 w-5 h-5" />
-                      {t('form.submit')}
-                      <ArrowRight className="ml-2 w-5 h-5" />
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                          Verzenden...
+                        </>
+                      ) : isSuccess ? (
+                        <>
+                          <CheckCircle className="mr-2 w-5 h-5" />
+                          Verzonden!
+                        </>
+                      ) : (
+                        <>
+                          <Calendar className="mr-2 w-5 h-5" />
+                          {t('form.submit')}
+                          <ArrowRight className="ml-2 w-5 h-5" />
+                        </>
+                      )}
                     </Button>
                     
-                    <p className="text-white/60 text-sm text-center">
-                      {t('form.responseTime')}
-                    </p>
+                    {isSuccess ? (
+                      <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-4">
+                        <p className="text-green-400 text-sm text-center font-medium">
+                          ✅ Uw aanvraag is succesvol ontvangen! We nemen binnen 24 uur contact met u op.
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-white/60 text-sm text-center">
+                        {t('form.responseTime')}
+                      </p>
+                    )}
                   </form>
                 </CardContent>
               </Card>

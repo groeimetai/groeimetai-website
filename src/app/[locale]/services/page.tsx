@@ -168,7 +168,7 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <section className="py-8 sm:py-12 md:py-16 lg:py-24 xl:py-32 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
+      <section className="pt-20 pb-8 sm:pt-24 sm:pb-12 md:pt-28 md:pb-16 lg:py-24 xl:py-32 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
         
         <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-center">
