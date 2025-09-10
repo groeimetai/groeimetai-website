@@ -77,6 +77,21 @@ export const viewport = {
   ],
 };
 
+// Disable Firebase Performance for now to prevent CSS class tracking errors
+if (typeof window !== 'undefined') {
+  window.addEventListener('load', () => {
+    try {
+      const perf = (window as any).firebase?.performance?.();
+      if (perf) {
+        perf.instrumentationEnabled = false;
+        perf.dataCollectionEnabled = false;
+      }
+    } catch (e) {
+      // Ignore Firebase Performance errors
+    }
+  });
+}
+
 // Generate static params for all supported locales
 export function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'nl' }];
