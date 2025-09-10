@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
     <!-- Header -->
     <div style="background: linear-gradient(135deg, #F87315, #FF8533); padding: 30px; text-align: center;">
       <div style="margin-bottom: 15px;">
-        <img src="cid:groeimetai-logo" alt="GroeimetAI" style="height: 40px; width: auto; filter: brightness(0) invert(1);" />
+        <img src="https://groeimetai.io/groeimet-ai-logo.svg" alt="GroeimetAI" style="height: 40px; width: auto; filter: brightness(0) invert(1);" />
       </div>
       <h1 style="color: white; margin: 0; font-size: 24px;">🆕 Nieuwe Contact Aanvraag</h1>
     </div>
@@ -213,14 +213,7 @@ export async function POST(req: NextRequest) {
           subject: `🆕 Contact Aanvraag - ${company} (${conversationType === 'verkennen' ? 'Verkennend' : 
                     conversationType === 'debrief' ? 'Debrief' : 
                     conversationType === 'kickoff' ? 'Kickoff' : 'Algemeen'})`,
-          html: adminEmailHtml,
-          attachments: [
-            {
-              filename: 'groeimetai-logo.svg',
-              path: process.cwd() + '/public/groeimet-ai-logo.svg',
-              cid: 'groeimetai-logo'
-            }
-          ]
+          html: adminEmailHtml
         });
 
         console.log('[Contact API] Admin notification email sent successfully:', adminEmailResponse.messageId);
@@ -238,7 +231,7 @@ export async function POST(req: NextRequest) {
     <!-- Header with logo/brand -->
     <div style="text-align: center; margin-bottom: 30px;">
       <div style="margin-bottom: 15px;">
-        <img src="cid:groeimetai-logo" alt="GroeimetAI" style="height: 50px; width: auto; filter: brightness(0) invert(1);" />
+        <img src="https://groeimetai.io/groeimet-ai-logo.svg" alt="GroeimetAI" style="height: 50px; width: auto; filter: brightness(0) invert(1);" />
       </div>
       <h1 style="color: #F87315; font-size: 32px; margin: 0;">GroeimetAI</h1>
       <p style="color: rgba(255,255,255,0.7); margin-top: 5px;">Transformeer je bedrijf met AI Agents</p>
@@ -311,14 +304,7 @@ export async function POST(req: NextRequest) {
           from: `"GroeimetAI" <${process.env.SMTP_USER}>`,
           to: email,
           subject: '✅ We hebben je aanvraag ontvangen - GroeimetAI',
-          html: confirmationHtml,
-          attachments: [
-            {
-              filename: 'groeimetai-logo.svg',
-              path: process.cwd() + '/public/groeimet-ai-logo.svg',
-              cid: 'groeimetai-logo'
-            }
-          ]
+          html: confirmationHtml
         });
 
         console.log('[Contact API] User confirmation email sent successfully:', userEmailResponse.messageId);
