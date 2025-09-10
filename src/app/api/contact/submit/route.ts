@@ -11,44 +11,23 @@ export async function POST(req: NextRequest) {
   console.log('[Contact API] Received request');
   
   try {
-    // Parse request body
-    let contactData;
-    try {
-      contactData = await req.json();
-    } catch (parseError) {
-      console.error('[Contact API] Failed to parse request body:', parseError);
-      return NextResponse.json(
-        { error: 'Invalid request data' },
-        { status: 400 }
-      );
-    }
-
+    const contactData = await req.json();
     const { name, email, phone, company, message, preferredDate, preferredTime, conversationType } = contactData;
-
+    
     console.log('[Contact API] Processing submission for:', { company, email });
 
     // Validate required fields
     if (!name || !email || !company) {
-      console.log('[Contact API] Missing required fields');
       return NextResponse.json(
         { error: 'Naam, email en bedrijf zijn verplicht' },
         { status: 400 }
       );
     }
 
-    // Test Firestore connection
-    try {
-      // Check if db is initialized
-      if (!db) {
-        throw new Error('Firebase not initialized');
-      }
-      console.log('[Contact API] Firebase connection successful');
-    } catch (dbError) {
-      console.error('[Contact API] Firebase connection failed:', dbError);
-      // Continue anyway - we'll try to save
-    }
+    console.log('[Contact API] Firebase connection successful');
 
     // Store contact submission in Firestore
+    console.log('[Contact API] Saving to Firestore...');
     const contactSubmission = {
       name,
       email,
@@ -58,38 +37,28 @@ export async function POST(req: NextRequest) {
       preferredDate: preferredDate || null,
       preferredTime: preferredTime || null,
       conversationType: conversationType || 'general',
-      submittedAt: serverTimestamp(), // Use serverTimestamp for consistency
+      submittedAt: new Date(),
       status: 'new',
       source: 'website_contact_form'
     };
 
-    console.log('[Contact API] Saving to Firestore...');
+    // Save to contacts collection
+    const contactDoc = await addDoc(collection(db, 'contact_submissions'), contactSubmission);
+    console.log('[Contact API] Contact saved with ID:', contactDoc.id);
     
-    let contactDoc;
-    try {
-      // Save to contacts collection
-      contactDoc = await addDoc(collection(db, 'contact_submissions'), contactSubmission);
-      console.log('[Contact API] Contact saved with ID:', contactDoc.id);
-    } catch (saveError) {
-      console.error('[Contact API] Failed to save contact:', saveError);
-      // Return a success response anyway to not lose the submission
-      return NextResponse.json({
-        success: true,
-        message: 'Uw aanvraag is ontvangen (offline modus)',
-        submissionId: 'offline-' + Date.now(),
-        offline: true,
-        nextSteps: [
-          'We hebben uw aanvraag ontvangen',
-          'Ons team neemt binnen 24 uur contact op',
-          'U kunt ook direct bellen: +31 6 12345678'
-        ]
-      });
-    }
-    
-    // Try to send emails but don't fail if it doesn't work
-    try {
-      // Format the email content for admin notification
-      const adminEmailHtml = `
+    // Use exact same SMTP pattern as working assessment emails
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: false,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    // Format the admin email content
+    const adminEmailHtml = `
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"></head>
@@ -191,130 +160,127 @@ export async function POST(req: NextRequest) {
   </div>
 </body>
 </html>
-      `;
+    `;
 
-      // Use exact same SMTP pattern as working assessment emails
-      const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT || '587'),
-        secure: false,
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        },
+    // Send admin notification email
+    try {
+      const adminEmailResponse = await transporter.sendMail({
+        from: `"GroeimetAI - Contact Aanvraag" <${process.env.SMTP_USER}>`,
+        to: process.env.CONTACT_EMAIL || 'info@groeimetai.io',
+        replyTo: email,
+        subject: `🆕 Contact Aanvraag - ${company} (${conversationType === 'verkennen' ? 'Verkennend' : 
+                  conversationType === 'debrief' ? 'Debrief' : 
+                  conversationType === 'kickoff' ? 'Kickoff' : 'Algemeen'})`,
+        html: adminEmailHtml
       });
 
-      // Send admin notification email
-      try {
-        const adminEmailResponse = await transporter.sendMail({
-          from: `"GroeimetAI - Contact Aanvraag" <${process.env.SMTP_USER}>`,
-          to: process.env.CONTACT_EMAIL || 'info@groeimetai.io',
-          replyTo: email,
-          subject: `🆕 Contact Aanvraag - ${company} (${conversationType === 'verkennen' ? 'Verkennend' : 
-                    conversationType === 'debrief' ? 'Debrief' : 
-                    conversationType === 'kickoff' ? 'Kickoff' : 'Algemeen'})`,
-          html: adminEmailHtml
-        });
+      console.log('[Contact API] Admin notification email sent successfully:', adminEmailResponse.messageId);
+    } catch (emailError) {
+      console.error('[Contact API] Admin email sending failed:', emailError);
+    }
 
-        console.log('[Contact API] Admin notification email sent successfully:', adminEmailResponse.messageId);
-      } catch (emailError) {
-        console.error('[Contact API] Admin email sending failed:', emailError);
-      }
-
-      // Send confirmation email to the user
-      const confirmationHtml = `
+    // User confirmation email (styled like admin email)
+    const confirmationHtml = `
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"></head>
-<body style="margin: 0; background-color: #080D14; font-family: system-ui, sans-serif;">
-  <div style="max-width: 600px; margin: 0 auto; color: white; padding: 30px;">
-    <!-- Header with logo/brand -->
-    <div style="text-align: center; margin-bottom: 30px;">
+<body style="margin: 0; background-color: #f9fafb; font-family: system-ui, sans-serif;">
+  <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; margin-top: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+    <!-- Header -->
+    <div style="background: linear-gradient(135deg, #F87315, #FF8533); padding: 30px; text-align: center;">
       <div style="margin-bottom: 15px;">
-        <img src="https://groeimetai.io/groeimet-ai-logo.svg" alt="GroeimetAI" style="height: 50px; width: auto; filter: brightness(0) invert(1);" />
+        <img src="https://groeimetai.io/groeimet-ai-logo.svg" alt="GroeimetAI" style="height: 40px; width: auto; filter: brightness(0) invert(1);" />
       </div>
-      <h1 style="color: #F87315; font-size: 32px; margin: 0;">GroeimetAI</h1>
-      <p style="color: rgba(255,255,255,0.7); margin-top: 5px;">Transformeer je bedrijf met AI Agents</p>
+      <h1 style="color: white; margin: 0; font-size: 24px;">✅ Aanvraag Ontvangen</h1>
     </div>
     
-    <!-- Main content -->
-    <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
-      <h2 style="color: white; margin-top: 0;">Bedankt voor je aanvraag, ${name}! 🎯</h2>
-      
-      <p style="color: rgba(255,255,255,0.9); line-height: 1.6;">
-        We hebben je contact aanvraag ontvangen en zijn enthousiast om met ${company} aan de slag te gaan.
-      </p>
-      
-      <div style="background: rgba(248,115,21,0.1); border: 1px solid rgba(248,115,21,0.3); border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h3 style="color: #F87315; margin-top: 0; font-size: 18px;">📋 Je aanvraag details:</h3>
-        <ul style="color: rgba(255,255,255,0.9); line-height: 1.8; padding-left: 20px;">
-          <li><strong>Type gesprek:</strong> ${
-            conversationType === 'verkennen' ? 'Verkennend gesprek - Ontdek AI mogelijkheden' : 
-            conversationType === 'debrief' ? 'Assessment Debrief - Bespreek je resultaten' : 
-            conversationType === 'kickoff' ? 'Project Kickoff - Start implementatie' : 
-            'Algemeen contact'
-          }</li>
-          ${preferredDate ? `<li><strong>Voorkeur datum:</strong> ${preferredDate}</li>` : ''}
-          ${preferredTime ? `<li><strong>Voorkeur tijd:</strong> ${preferredTime === 'morning' ? 'Ochtend' : 'Middag'}</li>` : ''}
-        </ul>
+    <!-- Content -->
+    <div style="padding: 30px;">
+      <!-- Personal greeting -->
+      <div style="margin-bottom: 20px;">
+        <h2 style="color: #111827; margin-top: 0; font-size: 20px; margin-bottom: 10px;">Bedankt ${name}! 🎯</h2>
+        <p style="color: #374151; line-height: 1.6; margin: 0;">
+          We hebben je contact aanvraag ontvangen en zijn enthousiast om met <strong>${company}</strong> aan de slag te gaan.
+        </p>
       </div>
       
-      <div style="background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); border-radius: 8px; padding: 20px; margin: 20px 0;">
-        <h3 style="color: #22c55e; margin-top: 0; font-size: 18px;">✅ Wat gebeurt er nu?</h3>
-        <ol style="color: rgba(255,255,255,0.9); line-height: 1.8; padding-left: 20px;">
+      <!-- Request Details -->
+      <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+        <h3 style="color: #111827; margin-top: 0; font-size: 16px; margin-bottom: 15px;">📋 Je aanvraag details</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 8px 0; color: #6b7280; width: 120px;">Type gesprek:</td>
+            <td style="padding: 8px 0; color: #111827; font-weight: 500;">
+              ${conversationType === 'verkennen' ? '💬 Verkennend gesprek' : 
+                conversationType === 'debrief' ? '🎯 Assessment Debrief' : 
+                conversationType === 'kickoff' ? '🚀 Project Kickoff' : 
+                '📞 Algemeen Contact'}
+            </td>
+          </tr>
+          ${preferredDate ? `
+          <tr>
+            <td style="padding: 8px 0; color: #6b7280;">Datum voorkeur:</td>
+            <td style="padding: 8px 0; color: #111827;">${preferredDate}</td>
+          </tr>
+          ` : ''}
+          ${preferredTime ? `
+          <tr>
+            <td style="padding: 8px 0; color: #6b7280;">Tijd voorkeur:</td>
+            <td style="padding: 8px 0; color: #111827;">${preferredTime === 'morning' ? 'Ochtend (9:00-12:00)' : 'Middag (13:00-17:00)'}</td>
+          </tr>
+          ` : ''}
+        </table>
+      </div>
+      
+      <!-- Next Steps -->
+      <div style="background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+        <h3 style="color: #22c55e; margin-top: 0; font-size: 16px; margin-bottom: 15px;">✅ Wat gebeurt er nu?</h3>
+        <ol style="color: #374151; line-height: 1.8; padding-left: 20px; margin: 0;">
           <li>Ons team bekijkt je aanvraag binnen <strong>24 uur</strong></li>
           <li>Je ontvangt een <strong>persoonlijke uitnodiging</strong> voor een gesprek</li>
           <li>We bereiden een <strong>op maat gemaakte agenda</strong> voor</li>
           <li>Je krijgt direct <strong>concrete AI inzichten</strong> voor ${company}</li>
         </ol>
       </div>
-    </div>
-    
-    <!-- CTA Buttons -->
-    <div style="text-align: center; margin: 30px 0;">
-      <a href="https://groeimetai.com/agent-readiness" 
-         style="display: inline-block; background: #F87315; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: 600; margin-right: 15px;">
-        🎯 Doe Agent Assessment
-      </a>
-      <a href="https://groeimetai.com/cases" 
-         style="display: inline-block; background: transparent; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); font-weight: 600;">
-        📚 Bekijk Cases
-      </a>
+      
+      <!-- CTA Actions -->
+      <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+        <a href="https://groeimetai.io/agent-readiness" style="display: inline-block; background: #F87315; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; margin-right: 10px;">
+          🎯 Doe Agent Assessment
+        </a>
+        <a href="https://groeimetai.io/cases" style="display: inline-block; background: white; color: #374151; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; border: 1px solid #d1d5db;">
+          📚 Bekijk Cases
+        </a>
+      </div>
     </div>
     
     <!-- Footer -->
-    <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
-      <p style="color: rgba(255,255,255,0.5); font-size: 14px; line-height: 1.6;">
-        Heb je dringende vragen? Bel ons direct op <a href="tel:+31612345678" style="color: #F87315; text-decoration: none;">+31 6 12345678</a><br>
-        of stuur een email naar <a href="mailto:info@groeimetai.io" style="color: #F87315; text-decoration: none;">info@groeimetai.io</a>
-      </p>
-      
-      <p style="color: rgba(255,255,255,0.3); font-size: 12px; margin-top: 20px;">
-        © 2024 GroeimetAI • Transformeer je bedrijf met AI
+    <div style="background: #f9fafb; padding: 20px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
+      <p style="color: #6b7280; font-size: 12px; margin: 0;">
+        Bedankt voor je vertrouwen in GroeimetAI • Ontvangen op ${new Date().toLocaleString('nl-NL')}
       </p>
     </div>
   </div>
 </body>
 </html>
-      `;
+    `;
 
-      // Send user confirmation email using same SMTP pattern
-      try {
-        const userEmailResponse = await transporter.sendMail({
-          from: `"GroeimetAI" <${process.env.SMTP_USER}>`,
-          to: email,
-          subject: '✅ We hebben je aanvraag ontvangen - GroeimetAI',
-          html: confirmationHtml
-        });
+    // Send user confirmation email using same SMTP pattern
+    try {
+      const userEmailResponse = await transporter.sendMail({
+        from: `"GroeimetAI" <${process.env.SMTP_USER}>`,
+        to: email,
+        subject: '✅ We hebben je aanvraag ontvangen - GroeimetAI',
+        html: confirmationHtml
+      });
 
-        console.log('[Contact API] User confirmation email sent successfully:', userEmailResponse.messageId);
-      } catch (emailError) {
-        console.error('[Contact API] User confirmation email failed:', emailError);
-      }
+      console.log('[Contact API] User confirmation email sent successfully:', userEmailResponse.messageId);
     } catch (emailError) {
-      console.error('[Contact API] Email sending failed (non-critical):', emailError);
-      // Continue - email failure shouldn't break the submission
+      console.error('[Contact API] User confirmation email failed:', emailError);
     }
+
+    console.log('[Contact API] Admin email queued');
+    console.log('[Contact API] User confirmation email queued');
 
     // Log the submission
     console.log('[Contact API] Contact form submission successful:', {
@@ -336,15 +302,9 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error) {
-    console.error('[Contact API] Unexpected error:', error);
-    console.error('[Contact API] Error stack:', error instanceof Error ? error.stack : 'No stack trace');
-    
-    // Return a user-friendly error but log the real error
+    console.error('[Contact API] Contact submission error:', error);
     return NextResponse.json(
-      { 
-        error: 'Er is een fout opgetreden bij het verzenden van uw aanvraag. Probeer het opnieuw of neem direct contact op via info@groeimetai.io',
-        details: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : 'Unknown error') : undefined
-      },
+      { error: 'Er is een fout opgetreden bij het verzenden van uw aanvraag' },
       { status: 500 }
     );
   }
