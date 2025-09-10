@@ -74,15 +74,59 @@ export async function POST(req: NextRequest) {
     
     <!-- Content -->
     <div style="padding: 30px;">
-      <!-- Conversation Type Badge -->
-      <div style="margin-bottom: 20px;">
+      <!-- Conversation Type Badge & Priority -->
+      <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
         <span style="display: inline-block; background: rgba(248,115,21,0.1); color: #F87315; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 14px;">
           ${conversationType === 'verkennen' ? '💬 Verkennend Gesprek' : 
             conversationType === 'debrief' ? '🎯 Assessment Debrief' : 
             conversationType === 'kickoff' ? '🚀 Project Kickoff' : 
             '📞 Algemeen Contact'}
         </span>
+        <span style="display: inline-block; background: ${
+          conversationType === 'kickoff' ? 'rgba(239, 68, 68, 0.1); color: #ef4444' :
+          conversationType === 'debrief' ? 'rgba(245, 158, 11, 0.1); color: #f59e0b' :
+          'rgba(34, 197, 94, 0.1); color: #22c55e'
+        }; padding: 6px 12px; border-radius: 20px; font-weight: 500; font-size: 12px;">
+          ${conversationType === 'kickoff' ? '🔴 HIGH PRIORITY' :
+            conversationType === 'debrief' ? '🟡 MEDIUM PRIORITY' :
+            '🟢 STANDARD'}
+        </span>
       </div>
+      
+      <!-- Conversation Context -->
+      ${conversationType === 'verkennen' ? `
+      <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+        <h4 style="color: #22c55e; margin: 0 0 8px 0; font-size: 14px;">🔍 Verkennend Gesprek Context</h4>
+        <p style="color: #374151; margin: 0; font-size: 14px; line-height: 1.5;">
+          Prospect wil AI mogelijkheden verkennen. <strong>Focus op:</strong> Use cases, ROI voorbeelden, implementatie complexiteit.
+          <strong>Doel:</strong> Assessment booking of directe offerte aanvraag.
+        </p>
+      </div>
+      ` : conversationType === 'debrief' ? `
+      <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+        <h4 style="color: #f59e0b; margin: 0 0 8px 0; font-size: 14px;">🎯 Assessment Debrief Context</h4>
+        <p style="color: #374151; margin: 0; font-size: 14px; line-height: 1.5;">
+          <strong>Warm lead!</strong> Heeft al assessment gedaan. <strong>Focus op:</strong> Assessment resultaten, concrete aanbevelingen, Expert Assessment upsell.
+          <strong>Doel:</strong> Expert Assessment verkoop (€2.500) of direct project start.
+        </p>
+      </div>
+      ` : conversationType === 'kickoff' ? `
+      <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+        <h4 style="color: #ef4444; margin: 0 0 8px 0; font-size: 14px;">🚀 Project Kickoff Context</h4>
+        <p style="color: #374151; margin: 0; font-size: 14px; line-height: 1.5;">
+          <strong>🔥 HOT LEAD!</strong> Ready voor implementatie. <strong>Focus op:</strong> Project scope, tijdlijnen, team requirements.
+          <strong>Doel:</strong> Contract signing en project start planning.
+        </p>
+      </div>
+      ` : `
+      <div style="background: rgba(156, 163, 175, 0.1); border: 1px solid rgba(156, 163, 175, 0.3); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+        <h4 style="color: #6b7280; margin: 0 0 8px 0; font-size: 14px;">📞 Algemeen Contact</h4>
+        <p style="color: #374151; margin: 0; font-size: 14px; line-height: 1.5;">
+          Algemene vraag of interesse. <strong>Kwalificeer eerst:</strong> Bedrijfsgrootte, AI ervaring, budget indicatie.
+          <strong>Doel:</strong> Naar verkennend gesprek of assessment leiden.
+        </p>
+      </div>
+      `}
       
       <!-- Contact Details -->
       <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin-bottom: 20px;">

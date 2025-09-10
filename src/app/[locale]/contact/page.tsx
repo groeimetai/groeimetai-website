@@ -13,6 +13,20 @@ import {
   User, Building, Clock, ArrowRight, CheckCircle, Users
 } from 'lucide-react';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+
+// Dynamic import for production-safe Google Maps
+const GoogleMapEmbed = dynamic(() => import('@/components/contact/GoogleMapEmbed'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[400px] rounded-lg overflow-hidden relative bg-black/20 border border-white/10 flex items-center justify-center">
+      <div className="text-center p-6">
+        <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+        <p className="text-white/60 text-sm">Loading interactive map...</p>
+      </div>
+    </div>
+  )
+});
 
 export default function SafeContactPage() {
   const t = useTranslations('contactPage');
@@ -410,6 +424,11 @@ export default function SafeContactPage() {
             <h2 className="text-3xl font-bold text-white mb-8">
               Bezoek Ons Kantoor
             </h2>
+            
+            {/* Interactive Google Maps */}
+            <div className="mb-8">
+              <GoogleMapEmbed className="mb-6" />
+            </div>
             
             <Card className="bg-white/5 border-white/10 p-8">
               <div className="grid md:grid-cols-2 gap-8 items-center">
