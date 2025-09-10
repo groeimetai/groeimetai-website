@@ -28,7 +28,9 @@ Deze gids helpt je om echte Google Calendar en Google Meet integratie in te stel
 **Service Account Permissions:**
 1. **IAM & Admin** → **Service Accounts**
 2. Find je Firebase service account: `firebase-adminsdk-fbsvc@groeimetai-458417.iam.gserviceaccount.com`
-3. **Add Role**: "Calendar Editor" of "Calendar Admin"
+3. **Keys** → Download service account JSON (voor client_id en private_key_id)
+
+**Note:** Service accounts krijgen automatisch calendar toegang via de API scopes. Geen extra IAM roles nodig!
 
 ### 2. Environment Variables
 
@@ -51,18 +53,25 @@ FIREBASE_CLIENT_EMAIL=firebase-adminsdk-fbsvc@groeimetai-458417.iam.gserviceacco
 3. **Keys** tab → **Add Key** → **Create New Key** → JSON
 4. Download JSON file, vind `client_id` en `private_key_id`
 
-### 3. Calendar Delegation (Optioneel)
+### 3. Calendar Setup Opties
 
-**Voor gebruik van persoonlijke calendar:**
-1. Google Admin Console (als je Google Workspace hebt)
-2. **Security** → **API Controls** → **Domain-wide Delegation**
-3. Add je service account client ID
-4. Scopes: `https://www.googleapis.com/auth/calendar`
+**Optie A: Service Account Calendar (Makkelijkst)**
+- Service account heeft eigen calendar
+- Meetings verschijnen in service account calendar
+- Attendees krijgen uitnodigingen
+- **Voordeel**: Werkt direct, geen extra setup
 
-**Of gebruik service account calendar:**
-- Meetings worden gemaakt in service account's calendar
-- Invite attendees krijgen wel uitnodigingen
-- Service account calendar kan gedeeld worden
+**Optie B: Personal Calendar Delegation (Google Workspace)**
+- Alleen als je Google Workspace hebt
+- **Google Admin Console** → **Security** → **API Controls** → **Domain-wide Delegation**
+- Add service account client ID met scope: `https://www.googleapis.com/auth/calendar`
+- **Voordeel**: Meetings in jouw persoonlijke calendar
+
+**Optie C: Shared Calendar**
+- Maak een gedeelde GroeimetAI calendar
+- Share met service account email
+- **Google Calendar** → **Settings** → **Share with specific people**
+- Add: `firebase-adminsdk-fbsvc@groeimetai-458417.iam.gserviceaccount.com`
 
 ### 4. Testing
 
@@ -115,11 +124,19 @@ FIREBASE_CLIENT_EMAIL=firebase-adminsdk-fbsvc@groeimetai-458417.iam.gserviceacco
 
 ### Fallback Behavior
 
-**Als Google API faalt:**
-- System valt terug op placeholder Meet links
-- ICS bijlage wordt nog steeds gegenereerd
-- Email uitnodiging wordt nog steeds verzonden
-- Meeting wordt opgeslagen in Firestore
+**Als Google Calendar API niet beschikbaar is:**
+- ✅ **Placeholder Meet links** - `https://meet.google.com/new`
+- ✅ **ICS calendar bijlage** - Voor handmatige import
+- ✅ **Professional email** - Volledig styled invitation
+- ✅ **Firestore storage** - Meeting data bewaard
+- ✅ **Manual Google Meet** - Client kan zelf meeting aanmaken
+
+**Quick Setup Zonder API:**
+1. Laat environment variables leeg
+2. System gebruikt automatisch fallback mode
+3. Emails worden nog steeds perfect verzonden
+4. ICS bijlage voor calendar import
+5. Manual Google Meet links in email
 
 ## 🚀 Pro Tips
 
