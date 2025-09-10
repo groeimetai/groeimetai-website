@@ -21,6 +21,10 @@ interface ContactSubmission {
   phone: string;
   company: string;
   conversationType: string;
+  message?: string;
+  preferredDate?: string;
+  preferredTime?: string;
+  submittedAt?: any;
 }
 
 interface AgendaItem {
@@ -59,15 +63,35 @@ export default function MeetingScheduler({ contact, isOpen, onClose, onSuccess }
   const [sendFollowUpEmail, setSendFollowUpEmail] = useState(true);
   const [selectedEmailTemplate, setSelectedEmailTemplate] = useState('');
   const [emailPreview, setEmailPreview] = useState('');
+  
+  // Email composer state
+  const [emailForm, setEmailForm] = useState({
+    subject: '',
+    content: '',
+    useTemplate: true
+  });
 
-  // Auto-select email template based on conversation type
+  // Auto-select email template based on conversation type and load into form
   useEffect(() => {
+    let templateId = '';
     if (contact.conversationType === 'debrief') {
-      setSelectedEmailTemplate('assessment_debrief_prep');
+      templateId = 'assessment_debrief_prep';
     } else if (contact.conversationType === 'kickoff') {
-      setSelectedEmailTemplate('project_kickoff_prep');
+      templateId = 'project_kickoff_prep';
     } else {
-      setSelectedEmailTemplate('meeting_with_prep');
+      templateId = 'meeting_with_prep';
+    }
+    
+    setSelectedEmailTemplate(templateId);
+    
+    // Load template content into email form
+    const template = emailTemplates.find(t => t.id === templateId);
+    if (template) {
+      setEmailForm({
+        subject: template.subject,
+        content: template.content,
+        useTemplate: true
+      });
     }
   }, [contact.conversationType]);
 
@@ -249,8 +273,8 @@ GroeimetAI - Je AI Implementation Partner`
                 },
                 body: JSON.stringify({
                   to: contact.email,
-                  subject: selectedTemplate.subject.replace('{{company}}', contact.company),
-                  content: selectedTemplate.content,
+                  subject: emailForm.subject.replace('{{company}}', contact.company),
+                  content: emailForm.content,
                   contactId: contact.id
                 }),
               });
@@ -287,16 +311,77 @@ GroeimetAI - Je AI Implementation Partner`
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-white/20 max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-black border-white/20 max-w-7xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
             <Calendar className="h-5 w-5 text-orange" />
-            Plan Meeting met {contact.name}
+            Plan Meeting met {contact.name} ({contact.company})
           </DialogTitle>
         </DialogHeader>
         
-        <div className="grid md:grid-cols-2 gap-6 mt-4">
-          {/* Left: Basic Details */}
+        <div className="grid lg:grid-cols-3 gap-6 mt-4">
+          {/* Left: Contact Context */}
+          <div className="space-y-4">
+            <Card className="bg-blue-500/10 border-blue-500/30">
+              <CardHeader>
+                <CardTitle className="text-blue-400 text-sm flex items-center gap-2">
+                  <Users className="h-4 w-4" />
+                  Contact Context
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div>
+                  <p className="text-blue-300 text-xs font-medium mb-1">Conversation Type</p>
+                  <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${
+                    contact.conversationType === 'kickoff' ? 'bg-red-500/20 text-red-400' :
+                    contact.conversationType === 'debrief' ? 'bg-yellow-500/20 text-yellow-400' :
+                    'bg-green-500/20 text-green-400'
+                  }`}>
+                    {contact.conversationType === 'verkennen' ? '💬 Verkennend' :
+                     contact.conversationType === 'debrief' ? '🎯 Assessment Debrief' :
+                     contact.conversationType === 'kickoff' ? '🚀 Project Kickoff' :
+                     '📞 Algemeen'}
+                  </span>
+                </div>
+                
+                {contact.message && (
+                  <div>
+                    <p className="text-blue-300 text-xs font-medium mb-1">User's Message</p>
+                    <div className="bg-white/5 rounded p-3 border border-blue-500/20">
+                      <p className="text-white/80 text-sm">{contact.message}</p>
+                    </div>
+                  </div>
+                )}
+                
+                {(contact.preferredDate || contact.preferredTime) && (
+                  <div>
+                    <p className="text-blue-300 text-xs font-medium mb-1">User's Preference</p>
+                    <div className="space-y-1">
+                      {contact.preferredDate && (
+                        <p className="text-white/70 text-sm">📅 Datum: {new Date(contact.preferredDate).toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
+                      )}
+                      {contact.preferredTime && (
+                        <p className="text-white/70 text-sm">⏰ Tijd: {contact.preferredTime === 'morning' ? 'Ochtend (9:00-12:00)' : 'Middag (13:00-17:00)'}</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
+                <div>
+                  <p className="text-blue-300 text-xs font-medium mb-1">Contact Info</p>
+                  <div className="space-y-1 text-xs">
+                    <p className="text-white/70">📧 {contact.email}</p>
+                    {contact.phone && <p className="text-white/70">📞 {contact.phone}</p>}
+                    {contact.submittedAt && (
+                      <p className="text-white/50">📝 {contact.submittedAt.toDate?.()?.toLocaleDateString('nl-NL') || 'Recent'}</p>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Middle: Meeting Details */}
           <div className="space-y-4">
             <Card className="bg-white/5 border-white/10">
               <CardHeader>
@@ -527,12 +612,15 @@ GroeimetAI - Je AI Implementation Partner`
               </CardContent>
             </Card>
 
-            {/* Email Template Selection */}
-            <Card className="bg-white/5 border-white/10">
+          </div>
+
+          {/* Right: Email Composer */}
+          <div className="space-y-4">
+            <Card className="bg-green-500/10 border-green-500/30">
               <CardHeader>
-                <CardTitle className="text-white text-sm flex items-center gap-2">
+                <CardTitle className="text-green-400 text-sm flex items-center gap-2">
                   <Mail className="h-4 w-4" />
-                  Follow-up Email (automatisch geselecteerd)
+                  Email Composer
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -548,32 +636,93 @@ GroeimetAI - Je AI Implementation Partner`
                 
                 {sendFollowUpEmail && (
                   <>
-                    <div>
-                      <Label className="text-white/80 text-sm">Email Template</Label>
-                      <select
-                        value={selectedEmailTemplate}
-                        onChange={(e) => setSelectedEmailTemplate(e.target.value)}
-                        className="w-full bg-white/5 border border-white/20 text-white rounded-md px-3 py-2 text-sm mt-1"
-                      >
-                        {emailTemplates.map((template) => (
-                          <option key={template.id} value={template.id}>
-                            {template.name}
-                          </option>
-                        ))}
-                      </select>
+                    <div className="flex items-center gap-2 mb-3">
+                      <input
+                        type="radio"
+                        id="useTemplate"
+                        checked={emailForm.useTemplate}
+                        onChange={() => {
+                          setEmailForm({ ...emailForm, useTemplate: true });
+                          const template = emailTemplates.find(t => t.id === selectedEmailTemplate);
+                          if (template) {
+                            setEmailForm({
+                              ...emailForm,
+                              useTemplate: true,
+                              subject: template.subject,
+                              content: template.content
+                            });
+                          }
+                        }}
+                        className="w-3 h-3 text-orange"
+                      />
+                      <Label htmlFor="useTemplate" className="text-white/80 text-xs">Use Template</Label>
+                      
+                      <input
+                        type="radio"
+                        id="customEmail"
+                        checked={!emailForm.useTemplate}
+                        onChange={() => setEmailForm({ ...emailForm, useTemplate: false })}
+                        className="w-3 h-3 text-orange ml-4"
+                      />
+                      <Label htmlFor="customEmail" className="text-white/80 text-xs">Custom Email</Label>
                     </div>
+
+                    {emailForm.useTemplate ? (
+                      <div>
+                        <Label className="text-white/80 text-sm">Email Template</Label>
+                        <select
+                          value={selectedEmailTemplate}
+                          onChange={(e) => {
+                            setSelectedEmailTemplate(e.target.value);
+                            const template = emailTemplates.find(t => t.id === e.target.value);
+                            if (template) {
+                              setEmailForm({
+                                ...emailForm,
+                                subject: template.subject,
+                                content: template.content
+                              });
+                            }
+                          }}
+                          className="w-full bg-white/5 border border-white/20 text-white rounded-md px-3 py-2 text-sm mt-1"
+                        >
+                          {emailTemplates.map((template) => (
+                            <option key={template.id} value={template.id}>
+                              {template.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    ) : (
+                      <>
+                        <div>
+                          <Label className="text-white/80 text-sm">Email Onderwerp</Label>
+                          <Input
+                            value={emailForm.subject}
+                            onChange={(e) => setEmailForm({ ...emailForm, subject: e.target.value })}
+                            placeholder="Meeting bevestiging..."
+                            className="bg-white/5 border-white/20 text-white text-sm mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-white/80 text-sm">Email Content</Label>
+                          <Textarea
+                            value={emailForm.content}
+                            onChange={(e) => setEmailForm({ ...emailForm, content: e.target.value })}
+                            placeholder="Beste [name], ons gesprek is bevestigd..."
+                            className="bg-white/5 border-white/20 text-white text-sm min-h-[200px] mt-1"
+                            rows={8}
+                          />
+                        </div>
+                      </>
+                    )}
                     
                     {selectedEmailTemplate && (
                       <div className="bg-white/5 rounded-lg p-3 border border-white/10">
                         <h4 className="text-white text-sm font-medium mb-2">Email Preview:</h4>
                         <div className="text-white/70 text-xs space-y-1">
-                          <p><strong>Onderwerp:</strong> {emailTemplates.find(t => t.id === selectedEmailTemplate)?.subject.replace('{{company}}', contact.company)}</p>
-                          <p><strong>Type:</strong> {
-                            selectedEmailTemplate === 'meeting_invite_only' ? 'Alleen calendar uitnodiging' :
-                            selectedEmailTemplate === 'assessment_debrief_prep' ? 'Assessment voorbereiding + meeting' :
-                            selectedEmailTemplate === 'project_kickoff_prep' ? 'Project kickoff voorbereiding + meeting' :
-                            'Algemene meeting voorbereiding + meeting'
-                          }</p>
+                          <p><strong>Naar:</strong> {contact.email}</p>
+                          <p><strong>Onderwerp:</strong> {emailForm.subject.replace('{{company}}', contact.company)}</p>
+                          <p><strong>Content:</strong> {emailForm.content.substring(0, 100).replace('{{name}}', contact.name)}...</p>
                         </div>
                       </div>
                     )}
