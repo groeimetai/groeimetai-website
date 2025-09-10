@@ -2571,6 +2571,12 @@ export default function DashboardWidgets() {
                       Contact Aanvragen
                     </Button>
                   </Link>
+                  <Link href="/dashboard/admin/calendar">
+                    <Button variant="outline" className="w-full justify-start" size="sm">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Google Calendar
+                    </Button>
+                  </Link>
                   <Link href="/dashboard/admin/invoices">
                     <Button variant="outline" className="w-full justify-start" size="sm">
                       <DollarSign className="w-4 h-4 mr-2" />

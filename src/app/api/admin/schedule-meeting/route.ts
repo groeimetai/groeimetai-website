@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { updateDoc, doc } from 'firebase/firestore';
+import { updateDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import nodemailer from 'nodemailer';
+import { GoogleCalendarService } from '@/lib/google/calendar-service';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,14 +40,51 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Generate meeting link based on type
+    // Get contact details from Firestore
+    const contactDoc = await getDoc(doc(db, 'contact_submissions', contactId));
+    if (!contactDoc.exists()) {
+      return NextResponse.json({ error: 'Contact niet gevonden' }, { status: 404 });
+    }
+    const contactData = contactDoc.data();
+
     let meetingLink = location;
+    let googleEventId = null;
+    let realMeetLink = null;
+
+    // Create actual Google Calendar event with Meet link
     if (type === 'google_meet') {
-      // In real implementation, use Google Calendar API to create meet link
-      meetingLink = `https://meet.google.com/new`;
+      console.log('📅 Creating Google Calendar event with Meet...');
+      
+      const calendarService = new GoogleCalendarService();
+      const startDateTime = new Date(`${date}T${time}`);
+      const endDateTime = new Date(startDateTime.getTime() + (duration * 60000));
+
+      const googleResult = await calendarService.createMeeting({
+        title: `GroeimetAI Consultatie - ${contactData.company}`,
+        description: `Meeting met ${contactData.name} van ${contactData.company}\n\nType: ${
+          contactData.conversationType === 'verkennen' ? 'Verkennend gesprek' :
+          contactData.conversationType === 'debrief' ? 'Assessment Debrief' :
+          contactData.conversationType === 'kickoff' ? 'Project Kickoff' :
+          'Consultatie'
+        }`,
+        startTime: startDateTime,
+        endTime: endDateTime,
+        attendeeEmails: [contactData.email, 'niels@groeimetai.io'],
+        agenda: agenda
+      });
+
+      if (googleResult.success) {
+        googleEventId = googleResult.eventId;
+        realMeetLink = googleResult.meetLink;
+        meetingLink = realMeetLink;
+        console.log('✅ Google Calendar event created with Meet link:', realMeetLink);
+      } else {
+        console.log('⚠️ Google Calendar failed, using fallback Meet link');
+        meetingLink = 'https://meet.google.com/new';
+      }
     } else if (type === 'zoom') {
-      // In real implementation, use Zoom API 
-      meetingLink = `https://zoom.us/j/meeting-id`;
+      // For Zoom, you'd integrate with Zoom API here
+      meetingLink = location || 'https://zoom.us/j/placeholder';
     }
 
     // Create calendar event ICS file content
@@ -62,7 +100,7 @@ export async function POST(req: NextRequest) {
       attendees: [...attendees, 'niels@groeimetai.io']
     });
 
-    // Update contact in Firestore
+    // Update contact in Firestore with Google Calendar data
     await updateDoc(doc(db, 'contact_submissions', contactId), {
       status: 'scheduled',
       meetingDate: date,
@@ -72,6 +110,8 @@ export async function POST(req: NextRequest) {
       meetingType: type,
       agenda: agenda,
       notes: notes,
+      googleEventId: googleEventId, // Store for future updates/cancellations
+      realMeetLink: realMeetLink,   // Store actual Meet link
       updatedAt: new Date()
     });
 
@@ -211,8 +251,11 @@ export async function POST(req: NextRequest) {
       success: true,
       message: 'Meeting ingepland en uitnodiging verzonden',
       meetingId: contactId,
-      meetingLink,
-      messageId: emailResponse.messageId
+      meetingLink: realMeetLink || meetingLink,
+      googleEventId: googleEventId,
+      isGoogleIntegrated: !!googleEventId,
+      messageId: emailResponse.messageId,
+      attendees: attendees
     });
 
   } catch (error) {
