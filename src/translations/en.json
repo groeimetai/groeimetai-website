@@ -1583,6 +1583,9 @@
     "strategicPartner": "Strategic AI Consultancy - Empowering Digital Transformation"
   },
   "about": {
+    "title": "About",
+    "tagline": "Agent Infrastructure pioneers since 2023",
+    "subtitle": "We were building MCP integrations before it was cool",
     "metadata": {
       "title": "About Us - GroeimetAI",
       "description": "Discover GroeimetAI - Your partner in AI transformation. Learn more about our mission, vision, and the team behind innovative AI solutions.",
@@ -1600,6 +1603,42 @@
       "tokens": "Tokens Processed",
       "gdpr": "GDPR Compliant",
       "users": "End Users Helped"
+    },
+    "philosophy": {
+      "opensource": {
+        "title": "Open Source First",
+        "description": "Snow-flow on GitHub - transparency and community"
+      },
+      "practical": {
+        "title": "Practical > Theoretical",
+        "description": "We build what works, not PowerPoints"
+      },
+      "custom": {
+        "title": "Custom > Copy-Paste",
+        "description": "Every solution tailored to your situation"
+      },
+      "pioneers": {
+        "title": "Pioneers > Followers",
+        "description": "2+ years ahead in AI implementations"
+      },
+      "dutch": {
+        "title": "Dutch & Direct",
+        "description": "No Silicon Valley hype, just Dutch pragmatism"
+      }
+    },
+    "capabilities": {
+      "mcp": {
+        "title": "MCP Development",
+        "description": "Custom Model Context Protocol servers that convert your APIs to agent-accessible interfaces"
+      },
+      "orchestration": {
+        "title": "Agent Orchestration",
+        "description": "Multi-agent systems collaborating on complex business challenges"
+      },
+      "context": {
+        "title": "Extreme Context Processing",
+        "description": "Our proprietary technology for processing massive documents without context loss"
+      }
     },
     "mission": {
       "title": "Our Mission",

@@ -1611,6 +1611,53 @@
       "backToLogin": "Terug naar Inloggen"
     }
   },
+  "about": {
+    "title": "Over",
+    "tagline": "Agent Infrastructure pioniers sinds 2023",
+    "subtitle": "Wij bouwden MCP integraties voordat het hip was",
+    "stats": {
+      "experience": "Jaar AI Expertise",
+      "tokens": "Tokens Verwerkt",
+      "gdpr": "GDPR Compliant",
+      "users": "Eindgebruikers Geholpen"
+    },
+    "philosophy": {
+      "opensource": {
+        "title": "Open Source First",
+        "description": "Snow-flow op GitHub - transparantie en community"
+      },
+      "practical": {
+        "title": "Praktisch > Theoretisch",
+        "description": "We bouwen wat werkt, geen PowerPoints"
+      },
+      "custom": {
+        "title": "Custom > Copy-Paste",
+        "description": "Elke oplossing op maat voor jouw situatie"
+      },
+      "pioneers": {
+        "title": "Pioniers > Volgers",
+        "description": "2+ jaar voorsprong in AI implementaties"
+      },
+      "dutch": {
+        "title": "Nederlands & Direct",
+        "description": "Geen Silicon Valley hype, gewoon Hollandse nuchterheid"
+      }
+    },
+    "capabilities": {
+      "mcp": {
+        "title": "MCP Development",
+        "description": "Custom Model Context Protocol servers die jouw APIs omzetten naar agent-toegankelijke interfaces"
+      },
+      "orchestration": {
+        "title": "Agent Orchestration",
+        "description": "Multi-agent systemen die samenwerken aan complexe business challenges"
+      },
+      "context": {
+        "title": "Extreme Context Processing",
+        "description": "Onze proprietary technologie voor het verwerken van gigantische documenten zonder context verlies"
+      }
+    }
+  },
   "errorPages": {
     "403": {
       "title": "Toegang Geweigerd",

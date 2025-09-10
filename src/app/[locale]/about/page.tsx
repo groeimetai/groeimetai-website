@@ -25,44 +25,44 @@ export default function AboutPage() {
 
   const philosophy = [
     {
-      title: 'Open Source First',
-      description: 'Snow-flow op GitHub - transparantie en community',
+      title: t('philosophy.opensource.title'),
+      description: t('philosophy.opensource.description'),
       icon: Github
     },
     {
-      title: 'Praktisch > Theoretisch',
-      description: 'We bouwen wat werkt, geen PowerPoints',
+      title: t('philosophy.practical.title'),
+      description: t('philosophy.practical.description'),
       icon: Code
     },
     {
-      title: 'Custom > Copy-Paste',
-      description: 'Elke oplossing op maat voor jouw situatie',
+      title: t('philosophy.custom.title'),
+      description: t('philosophy.custom.description'),
       icon: Target
     },
     {
-      title: 'Pioniers > Volgers',
-      description: '2+ jaar voorsprong in AI implementaties',
+      title: t('philosophy.pioneers.title'),
+      description: t('philosophy.pioneers.description'),
       icon: TrendingUp
     },
     {
-      title: 'Nederlands & Direct',
-      description: 'Geen Silicon Valley hype, gewoon Hollandse nuchterheid',
+      title: t('philosophy.dutch.title'),
+      description: t('philosophy.dutch.description'),
       icon: Users
     }
   ];
 
   const capabilities = [
     {
-      title: 'MCP Development',
-      description: 'Custom Model Context Protocol servers die jouw APIs omzetten naar agent-toegankelijke interfaces'
+      title: t('capabilities.mcp.title'),
+      description: t('capabilities.mcp.description')
     },
     {
-      title: 'Agent Orchestration', 
-      description: 'Multi-agent systemen die samenwerken aan complexe business challenges'
+      title: t('capabilities.orchestration.title'), 
+      description: t('capabilities.orchestration.description')
     },
     {
-      title: 'Extreme Context Processing',
-      description: 'Onze proprietary technologie voor het verwerken van gigantische documenten zonder context verlies'
+      title: t('capabilities.context.title'),
+      description: t('capabilities.context.description')
     }
   ];
 
@@ -81,7 +81,7 @@ export default function AboutPage() {
                 transition={{ duration: 0.8 }}
               >
                 <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                  Over{' '}
+                  {t('title')}{' '}
                   <span
                     className="text-white px-4 py-2 inline-block"
                     style={{ background: 'linear-gradient(135deg, #F87315, #FF8533)' }}
