@@ -2565,6 +2565,12 @@ export default function DashboardWidgets() {
                       Client Management
                     </Button>
                   </Link>
+                  <Link href="/dashboard/admin/contacts">
+                    <Button variant="outline" className="w-full justify-start" size="sm">
+                      <Mail className="w-4 h-4 mr-2" />
+                      Contact Aanvragen
+                    </Button>
+                  </Link>
                   <Link href="/dashboard/admin/invoices">
                     <Button variant="outline" className="w-full justify-start" size="sm">
                       <DollarSign className="w-4 h-4 mr-2" />
