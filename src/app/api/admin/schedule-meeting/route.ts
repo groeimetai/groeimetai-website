@@ -126,11 +126,14 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Get contact details (in real app, fetch from Firestore)
+    // Create professional agenda HTML table
     const agendaHtml = agenda.map(item => `
       <tr>
-        <td style="padding: 8px; border: 1px solid #e5e7eb; background: #f9fafb; color: #374151; font-weight: 600; width: 80px;">${item.time}</td>
-        <td style="padding: 8px; border: 1px solid #e5e7eb; color: #111827;"><strong>${item.title}</strong><br><span style="color: #6b7280; font-size: 14px;">${item.description}</span></td>
+        <td style="padding: 12px 8px; border: 1px solid #e5e7eb; background: rgba(248,115,21,0.05); color: #F87315; font-weight: 600; width: 80px; text-align: center;">${item.time}</td>
+        <td style="padding: 12px; border: 1px solid #e5e7eb; color: #111827;">
+          <strong style="color: #111827; font-size: 15px;">${item.title}</strong><br>
+          <span style="color: #6b7280; font-size: 14px; line-height: 1.4;">${item.description}</span>
+        </td>
       </tr>
     `).join('');
 
@@ -145,12 +148,20 @@ export async function POST(req: NextRequest) {
       <div style="margin-bottom: 15px;">
         <img src="https://groeimetai.io/groeimet-ai-logo.svg" alt="GroeimetAI" style="height: 40px; width: auto; filter: brightness(0) invert(1);" />
       </div>
-      <h1 style="color: white; margin: 0; font-size: 24px;">📅 Meeting Ingepland</h1>
+      <h1 style="color: white; margin: 0; font-size: 24px;">📅 Meeting Bevestigd</h1>
     </div>
     
     <!-- Content -->
     <div style="padding: 30px;">
-      <!-- Meeting Details -->
+      <!-- Personal Greeting -->
+      <div style="margin-bottom: 20px;">
+        <h2 style="color: #111827; margin-top: 0; font-size: 20px; margin-bottom: 10px;">Hoi ${contactData.name}! 🎯</h2>
+        <p style="color: #374151; line-height: 1.6; margin: 0;">
+          Ons gesprek over AI mogelijkheden voor <strong>${contactData.company}</strong> is bevestigd. Ik kijk ernaar uit!
+        </p>
+      </div>
+      
+      <!-- Meeting Details Card -->
       <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
         <h3 style="color: #111827; margin-top: 0; font-size: 16px; margin-bottom: 15px;">📋 Meeting Details</h3>
         <table style="width: 100%; border-collapse: collapse;">
@@ -160,22 +171,31 @@ export async function POST(req: NextRequest) {
           </tr>
           <tr>
             <td style="padding: 8px 0; color: #6b7280;">Tijd:</td>
-            <td style="padding: 8px 0; color: #111827; font-weight: 500;">${time} (${duration} minuten)</td>
+            <td style="padding: 8px 0; color: #111827; font-weight: 500;">${time} - ${new Date(new Date(\`\${date}T\${time}\`).getTime() + duration * 60000).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })} (${duration} minuten)</td>
           </tr>
           <tr>
-            <td style="padding: 8px 0; color: #6b7280;">Type:</td>
+            <td style="padding: 8px 0; color: #6b7280;">Type gesprek:</td>
             <td style="padding: 8px 0; color: #111827; font-weight: 500;">
-              ${type === 'google_meet' ? '📹 Google Meet' : 
+              ${contactData.conversationType === 'verkennen' ? '💬 Verkennend gesprek' :
+                contactData.conversationType === 'debrief' ? '🎯 Assessment Debrief' :
+                contactData.conversationType === 'kickoff' ? '🚀 Project Kickoff' :
+                '📞 Consultatie'}
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #6b7280;">Platform:</td>
+            <td style="padding: 8px 0; color: #111827; font-weight: 500;">
+              ${type === 'google_meet' ? '📹 Google Meet (automatische link)' : 
                 type === 'zoom' ? '📹 Zoom' : 
                 type === 'teams' ? '📹 Microsoft Teams' : 
-                type === 'phone' ? '📞 Telefoon' : '🏢 Kantoor'}
+                type === 'phone' ? '📞 Telefoon' : '🏢 Kantoor bezoek'}
             </td>
           </tr>
           ${meetingLink ? `
           <tr>
-            <td style="padding: 8px 0; color: #6b7280;">Link:</td>
+            <td style="padding: 8px 0; color: #6b7280;">Meeting Link:</td>
             <td style="padding: 8px 0;">
-              <a href="${meetingLink}" style="color: #F87315; text-decoration: none; font-weight: 500;">${meetingLink}</a>
+              <a href="${meetingLink}" style="color: #F87315; text-decoration: none; font-weight: 500; word-break: break-all;">${meetingLink}</a>
             </td>
           </tr>
           ` : ''}
@@ -183,46 +203,79 @@ export async function POST(req: NextRequest) {
       </div>
       
       ${agenda.length > 0 ? `
-      <!-- Agenda -->
+      <!-- Detailed Agenda -->
       <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-        <h3 style="color: #111827; margin-top: 0; font-size: 16px; margin-bottom: 15px;">📋 Agenda</h3>
-        <table style="width: 100%; border-collapse: collapse; border: 1px solid #e5e7eb;">
-          ${agendaHtml}
+        <h3 style="color: #111827; margin-top: 0; font-size: 16px; margin-bottom: 15px;">📋 Gedetailleerde Agenda</h3>
+        <table style="width: 100%; border-collapse: collapse; border: 1px solid #e5e7eb; border-radius: 6px; overflow: hidden;">
+          <thead>
+            <tr style="background: rgba(248,115,21,0.1);">
+              <th style="padding: 12px 8px; color: #F87315; font-weight: 600; text-align: left; width: 80px;">Tijd</th>
+              <th style="padding: 12px; color: #F87315; font-weight: 600; text-align: left;">Onderwerp & Doel</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${agendaHtml}
+          </tbody>
         </table>
       </div>
       ` : ''}
       
       ${notes ? `
-      <!-- Notes -->
+      <!-- Preparation Notes -->
       <div style="background: rgba(248,115,21,0.1); border: 1px solid rgba(248,115,21,0.3); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-        <h3 style="color: #F87315; margin-top: 0; font-size: 16px; margin-bottom: 10px;">📝 Voorbereiding & Notities</h3>
-        <p style="color: #374151; line-height: 1.6; margin: 0; white-space: pre-wrap;">${notes}</p>
+        <h3 style="color: #F87315; margin-top: 0; font-size: 16px; margin-bottom: 10px;">📝 Voorbereiding & Agenda Notities</h3>
+        <div style="color: #374151; line-height: 1.6; margin: 0; white-space: pre-wrap; background: white; padding: 15px; border-radius: 6px; border-left: 4px solid #F87315;">${notes}</div>
       </div>
       ` : ''}
       
-      <!-- Join Button -->
-      ${type !== 'phone' && type !== 'in_person' ? `
-      <div style="text-align: center; padding: 20px 0;">
-        <a href="${meetingLink}" style="display: inline-block; background: #F87315; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
-          🔗 Deelnemen aan Meeting
+      <!-- Primary CTA -->
+      <div style="text-align: center; padding: 25px 0; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; margin: 20px 0;">
+        ${type !== 'phone' && type !== 'in_person' && meetingLink ? `
+        <a href="${meetingLink}" style="display: inline-block; background: #F87315; color: white; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(248, 115, 21, 0.3);">
+          🎥 Deelnemen aan Meeting
         </a>
+        <p style="color: #6b7280; margin: 10px 0 0 0; font-size: 12px;">Je kunt 15 minuten voor de meeting al deelnemen</p>
+        ` : type === 'phone' ? `
+        <div style="background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); border-radius: 8px; padding: 20px;">
+          <h3 style="color: #22c55e; margin: 0 0 10px 0;">📞 Telefonisch Gesprek</h3>
+          <p style="color: #374151; margin: 0;">Ik bel je op <strong>${contactData.phone || contactData.email}</strong> om ${time}</p>
+        </div>
+        ` : `
+        <div style="background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); border-radius: 8px; padding: 20px;">
+          <h3 style="color: #22c55e; margin: 0 0 10px 0;">🏢 Kantoorbezoek</h3>
+          <p style="color: #374151; margin: 0;">Locatie: <strong>${meetingLink || 'GroeimetAI Kantoor, Apeldoorn'}</strong></p>
+        </div>
+        `}
       </div>
-      ` : ''}
       
-      <!-- Contact Info -->
-      <div style="background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); border-radius: 8px; padding: 20px; margin-top: 20px;">
-        <h3 style="color: #22c55e; margin-top: 0; font-size: 16px; margin-bottom: 10px;">📞 Contact</h3>
+      <!-- What to Expect -->
+      <div style="background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+        <h3 style="color: #22c55e; margin-top: 0; font-size: 16px; margin-bottom: 15px;">✨ Wat kun je verwachten?</h3>
+        <ul style="color: #374151; line-height: 1.8; padding-left: 20px; margin: 0;">
+          <li><strong>Persoonlijke benadering</strong> - Geen standaard sales pitch</li>
+          <li><strong>Concrete inzichten</strong> - Direct bruikbare AI adviezen</li>
+          <li><strong>Praktische examples</strong> - Echte cases uit jouw sector</li>
+          <li><strong>Clear next steps</strong> - Heldere vervolgstappen na het gesprek</li>
+        </ul>
+      </div>
+      
+      <!-- Emergency Contact -->
+      <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 20px;">
+        <h3 style="color: #3b82f6; margin-top: 0; font-size: 16px; margin-bottom: 10px;">📞 Contact & Noodgevallen</h3>
         <p style="color: #374151; line-height: 1.6; margin: 0;">
-          Vragen? Bel me direct: <a href="tel:+31612345678" style="color: #22c55e; text-decoration: none;">+31 6 12345678</a><br>
-          Of stuur een email: <a href="mailto:niels@groeimetai.io" style="color: #22c55e; text-decoration: none;">niels@groeimetai.io</a>
+          <strong>Direct contact:</strong> <a href="mailto:niels@groeimetai.io" style="color: #3b82f6; text-decoration: none;">niels@groeimetai.io</a><br>
+          <strong>Telefonisch:</strong> <a href="tel:+31612345678" style="color: #3b82f6; text-decoration: none;">+31 6 12345678</a><br>
+          <strong>Laatste moment wijzigingen?</strong> Bel direct of stuur WhatsApp!
         </p>
       </div>
     </div>
     
-    <!-- Footer -->
-    <div style="background: #f9fafb; padding: 20px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
-      <p style="color: #6b7280; font-size: 12px; margin: 0;">
-        GroeimetAI • Meeting ingepland op ${new Date().toLocaleString('nl-NL')}
+    <!-- Professional Footer -->
+    <div style="background: #f9fafb; padding: 25px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
+      <p style="color: #6b7280; font-size: 12px; margin: 0; line-height: 1.5;">
+        GroeimetAI • AI Infrastructure Specialists<br>
+        Meeting ingepland op ${new Date().toLocaleString('nl-NL')}
+        ${googleEventId ? ' • Geïntegreerd met Google Calendar' : ''}
       </p>
     </div>
   </div>
