@@ -217,7 +217,7 @@ export async function POST(req: NextRequest) {
           attachments: [
             {
               filename: 'groeimetai-logo.svg',
-              path: process.cwd() + '/public/gecentreerd-logo.svg',
+              path: process.cwd() + '/public/groeimet-ai-logo.svg',
               cid: 'groeimetai-logo'
             }
           ]
@@ -315,7 +315,7 @@ export async function POST(req: NextRequest) {
           attachments: [
             {
               filename: 'groeimetai-logo.svg',
-              path: process.cwd() + '/public/gecentreerd-logo.svg',
+              path: process.cwd() + '/public/groeimet-ai-logo.svg',
               cid: 'groeimetai-logo'
             }
           ]

@@ -194,7 +194,7 @@ export default function ContactsAdminPage() {
   <div style="max-width: 600px; margin: 0 auto; color: white; padding: 30px;">
     <div style="text-align: center; margin-bottom: 30px;">
       <div style="margin-bottom: 15px;">
-        <img src="https://groeimetai.io/gecentreerd-logo.svg" alt="GroeimetAI" style="height: 50px; width: auto; filter: brightness(0) invert(1);" />
+        <img src="https://groeimetai.io/groeimet-ai-logo.svg" alt="GroeimetAI" style="height: 50px; width: auto; filter: brightness(0) invert(1);" />
       </div>
       <h1 style="color: #F87315; font-size: 32px; margin: 0;">GroeimetAI</h1>
     </div>
@@ -295,7 +295,7 @@ export default function ContactsAdminPage() {
   <div style="max-width: 600px; margin: 0 auto; color: white; padding: 30px;">
     <div style="text-align: center; margin-bottom: 30px;">
       <div style="margin-bottom: 15px;">
-        <img src="https://groeimetai.io/gecentreerd-logo.svg" alt="GroeimetAI" style="height: 50px; width: auto; filter: brightness(0) invert(1);" />
+        <img src="https://groeimetai.io/groeimet-ai-logo.svg" alt="GroeimetAI" style="height: 50px; width: auto; filter: brightness(0) invert(1);" />
       </div>
       <h1 style="color: #F87315; font-size: 32px; margin: 0;">GroeimetAI</h1>
       <p style="color: rgba(255,255,255,0.7); margin-top: 5px;">Transformeer je bedrijf met AI Agents</p>
