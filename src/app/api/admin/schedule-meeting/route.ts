@@ -171,7 +171,7 @@ export async function POST(req: NextRequest) {
           </tr>
           <tr>
             <td style="padding: 8px 0; color: #6b7280;">Tijd:</td>
-            <td style="padding: 8px 0; color: #111827; font-weight: 500;">${time} - ${new Date(new Date(\`\${date}T\${time}\`).getTime() + duration * 60000).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })} (${duration} minuten)</td>
+            <td style="padding: 8px 0; color: #111827; font-weight: 500;">${time} - ${new Date(new Date(`${date}T${time}`).getTime() + duration * 60000).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })} (${duration} minuten)</td>
           </tr>
           <tr>
             <td style="padding: 8px 0; color: #6b7280;">Type gesprek:</td>
