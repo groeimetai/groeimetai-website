@@ -156,21 +156,20 @@ export default function AgentReadinessHero() {
                 <Button
                   onClick={() => setShowQuickCheck(true)}
                   size="lg"
-                  className="group text-white border-0 shadow-xl hover-lift transform transition-all duration-300 w-full sm:w-auto min-h-[48px] text-sm sm:text-base md:text-lg px-4 sm:px-6 py-3 sm:py-4"
+                  className="group text-white border-0 hover-lift transform transition-all duration-300 w-full sm:w-auto min-h-[44px] sm:min-h-[48px] text-sm sm:text-base md:text-lg px-3 sm:px-6 py-2.5 sm:py-4 shadow-md sm:shadow-xl"
                   style={{ 
-                    backgroundColor: '#F87315',
-                    boxShadow: '0 10px 25px -5px rgba(248, 115, 21, 0.25)'
+                    backgroundColor: '#F87315'
                   }}
                 >
-                  <Zap className="mr-2 w-5 h-5" />
+                  <Zap className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
                   {t('cta.quickCheck')}
-                  <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="ml-2 w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" />
                 </Button>
                 <Link href="/cases" className="w-full sm:w-auto">
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-white/20 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300 w-full sm:w-auto min-h-[48px] text-sm sm:text-base md:text-lg px-4 sm:px-6 py-3 sm:py-4"
+                    className="border-white/15 sm:border-white/20 text-white/90 sm:text-white hover:bg-white/5 sm:hover:bg-white/10 hover:border-white/25 sm:hover:border-white/40 transition-all duration-300 w-full sm:w-auto min-h-[44px] sm:min-h-[48px] text-sm sm:text-base md:text-lg px-3 sm:px-6 py-2.5 sm:py-4"
                   >
                     {t('cta.seeHow')}
                   </Button>
