@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   try {
     console.log('🧪 Email test endpoint called');
 
-    // Create a simple test email
+    // Create a simple test email with exact same format as working emails
     const testEmail = {
       to: process.env.CONTACT_EMAIL || 'info@groeimetai.com',
       message: {
@@ -21,12 +21,16 @@ export async function POST(req: NextRequest) {
     <p>Dit is een test email om te controleren of de Firebase Email Extension werkt.</p>
     <p><strong>Tijd:</strong> ${new Date().toLocaleString('nl-NL')}</p>
     <p><strong>Status:</strong> Email succesvol toegevoegd aan Firestore mail collection</p>
+    <p><strong>Extension configuratie:</strong> Send Email Extension zou dit automatisch moeten verwerken</p>
   </div>
 </body>
 </html>
         `
       },
-      timestamp: new Date()
+      template: {
+        name: 'debug_test',
+        data: { timestamp: new Date().toISOString() }
+      }
     };
 
     // Add to mail collection

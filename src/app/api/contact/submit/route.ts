@@ -198,6 +198,10 @@ export async function POST(req: NextRequest) {
                     conversationType === 'debrief' ? 'Debrief' : 
                     conversationType === 'kickoff' ? 'Kickoff' : 'Algemeen'})`,
           html: adminEmailHtml
+        },
+        template: {
+          name: 'contact_notification',
+          data: { name, email, company, conversationType }
         }
       });
 
@@ -282,6 +286,10 @@ export async function POST(req: NextRequest) {
         message: {
           subject: '✅ We hebben je aanvraag ontvangen - GroeimetAI',
           html: confirmationHtml
+        },
+        template: {
+          name: 'contact_confirmation',
+          data: { name, company, conversationType }
         }
       });
 
