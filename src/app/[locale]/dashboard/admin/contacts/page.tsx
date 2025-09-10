@@ -73,20 +73,95 @@ GroeimetAI Team`
   },
   {
     id: 'follow_up',
-    name: 'Follow-up',
-    subject: '🚀 Vervolgstappen na ons gesprek',
+    name: 'Follow-up Na Gesprek',
+    subject: '🚀 Vervolgstappen na ons inspirerende gesprek - {{company}}',
     content: `Beste {{name}},
 
-Bedankt voor het inspirerende gesprek! Zoals besproken stuur ik je hierbij de vervolgstappen voor {{company}}.
+Wat een inspirerend gesprek was het! Bedankt voor de openheid over de AI uitdagingen en kansen bij {{company}}.
 
-Next steps:
-1. {{step1}}
-2. {{step2}}
-3. {{step3}}
+Zoals besproken deel ik hieronder de concrete vervolgstappen:
 
-Ik hoor graag of je nog vragen hebt!
+🎯 DIRECT ACTIE:
+1. {{actionStep1}}
+2. {{actionStep2}} 
+3. {{actionStep3}}
+
+📋 PLANNING:
+• Volgende meeting: {{nextMeetingDate}}
+• Verwachte deadline eerste milestone: {{milestone1Date}}
+• Budget indicatie besproken: {{budgetRange}}
+
+📚 RESOURCES:
+• Agent Readiness Assessment: https://groeimetai.io/agent-readiness
+• Case study relevant voor {{company}}: {{relevantCase}}
+• Technische documentatie: {{techDocs}}
+
+💡 MIJN AANBEVELING:
+{{personalRecommendation}}
+
+Heb je nog vragen? Ik ben altijd bereikbaar op deze email of bel me direct: +31 6 12345678
+
+Tot snel!
+
+{{senderName}}
+GroeimetAI - AI Infrastructure Specialists`
+  },
+  {
+    id: 'proposal_ready',
+    name: 'Voorstel Klaar',
+    subject: '📄 Je AI implementatie voorstel is klaar - {{company}}',
+    content: `Hoi {{name}},
+
+Zoals beloofd heb ik een op maat gemaakt AI implementatie voorstel voor {{company}} voorbereid.
+
+📊 HET VOORSTEL BEVAT:
+• Specifieke AI use cases voor jouw bedrijf
+• ROI berekening en business case
+• Implementatie roadmap met tijdlijnen
+• Team training en change management plan
+• Budget overzicht met fases
+
+🎯 HOOGTEPUNTEN:
+• Verwachte ROI: {{expectedROI}}
+• Implementatie tijd: {{implementationTime}}
+• Eerste resultaten na: {{firstResultsTime}}
+
+Het complete voorstel vind je hier: {{proposalLink}}
+
+Wanneer kunnen we dit bespreken? Ik stel voor om binnen een week een review meeting in te plannen.
+
+Beschikbare slots:
+• {{availableSlot1}}
+• {{availableSlot2}}
+• {{availableSlot3}}
 
 Met vriendelijke groet,
+
+{{senderName}}
+GroeimetAI`
+  },
+  {
+    id: 'quick_check_in',
+    name: 'Snelle Check-in',
+    subject: '👋 Hoe staat het met je AI journey? - {{company}}',
+    content: `Hoi {{name}},
+
+Ik dacht aan ons gesprek over AI mogelijkheden voor {{company}} en wilde even checken hoe het ervoor staat.
+
+🤔 WAAR STA JE NU?
+• Heb je al stappen kunnen zetten?
+• Zijn er nog vragen ontstaan?
+• Kan ik ergens mee helpen?
+
+💡 QUICK WIN IDEEËN:
+Ik heb een paar concrete, snelle AI wins gezien die perfect bij {{company}} passen:
+• {{quickWin1}}
+• {{quickWin2}}
+• {{quickWin3}}
+
+Zin in een 15-minuten catch-up call deze week? Dan kan ik je deze quick wins even laten zien.
+
+Groet,
 {{senderName}}`
   }
 ];
