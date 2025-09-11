@@ -311,21 +311,39 @@ GroeimetAI - Je AI Implementation Partner`
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-white/20 max-w-7xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-white flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-orange" />
-            Plan Meeting met {contact.name} ({contact.company})
+      <DialogContent className="bg-black border-white/20 max-w-[95vw] xl:max-w-7xl max-h-[95vh] overflow-hidden">
+        <DialogHeader className="border-b border-white/10 pb-4">
+          <DialogTitle className="text-white flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Calendar className="h-6 w-6 text-orange" />
+              <div>
+                <h2 className="text-xl font-bold">Meeting Planning</h2>
+                <p className="text-white/60 text-sm font-normal">{contact.name} • {contact.company}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                contact.conversationType === 'kickoff' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                contact.conversationType === 'debrief' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                'bg-green-500/20 text-green-400 border border-green-500/30'
+              }`}>
+                {contact.conversationType === 'verkennen' ? '💬 Verkennend' :
+                 contact.conversationType === 'debrief' ? '🎯 Assessment Debrief' :
+                 contact.conversationType === 'kickoff' ? '🚀 Project Kickoff' :
+                 '📞 Algemeen'}
+              </span>
+            </div>
           </DialogTitle>
         </DialogHeader>
         
-        <div className="grid lg:grid-cols-3 gap-6 mt-4">
+        <div className="flex-1 overflow-y-auto">
+          <div className="grid xl:grid-cols-3 gap-6 p-6">
           {/* Left: Contact Context */}
           <div className="space-y-4">
-            <Card className="bg-blue-500/10 border-blue-500/30">
-              <CardHeader>
-                <CardTitle className="text-blue-400 text-sm flex items-center gap-2">
-                  <Users className="h-4 w-4" />
+            <Card className="bg-blue-500/10 border-blue-500/30 shadow-lg">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-blue-300 text-base flex items-center gap-2 font-semibold">
+                  <Users className="h-5 w-5" />
                   Contact Context
                 </CardTitle>
               </CardHeader>
@@ -383,9 +401,12 @@ GroeimetAI - Je AI Implementation Partner`
 
           {/* Middle: Meeting Details */}
           <div className="space-y-4">
-            <Card className="bg-white/5 border-white/10">
-              <CardHeader>
-                <CardTitle className="text-white text-sm">Meeting Details</CardTitle>
+            <Card className="bg-white/5 border-white/10 shadow-lg">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-white text-base flex items-center gap-2 font-semibold">
+                  <Calendar className="h-5 w-5 text-orange" />
+                  Meeting Details
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -616,10 +637,10 @@ GroeimetAI - Je AI Implementation Partner`
 
           {/* Right: Email Composer */}
           <div className="space-y-4">
-            <Card className="bg-green-500/10 border-green-500/30">
-              <CardHeader>
-                <CardTitle className="text-green-400 text-sm flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
+            <Card className="bg-green-500/10 border-green-500/30 shadow-lg">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-green-300 text-base flex items-center gap-2 font-semibold">
+                  <Mail className="h-5 w-5" />
                   Email Composer
                 </CardTitle>
               </CardHeader>
@@ -777,34 +798,61 @@ GroeimetAI - Je AI Implementation Partner`
           </div>
         </div>
 
-        <DialogFooter className="mt-6">
-          <Button
-            variant="outline"
-            onClick={onClose}
-            className="border-white/20 text-white"
-          >
-            Annuleren
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-            className="bg-orange text-white"
-          >
-            {isSubmitting ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                Plannen...
-              </>
-            ) : (
-              <>
-                <Send className="mr-2 h-4 w-4" />
-                {sendFollowUpEmail && selectedEmailTemplate !== 'meeting_invite_only' 
-                  ? 'Plan Meeting & Verstuur Emails' 
-                  : 'Plan Meeting & Verstuur Uitnodiging'}
-              </>
-            )}
-          </Button>
-        </DialogFooter>
+          </div>
+        </div>
+
+        {/* Fixed Footer */}
+        <div className="border-t border-white/10 bg-black/50 p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="text-white/60 text-sm">
+                <span className="font-medium">Meeting:</span> {
+                  scheduleForm.date && scheduleForm.time 
+                    ? `${new Date(scheduleForm.date).toLocaleDateString('nl-NL', { month: 'short', day: 'numeric' })} om ${scheduleForm.time}`
+                    : 'Niet ingesteld'
+                }
+              </div>
+              {sendFollowUpEmail && (
+                <div className="text-white/60 text-sm">
+                  <span className="font-medium">Email:</span> {
+                    emailForm.useTemplate 
+                      ? emailTemplates.find(t => t.id === selectedEmailTemplate)?.name || 'Template'
+                      : 'Custom email'
+                  }
+                </div>
+              )}
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                onClick={onClose}
+                className="border-white/20 text-white hover:bg-white/10"
+              >
+                Annuleren
+              </Button>
+              <Button
+                onClick={handleSubmit}
+                disabled={isSubmitting || !scheduleForm.date || !scheduleForm.time}
+                className="bg-gradient-to-r from-orange to-orange-600 text-white shadow-lg hover:shadow-xl transition-all"
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                    Bezig met plannen...
+                  </>
+                ) : (
+                  <>
+                    <Send className="mr-2 h-4 w-4" />
+                    {sendFollowUpEmail && emailForm.content
+                      ? 'Plan Meeting & Verstuur Emails'
+                      : 'Plan Meeting & Verstuur Uitnodiging'}
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );
