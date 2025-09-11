@@ -14,8 +14,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Mail, Phone, Building, Calendar, Clock, Send, User, 
   MessageCircle, Target, Rocket, Filter, Search, ChevronRight,
-  CheckCircle, XCircle, AlertCircle, Eye, Edit, Archive
+  CheckCircle, XCircle, AlertCircle, Eye, Edit, Archive,
+  ArrowLeft, Home, Settings, Users
 } from 'lucide-react';
+import { Link } from '@/i18n/routing';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { nl } from 'date-fns/locale';
@@ -485,9 +487,67 @@ ${emailContent}
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Navigation */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2 text-sm text-white/60">
+            <Link href="/dashboard" className="hover:text-white transition-colors flex items-center gap-1">
+              <Home className="h-4 w-4" />
+              Dashboard
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <Link href="/dashboard/admin" className="hover:text-white transition-colors flex items-center gap-1">
+              <Settings className="h-4 w-4" />
+              Admin
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <span className="text-orange font-medium">Contact Aanvragen</span>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Link href="/dashboard/admin">
+              <Button variant="outline" size="sm" className="border-white/20 text-white hover:bg-white/10">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Terug naar Admin
+              </Button>
+            </Link>
+            <Link href="/dashboard/admin/calendar">
+              <Button variant="outline" size="sm" className="border-white/20 text-white hover:bg-white/10">
+                <Calendar className="h-4 w-4 mr-2" />
+                Calendar
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Page Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">Contact Aanvragen</h1>
-        <p className="text-white/60">Beheer en reageer op contact aanvragen</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+              <Mail className="h-8 w-8 text-orange" />
+              Contact Aanvragen
+            </h1>
+            <p className="text-white/60">Beheer en reageer op contact aanvragen</p>
+          </div>
+          <div className="text-white/60 text-sm">
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                {contacts.filter(c => c.status === 'new').length} Nieuw
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
+                {contacts.filter(c => c.status === 'contacted').length} Contacted
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                {contacts.filter(c => c.status === 'scheduled').length} Scheduled
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Filters */}
