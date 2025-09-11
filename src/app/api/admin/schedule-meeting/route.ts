@@ -51,40 +51,50 @@ export async function POST(req: NextRequest) {
     let googleEventId = null;
     let realMeetLink = null;
 
-    // Create actual Google Calendar event with Meet link
+    // Create actual Google Calendar event with Meet link (with fallback)
     if (type === 'google_meet') {
-      console.log('📅 Creating Google Calendar event with Meet...');
-      
-      const calendarService = new GoogleCalendarService();
-      const startDateTime = new Date(`${date}T${time}`);
-      const endDateTime = new Date(startDateTime.getTime() + (duration * 60000));
+      try {
+        console.log('📅 Attempting Google Calendar integration...');
+        
+        const calendarService = new GoogleCalendarService();
+        const startDateTime = new Date(`${date}T${time}`);
+        const endDateTime = new Date(startDateTime.getTime() + (duration * 60000));
 
-      const googleResult = await calendarService.createMeeting({
-        title: `GroeimetAI Consultatie - ${contactData.company}`,
-        description: `Meeting met ${contactData.name} van ${contactData.company}\n\nType: ${
-          contactData.conversationType === 'verkennen' ? 'Verkennend gesprek' :
-          contactData.conversationType === 'debrief' ? 'Assessment Debrief' :
-          contactData.conversationType === 'kickoff' ? 'Project Kickoff' :
-          'Consultatie'
-        }`,
-        startTime: startDateTime,
-        endTime: endDateTime,
-        attendeeEmails: [contactData.email, 'niels@groeimetai.io'],
-        agenda: agenda
-      });
+        const googleResult = await calendarService.createMeeting({
+          title: `GroeimetAI Consultatie - ${contactData.company}`,
+          description: `Meeting met ${contactData.name} van ${contactData.company}\n\nType: ${
+            contactData.conversationType === 'verkennen' ? 'Verkennend gesprek' :
+            contactData.conversationType === 'debrief' ? 'Assessment Debrief' :
+            contactData.conversationType === 'kickoff' ? 'Project Kickoff' :
+            'Consultatie'
+          }`,
+          startTime: startDateTime,
+          endTime: endDateTime,
+          attendeeEmails: [contactData.email, 'niels@groeimetai.io'],
+          agenda: agenda
+        });
 
-      if (googleResult.success) {
-        googleEventId = googleResult.eventId;
-        realMeetLink = googleResult.meetLink;
-        meetingLink = realMeetLink;
-        console.log('✅ Google Calendar event created with Meet link:', realMeetLink);
-      } else {
-        console.log('⚠️ Google Calendar failed, using fallback Meet link');
+        if (googleResult.success) {
+          googleEventId = googleResult.eventId;
+          realMeetLink = googleResult.meetLink;
+          meetingLink = realMeetLink;
+          console.log('✅ Google Calendar event created with Meet link:', realMeetLink);
+        } else {
+          console.log('⚠️ Google Calendar failed, using fallback Meet link');
+          meetingLink = 'https://meet.google.com/new';
+        }
+      } catch (googleError) {
+        console.log('❌ Google Calendar error, using fallback:', googleError);
         meetingLink = 'https://meet.google.com/new';
       }
     } else if (type === 'zoom') {
-      // For Zoom, you'd integrate with Zoom API here
       meetingLink = location || 'https://zoom.us/j/placeholder';
+    } else if (type === 'teams') {
+      meetingLink = location || 'https://teams.microsoft.com/';
+    } else if (type === 'phone') {
+      meetingLink = `tel:${contactData.phone || '+31612345678'}`;
+    } else {
+      meetingLink = location || 'GroeimetAI Kantoor, Apeldoorn';
     }
 
     // Create calendar event ICS file content

@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { 
   Calendar, Clock, Video, Phone, Building, Plus, X, Send,
   Users, MapPin, FileText, Settings, Mail
@@ -299,6 +299,9 @@ Niels van der Werf`;
               </div>
             </div>
           </DialogTitle>
+          <DialogDescription className="text-white/60 text-sm mt-2">
+            Plan een meeting, bouw een agenda, en stuur een professionele voorbereidingsemail.
+          </DialogDescription>
         </DialogHeader>
         
         <div className="flex-1 overflow-y-auto min-h-0">

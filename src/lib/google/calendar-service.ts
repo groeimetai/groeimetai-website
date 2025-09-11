@@ -1,12 +1,26 @@
-import { google } from 'googleapis';
+// Conditional import to prevent errors if googleapis isn't available
+let google: any = null;
+try {
+  const googleapis = require('googleapis');
+  google = googleapis.google;
+} catch (error) {
+  console.log('📅 googleapis package not available, using fallback mode');
+}
 
 export class GoogleCalendarService {
   private calendar;
   private auth;
 
   constructor() {
-    // Use service account for server-side Google API access
-    this.auth = new google.auth.GoogleAuth({
+    // Check if google is available
+    if (!google) {
+      console.log('⚠️ Google APIs not available, service will use fallback mode');
+      return;
+    }
+
+    try {
+      // Use service account for server-side Google API access
+      this.auth = new google.auth.GoogleAuth({
       credentials: {
         type: 'service_account',
         project_id: process.env.FIREBASE_PROJECT_ID,
@@ -25,7 +39,12 @@ export class GoogleCalendarService {
       ],
     });
 
-    this.calendar = google.calendar({ version: 'v3', auth: this.auth });
+      this.calendar = google.calendar({ version: 'v3', auth: this.auth });
+    } catch (error) {
+      console.log('⚠️ Google Calendar service initialization failed:', error);
+      this.calendar = null;
+      this.auth = null;
+    }
   }
 
   async createMeeting(meetingData: {
@@ -41,6 +60,19 @@ export class GoogleCalendarService {
       duration: number;
     }>;
   }) {
+    // Return fallback if Google Calendar is not available
+    if (!google || !this.calendar) {
+      console.log('📅 Google Calendar not available, using fallback');
+      return {
+        success: false,
+        error: 'Google Calendar service not available',
+        fallback: {
+          meetLink: 'https://meet.google.com/new',
+          eventId: null
+        }
+      };
+    }
+
     try {
       // Format agenda for description
       let fullDescription = meetingData.description;
