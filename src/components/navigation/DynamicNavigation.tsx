@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import NotificationCenter from '@/components/NotificationCenter';
 import { useTranslations } from 'next-intl';
+import LanguageSwitcher from '@/components/layout/LanguageSwitcher';
 import {
   Home, Users, Mail, Calendar, Settings, FileText, 
   DollarSign, BarChart3, MessageSquare, Phone, Clock,
@@ -115,6 +116,9 @@ export default function DynamicNavigation() {
 
           {/* Right Section */}
           <div className="flex items-center space-x-4">
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+
             {user ? (
               <div className="hidden md:flex items-center space-x-3">
                 <NotificationCenter />
@@ -193,6 +197,16 @@ export default function DynamicNavigation() {
                         {item.label}
                       </Link>
                     ))}
+                  </div>
+
+                  {/* Language Section */}
+                  <div className="border-t border-white/10 pt-4 mb-4">
+                    <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">
+                      Taal / Language
+                    </p>
+                    <div className="px-4">
+                      <LanguageSwitcher />
+                    </div>
                   </div>
                   
                   {/* User Section */}
