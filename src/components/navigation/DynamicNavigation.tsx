@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from '@/i18n/routing';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import NotificationCenter from '@/components/NotificationCenter';
@@ -11,7 +12,7 @@ import {
   Home, Users, Mail, Calendar, Settings, FileText, 
   DollarSign, BarChart3, MessageSquare, Phone, Clock,
   User, LogOut, Menu, X, ChevronDown, ExternalLink,
-  Target, Rocket, Brain, Database, Shield, Bell
+  Target, Rocket, Brain, Database, Shield, Bell, LayoutDashboard
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -36,41 +37,19 @@ export default function DynamicNavigation() {
     setMounted(true);
   }, []);
 
-  // Define navigation items based on user context
+  // Define navigation items based on user context (simplified)
   const getNavigationItems = (): NavigationItem[] => {
     const baseItems: NavigationItem[] = [
-      { href: '/', label: 'Home', icon: Home, description: 'Terug naar homepage' },
-      { href: '/about', label: 'Over Ons', icon: Users, description: 'Leer meer over GroeimetAI' },
-      { href: '/services', label: 'Diensten', icon: Target, description: 'Onze AI services' },
-      { href: '/cases', label: 'Cases', icon: Rocket, description: 'Succesvolle projecten' },
-      { href: '/contact', label: 'Contact', icon: Phone, description: 'Neem contact op' },
+      { href: '/services', label: 'Diensten', icon: Target },
+      { href: '/cases', label: 'Cases', icon: Rocket },
+      { href: '/about', label: 'Over Ons', icon: Users },
+      { href: '/contact', label: 'Contact', icon: Phone },
     ];
-
-    // Add assessment for everyone
-    baseItems.push({
-      href: '/agent-readiness',
-      label: 'Agent Assessment',
-      icon: Brain,
-      description: 'Test je AI readiness'
-    });
 
     // Authenticated user items
     if (user) {
-      baseItems.push(
-        { href: '/dashboard', label: 'Dashboard', icon: BarChart3, description: 'Persoonlijk dashboard' },
-        { href: '/dashboard/projects', label: 'Projecten', icon: FileText, description: 'Mijn projecten' },
-        { href: '/dashboard/messages', label: 'Berichten', icon: MessageSquare, description: 'Communicatie' }
-      );
-    }
-
-    // Admin-only items
-    if (isAdmin) {
-      baseItems.push(
-        { href: '/dashboard/admin', label: 'Admin Panel', icon: Settings, description: 'Admin dashboard' },
-        { href: '/dashboard/admin/contacts', label: 'Contact Aanvragen', icon: Mail, description: 'Beheer contact aanvragen' },
-        { href: '/dashboard/admin/calendar', label: 'Calendar', icon: Calendar, description: 'Meeting management' },
-        { href: '/dashboard/admin/users', label: 'Gebruikers', icon: Users, description: 'Gebruiker beheer' },
-        { href: '/dashboard/admin/quotes', label: 'Offertes', icon: DollarSign, description: 'Offerte beheer' }
+      baseItems.unshift(
+        { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard }
       );
     }
 
@@ -87,64 +66,7 @@ export default function DynamicNavigation() {
     }
   };
 
-  // Get current page context
-  const getCurrentPageContext = () => {
-    if (pathname.includes('/dashboard/admin/contacts')) {
-      return {
-        title: 'Contact Management',
-        subtitle: 'Beheer contact aanvragen en plan meetings',
-        color: 'text-orange',
-        bgColor: 'bg-orange/10'
-      };
-    }
-    
-    if (pathname.includes('/dashboard/admin/calendar')) {
-      return {
-        title: 'Calendar Management', 
-        subtitle: 'Google Calendar en meeting overzicht',
-        color: 'text-blue-500',
-        bgColor: 'bg-blue-500/10'
-      };
-    }
-    
-    if (pathname.includes('/dashboard/admin')) {
-      return {
-        title: 'Admin Dashboard',
-        subtitle: 'Systeem beheer en overzichten',
-        color: 'text-purple-500',
-        bgColor: 'bg-purple-500/10'
-      };
-    }
-    
-    if (pathname.includes('/dashboard')) {
-      return {
-        title: 'Dashboard',
-        subtitle: 'Uw persoonlijke overzicht',
-        color: 'text-green-500',
-        bgColor: 'bg-green-500/10'
-      };
-    }
-    
-    if (pathname.includes('/contact')) {
-      return {
-        title: 'Contact',
-        subtitle: 'Neem contact op voor AI consultatie',
-        color: 'text-orange',
-        bgColor: 'bg-orange/10'
-      };
-    }
-    
-    return {
-      title: 'GroeimetAI',
-      subtitle: 'AI Infrastructure Specialists',
-      color: 'text-orange',
-      bgColor: 'bg-orange/10'
-    };
-  };
-
   const navigationItems = getNavigationItems();
-  const pageContext = getCurrentPageContext();
-  const currentItem = navigationItems.find(item => item.href === pathname);
 
   if (!mounted) {
     return null;
@@ -154,105 +76,76 @@ export default function DynamicNavigation() {
     <nav className="bg-black border-b border-white/10 sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo & Current Page */}
-          <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-orange rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">G</span>
-              </div>
-              <span className="text-white font-semibold hidden sm:block">GroeimetAI</span>
+          {/* Logo */}
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/groeimet-ai-logo.svg"
+                alt="GroeimetAI"
+                width={150}
+                height={62}
+                className="h-10 w-auto max-w-[150px]"
+                priority
+              />
             </Link>
-            
-            {/* Page Context */}
-            <div className="hidden md:flex items-center gap-3">
-              <div className="w-px h-6 bg-white/20"></div>
-              <div className={`px-3 py-1 rounded-full ${pageContext.bgColor}`}>
-                <span className={`text-sm font-medium ${pageContext.color}`}>
-                  {pageContext.title}
-                </span>
-              </div>
-            </div>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-1">
-            {navigationItems.slice(0, 6).map((item) => {
-              const Icon = item.icon;
+          <div className="hidden md:flex items-center space-x-8">
+            {navigationItems.map((item) => {
               const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
               
               return (
-                <Link key={item.href} href={item.href}>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className={`flex items-center gap-2 ${
-                      isActive 
-                        ? 'bg-orange text-white' 
-                        : 'text-white/80 hover:text-white hover:bg-white/10'
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span className="hidden xl:block">{item.label}</span>
-                    {item.badge && (
-                      <Badge className="bg-orange text-white text-xs ml-1">
-                        {item.badge}
-                      </Badge>
-                    )}
-                  </Button>
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`text-white font-medium px-3 py-2 rounded-lg transition-colors ${
+                    isActive 
+                      ? 'text-orange bg-orange/10' 
+                      : 'hover:text-orange hover:bg-white/5'
+                  }`}
+                >
+                  {item.label}
                 </Link>
               );
             })}
           </div>
 
-          {/* User Menu */}
-          <div className="flex items-center gap-3">
+          {/* Right Section */}
+          <div className="flex items-center space-x-4">
             {user ? (
-              <div className="flex items-center gap-2">
-                {/* Notification Center */}
+              <div className="hidden md:flex items-center space-x-3">
                 <NotificationCenter />
-                
-                <div className="hidden sm:flex items-center gap-2">
-                  <div className="w-8 h-8 bg-orange/20 rounded-full flex items-center justify-center">
-                    <User className="h-4 w-4 text-orange" />
-                  </div>
-                  <div className="text-right">
-                    <p className="text-white text-sm font-medium">{user.displayName || user.email}</p>
-                    <p className="text-white/50 text-xs">
-                      {isAdmin ? 'Admin' : 'User'}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Settings Button */}
                 <Link href="/settings">
                   <Button
                     variant="ghost"
-                    size="sm"
-                    className="text-white/80 hover:text-white"
+                    className="text-white hover:text-orange hover:bg-white/10"
                   >
-                    <Settings className="h-4 w-4" />
+                    <Settings className="w-4 h-4 mr-2" />
+                    Instellingen
                   </Button>
                 </Link>
-                
-                {/* Logout Button */}
                 <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-white/80 hover:text-white"
                   onClick={handleLogout}
+                  variant="ghost"
+                  className="text-white hover:text-orange hover:bg-white/10"
                 >
-                  <LogOut className="h-4 w-4" />
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
                 </Button>
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center space-x-3">
                 <Link href="/login">
-                  <Button variant="outline" size="sm" className="border-white/20 text-white">
-                    Login
+                  <Button
+                    variant="ghost"
+                    className="text-white hover:text-orange hover:bg-white/10"
+                  >
+                    Inloggen
                   </Button>
                 </Link>
                 <Link href="/agent-readiness">
-                  <Button size="sm" className="bg-orange text-white">
+                  <Button className="bg-orange hover:bg-orange-600 text-white">
                     Start Assessment
                   </Button>
                 </Link>
@@ -262,11 +155,11 @@ export default function DynamicNavigation() {
             {/* Mobile Menu Toggle */}
             <Button
               variant="ghost"
-              size="sm"
-              className="lg:hidden text-white"
+              size="icon"
+              className="md:hidden text-white"
               onClick={() => setIsOpen(!isOpen)}
             >
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
           </div>
         </div>
@@ -278,98 +171,89 @@ export default function DynamicNavigation() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden border-t border-white/10"
+              className="md:hidden bg-white/5 backdrop-blur-xl border-t border-white/10"
             >
-              <div className="py-4 space-y-2">
-                {navigationItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
-                  
-                  return (
-                    <Link key={item.href} href={item.href}>
-                      <Button
-                        variant="ghost"
-                        className={`w-full justify-start ${
-                          isActive 
-                            ? 'bg-orange text-white' 
-                            : 'text-white/80 hover:text-white hover:bg-white/10'
-                        }`}
+              <div className="container mx-auto px-4 py-6">
+                <div className="flex flex-col space-y-2">
+                  {/* Navigation Section */}
+                  <div className="mb-4">
+                    <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">
+                      Navigatie
+                    </p>
+                    {navigationItems.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="flex items-center text-white font-medium py-3 px-4 rounded-lg hover:bg-white/5 transition-colors"
                         onClick={() => setIsOpen(false)}
                       >
-                        <Icon className="h-4 w-4 mr-3" />
-                        <span className="flex-1 text-left">{item.label}</span>
-                        {item.badge && (
-                          <Badge className="bg-orange text-white text-xs">
-                            {item.badge}
-                          </Badge>
-                        )}
-                        {item.description && (
-                          <span className="text-white/50 text-xs ml-2 hidden sm:block">
-                            {item.description}
-                          </span>
-                        )}
-                      </Button>
-                    </Link>
-                  );
-                })}
-                
-                {/* Mobile User Actions */}
-                {user ? (
-                  <div className="pt-4 border-t border-white/10 space-y-2">
-                    <div className="px-4 mb-3">
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
-                        <div className="flex items-center">
-                          <Bell className="w-5 h-5 mr-2 text-white/60" />
-                          <span className="text-white/80 text-sm">Notifications</span>
+                        <item.icon className="w-5 h-5 mr-3 text-white/60" />
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                  
+                  {/* User Section */}
+                  <div className="border-t border-white/10 pt-4">
+                    <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">
+                      {user ? 'Account' : 'Aan de slag'}
+                    </p>
+                    {user ? (
+                      <>
+                        <div className="px-4 mb-3">
+                          <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
+                            <div className="flex items-center">
+                              <Bell className="w-5 h-5 mr-2 text-white/60" />
+                              <span className="text-white/80 text-sm">Notificaties</span>
+                            </div>
+                            <NotificationCenter />
+                          </div>
                         </div>
-                        <NotificationCenter />
+                        <Link href="/settings" onClick={() => setIsOpen(false)}>
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start text-white hover:bg-white/5 py-3"
+                          >
+                            <Settings className="w-5 h-5 mr-3" />
+                            Instellingen
+                          </Button>
+                        </Link>
+                        <Button
+                          onClick={() => {
+                            handleLogout();
+                            setIsOpen(false);
+                          }}
+                          variant="ghost"
+                          className="w-full justify-start text-white hover:bg-white/5 py-3"
+                        >
+                          <LogOut className="w-5 h-5 mr-3" />
+                          Logout
+                        </Button>
+                      </>
+                    ) : (
+                      <div className="space-y-3">
+                        <Link href="/login" onClick={() => setIsOpen(false)}>
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start text-white hover:bg-white/5 py-3"
+                          >
+                            <User className="w-5 h-5 mr-3" />
+                            Inloggen
+                          </Button>
+                        </Link>
+                        <Link href="/agent-readiness" onClick={() => setIsOpen(false)}>
+                          <Button className="w-full bg-orange hover:bg-orange-600 text-white">
+                            Start Assessment
+                          </Button>
+                        </Link>
                       </div>
-                    </div>
-                    <Link href="/settings" onClick={() => setIsOpen(false)}>
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start text-white hover:bg-white/5 py-3"
-                      >
-                        <Settings className="w-5 h-5 mr-3" />
-                        Settings
-                      </Button>
-                    </Link>
-                    <Button
-                      onClick={() => {
-                        handleLogout();
-                        setIsOpen(false);
-                      }}
-                      variant="ghost"
-                      className="w-full justify-start text-white hover:bg-white/5 py-3"
-                    >
-                      <LogOut className="w-5 h-5 mr-3" />
-                      Logout
-                    </Button>
+                    )}
                   </div>
-                ) : (
-                  <div className="pt-4 border-t border-white/10 space-y-2">
-                    <Link href="/login">
-                      <Button variant="outline" className="w-full border-white/20 text-white">
-                        <User className="h-4 w-4 mr-2" />
-                        Login
-                      </Button>
-                    </Link>
-                  </div>
-                )}
+                </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-
-      {/* Page Context Bar (Mobile) */}
-      <div className="md:hidden bg-white/5 px-4 py-2 border-t border-white/10">
-        <div className="flex items-center gap-2">
-          <div className={`w-2 h-2 rounded-full ${pageContext.color.replace('text-', 'bg-')}`}></div>
-          <span className="text-white text-sm font-medium">{pageContext.title}</span>
-          <span className="text-white/60 text-xs">•</span>
-          <span className="text-white/60 text-xs">{pageContext.subtitle}</span>
-        </div>
       </div>
     </nav>
   );
