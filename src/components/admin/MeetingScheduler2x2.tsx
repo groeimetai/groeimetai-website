@@ -193,12 +193,39 @@ Niels van der Werf`;
     const newAgenda = [...agenda];
     newAgenda[index] = { ...newAgenda[index], [field]: value };
     setAgenda(newAgenda);
+    
+    // Auto-update meeting duration to match agenda total
+    if (field === 'duration') {
+      const totalAgendaDuration = newAgenda.reduce((total, item) => total + item.duration, 0);
+      setScheduleForm({ ...scheduleForm, duration: totalAgendaDuration });
+    }
+  };
+
+  // Calculate total agenda duration
+  const totalAgendaDuration = agenda.reduce((total, item) => total + item.duration, 0);
+  
+  // Check if durations match
+  const durationsMatch = totalAgendaDuration === scheduleForm.duration;
+  
+  // Auto-sync durations
+  const syncDurations = () => {
+    setScheduleForm({ ...scheduleForm, duration: totalAgendaDuration });
   };
 
   const handleSubmit = async () => {
     if (!scheduleForm.date || !scheduleForm.time) {
       toast.error('Datum en tijd zijn verplicht');
       return;
+    }
+
+    // Warn if durations don't match but allow to proceed
+    if (!durationsMatch) {
+      const proceed = confirm(
+        `Meeting duur (${scheduleForm.duration}min) komt niet overeen met agenda totaal (${totalAgendaDuration}min).\n\nWil je doorgaan of eerst de tijden synchroniseren?`
+      );
+      if (!proceed) {
+        return;
+      }
     }
 
     setIsSubmitting(true);
@@ -372,17 +399,42 @@ Niels van der Werf`;
                   />
                 </div>
                 <div>
-                  <Label className="text-white/80 text-sm">Duur</Label>
-                  <select
-                    value={scheduleForm.duration}
-                    onChange={(e) => setScheduleForm({ ...scheduleForm, duration: Number(e.target.value) })}
-                    className="w-full bg-white/5 border border-white/20 text-white rounded-md px-2 py-1 text-sm"
-                  >
-                    <option value={30}>30 min</option>
-                    <option value={45}>45 min</option>
-                    <option value={60}>60 min</option>
-                    <option value={90}>90 min</option>
-                  </select>
+                  <Label className="text-white/80 text-sm">
+                    Meeting Duur 
+                    {!durationsMatch && (
+                      <span className="text-yellow-400 ml-1">⚠️</span>
+                    )}
+                  </Label>
+                  <div className="flex gap-2">
+                    <select
+                      value={scheduleForm.duration}
+                      onChange={(e) => setScheduleForm({ ...scheduleForm, duration: Number(e.target.value) })}
+                      className={`flex-1 bg-white/5 border text-white rounded-md px-2 py-1 text-sm ${
+                        durationsMatch ? 'border-white/20' : 'border-yellow-400/50'
+                      }`}
+                    >
+                      <option value={30}>30 min</option>
+                      <option value={45}>45 min</option>
+                      <option value={60}>60 min</option>
+                      <option value={90}>90 min</option>
+                      <option value={120}>120 min</option>
+                    </select>
+                    {!durationsMatch && (
+                      <Button
+                        onClick={syncDurations}
+                        size="sm"
+                        className="bg-yellow-500 text-black text-xs px-2"
+                        title="Sync meeting duur met agenda totaal"
+                      >
+                        Sync
+                      </Button>
+                    )}
+                  </div>
+                  {!durationsMatch && (
+                    <p className="text-yellow-400 text-xs mt-1">
+                      Meeting: {scheduleForm.duration}min • Agenda: {totalAgendaDuration}min
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -460,7 +512,12 @@ Niels van der Werf`;
               {/* Compact Agenda Builder */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <Label className="text-white/80 text-sm">Meeting Agenda ({agenda.reduce((total, item) => total + item.duration, 0)} min)</Label>
+                  <Label className={`text-sm ${
+                    durationsMatch ? 'text-white/80' : 'text-yellow-400'
+                  }`}>
+                    Meeting Agenda ({totalAgendaDuration} min) 
+                    {durationsMatch ? '✅' : '⚠️'}
+                  </Label>
                   <Button onClick={addAgendaItem} size="sm" className="bg-orange text-white h-6 px-2">
                     <Plus className="h-3 w-3" />
                   </Button>
@@ -586,7 +643,7 @@ Niels van der Werf`;
                 scheduleForm.date && scheduleForm.time 
                   ? `${new Date(scheduleForm.date).toLocaleDateString('nl-NL', { month: 'long', day: 'numeric' })} om ${scheduleForm.time} (${scheduleForm.duration}min)`
                   : 'Meeting datum/tijd niet ingesteld'
-              } • Email template met agenda included
+              } • Agenda: {totalAgendaDuration}min {durationsMatch ? '✅' : '⚠️'} • Email included
             </div>
             
             <div className="flex items-center gap-3">
