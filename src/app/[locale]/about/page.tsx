@@ -175,10 +175,10 @@ className="sfeer-image sfeer-accent"
               className="text-center mb-16"
             >
               <h2 className="text-4xl font-bold text-white mb-6">
-                Wat We <span style={{ color: '#F87315' }}>Doen</span>
+                {t('whatWeDo.title')} <span style={{ color: '#F87315' }}>{t('whatWeDo.highlight')}</span>
               </h2>
               <p className="text-xl text-white/70 max-w-4xl mx-auto">
-                We maken bedrijven klaar voor de agent economie door:
+                {t('whatWeDo.subtitle')}
               </p>
             </motion.div>
 
@@ -230,7 +230,7 @@ className="sfeer-image sfeer-accent"
               className="text-center mb-16"
             >
               <h2 className="text-4xl font-bold text-white mb-6">
-                Onze <span style={{ color: '#F87315' }}>Filosofie</span>
+                {t('philosophySection.title')} <span style={{ color: '#F87315' }}>{t('philosophySection.highlight')}</span>
               </h2>
             </motion.div>
 
@@ -269,7 +269,7 @@ className="sfeer-image sfeer-accent"
               className="text-center mb-16"
             >
               <h2 className="text-4xl font-bold text-white mb-6">
-                <span style={{ color: '#F87315' }}>Contact</span>
+                <span style={{ color: '#F87315' }}>{t('contactSection.title')}</span>
               </h2>
             </motion.div>
 
@@ -281,8 +281,8 @@ className="sfeer-image sfeer-accent"
                 className="bg-white/5 border border-white/10 rounded-xl p-6 text-center"
               >
                 <MapPin className="w-8 h-8 mx-auto mb-4" style={{ color: '#F87315' }} />
-                <h3 className="text-lg font-bold text-white mb-3">Hoofdkantoor</h3>
-                <p className="text-white/80">Apeldoorn, Nederland</p>
+                <h3 className="text-lg font-bold text-white mb-3">{t('contactSection.office.title')}</h3>
+                <p className="text-white/80">{t('contactSection.office.location')}</p>
               </motion.div>
 
               <motion.div
@@ -292,9 +292,9 @@ className="sfeer-image sfeer-accent"
                 className="bg-white/5 border border-white/10 rounded-xl p-6 text-center"
               >
                 <Mail className="w-8 h-8 mx-auto mb-4" style={{ color: '#F87315' }} />
-                <h3 className="text-lg font-bold text-white mb-3">Email</h3>
-                <p className="text-white/80 mb-2">info@groeimetai.io</p>
-                <p className="text-white/60 text-sm">Respons binnen 24 uur</p>
+                <h3 className="text-lg font-bold text-white mb-3">{t('contactSection.email.title')}</h3>
+                <p className="text-white/80 mb-2">{t('contactSection.email.address')}</p>
+                <p className="text-white/60 text-sm">{t('contactSection.email.response')}</p>
               </motion.div>
 
               <motion.div
@@ -304,9 +304,9 @@ className="sfeer-image sfeer-accent"
                 className="bg-white/5 border border-white/10 rounded-xl p-6 text-center"
               >
                 <Phone className="w-8 h-8 mx-auto mb-4" style={{ color: '#F87315' }} />
-                <h3 className="text-lg font-bold text-white mb-3">Telefoon</h3>
-                <p className="text-white/80 mb-2">+31 (6) 81 739 018</p>
-                <p className="text-white/60 text-sm">Ma-Vr 9:00-18:00</p>
+                <h3 className="text-lg font-bold text-white mb-3">{t('contactSection.phone.title')}</h3>
+                <p className="text-white/80 mb-2">{t('contactSection.phone.number')}</p>
+                <p className="text-white/60 text-sm">{t('contactSection.phone.hours')}</p>
               </motion.div>
 
               <motion.div
@@ -316,9 +316,9 @@ className="sfeer-image sfeer-accent"
                 className="bg-white/5 border border-white/10 rounded-xl p-6 text-center"
               >
                 <Github className="w-8 h-8 mx-auto mb-4" style={{ color: '#F87315' }} />
-                <h3 className="text-lg font-bold text-white mb-3">Online</h3>
-                <p className="text-white/80 mb-1">GitHub: @GroeimetAI</p>
-                <p className="text-white/80">LinkedIn: GroeimetAI</p>
+                <h3 className="text-lg font-bold text-white mb-3">{t('contactSection.online.title')}</h3>
+                <p className="text-white/80 mb-1">{t('contactSection.online.github')}</p>
+                <p className="text-white/80">{t('contactSection.online.linkedin')}</p>
               </motion.div>
             </div>
           </div>
@@ -337,23 +337,23 @@ className="sfeer-image sfeer-accent"
             >
               <div className="bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-8 lg:p-12 max-w-4xl mx-auto">
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                  Ready voor{' '}
+                  {t('finalCta.title')}{' '}
                   <span
                     className="text-white px-4 py-2 inline-block"
                     style={{ background: 'linear-gradient(135deg, #F87315, #FF8533)' }}
                   >
-                    Agent Season
+                    {t('finalCta.highlight')}
                   </span>
                   ?
                 </h2>
                 <p className="text-xl text-white/80 mb-4">
-                  De agent economie wacht niet.
+                  {t('finalCta.subtitle')}
                 </p>
                 <p className="text-lg text-white/70 mb-6">
-                  Bedrijven die nu niet voorbereiden, missen de boot.
+                  {t('finalCta.warning')}
                 </p>
                 <p className="text-xl font-bold text-white mb-8">
-                  Wij helpen je aan boord.
+                  {t('finalCta.promise')}
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -367,7 +367,7 @@ className="sfeer-image sfeer-accent"
                       }}
                     >
                       <Calendar className="mr-2 w-5 h-5" />
-                      Start Agent Assessment
+                      {t('finalCta.startAssessment')}
                       <ArrowRight className="ml-2 w-4 h-4" />
                     </Button>
                   </Link>
@@ -379,7 +379,7 @@ className="sfeer-image sfeer-accent"
                       className="border-white/20 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300"
                     >
                       <Github className="mr-2 w-5 h-5" />
-                      Bekijk Snow-flow Demo
+                      {t('finalCta.viewDemo')}
                       <ExternalLink className="ml-2 w-4 h-4" />
                     </Button>
                   </Link>
@@ -387,7 +387,7 @@ className="sfeer-image sfeer-accent"
 
                 <div className="mt-8 pt-6 border-t border-white/10">
                   <p className="text-white/60 text-sm">
-                    Elk gesprek start met een gratis assessment - geen verplichtingen
+                    {t('finalCta.disclaimer')}
                   </p>
                 </div>
               </div>

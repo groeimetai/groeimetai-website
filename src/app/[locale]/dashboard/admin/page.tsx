@@ -172,6 +172,12 @@ export default function AdminDashboard() {
   const [projects, setProjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [systemHealth, setSystemHealth] = useState({
+    status: 'operational',
+    messagesProcessed: 0,
+    avgResponseTime: 0,
+    errorRate: 0
+  });
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -186,66 +192,176 @@ export default function AdminDashboard() {
     }
   }, [user, isAdmin, loading, router]);
 
-  // Fetch metrics
+  // Real-time metrics with calculated trends and live data
   useEffect(() => {
     if (!user || !isAdmin) return;
 
-    const fetchMetrics = async () => {
-      setIsLoadingMetrics(true);
-      try {
-        // Get time range
-        const now = new Date();
-        const startDate = new Date();
-        if (timeRange === '7d') {
-          startDate.setDate(now.getDate() - 7);
-        } else if (timeRange === '30d') {
-          startDate.setDate(now.getDate() - 30);
-        } else if (timeRange === '90d') {
-          startDate.setDate(now.getDate() - 90);
-        }
+    const unsubscribers: (() => void)[] = [];
+    setIsLoadingMetrics(true);
 
-        // Fetch users (excluding deleted users)
-        const usersSnapshot = await getDocs(collection(db, 'users'));
-        const activeUsersSnapshot = usersSnapshot.docs.filter((doc) => {
-          const userData = doc.data();
-          return !userData.isDeleted; // Exclude deleted users
-        });
-        const totalUsers = activeUsersSnapshot.length;
-        const newUsers = activeUsersSnapshot.filter((doc) => {
+    // Get time range for trend calculations
+    const now = new Date();
+    const startDate = new Date();
+    const previousPeriodStart = new Date();
+    
+    if (timeRange === '7d') {
+      startDate.setDate(now.getDate() - 7);
+      previousPeriodStart.setDate(now.getDate() - 14);
+    } else if (timeRange === '30d') {
+      startDate.setDate(now.getDate() - 30);
+      previousPeriodStart.setDate(now.getDate() - 60);
+    } else if (timeRange === '90d') {
+      startDate.setDate(now.getDate() - 90);
+      previousPeriodStart.setDate(now.getDate() - 180);
+    }
+
+    // Real-time users listener
+    const usersUnsubscribe = onSnapshot(
+      collection(db, 'users'),
+      (snapshot) => {
+        const allUsers = snapshot.docs.filter(doc => !doc.data().isDeleted);
+        const currentPeriodUsers = allUsers.filter(doc => {
           const createdAt = doc.data().createdAt?.toDate();
           return createdAt && createdAt >= startDate;
+        });
+        const previousPeriodUsers = allUsers.filter(doc => {
+          const createdAt = doc.data().createdAt?.toDate();
+          return createdAt && createdAt >= previousPeriodStart && createdAt < startDate;
+        });
+        
+        const currentCount = currentPeriodUsers.length;
+        const previousCount = previousPeriodUsers.length;
+        const userGrowthRate = previousCount > 0 
+          ? ((currentCount - previousCount) / previousCount) * 100 
+          : currentCount > 0 ? 100 : 0;
+
+        setMetrics(prev => prev.map(m => 
+          m.title === 'Total Users' 
+            ? {
+                ...m,
+                value: allUsers.length,
+                change: Math.round(userGrowthRate),
+                trend: userGrowthRate > 0 ? 'up' : userGrowthRate < 0 ? 'down' : 'neutral'
+              }
+            : m
+        ));
+      },
+      (error) => console.error('Error in users listener:', error)
+    );
+    unsubscribers.push(usersUnsubscribe);
+
+    // Real-time quotes listener with revenue calculations
+    const quotesUnsubscribe = onSnapshot(
+      collection(db, 'quotes'),
+      (snapshot) => {
+        const quotesData: Quote[] = [];
+        snapshot.forEach((doc) => {
+          quotesData.push({ id: doc.id, ...doc.data() } as Quote);
+        });
+        setQuotes(quotesData);
+
+        // Calculate revenue trends
+        const currentPeriodRevenue = quotesData
+          .filter(q => q.status === 'approved' && q.createdAt?.toDate() >= startDate)
+          .reduce((sum, q) => sum + (q.totalCost || 0), 0);
+        
+        const previousPeriodRevenue = quotesData
+          .filter(q => {
+            const createdAt = q.createdAt?.toDate();
+            return q.status === 'approved' && 
+                   createdAt && 
+                   createdAt >= previousPeriodStart && 
+                   createdAt < startDate;
+          })
+          .reduce((sum, q) => sum + (q.totalCost || 0), 0);
+
+        const totalRevenue = quotesData
+          .filter(q => q.status === 'approved')
+          .reduce((sum, q) => sum + (q.totalCost || 0), 0);
+        
+        const revenueGrowthRate = previousPeriodRevenue > 0 
+          ? ((currentPeriodRevenue - previousPeriodRevenue) / previousPeriodRevenue) * 100 
+          : currentPeriodRevenue > 0 ? 100 : 0;
+
+        setTotalRevenue(totalRevenue);
+        
+        // Calculate quote conversion trends
+        const currentPeriodTotal = quotesData.filter(q => q.createdAt?.toDate() >= startDate).length;
+        const currentPeriodApproved = quotesData.filter(q => 
+          q.status === 'approved' && q.createdAt?.toDate() >= startDate
+        ).length;
+        
+        const previousPeriodTotal = quotesData.filter(q => {
+          const createdAt = q.createdAt?.toDate();
+          return createdAt && createdAt >= previousPeriodStart && createdAt < startDate;
+        }).length;
+        const previousPeriodApproved = quotesData.filter(q => {
+          const createdAt = q.createdAt?.toDate();
+          return q.status === 'approved' && 
+                 createdAt && 
+                 createdAt >= previousPeriodStart && 
+                 createdAt < startDate;
         }).length;
 
-        // Fetch projects (from both projects and approved quotes)
-        const projectsQuery = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
-        const projectsSnapshot = await getDocs(projectsQuery);
-        
-        // Also fetch approved quotes (which are projects)
-        const approvedQuotesQuery = query(
-          collection(db, 'quotes'),
-          where('status', '==', 'approved'),
-          orderBy('createdAt', 'desc')
-        );
-        const approvedQuotesSnapshot = await getDocs(approvedQuotesQuery);
+        const currentConversionRate = currentPeriodTotal > 0 ? (currentPeriodApproved / currentPeriodTotal) * 100 : 0;
+        const previousConversionRate = previousPeriodTotal > 0 ? (previousPeriodApproved / previousPeriodTotal) * 100 : 0;
+        const conversionTrend = currentConversionRate - previousConversionRate;
 
-        // Fetch contact submissions
-        const contactsQuery = query(
-          collection(db, 'contact_submissions'),
-          orderBy('submittedAt', 'desc'),
-          limit(50)
-        );
-        const contactsSnapshot = await getDocs(contactsQuery);
-        const contacts = contactsSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        } as ContactSubmission));
-        setContactSubmissions(contacts);
+        const pendingCount = quotesData.filter(q => q.status === 'pending').length;
+        setPendingQuotes(pendingCount);
+
+        // Update metrics with real data
+        setMetrics(prev => prev.map(m => {
+          if (m.title === 'Revenue') {
+            return {
+              ...m,
+              value: `€${totalRevenue.toLocaleString()}`,
+              change: Math.round(revenueGrowthRate),
+              trend: revenueGrowthRate > 0 ? 'up' : revenueGrowthRate < 0 ? 'down' : 'neutral'
+            };
+          }
+          if (m.title === 'Pending Quotes') {
+            return {
+              ...m,
+              value: pendingCount,
+              change: Math.round(conversionTrend),
+              trend: conversionTrend > 0 ? 'up' : conversionTrend < 0 ? 'down' : 'neutral'
+            };
+          }
+          return m;
+        }));
+
+        // Update recent activities
+        const activities: RecentActivity[] = [];
+        quotesData.slice(0, 5).forEach((quote) => {
+          activities.push({
+            id: quote.id,
+            type: 'quote',
+            title: 'New quote request',
+            description: `${quote.projectName} - ${quote.company}`,
+            timestamp: quote.createdAt?.toDate() || new Date(),
+            status: quote.status,
+          });
+        });
         
-        // Combine both data sources
+        setRecentActivities(prev => {
+          // Merge and sort all activities
+          const allActivities = [...activities, ...prev.filter(a => a.type !== 'quote')];
+          return allActivities
+            .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+            .slice(0, 10);
+        });
+      },
+      (error) => console.error('Error in quotes listener:', error)
+    );
+    unsubscribers.push(quotesUnsubscribe);
+
+    // Real-time projects listener
+    const projectsUnsubscribe = onSnapshot(
+      collection(db, 'projects'),
+      (snapshot) => {
         const projectsData: any[] = [];
-        
-        // Add projects from projects collection
-        projectsSnapshot.forEach((doc) => {
+        snapshot.forEach((doc) => {
           const data = doc.data();
           projectsData.push({
             id: doc.id,
@@ -257,134 +373,189 @@ export default function AdminDashboard() {
             type: 'project'
           });
         });
-        
-        // Add approved quotes as projects
-        approvedQuotesSnapshot.forEach((doc) => {
-          const data = doc.data();
-          projectsData.push({
-            id: doc.id,
-            name: data.projectName || 'Untitled Project',
-            clientName: data.fullName || 'Unknown Client',
-            status: 'active',
-            progress: 0,
-            createdAt: data.createdAt?.toDate() || new Date(),
-            type: 'quote'
-          });
-        });
-        
-        // Sort by creation date
-        projectsData.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-        
-        setProjects(projectsData);
-        setActiveProjects(projectsData.filter(p => p.status === 'active' || p.status === 'in_progress').length);
 
-        // Fetch quotes
-        const quotesQuery = query(collection(db, 'quotes'), orderBy('createdAt', 'desc'));
-        const quotesSnapshot = await getDocs(quotesQuery);
-        const quotesData: Quote[] = [];
-        quotesSnapshot.forEach((doc) => {
-          quotesData.push({ id: doc.id, ...doc.data() } as Quote);
-        });
-        setQuotes(quotesData);
-
-        const pendingCount = quotesData.filter((q) => q.status === 'pending').length;
-        setPendingQuotes(pendingCount);
-
-        // Calculate revenue (from approved quotes)
-        let revenue = 0;
-        quotesData.forEach((quote) => {
-          if (quote.status === 'approved' && quote.totalCost) {
-            revenue += quote.totalCost;
-          }
-        });
-        setTotalRevenue(revenue);
-
-        // Set metrics
-        setMetrics([
-          {
-            title: 'Total Users',
-            value: totalUsers,
-            change: newUsers > 0 ? (newUsers / totalUsers) * 100 : 0,
-            trend: newUsers > 0 ? 'up' : 'neutral',
-            icon: Users,
-            color: 'text-blue-500',
-          },
-          {
-            title: 'Active Projects',
-            value: projectsSnapshot.size,
-            change: 12, // Mock change
-            trend: 'up',
-            icon: Briefcase,
-            color: 'text-green-500',
-          },
-          {
-            title: 'Pending Quotes',
-            value: pendingCount,
-            change: -5, // Mock change
-            trend: 'down',
-            icon: FileText,
-            color: 'text-yellow-500',
-          },
-          {
-            title: 'Revenue',
-            value: `€${revenue.toLocaleString()}`,
-            change: 23, // Mock change
-            trend: 'up',
-            icon: DollarSign,
-            color: 'text-purple-500',
-          },
-        ]);
-
-        // Fetch recent activities
-        const activities: RecentActivity[] = [];
-
-        // Recent users (excluding deleted users)
-        const recentUsersQuery = query(
-          collection(db, 'users'),
-          orderBy('createdAt', 'desc'),
-          limit(10) // Get more to account for potential deleted users
+        // Calculate project trends
+        const currentPeriodProjects = projectsData.filter(p => p.createdAt >= startDate);
+        const previousPeriodProjects = projectsData.filter(p => 
+          p.createdAt >= previousPeriodStart && p.createdAt < startDate
         );
-        const recentUsersSnapshot = await getDocs(recentUsersQuery);
+        
+        const projectGrowthRate = previousPeriodProjects.length > 0 
+          ? ((currentPeriodProjects.length - previousPeriodProjects.length) / previousPeriodProjects.length) * 100 
+          : currentPeriodProjects.length > 0 ? 100 : 0;
+        
+        const activeProjectsCount = projectsData.filter(p => 
+          p.status === 'active' || p.status === 'in_progress'
+        ).length;
+        
+        setActiveProjects(activeProjectsCount);
+        setProjects(projectsData.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()));
+        
+        setMetrics(prev => prev.map(m => 
+          m.title === 'Active Projects' 
+            ? {
+                ...m,
+                value: activeProjectsCount,
+                change: Math.round(projectGrowthRate),
+                trend: projectGrowthRate > 0 ? 'up' : projectGrowthRate < 0 ? 'down' : 'neutral'
+              }
+            : m
+        ));
+      },
+      (error) => console.error('Error in projects listener:', error)
+    );
+    unsubscribers.push(projectsUnsubscribe);
+
+    // Real-time contact submissions listener
+    const contactsUnsubscribe = onSnapshot(
+      query(
+        collection(db, 'contact_submissions'),
+        orderBy('submittedAt', 'desc'),
+        limit(50)
+      ),
+      (snapshot) => {
+        const contacts = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        } as ContactSubmission));
+        setContactSubmissions(contacts);
+      },
+      (error) => console.error('Error in contacts listener:', error)
+    );
+    unsubscribers.push(contactsUnsubscribe);
+
+    // Real-time users activity listener for recent activities
+    const recentUsersUnsubscribe = onSnapshot(
+      query(
+        collection(db, 'users'),
+        orderBy('createdAt', 'desc'),
+        limit(10)
+      ),
+      (snapshot) => {
+        const activities: RecentActivity[] = [];
         let userActivitiesAdded = 0;
-        recentUsersSnapshot.forEach((doc) => {
+        snapshot.forEach((doc) => {
           const data = doc.data();
-          // Skip deleted users
           if (!data.isDeleted && userActivitiesAdded < 5) {
             activities.push({
               id: doc.id,
               type: 'user',
               title: 'New user registered',
-              description: data.displayName || data.email,
+              description: `${data.displayName || data.email} joined GroeimetAI`,
               timestamp: data.createdAt?.toDate() || new Date(),
             });
             userActivitiesAdded++;
           }
         });
+        
+        setRecentActivities(prev => {
+          const allActivities = [...activities, ...prev.filter(a => a.type !== 'user')];
+          return allActivities
+            .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+            .slice(0, 10);
+        });
+      },
+      (error) => console.error('Error in recent users listener:', error)
+    );
+    unsubscribers.push(recentUsersUnsubscribe);
 
-        // Recent quotes
-        quotesData.slice(0, 5).forEach((quote) => {
-          activities.push({
-            id: quote.id,
-            type: 'quote',
-            title: 'New quote request',
-            description: quote.projectName || 'Untitled Project',
-            timestamp: quote.createdAt?.toDate() || new Date(),
-            status: quote.status,
-          });
+    // Real-time messages listener for communication metrics
+    const messagesUnsubscribe = onSnapshot(
+      query(
+        collection(db, 'messages'),
+        orderBy('timestamp', 'desc'),
+        limit(100)
+      ),
+      (snapshot) => {
+        const messages = snapshot.docs.map(doc => doc.data());
+        const todayMessages = messages.filter(msg => {
+          const timestamp = msg.timestamp?.toDate();
+          return timestamp && timestamp >= startDate;
+        });
+        
+        // Calculate communication metrics
+        const totalMessages = todayMessages.length;
+        const avgResponseTime = todayMessages.length > 0 
+          ? todayMessages.reduce((acc, msg) => acc + (msg.responseTime || 300), 0) / todayMessages.length
+          : 0;
+        
+        const errorMessages = todayMessages.filter(msg => msg.status === 'error').length;
+        const errorRate = totalMessages > 0 ? (errorMessages / totalMessages) * 100 : 0;
+        
+        setSystemHealth({
+          status: errorRate < 5 ? 'operational' : errorRate < 15 ? 'degraded' : 'critical',
+          messagesProcessed: totalMessages,
+          avgResponseTime: Math.round(avgResponseTime),
+          errorRate: Math.round(errorRate * 10) / 10
         });
 
-        // Sort activities by timestamp
-        activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
-        setRecentActivities(activities.slice(0, 10));
-      } catch (error) {
-        console.error('Error fetching metrics:', error);
-      } finally {
-        setIsLoadingMetrics(false);
-        setIsLoading(false);
+        // Add message activities
+        const messageActivities: RecentActivity[] = todayMessages.slice(0, 3).map(msg => ({
+          id: msg.id || Date.now().toString(),
+          type: 'chat',
+          title: 'Support message',
+          description: `${msg.senderName || 'User'} sent a message`,
+          timestamp: msg.timestamp?.toDate() || new Date(),
+          status: msg.status
+        }));
+        
+        setRecentActivities(prev => {
+          const allActivities = [...messageActivities, ...prev.filter(a => a.type !== 'chat')];
+          return allActivities
+            .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+            .slice(0, 10);
+        });
+      },
+      (error) => {
+        console.error('Error in messages listener:', error);
+        setSystemHealth(prev => ({ ...prev, status: 'critical' }));
       }
-    };
+    );
+    unsubscribers.push(messagesUnsubscribe);
 
-    fetchMetrics();
+    // Initialize metrics with empty state
+    setMetrics([
+      {
+        title: 'Total Users',
+        value: 0,
+        change: 0,
+        trend: 'neutral',
+        icon: Users,
+        color: 'text-blue-500',
+      },
+      {
+        title: 'Active Projects',
+        value: 0,
+        change: 0,
+        trend: 'neutral',
+        icon: Briefcase,
+        color: 'text-green-500',
+      },
+      {
+        title: 'Pending Quotes',
+        value: 0,
+        change: 0,
+        trend: 'neutral',
+        icon: FileText,
+        color: 'text-yellow-500',
+      },
+      {
+        title: 'Revenue',
+        value: '€0',
+        change: 0,
+        trend: 'neutral',
+        icon: DollarSign,
+        color: 'text-purple-500',
+      },
+    ]);
+
+    setIsLoadingMetrics(false);
+    setIsLoading(false);
+
+    // Cleanup function
+    return () => {
+      unsubscribers.forEach(unsubscribe => unsubscribe());
+    };
   }, [user, isAdmin, timeRange]);
 
   // Real-time active users tracking
@@ -690,15 +861,18 @@ export default function AdminDashboard() {
         </div>
 
         {/* Live Status Bar */}
-        <Card className="bg-orange/10 border-orange/30 mb-6">
+        <Card className={`${systemHealth.status === 'operational' ? 'bg-green-500/10 border-green-500/30' : systemHealth.status === 'degraded' ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-red-500/10 border-red-500/30'} mb-6`}>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <Activity className="w-5 h-5 text-orange" />
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <Activity className={`w-5 h-5 ${systemHealth.status === 'operational' ? 'text-green-500' : systemHealth.status === 'degraded' ? 'text-yellow-500' : 'text-red-500'}`} />
+                  <div className={`absolute -top-1 -right-1 w-2 h-2 rounded-full animate-pulse ${
+                    systemHealth.status === 'operational' ? 'bg-green-500' : 
+                    systemHealth.status === 'degraded' ? 'bg-yellow-500' : 'bg-red-500'
+                  }`}></div>
                 </div>
-                <span className="text-white font-medium">System Status: Operational</span>
+                <span className="text-white font-medium">System Status: {systemHealth.status.charAt(0).toUpperCase() + systemHealth.status.slice(1)}</span>
               </div>
               <div className="flex items-center gap-6 text-sm">
                 <div className="flex items-center gap-2">
@@ -711,50 +885,80 @@ export default function AdminDashboard() {
                 </div>
                 <div className="flex items-center gap-2">
                   <MessageSquare className="w-4 h-4 text-white/60" />
-                  <span className="text-white">{pendingQuotes} pending quotes</span>
+                  <span className="text-white">{systemHealth.messagesProcessed} messages today</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-white/60" />
+                  <span className="text-white">{systemHealth.avgResponseTime}ms avg</span>
                 </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
+        {/* Error Alert */}
+        {error && (
+          <Alert className="bg-red-500/10 border-red-500/30 mb-6">
+            <AlertCircle className="w-4 h-4 text-red-500" />
+            <AlertDescription className="text-white">
+              {error}
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {metrics.map((metric, index) => (
-            <motion.div
-              key={metric.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors">
+          {isLoadingMetrics ? (
+            // Loading skeleton
+            Array.from({ length: 4 }).map((_, index) => (
+              <Card key={index} className="bg-white/5 border-white/10">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <metric.icon className={`w-8 h-8 ${metric.color}`} />
-                    <Badge
-                      variant="outline"
-                      className={`${
-                        metric.trend === 'up'
-                          ? 'text-green-500 border-green-500/30'
-                          : metric.trend === 'down'
-                            ? 'text-red-500 border-red-500/30'
-                            : 'text-white/60 border-white/20'
-                      }`}
-                    >
-                      {metric.trend === 'up' ? (
-                        <ArrowUp className="w-3 h-3 mr-1" />
-                      ) : metric.trend === 'down' ? (
-                        <ArrowDown className="w-3 h-3 mr-1" />
-                      ) : null}
-                      {Math.abs(metric.change)}%
-                    </Badge>
+                    <div className="w-8 h-8 bg-white/20 rounded animate-pulse"></div>
+                    <div className="w-16 h-6 bg-white/20 rounded animate-pulse"></div>
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-1">{metric.value}</h3>
-                  <p className="text-white/60 text-sm">{metric.title}</p>
+                  <div className="w-20 h-8 bg-white/20 rounded animate-pulse mb-1"></div>
+                  <div className="w-24 h-4 bg-white/20 rounded animate-pulse"></div>
                 </CardContent>
               </Card>
-            </motion.div>
-          ))}
+            ))
+          ) : (
+            metrics.map((metric, index) => (
+              <motion.div
+                key={metric.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <metric.icon className={`w-8 h-8 ${metric.color}`} />
+                      <Badge
+                        variant="outline"
+                        className={`${
+                          metric.trend === 'up'
+                            ? 'text-green-500 border-green-500/30'
+                            : metric.trend === 'down'
+                              ? 'text-red-500 border-red-500/30'
+                              : 'text-white/60 border-white/20'
+                        }`}
+                      >
+                        {metric.trend === 'up' ? (
+                          <ArrowUp className="w-3 h-3 mr-1" />
+                        ) : metric.trend === 'down' ? (
+                          <ArrowDown className="w-3 h-3 mr-1" />
+                        ) : null}
+                        {Math.abs(metric.change)}%
+                      </Badge>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-1">{metric.value}</h3>
+                    <p className="text-white/60 text-sm">{metric.title}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))
+          )}
         </div>
 
         {/* Main Content Tabs */}
@@ -923,11 +1127,11 @@ export default function AdminDashboard() {
                     <div className="space-y-1 mt-2">
                       <div className="flex justify-between text-xs">
                         <span className="text-white/80">Clients</span>
-                        <span className="text-white">85%</span>
+                        <span className="text-white">{Math.round(((metrics.find(m => m.title === 'Total Users')?.value as number || 0) - 1) / (metrics.find(m => m.title === 'Total Users')?.value as number || 1) * 100)}%</span>
                       </div>
                       <div className="flex justify-between text-xs">
                         <span className="text-white/80">Admins</span>
-                        <span className="text-white">15%</span>
+                        <span className="text-white">{Math.round(1 / (metrics.find(m => m.title === 'Total Users')?.value as number || 1) * 100)}%</span>
                       </div>
                     </div>
                   </div>
@@ -936,11 +1140,11 @@ export default function AdminDashboard() {
                     <div className="space-y-1 mt-2">
                       <div className="flex justify-between text-xs">
                         <span className="text-white/80">Business</span>
-                        <span className="text-white">62%</span>
+                        <span className="text-white">{quotes.length > 0 ? Math.round((quotes.filter(q => q.accountType === 'business').length / quotes.length) * 100) : 0}%</span>
                       </div>
                       <div className="flex justify-between text-xs">
                         <span className="text-white/80">Personal</span>
-                        <span className="text-white">38%</span>
+                        <span className="text-white">{quotes.length > 0 ? Math.round((quotes.filter(q => q.accountType === 'personal').length / quotes.length) * 100) : 0}%</span>
                       </div>
                     </div>
                   </div>
@@ -970,33 +1174,41 @@ export default function AdminDashboard() {
                       <p className="text-2xl font-bold text-white">€{totalRevenue.toLocaleString()}</p>
                       <p className="text-xs text-green-500 mt-1">
                         <TrendingUp className="w-3 h-3 inline mr-1" />
-                        +23% from last month
+                        {metrics.find(m => m.title === 'Revenue')?.change > 0 ? '+' : ''}{metrics.find(m => m.title === 'Revenue')?.change || 0}% from last {timeRange === '7d' ? 'week' : timeRange === '30d' ? 'month' : 'quarter'}
                       </p>
                     </div>
                     <div>
                       <p className="text-xs text-white/60 mb-2">Revenue by Service</p>
                       <div className="space-y-2">
-                        <div>
-                          <div className="flex justify-between text-xs mb-1">
-                            <span className="text-white/80">AI Consulting</span>
-                            <span className="text-white">45%</span>
-                          </div>
-                          <Progress value={45} className="h-1" />
-                        </div>
-                        <div>
-                          <div className="flex justify-between text-xs mb-1">
-                            <span className="text-white/80">Development</span>
-                            <span className="text-white">30%</span>
-                          </div>
-                          <Progress value={30} className="h-1" />
-                        </div>
-                        <div>
-                          <div className="flex justify-between text-xs mb-1">
-                            <span className="text-white/80">Automation</span>
-                            <span className="text-white">25%</span>
-                          </div>
-                          <Progress value={25} className="h-1" />
-                        </div>
+                        {(() => {
+                          const serviceStats = quotes
+                            .filter(q => q.status === 'approved' && q.services)
+                            .reduce((acc, quote) => {
+                              quote.services.forEach(service => {
+                                const revenue = quote.totalCost || 0;
+                                acc[service] = (acc[service] || 0) + revenue;
+                              });
+                              return acc;
+                            }, {} as Record<string, number>);
+                          
+                          const totalServiceRevenue = Object.values(serviceStats).reduce((sum, val) => sum + val, 0);
+                          const topServices = Object.entries(serviceStats)
+                            .sort(([,a], [,b]) => b - a)
+                            .slice(0, 3);
+                          
+                          return topServices.map(([service, revenue]) => {
+                            const percentage = totalServiceRevenue > 0 ? (revenue / totalServiceRevenue) * 100 : 0;
+                            return (
+                              <div key={service}>
+                                <div className="flex justify-between text-xs mb-1">
+                                  <span className="text-white/80">{service}</span>
+                                  <span className="text-white">{Math.round(percentage)}%</span>
+                                </div>
+                                <Progress value={percentage} className="h-1" />
+                              </div>
+                            );
+                          });
+                        })()}
                       </div>
                     </div>
                   </div>
@@ -1006,7 +1218,7 @@ export default function AdminDashboard() {
                     <div>
                       <p className="text-sm text-white/60 mb-1">Project Completion Rate</p>
                       <div className="flex items-end gap-2">
-                        <p className="text-2xl font-bold text-white">86%</p>
+                        <p className="text-2xl font-bold text-white">{projects.length > 0 ? Math.round((projects.filter(p => p.status === 'completed').length / projects.length) * 100) : 0}%</p>
                         <p className="text-xs text-white/60 mb-1">({projects.filter(p => p.status === 'completed').length} completed)</p>
                       </div>
                     </div>
@@ -1034,10 +1246,13 @@ export default function AdminDashboard() {
                     <div>
                       <p className="text-sm text-white/60 mb-1">Quote Conversion Rate</p>
                       <div className="flex items-end gap-2">
-                        <p className="text-2xl font-bold text-white">54.7%</p>
-                        <p className="text-xs text-orange mt-1">
-                          <ArrowDown className="w-3 h-3 inline mr-1" />
-                          -5% from last month
+                        <p className="text-2xl font-bold text-white">{quotes.length > 0 ? ((quotes.filter(q => q.status === 'approved').length / quotes.length) * 100).toFixed(1) : 0}%</p>
+                        <p className={`text-xs mt-1 ${(metrics.find(m => m.title === 'Pending Quotes')?.change || 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                          {(metrics.find(m => m.title === 'Pending Quotes')?.change || 0) >= 0 ? 
+                            <ArrowUp className="w-3 h-3 inline mr-1" /> : 
+                            <ArrowDown className="w-3 h-3 inline mr-1" />
+                          }
+                          {Math.abs(metrics.find(m => m.title === 'Pending Quotes')?.change || 0)}% from last {timeRange === '7d' ? 'week' : timeRange === '30d' ? 'month' : 'quarter'}
                         </p>
                       </div>
                     </div>
@@ -1054,7 +1269,7 @@ export default function AdminDashboard() {
                         </div>
                         <div className="flex justify-between text-xs">
                           <span className="text-white/80">Average Value</span>
-                          <span className="text-white">€8,500</span>
+                          <span className="text-white">€{quotes.filter(q => q.status === 'approved' && q.totalCost).length > 0 ? Math.round(quotes.filter(q => q.status === 'approved' && q.totalCost).reduce((sum, q) => sum + (q.totalCost || 0), 0) / quotes.filter(q => q.status === 'approved' && q.totalCost).length).toLocaleString() : '0'}</span>
                         </div>
                       </div>
                     </div>

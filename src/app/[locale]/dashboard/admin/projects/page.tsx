@@ -81,6 +81,7 @@ import { BulkActions, useBulkSelection } from '@/components/admin/BulkActions';
 import type { BulkActionType } from '@/components/admin/BulkActions';
 import { notificationService } from '@/services/notificationService';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useTeamData } from '@/hooks/useTeamData';
 
 interface Project {
   id: string;
@@ -110,18 +111,32 @@ interface TeamMember {
   name: string;
   email: string;
   role: string;
+  photoURL?: string;
+  skills?: string[];
+  availability?: {
+    status: 'available' | 'busy' | 'away' | 'offline';
+    lastSeen?: Date;
+  };
+  workload?: number;
 }
-
-const mockTeamMembers: TeamMember[] = [
-  { id: '1', name: 'John Doe', email: 'john@groeimetai.nl', role: 'Developer' },
-  { id: '2', name: 'Jane Smith', email: 'jane@groeimetai.nl', role: 'Designer' },
-  { id: '3', name: 'Mike Johnson', email: 'mike@groeimetai.nl', role: 'Project Manager' },
-  { id: '4', name: 'Sarah Wilson', email: 'sarah@groeimetai.nl', role: 'Marketing' },
-];
 
 export default function AdminProjectsPage() {
   const router = useRouter();
   const { user, isAdmin, loading } = useAuth();
+  
+  // Real team data hook
+  const {
+    teamMembers: realTeamMembers,
+    consultants,
+    isLoading: teamLoading,
+    error: teamError,
+    getAvailableConsultants,
+    searchTeamMembers,
+  } = useTeamData({
+    roles: ['admin', 'consultant'],
+    includeAvailability: true,
+    realTime: true,
+  });
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -135,6 +150,7 @@ export default function AdminProjectsPage() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedTeamMembers, setSelectedTeamMembers] = useState<string[]>([]);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [teamSearchQuery, setTeamSearchQuery] = useState('');
 
   const { selectedIds, setSelectedIds, toggleSelection, clearSelection } =
     useBulkSelection(projects);
@@ -462,6 +478,48 @@ export default function AdminProjectsPage() {
     }
   };
 
+  // Convert real team members to TeamMember interface format
+  const teamMembers: TeamMember[] = realTeamMembers.map(member => ({
+    id: member.uid,
+    name: member.displayName || `${member.firstName} ${member.lastName}`.trim() || 'Unknown',
+    email: member.email,
+    role: member.jobTitle || member.role,
+    photoURL: member.photoURL,
+    skills: member.skills,
+    availability: member.availability,
+    workload: member.workload,
+  }));
+
+  // Get suggested consultants for a project
+  const getSuggestedConsultants = (project: Project): TeamMember[] => {
+    const projectSkills = [
+      ...project.services,
+      ...project.technologies,
+      project.type,
+    ];
+    
+    return getAvailableConsultants(projectSkills).map(consultant => ({
+      id: consultant.uid,
+      name: consultant.displayName || `${consultant.firstName} ${consultant.lastName}`.trim(),
+      email: consultant.email,
+      role: consultant.jobTitle || consultant.role,
+      photoURL: consultant.photoURL,
+      skills: consultant.skills,
+      availability: consultant.availability,
+      workload: consultant.workload,
+    }));
+  };
+
+  // Filter team members based on search
+  const filteredTeamMembers = teamSearchQuery
+    ? teamMembers.filter(member =>
+        member.name.toLowerCase().includes(teamSearchQuery.toLowerCase()) ||
+        member.email.toLowerCase().includes(teamSearchQuery.toLowerCase()) ||
+        member.role.toLowerCase().includes(teamSearchQuery.toLowerCase()) ||
+        member.skills?.some(skill => skill.toLowerCase().includes(teamSearchQuery.toLowerCase()))
+      )
+    : teamMembers;
+
   const getStatusColor = (status: Project['status']) => {
     switch (status) {
       case 'active':
@@ -748,19 +806,27 @@ export default function AdminProjectsPage() {
                                 <>
                                   <div className="flex -space-x-2">
                                     {project.assignedTo.slice(0, 3).map((memberId, idx) => {
-                                      const member = mockTeamMembers.find((m) => m.id === memberId);
+                                      const member = teamMembers.find((m) => m.id === memberId);
                                       return (
                                         <div
                                           key={idx}
-                                          className="w-8 h-8 rounded-full bg-orange/20 border-2 border-black flex items-center justify-center"
-                                          title={member?.name}
+                                          className="w-8 h-8 rounded-full bg-orange/20 border-2 border-black flex items-center justify-center overflow-hidden"
+                                          title={`${member?.name || 'Unknown'} (${member?.role || 'Unknown role'})`}
                                         >
-                                          <span className="text-xs text-white">
-                                            {member?.name
-                                              .split(' ')
-                                              .map((n) => n[0])
-                                              .join('')}
-                                          </span>
+                                          {member?.photoURL ? (
+                                            <img 
+                                              src={member.photoURL} 
+                                              alt={member.name}
+                                              className="w-full h-full object-cover"
+                                            />
+                                          ) : (
+                                            <span className="text-xs text-white font-medium">
+                                              {member?.name
+                                                ?.split(' ')
+                                                .map((n) => n[0])
+                                                .join('') || '?'}
+                                            </span>
+                                          )}
                                         </div>
                                       );
                                     })}
@@ -947,38 +1013,183 @@ export default function AdminProjectsPage() {
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 mt-4">
-              {mockTeamMembers.map((member) => (
-                <label
-                  key={member.id}
-                  className="flex items-center space-x-3 cursor-pointer p-3 rounded-lg hover:bg-white/5"
-                >
-                  <Checkbox
-                    checked={selectedTeamMembers.includes(member.id)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSelectedTeamMembers([...selectedTeamMembers, member.id]);
-                      } else {
-                        setSelectedTeamMembers(
-                          selectedTeamMembers.filter((id) => id !== member.id)
-                        );
-                      }
-                    }}
-                  />
-                  <div className="flex-1">
-                    <p className="font-medium text-white">{member.name}</p>
-                    <p className="text-sm text-white/60">
-                      {member.role} • {member.email}
-                    </p>
+              {/* Search Team Members */}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                <Input
+                  placeholder="Search team members..."
+                  value={teamSearchQuery}
+                  onChange={(e) => setTeamSearchQuery(e.target.value)}
+                  className="pl-10 bg-white/5 border-white/10 text-white"
+                />
+              </div>
+
+              {/* Loading State */}
+              {teamLoading && (
+                <div className="text-center py-4">
+                  <Loader2 className="animate-spin h-6 w-6 text-orange mx-auto mb-2" />
+                  <p className="text-white/60">Loading team members...</p>
+                </div>
+              )}
+
+              {/* Error State */}
+              {teamError && (
+                <div className="text-center py-4">
+                  <AlertCircle className="h-6 w-6 text-red-500 mx-auto mb-2" />
+                  <p className="text-red-400">{teamError}</p>
+                </div>
+              )}
+
+              {/* Suggested Consultants */}
+              {selectedProject && !teamLoading && (
+                <div className="mb-4">
+                  <h4 className="text-sm font-medium text-white mb-2">Suggested Consultants</h4>
+                  <div className="space-y-2">
+                    {getSuggestedConsultants(selectedProject).slice(0, 3).map((consultant) => (
+                      <div
+                        key={consultant.id}
+                        className="flex items-center space-x-3 p-2 bg-green-500/10 border border-green-500/20 rounded-lg"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center overflow-hidden">
+                          {consultant.photoURL ? (
+                            <img 
+                              src={consultant.photoURL} 
+                              alt={consultant.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <span className="text-xs text-green-400 font-medium">
+                              {consultant.name?.split(' ').map(n => n[0]).join('') || '?'}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-white">{consultant.name}</p>
+                          <p className="text-xs text-white/60">
+                            {consultant.role} • Workload: {consultant.workload || 0}%
+                          </p>
+                          {consultant.skills && consultant.skills.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {consultant.skills.slice(0, 3).map((skill, idx) => (
+                                <span key={idx} className="text-xs bg-green-500/20 text-green-400 px-1 py-0.5 rounded">
+                                  {skill}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="border-green-500/50 text-green-400 hover:bg-green-500/20"
+                          onClick={() => {
+                            if (!selectedTeamMembers.includes(consultant.id)) {
+                              setSelectedTeamMembers([...selectedTeamMembers, consultant.id]);
+                            }
+                          }}
+                          disabled={selectedTeamMembers.includes(consultant.id)}
+                        >
+                          {selectedTeamMembers.includes(consultant.id) ? 'Added' : 'Add'}
+                        </Button>
+                      </div>
+                    ))}
                   </div>
-                </label>
-              ))}
+                </div>
+              )}
+
+              {/* All Team Members */}
+              <div className="max-h-60 overflow-y-auto space-y-2">
+                {filteredTeamMembers.map((member) => (
+                  <label
+                    key={member.id}
+                    className="flex items-center space-x-3 cursor-pointer p-3 rounded-lg hover:bg-white/5"
+                  >
+                    <Checkbox
+                      checked={selectedTeamMembers.includes(member.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedTeamMembers([...selectedTeamMembers, member.id]);
+                        } else {
+                          setSelectedTeamMembers(
+                            selectedTeamMembers.filter((id) => id !== member.id)
+                          );
+                        }
+                      }}
+                    />
+                    <div className="w-10 h-10 rounded-full bg-orange/20 flex items-center justify-center overflow-hidden">
+                      {member.photoURL ? (
+                        <img 
+                          src={member.photoURL} 
+                          alt={member.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-sm text-white font-medium">
+                          {member.name?.split(' ').map(n => n[0]).join('') || '?'}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium text-white">{member.name}</p>
+                        {member.availability?.status && (
+                          <span className={`w-2 h-2 rounded-full ${
+                            member.availability.status === 'available' ? 'bg-green-500' :
+                            member.availability.status === 'busy' ? 'bg-red-500' :
+                            member.availability.status === 'away' ? 'bg-yellow-500' :
+                            'bg-gray-500'
+                          }`} />
+                        )}
+                      </div>
+                      <p className="text-sm text-white/60">
+                        {member.role} • {member.email}
+                      </p>
+                      {member.workload !== undefined && (
+                        <p className="text-xs text-white/40">Workload: {member.workload}%</p>
+                      )}
+                      {member.skills && member.skills.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {member.skills.slice(0, 3).map((skill, idx) => (
+                            <span key={idx} className="text-xs bg-white/10 text-white/60 px-1 py-0.5 rounded">
+                              {skill}
+                            </span>
+                          ))}
+                          {member.skills.length > 3 && (
+                            <span className="text-xs text-white/40">+{member.skills.length - 3}</span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </label>
+                ))}
+
+                {!teamLoading && filteredTeamMembers.length === 0 && (
+                  <div className="text-center py-8">
+                    <Users className="w-12 h-12 text-white/20 mx-auto mb-2" />
+                    <p className="text-white/60">No team members found</p>
+                    {teamSearchQuery && (
+                      <p className="text-white/40 text-sm">Try adjusting your search</p>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
             <div className="flex justify-end gap-3 mt-6">
-              <Button variant="outline" onClick={() => setIsAssignDialogOpen(false)}>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setIsAssignDialogOpen(false);
+                  setTeamSearchQuery(''); // Reset search when closing
+                }}
+              >
                 Cancel
               </Button>
-              <Button onClick={assignTeamMembers} className="bg-orange hover:bg-orange/90">
-                Assign Team
+              <Button 
+                onClick={assignTeamMembers} 
+                className="bg-orange hover:bg-orange/90"
+                disabled={selectedTeamMembers.length === 0}
+              >
+                Assign {selectedTeamMembers.length} Team Member{selectedTeamMembers.length !== 1 ? 's' : ''}
               </Button>
             </div>
           </DialogContent>

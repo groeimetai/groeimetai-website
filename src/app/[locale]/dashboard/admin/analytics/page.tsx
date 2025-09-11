@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
-import { collection, query, getDocs, where, orderBy, Timestamp } from 'firebase/firestore';
+import { collection, query, getDocs, where, orderBy, Timestamp, doc, onSnapshot, limit, startAfter, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
   TrendingUp,
@@ -76,9 +76,22 @@ interface AnalyticsData {
     totalValue: number;
   };
   team: {
-    members: { id: string; name: string; projects: number; revenue: number; performance: number }[];
+    members: { 
+      id: string; 
+      name: string; 
+      email: string; 
+      role: string; 
+      projects: number; 
+      revenue: number; 
+      performance: number;
+      completionRate: number;
+      quoteConversionRate: number;
+      lastActive: any;
+    }[];
     topPerformer: string;
     averagePerformance: number;
+    totalMembers: number;
+    activeMembers: number;
   };
 }
 
@@ -119,6 +132,8 @@ const getDefaultAnalyticsData = (): AnalyticsData => ({
     members: [],
     topPerformer: '',
     averagePerformance: 0,
+    totalMembers: 0,
+    activeMembers: 0,
   },
 });
 
@@ -130,6 +145,8 @@ export default function AdminAnalyticsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [exportFormat, setExportFormat] = useState('pdf');
   const [activeTab, setActiveTab] = useState('overview');
+  const [analyticsCache, setAnalyticsCache] = useState<Map<string, { data: any; timestamp: number }>>(new Map());
+  const [realtimeSubscriptions, setRealtimeSubscriptions] = useState<(() => void)[]>([]);
 
   // Redirect if not admin
   useEffect(() => {
@@ -166,22 +183,44 @@ export default function AdminAnalyticsPage() {
             startDate = subDays(now, 30);
         }
 
-        // Fetch users data from custom collection
-        // Note: Firebase Auth doesn't support querying all users from client-side
-        // We need the custom users collection for analytics features like:
-        // - Filtering by date
-        // - Sorting
-        // - Custom fields (company, role, etc.)
-        // - Activity tracking
-        const usersQuery = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
-        const usersSnapshot = await getDocs(usersQuery);
-        const allUsers = usersSnapshot.docs.map(doc => ({ 
-          id: doc.id, 
-          ...doc.data() 
-        } as any)); // Type assertion needed due to Firestore's generic document type
+        // Check cache first for users data
+        const cacheKey = `users-${timeRange}`;
+        const cachedUsers = analyticsCache.get(cacheKey);
+        const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
         
-        // Filter out deleted users
-        const users = allUsers.filter(user => !user.isDeleted);
+        let users: any[] = [];
+        
+        if (cachedUsers && Date.now() - cachedUsers.timestamp < CACHE_DURATION) {
+          users = cachedUsers.data;
+        } else {
+          // Fetch users data from custom collection with optimized queries
+          // Note: Firebase Auth doesn't support querying all users from client-side
+          // We need the custom users collection for analytics features like:
+          // - Filtering by date
+          // - Sorting  
+          // - Custom fields (company, role, etc.)
+          // - Activity tracking
+          const usersQuery = query(
+            collection(db, 'users'), 
+            where('isDeleted', '!=', true),
+            orderBy('isDeleted'),
+            orderBy('createdAt', 'desc'),
+            limit(1000) // Prevent excessive data fetching
+          );
+          const usersSnapshot = await getDocs(usersQuery);
+          const allUsers = usersSnapshot.docs.map(doc => ({ 
+            id: doc.id, 
+            ...doc.data() 
+          } as any)); // Type assertion needed due to Firestore's generic document type
+          
+          users = allUsers.filter(user => !user.isDeleted);
+          
+          // Cache users data
+          setAnalyticsCache(prev => new Map(prev.set(cacheKey, {
+            data: users,
+            timestamp: Date.now()
+          })));
+        }
         
         const totalUsers = users.length;
         const newUsers = users.filter(user => 
@@ -202,13 +241,32 @@ export default function AdminAnalyticsPage() {
         
         const userGrowth = previousNewUsers > 0 ? ((newUsers - previousNewUsers) / previousNewUsers) * 100 : 0;
 
-        // Fetch quotes data
-        const quotesQuery = query(collection(db, 'quotes'), orderBy('createdAt', 'desc'));
-        const quotesSnapshot = await getDocs(quotesQuery);
-        const quotes = quotesSnapshot.docs.map(doc => ({ 
-          id: doc.id, 
-          ...doc.data() 
-        } as any));
+        // Fetch quotes data with caching
+        const quotesCacheKey = `quotes-${timeRange}`;
+        const cachedQuotes = analyticsCache.get(quotesCacheKey);
+        
+        let quotes: any[] = [];
+        
+        if (cachedQuotes && Date.now() - cachedQuotes.timestamp < CACHE_DURATION) {
+          quotes = cachedQuotes.data;
+        } else {
+          const quotesQuery = query(
+            collection(db, 'quotes'), 
+            orderBy('createdAt', 'desc'),
+            limit(500) // Limit for performance
+          );
+          const quotesSnapshot = await getDocs(quotesQuery);
+          quotes = quotesSnapshot.docs.map(doc => ({ 
+            id: doc.id, 
+            ...doc.data() 
+          } as any));
+          
+          // Cache quotes data
+          setAnalyticsCache(prev => new Map(prev.set(quotesCacheKey, {
+            data: quotes,
+            timestamp: Date.now()
+          })));
+        }
         
         const quotesInRange = quotes.filter(quote => 
           quote.createdAt?.toDate() >= startDate
@@ -256,13 +314,32 @@ export default function AdminAnalyticsPage() {
           .sort((a, b) => b.amount - a.amount)
           .slice(0, 5);
 
-        // Fetch projects data
-        const projectsQuery = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
-        const projectsSnapshot = await getDocs(projectsQuery);
-        const projects = projectsSnapshot.docs.map(doc => ({ 
-          id: doc.id, 
-          ...doc.data() 
-        } as any));
+        // Fetch projects data with caching
+        const projectsCacheKey = `projects-${timeRange}`;
+        const cachedProjects = analyticsCache.get(projectsCacheKey);
+        
+        let projects: any[] = [];
+        
+        if (cachedProjects && Date.now() - cachedProjects.timestamp < CACHE_DURATION) {
+          projects = cachedProjects.data;
+        } else {
+          const projectsQuery = query(
+            collection(db, 'projects'), 
+            orderBy('createdAt', 'desc'),
+            limit(300) // Limit for performance
+          );
+          const projectsSnapshot = await getDocs(projectsQuery);
+          projects = projectsSnapshot.docs.map(doc => ({ 
+            id: doc.id, 
+            ...doc.data() 
+          } as any));
+          
+          // Cache projects data
+          setAnalyticsCache(prev => new Map(prev.set(projectsCacheKey, {
+            data: projects,
+            timestamp: Date.now()
+          })));
+        }
         
         // Also count approved quotes as projects
         const totalProjects = projects.length + approvedQuotes;
@@ -317,6 +394,70 @@ export default function AdminAnalyticsPage() {
           };
         });
 
+        // Calculate team performance metrics from real data
+        const teamMembers = users.filter(user => 
+          user.role === 'admin' || user.role === 'team' || user.role === 'consultant'
+        );
+        
+        const teamWithMetrics = await Promise.all(teamMembers.map(async (member) => {
+          // Count projects assigned to this team member
+          const memberProjects = projects.filter(project => 
+            project.assignedTo === member.id || 
+            project.teamMembers?.includes(member.id) ||
+            project.consultant === member.id
+          );
+          
+          // Calculate revenue from quotes associated with this member
+          const memberQuotes = quotes.filter(quote => 
+            quote.assignedTo === member.id || 
+            quote.consultant === member.id ||
+            quote.createdBy === member.id
+          );
+          
+          const memberRevenue = memberQuotes
+            .filter(q => q.status === 'approved' && q.totalCost)
+            .reduce((sum, q) => sum + (typeof q.totalCost === 'number' ? q.totalCost : 0), 0);
+          
+          // Calculate performance score based on:
+          // - Project completion rate
+          // - Quote conversion rate  
+          // - Revenue generated
+          // - Client satisfaction (if available)
+          const completedProjects = memberProjects.filter(p => p.status === 'completed').length;
+          const completionRate = memberProjects.length > 0 ? (completedProjects / memberProjects.length) * 100 : 0;
+          
+          const approvedQuotes = memberQuotes.filter(q => q.status === 'approved').length;
+          const quoteConversionRate = memberQuotes.length > 0 ? (approvedQuotes / memberQuotes.length) * 100 : 0;
+          
+          // Performance score: weighted average of metrics
+          const performanceScore = Math.round(
+            (completionRate * 0.4) + 
+            (quoteConversionRate * 0.4) + 
+            (Math.min(memberRevenue / 10000, 100) * 0.2) // Revenue score (capped at 100)
+          );
+          
+          return {
+            id: member.id,
+            name: member.displayName || member.email?.split('@')[0] || 'Unknown',
+            email: member.email,
+            role: member.role,
+            projects: memberProjects.length,
+            revenue: memberRevenue,
+            performance: performanceScore,
+            completionRate,
+            quoteConversionRate,
+            lastActive: member.lastActive
+          };
+        }));
+        
+        // Sort team members by performance
+        teamWithMetrics.sort((a, b) => b.performance - a.performance);
+        
+        const topPerformer = teamWithMetrics.length > 0 ? teamWithMetrics[0].name : '';
+        const averagePerformance = teamWithMetrics.length > 0 
+          ? Math.round(teamWithMetrics.reduce((sum, member) => sum + member.performance, 0) / teamWithMetrics.length)
+          : 0;
+
         // Set analytics data
         setAnalyticsData({
           revenue: {
@@ -352,9 +493,13 @@ export default function AdminAnalyticsPage() {
             totalValue: totalRevenue,
           },
           team: {
-            members: [], // This would need team member data
-            topPerformer: '',
-            averagePerformance: 0,
+            members: teamWithMetrics.slice(0, 10), // Top 10 performers
+            topPerformer,
+            averagePerformance,
+            totalMembers: teamWithMetrics.length,
+            activeMembers: teamWithMetrics.filter(m => 
+              m.lastActive && m.lastActive.toDate() >= sevenDaysAgo
+            ).length,
           },
         });
       } catch (error) {
@@ -366,6 +511,64 @@ export default function AdminAnalyticsPage() {
 
     fetchAnalyticsData();
   }, [user, isAdmin, timeRange]);
+
+  // Setup real-time subscriptions for live updates
+  useEffect(() => {
+    if (!user || !isAdmin) return;
+
+    const subscriptions: (() => void)[] = [];
+
+    // Subscribe to quotes collection for real-time updates
+    const quotesUnsubscribe = onSnapshot(
+      query(collection(db, 'quotes'), orderBy('createdAt', 'desc'), limit(50)),
+      (snapshot) => {
+        if (!snapshot.empty) {
+          // Clear cache when new quotes are detected
+          setAnalyticsCache(prev => {
+            const newCache = new Map(prev);
+            newCache.delete(`quotes-${timeRange}`);
+            return newCache;
+          });
+        }
+      },
+      (error) => {
+        console.warn('Error in quotes subscription:', error);
+      }
+    );
+    subscriptions.push(quotesUnsubscribe);
+
+    // Subscribe to projects collection
+    const projectsUnsubscribe = onSnapshot(
+      query(collection(db, 'projects'), orderBy('createdAt', 'desc'), limit(30)),
+      (snapshot) => {
+        if (!snapshot.empty) {
+          setAnalyticsCache(prev => {
+            const newCache = new Map(prev);
+            newCache.delete(`projects-${timeRange}`);
+            return newCache;
+          });
+        }
+      },
+      (error) => {
+        console.warn('Error in projects subscription:', error);
+      }
+    );
+    subscriptions.push(projectsUnsubscribe);
+
+    setRealtimeSubscriptions(subscriptions);
+
+    // Cleanup function
+    return () => {
+      subscriptions.forEach(unsub => unsub());
+    };
+  }, [user, isAdmin, timeRange]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      realtimeSubscriptions.forEach(unsub => unsub());
+    };
+  }, [realtimeSubscriptions]);
 
   const exportReport = () => {
     // Mock export functionality
@@ -771,6 +974,114 @@ export default function AdminAnalyticsPage() {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Team Performance */}
+            {analyticsData.team.members.length > 0 && (
+              <div className="mt-8">
+                <h2 className="text-2xl font-bold text-white mb-6">Team Performance</h2>
+                
+                {/* Team Overview Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                  <Card className="bg-white/5 border-white/10">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-2">
+                        <Users className="w-6 h-6 text-blue-500" />
+                        <Badge variant="outline" className="text-blue-500 border-blue-500/30">
+                          Total
+                        </Badge>
+                      </div>
+                      <p className="text-2xl font-bold text-white">{analyticsData.team.totalMembers}</p>
+                      <p className="text-sm text-white/60">Team members</p>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="bg-white/5 border-white/10">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-2">
+                        <Activity className="w-6 h-6 text-green-500" />
+                        <Badge variant="outline" className="text-green-500 border-green-500/30">
+                          Active
+                        </Badge>
+                      </div>
+                      <p className="text-2xl font-bold text-white">{analyticsData.team.activeMembers}</p>
+                      <p className="text-sm text-white/60">Active this week</p>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="bg-white/5 border-white/10">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-2">
+                        <Award className="w-6 h-6 text-orange" />
+                        <Badge variant="outline" className="text-orange border-orange/30">
+                          Top Performer
+                        </Badge>
+                      </div>
+                      <p className="text-2xl font-bold text-white">{analyticsData.team.averagePerformance}%</p>
+                      <p className="text-sm text-white/60">Avg. performance</p>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Team Members List */}
+                <Card className="bg-white/5 border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">
+                      <Users className="w-5 h-5" />
+                      Team Performance Leaderboard
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {analyticsData.team.members.slice(0, 8).map((member, index) => (
+                        <div key={member.id} className="flex items-center justify-between p-4 rounded-lg bg-white/5">
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-orange/20 text-orange font-bold">
+                              {index + 1}
+                            </div>
+                            <div>
+                              <p className="text-white font-medium">{member.name}</p>
+                              <div className="flex items-center gap-2 text-sm text-white/60">
+                                <span className="capitalize">{member.role}</span>
+                                {member.email && <span>• {member.email}</span>}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="flex items-center gap-4">
+                              <div className="text-center">
+                                <p className="text-white font-medium">{member.projects}</p>
+                                <p className="text-xs text-white/60">Projects</p>
+                              </div>
+                              <div className="text-center">
+                                <p className="text-white font-medium">€{member.revenue.toLocaleString()}</p>
+                                <p className="text-xs text-white/60">Revenue</p>
+                              </div>
+                              <div className="text-center">
+                                <p className={`text-lg font-bold ${
+                                  member.performance >= 80 ? 'text-green-500' : 
+                                  member.performance >= 60 ? 'text-yellow-500' : 'text-red-500'
+                                }`}>
+                                  {member.performance}%
+                                </p>
+                                <p className="text-xs text-white/60">Score</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {analyticsData.team.members.length > 8 && (
+                      <div className="mt-4 text-center">
+                        <p className="text-white/60 text-sm">
+                          Showing top 8 of {analyticsData.team.members.length} team members
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            )}
 
             {/* Quote Analytics */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">

@@ -10,13 +10,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import AssessmentViewer from '@/components/dashboard/AssessmentViewer';
+import DashboardOverview from '@/components/dashboard/DashboardOverview';
+import EngagementDashboard from '@/components/dashboard/EngagementDashboard';
+import CustomerJourneyWidget from '@/components/dashboard/CustomerJourneyWidget';
 import { useTranslations } from 'next-intl';
+import { useDashboardOverview, useSystemMetrics, usePerformanceMetrics } from '@/hooks/useDashboardData';
 import { 
   BarChart3, Activity, FileText, User,
   TrendingUp, Clock, CheckCircle,
   Download, Database,
-  Brain, Target, ArrowRight
+  Brain, Target, ArrowRight,
+  AlertTriangle
 } from 'lucide-react';
+import { DashboardStatsSkeleton, MetricCardSkeleton } from '@/components/ui/LoadingSkeleton';
 
 function DashboardPageContent() {
   const t = useTranslations('dashboard');
@@ -30,23 +36,17 @@ function DashboardPageContent() {
   const [agentReadinessAssessments, setAgentReadinessAssessments] = useState<any[]>([]);
   const searchParams = useSearchParams();
 
+  // Use our new data hooks
+  const { stats, projects, activities, loading: dashboardLoading, error: dashboardError } = useDashboardOverview();
+  const { metrics: systemMetrics, loading: metricsLoading, error: metricsError } = useSystemMetrics();
+  const { metrics: performanceMetrics, loading: perfLoading, error: perfError } = usePerformanceMetrics();
+
   // User profile state
   const [userProfile, setUserProfile] = useState({
     name: user?.displayName || user?.firstName || user?.email?.split('@')[0] || 'User',
     company: user?.company || 'Your Company',
     lastLogin: 'Recent'
   });
-
-  // Sample data - replace with Firestore calls
-  const projects = [];
-  const activities = [];
-  const systemMetrics = {
-    agentReadiness: 0,
-    connectedSystems: { current: 0, total: 0 },
-    activeAgents: 0,
-    monthlySavings: 0,
-    uptime: 0
-  };
 
   // Load Expert Assessment data
   useEffect(() => {
@@ -126,6 +126,17 @@ function DashboardPageContent() {
     }
   }, [user]);
 
+  // Update last update timestamp
+  useEffect(() => {
+    const updateTimestamp = () => {
+      setLastUpdate(new Date().toLocaleTimeString());
+    };
+    
+    updateTimestamp();
+    const interval = setInterval(updateTimestamp, 60000); // Update every minute
+    
+    return () => clearInterval(interval);
+  }, []);
 
   if (loading) {
     return (
@@ -152,12 +163,23 @@ function DashboardPageContent() {
           transition={{ duration: 0.8 }}
           className="mb-8"
         >
-          <h2 className="text-3xl font-bold text-white mb-2">
-            {t('welcome', { name: userProfile.name })}
-          </h2>
-          <p className="text-white/60">
-            {t('lastLogin', { date: userProfile.lastLogin })}
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-3xl font-bold text-white mb-2">
+                {t('welcome', { name: userProfile.name })}
+              </h2>
+              <p className="text-white/60">
+                {t('lastLogin', { date: userProfile.lastLogin })}
+              </p>
+            </div>
+            <div className="text-right">
+              <div className="flex items-center space-x-2 mb-2">
+                <div className={`w-2 h-2 rounded-full ${isLiveMode ? 'bg-green-500' : 'bg-gray-500'}`}></div>
+                <span className="text-white/60 text-sm">{isLiveMode ? 'Live' : 'Offline'}</span>
+              </div>
+              <p className="text-white/40 text-xs">Last updated: {lastUpdate}</p>
+            </div>
+          </div>
         </motion.div>
 
         {/* Assessment Viewer or Next Action */}
@@ -182,7 +204,7 @@ function DashboardPageContent() {
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Target className="w-5 h-5 mr-2" style={{ color: '#F87315' }} />
-{t('nextStep.title')}
+                {t('nextStep.title')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -209,7 +231,7 @@ function DashboardPageContent() {
                   variant="outline"
                   className="border-white/20 text-white hover:bg-white/10"
                 >
-{t('nextStep.notNow')}
+                  {t('nextStep.notNow')}
                 </Button>
               </div>
             </CardContent>
@@ -227,6 +249,23 @@ function DashboardPageContent() {
 
           {/* OVERVIEW TAB */}
           <TabsContent value="overview" className="space-y-8">
+            {/* Error handling for dashboard data */}
+            {(dashboardError || metricsError || perfError) && (
+              <Card className="bg-red-500/10 border border-red-500/20">
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-3">
+                    <AlertTriangle className="h-6 w-6 text-red-400" />
+                    <div>
+                      <h3 className="text-lg font-semibold text-red-400">Data Loading Issues</h3>
+                      <p className="text-red-300 text-sm mt-1">
+                        Some dashboard data couldn't be loaded. Please refresh or contact support.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Expert Assessment Status */}
             {expertAssessmentData && (
               <div className="mb-8">
@@ -274,6 +313,77 @@ function DashboardPageContent() {
               </div>
             )}
 
+            {/* Real-time Dashboard Overview */}
+            <div className="mb-8">
+              <h3 className="text-2xl font-bold text-white mb-6">Dashboard Overview</h3>
+              <DashboardOverview />
+            </div>
+
+            {/* System Metrics */}
+            <div className="mb-8">
+              <h3 className="text-2xl font-bold text-white mb-6">System Status</h3>
+              {metricsLoading ? (
+                <div className="grid lg:grid-cols-3 gap-6">
+                  <MetricCardSkeleton />
+                  <MetricCardSkeleton />
+                  <MetricCardSkeleton />
+                </div>
+              ) : systemMetrics ? (
+                <div className="grid lg:grid-cols-3 gap-6">
+                  <Card className="bg-white/5 border-white/10">
+                    <CardContent className="p-6 text-center">
+                      <div className="text-2xl font-bold text-white mb-2">
+                        {systemMetrics.agentReadiness || 0}/100
+                      </div>
+                      <div className="text-white/60 text-sm">Agent Readiness</div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white/5 border-white/10">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-white/60 text-sm">Connected</p>
+                          <p className="text-2xl font-bold text-white">
+                            {systemMetrics.connectedSystems?.current || 0}/{systemMetrics.connectedSystems?.total || 0}
+                          </p>
+                          <p className="text-white/60 text-xs">Systems</p>
+                        </div>
+                        <Database className="w-8 h-8" style={{ color: '#F87315' }} />
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white/5 border-white/10">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-white/60 text-sm">Active</p>
+                          <p className="text-2xl font-bold text-white">{systemMetrics.activeAgents || 0}</p>
+                          <p className="text-white/60 text-xs">Agents</p>
+                        </div>
+                        <Brain className="w-8 h-8" style={{ color: '#F87315' }} />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <Activity className="h-12 w-12 text-white/40 mx-auto mb-4" />
+                  <h4 className="text-white font-medium mb-2">No System Data</h4>
+                  <p className="text-white/60 text-sm">
+                    System metrics will appear when you have active projects
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Journey Widget */}
+            <div className="mb-8">
+              <h3 className="text-2xl font-bold text-white mb-6">Your Journey</h3>
+              <CustomerJourneyWidget />
+            </div>
+
             {/* Service Request Cards */}
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-white mb-6">{t('overview.readyForMore')}</h3>
@@ -301,118 +411,79 @@ function DashboardPageContent() {
                     </Link>
                   </CardContent>
                 </Card>
+
+                <Card className="bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300">
+                  <CardContent className="p-6">
+                    <div 
+                      className="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
+                      style={{ backgroundColor: '#F87315' }}
+                    >
+                      <Target className="w-6 h-6 text-white" />
+                    </div>
+                    <h4 className="text-lg font-bold text-white mb-3">Expert Assessment</h4>
+                    <p className="text-white/70 text-sm leading-relaxed mb-6">
+                      Deep-dive analysis with personalized roadmap
+                    </p>
+                    <Link href="/expert-assessment">
+                      <Button 
+                        className="w-full text-white"
+                        style={{ backgroundColor: '#F87315' }}
+                      >
+                        Book Assessment
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300">
+                  <CardContent className="p-6">
+                    <div 
+                      className="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
+                      style={{ backgroundColor: '#F87315' }}
+                    >
+                      <Brain className="w-6 h-6 text-white" />
+                    </div>
+                    <h4 className="text-lg font-bold text-white mb-3">AI Consultation</h4>
+                    <p className="text-white/70 text-sm leading-relaxed mb-6">
+                      Strategy session with AI transformation experts
+                    </p>
+                    <Link href="/contact">
+                      <Button 
+                        className="w-full text-white"
+                        style={{ backgroundColor: '#F87315' }}
+                      >
+                        Schedule Call
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300">
+                  <CardContent className="p-6">
+                    <div 
+                      className="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
+                      style={{ backgroundColor: '#F87315' }}
+                    >
+                      <Activity className="w-6 h-6 text-white" />
+                    </div>
+                    <h4 className="text-lg font-bold text-white mb-3">Performance Monitoring</h4>
+                    <p className="text-white/70 text-sm leading-relaxed mb-6">
+                      Real-time system monitoring and optimization
+                    </p>
+                    <Button 
+                      className="w-full text-white"
+                      style={{ backgroundColor: '#F87315' }}
+                      disabled={!stats || stats.activeProjects === 0}
+                    >
+                      Enable Monitoring
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </CardContent>
+                </Card>
               </div>
             </div>
-
-            {/* System Status */}
-            <div className="grid lg:grid-cols-3 gap-8">
-              <Card className="bg-white/5 border-white/10">
-                <CardContent className="p-6 text-center">
-                  <div className="text-2xl font-bold text-white mb-2">
-                    {systemMetrics.agentReadiness}/100
-                  </div>
-                  <div className="text-white/60 text-sm">{t('overview.agentReadiness')}</div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-white/5 border-white/10">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-white/60 text-sm">{t('overview.connected')}</p>
-                      <p className="text-2xl font-bold text-white">
-                        {systemMetrics.connectedSystems.current}/{systemMetrics.connectedSystems.total}
-                      </p>
-                      <p className="text-white/60 text-xs">{t('overview.systems')}</p>
-                    </div>
-                    <Database className="w-8 h-8" style={{ color: '#F87315' }} />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-white/5 border-white/10">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-white/60 text-sm">{t('overview.active')}</p>
-                      <p className="text-2xl font-bold text-white">{systemMetrics.activeAgents}</p>
-                      <p className="text-white/60 text-xs">{t('overview.agents')}</p>
-                    </div>
-                    <Brain className="w-8 h-8" style={{ color: '#F87315' }} />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          {/* PROJECTS TAB */}
-          <TabsContent value="projects" className="space-y-6">
-            <h3 className="text-2xl font-bold text-white mb-6">{t('projects.title')}</h3>
-            
-            <Card className="bg-white/5 border-white/10">
-              <CardContent className="p-12 text-center">
-                <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-6">
-                  <BarChart3 className="w-8 h-8 text-white/60" />
-                </div>
-                <h4 className="text-xl font-bold text-white mb-4">{t('projects.noActiveProjects')}</h4>
-                <p className="text-white/70 mb-8">
-                  {t('projects.readyToStart')}
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link href="/agent-readiness">
-                    <Button
-                      className="text-white"
-                      style={{ backgroundColor: '#F87315' }}
-                    >
-{t('projects.startWithAssessment')}
-                    </Button>
-                  </Link>
-                  <Link href="/contact">
-                    <Button
-                      variant="outline"
-                      className="border-white/20 text-white hover:bg-white/10"
-                    >
-{t('projects.bookConsult')}
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* MONITORING TAB */}
-          <TabsContent value="monitoring" className="space-y-6">
-            <h3 className="text-2xl font-bold text-white">{t('monitoring.title')}</h3>
-            
-            <Card className="bg-white/5 border-white/10">
-              <CardContent className="p-12 text-center">
-                <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-6">
-                  <Activity className="w-8 h-8 text-white/60" />
-                </div>
-                <h4 className="text-xl font-bold text-white mb-4">{t('monitoring.notActive')}</h4>
-                <p className="text-white/70 mb-8">
-                  {t('monitoring.description')}
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link href="/services">
-                    <Button
-                      className="text-white"
-                      style={{ backgroundColor: '#F87315' }}
-                    >
-{t('monitoring.enable')}
-                    </Button>
-                  </Link>
-                  <Link href="/demo-request">
-                    <Button
-                      variant="outline"
-                      className="border-white/20 text-white hover:bg-white/10"
-                    >
-{t('monitoring.seeDemo')}
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
           </TabsContent>
 
           {/* ASSESSMENTS TAB */}
@@ -547,7 +618,7 @@ function DashboardPageContent() {
                   <CardTitle className="text-white flex items-center justify-between">
                     <span className="flex items-center">
                       <CheckCircle className="w-5 h-5 mr-2" style={{ color: '#10B981' }} />
-{t('assessments.agentReadinessAssessment')}
+                      {t('assessments.agentReadinessAssessment')}
                     </span>
                     {assessmentData.score !== 'Loading...' ? (
                       <Badge className="bg-green-500 text-white">Score: {assessmentData.score}</Badge>
@@ -587,14 +658,14 @@ function DashboardPageContent() {
                         variant="outline"
                         className="border-white/20 text-white hover:bg-white/10"
                       >
-{t('assessments.contactSupport')}
+                        {t('assessments.contactSupport')}
                       </Button>
                       <Link href="/expert-assessment" className="flex-1">
                         <Button 
                           className="w-full text-white font-semibold"
                           style={{ backgroundColor: '#F87315' }}
                         >
-{t('assessments.upgradeExpert')}
+                          {t('assessments.upgradeExpert')}
                           <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
                       </Link>
@@ -614,7 +685,7 @@ function DashboardPageContent() {
                       className="text-white"
                       style={{ backgroundColor: '#F87315' }}
                     >
-{t('assessments.startAssessment')}
+                      {t('assessments.startAssessment')}
                     </Button>
                   </Link>
                 </CardContent>
@@ -622,26 +693,81 @@ function DashboardPageContent() {
             )}
           </TabsContent>
 
+          {/* MONITORING TAB */}
+          <TabsContent value="monitoring" className="space-y-6">
+            <h3 className="text-2xl font-bold text-white">{t('monitoring.title')}</h3>
+            
+            {/* Engagement Dashboard Integration */}
+            <EngagementDashboard />
+          </TabsContent>
+
           {/* REPORTS TAB */}
           <TabsContent value="reports" className="space-y-6">
             <h3 className="text-2xl font-bold text-white">{t('reports.title')}</h3>
             
-            <Card className="bg-white/5 border-white/10">
-              <CardContent className="p-12 text-center">
-                <h4 className="text-xl font-bold text-white mb-4">{t('reports.noReports')}</h4>
-                <p className="text-white/70 mb-8">
-                  {t('reports.description')}
-                </p>
-                <Link href="/agent-readiness">
-                  <Button
-                    className="text-white"
-                    style={{ backgroundColor: '#F87315' }}
-                  >
-{t('reports.startJourney')}
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+            {/* Performance Metrics */}
+            {perfLoading ? (
+              <div className="grid md:grid-cols-2 gap-6">
+                <MetricCardSkeleton />
+                <MetricCardSkeleton />
+              </div>
+            ) : performanceMetrics && performanceMetrics.length > 0 ? (
+              <div className="grid md:grid-cols-2 gap-6">
+                {performanceMetrics.map((metric, index) => (
+                  <Card key={index} className="bg-white/5 border-white/10">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-lg font-semibold text-white">{metric.name}</h4>
+                        <Badge className={
+                          metric.status === 'good' ? 'bg-green-500/20 text-green-400' :
+                          metric.status === 'warning' ? 'bg-yellow-500/20 text-yellow-400' :
+                          'bg-red-500/20 text-red-400'
+                        }>
+                          {metric.status}
+                        </Badge>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-white/60 text-sm">Current</span>
+                          <span className="text-white font-medium">{metric.current}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-white/60 text-sm">Target</span>
+                          <span className="text-white/60">{metric.target}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-white/60 text-sm">Trend</span>
+                          <span className={
+                            metric.trend === 'up' ? 'text-green-400' :
+                            metric.trend === 'down' ? 'text-red-400' :
+                            'text-white/60'
+                          }>
+                            {metric.trend === 'up' ? '↗' : metric.trend === 'down' ? '↘' : '→'} {metric.trend}
+                          </span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-12 text-center">
+                  <h4 className="text-xl font-bold text-white mb-4">{t('reports.noReports')}</h4>
+                  <p className="text-white/70 mb-8">
+                    {t('reports.description')}
+                  </p>
+                  <Link href="/agent-readiness">
+                    <Button
+                      className="text-white"
+                      style={{ backgroundColor: '#F87315' }}
+                    >
+                      {t('reports.startJourney')}
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
         </Tabs>
       </div>

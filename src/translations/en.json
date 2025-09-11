@@ -11,7 +11,14 @@
     "signIn": "Sign In",
     "dashboard": "Dashboard",
     "logout": "Logout",
-    "getStarted": "Get Started"
+    "getStarted": "Get Started",
+    "settings": "Settings",
+    "login": "Login",
+    "startAssessment": "Start Assessment",
+    "notifications": "Notifications", 
+    "account": "Account",
+    "sectionNavigation": "Navigation",
+    "sectionGetStarted": "Get Started"
   },
   "hero": {
     "title": "From APIs to",
@@ -1639,6 +1646,47 @@
         "title": "Extreme Context Processing",
         "description": "Our proprietary technology for processing massive documents without context loss"
       }
+    },
+    "whatWeDo": {
+      "title": "What We",
+      "highlight": "Do",
+      "subtitle": "We prepare businesses for the agent economy by:"
+    },
+    "philosophySection": {
+      "title": "Our",
+      "highlight": "Philosophy"
+    },
+    "contactSection": {
+      "title": "Contact",
+      "office": {
+        "title": "Head Office",
+        "location": "Apeldoorn, Netherlands"
+      },
+      "email": {
+        "title": "Email",
+        "address": "info@groeimetai.io",
+        "response": "Response within 24 hours"
+      },
+      "phone": {
+        "title": "Phone",
+        "number": "+31 (6) 81 739 018",
+        "hours": "Mon-Fri 9:00-18:00"
+      },
+      "online": {
+        "title": "Online",
+        "github": "GitHub: @GroeimetAI",
+        "linkedin": "LinkedIn: GroeimetAI"
+      }
+    },
+    "finalCta": {
+      "title": "Ready for",
+      "highlight": "Agent Season",
+      "subtitle": "The agent economy won't wait.",
+      "warning": "Companies not preparing now will miss the boat.",
+      "promise": "We'll help you get on board.",
+      "startAssessment": "Start Agent Assessment",
+      "viewDemo": "View Snow-flow Demo",
+      "disclaimer": "Every conversation starts with a free assessment - no obligations"
     },
     "mission": {
       "title": "Our Mission",

@@ -32,6 +32,13 @@ export interface User {
   subscriptionPlan?: SubscriptionPlan;
   stats: UserStats;
   isDeleted?: boolean;
+  // Team & Consultant specific fields
+  skills?: string[];
+  specializations?: string[];
+  hourlyRate?: number;
+  availability?: UserAvailability;
+  workload?: number; // 0-100 percentage
+  isAvailable?: boolean;
 }
 
 export type UserRole = 'admin' | 'consultant' | 'client' | 'guest';
@@ -58,6 +65,14 @@ export interface UserStats {
   consultationsCount: number;
   messagesCount: number;
   totalSpent: number;
+}
+
+export interface UserAvailability {
+  status: 'available' | 'busy' | 'away' | 'offline';
+  lastSeen?: Date;
+  currentProject?: string;
+  scheduledUntil?: Date;
+  notes?: string;
 }
 
 // Organization Types

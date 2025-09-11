@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import NotificationCenter from '@/components/NotificationCenter';
+import { useTranslations } from 'next-intl';
 import {
   Home, Users, Mail, Calendar, Settings, FileText, 
   DollarSign, BarChart3, MessageSquare, Phone, Clock,
@@ -32,6 +33,7 @@ export default function DynamicNavigation() {
   const { user, isAdmin, loading, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const t = useTranslations('navigation');
 
   useEffect(() => {
     setMounted(true);
@@ -40,16 +42,16 @@ export default function DynamicNavigation() {
   // Define navigation items based on user context (simplified)
   const getNavigationItems = (): NavigationItem[] => {
     const baseItems: NavigationItem[] = [
-      { href: '/services', label: 'Diensten', icon: Target },
-      { href: '/cases', label: 'Cases', icon: Rocket },
-      { href: '/about', label: 'Over Ons', icon: Users },
-      { href: '/contact', label: 'Contact', icon: Phone },
+      { href: '/services', label: t('services'), icon: Target },
+      { href: '/cases', label: t('cases'), icon: Rocket },
+      { href: '/about', label: t('about'), icon: Users },
+      { href: '/contact', label: t('contact'), icon: Phone },
     ];
 
     // Authenticated user items
     if (user) {
       baseItems.unshift(
-        { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard }
+        { href: '/dashboard', label: t('dashboard'), icon: LayoutDashboard }
       );
     }
 
@@ -122,7 +124,7 @@ export default function DynamicNavigation() {
                     className="text-white hover:text-orange hover:bg-white/10"
                   >
                     <Settings className="w-4 h-4 mr-2" />
-                    Instellingen
+                    {t('settings')}
                   </Button>
                 </Link>
                 <Button
@@ -131,7 +133,7 @@ export default function DynamicNavigation() {
                   className="text-white hover:text-orange hover:bg-white/10"
                 >
                   <LogOut className="w-4 h-4 mr-2" />
-                  Logout
+                  {t('logout')}
                 </Button>
               </div>
             ) : (
@@ -141,12 +143,12 @@ export default function DynamicNavigation() {
                     variant="ghost"
                     className="text-white hover:text-orange hover:bg-white/10"
                   >
-                    Inloggen
+                    {t('login')}
                   </Button>
                 </Link>
                 <Link href="/agent-readiness">
                   <Button className="bg-orange hover:bg-orange-600 text-white">
-                    Start Assessment
+                    {t('startAssessment')}
                   </Button>
                 </Link>
               </div>
@@ -178,7 +180,7 @@ export default function DynamicNavigation() {
                   {/* Navigation Section */}
                   <div className="mb-4">
                     <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">
-                      Navigatie
+                      {t('sectionNavigation')}
                     </p>
                     {navigationItems.map((item) => (
                       <Link
@@ -196,7 +198,7 @@ export default function DynamicNavigation() {
                   {/* User Section */}
                   <div className="border-t border-white/10 pt-4">
                     <p className="text-white/40 text-xs uppercase tracking-wide px-4 mb-2">
-                      {user ? 'Account' : 'Aan de slag'}
+                      {user ? t('account') : t('sectionGetStarted')}
                     </p>
                     {user ? (
                       <>
@@ -204,7 +206,7 @@ export default function DynamicNavigation() {
                           <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
                             <div className="flex items-center">
                               <Bell className="w-5 h-5 mr-2 text-white/60" />
-                              <span className="text-white/80 text-sm">Notificaties</span>
+                              <span className="text-white/80 text-sm">{t('notifications')}</span>
                             </div>
                             <NotificationCenter />
                           </div>
@@ -215,7 +217,7 @@ export default function DynamicNavigation() {
                             className="w-full justify-start text-white hover:bg-white/5 py-3"
                           >
                             <Settings className="w-5 h-5 mr-3" />
-                            Instellingen
+                            {t('settings')}
                           </Button>
                         </Link>
                         <Button
@@ -227,7 +229,7 @@ export default function DynamicNavigation() {
                           className="w-full justify-start text-white hover:bg-white/5 py-3"
                         >
                           <LogOut className="w-5 h-5 mr-3" />
-                          Logout
+                          {t('logout')}
                         </Button>
                       </>
                     ) : (
@@ -238,12 +240,12 @@ export default function DynamicNavigation() {
                             className="w-full justify-start text-white hover:bg-white/5 py-3"
                           >
                             <User className="w-5 h-5 mr-3" />
-                            Inloggen
+                            {t('login')}
                           </Button>
                         </Link>
                         <Link href="/agent-readiness" onClick={() => setIsOpen(false)}>
                           <Button className="w-full bg-orange hover:bg-orange-600 text-white">
-                            Start Assessment
+                            {t('startAssessment')}
                           </Button>
                         </Link>
                       </div>
