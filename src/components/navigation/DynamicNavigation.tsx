@@ -216,7 +216,7 @@ export default function DynamicNavigation() {
                     <User className="h-4 w-4 text-orange" />
                   </div>
                   <div className="text-right">
-                    <p className="text-white text-sm font-medium">{user.name || user.email}</p>
+                    <p className="text-white text-sm font-medium">{user.displayName || user.email}</p>
                     <p className="text-white/50 text-xs">
                       {isAdmin ? 'Admin' : 'User'}
                     </p>

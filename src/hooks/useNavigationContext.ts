@@ -34,7 +34,7 @@ export const useUserContext = (): UserContextData => {
     isAdmin: isAdmin,
     user: user ? {
       id: user.uid,
-      name: user.displayName || user.name,
+      name: user.displayName || user.email,
       email: user.email,
       avatar: user.photoURL
     } : undefined,

@@ -246,7 +246,7 @@ export default function UnifiedNavigation({
                         className="bg-black/95 border-white/20"
                       >
                         {item.children.map((child) => (
-                          <DropdownMenuItem key={child.id} asChild>
+                          <DropdownMenuItem key={child.id}>
                             <Link 
                               href={child.href!}
                               className="text-white hover:text-orange"
@@ -329,7 +329,7 @@ export default function UnifiedNavigation({
                       align="end" 
                       className="bg-black/95 border-white/20"
                     >
-                      <DropdownMenuItem asChild>
+                      <DropdownMenuItem>
                         <Link href="/dashboard" className="text-white hover:text-orange">
                           <User className="h-4 w-4 mr-2" />
                           Dashboard
