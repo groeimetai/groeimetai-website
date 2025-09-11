@@ -7,10 +7,10 @@ import type { RootLayoutProps } from '@/types/layout';
 import { locales } from '@/i18n';
 import { LocaleProviders } from '@/components/LocaleProviders';
 
-// Dynamically import Navigation to avoid SSR issues with router
-const Navigation = dynamic(() => import('@/components/layout/Navigation'), {
+// Dynamically import DynamicNavigation to avoid SSR issues with router
+const DynamicNavigation = dynamic(() => import('@/components/navigation/DynamicNavigation'), {
   ssr: false,
-  loading: () => <div className="h-20" />, // Placeholder to prevent layout shift
+  loading: () => <div className="h-16" />, // Placeholder to prevent layout shift
 });
 
 export async function generateStaticParams() {
@@ -34,7 +34,7 @@ export default async function LocaleLayout({ children, params: { locale } }: Roo
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <LocaleProviders>
-        <Navigation />
+        <DynamicNavigation />
         {children}
         <Footer />
       </LocaleProviders>

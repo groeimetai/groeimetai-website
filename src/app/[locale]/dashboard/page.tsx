@@ -7,17 +7,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import NotificationCenter from '@/components/NotificationCenter';
 import AssessmentViewer from '@/components/dashboard/AssessmentViewer';
 import { useTranslations } from 'next-intl';
 import { 
-  BarChart3, Activity, FileText, Settings, User,
-  TrendingUp, Clock, CheckCircle, AlertTriangle,
-  Pause, Play, Filter, Download, Eye, Calendar, Database,
-  Brain, Monitor, RefreshCw, Target, ArrowRight
+  BarChart3, Activity, FileText, User,
+  TrendingUp, Clock, CheckCircle,
+  Download, Database,
+  Brain, Target, ArrowRight
 } from 'lucide-react';
 
 function DashboardPageContent() {
@@ -128,9 +126,6 @@ function DashboardPageContent() {
     }
   }, [user]);
 
-  const handleSettings = () => {
-    window.location.href = '/settings';
-  };
 
   if (loading) {
     return (
@@ -142,56 +137,6 @@ function DashboardPageContent() {
 
   return (
     <div className="min-h-screen bg-black">
-      {/* Header Navigation */}
-      <header className="bg-white/5 border-b border-white/10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-8">
-              <div className="flex items-center space-x-4">
-                <Image
-                  src="/groeimet-ai-logo.svg"
-                  alt="GroeimetAI"
-                  width={120}
-                  height={32}
-                  className="h-8 w-auto"
-                />
-                <span className="text-xl font-bold text-white">{t('title')}</span>
-              </div>
-              
-              {/* Quick Actions Bar */}
-              <nav className="hidden lg:flex space-x-6">
-                <Link href="/agent-readiness" className="text-white/70 hover:text-white transition-colors text-sm">
-                  {t('navigation.newAssessment')}
-                </Link>
-                <Link href="/pilot-intake" className="text-white/70 hover:text-white transition-colors text-sm">
-                  {t('navigation.requestPilot')}
-                </Link>
-                <Link href="/implementation-proposal" className="text-white/70 hover:text-white transition-colors text-sm">
-                  {t('navigation.addSystem')}
-                </Link>
-                <Link href="/contact" className="text-white/70 hover:text-white transition-colors text-sm">
-                  {t('navigation.getHelp')}
-                </Link>
-              </nav>
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <NotificationCenter />
-              <div className="flex items-center space-x-2 text-white">
-                <User className="w-5 h-5" />
-                <span>{userProfile.name}</span>
-              </div>
-              <button 
-                onClick={handleSettings}
-                className="p-2 text-white/70 hover:text-white transition-colors"
-              >
-                <Settings className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
       <div className="container mx-auto px-4 py-24">
         {/* Breadcrumb */}
         <div className="mb-6">

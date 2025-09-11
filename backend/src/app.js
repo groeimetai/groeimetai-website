@@ -14,6 +14,7 @@ import { logger } from './utils/logger.js';
 
 // Import routes
 import userRoutes from './routes/user.routes.js';
+import settingsRoutes from './routes/settings.routes.js';
 // import authRoutes from './routes/auth.routes.js';
 // import consultationRoutes from './routes/consultation.routes.js';
 // import quoteRoutes from './routes/quote.routes.js';
@@ -148,6 +149,7 @@ app.use(API_PREFIX, apiRateLimiter);
  * Mount routes
  */
 app.use(`${API_PREFIX}/users`, userRoutes);
+app.use(`${API_PREFIX}/settings`, settingsRoutes);
 // app.use(`${API_PREFIX}/auth`, authRoutes);
 // app.use(`${API_PREFIX}/consultations`, consultationRoutes);
 // app.use(`${API_PREFIX}/quotes`, quoteRoutes);
@@ -176,6 +178,20 @@ app.get(`${API_PREFIX}/docs`, (req, res) => {
         getUser: 'GET /api/v1/users/:userId',
         updateUser: 'PUT /api/v1/users/:userId',
         deleteUser: 'DELETE /api/v1/users/:userId',
+      },
+      settings: {
+        getProfile: 'GET /api/v1/settings/profile',
+        updateProfile: 'PUT /api/v1/settings/profile',
+        getPreferences: 'GET /api/v1/settings/preferences',
+        updatePreferences: 'PUT /api/v1/settings/preferences',
+        getNotifications: 'GET /api/v1/settings/notifications',
+        updateNotifications: 'PUT /api/v1/settings/notifications',
+        getSecurity: 'GET /api/v1/settings/security',
+        updateSecurity: 'PUT /api/v1/settings/security',
+        getPrivacy: 'GET /api/v1/settings/privacy',
+        updatePrivacy: 'PUT /api/v1/settings/privacy',
+        getAllSettings: 'GET /api/v1/settings/all',
+        batchUpdate: 'PUT /api/v1/settings/batch',
       },
       consultations: {
         create: 'POST /api/v1/consultations',

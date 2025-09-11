@@ -6,11 +6,12 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Link } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import NotificationCenter from '@/components/NotificationCenter';
 import {
   Home, Users, Mail, Calendar, Settings, FileText, 
   DollarSign, BarChart3, MessageSquare, Phone, Clock,
   User, LogOut, Menu, X, ChevronDown, ExternalLink,
-  Target, Rocket, Brain, Database, Shield
+  Target, Rocket, Brain, Database, Shield, Bell
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -27,7 +28,7 @@ interface NavigationItem {
 
 export default function DynamicNavigation() {
   const pathname = usePathname();
-  const { user, isAdmin, loading } = useAuth();
+  const { user, isAdmin, loading, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -74,6 +75,16 @@ export default function DynamicNavigation() {
     }
 
     return baseItems;
+  };
+
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setIsOpen(false);
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   // Get current page context
@@ -197,6 +208,9 @@ export default function DynamicNavigation() {
           <div className="flex items-center gap-3">
             {user ? (
               <div className="flex items-center gap-2">
+                {/* Notification Center */}
+                <NotificationCenter />
+                
                 <div className="hidden sm:flex items-center gap-2">
                   <div className="w-8 h-8 bg-orange/20 rounded-full flex items-center justify-center">
                     <User className="h-4 w-4 text-orange" />
@@ -208,12 +222,24 @@ export default function DynamicNavigation() {
                     </p>
                   </div>
                 </div>
+
+                {/* Settings Button */}
+                <Link href="/settings">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-white/80 hover:text-white"
+                  >
+                    <Settings className="h-4 w-4" />
+                  </Button>
+                </Link>
                 
+                {/* Logout Button */}
                 <Button
                   variant="ghost"
                   size="sm"
                   className="text-white/80 hover:text-white"
-                  onClick={() => {/* Add logout logic */}}
+                  onClick={handleLogout}
                 >
                   <LogOut className="h-4 w-4" />
                 </Button>
@@ -288,7 +314,39 @@ export default function DynamicNavigation() {
                 })}
                 
                 {/* Mobile User Actions */}
-                {!user && (
+                {user ? (
+                  <div className="pt-4 border-t border-white/10 space-y-2">
+                    <div className="px-4 mb-3">
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
+                        <div className="flex items-center">
+                          <Bell className="w-5 h-5 mr-2 text-white/60" />
+                          <span className="text-white/80 text-sm">Notifications</span>
+                        </div>
+                        <NotificationCenter />
+                      </div>
+                    </div>
+                    <Link href="/settings" onClick={() => setIsOpen(false)}>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-white hover:bg-white/5 py-3"
+                      >
+                        <Settings className="w-5 h-5 mr-3" />
+                        Settings
+                      </Button>
+                    </Link>
+                    <Button
+                      onClick={() => {
+                        handleLogout();
+                        setIsOpen(false);
+                      }}
+                      variant="ghost"
+                      className="w-full justify-start text-white hover:bg-white/5 py-3"
+                    >
+                      <LogOut className="w-5 h-5 mr-3" />
+                      Logout
+                    </Button>
+                  </div>
+                ) : (
                   <div className="pt-4 border-t border-white/10 space-y-2">
                     <Link href="/login">
                       <Button variant="outline" className="w-full border-white/20 text-white">

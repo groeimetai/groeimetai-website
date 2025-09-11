@@ -7,13 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import Image from 'next/image';
 import { 
-  Home, BarChart3, Users, FileText, Settings, Bell, LogOut,
-  TrendingUp, TrendingDown, Clock, CheckCircle, AlertCircle,
-  Eye, Calendar, DollarSign, Target, Activity, Shield,
-  Search, Filter, Download, Edit, Send, Play, Pause,
-  ArrowRight, Building, Mail, Phone, ExternalLink
+  BarChart3, FileText,
+  TrendingUp, CheckCircle, AlertCircle,
+  Target, Activity, Shield,
+  Search, ArrowRight
 } from 'lucide-react';
 
 export default function AdminDashboardPage() {
@@ -130,52 +128,6 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="min-h-screen bg-black">
-      {/* Admin Header */}
-      <header className="bg-white/5 border-b border-white/10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Image
-                src="/groeimet-ai-logo.svg"
-                alt="GroeimetAI"
-                width={120}
-                height={32}
-                className="h-8 w-auto"
-              />
-              <span className="text-xl font-bold text-white">Admin Portal</span>
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <button className="relative p-2 text-white/70 hover:text-white">
-                <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                  3
-                </span>
-              </button>
-              <div className="flex items-center space-x-2 text-white">
-                <span>{adminProfile.name}</span>
-              </div>
-              <button className="p-2 text-white/70 hover:text-white">
-                <Settings className="w-5 h-5" />
-              </button>
-              <button className="p-2 text-white/70 hover:text-white">
-                <LogOut className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Status Bar */}
-          <div className="mt-4 pt-4 border-t border-white/10">
-            <div className="flex items-center space-x-6 text-sm text-white/70">
-              <span>Status Bar:</span>
-              <span className="text-orange-400">3 pending reports</span>
-              <span className="text-blue-400">2 pilots starting this week</span>
-              <span className="text-green-400">System: All operational</span>
-            </div>
-          </div>
-        </div>
-      </header>
-
       <div className="container mx-auto px-4 py-24">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-6 mb-8">
