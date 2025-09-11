@@ -716,13 +716,57 @@ GroeimetAI - Je AI Implementation Partner`
                       </>
                     )}
                     
-                    {selectedEmailTemplate && (
-                      <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-                        <h4 className="text-white text-sm font-medium mb-2">Email Preview:</h4>
-                        <div className="text-white/70 text-xs space-y-1">
-                          <p><strong>Naar:</strong> {contact.email}</p>
-                          <p><strong>Onderwerp:</strong> {emailForm.subject.replace('{{company}}', contact.company)}</p>
-                          <p><strong>Content:</strong> {emailForm.content.substring(0, 100).replace('{{name}}', contact.name)}...</p>
+                    {(selectedEmailTemplate || !emailForm.useTemplate) && (
+                      <div className="bg-white/5 rounded-lg border border-white/10">
+                        <div className="p-3 border-b border-white/10">
+                          <h4 className="text-white text-sm font-medium flex items-center gap-2">
+                            <Mail className="h-3 w-3" />
+                            Email Preview
+                          </h4>
+                        </div>
+                        <div className="p-3 space-y-3">
+                          <div className="grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                              <p className="text-white/50 mb-1">Naar:</p>
+                              <p className="text-white/80">{contact.email}</p>
+                            </div>
+                            <div>
+                              <p className="text-white/50 mb-1">Van:</p>
+                              <p className="text-white/80">niels@groeimetai.io</p>
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <p className="text-white/50 text-xs mb-1">Onderwerp:</p>
+                            <p className="text-white/80 text-sm font-medium">
+                              {emailForm.subject
+                                .replace('{{company}}', contact.company)
+                                .replace('{{name}}', contact.name)
+                              }
+                            </p>
+                          </div>
+                          
+                          <div>
+                            <p className="text-white/50 text-xs mb-2">Email Content:</p>
+                            <div className="bg-black/30 rounded border border-white/10 p-3 max-h-[300px] overflow-y-auto">
+                              <div className="text-white/70 text-xs leading-relaxed whitespace-pre-wrap">
+                                {emailForm.content
+                                  .replace(/{{name}}/g, contact.name)
+                                  .replace(/{{company}}/g, contact.company)
+                                  .replace(/{{meetingDate}}/g, scheduleForm.date ? new Date(scheduleForm.date).toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' }) : '[MEETING DATUM]')
+                                  .replace(/{{meetingTime}}/g, scheduleForm.time || '[MEETING TIJD]')
+                                  .replace(/{{senderName}}/g, 'Niels van der Werf')
+                                  .replace(/{{actionStep1}}/g, '[Eerste actie - vul aan]')
+                                  .replace(/{{actionStep2}}/g, '[Tweede actie - vul aan]')
+                                  .replace(/{{actionStep3}}/g, '[Derde actie - vul aan]')
+                                  .replace(/{{nextMeetingDate}}/g, '[Volgende meeting datum]')
+                                  .replace(/{{budgetRange}}/g, '[Budget indicatie]')
+                                  .replace(/{{relevantCase}}/g, 'https://groeimetai.io/cases')
+                                  .replace(/{{personalRecommendation}}/g, '[Persoonlijke aanbeveling - vul aan]')
+                                }
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     )}
