@@ -261,7 +261,7 @@ Niels van der Werf`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-white/20 max-w-[95vw] max-h-[95vh] overflow-hidden">
+      <DialogContent className="bg-black border-white/20 max-w-[95vw] max-h-[95vh] overflow-y-auto flex flex-col">
         <DialogHeader className="border-b border-white/10 pb-4">
           <DialogTitle className="text-white flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -274,18 +274,18 @@ Niels van der Werf`;
           </DialogTitle>
         </DialogHeader>
         
-        <div className="flex-1 overflow-y-auto">
-          <div className="grid grid-cols-2 gap-6 p-6 min-h-[600px]">
+        <div className="flex-1 overflow-y-auto min-h-0">
+          <div className="grid grid-cols-2 gap-4 p-4">
           
           {/* Top Left: Contact Context */}
-          <Card className="bg-blue-500/10 border-blue-500/30 shadow-lg">
-            <CardHeader className="pb-3">
+          <Card className="bg-blue-500/10 border-blue-500/30 shadow-lg h-[400px] flex flex-col">
+            <CardHeader className="pb-3 flex-shrink-0">
               <CardTitle className="text-blue-300 text-base flex items-center gap-2 font-semibold">
                 <Users className="h-5 w-5" />
                 Contact Context
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 flex-1 overflow-y-auto">
               <div>
                 <p className="text-blue-300 text-sm font-medium mb-2">Conversation Type</p>
                 <span className={`inline-block px-3 py-1.5 rounded-full text-sm font-medium ${
@@ -343,14 +343,14 @@ Niels van der Werf`;
           </Card>
 
           {/* Top Right: Meeting Details & Agenda */}
-          <Card className="bg-orange-500/10 border-orange-500/30 shadow-lg">
-            <CardHeader className="pb-3">
+          <Card className="bg-orange-500/10 border-orange-500/30 shadow-lg h-[400px] flex flex-col">
+            <CardHeader className="pb-3 flex-shrink-0">
               <CardTitle className="text-orange-300 text-base flex items-center gap-2 font-semibold">
                 <Calendar className="h-5 w-5" />
                 Meeting Details & Agenda
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 flex-1 overflow-y-auto">
               {/* Basic Meeting Info */}
               <div className="grid grid-cols-3 gap-3">
                 <div>
@@ -507,14 +507,14 @@ Niels van der Werf`;
           </Card>
 
           {/* Bottom Left: Email Composer */}
-          <Card className="bg-green-500/10 border-green-500/30 shadow-lg">
-            <CardHeader className="pb-3">
+          <Card className="bg-green-500/10 border-green-500/30 shadow-lg h-[400px] flex flex-col">
+            <CardHeader className="pb-3 flex-shrink-0">
               <CardTitle className="text-green-300 text-base flex items-center gap-2 font-semibold">
                 <Mail className="h-5 w-5" />
                 Email Composer
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 flex-1 overflow-y-auto">
               <div>
                 <Label className="text-white/80 text-sm">Email Onderwerp</Label>
                 <Input
@@ -524,29 +524,28 @@ Niels van der Werf`;
                 />
               </div>
               
-              <div>
-                <Label className="text-white/80 text-sm">Email Content (met agenda)</Label>
+              <div className="flex-1 flex flex-col">
+                <Label className="text-white/80 text-sm mb-2">Email Content (met agenda)</Label>
                 <Textarea
                   value={emailForm.content}
                   onChange={(e) => setEmailForm({ ...emailForm, content: e.target.value })}
-                  className="bg-white/5 border-white/20 text-white text-sm min-h-[300px] mt-1"
-                  rows={12}
+                  className="bg-white/5 border-white/20 text-white text-sm flex-1 min-h-[250px] resize-none"
                 />
               </div>
             </CardContent>
           </Card>
 
           {/* Bottom Right: Email Preview */}
-          <Card className="bg-purple-500/10 border-purple-500/30 shadow-lg">
-            <CardHeader className="pb-3">
+          <Card className="bg-purple-500/10 border-purple-500/30 shadow-lg h-[400px] flex flex-col">
+            <CardHeader className="pb-3 flex-shrink-0">
               <CardTitle className="text-purple-300 text-base flex items-center gap-2 font-semibold">
                 <Mail className="h-5 w-5" />
                 Live Email Preview
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="bg-white/5 rounded-lg border border-white/10 p-4">
-                <div className="space-y-3">
+            <CardContent className="flex-1 overflow-y-auto">
+              <div className="bg-white/5 rounded-lg border border-white/10 p-4 h-full flex flex-col">
+                <div className="flex flex-col h-full space-y-3">
                   <div className="grid grid-cols-2 gap-4 text-sm border-b border-white/10 pb-3">
                     <div>
                       <p className="text-white/50 mb-1">To:</p>
@@ -563,9 +562,9 @@ Niels van der Werf`;
                     <p className="text-white/90 font-medium">{emailForm.subject}</p>
                   </div>
                   
-                  <div>
+                  <div className="flex-1 flex flex-col">
                     <p className="text-white/50 text-sm mb-2">Content:</p>
-                    <div className="bg-black/30 rounded border border-white/10 p-3 max-h-[280px] overflow-y-auto">
+                    <div className="bg-black/30 rounded border border-white/10 p-3 flex-1 overflow-y-auto">
                       <div className="text-white/70 text-sm leading-relaxed whitespace-pre-wrap">
                         {emailForm.content}
                       </div>
