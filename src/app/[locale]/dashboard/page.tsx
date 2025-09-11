@@ -11,6 +11,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import NotificationCenter from '@/components/NotificationCenter';
+import AssessmentViewer from '@/components/dashboard/AssessmentViewer';
 import { useTranslations } from 'next-intl';
 import { 
   BarChart3, Activity, FileText, Settings, User,
@@ -214,52 +215,24 @@ function DashboardPageContent() {
           </p>
         </motion.div>
 
-        {/* Assessment Results or Next Action */}
-        {assessmentData ? (
-          <Card className="bg-gradient-to-r from-green-500/10 to-green-600/10 border-green-500/30 mb-8">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <CheckCircle className="w-5 h-5 mr-2" style={{ color: '#10B981' }} />
-{t('assessmentResults.title')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-6">
-                <h4 className="text-2xl font-bold text-white mb-3">
-                  {t('assessmentResults.calculating')}
-                </h4>
-                <p className="text-white/80 leading-relaxed mb-4">
-                  {t('assessmentResults.processing')}
-                </p>
-                <div className="bg-white/5 rounded-lg p-4">
-                  <p className="text-white/70 text-sm">
-                    <strong>{t('assessmentResults.assessmentId')}:</strong> {assessmentData.id}<br/>
-                    <strong>{t('assessmentResults.submitted')}:</strong> {new Date().toLocaleString()}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-3">
-                <Link href="/expert-assessment" className="flex-1">
-                  <Button 
-                    className="w-full text-white font-semibold"
-                    style={{ backgroundColor: '#F87315' }}
-                  >
-                    {t('assessmentResults.expertAssessmentInterest')}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </Link>
-                <Button 
-                  onClick={() => setAssessmentData(null)}
-                  variant="outline"
-                  className="border-white/20 text-white hover:bg-white/10"
-                >
-{t('assessmentResults.close')}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ) : (
+        {/* Assessment Viewer or Next Action */}
+        {(() => {
+          const assessmentId = searchParams.get('assessment');
+          const isFirstTime = searchParams.get('first') === 'true';
+          const scoreParam = searchParams.get('score');
+          
+          if (assessmentId) {
+            return (
+              <AssessmentViewer 
+                assessmentId={assessmentId}
+                isFirstTime={isFirstTime}
+                initialScore={scoreParam ? parseInt(scoreParam) : undefined}
+              />
+            );
+          }
+          
+          // Show next action card if no assessment
+          return (
           <Card className="bg-gradient-to-r from-orange-500/10 to-orange-600/10 border-orange-500/30 mb-8">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
@@ -296,7 +269,8 @@ function DashboardPageContent() {
               </div>
             </CardContent>
           </Card>
-        )}
+          );
+        })()}
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-4 mb-8">
