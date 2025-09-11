@@ -9,7 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   MessageSquare, Send, Target, Brain, ArrowRight, 
-  AlertCircle, CheckCircle, Clock, Star, ExternalLink
+  AlertTriangle, CheckCircle, Clock, Star, ExternalLink
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';

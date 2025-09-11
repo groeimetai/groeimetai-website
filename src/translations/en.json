@@ -2252,6 +2252,10 @@
       "upgradeExpert": "Upgrade to Expert Assessment (€2,500)",
       "noAssessments": "No Assessments",
       "startFirst": "Start with your first Agent Readiness Assessment",
+      "readyToStart": "Ready to start your AI transformation?",
+      "startWithAssessment": "Start with Assessment",
+      "bookConsult": "Book Consultation",
+      "noActiveProjects": "No Active Projects",
       "startAssessment": "Start Assessment"
     },
     "reports": {
