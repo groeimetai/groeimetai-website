@@ -278,7 +278,7 @@ Niels van der Werf`;
           <div className="grid grid-cols-2 gap-4 p-4">
           
           {/* Top Left: Contact Context */}
-          <Card className="bg-blue-500/10 border-blue-500/30 shadow-lg h-[400px] flex flex-col">
+          <Card className="bg-blue-500/10 border-blue-500/30 shadow-lg h-[500px] flex flex-col">
             <CardHeader className="pb-3 flex-shrink-0">
               <CardTitle className="text-blue-300 text-base flex items-center gap-2 font-semibold">
                 <Users className="h-5 w-5" />
@@ -343,7 +343,7 @@ Niels van der Werf`;
           </Card>
 
           {/* Top Right: Meeting Details & Agenda */}
-          <Card className="bg-orange-500/10 border-orange-500/30 shadow-lg h-[400px] flex flex-col">
+          <Card className="bg-orange-500/10 border-orange-500/30 shadow-lg h-[500px] flex flex-col">
             <CardHeader className="pb-3 flex-shrink-0">
               <CardTitle className="text-orange-300 text-base flex items-center gap-2 font-semibold">
                 <Calendar className="h-5 w-5" />
@@ -465,7 +465,7 @@ Niels van der Werf`;
                     <Plus className="h-3 w-3" />
                   </Button>
                 </div>
-                <div className="space-y-2 max-h-[200px] overflow-y-auto">
+                <div className="space-y-2 max-h-[280px] overflow-y-auto">
                   {agenda.map((item, index) => (
                     <div key={index} className="bg-white/5 rounded p-2 border border-white/10">
                       <div className="flex items-center justify-between mb-1">
@@ -507,7 +507,7 @@ Niels van der Werf`;
           </Card>
 
           {/* Bottom Left: Email Composer */}
-          <Card className="bg-green-500/10 border-green-500/30 shadow-lg h-[400px] flex flex-col">
+          <Card className="bg-green-500/10 border-green-500/30 shadow-lg h-[500px] flex flex-col">
             <CardHeader className="pb-3 flex-shrink-0">
               <CardTitle className="text-green-300 text-base flex items-center gap-2 font-semibold">
                 <Mail className="h-5 w-5" />
@@ -529,14 +529,14 @@ Niels van der Werf`;
                 <Textarea
                   value={emailForm.content}
                   onChange={(e) => setEmailForm({ ...emailForm, content: e.target.value })}
-                  className="bg-white/5 border-white/20 text-white text-sm flex-1 min-h-[250px] resize-none"
+                  className="bg-white/5 border-white/20 text-white text-sm flex-1 min-h-[350px] resize-none"
                 />
               </div>
             </CardContent>
           </Card>
 
           {/* Bottom Right: Email Preview */}
-          <Card className="bg-purple-500/10 border-purple-500/30 shadow-lg h-[400px] flex flex-col">
+          <Card className="bg-purple-500/10 border-purple-500/30 shadow-lg h-[500px] flex flex-col">
             <CardHeader className="pb-3 flex-shrink-0">
               <CardTitle className="text-purple-300 text-base flex items-center gap-2 font-semibold">
                 <Mail className="h-5 w-5" />
