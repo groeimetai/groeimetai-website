@@ -189,7 +189,7 @@ export async function POST(req: NextRequest) {
         <a href="mailto:${email}" style="display: inline-block; background: #F87315; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; margin-right: 10px;">
           ✉️ Beantwoord Direct
         </a>
-        <a href="https://groeimetai.com/dashboard/admin/contacts" style="display: inline-block; background: white; color: #374151; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; border: 1px solid #d1d5db;">
+        <a href="https://groeimetai.io/dashboard/admin/contacts" style="display: inline-block; background: white; color: #374151; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; border: 1px solid #d1d5db;">
           📊 Dashboard
         </a>
       </div>

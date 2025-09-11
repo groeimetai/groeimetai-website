@@ -402,7 +402,7 @@ ${emailContent}
     </div>
     
     <div style="text-align: center; margin-top: 30px;">
-      <a href="https://groeimetai.com" style="display: inline-block; background: #F87315; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">
+      <a href="https://groeimetai.io" style="display: inline-block; background: #F87315; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">
         Bezoek Website
       </a>
     </div>

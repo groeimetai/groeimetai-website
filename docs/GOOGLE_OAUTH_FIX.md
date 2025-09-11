@@ -32,10 +32,10 @@ If you cannot change from Internal to External directly:
    - App name: "Groeimet AI"
    - User support email: Your support email
    - App logo: Upload your logo
-   - Application home page: https://groeimetai.com
-   - Application privacy policy: https://groeimetai.com/privacy
-   - Application terms of service: https://groeimetai.com/terms
-   - Authorized domains: groeimetai.com
+   - Application home page: https://groeimetai.io
+   - Application privacy policy: https://groeimetai.io/privacy
+   - Application terms of service: https://groeimetai.io/terms
+   - Authorized domains: groeimetai.io
    - Developer contact information: Your contact email
 
 ### Step 4: Publishing Status
@@ -49,7 +49,7 @@ If you cannot change from Internal to External directly:
 1. Go to "Credentials" in the left sidebar
 2. Click on your OAuth 2.0 Client ID
 3. Ensure the authorized redirect URIs include:
-   - https://groeimetai.com/api/auth/callback/google
+   - https://groeimetai.io/api/auth/callback/google
    - http://localhost:3000/api/auth/callback/google (for development)
 
 ### Step 6: Verification Requirements

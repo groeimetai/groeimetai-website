@@ -154,7 +154,7 @@ export default function GoogleMapEmbed({ className }: GoogleMapEmbedProps) {
               <p style="margin: 0 0 8px 0; font-size: 14px; color: #374151;">AI Infrastructure Specialists</p>
               <p style="margin: 0 0 12px 0; font-size: 13px; color: #6b7280;">
                 <strong>📍 Locatie:</strong> Apeldoorn, Nederland<br>
-                <strong>📧 Email:</strong> info@groeimetai.com<br>
+                <strong>📧 Email:</strong> info@groeimetai.io<br>
                 <strong>📞 Telefoon:</strong> +31 6 12345678
               </p>
               <a href="https://maps.google.com/?q=GroeimetAI+Apeldoorn" target="_blank" 

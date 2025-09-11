@@ -43,6 +43,11 @@ import {
   GitBranch,
   ChevronLeft,
   Loader2,
+  Mail,
+  Video,
+  Phone,
+  Target,
+  Rocket,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -83,6 +88,20 @@ interface RecentActivity {
   description: string;
   timestamp: Date;
   status?: string;
+}
+
+interface ContactSubmission {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  conversationType: string;
+  status: 'new' | 'contacted' | 'scheduled' | 'completed' | 'archived';
+  submittedAt: any;
+  message?: string;
+  preferredDate?: string;
+  preferredTime?: string;
 }
 
 interface Quote {
@@ -143,6 +162,10 @@ export default function AdminDashboard() {
   const [pendingQuotes, setPendingQuotes] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
 
+  // Contact submissions and modern features
+  const [contactSubmissions, setContactSubmissions] = useState<ContactSubmission[]>([]);
+  const [todaysMeetings, setTodaysMeetings] = useState<any[]>([]);
+  
   // Legacy states for quote management
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [meetings, setMeetings] = useState<Meeting[]>([]);
@@ -204,6 +227,19 @@ export default function AdminDashboard() {
           orderBy('createdAt', 'desc')
         );
         const approvedQuotesSnapshot = await getDocs(approvedQuotesQuery);
+
+        // Fetch contact submissions
+        const contactsQuery = query(
+          collection(db, 'contact_submissions'),
+          orderBy('submittedAt', 'desc'),
+          limit(50)
+        );
+        const contactsSnapshot = await getDocs(contactsQuery);
+        const contacts = contactsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        } as ContactSubmission));
+        setContactSubmissions(contacts);
         
         // Combine both data sources
         const projectsData: any[] = [];

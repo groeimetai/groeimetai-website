@@ -15,8 +15,8 @@ const io = new SocketIOServer(server, {
       const allowedOrigins = [
         'http://localhost:3000',
         'http://localhost:3001',
-        'https://groeimetai.com',
-        'https://www.groeimetai.com',
+        'https://groeimetai.io',
+        'https://www.groeimetai.io',
       ];
 
       if (!origin) return callback(null, true);

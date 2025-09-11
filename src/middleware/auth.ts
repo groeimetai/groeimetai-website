@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid';
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || 'your-secret-key-change-in-production'
 );
-const JWT_ISSUER = 'groeimetai.com';
+const JWT_ISSUER = 'groeimetai.io';
 const JWT_AUDIENCE = 'groeimetai-app';
 const ACCESS_TOKEN_EXPIRY = '15m';
 const REFRESH_TOKEN_EXPIRY = '7d';

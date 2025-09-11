@@ -58,7 +58,7 @@ Extension parameters:
 ```env
 SMTP_CONNECTION_URI=smtps://username:password@smtp.gmail.com:465
 SMTP_PASSWORD=your-app-password
-DEFAULT_FROM=noreply@groeimetai.com
+DEFAULT_FROM=noreply@groeimetai.io
 DEFAULT_REPLY_TO=info@groeimetai.io
 ```
 

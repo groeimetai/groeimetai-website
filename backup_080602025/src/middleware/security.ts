@@ -13,8 +13,8 @@ export function securityMiddleware(request: NextRequest) {
 
   // Define allowed origins
   const allowedOrigins = [
-    'https://groeimetai.com',
-    'https://www.groeimetai.com',
+    'https://groeimetai.io',
+    'https://www.groeimetai.io',
     'https://groeimetai-app.run.app',
     'https://groeimetai-app-staging.run.app',
   ];

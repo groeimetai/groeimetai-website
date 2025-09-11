@@ -60,8 +60,8 @@ const corsOptions = {
     const allowedOrigins = [
       'http://localhost:3000',
       'http://localhost:3001',
-      'https://groeimetai.com',
-      'https://www.groeimetai.com',
+      'https://groeimetai.io',
+      'https://www.groeimetai.io',
     ];
 
     // Allow requests with no origin (like mobile apps or Postman)
