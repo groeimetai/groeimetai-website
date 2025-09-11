@@ -12,8 +12,6 @@ import {
   User, Building, Mail, Phone, Bell, Shield, 
   ArrowLeft, Save, Eye, EyeOff
 } from 'lucide-react';
-import Link from 'next/link';
-import Image from 'next/image';
 
 export default function SettingsPage() {
   const { user, updateProfile } = useAuth();
@@ -62,16 +60,7 @@ export default function SettingsPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
-              <Link href="/dashboard" className="flex items-center space-x-4 hover:opacity-80 transition-opacity">
-                <Image
-                  src="/groeimet-ai-logo.svg"
-                  alt="GroeimetAI"
-                  width={120}
-                  height={32}
-                  className="h-8 w-auto"
-                />
-                <span className="text-xl font-bold text-white">Settings</span>
-              </Link>
+              <h1 className="text-2xl font-bold text-white">Settings</h1>
             </div>
             <Button
               onClick={handleSaveProfile}
