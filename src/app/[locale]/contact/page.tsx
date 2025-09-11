@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+// Navigation is handled by main layout, no wrapper needed
 
 // Dynamic import for production-safe Google Maps
 const GoogleMapEmbed = dynamic(() => import('@/components/contact/GoogleMapEmbed'), {
@@ -155,7 +156,8 @@ export default function SafeContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <>
+      <div className="min-h-screen bg-black">
       {/* Hero Section */}
       <div className="relative" style={{ backgroundColor: '#080D14' }}>
         <div className="relative container mx-auto px-4 py-32">
@@ -495,5 +497,6 @@ export default function SafeContactPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

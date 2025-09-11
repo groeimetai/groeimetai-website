@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { collection, query, orderBy, onSnapshot, doc, updateDoc, addDoc, Timestamp, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
+import NavigationLayout from '@/components/layout/NavigationLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -486,41 +487,8 @@ ${emailContent}
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Navigation */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2 text-sm text-white/60">
-            <Link href="/dashboard" className="hover:text-white transition-colors flex items-center gap-1">
-              <Home className="h-4 w-4" />
-              Dashboard
-            </Link>
-            <ChevronRight className="h-4 w-4" />
-            <Link href="/dashboard/admin" className="hover:text-white transition-colors flex items-center gap-1">
-              <Settings className="h-4 w-4" />
-              Admin
-            </Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-orange font-medium">Contact Aanvragen</span>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <Link href="/dashboard/admin">
-              <Button variant="outline" size="sm" className="border-white/20 text-white hover:bg-white/10">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Terug naar Admin
-              </Button>
-            </Link>
-            <Link href="/dashboard/admin/calendar">
-              <Button variant="outline" size="sm" className="border-white/20 text-white hover:bg-white/10">
-                <Calendar className="h-4 w-4 mr-2" />
-                Calendar
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-
+    <NavigationLayout>
+      <div className="container mx-auto px-4 py-8">
       {/* Page Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -792,6 +760,7 @@ ${emailContent}
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </NavigationLayout>
   );
 }

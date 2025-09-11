@@ -17,6 +17,12 @@ import {
   Menu,
   Bell,
   User,
+  Mail,
+  Users,
+  DollarSign,
+  Shield,
+  BarChart3,
+  Database,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -29,13 +35,32 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-const sidebarItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
-  { icon: MessageSquare, label: 'Messages', href: '/dashboard/messages' },
-  { icon: FileText, label: 'Projects', href: '/dashboard/projects' },
-  { icon: Calendar, label: 'Consultations', href: '/dashboard/consultations' },
-  { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
-];
+// Dynamic sidebar items based on user role
+const getSidebarItems = (isAdmin: boolean) => {
+  const baseItems = [
+    { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
+    { icon: MessageSquare, label: 'Messages', href: '/dashboard/messages' },
+    { icon: FileText, label: 'Projects', href: '/dashboard/projects' },
+    { icon: Calendar, label: 'Consultations', href: '/dashboard/consultations' },
+  ];
+
+  // Add admin-specific items
+  if (isAdmin) {
+    baseItems.push(
+      { icon: Shield, label: 'Admin Panel', href: '/dashboard/admin', separator: true },
+      { icon: Mail, label: 'Contact Aanvragen', href: '/dashboard/admin/contacts' },
+      { icon: Calendar, label: 'Calendar', href: '/dashboard/admin/calendar' },
+      { icon: Users, label: 'User Management', href: '/dashboard/admin/users' },
+      { icon: DollarSign, label: 'Quotes & Invoices', href: '/dashboard/admin/quotes' },
+      { icon: BarChart3, label: 'Analytics', href: '/dashboard/admin/analytics' },
+    );
+  }
+
+  // Settings always last
+  baseItems.push({ icon: Settings, label: 'Settings', href: '/dashboard/settings' });
+
+  return baseItems;
+};
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -44,10 +69,13 @@ interface DashboardLayoutProps {
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  // Get dynamic sidebar items
+  const sidebarItems = getSidebarItems(isAdmin || false);
 
   const handleLogout = async () => {
     try {
@@ -120,10 +148,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Navigation */}
           <nav className="flex-1 p-3 sm:p-4 overflow-y-auto">
             <ul className="space-y-1 sm:space-y-2">
-              {sidebarItems.map((item) => {
+              {sidebarItems.map((item, index) => {
                 const isActive = pathname === item.href;
+                const showSeparator = item.separator && index > 0;
+                
                 return (
                   <li key={item.href}>
+                    {showSeparator && (
+                      <div className="my-3 border-t border-border opacity-50"></div>
+                    )}
                     <Link 
                       href={item.href}
                       onClick={() => setIsMobileSidebarOpen(false)}
@@ -133,7 +166,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                         whileTap={{ scale: 0.98 }}
                         className={`flex items-center gap-3 px-3 py-2.5 sm:py-2 rounded-lg transition-colors ${
                           isActive
-                            ? 'bg-primary text-primary-foreground'
+                            ? 'bg-orange text-white'
                             : 'hover:bg-muted text-muted-foreground hover:text-foreground'
                         }`}
                       >

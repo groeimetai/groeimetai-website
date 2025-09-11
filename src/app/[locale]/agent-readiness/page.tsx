@@ -172,7 +172,7 @@ export default function AgentReadinessPage() {
     };
   }, [currentStep, formData]); // Dependencies to ensure fresh state
 
-  const totalSteps = 16; // Assessment questions (1 business + 2 systems + 1 apis + 2 data + 1 processes + 1 automation + 2 ai platform + 1 blocker + 1 adoption + 1 cost + 1 budget + 1 it maturity + 1 contact), final step is contact info
+  const totalSteps = 15; // Assessment questions (1 business + 2 systems + 1 apis + 2 data + 1 processes + 1 automation + 1 ai platform + 1 blocker + 1 adoption + 1 cost + 1 budget + 1 it maturity + 1 contact), final step is contact info
 
   // Skip questions that are already filled from quick check
   const shouldSkipStep = (step: number): boolean => {
@@ -181,8 +181,8 @@ export default function AgentReadinessPage() {
     switch (step) {
       case 4: return !!(quizPreFillData.hasApis && formData.hasApis); // API question
       case 5: return !!(quizPreFillData.dataAccess && formData.dataAccess); // Data access question  
-      case 11: return !!(quizPreFillData.mainBlocker && formData.mainBlocker); // Main blocker question
-      case 14: return !!(quizPreFillData.budgetReality && formData.budgetReality); // Budget reality question
+      case 10: return !!(quizPreFillData.mainBlocker && formData.mainBlocker); // Main blocker question
+      case 13: return !!(quizPreFillData.budgetReality && formData.budgetReality); // Budget reality question
       default: return false;
     }
   };
@@ -194,8 +194,8 @@ export default function AgentReadinessPage() {
     let count = 0;
     if (shouldSkipStep(4)) count++; // Step 4
     if (shouldSkipStep(5)) count++; // Step 5  
-    if (shouldSkipStep(11)) count++; // Step 11
-    if (shouldSkipStep(14)) count++; // Step 14
+    if (shouldSkipStep(10)) count++; // Step 10
+    if (shouldSkipStep(13)) count++; // Step 13
     
     return count;
   };
@@ -932,73 +932,10 @@ export default function AgentReadinessPage() {
                   </motion.div>
                 )}
 
-                {/* Step 10: Agent Platforms - Conditional (OUDE VERSIE - VERWIJDEREN) */}
+                {/* Step 10: Main Blocker */}
                 {currentStep === 10 && (
                   <motion.div
                     key="step10"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    {formData.agentPlatformPreference === 'yes' ? (
-                      <>
-                        <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                          🧠 Welke AI platforms heb je op het oog?
-                        </h2>
-                        <p className="text-white/70 mb-6">Selecteer alle die van toepassing zijn</p>
-                        
-                        <div className="space-y-4">
-                          {agentPlatforms.filter(p => p !== 'Weet nog niet').map((platform) => (
-                            <div key={platform} className="flex items-center space-x-3">
-                              <input
-                                type="checkbox"
-                                id={platform}
-                                checked={formData.agentPlatforms.includes(platform)}
-                                onChange={(e) => handlePlatformToggle(platform, e.target.checked)}
-                                className="w-4 h-4 rounded border-white/20 bg-white/5"
-                                style={{ accentColor: '#F87315' }}
-                              />
-                              <Label htmlFor={platform} className="text-white/80 text-sm cursor-pointer">
-                                {platform}
-                              </Label>
-                            </div>
-                          ))}
-                        </div>
-
-                        {formData.agentPlatforms.includes('Anders') && (
-                          <div className="mt-4">
-                            <Input
-                              placeholder="Welke andere AI platforms heb je op het oog..."
-                              className="bg-white/5 border-white/20 text-white"
-                            />
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                          ✅ Perfect!
-                        </h2>
-                        <div className="bg-white/5 rounded-lg p-6 border border-white/10">
-                          <p className="text-white/80 mb-4">
-                            {formData.agentPlatformPreference === 'no' 
-                              ? 'We gaan je advies geven over de beste AI platforms voor jouw situatie.'
-                              : 'We houden rekening met kosten en compliance eisen bij onze aanbevelingen.'}
-                          </p>
-                          <p className="text-white/60 text-sm">
-                            In je rapport krijg je een vergelijking van platforms die passen bij jouw infrastructure en budget.
-                          </p>
-                        </div>
-                      </>
-                    )}
-                  </motion.div>
-                )}
-
-                {/* Step 11: Main Blocker */}
-                {currentStep === 11 && (
-                  <motion.div
-                    key="step11"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -1038,10 +975,10 @@ export default function AgentReadinessPage() {
                   </motion.div>
                 )}
 
-                {/* Step 12: Adoption Speed */}
-                {currentStep === 12 && (
+                {/* Step 11: Adoption Speed */}
+                {currentStep === 11 && (
                   <motion.div
-                    key="step12"
+                    key="step11"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -1074,10 +1011,10 @@ export default function AgentReadinessPage() {
                   </motion.div>
                 )}
 
-                {/* Step 13: Cost Optimization */}
-                {currentStep === 13 && (
+                {/* Step 12: Cost Optimization */}
+                {currentStep === 12 && (
                   <motion.div
-                    key="step13"
+                    key="step12"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -1101,10 +1038,10 @@ export default function AgentReadinessPage() {
                   </motion.div>
                 )}
 
-                {/* Step 14: Budget Reality */}
-                {currentStep === 14 && (
+                {/* Step 13: Budget Reality */}
+                {currentStep === 13 && (
                   <motion.div
-                    key="step14"
+                    key="step13"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -1150,10 +1087,10 @@ export default function AgentReadinessPage() {
                   </motion.div>
                 )}
 
-                {/* Step 15: IT Maturity */}
-                {currentStep === 15 && (
+                {/* Step 14: IT Maturity */}
+                {currentStep === 14 && (
                   <motion.div
-                    key="step15"
+                    key="step14"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
