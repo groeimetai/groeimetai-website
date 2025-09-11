@@ -112,7 +112,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-            className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-white mb-3 sm:mb-4 md:mb-6 leading-tight"
+            className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight text-white mb-4 sm:mb-5 md:mb-6 leading-tight"
           >
             {t('title')}{' '}
             <span
@@ -131,7 +131,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-2 sm:mb-3 md:mb-4 max-w-4xl mx-auto font-light leading-relaxed px-1 sm:px-2 md:px-0"
+            className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/90 mb-3 sm:mb-4 md:mb-5 max-w-4xl mx-auto font-light leading-relaxed px-1 sm:px-2 md:px-0"
           >
             {t('subtitle')}
           </motion.p>
