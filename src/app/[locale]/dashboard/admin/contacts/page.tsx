@@ -326,13 +326,42 @@ export default function ContactsAdminPage() {
 </html>
       `;
 
-      await addDoc(collection(db, 'mail'), {
-        to: selectedContact.email,
-        message: {
+      // Send via SMTP API instead of Firebase Extension (to avoid SSL errors)
+      const response = await fetch('/api/admin/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to: selectedContact.email,
           subject: `📅 Bevestiging: Ons gesprek op ${format(new Date(scheduleForm.date), 'd MMMM', { locale: nl })}`,
-          html: emailHtml
-        }
+          content: `Beste ${selectedContact.name},
+
+Ons gesprek is bevestigd voor ${format(new Date(scheduleForm.date), 'EEEE d MMMM yyyy', { locale: nl })} om ${scheduleForm.time}.
+
+Meeting details:
+• Type: ${selectedContact.conversationType === 'verkennen' ? 'Verkennend gesprek' :
+          selectedContact.conversationType === 'debrief' ? 'Assessment Debrief' :  
+          selectedContact.conversationType === 'kickoff' ? 'Project Kickoff' :
+          'Consultatie'}
+• Locatie: ${scheduleForm.location}
+• Duur: ${scheduleForm.time}
+
+${scheduleForm.notes ? `Agenda notities:
+${scheduleForm.notes}` : ''}
+
+Tot snel!
+
+Niels van der Werf
+GroeimetAI`,
+          contactId: selectedContact.id
+        }),
       });
+
+      const emailData = await response.json();
+      if (!response.ok || !emailData.success) {
+        throw new Error(emailData.error || 'Email API failed');
+      }
 
       toast.success('Meeting ingepland en bevestiging verstuurd!');
       setShowScheduleModal(false);
