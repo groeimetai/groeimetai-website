@@ -27,9 +27,9 @@ function DashboardPageContent() {
   const [lastUpdate, setLastUpdate] = useState('--:--:--');
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [assessmentData, setAssessmentData] = useState(null);
-  const [expertAssessmentData, setExpertAssessmentData] = useState(null);
-  const [agentReadinessAssessments, setAgentReadinessAssessments] = useState([]);
+  const [assessmentData, setAssessmentData] = useState<any>(null);
+  const [expertAssessmentData, setExpertAssessmentData] = useState<any>(null);
+  const [agentReadinessAssessments, setAgentReadinessAssessments] = useState<any[]>([]);
   const searchParams = useSearchParams();
 
   // User profile state
@@ -105,7 +105,7 @@ function DashboardPageContent() {
         score: scoreParam || 'Loading...',
         level: scoreParam ? getQuickLevel(parseInt(scoreParam)) : 'Analyzing...',
         timestamp: new Date().toISOString()
-      });
+      } as any);
     }
   }, [searchParams]);
   
@@ -123,7 +123,7 @@ function DashboardPageContent() {
       setUserProfile({
         name: user.displayName || user.firstName || user.email?.split('@')[0] || 'User',
         company: user.company || 'Your Company',
-        lastLogin: user.lastLoginAt ? new Date(user.lastLoginAt.seconds * 1000).toLocaleDateString() : 'Recent'
+        lastLogin: user.lastLoginAt ? new Date((user.lastLoginAt as any).seconds * 1000).toLocaleDateString() : 'Recent'
       });
     }
   }, [user]);

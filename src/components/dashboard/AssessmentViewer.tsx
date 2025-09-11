@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import Link from 'next/link';
 
 interface AssessmentViewerProps {
   assessmentId: string;

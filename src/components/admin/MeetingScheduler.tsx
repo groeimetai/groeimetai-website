@@ -796,9 +796,6 @@ GroeimetAI - Je AI Implementation Partner`
           </div>
         </div>
 
-          </div>
-        </div>
-
         {/* Fixed Footer */}
         <div className="border-t border-white/10 bg-black/50 p-4">
           <div className="flex items-center justify-between">
