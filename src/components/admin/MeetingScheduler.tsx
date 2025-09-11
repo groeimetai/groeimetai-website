@@ -337,16 +337,16 @@ GroeimetAI - Je AI Implementation Partner`
         </DialogHeader>
         
         <div className="flex-1 overflow-y-auto">
-          <div className="grid xl:grid-cols-3 gap-6 p-6">
-          {/* Left: Contact Context */}
-          <div className="space-y-4">
-            <Card className="bg-blue-500/10 border-blue-500/30 shadow-lg">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-blue-300 text-base flex items-center gap-2 font-semibold">
-                  <Users className="h-5 w-5" />
-                  Contact Context
-                </CardTitle>
-              </CardHeader>
+          <div className="grid grid-cols-2 gap-6 p-6">
+          
+          {/* Top Left: Contact Context */}
+          <Card className="bg-blue-500/10 border-blue-500/30 shadow-lg">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-blue-300 text-base flex items-center gap-2 font-semibold">
+                <Users className="h-5 w-5" />
+                Contact Context
+              </CardTitle>
+            </CardHeader>
               <CardContent className="space-y-3">
                 <div>
                   <p className="text-blue-300 text-xs font-medium mb-1">Conversation Type</p>
@@ -396,11 +396,9 @@ GroeimetAI - Je AI Implementation Partner`
                   </div>
                 </div>
               </CardContent>
-            </Card>
-          </div>
+          </Card>
 
-          {/* Middle: Meeting Details */}
-          <div className="space-y-4">
+          {/* Top Right: Meeting Details */}
             <Card className="bg-white/5 border-white/10 shadow-lg">
               <CardHeader className="pb-3">
                 <CardTitle className="text-white text-base flex items-center gap-2 font-semibold">

@@ -19,7 +19,7 @@ import {
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { nl } from 'date-fns/locale';
-import MeetingScheduler from '@/components/admin/MeetingScheduler';
+import MeetingScheduler2x2 from '@/components/admin/MeetingScheduler2x2';
 
 interface ContactSubmission {
   id: string;
@@ -644,9 +644,9 @@ ${emailContent}
         )}
       </div>
 
-      {/* Enhanced Meeting Scheduler */}
+      {/* Enhanced 2x2 Meeting Scheduler */}
       {selectedContact && (
-        <MeetingScheduler
+        <MeetingScheduler2x2
           contact={selectedContact}
           isOpen={showScheduleModal}
           onClose={() => {
