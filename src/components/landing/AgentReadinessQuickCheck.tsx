@@ -313,24 +313,24 @@ export function AgentReadinessQuickCheck() {
                 <RadioGroup value={formData.budgetReality} onValueChange={(value) => setFormData(prev => ({ ...prev, budgetReality: value }))}>
                   <div className="space-y-2 sm:space-y-3">
                     <div className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors">
-                      <RadioGroupItem value="EUR100k+ - Enterprise rollout" id="eur100k" className="mt-0.5" />
-                      <Label htmlFor="eur100k" className="text-sm sm:text-base text-white/80 leading-relaxed cursor-pointer flex-1 text-left">{t('questions.budgetReality.options.eur100k')}</Label>
+                      <RadioGroupItem value="EUR100k+ - Enterprise rollout" id="enterprise" className="mt-0.5" />
+                      <Label htmlFor="enterprise" className="text-sm sm:text-base text-white/80 leading-relaxed cursor-pointer flex-1 text-left">{t('questions.budgetReality.options.enterprise')}</Label>
                     </div>
                     <div className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors">
-                      <RadioGroupItem value="EUR25-100k - Meerdere systemen" id="eur25-100k" className="mt-0.5" />
-                      <Label htmlFor="eur25-100k" className="text-sm sm:text-base text-white/80 leading-relaxed cursor-pointer flex-1 text-left">{t('questions.budgetReality.options.eur25100k')}</Label>
+                      <RadioGroupItem value="EUR25-100k - Meerdere systemen" id="multiple" className="mt-0.5" />
+                      <Label htmlFor="multiple" className="text-sm sm:text-base text-white/80 leading-relaxed cursor-pointer flex-1 text-left">{t('questions.budgetReality.options.multiple')}</Label>
                     </div>
                     <div className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors">
-                      <RadioGroupItem value="EUR10-25k - Één systeem serieus" id="eur10-25k" className="mt-0.5" />
-                      <Label htmlFor="eur10-25k" className="text-sm sm:text-base text-white/80 leading-relaxed cursor-pointer flex-1 text-left">{t('questions.budgetReality.options.eur1025k')}</Label>
+                      <RadioGroupItem value="EUR10-25k - Één systeem serieus" id="single" className="mt-0.5" />
+                      <Label htmlFor="single" className="text-sm sm:text-base text-white/80 leading-relaxed cursor-pointer flex-1 text-left">{t('questions.budgetReality.options.single')}</Label>
                     </div>
                     <div className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors">
-                      <RadioGroupItem value="< EUR10k - Pilot/experiment" id="eur10k" className="mt-0.5" />
-                      <Label htmlFor="eur10k" className="text-sm sm:text-base text-white/80 leading-relaxed cursor-pointer flex-1 text-left">{t('questions.budgetReality.options.eur10k')}</Label>
+                      <RadioGroupItem value="< EUR10k - Pilot/experiment" id="pilot" className="mt-0.5" />
+                      <Label htmlFor="pilot" className="text-sm sm:text-base text-white/80 leading-relaxed cursor-pointer flex-1 text-left">{t('questions.budgetReality.options.pilot')}</Label>
                     </div>
                     <div className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors">
-                      <RadioGroupItem value="Eerst business case nodig" id="businesscase" className="mt-0.5" />
-                      <Label htmlFor="businesscase" className="text-sm sm:text-base text-white/80 leading-relaxed cursor-pointer flex-1 text-left">{t('questions.budgetReality.options.businesscase')}</Label>
+                      <RadioGroupItem value="Eerst business case nodig" id="businessCase" className="mt-0.5" />
+                      <Label htmlFor="businessCase" className="text-sm sm:text-base text-white/80 leading-relaxed cursor-pointer flex-1 text-left">{t('questions.budgetReality.options.businessCase')}</Label>
                     </div>
                   </div>
                 </RadioGroup>
