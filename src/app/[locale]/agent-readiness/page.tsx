@@ -179,6 +179,7 @@ export default function AgentReadinessPage() {
     if (!quizPreFillData) return false;
     
     switch (step) {
+      case 3: return !!(quizPreFillData.highestImpact && formData.highestImpactSystem); // Highest impact system question
       case 4: return !!(quizPreFillData.hasApis && formData.hasApis); // API question
       case 5: return !!(quizPreFillData.dataAccess && formData.dataAccess); // Data access question  
       case 10: return !!(quizPreFillData.mainBlocker && formData.mainBlocker); // Main blocker question
@@ -192,10 +193,11 @@ export default function AgentReadinessPage() {
     if (!quizPreFillData) return 0;
     
     let count = 0;
-    if (shouldSkipStep(4)) count++; // Step 4
-    if (shouldSkipStep(5)) count++; // Step 5  
-    if (shouldSkipStep(10)) count++; // Step 10
-    if (shouldSkipStep(13)) count++; // Step 13
+    if (shouldSkipStep(3)) count++; // Step 3 - Highest impact system
+    if (shouldSkipStep(4)) count++; // Step 4 - APIs
+    if (shouldSkipStep(5)) count++; // Step 5 - Data access
+    if (shouldSkipStep(10)) count++; // Step 10 - Main blocker
+    if (shouldSkipStep(13)) count++; // Step 13 - Budget reality
     
     return count;
   };
