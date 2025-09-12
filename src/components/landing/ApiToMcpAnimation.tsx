@@ -34,9 +34,9 @@ function useElementSize<T extends HTMLElement>() {
 // Bereken posities - mobile simplified, desktop circular
 function radialPositions(count: number, radiusPct = 40, startDeg = -90, isMobile = false) {
   if (isMobile) {
-    // Mobile: simplified to single API for clean demonstration
+    // Mobile: simplified to single API positioned at top
     return [
-      { top: 20, left: 50 }   // Single API - top center for clean flow
+      { top: 15, left: 50 }   // Single API - top of container
     ];
   } else {
     // Desktop: keep original circular layout with all APIs
@@ -54,8 +54,8 @@ function radialPositions(count: number, radiusPct = 40, startDeg = -90, isMobile
 // Bereken MCP posities - mobile edge-aware, desktop original
 function betweenCenter(pos: { top: number; left: number }, f = 0.6, isMobile = false) {
   if (isMobile) {
-    // Mobile: single MCP positioned between API and AI for clean flow
-    return { top: 35, left: 50 }; // Fixed position between API (20%) and AI (50%)
+    // Mobile: single MCP positioned in middle for clean vertical flow
+    return { top: 40, left: 50 }; // Fixed position between API (15%) and AI (65%)
   } else {
     // Desktop: keep original calculation for all MCPs
     const cx = 50;
@@ -379,7 +379,7 @@ export default function ApiToMcpAnimation() {
                     };
                     const m = getBoxCenter(mcpConnectionPos, stageSize); // MCP connection point
                     // Agent box center
-                    const c = getBoxCenter({ top: isMobile ? 50 : 55, left: 50 }, stageSize); // Agent connection point (mobile centered, desktop original)
+                    const c = getBoxCenter({ top: isMobile ? 65 : 55, left: 50 }, stageSize); // Agent connection point (mobile lower, desktop original)
                     return (
                       <motion.line
                         key={`m-c-${i}`}
@@ -408,10 +408,10 @@ export default function ApiToMcpAnimation() {
                   })}
               </svg>
 
-              {/* Agent (center - mobile centered, desktop original) */}
+              {/* Agent (center - mobile vertical flow, desktop original) */}
               <div
                 className="absolute -translate-x-1/2 -translate-y-1/2"
-                style={{ top: isMobile ? '50%' : '55%', left: '50%', zIndex: 35 }}
+                style={{ top: isMobile ? '65%' : '55%', left: '50%', zIndex: 35 }}
               >
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
