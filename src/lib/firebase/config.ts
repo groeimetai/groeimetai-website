@@ -66,6 +66,21 @@ if (typeof window !== 'undefined') {
 // Offline persistence is now enabled by default in newer Firebase versions
 // The deprecated enableIndexedDbPersistence method is no longer needed
 
+// Collection names for consistency
+export const collections = {
+  users: 'users',
+  quotes: 'quotes',
+  projects: 'projects',
+  messages: 'messages',
+  notifications: 'notifications',
+  consultations: 'consultations',
+  documents: 'documents',
+  activityLogs: 'activityLogs',
+  activities: 'activities',
+  invoices: 'invoices',
+  payments: 'payments',
+};
+
 export { app, auth, db, storage, analytics, performance };
 
 // Auth helper functions

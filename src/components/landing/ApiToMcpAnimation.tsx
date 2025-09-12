@@ -31,29 +31,31 @@ function useElementSize<T extends HTMLElement>() {
   return { ref, size };
 }
 
-// Bereken n posities op een cirkel, mooi verdeeld (in %) - responsive center
+// Bereken n posities op een cirkel, mooi verdeeld (in %) - consistent centering
 function radialPositions(count: number, radiusPct = 40, startDeg = -90, isMobile = false) {
   return Array.from({ length: count }, (_, i) => {
     const angle = ((360 / count) * i + startDeg) * (Math.PI / 180);
-    // Mobile: perfect center (50%), Desktop: slight left shift (45%) for better layout
-    const cx = isMobile ? 50 : 45;
+    // Always use perfect center for consistency
+    const cx = 50;
     const cy = 50;
-    // Mobile: smaller radius for better fit
-    const radius = isMobile ? Math.min(radiusPct, 35) : radiusPct;
+    // Adjust radius for mobile to ensure good fit
+    const radius = isMobile ? 32 : 38;
     const left = cx + radius * Math.cos(angle);
     const top = cy + radius * Math.sin(angle);
     return { top, left };
   });
 }
 
-// Lerp tussen center en een target positie (in %), fractie f [0..1] - responsive
+// Lerp tussen center en een target positie (in %), fractie f [0..1] - consistent
 function betweenCenter(pos: { top: number; left: number }, f = 0.6, isMobile = false) {
-  // Mobile: perfect center (50%), Desktop: slight left shift for AI agent positioning
-  const cx = isMobile ? 50 : 50; // Keep agent centered on both mobile and desktop
+  // Always use consistent center for proper positioning
+  const cx = 50;
   const cy = 50;
+  // Adjust factor for mobile to bring MCP elements closer to center
+  const factor = isMobile ? 0.5 : 0.6;
   return {
-    top: cy + (pos.top - cy) * f,
-    left: cx + (pos.left - cx) * f,
+    top: cy + (pos.top - cy) * factor,
+    left: cx + (pos.left - cx) * factor,
   };
 }
 
@@ -76,9 +78,7 @@ function getBoxCenter(pct: { top: number; left: number }, size: { width: number;
   const centerX = (pct.left / 100) * size.width;
   const centerY = (pct.top / 100) * size.height;
 
-  console.log(
-    `Position ${pct.top}%/${pct.left}% → Pixel ${centerX},${centerY} (Container: ${size.width}×${size.height})`
-  );
+  // Debug output removed for production
 
   return { x: centerX, y: centerY };
 }
@@ -146,17 +146,17 @@ export default function ApiToMcpAnimation() {
     []
   );
 
-  // Posities in % (responsive based on screen size)
-  const apiPositions = useMemo(() => radialPositions(apis.length, isMobile ? 32 : 38, -90, isMobile), [apis.length, isMobile]);
-  const mcpPositions = useMemo(() => {
-    // MCP positions based on center with responsive positioning
-    const centerX = isMobile ? 50 : 50; // Both mobile and desktop centered for MCP
-    const centerPositions = radialPositions(apis.length, isMobile ? 32 : 38, -90, isMobile).map((p) => ({
-      top: centerX + (p.top - centerX) * (isMobile ? 0.55 : 0.62), // Tighter on mobile
-      left: centerX + (p.left - centerX) * (isMobile ? 0.55 : 0.62),
-    }));
-    return centerPositions;
+  // Posities in % (consistent positioning)
+  const apiPositions = useMemo(() => {
+    return radialPositions(apis.length, 40, -90, isMobile);
   }, [apis.length, isMobile]);
+  
+  const mcpPositions = useMemo(() => {
+    // MCP positions between center and API positions - consistent calculation
+    return apiPositions.map((apiPos) => 
+      betweenCenter(apiPos, 0.6, isMobile)
+    );
+  }, [apiPositions, isMobile]);
 
   // Grootte van het animatievlak t.b.v. SVG-lijnen
   const { ref: stageRef, size: stageSize } = useElementSize<HTMLDivElement>();
@@ -311,7 +311,7 @@ export default function ApiToMcpAnimation() {
             {/* Animation Stage */}
             <div
               ref={stageRef}
-              className="relative h-80 sm:h-96 lg:h-[520px] mb-8 overflow-hidden rounded-xl border border-white/10"
+              className="relative h-96 lg:h-[520px] mb-8 overflow-hidden rounded-xl border border-white/10"
               style={{
                 background:
                   'radial-gradient(ellipse at center, rgba(255,255,255,0.04), rgba(255,255,255,0.02))',
@@ -371,7 +371,7 @@ export default function ApiToMcpAnimation() {
                     };
                     const m = getBoxCenter(mcpConnectionPos, stageSize); // MCP connection point
                     // Agent box center
-                    const c = getBoxCenter({ top: isMobile ? 50 : 55, left: 50 }, stageSize); // Agent connection point (centered on mobile)
+                    const c = getBoxCenter({ top: 50, left: 50 }, stageSize); // Agent connection point (always centered)
                     return (
                       <motion.line
                         key={`m-c-${i}`}
@@ -400,10 +400,10 @@ export default function ApiToMcpAnimation() {
                   })}
               </svg>
 
-              {/* Agent (center - responsive position) */}
+              {/* Agent (center - consistent position) */}
               <div
                 className="absolute -translate-x-1/2 -translate-y-1/2"
-                style={{ top: isMobile ? '50%' : '60%', left: '50%', zIndex: 35 }}
+                style={{ top: '50%', left: '50%', zIndex: 35 }}
               >
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
