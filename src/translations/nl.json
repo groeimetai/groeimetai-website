@@ -3501,7 +3501,7 @@
   },
   "agentReadinessAssessment": {
     "title": "Agent Readiness Assessment",
-    "subtitle": "14 vragen, 5-8 minuten - kom achter je complete agent readiness score",
+    "subtitle": "15 vragen, 5-8 minuten - kom achter je complete agent readiness score",
     "description": "Puur focus op: kunnen agents met jouw systemen werken?",
     "progress": {
       "question": "Vraag",

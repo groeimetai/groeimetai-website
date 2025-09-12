@@ -99,6 +99,10 @@ Ik geef je praktische adviezen op basis van jouw exacte antwoorden! 🚀`,
         const data = await response.json();
         if (data.success && data.assessment) {
           setAssessment(data.assessment);
+          // Also try to get the full report if available in assessment data
+          if (data.assessment.report) {
+            setFullReport(data.assessment.report);
+          }
           return;
         }
       }

@@ -284,7 +284,7 @@ export default function AgentReadinessPage() {
   const handleSubmit = async () => {
     try {
       // Prepare submission data with authentication
-      const submissionData = {
+      const submissionData: any = {
         ...formData,
         entryPoint: 'comprehensive_assessment',
         timestamp: new Date().toISOString()
@@ -527,7 +527,7 @@ export default function AgentReadinessPage() {
               Assessment
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-white/80 mb-3 sm:mb-4">
-              14 vragen, 5-8 minuten - kom achter je complete agent readiness score
+              15 vragen, 5-8 minuten - kom achter je complete agent readiness score
             </p>
             <p className="text-sm sm:text-base md:text-lg text-white/60 mb-4 sm:mb-6 md:mb-8">
               Puur focus op: kunnen agents met jouw systemen werken?
