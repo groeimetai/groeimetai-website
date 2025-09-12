@@ -204,8 +204,9 @@ export default function AgentReadinessPage() {
   const getAdjustedProgress = (): number => {
     const skippedCount = getSkippedQuestionCount();
     const totalQuestionsToAnswer = 15 - skippedCount;
-    const effectiveStep = currentStep + skippedCount;
-    return Math.round((Math.min(effectiveStep, 15) / totalQuestionsToAnswer) * 100);
+    // Progress should be based on questions actually answered, not currentStep + skipped
+    const questionsAnswered = currentStep - 1; // currentStep is 1-indexed, so -1 for answered count
+    return Math.round((Math.min(questionsAnswered, totalQuestionsToAnswer) / totalQuestionsToAnswer) * 100);
   };
 
   const systemOptions = [
@@ -280,20 +281,56 @@ export default function AgentReadinessPage() {
 
   const handleSubmit = async () => {
     try {
-      // Submit assessment data
+      // Prepare submission data with authentication
+      const submissionData = {
+        ...formData,
+        entryPoint: 'comprehensive_assessment',
+        timestamp: new Date().toISOString()
+      };
+
+      // Add Firebase ID token if user is authenticated
+      if (user) {
+        try {
+          const idToken = await user.getIdToken();
+          submissionData.firebaseIdToken = idToken;
+          submissionData.userId = user.uid;
+          console.log('🔐 Adding authentication to assessment submission:', user.uid);
+        } catch (tokenError) {
+          console.warn('⚠️ Failed to get ID token, submitting without auth:', tokenError);
+        }
+      }
+
+      // Submit assessment data with authentication
+      const headers: Record<string, string> = { 
+        'Content-Type': 'application/json' 
+      };
+      
+      // Add Authorization header if available
+      if (user) {
+        try {
+          const idToken = await user.getIdToken();
+          headers['Authorization'] = `Bearer ${idToken}`;
+        } catch (headerError) {
+          console.warn('⚠️ Failed to add Authorization header:', headerError);
+        }
+      }
+
       const response = await fetch('/api/assessment/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          entryPoint: 'comprehensive_assessment',
-          timestamp: new Date().toISOString()
-        })
+        headers,
+        body: JSON.stringify(submissionData)
       });
 
       const data = await response.json();
       
       if (data.success) {
+        console.log('✅ Assessment submission successful:', {
+          assessmentId: data.assessmentId,
+          previewScore: data.previewScore,
+          userAuthenticated: !!user,
+          message: data.message
+        });
+        
         // If user is already logged in, save to their account automatically
         if (user) {
           try {
@@ -303,20 +340,25 @@ export default function AgentReadinessPage() {
               body: JSON.stringify({
                 userId: user.uid,
                 assessmentId: data.assessmentId,
-                source: 'logged_in_user'
+                userEmail: user.email,
+                source: 'logged_in_user_enhanced'
               })
             });
             
             const linkData = await linkResponse.json();
+            console.log('🔗 Assessment linking result:', linkData);
+            
             if (linkData.offline) {
-              console.log('Assessment will be linked when Firestore is back online');
+              console.log('🔄 Assessment will be linked when Firestore is back online');
+            } else if (linkData.success && linkData.stats?.linkedCount > 0) {
+              console.log(`✅ Successfully linked ${linkData.stats.linkedCount} assessments`);
             }
           } catch (linkError) {
-            console.error('Failed to link assessment, but continuing:', linkError);
+            console.error('❌ Failed to link assessment, but continuing:', linkError);
           }
           
           // Redirect to dashboard with assessment (regardless of link success)
-          window.location.href = `/dashboard?assessment=${data.assessmentId}&first=true&score=${data.previewScore || 'pending'}`;
+          window.location.href = `/dashboard?assessment=${data.assessmentId}&first=true&score=${data.previewScore || 'pending'}&linked=true`;
         } else if (formData.createAccount) {
           // Create account and redirect to dashboard with pre-filled data
           const params = new URLSearchParams({
@@ -492,7 +534,7 @@ export default function AgentReadinessPage() {
             {/* Progress Bar */}
             <div className="max-w-sm sm:max-w-md mx-auto mb-6 sm:mb-8">
               <div className="flex justify-between text-sm text-white/60 mb-2">
-                <span>Vraag {Math.min(currentStep + getSkippedQuestionCount(), 15)} van 15</span>
+                <span>Vraag {currentStep} van {15 - getSkippedQuestionCount()}</span>
                 <span>{getAdjustedProgress()}%</span>
               </div>
               <div className="w-full bg-white/10 rounded-full h-2">
