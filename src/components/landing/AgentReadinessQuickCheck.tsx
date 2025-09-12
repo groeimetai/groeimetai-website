@@ -183,15 +183,31 @@ export function AgentReadinessQuickCheck() {
                 highestImpact: formData.highestImpact,
                 quickCheckScore: score,
                 quickCheckLevel: level,
-                source: 'hero_quiz'
+                source: 'hero_quiz',
+                timestamp: new Date().toISOString()
               };
               
+              // Store in both sessionStorage and localStorage for reliability
               sessionStorage.setItem('quizPreFill', JSON.stringify(preFillData));
+              localStorage.setItem('quizPreFillBackup', JSON.stringify(preFillData));
               
+              // Enhanced URL parameters with better encoding
               const params = new URLSearchParams({
                 prefill: 'true',
                 score: score.toString(),
-                ...preFillData
+                level: encodeURIComponent(level),
+                from: 'quick_check',
+                hasApis: formData.hasApis,
+                dataAccess: formData.dataAccess,
+                budgetReality: encodeURIComponent(formData.budgetReality),
+                mainBlocker: encodeURIComponent(formData.mainBlocker),
+                highestImpact: encodeURIComponent(formData.highestImpact)
+              });
+              
+              console.log('🔄 Quiz-to-Assessment Transfer:', {
+                sessionData: preFillData,
+                urlParams: params.toString(),
+                fieldsTransferred: Object.keys(preFillData).length
               });
               
               window.location.href = `/agent-readiness?${params.toString()}`;

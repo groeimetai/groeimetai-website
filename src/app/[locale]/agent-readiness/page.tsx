@@ -45,6 +45,9 @@ export default function AgentReadinessPage() {
   const t = useTranslations('agentReadinessAssessment');
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [resultsReady, setResultsReady] = useState(false);
+  const [assessmentResults, setAssessmentResults] = useState<any>(null);
+  const [loadingResults, setLoadingResults] = useState(false);
   const { user, firebaseUser } = useAuth();
   const [quizPreFillData, setQuizPreFillData] = useState<any>(null);
   const [formData, setFormData] = useState<AssessmentData>({
@@ -74,64 +77,98 @@ export default function AgentReadinessPage() {
     createAccount: false
   });
 
-  // Load quiz pre-fill data on component mount
+  // Enhanced quiz pre-fill data loading with multiple fallbacks and better error handling
   useEffect(() => {
-    // Try sessionStorage first
+    let loadedData = null;
+    let dataSource = 'none';
+
+    // Try sessionStorage first (primary method)
     const sessionData = sessionStorage.getItem('quizPreFill');
     if (sessionData) {
       try {
-        const parsedData = JSON.parse(sessionData);
-        setQuizPreFillData(parsedData);
-        
-        // Pre-fill overlapping fields
-        setFormData(prev => ({
-          ...prev,
-          hasApis: parsedData.hasApis || '',
-          dataAccess: parsedData.dataAccess || '',
-          budgetReality: parsedData.budgetReality || '',
-          mainBlocker: parsedData.mainBlocker || '',
-          highestImpactSystem: parsedData.highestImpact || ''
-        }));
-
-        console.log('Prefilled form data from session:', {
-          hasApis: parsedData.hasApis,
-          dataAccess: parsedData.dataAccess,
-          budgetReality: parsedData.budgetReality,
-          mainBlocker: parsedData.mainBlocker,
-          highestImpact: parsedData.highestImpact
-        });
-        
-        // Clear session storage to prevent reuse
-        sessionStorage.removeItem('quizPreFill');
+        loadedData = JSON.parse(sessionData);
+        dataSource = 'sessionStorage';
+        console.log('🔄 Loading quiz data from sessionStorage:', loadedData);
       } catch (error) {
-        console.log('Failed to parse quiz pre-fill data:', error);
+        console.error('❌ Failed to parse sessionStorage quiz data:', error);
       }
-    } else {
-      // Try URL params as backup
+    }
+
+    // Try localStorage backup if sessionStorage failed
+    if (!loadedData) {
+      const localData = localStorage.getItem('quizPreFillBackup');
+      if (localData) {
+        try {
+          loadedData = JSON.parse(localData);
+          dataSource = 'localStorage';
+          console.log('🔄 Loading quiz data from localStorage backup:', loadedData);
+        } catch (error) {
+          console.error('❌ Failed to parse localStorage quiz data:', error);
+        }
+      }
+    }
+
+    // Try URL params as final fallback
+    if (!loadedData) {
       const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('prefill') === 'true') {
-        const urlData = {
-          hasApis: urlParams.get('hasApis') || '',
-          dataAccess: urlParams.get('dataAccess') || '',
-          budgetReality: urlParams.get('budgetReality') || '',
-          mainBlocker: urlParams.get('mainBlocker') || '',
-          highestImpact: urlParams.get('highestImpact') || '',
+      if (urlParams.get('prefill') === 'true' && urlParams.get('from') === 'quick_check') {
+        loadedData = {
+          hasApis: decodeURIComponent(urlParams.get('hasApis') || ''),
+          dataAccess: decodeURIComponent(urlParams.get('dataAccess') || ''),
+          budgetReality: decodeURIComponent(urlParams.get('budgetReality') || ''),
+          mainBlocker: decodeURIComponent(urlParams.get('mainBlocker') || ''),
+          highestImpact: decodeURIComponent(urlParams.get('highestImpact') || ''),
           quickCheckScore: parseInt(urlParams.get('score') || '0'),
+          quickCheckLevel: decodeURIComponent(urlParams.get('level') || ''),
           source: 'hero_quiz'
         };
-        
-        setQuizPreFillData(urlData);
-        setFormData(prev => ({
-          ...prev,
-          hasApis: urlData.hasApis,
-          dataAccess: urlData.dataAccess,
-          budgetReality: urlData.budgetReality,
-          mainBlocker: urlData.mainBlocker,
-          highestImpactSystem: urlData.highestImpact
-        }));
-
-        console.log('Prefilled form data from URL:', urlData);
+        dataSource = 'urlParams';
+        console.log('🔄 Loading quiz data from URL params:', loadedData);
       }
+    }
+
+    // If we have data, pre-fill the form
+    if (loadedData && (loadedData.hasApis || loadedData.dataAccess || loadedData.budgetReality)) {
+      setQuizPreFillData(loadedData);
+      
+      // Pre-fill overlapping fields with validation
+      setFormData(prev => ({
+        ...prev,
+        hasApis: loadedData.hasApis || '',
+        dataAccess: loadedData.dataAccess || '',
+        budgetReality: loadedData.budgetReality || '',
+        mainBlocker: loadedData.mainBlocker || '',
+        highestImpactSystem: loadedData.highestImpact || ''
+      }));
+
+      console.log('✅ Quiz-to-Assessment Bridge Successful:', {
+        dataSource,
+        fieldsLoaded: {
+          hasApis: !!loadedData.hasApis,
+          dataAccess: !!loadedData.dataAccess,
+          budgetReality: !!loadedData.budgetReality,
+          mainBlocker: !!loadedData.mainBlocker,
+          highestImpact: !!loadedData.highestImpact
+        },
+        score: loadedData.quickCheckScore || 'none',
+        level: loadedData.quickCheckLevel || 'none'
+      });
+
+      // Clean up storage after successful load to prevent reuse
+      if (dataSource === 'sessionStorage') {
+        sessionStorage.removeItem('quizPreFill');
+      }
+      if (dataSource === 'localStorage') {
+        localStorage.removeItem('quizPreFillBackup');
+      }
+      
+      // Clear URL params to clean up browser history
+      if (dataSource === 'urlParams') {
+        const cleanUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+      }
+    } else {
+      console.log('ℹ️ No quiz pre-fill data found or data incomplete');
     }
   }, []);
 
@@ -174,18 +211,45 @@ export default function AgentReadinessPage() {
 
   const totalSteps = 15; // Assessment questions (1 business + 2 systems + 1 apis + 2 data + 1 processes + 1 automation + 1 ai platform + 1 blocker + 1 adoption + 1 cost + 1 budget + 1 it maturity + 1 contact), final step is contact info
 
-  // Skip questions that are already filled from quick check
+  // Enhanced step skipping logic with better validation and logging
   const shouldSkipStep = (step: number): boolean => {
     if (!quizPreFillData) return false;
     
-    switch (step) {
-      case 3: return !!(quizPreFillData.highestImpact && formData.highestImpactSystem); // Highest impact system question
-      case 4: return !!(quizPreFillData.hasApis && formData.hasApis); // API question
-      case 5: return !!(quizPreFillData.dataAccess && formData.dataAccess); // Data access question  
-      case 10: return !!(quizPreFillData.mainBlocker && formData.mainBlocker); // Main blocker question
-      case 13: return !!(quizPreFillData.budgetReality && formData.budgetReality); // Budget reality question
-      default: return false;
+    const skipMap = {
+      3: { // Highest impact system question
+        condition: !!(quizPreFillData.highestImpact && formData.highestImpactSystem),
+        field: 'highestImpact',
+        value: quizPreFillData.highestImpact
+      },
+      4: { // API question
+        condition: !!(quizPreFillData.hasApis && formData.hasApis),
+        field: 'hasApis',
+        value: quizPreFillData.hasApis
+      },
+      5: { // Data access question  
+        condition: !!(quizPreFillData.dataAccess && formData.dataAccess),
+        field: 'dataAccess',
+        value: quizPreFillData.dataAccess
+      },
+      11: { // Main blocker question (updated step number)
+        condition: !!(quizPreFillData.mainBlocker && formData.mainBlocker),
+        field: 'mainBlocker',
+        value: quizPreFillData.mainBlocker
+      },
+      14: { // Budget reality question (updated step number)
+        condition: !!(quizPreFillData.budgetReality && formData.budgetReality),
+        field: 'budgetReality',
+        value: quizPreFillData.budgetReality
+      }
+    };
+    
+    const stepConfig = skipMap[step];
+    if (stepConfig && stepConfig.condition) {
+      console.log(`⏭️ Skipping step ${step} (${stepConfig.field}): "${stepConfig.value}" - pre-filled from quiz`);
+      return true;
     }
+    
+    return false;
   };
 
   // Calculate how many questions are skipped from quick check
@@ -281,6 +345,78 @@ export default function AgentReadinessPage() {
     }
   };
 
+  // Poll assessment results until ready
+  const pollAssessmentResults = async (assessmentId: string, initialScore?: number) => {
+    let attempts = 0;
+    const maxAttempts = 30; // 5 minutes max
+    
+    const poll = async () => {
+      try {
+        const response = await fetch(`/api/assessment/get-by-id?assessmentId=${assessmentId}`);
+        const data = await response.json();
+        
+        if (data.success && data.assessment) {
+          // Assessment is ready, show results
+          setAssessmentResults(data.assessment);
+          setLoadingResults(false);
+          setResultsReady(true);
+          return;
+        }
+        
+        attempts++;
+        if (attempts < maxAttempts) {
+          setTimeout(poll, 10000); // Poll every 10 seconds
+        } else {
+          // Timeout - show basic results with initialScore if available
+          if (initialScore) {
+            setAssessmentResults({
+              id: assessmentId,
+              score: initialScore,
+              level: getLevelFromScore(initialScore),
+              createdAt: new Date(),
+              status: 'completed',
+              type: 'agent_readiness'
+            });
+          }
+          setLoadingResults(false);
+          setResultsReady(true);
+        }
+      } catch (error) {
+        console.error('Error polling assessment results:', error);
+        attempts++;
+        if (attempts < maxAttempts) {
+          setTimeout(poll, 10000);
+        } else {
+          setLoadingResults(false);
+          // Show error or basic results if available
+          if (initialScore) {
+            setAssessmentResults({
+              id: assessmentId,
+              score: initialScore,
+              level: getLevelFromScore(initialScore),
+              createdAt: new Date(),
+              status: 'completed',
+              type: 'agent_readiness'
+            });
+          }
+          setResultsReady(true);
+        }
+      }
+    };
+    
+    // Start polling after 2 seconds
+    setTimeout(poll, 2000);
+  };
+
+  // Helper function to get level from score
+  const getLevelFromScore = (score: number): string => {
+    if (score >= 90) return 'Agent-Ready (Level 5)';
+    if (score >= 70) return 'Integration-Ready (Level 4)';
+    if (score >= 50) return 'Digitalization-Ready (Level 3)';
+    if (score >= 30) return 'Foundation-Building (Level 2)';
+    return 'Pre-Digital (Level 1)';
+  };
+
   const handleSubmit = async () => {
     try {
       // Prepare submission data with authentication
@@ -372,8 +508,12 @@ export default function AgentReadinessPage() {
           });
           window.location.href = `/register?${params.toString()}`;
         } else {
-          // Show results without account
+          // Show results without account - start polling for results
           setIsSubmitted(true);
+          setLoadingResults(true);
+          
+          // Start polling for assessment results
+          pollAssessmentResults(data.assessmentId, data.previewScore);
         }
       } else {
         console.error('Assessment submission failed');
@@ -416,6 +556,163 @@ export default function AgentReadinessPage() {
   };
 
   if (isSubmitted) {
+    // If results are ready, show them
+    if (resultsReady && assessmentResults) {
+      return (
+        <div className="min-h-screen bg-black">
+          <div className="container mx-auto px-4 py-24">
+            <div className="max-w-6xl mx-auto">
+              {/* Success Header */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="text-center mb-12"
+              >
+                <div className="bg-gradient-to-r from-green-500/10 to-green-600/10 border border-green-500/20 rounded-lg p-6 mb-8">
+                  <div className="flex items-center justify-center gap-3 mb-4">
+                    <CheckCircle className="w-8 h-8 text-green-400" />
+                    <h1 className="text-3xl font-bold text-white">🎉 Assessment Voltooid!</h1>
+                  </div>
+                  <p className="text-green-200">
+                    Je Agent Readiness Assessment is afgerond. Hieronder vind je je resultaten.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Results Display */}
+              <div className="grid lg:grid-cols-2 gap-8">
+                {/* Score Card */}
+                <Card className="bg-white/5 border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">
+                      <Target className="w-5 h-5 text-orange-500" />
+                      Je Agent Readiness Score
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Score Circle */}
+                    <div className="text-center">
+                      <div
+                        className="w-32 h-32 rounded-full mx-auto flex items-center justify-center text-4xl font-bold text-white mb-6"
+                        style={{
+                          background: `conic-gradient(#F87315 ${assessmentResults.score}%, rgba(255,255,255,0.1) ${assessmentResults.score}%)`,
+                        }}
+                      >
+                        {assessmentResults.score}
+                      </div>
+                      <h3 className="text-2xl font-bold text-white mb-2">
+                        {assessmentResults.level}
+                      </h3>
+                      <p className="text-white/70">
+                        {assessmentResults.score}/100 punten behaald
+                      </p>
+                    </div>
+
+                    {/* Quick Insights */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-white">Key Findings:</h4>
+                      <div className="grid gap-2 text-sm">
+                        {assessmentResults.score >= 70 && (
+                          <div className="flex items-center gap-2 text-green-400">
+                            <CheckCircle className="w-4 h-4" />
+                            Goed voorbereid voor agent implementatie
+                          </div>
+                        )}
+                        {assessmentResults.score < 70 && assessmentResults.score >= 40 && (
+                          <div className="flex items-center gap-2 text-yellow-400">
+                            <Clock className="w-4 h-4" />
+                            Enkele voorbereidingen nodig
+                          </div>
+                        )}
+                        {assessmentResults.score < 40 && (
+                          <div className="flex items-center gap-2 text-red-400">
+                            <Target className="w-4 h-4" />
+                            Significante voorbereiding vereist
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* CTA Buttons */}
+                    <div className="space-y-4">
+                      <Button 
+                        onClick={() => window.location.href = '/register'}
+                        className="w-full bg-orange-500 text-white"
+                      >
+                        <Users className="mr-2 w-4 h-4" />
+                        Maak Account Aan - Sla Assessment Op
+                        <ArrowRight className="ml-2 w-4 h-4" />
+                      </Button>
+                      
+                      <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-4">
+                        <h4 className="font-semibold text-white mb-2">Wil je een concrete roadmap?</h4>
+                        <p className="text-white/70 text-sm mb-3">
+                          Expert Assessment (€2.500) geeft specifieke gaps analyse en implementatie plan voor jouw bedrijf.
+                        </p>
+                        <Button 
+                          size="sm" 
+                          className="bg-orange-500 text-white w-full"
+                          onClick={() => window.location.href = '/expert-assessment'}
+                        >
+                          Upgrade naar Expert Assessment
+                          <ArrowRight className="ml-2 w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Next Steps */}
+                <Card className="bg-white/5 border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">
+                      <FileText className="w-5 h-5 text-orange-500" />
+                      Volgende Stappen
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="space-y-4">
+                      <div className="p-4 bg-white/5 rounded-lg">
+                        <h4 className="font-semibold text-white mb-2">1. Account Aanmaken</h4>
+                        <p className="text-white/70 text-sm">
+                          Sla je assessment op en krijg toegang tot je persoonlijke dashboard.
+                        </p>
+                      </div>
+                      
+                      <div className="p-4 bg-white/5 rounded-lg">
+                        <h4 className="font-semibold text-white mb-2">2. Download Report</h4>
+                        <p className="text-white/70 text-sm">
+                          Krijg je volledige Agent Readiness Report via email.
+                        </p>
+                      </div>
+                      
+                      <div className="p-4 bg-white/5 rounded-lg">
+                        <h4 className="font-semibold text-white mb-2">3. Plan Implementatie</h4>
+                        <p className="text-white/70 text-sm">
+                          Begin met de hoogst scorende systemen voor snelle wins.
+                        </p>
+                      </div>
+
+                      {assessmentResults.score < 70 && (
+                        <div className="p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg">
+                          <h4 className="font-semibold text-orange-300 mb-2">🎯 Aanbevolen</h4>
+                          <p className="text-white/80 text-sm">
+                            Expert Assessment helpt je een concreet plan maken om je score naar 85+ te krijgen.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Still generating - show loading state
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="container mx-auto px-4">
@@ -427,10 +724,19 @@ export default function AgentReadinessPage() {
               className="bg-white/5 border border-white/10 rounded-xl p-8 lg:p-12"
             >
               <div className="mb-8">
-                <CheckCircle className="w-16 h-16 mx-auto mb-6" style={{ color: '#F87315' }} />
+                {loadingResults ? (
+                  <div className="w-16 h-16 mx-auto mb-6 border-4 border-orange-500/30 border-t-orange-500 rounded-full animate-spin"></div>
+                ) : (
+                  <CheckCircle className="w-16 h-16 mx-auto mb-6" style={{ color: '#F87315' }} />
+                )}
                 <h1 className="text-4xl font-bold text-white mb-4">
-                  Je Agent Readiness Report wordt gegenereerd...
+                  {loadingResults ? 'Je rapport wordt gegenereerd...' : 'Assessment Verwerkt!'}
                 </h1>
+                {loadingResults && (
+                  <p className="text-white/70">
+                    Even geduld, we analyseren je antwoorden...
+                  </p>
+                )}
               </div>
 
               <div className="grid md:grid-cols-2 gap-8 mb-8">
@@ -484,10 +790,13 @@ export default function AgentReadinessPage() {
 
               <div className="bg-gradient-to-r from-white/5 to-white/10 rounded-lg p-6">
                 <h3 className="text-xl font-bold text-white mb-2">
-                  Je gratis rapport wordt gegenereerd!
+                  {loadingResults ? 'Je resultaten komen eraan!' : 'Resultaten worden voorbereid!'}
                 </h3>
                 <p className="text-white/70 text-sm">
-                  Je Agent Readiness Score en algemene inzichten komen binnen 2 minuten via email.
+                  {loadingResults 
+                    ? 'Even geduld, je score wordt berekend...'
+                    : 'Je Agent Readiness Score en inzichten worden voorbereid.'
+                  }
                 </p>
                 <div className="mt-4 p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
                   <p className="text-white/80 text-sm">
@@ -556,6 +865,12 @@ export default function AgentReadinessPage() {
                     <span className="text-green-400 text-sm font-medium">
                       {getSkippedQuestionCount()} vragen geskipt uit quick check
                     </span>
+                  </div>
+                  <div className="mt-2 text-xs text-white/60">
+                    Quick check score: {quizPreFillData.quickCheckScore || 'N/A'}/100 • {quizPreFillData.quickCheckLevel || ''}
+                  </div>
+                  <div className="mt-1 text-xs text-green-400/80">
+                    🔄 Data overgenomen uit hero quiz
                   </div>
                 </div>
               )}
@@ -709,7 +1024,8 @@ export default function AgentReadinessPage() {
                       <div className="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
                         <div className="flex items-center space-x-2">
                           <CheckCircle className="w-5 h-5" style={{ color: '#22c55e' }} />
-                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check</span>
+                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check:</span>
+                          <span className="text-green-300 italic">"{quizPreFillData.hasApis}"</span>
                         </div>
                       </div>
                     )}
@@ -754,7 +1070,8 @@ export default function AgentReadinessPage() {
                       <div className="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
                         <div className="flex items-center space-x-2">
                           <CheckCircle className="w-5 h-5" style={{ color: '#22c55e' }} />
-                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check</span>
+                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check:</span>
+                          <span className="text-green-300 italic">"{quizPreFillData.dataAccess}"</span>
                         </div>
                       </div>
                     )}
@@ -989,7 +1306,8 @@ export default function AgentReadinessPage() {
                       <div className="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
                         <div className="flex items-center space-x-2">
                           <CheckCircle className="w-5 h-5" style={{ color: '#22c55e' }} />
-                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check</span>
+                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check:</span>
+                          <span className="text-green-300 italic">"{quizPreFillData.mainBlocker}"</span>
                         </div>
                       </div>
                     )}
@@ -1095,7 +1413,8 @@ export default function AgentReadinessPage() {
                       <div className="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
                         <div className="flex items-center space-x-2">
                           <CheckCircle className="w-5 h-5" style={{ color: '#22c55e' }} />
-                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check</span>
+                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check:</span>
+                          <span className="text-green-300 italic">"{quizPreFillData.budgetReality}"</span>
                         </div>
                       </div>
                     )}
