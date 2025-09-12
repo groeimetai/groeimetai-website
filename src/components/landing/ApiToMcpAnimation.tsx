@@ -31,20 +31,15 @@ function useElementSize<T extends HTMLElement>() {
   return { ref, size };
 }
 
-// Bereken posities - mobile edge-aligned, desktop circular
+// Bereken posities - mobile simplified, desktop circular
 function radialPositions(count: number, radiusPct = 40, startDeg = -90, isMobile = false) {
   if (isMobile) {
-    // Mobile: align APIs to edges where they're closest
-    const edgePositions = [
-      { top: 10, left: 50 },   // CRM API - top center
-      { top: 50, left: 85 },   // Support API - right center  
-      { top: 90, left: 75 },   // ERP API - bottom right
-      { top: 90, left: 25 },   // Analytics API - bottom left
-      { top: 50, left: 15 },   // Payment API - left center
+    // Mobile: simplified to single API for clean demonstration
+    return [
+      { top: 20, left: 50 }   // Single API - top center for clean flow
     ];
-    return edgePositions.slice(0, count);
   } else {
-    // Desktop: keep original circular layout
+    // Desktop: keep original circular layout with all APIs
     return Array.from({ length: count }, (_, i) => {
       const angle = ((360 / count) * i + startDeg) * (Math.PI / 180);
       const cx = 45;
@@ -59,17 +54,10 @@ function radialPositions(count: number, radiusPct = 40, startDeg = -90, isMobile
 // Bereken MCP posities - mobile edge-aware, desktop original
 function betweenCenter(pos: { top: number; left: number }, f = 0.6, isMobile = false) {
   if (isMobile) {
-    // Mobile: place MCP elements logically between edge APIs and center
-    const cx = 50;
-    const cy = 50;
-    // Bring MCP elements significantly closer to center for clean mobile layout
-    const factor = 0.4; // Much closer to center on mobile
-    return {
-      top: cy + (pos.top - cy) * factor,
-      left: cx + (pos.left - cx) * factor,
-    };
+    // Mobile: single MCP positioned between API and AI for clean flow
+    return { top: 35, left: 50 }; // Fixed position between API (20%) and AI (50%)
   } else {
-    // Desktop: keep original calculation
+    // Desktop: keep original calculation for all MCPs
     const cx = 50;
     const cy = 50;
     return {
@@ -344,19 +332,19 @@ export default function ApiToMcpAnimation() {
                 viewBox={`0 0 ${stageSize.width} ${stageSize.height}`}
                 preserveAspectRatio="none"
               >
-                {/* API -> MCP - Fixed to connect box centers */}
+                {/* API -> MCP - Mobile simplified, Desktop all lines */}
                 {showLinesAPIMCP &&
-                  apis.map((_, i) => {
-                    // Shift line start 5% right to compensate for API shift left
-                    const lineStartPos = {
+                  (isMobile ? apis.slice(0, 1) : apis).map((_, i) => {
+                    // Mobile: direct connection, Desktop: shifted for symmetry
+                    const lineStartPos = isMobile ? apiPositions[i] : {
                       top: apiPositions[i].top,
-                      left: apiPositions[i].left + 5, // 5% naar rechts voor symmetrie
+                      left: apiPositions[i].left + 5, // 5% naar rechts voor symmetrie (desktop only)
                     };
                     const a = getApiConnectionPoint(lineStartPos, stageSize, i); // Use new function for API connection
-                    // MCP end point - shifted right for symmetry
-                    const mcpEndPos = {
+                    // Mobile: direct connection, Desktop: shifted for symmetry
+                    const mcpEndPos = isMobile ? mcpPositions[i] : {
                       top: mcpPositions[i].top,
-                      left: mcpPositions[i].left + 3, // 3% naar rechts voor betere symmetrie
+                      left: mcpPositions[i].left + 3, // 3% naar rechts voor betere symmetrie (desktop only)
                     };
                     const m = getBoxCenter(mcpEndPos, stageSize); // MCP connection point
 
@@ -381,13 +369,13 @@ export default function ApiToMcpAnimation() {
                     );
                   })}
 
-                {/* MCP -> Agent (center 50/50) - Fixed to connect exact box centers */}
+                {/* MCP -> Agent - Mobile simplified, Desktop all lines */}
                 {showLinesMCPAgent &&
-                  mcpPositions.map((p, i) => {
-                    // Shift MCP connection point right to match API→MCP end points
-                    const mcpConnectionPos = {
+                  (isMobile ? mcpPositions.slice(0, 1) : mcpPositions).map((p, i) => {
+                    // Mobile: direct connection, Desktop: shifted connection
+                    const mcpConnectionPos = isMobile ? p : {
                       top: p.top,
-                      left: p.left + 3, // Same 3% shift as API→MCP end points
+                      left: p.left + 3, // Same 3% shift as API→MCP end points (desktop only)
                     };
                     const m = getBoxCenter(mcpConnectionPos, stageSize); // MCP connection point
                     // Agent box center
@@ -516,8 +504,8 @@ export default function ApiToMcpAnimation() {
                 </motion.div>
               </div>
 
-              {/* API wolkjes – ALTIJD zichtbaar, identieke plekken */}
-              {apis.map((name, i) => {
+              {/* API wolkjes – Mobile simplified, Desktop all APIs */}
+              {(isMobile ? apis.slice(0, 1) : apis).map((name, i) => {
                 const pos = apiPositions[i];
                 const v = apiVariant(i);
                 return (
@@ -559,7 +547,7 @@ export default function ApiToMcpAnimation() {
               {/* MCP wolkjes – verschijnen vanaf fase 1 */}
               <AnimatePresence>
                 {showMCP &&
-                  mcpPositions.map((pos, i) => {
+                  (isMobile ? mcpPositions.slice(0, 1) : mcpPositions).map((pos, i) => {
                     const v = mcpVariant(i);
                     return (
                       <motion.div
