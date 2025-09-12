@@ -1960,7 +1960,7 @@
     "tagline": "AI pioniers die bedrijven agent-ready maken.",
     "subtitle": "Geen consultancy fluff, maar werkende code.",
     "philosophy": {
-      "openSource": {
+      "opensource": {
         "title": "Open Source First",
         "description": "Snow-flow op GitHub - transparantie en community"
       },
@@ -1968,10 +1968,73 @@
         "title": "Praktisch > Theoretisch",
         "description": "We bouwen wat werkt, geen PowerPoints"
       },
-      "agentFocus": {
-        "title": "Agent Infrastructure Focus",
-        "description": "Specialized in MCP, multi-agent systems en API orchestration"
+      "custom": {
+        "title": "Custom > Copy-Paste",
+        "description": "Elke oplossing op maat voor jouw situatie"
+      },
+      "pioneers": {
+        "title": "Pioniers > Volgers",
+        "description": "2+ jaar voorsprong in AI implementaties"
+      },
+      "dutch": {
+        "title": "Nederlands & Direct",
+        "description": "Geen Silicon Valley hype, gewoon Hollandse nuchterheid"
       }
+    },
+    "capabilities": {
+      "mcp": {
+        "title": "MCP Development",
+        "description": "Custom Model Context Protocol servers die jouw APIs omzetten naar agent-toegankelijke interfaces"
+      },
+      "orchestration": {
+        "title": "Agent Orchestration",
+        "description": "Multi-agent systemen die samenwerken aan complexe business challenges"
+      },
+      "context": {
+        "title": "Extreme Context Processing",
+        "description": "Onze proprietary technologie voor het verwerken van gigantische documenten zonder context verlies"
+      }
+    },
+    "whatWeDo": {
+      "title": "Wat We",
+      "highlight": "Doen",
+      "subtitle": "We maken bedrijven klaar voor de agent economie door:"
+    },
+    "philosophySection": {
+      "title": "Onze",
+      "highlight": "Filosofie"
+    },
+    "contactSection": {
+      "title": "Contact",
+      "office": {
+        "title": "Hoofdkantoor",
+        "location": "Apeldoorn, Nederland"
+      },
+      "email": {
+        "title": "Email",
+        "address": "info@groeimetai.io",
+        "response": "Respons binnen 24 uur"
+      },
+      "phone": {
+        "title": "Telefoon",
+        "number": "+31 (6) 81 739 018",
+        "hours": "Ma-Vr 9:00-18:00"
+      },
+      "online": {
+        "title": "Online",
+        "github": "GitHub: @GroeimetAI",
+        "linkedin": "LinkedIn: GroeimetAI"
+      }
+    },
+    "finalCta": {
+      "title": "Ready voor",
+      "highlight": "Agent Season",
+      "subtitle": "De agent economie wacht niet.",
+      "warning": "Bedrijven die nu niet voorbereiden, missen de boot.",
+      "promise": "Wij helpen je aan boord.",
+      "startAssessment": "Start Agent Assessment",
+      "viewDemo": "Bekijk Snow-flow Demo",
+      "disclaimer": "Elk gesprek start met een gratis assessment - geen verplichtingen"
     }
   },
   "cases": {

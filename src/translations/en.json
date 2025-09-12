@@ -1760,7 +1760,74 @@
       "agentFocus": {
         "title": "Agent Infrastructure Focus",
         "description": "Specialized in MCP, multi-agent systems and API orchestration"
+      },
+      "custom": {
+        "title": "Custom > Copy-Paste",
+        "description": "Every solution tailored to your situation"
+      },
+      "pioneers": {
+        "title": "Pioneers > Followers",
+        "description": "2+ years ahead in AI implementations"
+      },
+      "dutch": {
+        "title": "Dutch & Direct",
+        "description": "No Silicon Valley hype, just Dutch pragmatism"
       }
+    },
+    "capabilities": {
+      "mcp": {
+        "title": "MCP Development",
+        "description": "Custom Model Context Protocol servers that convert your APIs to agent-accessible interfaces"
+      },
+      "orchestration": {
+        "title": "Agent Orchestration",
+        "description": "Multi-agent systems collaborating on complex business challenges"
+      },
+      "context": {
+        "title": "Extreme Context Processing",
+        "description": "Our proprietary technology for processing massive documents without context loss"
+      }
+    },
+    "whatWeDo": {
+      "title": "What We",
+      "highlight": "Do",
+      "subtitle": "We prepare businesses for the agent economy by:"
+    },
+    "philosophySection": {
+      "title": "Our",
+      "highlight": "Philosophy"
+    },
+    "contactSection": {
+      "title": "Contact",
+      "office": {
+        "title": "Head Office",
+        "location": "Apeldoorn, Netherlands"
+      },
+      "email": {
+        "title": "Email",
+        "address": "info@groeimetai.io",
+        "response": "Response within 24 hours"
+      },
+      "phone": {
+        "title": "Phone",
+        "number": "+31 (6) 81 739 018",
+        "hours": "Mon-Fri 9:00-18:00"
+      },
+      "online": {
+        "title": "Online",
+        "github": "GitHub: @GroeimetAI",
+        "linkedin": "LinkedIn: GroeimetAI"
+      }
+    },
+    "finalCta": {
+      "title": "Ready for",
+      "highlight": "Agent Season",
+      "subtitle": "The agent economy won't wait.",
+      "warning": "Companies not preparing now will miss the boat.",
+      "promise": "We'll help you get on board.",
+      "startAssessment": "Start Agent Assessment",
+      "viewDemo": "View Snow-flow Demo",
+      "disclaimer": "Every conversation starts with a free assessment - no obligations"
     }
   },
   "cases": {
