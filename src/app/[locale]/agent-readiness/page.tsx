@@ -45,7 +45,7 @@ export default function AgentReadinessPage() {
   const t = useTranslations('agentReadinessAssessment');
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { user } = useAuth();
+  const { user, firebaseUser } = useAuth();
   const [quizPreFillData, setQuizPreFillData] = useState<any>(null);
   const [formData, setFormData] = useState<AssessmentData>({
     // Core Agent Readiness
@@ -291,12 +291,12 @@ export default function AgentReadinessPage() {
       };
 
       // Add Firebase ID token if user is authenticated
-      if (user) {
+      if (firebaseUser) {
         try {
-          const idToken = await user.getIdToken();
+          const idToken = await firebaseUser.getIdToken();
           submissionData.firebaseIdToken = idToken;
-          submissionData.userId = user.uid;
-          console.log('🔐 Adding authentication to assessment submission:', user.uid);
+          submissionData.userId = firebaseUser.uid;
+          console.log('🔐 Adding authentication to assessment submission:', firebaseUser.uid);
         } catch (tokenError) {
           console.warn('⚠️ Failed to get ID token, submitting without auth:', tokenError);
         }
@@ -308,9 +308,9 @@ export default function AgentReadinessPage() {
       };
       
       // Add Authorization header if available
-      if (user) {
+      if (firebaseUser) {
         try {
-          const idToken = await user.getIdToken();
+          const idToken = await firebaseUser.getIdToken();
           headers['Authorization'] = `Bearer ${idToken}`;
         } catch (headerError) {
           console.warn('⚠️ Failed to add Authorization header:', headerError);
@@ -340,9 +340,9 @@ export default function AgentReadinessPage() {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                userId: user.uid,
+                userId: firebaseUser.uid,
                 assessmentId: data.assessmentId,
-                userEmail: user.email,
+                userEmail: firebaseUser.email,
                 source: 'logged_in_user_enhanced'
               })
             });
