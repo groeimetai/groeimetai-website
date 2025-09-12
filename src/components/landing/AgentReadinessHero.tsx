@@ -13,7 +13,7 @@ export default function AgentReadinessHero() {
   const t = useTranslations('hero');
   
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-4 sm:py-8 md:py-16" style={{ backgroundColor: '#080D14' }}>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 pb-8 sm:py-8 md:py-16" style={{ backgroundColor: '#080D14' }}>
       {/* Luxe Moving Orange Glow Effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none glow-container">
         {/* Main Central Glow - Slow Orbital Movement */}
@@ -98,7 +98,7 @@ export default function AgentReadinessHero() {
         ></motion.div>
       </div>
       
-      <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 text-center relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 text-center relative z-10">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -112,7 +112,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-            className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight text-white mb-4 sm:mb-5 md:mb-6 leading-tight"
+            className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight text-white mb-3 sm:mb-4 md:mb-6 leading-[1.1] sm:leading-tight"
           >
             {t('title')}{' '}
             <span
@@ -131,7 +131,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/90 mb-3 sm:mb-4 md:mb-5 max-w-4xl mx-auto font-light leading-relaxed px-1 sm:px-2 md:px-0"
+            className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/90 mb-2 sm:mb-3 md:mb-4 max-w-4xl mx-auto font-light leading-relaxed"
           >
             {t('subtitle')}
           </motion.p>
@@ -140,7 +140,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-sm sm:text-base md:text-lg text-white/80 mb-4 sm:mb-6 md:mb-8 max-w-3xl mx-auto leading-relaxed px-1 sm:px-2 md:px-0"
+            className="text-sm sm:text-base md:text-lg text-white/80 mb-4 sm:mb-5 md:mb-6 max-w-3xl mx-auto leading-relaxed"
           >
             {t('description')}
           </motion.p>
@@ -149,10 +149,10 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-            className="space-y-4 sm:space-y-6 md:space-y-8 mb-6 sm:mb-8 md:mb-12"
+            className="space-y-3 sm:space-y-4 md:space-y-6 mb-4 sm:mb-6 md:mb-8"
           >
             {!showQuickCheck ? (
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center items-center px-2 sm:px-4 md:px-0">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
                 <Button
                   onClick={() => setShowQuickCheck(true)}
                   size="default"
@@ -176,10 +176,10 @@ export default function AgentReadinessHero() {
                 </Link>
               </div>
             ) : (
-              <div className="max-w-2xl mx-auto px-2 sm:px-4">
+              <div className="max-w-2xl mx-auto">
                 <AgentReadinessQuickCheck />
                 
-                <div className="text-center mt-4 sm:mt-6">
+                <div className="text-center mt-3 sm:mt-4">
                   <Button
                     onClick={() => setShowQuickCheck(false)}
                     variant="outline"
@@ -198,10 +198,10 @@ export default function AgentReadinessHero() {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="text-center"
           >
-            <p className="text-xs sm:text-sm text-white/50 mb-2 px-1 sm:px-2 text-center">
+            <p className="text-xs sm:text-sm text-white/50 mb-2 text-center">
               {t('badge')}
             </p>
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white/90 px-1 sm:px-2 text-center leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white/90 text-center leading-relaxed">
               {t('explanation')}{' '}
               <span style={{ color: '#F87315' }}>{t('reason')}</span>
             </p>
