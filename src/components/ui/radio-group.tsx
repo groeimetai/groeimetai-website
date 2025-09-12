@@ -56,7 +56,7 @@ const RadioGroupItem = React.forwardRef<HTMLInputElement, RadioGroupItemProps>(
           )}
           onClick={() => context.onValueChange?.(value)}
         >
-          {isChecked && <div className="h-2 w-2 rounded-full bg-orange" />}
+          {isChecked && <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: '#F87315' }} />}
         </button>
       </div>
     );
