@@ -31,32 +31,52 @@ function useElementSize<T extends HTMLElement>() {
   return { ref, size };
 }
 
-// Bereken n posities op een cirkel, mooi verdeeld (in %) - mobile fixes only
+// Bereken posities - mobile edge-aligned, desktop circular
 function radialPositions(count: number, radiusPct = 40, startDeg = -90, isMobile = false) {
-  return Array.from({ length: count }, (_, i) => {
-    const angle = ((360 / count) * i + startDeg) * (Math.PI / 180);
-    // Mobile: perfect center (50%), Desktop: keep original (45%) for established layout
-    const cx = isMobile ? 50 : 45;
-    const cy = 50;
-    // Mobile: smaller radius for better fit, Desktop: keep original
-    const radius = isMobile ? 32 : radiusPct;
-    const left = cx + radius * Math.cos(angle);
-    const top = cy + radius * Math.sin(angle);
-    return { top, left };
-  });
+  if (isMobile) {
+    // Mobile: align APIs to edges where they're closest
+    const edgePositions = [
+      { top: 10, left: 50 },   // CRM API - top center
+      { top: 50, left: 85 },   // Support API - right center  
+      { top: 90, left: 75 },   // ERP API - bottom right
+      { top: 90, left: 25 },   // Analytics API - bottom left
+      { top: 50, left: 15 },   // Payment API - left center
+    ];
+    return edgePositions.slice(0, count);
+  } else {
+    // Desktop: keep original circular layout
+    return Array.from({ length: count }, (_, i) => {
+      const angle = ((360 / count) * i + startDeg) * (Math.PI / 180);
+      const cx = 45;
+      const cy = 50;
+      const left = cx + radiusPct * Math.cos(angle);
+      const top = cy + radiusPct * Math.sin(angle);
+      return { top, left };
+    });
+  }
 }
 
-// Lerp tussen center en een target positie (in %), fractie f [0..1] - mobile-specific fixes
+// Bereken MCP posities - mobile edge-aware, desktop original
 function betweenCenter(pos: { top: number; left: number }, f = 0.6, isMobile = false) {
-  // Mobile: use same center as API positions for consistency, Desktop: keep original logic
-  const cx = isMobile ? 50 : 50; // Now both use center, but apply different factors
-  const cy = 50;
-  // Mobile: bring MCP closer to center, Desktop: keep original spacing
-  const factor = isMobile ? 0.55 : f;
-  return {
-    top: cy + (pos.top - cy) * factor,
-    left: cx + (pos.left - cx) * factor,
-  };
+  if (isMobile) {
+    // Mobile: place MCP elements logically between edge APIs and center
+    const cx = 50;
+    const cy = 50;
+    // Bring MCP elements significantly closer to center for clean mobile layout
+    const factor = 0.4; // Much closer to center on mobile
+    return {
+      top: cy + (pos.top - cy) * factor,
+      left: cx + (pos.left - cx) * factor,
+    };
+  } else {
+    // Desktop: keep original calculation
+    const cx = 50;
+    const cy = 50;
+    return {
+      top: cy + (pos.top - cy) * f,
+      left: cx + (pos.left - cx) * f,
+    };
+  }
 }
 
 // Helper: % -> px met container size, accounting for centered elements
