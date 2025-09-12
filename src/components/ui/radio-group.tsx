@@ -50,13 +50,13 @@ const RadioGroupItem = React.forwardRef<HTMLInputElement, RadioGroupItemProps>(
           role="radio"
           aria-checked={isChecked}
           className={cn(
-            'aspect-square h-4 w-4 rounded-full border border-orange bg-black text-orange ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-orange focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all',
-            isChecked && 'border-orange bg-orange',
+            'aspect-square h-4 w-4 rounded-full border-2 border-white/30 bg-transparent text-orange ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-orange focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all flex items-center justify-center',
+            isChecked && 'border-orange bg-transparent',
             className
           )}
           onClick={() => context.onValueChange?.(value)}
         >
-          {isChecked && <Circle className="h-2.5 w-2.5 fill-white text-white" />}
+          {isChecked && <div className="h-2 w-2 rounded-full bg-orange" />}
         </button>
       </div>
     );
