@@ -23,7 +23,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     // Get invoice
     // Get invoice using dynamic imports
     const { getDoc, doc } = await import('firebase/firestore');
-    const { db, collections } = await import('@/lib/firebase');
+    const { db, collections } = await import('@/lib/firebase/config');
 
     const invoiceDoc = await getDoc(doc(db, collections.invoices, params.id));
 

@@ -1,5 +1,5 @@
 import { createMollieClient } from '@mollie/api-client';
-import { db, collections } from '@/lib/firebase';
+import { db } from '@/lib/firebase/config';
 import { doc, collection, setDoc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { invoiceService } from './invoiceService';
 import { emailService } from './emailService';
@@ -77,7 +77,7 @@ class PaymentService {
       }
 
       // Get client details
-      const clientDoc = await getDoc(doc(db, collections.users, invoice.clientId));
+      const clientDoc = await getDoc(doc(db, 'users', invoice.clientId));
       const client = clientDoc.data();
       if (!client) {
         throw new Error('Client not found');
@@ -104,7 +104,7 @@ class PaymentService {
 
       // Create payment record
       const payment: Payment = {
-        id: doc(collection(db, collections.payments)).id,
+        id: doc(collection(db, "payments")).id,
         invoiceId: invoice.id,
         clientId: invoice.clientId,
         amount: molliePayment.amount,
@@ -127,7 +127,7 @@ class PaymentService {
       };
 
       // Save payment to Firestore
-      await setDoc(doc(db, collections.payments, payment.id), {
+      await setDoc(doc(db, 'payments', payment.id), {
         ...payment,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
@@ -191,7 +191,7 @@ class PaymentService {
           // Send confirmation email
           const invoice = await invoiceService.getInvoice(payment.invoiceId);
           if (invoice) {
-            const clientDoc = await getDoc(doc(db, collections.users, payment.clientId));
+            const clientDoc = await getDoc(doc(db, "users", payment.clientId));
             const client = clientDoc.data();
             if (client) {
               await emailService.sendPaymentConfirmationEmail({
@@ -227,7 +227,7 @@ class PaymentService {
       }
 
       // Update payment record
-      await updateDoc(doc(db, collections.payments, paymentDoc.id), updates);
+      await updateDoc(doc(db, "payments", paymentDoc.id), updates);
     } catch (error) {
       console.error('Error handling webhook:', error);
       throw error;
@@ -239,7 +239,7 @@ class PaymentService {
    */
   async getPayment(paymentId: string): Promise<Payment | null> {
     try {
-      const paymentDoc = await getDoc(doc(db, collections.payments, paymentId));
+      const paymentDoc = await getDoc(doc(db, "payments", paymentId));
 
       if (!paymentDoc.exists()) {
         return null;
@@ -264,7 +264,7 @@ class PaymentService {
     try {
       // In a real implementation, you would query the payments collection
       // For now, we'll iterate through all payments (not efficient for production)
-      const paymentsSnapshot = await getDocs(collection(db, collections.payments));
+      const paymentsSnapshot = await getDocs(collection(db, "payments"));
 
       for (const doc of paymentsSnapshot.docs) {
         const payment = doc.data() as Payment;
@@ -306,7 +306,7 @@ class PaymentService {
 
         // Update local status if different
         if (newStatus !== payment.status) {
-          await updateDoc(doc(db, collections.payments, paymentId), {
+          await updateDoc(doc(db, "payments", paymentId), {
             status: newStatus,
             updatedAt: serverTimestamp(),
           });

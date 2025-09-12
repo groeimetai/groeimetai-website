@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { message, assessmentData, chatHistory } = await req.json();
+    const { message, assessmentData, chatHistory, fullReport } = await req.json();
 
     // Validate input
     if (!message || !assessmentData) {
@@ -12,24 +12,38 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Build detailed context for Claude
+    // Build comprehensive context for Claude including full report
     const assessmentContext = `
-Assessment Score: ${assessmentData.score}/100
+=== BASIC ASSESSMENT INFO ===
+Score: ${assessmentData.score}/100
 Level: ${assessmentData.level}
-Type: Agent Readiness Assessment
 Assessment ID: ${assessmentData.id || 'N/A'}
+Completion Date: ${assessmentData.createdAt || 'N/A'}
 
-Assessment Details:
+=== USER RESPONSES ===
 ${assessmentData.responses ? `
 Core Business: ${assessmentData.responses.coreBusiness || 'N/A'}
-Selected Systems: ${assessmentData.responses.systems?.join(', ') || 'N/A'}
+Priority Systems: ${assessmentData.responses.systems?.join(', ') || 'N/A'}
 Highest Impact System: ${assessmentData.responses.highestImpactSystem || 'N/A'}
 APIs Available: ${assessmentData.responses.hasApis || 'N/A'}
 Data Access Speed: ${assessmentData.responses.dataAccess || 'N/A'}
+Data Location: ${assessmentData.responses.dataLocation || 'N/A'}
+Process Documentation: ${assessmentData.responses.processDocumentation || 'N/A'}
+Automation Experience: ${assessmentData.responses.automationExperience || 'N/A'}
+Agent Platform Preference: ${assessmentData.responses.agentPlatformPreference || 'N/A'}
+Preferred Platforms: ${assessmentData.responses.agentPlatforms?.join(', ') || 'N/A'}
 Main Blocker: ${assessmentData.responses.mainBlocker || 'N/A'}
+Adoption Speed: ${assessmentData.responses.adoptionSpeed || 'N/A'}
+Cost Optimization Focus: ${assessmentData.responses.costOptimization || 'N/A'}
 Budget Reality: ${assessmentData.responses.budgetReality || 'N/A'}
-IT Maturity: ${assessmentData.responses.itMaturity || 'N/A'}
+IT Maturity Level: ${assessmentData.responses.itMaturity || 'N/A'}
 ` : 'Detailed assessment responses not available'}
+
+=== FULL ASSESSMENT REPORT ===
+${fullReport ? `
+GENERATED REPORT:
+${typeof fullReport === 'string' ? fullReport : JSON.stringify(fullReport, null, 2)}
+` : 'Full report not provided - use assessment data above'}
 `;
 
     // Call Claude API with latest Sonnet
@@ -41,7 +55,7 @@ IT Maturity: ${assessmentData.responses.itMaturity || 'N/A'}
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022', // Latest Sonnet 3.5 (closest to Sonnet 4.0 available)
+        model: 'claude-sonnet-4-20250514', // Sonnet 4 - newest Claude model
         max_tokens: 600,
         messages: [
           {

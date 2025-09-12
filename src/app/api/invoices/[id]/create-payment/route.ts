@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getMollieService, type InvoiceData } from '@/services/mollieService';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db } from '@/lib/firebase/config';
 import { getServerSession } from 'next-auth';
 import { Invoice } from '@/types';
 

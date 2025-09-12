@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
     if (body.sendEmail) {
       // Get client email
       const { getDoc, doc } = await import('firebase/firestore');
-      const { db, collections } = await import('@/lib/firebase');
+      const { db, collections } = await import('@/lib/firebase/config');
 
       const clientDoc = await getDoc(doc(db, collections.users, body.clientId));
       const client = clientDoc.data();

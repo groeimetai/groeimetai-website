@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
     // Get invoice to check permissions using dynamic imports
     const { getDoc, doc } = await import('firebase/firestore');
-    const { db, collections } = await import('@/lib/firebase');
+    const { db, collections } = await import('@/lib/firebase/config');
 
     const invoiceDoc = await getDoc(doc(db, collections.invoices, body.invoiceId));
 

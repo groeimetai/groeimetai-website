@@ -47,6 +47,7 @@ export default function AssessmentViewer({
 }: AssessmentViewerProps) {
   const { user } = useAuth();
   const [assessment, setAssessment] = useState<AssessmentData | null>(null);
+  const [fullReport, setFullReport] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -57,6 +58,7 @@ export default function AssessmentViewer({
   // Load assessment data
   useEffect(() => {
     loadAssessmentData();
+    loadFullReport();
   }, [assessmentId]);
 
   // Initialize chat with welcome message
@@ -69,13 +71,16 @@ export default function AssessmentViewer({
 
 Ik zie dat je je Agent Readiness Assessment hebt afgerond met een score van **${assessment.score}/100** - niveau **${assessment.level}**.
 
-Ik kan je helpen om je resultaten beter te begrijpen en concrete volgende stappen te bepalen. Wat wil je weten over je assessment?
+Ik heb toegang tot je complete assessment data${fullReport ? ' en gegenereerde rapport' : ''}, dus ik kan je zeer specifieke en gepersonaliseerde adviezen geven.
 
-Bijvoorbeeld:
-• Wat betekent mijn score precies?
-• Welke systemen moet ik prioriteren?
-• Hoe lang duurt implementatie ongeveer?
-• Wat zijn mijn grootste blockers?`,
+Stel me gerust vragen zoals:
+• Wat betekent mijn score voor mijn specifieke situatie?
+• Welke van mijn systemen moet ik als eerste aanpakken?
+• Hoe kan ik mijn grootste blocker oplossen?
+• Wat zijn concrete next steps binnen mijn budget?
+• Hoe lang duurt implementatie voor mijn systemen?
+
+Ik geef je praktische adviezen op basis van jouw exacte antwoorden! 🚀`,
         timestamp: new Date()
       };
       setChatMessages([welcomeMessage]);
@@ -119,6 +124,23 @@ Bijvoorbeeld:
     }
   };
 
+  const loadFullReport = async () => {
+    try {
+      // Try to get the full generated report
+      const response = await fetch(`/api/assessment/get-report?assessmentId=${assessmentId}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.report) {
+          setFullReport(data.report);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading full report:', error);
+      // Don't show error to user - report is optional for chat
+    }
+  };
+
   const getLevelFromScore = (score: number): string => {
     if (score >= 90) return 'Agent-Ready (Level 5)';
     if (score >= 70) return 'Integration-Ready (Level 4)';
@@ -154,7 +176,8 @@ Bijvoorbeeld:
         body: JSON.stringify({
           message: newMessage.trim(),
           assessmentData: assessment,
-          chatHistory: chatMessages.slice(-4) // Last 4 messages for context
+          chatHistory: chatMessages.slice(-6), // Last 6 messages for better context
+          fullReport: fullReport // Include full assessment report for comprehensive context
         })
       });
 

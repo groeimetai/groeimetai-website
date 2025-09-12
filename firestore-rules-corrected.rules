@@ -694,6 +694,150 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
     
+    // ===== NEW DASHBOARD COLLECTIONS =====
+    
+    // Performance Metrics collection
+    match /performanceMetrics/{metricId} {
+      // Users can read their own metrics, admins can read all
+      allow read: if isAuthenticated() && (
+        resource.data.clientId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // System can create performance metrics
+      allow create: if true;
+      
+      // System and admins can update metrics
+      allow update: if isAdmin();
+      
+      // Only admins can delete metrics
+      allow delete: if isAdmin();
+    }
+    
+    // System Metrics collection
+    match /systemMetrics/{clientId} {
+      // Users can read their own system metrics, admins can read all
+      allow read: if isAuthenticated() && (
+        clientId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // System can create/update system metrics
+      allow create: if true;
+      allow update: if true;
+      
+      // Only admins can delete system metrics
+      allow delete: if isAdmin();
+    }
+    
+    // Agent Activities collection
+    match /agentActivities/{activityId} {
+      // Users can read their own activities, admins can read all
+      allow read: if isAuthenticated() && (
+        resource.data.clientId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // System can create agent activities
+      allow create: if true;
+      
+      // No updates allowed (audit trail)
+      allow update: if false;
+      
+      // Only admins can delete activities
+      allow delete: if isAdmin();
+    }
+    
+    // MCP Servers collection
+    match /mcpServers/{serverId} {
+      // Users can read their own MCP servers, admins can read all
+      allow read: if isAuthenticated() && (
+        resource.data.clientId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Users can create their own MCP server configs
+      allow create: if isAuthenticated() && 
+        request.resource.data.clientId == request.auth.uid;
+      
+      // Users can update their own MCP servers
+      allow update: if isAuthenticated() && (
+        resource.data.clientId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Users can delete their own MCP servers
+      allow delete: if isAuthenticated() && (
+        resource.data.clientId == request.auth.uid ||
+        isAdmin()
+      );
+    }
+    
+    // Reports collection
+    match /reports/{reportId} {
+      // Users can read their own reports, admins can read all
+      allow read: if isAuthenticated() && (
+        resource.data.clientId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // System and admins can create reports
+      allow create: if isAdmin();
+      
+      // System and admins can update reports
+      allow update: if isAdmin();
+      
+      // Only admins can delete reports
+      allow delete: if isAdmin();
+    }
+    
+    // Workflow collections
+    match /workflows/{workflowId} {
+      // Users can read workflows, admins can read all
+      allow read: if isAuthenticated();
+      
+      // Only admins can create workflows
+      allow create: if isAdmin();
+      
+      // Only admins can update workflows
+      allow update: if isAdmin();
+      
+      // Only admins can delete workflows
+      allow delete: if isAdmin();
+    }
+    
+    match /workflow_executions/{executionId} {
+      // Users can read their own executions
+      allow read: if isAuthenticated();
+      
+      // System can create executions
+      allow create: if true;
+      
+      // System can update executions
+      allow update: if true;
+      
+      // Only admins can delete executions
+      allow delete: if isAdmin();
+    }
+    
+    // Payments collection
+    match /payments/{paymentId} {
+      // Users can read their own payments, admins can read all
+      allow read: if isAuthenticated() && (
+        resource.data.clientId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // System can create payments
+      allow create: if true;
+      
+      // System can update payment status
+      allow update: if true;
+      
+      // Only admins can delete payments
+      allow delete: if isAdmin();
+    }
+
     // Catch-all rule - deny everything else
     match /{document=**} {
       allow read, write: if false;

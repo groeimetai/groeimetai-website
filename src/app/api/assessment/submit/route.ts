@@ -5,9 +5,54 @@ export async function POST(req: NextRequest) {
   try {
     const assessmentData = await req.json();
     
-    // Create lead in pipeline
+    // Extract userId from multiple sources (Authorization header, request body, or Firebase ID token)
+    let userId = null;
+    let userEmail = null;
+    
+    // Method 1: Try Authorization header
+    try {
+      const authHeader = req.headers.get('Authorization');
+      if (authHeader?.startsWith('Bearer ')) {
+        const { verifyIdToken } = await import('@/lib/firebase/admin');
+        const token = authHeader.substring(7);
+        const result = await verifyIdToken(token);
+        if (result.valid && result.decodedToken) {
+          userId = result.decodedToken.uid;
+          userEmail = result.decodedToken.email;
+          console.log('✅ Authenticated user detected via Authorization header:', userId);
+        }
+      }
+    } catch (authError) {
+      console.log('⚠️ Authorization header auth failed:', authError);
+    }
+    
+    // Method 2: Try Firebase ID token from body (for client-side auth)
+    if (!userId && assessmentData.firebaseIdToken) {
+      try {
+        const { verifyIdToken } = await import('@/lib/firebase/admin');
+        const result = await verifyIdToken(assessmentData.firebaseIdToken);
+        if (result.valid && result.decodedToken) {
+          userId = result.decodedToken.uid;
+          userEmail = result.decodedToken.email;
+          console.log('✅ Authenticated user detected via ID token in body:', userId);
+        }
+      } catch (tokenError) {
+        console.log('⚠️ ID token verification failed:', tokenError);
+      }
+    }
+    
+    // Method 3: Use userId directly if provided in body (from authenticated client)
+    if (!userId && assessmentData.userId) {
+      userId = assessmentData.userId;
+      console.log('✅ Using userId from request body:', userId);
+    }
+    
+    // Create lead in pipeline with enhanced user tracking
     const leadId = await createLead({
       ...assessmentData,
+      userId, // Add userId if authenticated
+      authenticatedEmail: userEmail, // Add authenticated email for verification
+      submissionMethod: userId ? 'authenticated' : 'anonymous',
       status: 'assessment_submitted',
       source: 'website_assessment',
       createdAt: new Date()
@@ -215,15 +260,33 @@ async function createLead(leadData: any): Promise<string> {
     const { collection, addDoc } = await import('firebase/firestore');
     const { db } = await import('@/lib/firebase/config');
     
-    const docRef = await addDoc(collection(db, 'agent_assessments'), {
+    const assessmentDoc = {
       ...leadData,
       leadId,
       type: 'agent_readiness',
       createdAt: new Date(),
       status: 'assessment_submitted'
+    };
+    
+    console.log('📝 Storing assessment with enhanced data:', {
+      userId: assessmentDoc.userId,
+      email: assessmentDoc.email,
+      authenticatedEmail: assessmentDoc.authenticatedEmail,
+      submissionMethod: assessmentDoc.submissionMethod,
+      leadId: assessmentDoc.leadId,
+      hasUserId: !!assessmentDoc.userId,
+      emailMatch: assessmentDoc.email === assessmentDoc.authenticatedEmail
     });
     
-    console.log('✅ Agent Assessment stored in Firestore:', docRef.id);
+    const docRef = await addDoc(collection(db, 'agent_assessments'), assessmentDoc);
+    
+    console.log('✅ Agent Assessment stored in Firestore:', {
+      firestoreId: docRef.id,
+      leadId,
+      userId: assessmentDoc.userId,
+      email: assessmentDoc.email
+    });
+    
     return leadId;
   } catch (error) {
     console.error('❌ Failed to store Agent Assessment:', error);

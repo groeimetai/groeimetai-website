@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export default function SettingsPage() {
-  const { user, updateProfile } = useAuth();
+  const { user, updateUserProfile } = useAuth();
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
   
@@ -43,7 +43,7 @@ export default function SettingsPage() {
   const handleSaveProfile = async () => {
     setLoading(true);
     try {
-      await updateProfile(profile);
+      await updateUserProfile(profile);
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (error) {

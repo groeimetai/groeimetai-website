@@ -50,7 +50,7 @@ import { toast } from 'react-hot-toast';
 import { PaymentButton } from '@/components/invoice/PaymentButton';
 import { Invoice, InvoiceStatus } from '@/types';
 import { collection, query, where, orderBy, onSnapshot, Timestamp } from 'firebase/firestore';
-import { db, collections } from '@/lib/firebase';
+import { db, collections } from '@/lib/firebase/config';
 
 interface InvoiceStats {
   totalPaid: number;

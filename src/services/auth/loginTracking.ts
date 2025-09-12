@@ -1,5 +1,5 @@
 import { doc, updateDoc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db } from '@/lib/firebase/config';
 
 export class LoginTrackingService {
   static async updateLastLogin(uid: string): Promise<void> {

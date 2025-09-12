@@ -24,7 +24,7 @@ import {
   getMetadata,
 } from 'firebase/storage';
 import { db, storage, auth } from '@/lib/firebase/config';
-import { collections } from '@/lib/firebase';
+// Collections are now hardcoded strings
 import { logResourceActivity, logErrorActivity } from './activityLogger';
 
 export type DocumentType =
@@ -162,7 +162,7 @@ export const firebaseDocumentService = {
       };
 
       // Add to Firestore
-      const docRef = await addDoc(collection(db, collections.documents), documentData);
+      const docRef = await addDoc(collection(db, "documents"), documentData);
 
       const result = {
         ...documentData,
@@ -254,7 +254,7 @@ export const firebaseDocumentService = {
         constraints.push(limit(filters.pageSize));
       }
 
-      const q = query(collection(db, collections.documents), ...constraints);
+      const q = query(collection(db, "documents"), ...constraints);
       const querySnapshot = await getDocs(q);
 
       const documents: FirebaseDocument[] = [];
@@ -291,7 +291,7 @@ export const firebaseDocumentService = {
   // Get single document
   async getDocument(documentId: string): Promise<FirebaseDocument | null> {
     try {
-      const docRef = doc(db, collections.documents, documentId);
+      const docRef = doc(db, "documents", documentId);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
@@ -372,7 +372,7 @@ export const firebaseDocumentService = {
   async deleteDocument(documentId: string, storagePath: string): Promise<void> {
     try {
       // Get document info before deleting
-      const docRef = doc(db, collections.documents, documentId);
+      const docRef = doc(db, "documents", documentId);
       const docSnap = await getDoc(docRef);
       const documentData = docSnap.exists()
         ? ({ ...docSnap.data(), id: docSnap.id } as FirebaseDocument)
@@ -383,7 +383,7 @@ export const firebaseDocumentService = {
       await deleteObject(storageRef);
 
       // Delete from Firestore
-      await deleteDoc(doc(db, collections.documents, documentId));
+      await deleteDoc(doc(db, "documents", documentId));
 
       // Log activity if we have document data and current user
       const currentUser = auth.currentUser;
@@ -436,7 +436,7 @@ export const firebaseDocumentService = {
   // Archive/Unarchive document
   async toggleArchiveDocument(documentId: string, isArchived: boolean): Promise<void> {
     try {
-      const docRef = doc(db, collections.documents, documentId);
+      const docRef = doc(db, "documents", documentId);
       await updateDoc(docRef, {
         isArchived: isArchived,
         updatedAt: serverTimestamp(),
@@ -453,7 +453,7 @@ export const firebaseDocumentService = {
     updates: Partial<Pick<FirebaseDocument, 'name' | 'description' | 'tags' | 'type'>>
   ): Promise<void> {
     try {
-      const docRef = doc(db, collections.documents, documentId);
+      const docRef = doc(db, "documents", documentId);
       await updateDoc(docRef, {
         ...updates,
         updatedAt: serverTimestamp(),
@@ -470,7 +470,7 @@ export const firebaseDocumentService = {
     documentCount: number;
   }> {
     try {
-      const q = query(collection(db, collections.documents), where('uploadedBy.uid', '==', userId));
+      const q = query(collection(db, "documents"), where('uploadedBy.uid', '==', userId));
 
       const querySnapshot = await getDocs(q);
 

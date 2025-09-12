@@ -22,7 +22,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
     // Get invoice to check permissions using dynamic import
     const { getDoc, doc } = await import('firebase/firestore');
-    const { db, collections } = await import('@/lib/firebase');
+    const { db, collections } = await import('@/lib/firebase/config');
 
     const invoiceDoc = await getDoc(doc(db, collections.invoices, params.id));
 
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
     if (!email) {
       const { getDoc, doc } = await import('firebase/firestore');
-      const { db, collections } = await import('@/lib/firebase');
+      const { db, collections } = await import('@/lib/firebase/config');
 
       const clientDoc = await getDoc(doc(db, collections.users, invoice.clientId));
       const client = clientDoc.data();

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DynamicReportGenerator } from '@/services/ai/reportGeneration';
 import { doc, updateDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db } from '@/lib/firebase/config';
 
 export async function POST(req: NextRequest) {
   try {

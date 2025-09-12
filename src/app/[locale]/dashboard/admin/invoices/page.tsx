@@ -15,7 +15,7 @@ import {
   deleteDoc,
   doc,
 } from 'firebase/firestore';
-import { db, collections } from '@/lib/firebase';
+import { db, collections } from '@/lib/firebase/config';
 import {
   FileText,
   DollarSign,
