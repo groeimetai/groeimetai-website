@@ -31,28 +31,28 @@ function useElementSize<T extends HTMLElement>() {
   return { ref, size };
 }
 
-// Bereken n posities op een cirkel, mooi verdeeld (in %) - consistent centering
+// Bereken n posities op een cirkel, mooi verdeeld (in %) - mobile fixes only
 function radialPositions(count: number, radiusPct = 40, startDeg = -90, isMobile = false) {
   return Array.from({ length: count }, (_, i) => {
     const angle = ((360 / count) * i + startDeg) * (Math.PI / 180);
-    // Always use perfect center for consistency
-    const cx = 50;
+    // Mobile: perfect center (50%), Desktop: keep original (45%) for established layout
+    const cx = isMobile ? 50 : 45;
     const cy = 50;
-    // Adjust radius for mobile to ensure good fit
-    const radius = isMobile ? 32 : 38;
+    // Mobile: smaller radius for better fit, Desktop: keep original
+    const radius = isMobile ? 32 : radiusPct;
     const left = cx + radius * Math.cos(angle);
     const top = cy + radius * Math.sin(angle);
     return { top, left };
   });
 }
 
-// Lerp tussen center en een target positie (in %), fractie f [0..1] - consistent
+// Lerp tussen center en een target positie (in %), fractie f [0..1] - mobile-specific fixes
 function betweenCenter(pos: { top: number; left: number }, f = 0.6, isMobile = false) {
-  // Always use consistent center for proper positioning
-  const cx = 50;
+  // Mobile: use same center as API positions for consistency, Desktop: keep original logic
+  const cx = isMobile ? 50 : 50; // Now both use center, but apply different factors
   const cy = 50;
-  // Adjust factor for mobile to bring MCP elements closer to center
-  const factor = isMobile ? 0.5 : 0.6;
+  // Mobile: bring MCP closer to center, Desktop: keep original spacing
+  const factor = isMobile ? 0.55 : f;
   return {
     top: cy + (pos.top - cy) * factor,
     left: cx + (pos.left - cx) * factor,
@@ -146,13 +146,13 @@ export default function ApiToMcpAnimation() {
     []
   );
 
-  // Posities in % (consistent positioning)
+  // Posities in % (mobile-specific fixes, desktop unchanged)
   const apiPositions = useMemo(() => {
-    return radialPositions(apis.length, 40, -90, isMobile);
+    return radialPositions(apis.length, 38, -90, isMobile);
   }, [apis.length, isMobile]);
   
   const mcpPositions = useMemo(() => {
-    // MCP positions between center and API positions - consistent calculation
+    // MCP positions between center and API positions
     return apiPositions.map((apiPos) => 
       betweenCenter(apiPos, 0.6, isMobile)
     );
@@ -311,7 +311,7 @@ export default function ApiToMcpAnimation() {
             {/* Animation Stage */}
             <div
               ref={stageRef}
-              className="relative h-96 lg:h-[520px] mb-8 overflow-hidden rounded-xl border border-white/10"
+              className="relative h-80 sm:h-96 lg:h-[520px] mb-8 overflow-hidden rounded-xl border border-white/10"
               style={{
                 background:
                   'radial-gradient(ellipse at center, rgba(255,255,255,0.04), rgba(255,255,255,0.02))',
@@ -371,7 +371,7 @@ export default function ApiToMcpAnimation() {
                     };
                     const m = getBoxCenter(mcpConnectionPos, stageSize); // MCP connection point
                     // Agent box center
-                    const c = getBoxCenter({ top: 50, left: 50 }, stageSize); // Agent connection point (always centered)
+                    const c = getBoxCenter({ top: isMobile ? 50 : 55, left: 50 }, stageSize); // Agent connection point (mobile centered, desktop original)
                     return (
                       <motion.line
                         key={`m-c-${i}`}
@@ -400,10 +400,10 @@ export default function ApiToMcpAnimation() {
                   })}
               </svg>
 
-              {/* Agent (center - consistent position) */}
+              {/* Agent (center - mobile centered, desktop original) */}
               <div
                 className="absolute -translate-x-1/2 -translate-y-1/2"
-                style={{ top: '50%', left: '50%', zIndex: 35 }}
+                style={{ top: isMobile ? '50%' : '55%', left: '50%', zIndex: 35 }}
               >
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
