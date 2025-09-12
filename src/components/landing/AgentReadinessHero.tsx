@@ -112,7 +112,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-            className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight text-white mb-3 sm:mb-4 md:mb-6 leading-[1.1] sm:leading-tight"
+            className="text-5xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-10xl font-bold tracking-tight text-white mb-3 sm:mb-4 md:mb-6 leading-[1.05] sm:leading-tight"
           >
             {t('title')}{' '}
             <span
@@ -131,7 +131,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/90 mb-2 sm:mb-3 md:mb-4 max-w-4xl mx-auto font-light leading-relaxed"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white/90 mb-2 sm:mb-3 md:mb-4 max-w-4xl mx-auto font-light leading-relaxed"
           >
             {t('subtitle')}
           </motion.p>
@@ -140,7 +140,7 @@ export default function AgentReadinessHero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-sm sm:text-base md:text-lg text-white/80 mb-4 sm:mb-5 md:mb-6 max-w-3xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg md:text-xl text-white/80 mb-4 sm:mb-5 md:mb-6 max-w-3xl mx-auto leading-relaxed"
           >
             {t('description')}
           </motion.p>
@@ -156,7 +156,7 @@ export default function AgentReadinessHero() {
                 <Button
                   onClick={() => setShowQuickCheck(true)}
                   size="default"
-                  className="group text-white border-0 hover-lift transform transition-all duration-300 w-full sm:w-auto h-10 sm:h-11 text-sm sm:text-base px-4 sm:px-5 py-2 sm:py-2.5 shadow-lg hover:shadow-xl"
+                  className="group text-white border-0 hover-lift transform transition-all duration-300 w-full sm:w-auto h-12 sm:h-13 text-base sm:text-lg px-6 sm:px-7 py-3 sm:py-3.5 shadow-lg hover:shadow-xl font-semibold"
                   style={{ 
                     backgroundColor: '#F87315'
                   }}
@@ -169,7 +169,7 @@ export default function AgentReadinessHero() {
                   <Button
                     size="default"
                     variant="outline"
-                    className="border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 w-full sm:w-auto h-10 sm:h-11 text-sm sm:text-base px-4 sm:px-5 py-2 sm:py-2.5"
+                    className="border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 w-full sm:w-auto h-12 sm:h-13 text-base sm:text-lg px-6 sm:px-7 py-3 sm:py-3.5 font-semibold"
                   >
                     {t('cta.seeHow')}
                   </Button>
