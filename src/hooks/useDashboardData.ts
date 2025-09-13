@@ -107,18 +107,16 @@ export const useDashboardOverview = () => {
     const unsubscribe = DashboardService.subscribeToProjects(user.uid, (updatedProjects) => {
       setProjects(updatedProjects);
       
-      // Update stats when projects change
-      if (stats) {
-        const activeCount = updatedProjects.filter(p => 
-          ['pilot', 'implementation', 'live'].includes(p.status)
-        ).length;
-        
-        setStats(prev => prev ? { ...prev, activeProjects: activeCount } : null);
-      }
+      // Update stats when projects change - FIXED: Remove stats dependency
+      const activeCount = updatedProjects.filter(p => 
+        ['pilot', 'implementation', 'live'].includes(p.status)
+      ).length;
+      
+      setStats(prev => prev ? { ...prev, activeProjects: activeCount } : null);
     });
 
     return unsubscribe;
-  }, [user, stats]);
+  }, [user]); // EMERGENCY FIX: Removed stats dependency causing infinite loop
 
   return {
     stats,
@@ -156,8 +154,8 @@ export const useSystemMetrics = () => {
   useEffect(() => {
     fetchMetrics();
     
-    // Poll every 30 seconds for real-time updates
-    const interval = setInterval(fetchMetrics, 30000);
+    // EMERGENCY FIX: Reduced polling to 2 minutes to prevent API overload
+    const interval = setInterval(fetchMetrics, 120000);
     return () => clearInterval(interval);
   }, [fetchMetrics]);
 
@@ -289,8 +287,8 @@ export const usePerformanceMetrics = () => {
   useEffect(() => {
     fetchMetrics();
     
-    // Poll every 60 seconds for performance updates
-    const interval = setInterval(fetchMetrics, 60000);
+    // EMERGENCY FIX: Reduced polling to 5 minutes to prevent API overload
+    const interval = setInterval(fetchMetrics, 300000);
     return () => clearInterval(interval);
   }, [fetchMetrics]);
 
