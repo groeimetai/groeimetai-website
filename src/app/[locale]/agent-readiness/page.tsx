@@ -255,14 +255,14 @@ export default function AgentReadinessPage() {
   // Calculate how many questions are skipped from quick check
   const getSkippedQuestionCount = (): number => {
     if (!quizPreFillData) return 0;
-    
+
     let count = 0;
     if (shouldSkipStep(1)) count++; // Step 1 - APIs
     if (shouldSkipStep(2)) count++; // Step 2 - Data access
+    if (shouldSkipStep(3)) count++; // Step 3 - Process documentation
+    if (shouldSkipStep(4)) count++; // Step 4 - Automation experience
     if (shouldSkipStep(5)) count++; // Step 5 - Main blocker
-    if (shouldSkipStep(8)) count++; // Step 8 - Highest impact system
-    if (shouldSkipStep(13)) count++; // Step 13 - Budget reality
-    
+
     return count;
   };
 
