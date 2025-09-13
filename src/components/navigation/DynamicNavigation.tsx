@@ -34,11 +34,65 @@ export default function DynamicNavigation() {
   const { user, isAdmin, loading, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const t = useTranslations('navigation');
 
   useEffect(() => {
     setMounted(true);
+    
+    // Add body padding to accommodate fixed navigation
+    const addBodyPadding = () => {
+      document.body.style.paddingTop = '64px'; // h-16 = 64px
+    };
+    
+    addBodyPadding();
+    
+    // Cleanup on unmount
+    return () => {
+      document.body.style.paddingTop = '';
+    };
   }, []);
+
+  // Smart scroll behavior - hide on scroll down, show on scroll up
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Always show navigation at the very top
+      if (currentScrollY < 10) {
+        setIsVisible(true);
+        setLastScrollY(currentScrollY);
+        return;
+      }
+      
+      // Hide when scrolling down, show when scrolling up
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down - hide navigation
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        // Scrolling up - show navigation
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    // Add scroll listener with throttling for performance
+    let ticking = false;
+    const throttledScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', throttledScroll, { passive: true });
+    return () => window.removeEventListener('scroll', throttledScroll);
+  }, [lastScrollY]);
 
   // Define navigation items based on user context (simplified)
   const getNavigationItems = (): NavigationItem[] => {
@@ -76,7 +130,9 @@ export default function DynamicNavigation() {
   }
 
   return (
-    <nav className="bg-black border-b border-white/10 sticky top-0 z-50">
+    <nav className={`bg-black border-b border-white/10 fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
+      isVisible ? 'translate-y-0' : '-translate-y-full'
+    }`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
