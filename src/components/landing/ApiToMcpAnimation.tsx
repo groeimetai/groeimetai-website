@@ -34,9 +34,9 @@ function useElementSize<T extends HTMLElement>() {
 // Bereken posities - mobile simplified, desktop circular
 function radialPositions(count: number, radiusPct = 40, startDeg = -90, isMobile = false) {
   if (isMobile) {
-    // Mobile: simplified to single API positioned at top
+    // Mobile: simplified to single API positioned at top with better spacing
     return [
-      { top: 10, left: 50 }   // Single API - clear at top
+      { top: 15, left: 50 }   // Single API - better top spacing for professional layout
     ];
   } else {
     // Desktop: keep original circular layout with all APIs
@@ -54,8 +54,8 @@ function radialPositions(count: number, radiusPct = 40, startDeg = -90, isMobile
 // Bereken MCP posities - mobile edge-aware, desktop original
 function betweenCenter(pos: { top: number; left: number }, f = 0.6, isMobile = false) {
   if (isMobile) {
-    // Mobile: single MCP positioned in middle for clean vertical flow
-    return { top: 35, left: 50 }; // Fixed position between API (10%) and AI (70%)
+    // Mobile: single MCP positioned in middle for clean vertical flow with better spacing
+    return { top: 45, left: 50 }; // Fixed position between API (15%) and AI (75%) - professional spacing
   } else {
     // Desktop: keep original calculation for all MCPs
     const cx = 50;
@@ -379,7 +379,7 @@ export default function ApiToMcpAnimation() {
                     };
                     const m = getBoxCenter(mcpConnectionPos, stageSize); // MCP connection point
                     // Agent box center
-                    const c = getBoxCenter({ top: isMobile ? 70 : 55, left: 50 }, stageSize); // Agent connection point (mobile lower, desktop original)
+                    const c = getBoxCenter({ top: isMobile ? 75 : 55, left: 50 }, stageSize); // Agent connection point (mobile lower with better spacing, desktop original)
                     return (
                       <motion.line
                         key={`m-c-${i}`}
@@ -411,7 +411,7 @@ export default function ApiToMcpAnimation() {
               {/* Agent (center - mobile vertical flow, desktop original) */}
               <div
                 className="absolute -translate-x-1/2 -translate-y-1/2"
-                style={{ top: isMobile ? '70%' : '55%', left: '50%', zIndex: 35 }}
+                style={{ top: isMobile ? '75%' : '55%', left: '50%', zIndex: 35 }}
               >
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
