@@ -269,10 +269,9 @@ export default function AgentReadinessPage() {
   // Adjusted progress calculation that accounts for skipped questions
   const getAdjustedProgress = (): number => {
     const skippedCount = getSkippedQuestionCount();
-    // Total progress = questions answered in assessment + pre-filled from quiz
-    const questionsAnswered = (currentStep - 1) + skippedCount; // Include pre-filled questions
-    const totalQuestions = 15;
-    return Math.round((Math.min(questionsAnswered, totalQuestions) / totalQuestions) * 100);
+    const totalQuestionsToAnswer = 15 - skippedCount; // Fewer questions to answer due to quiz
+    const questionsAnswered = currentStep - 1; // Just current progress in assessment
+    return Math.round((Math.min(questionsAnswered, totalQuestionsToAnswer) / totalQuestionsToAnswer) * 100);
   };
 
   const systemOptions = [
@@ -853,7 +852,7 @@ export default function AgentReadinessPage() {
             {/* Progress Bar */}
             <div className="max-w-sm sm:max-w-md mx-auto mb-6 sm:mb-8">
               <div className="flex justify-between text-sm text-white/60 mb-2">
-                <span>Vraag {currentStep + getSkippedQuestionCount()} van 15</span>
+                <span>Vraag {currentStep + getSkippedQuestionCount()} van {15}</span>
                 <span>{getAdjustedProgress()}%</span>
               </div>
               <div className="w-full bg-white/10 rounded-full h-2">
