@@ -46,8 +46,23 @@ export async function GET(req: NextRequest) {
 
   } catch (error) {
     console.error('Error getting Expert Assessment project:', error);
+    
+    // Better error details for debugging
+    const errorDetails = {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      userId,
+      collection: 'expert_assessments'
+    };
+    
+    console.error('Expert Assessment API Error Details:', errorDetails);
+    
     return NextResponse.json(
-      { error: 'Failed to load assessment project' },
+      { 
+        error: 'Failed to load assessment project',
+        success: false,
+        assessment: null,
+        debug: process.env.NODE_ENV === 'development' ? errorDetails : undefined
+      },
       { status: 500 }
     );
   }
