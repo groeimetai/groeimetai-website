@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 interface QuickCheckData {
+  coreBusiness: string;
+  systems: string[];
+  highestImpactSystem: string;
   hasApis: string;
   dataAccess: string;
-  budgetReality: string;
-  mainBlocker: string;
-  highestImpact: string;
   email?: string;
   company?: string;
 }
@@ -43,64 +43,37 @@ export async function POST(req: NextRequest) {
 function calculateQuickScore(data: QuickCheckData): number {
   let score = 0;
 
-  // APIs (40 points) - MOST CRITICAL - Can agents connect to systems?
+  // Core Business (20 points) - Business clarity
+  const businessScore = data.coreBusiness?.trim().length > 10 ? 20 : data.coreBusiness?.trim().length > 0 ? 10 : 0;
+  score += businessScore;
+
+  // Systems (25 points) - Number of systems to agent-fy
+  const systemsScore = Math.min(data.systems?.length * 8 || 0, 25);
+  score += systemsScore;
+
+  // Highest Impact System (15 points) - Priority focus
+  const highestImpactScore = data.highestImpactSystem ? 15 : 0;
+  score += highestImpactScore;
+
+  // APIs (25 points) - CRITICAL - Can agents connect to systems?
   const apiScore =
     {
-      most: 40, // Agents can connect to most systems
-      some: 25, // Limited agent connectivity
-      unknown: 10, // Unknown = probably minimal APIs
+      most: 25, // Agents can connect to most systems
+      some: 18, // Limited agent connectivity
+      unknown: 8, // Unknown = probably minimal APIs
       none: 0, // Agents can't connect anywhere
     }[data.hasApis] || 0;
   score += apiScore;
 
-  // Data Access (25 points) - Can agents get the data they need?
+  // Data Access (15 points) - Can agents get the data they need?
   const dataScore =
     {
-      instant: 25, // Agents can access data immediately
-      minutes: 18, // Some friction but accessible
-      difficult: 8, // Major data silos block agents
+      instant: 15, // Agents can access data immediately
+      minutes: 12, // Some friction but accessible
+      difficult: 6, // Major data silos block agents
       impossible: 0, // Data not digitized yet
     }[data.dataAccess] || 0;
   score += dataScore;
-
-  // Budget Reality (20 points) - Investment capacity
-  const budgetScore =
-    {
-      'EUR100k+ - Enterprise rollout': 20,
-      'EUR25-100k - Meerdere systemen': 15,
-      'EUR10-25k - Één systeem serieus': 10,
-      '< EUR10k - Pilot/experiment': 5,
-      'Eerst business case nodig': 2,
-    }[data.budgetReality] || 0;
-  score += budgetScore;
-
-  // Main Blocker Assessment (10 points) - Reverse scoring (less severe = higher score)
-  const blockerScore =
-    {
-      'Security/compliance zorgen': 10, // Addressable governance
-      'Budget/resources beperkt': 8, // Solvable constraint
-      'Geen idee waar te beginnen': 6, // Need guidance
-      'Technische kennis ontbreekt': 4, // Knowledge gap
-      'Systemen praten niet met elkaar': 2, // Complex integration
-      'Team weerstand tegen verandering': 3, // Change management challenge
-      'Data is te rommelig/verspreid': 1, // Data quality issues
-      Anders: 5, // Unknown, middle score
-    }[data.mainBlocker] || 0;
-  score += blockerScore;
-
-  // Highest Impact System (5 points) - System readiness assessment
-  const impactScore =
-    {
-      'Klantenservice/Helpdesk': 5, // High agent ROI
-      'CRM/Sales': 4, // Good automation potential
-      'Kennisbank/Documentatie': 4, // Knowledge management
-      'ERP/Finance': 3, // Complex but valuable
-      'Planning/Logistics': 3, // Operational efficiency
-      'HR/Personeelszaken': 3, // Process automation potential
-      'Eigen software/Maatwerk': 2, // Depends on implementation
-      Anders: 2, // Unknown system
-    }[data.highestImpact] || 0;
-  score += impactScore;
 
   return Math.min(score, 100);
 }
@@ -126,6 +99,9 @@ async function logQuickCheck(data: QuickCheckData, score: number, level: string)
   console.log('Quick check completed:', {
     score,
     level,
+    coreBusiness: data.coreBusiness,
+    systemsCount: data.systems?.length || 0,
+    highestImpactSystem: data.highestImpactSystem,
     hasApis: data.hasApis,
     dataAccess: data.dataAccess,
     timestamp: new Date().toISOString(),

@@ -113,11 +113,11 @@ export default function AgentReadinessPage() {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('prefill') === 'true' && urlParams.get('from') === 'quick_check') {
         loadedData = {
+          coreBusiness: decodeURIComponent(urlParams.get('coreBusiness') || ''),
+          systems: (urlParams.get('systems') || '').split(',').filter(s => s.trim()),
+          highestImpactSystem: decodeURIComponent(urlParams.get('highestImpactSystem') || ''),
           hasApis: decodeURIComponent(urlParams.get('hasApis') || ''),
           dataAccess: decodeURIComponent(urlParams.get('dataAccess') || ''),
-          budgetReality: decodeURIComponent(urlParams.get('budgetReality') || ''),
-          mainBlocker: decodeURIComponent(urlParams.get('mainBlocker') || ''),
-          highestImpact: decodeURIComponent(urlParams.get('highestImpact') || ''),
           quickCheckScore: parseInt(urlParams.get('score') || '0'),
           quickCheckLevel: decodeURIComponent(urlParams.get('level') || ''),
           source: 'hero_quiz'
@@ -128,27 +128,27 @@ export default function AgentReadinessPage() {
     }
 
     // If we have data, pre-fill the form
-    if (loadedData && (loadedData.hasApis || loadedData.dataAccess || loadedData.budgetReality)) {
+    if (loadedData && (loadedData.coreBusiness || loadedData.systems || loadedData.hasApis)) {
       setQuizPreFillData(loadedData);
       
       // Pre-fill overlapping fields with validation
       setFormData(prev => ({
         ...prev,
+        coreBusiness: loadedData.coreBusiness || '',
+        systems: loadedData.systems || [],
+        highestImpactSystem: loadedData.highestImpactSystem || '',
         hasApis: loadedData.hasApis || '',
-        dataAccess: loadedData.dataAccess || '',
-        budgetReality: loadedData.budgetReality || '',
-        mainBlocker: loadedData.mainBlocker || '',
-        highestImpactSystem: loadedData.highestImpact || ''
+        dataAccess: loadedData.dataAccess || ''
       }));
 
       console.log('✅ Quiz-to-Assessment Bridge Successful:', {
         dataSource,
         fieldsLoaded: {
+          coreBusiness: !!loadedData.coreBusiness,
+          systems: !!(loadedData.systems && loadedData.systems.length > 0),
+          highestImpactSystem: !!loadedData.highestImpactSystem,
           hasApis: !!loadedData.hasApis,
-          dataAccess: !!loadedData.dataAccess,
-          budgetReality: !!loadedData.budgetReality,
-          mainBlocker: !!loadedData.mainBlocker,
-          highestImpact: !!loadedData.highestImpact
+          dataAccess: !!loadedData.dataAccess
         },
         score: loadedData.quickCheckScore || 'none',
         level: loadedData.quickCheckLevel || 'none'

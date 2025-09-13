@@ -6,14 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowRight, Target, Zap, CheckCircle } from 'lucide-react';
 
 interface QuickCheckData {
+  coreBusiness: string;
+  systems: string[];
+  highestImpactSystem: string;
   hasApis: string;
   dataAccess: string;
-  budgetReality: string;
-  mainBlocker: string;
-  highestImpact: string;
 }
 
 export function AgentReadinessQuickCheck() {
@@ -23,11 +25,11 @@ export function AgentReadinessQuickCheck() {
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState('');
   const [formData, setFormData] = useState<QuickCheckData>({
+    coreBusiness: '',
+    systems: [],
+    highestImpactSystem: '',
     hasApis: '',
     dataAccess: '',
-    budgetReality: '',
-    mainBlocker: '',
-    highestImpact: '',
   });
 
   const totalSteps = 5;
@@ -35,59 +37,35 @@ export function AgentReadinessQuickCheck() {
   const calculateQuickScore = (data: QuickCheckData): number => {
     let score = 0;
 
-    // APIs (40 points)
+    // Core Business (20 points)
+    const businessScore = data.coreBusiness.trim().length > 10 ? 20 : data.coreBusiness.trim().length > 0 ? 10 : 0;
+    score += businessScore;
+
+    // Systems (25 points - based on number of systems selected)
+    const systemsScore = Math.min(data.systems.length * 8, 25);
+    score += systemsScore;
+
+    // Highest Impact System (15 points)
+    const highestImpactScore = data.highestImpactSystem ? 15 : 0;
+    score += highestImpactScore;
+
+    // APIs (25 points)
     const apiScore = {
-      'most': 40,
-      'some': 25,
-      'unknown': 10,
+      'most': 25,
+      'some': 18,
+      'unknown': 8,
       'none': 0
     }[data.hasApis] || 0;
     score += apiScore;
 
-    // Data Access (25 points)
+    // Data Access (15 points)
     const dataScore = {
-      'instant': 25,
-      'minutes': 18,
-      'difficult': 8,
+      'instant': 15,
+      'minutes': 12,
+      'difficult': 6,
       'impossible': 0
     }[data.dataAccess] || 0;
     score += dataScore;
-
-    // Budget Reality (20 points)
-    const budgetScore = {
-      'EUR100k+ - Enterprise rollout': 20,
-      'EUR25-100k - Meerdere systemen': 15,
-      'EUR10-25k - Één systeem serieus': 10,
-      '< EUR10k - Pilot/experiment': 5,
-      'Eerst business case nodig': 2
-    }[data.budgetReality] || 0;
-    score += budgetScore;
-
-    // Main Blocker (10 points)
-    const blockerScore = {
-      'Security/compliance zorgen': 10,
-      'Budget/resources beperkt': 8,
-      'Geen idee waar te beginnen': 6,
-      'Technische kennis ontbreekt': 4,
-      'Systemen praten niet met elkaar': 2,
-      'Team weerstand tegen verandering': 3,
-      'Data is te rommelig/verspreid': 1,
-      'Anders': 5
-    }[data.mainBlocker] || 0;
-    score += blockerScore;
-
-    // Highest Impact (5 points)
-    const impactScore = {
-      'Klantenservice/Helpdesk': 5,
-      'CRM/Sales': 4,
-      'Kennisbank/Documentatie': 4,
-      'ERP/Finance': 3,
-      'Planning/Logistics': 3,
-      'HR/Personeelszaken': 3,
-      'Eigen software/Maatwerk': 2,
-      'Anders': 2
-    }[data.highestImpact] || 0;
-    score += impactScore;
 
     return Math.min(score, 100);
   };
@@ -132,15 +110,15 @@ export function AgentReadinessQuickCheck() {
   const canProceed = (): boolean => {
     switch (currentStep) {
       case 1:
-        return formData.hasApis !== '';
+        return formData.coreBusiness.trim().length > 0;
       case 2:
-        return formData.dataAccess !== '';
+        return formData.systems.length > 0;
       case 3:
-        return formData.budgetReality !== '';
+        return formData.highestImpactSystem !== '';
       case 4:
-        return formData.mainBlocker !== '';
+        return formData.hasApis !== '';
       case 5:
-        return formData.highestImpact !== '';
+        return formData.dataAccess !== '';
       default:
         return false;
     }
@@ -176,11 +154,11 @@ export function AgentReadinessQuickCheck() {
           <Button
             onClick={() => {
               const preFillData = {
+                coreBusiness: formData.coreBusiness,
+                systems: formData.systems,
+                highestImpactSystem: formData.highestImpactSystem,
                 hasApis: formData.hasApis,
                 dataAccess: formData.dataAccess,
-                budgetReality: formData.budgetReality,
-                mainBlocker: formData.mainBlocker,
-                highestImpact: formData.highestImpact,
                 quickCheckScore: score,
                 quickCheckLevel: level,
                 source: 'hero_quiz',
@@ -197,11 +175,11 @@ export function AgentReadinessQuickCheck() {
                 score: score.toString(),
                 level: encodeURIComponent(level),
                 from: 'quick_check',
+                coreBusiness: encodeURIComponent(formData.coreBusiness),
+                systems: formData.systems.join(','),
+                highestImpactSystem: encodeURIComponent(formData.highestImpactSystem),
                 hasApis: formData.hasApis,
-                dataAccess: formData.dataAccess,
-                budgetReality: encodeURIComponent(formData.budgetReality),
-                mainBlocker: encodeURIComponent(formData.mainBlocker),
-                highestImpact: encodeURIComponent(formData.highestImpact)
+                dataAccess: formData.dataAccess
               });
               
               console.log('🔄 Quiz-to-Assessment Transfer:', {
@@ -225,11 +203,11 @@ export function AgentReadinessQuickCheck() {
               setIsCompleted(false);
               setCurrentStep(1);
               setFormData({
+                coreBusiness: '',
+                systems: [],
+                highestImpactSystem: '',
                 hasApis: '',
                 dataAccess: '',
-                budgetReality: '',
-                mainBlocker: '',
-                highestImpact: '',
               });
             }}
             variant="outline"
@@ -273,81 +251,66 @@ export function AgentReadinessQuickCheck() {
           <div className="space-y-6">
             {currentStep === 1 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">{t('questions.hasApis.title')}</h4>
-                <RadioGroup value={formData.hasApis} onValueChange={(value) => setFormData(prev => ({ ...prev, hasApis: value }))}>
-                  <div className="space-y-2 sm:space-y-3">
-                    <Label htmlFor="most" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="most" id="most" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.hasApis.options.most')}</span>
-                    </Label>
-                    <Label htmlFor="some" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="some" id="some" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.hasApis.options.some')}</span>
-                    </Label>
-                    <Label htmlFor="unknown" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="unknown" id="unknown" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.hasApis.options.unknown')}</span>
-                    </Label>
-                    <Label htmlFor="none" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="none" id="none" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.hasApis.options.none')}</span>
-                    </Label>
-                  </div>
-                </RadioGroup>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">💼 Wat is jullie core business?</h4>
+                <p className="text-white/70 text-sm mb-4">In één zin: wat doet jullie bedrijf voor klanten?</p>
+                <Input
+                  value={formData.coreBusiness}
+                  onChange={(e) => setFormData(prev => ({ ...prev, coreBusiness: e.target.value }))}
+                  placeholder="We zijn een [type bedrijf] die [wat jullie doen] voor [doelgroep]"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                />
               </div>
             )}
 
             {currentStep === 2 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">{t('questions.dataAccess.title')}</h4>
-                <RadioGroup value={formData.dataAccess} onValueChange={(value) => setFormData(prev => ({ ...prev, dataAccess: value }))}>
-                  <div className="space-y-2 sm:space-y-3">
-                    <Label htmlFor="instant" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="instant" id="instant" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.dataAccess.options.instant')}</span>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🏗️ Welke systemen MOETEN agent-ready worden?</h4>
+                <p className="text-white/70 text-sm mb-4">Selecteer maximaal 3 systemen die je prioriteit hebben</p>
+                <div className="space-y-2 sm:space-y-3">
+                  {[
+                    'Klantenservice/Helpdesk',
+                    'CRM/Sales', 
+                    'ERP/Finance',
+                    'HR/Personeelszaken',
+                    'Kennisbank/Documentatie',
+                    'Planning/Logistics',
+                    'Eigen software/Maatwerk',
+                    'Anders'
+                  ].map((system) => (
+                    <Label key={system} className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <Checkbox 
+                        checked={formData.systems.includes(system)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          const checked = e.target.checked;
+                          if (checked && formData.systems.length < 3) {
+                            setFormData(prev => ({ ...prev, systems: [...prev.systems, system] }));
+                          } else if (!checked) {
+                            setFormData(prev => ({ ...prev, systems: prev.systems.filter(s => s !== system) }));
+                          }
+                        }}
+                        disabled={!formData.systems.includes(system) && formData.systems.length >= 3}
+                        className="mt-0.5"
+                      />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{system}</span>
                     </Label>
-                    <Label htmlFor="minutes" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="minutes" id="minutes" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.dataAccess.options.minutes')}</span>
-                    </Label>
-                    <Label htmlFor="difficult" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="difficult" id="difficult" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.dataAccess.options.difficult')}</span>
-                    </Label>
-                    <Label htmlFor="impossible" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="impossible" id="impossible" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.dataAccess.options.impossible')}</span>
-                    </Label>
-                  </div>
-                </RadioGroup>
+                  ))}
+                </div>
+                <p className="text-white/50 text-xs mt-2">Geselecteerd: {formData.systems.length}/3 systemen</p>
               </div>
             )}
 
             {currentStep === 3 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">{t('questions.budgetReality.title')}</h4>
-                <RadioGroup value={formData.budgetReality} onValueChange={(value) => setFormData(prev => ({ ...prev, budgetReality: value }))}>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🎯 Welk systeem heeft de GROOTSTE impact?</h4>
+                <p className="text-white/70 text-sm mb-4">Kies uit de systemen die je net selecteerde</p>
+                <RadioGroup value={formData.highestImpactSystem} onValueChange={(value) => setFormData(prev => ({ ...prev, highestImpactSystem: value }))}>
                   <div className="space-y-2 sm:space-y-3">
-                    <Label htmlFor="enterprise" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="EUR100k+ - Enterprise rollout" id="enterprise" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.budgetReality.options.enterprise')}</span>
-                    </Label>
-                    <Label htmlFor="multiple" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="EUR25-100k - Meerdere systemen" id="multiple" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.budgetReality.options.multiple')}</span>
-                    </Label>
-                    <Label htmlFor="single" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="EUR10-25k - Één systeem serieus" id="single" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.budgetReality.options.single')}</span>
-                    </Label>
-                    <Label htmlFor="pilot" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="< EUR10k - Pilot/experiment" id="pilot" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.budgetReality.options.pilot')}</span>
-                    </Label>
-                    <Label htmlFor="businessCase" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Eerst business case nodig" id="businessCase" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.budgetReality.options.businessCase')}</span>
-                    </Label>
+                    {formData.systems.map((system) => (
+                      <Label key={system} className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                        <RadioGroupItem value={system} id={system.toLowerCase().replace(/[^a-z0-9]/g, '-')} className="mt-0.5" />
+                        <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{system}</span>
+                      </Label>
+                    ))}
                   </div>
                 </RadioGroup>
               </div>
@@ -355,40 +318,25 @@ export function AgentReadinessQuickCheck() {
 
             {currentStep === 4 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">{t('questions.mainBlocker.title')}</h4>
-                <RadioGroup value={formData.mainBlocker} onValueChange={(value) => setFormData(prev => ({ ...prev, mainBlocker: value }))}>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🔌 Hebben deze systemen APIs?</h4>
+                <p className="text-white/70 text-sm mb-4">Agents moeten kunnen verbinden met je systemen</p>
+                <RadioGroup value={formData.hasApis} onValueChange={(value) => setFormData(prev => ({ ...prev, hasApis: value }))}>
                   <div className="space-y-2 sm:space-y-3">
-                    <Label htmlFor="security" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Security/compliance zorgen" id="security" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.security')}</span>
+                    <Label htmlFor="most" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="most" id="most" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, de meeste hebben APIs</span>
                     </Label>
-                    <Label htmlFor="budget" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Budget/resources beperkt" id="budget" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.budget')}</span>
+                    <Label htmlFor="some" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="some" id="some" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Sommige wel, sommige niet</span>
                     </Label>
-                    <Label htmlFor="guidance" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Geen idee waar te beginnen" id="guidance" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.guidance')}</span>
+                    <Label htmlFor="unknown" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="unknown" id="unknown" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Geen idee eigenlijk</span>
                     </Label>
-                    <Label htmlFor="knowledge" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Technische kennis ontbreekt" id="knowledge" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.knowledge')}</span>
-                    </Label>
-                    <Label htmlFor="integration" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Systemen praten niet met elkaar" id="integration" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.integration')}</span>
-                    </Label>
-                    <Label htmlFor="resistance" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Team weerstand tegen verandering" id="resistance" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.resistance')}</span>
-                    </Label>
-                    <Label htmlFor="data" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Data is te rommelig/verspreid" id="data" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.data')}</span>
-                    </Label>
-                    <Label htmlFor="other" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Anders" id="other" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.other')}</span>
+                    <Label htmlFor="none" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="none" id="none" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, nog geen APIs</span>
                     </Label>
                   </div>
                 </RadioGroup>
@@ -397,40 +345,25 @@ export function AgentReadinessQuickCheck() {
 
             {currentStep === 5 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">{t('questions.highestImpact.title')}</h4>
-                <RadioGroup value={formData.highestImpact} onValueChange={(value) => setFormData(prev => ({ ...prev, highestImpact: value }))}>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📊 Kun je snel klantdata vinden?</h4>
+                <p className="text-white/70 text-sm mb-4">Test: Kun je binnen 5 minuten alle data van klant "Jan de Vries" vinden?</p>
+                <RadioGroup value={formData.dataAccess} onValueChange={(value) => setFormData(prev => ({ ...prev, dataAccess: value }))}>
                   <div className="space-y-2 sm:space-y-3">
-                    <Label htmlFor="helpdesk" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Klantenservice/Helpdesk" id="helpdesk" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.highestImpact.options.helpdesk')}</span>
+                    <Label htmlFor="instant" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="instant" id="instant" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, binnen 1 minuut</span>
                     </Label>
-                    <Label htmlFor="crm" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="CRM/Sales" id="crm" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.highestImpact.options.crm')}</span>
+                    <Label htmlFor="minutes" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="minutes" id="minutes" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, binnen 5 minuten</span>
                     </Label>
-                    <Label htmlFor="knowledgeDoc" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Kennisbank/Documentatie" id="knowledgeDoc" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.highestImpact.options.knowledge')}</span>
+                    <Label htmlFor="difficult" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="difficult" id="difficult" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Moeilijk, data zit verspreid</span>
                     </Label>
-                    <Label htmlFor="erp" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="ERP/Finance" id="erp" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.highestImpact.options.erp')}</span>
-                    </Label>
-                    <Label htmlFor="planning" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Planning/Logistics" id="planning" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.highestImpact.options.planning')}</span>
-                    </Label>
-                    <Label htmlFor="hr" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="HR/Personeelszaken" id="hr" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.highestImpact.options.hr')}</span>
-                    </Label>
-                    <Label htmlFor="custom" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Eigen software/Maatwerk" id="custom" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.highestImpact.options.custom')}</span>
-                    </Label>
-                    <Label htmlFor="otherImpact" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="Anders" id="otherImpact" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.highestImpact.options.other')}</span>
+                    <Label htmlFor="impossible" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="impossible" id="impossible" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Bijna onmogelijk</span>
                     </Label>
                   </div>
                 </RadioGroup>
