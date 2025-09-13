@@ -110,15 +110,15 @@ export function AgentReadinessQuickCheck() {
   const canProceed = (): boolean => {
     switch (currentStep) {
       case 1:
-        return formData.coreBusiness.trim().length > 0;
-      case 2:
-        return formData.systems.length > 0;
-      case 3:
-        return formData.highestImpactSystem !== '';
-      case 4:
         return formData.hasApis !== '';
-      case 5:
+      case 2:
         return formData.dataAccess !== '';
+      case 3:
+        return formData.processDocumentation !== '';
+      case 4:
+        return formData.automationExperience !== '';
+      case 5:
+        return formData.mainBlocker !== '';
       default:
         return false;
     }
