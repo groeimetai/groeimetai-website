@@ -422,7 +422,7 @@ export default function ApiToMcpAnimation() {
                     <motion.div
                       animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.06, 1] }}
                       transition={{ repeat: Infinity, duration: 3 }}
-                      className="bg-red-500/20 border-2 border-red-500/40 rounded-full p-8 text-center"
+                      className={`bg-red-500/20 border-2 border-red-500/40 rounded-full text-center ${isMobile ? 'p-6' : 'p-8'}`}
                     >
                       <div className="text-red-400 text-2xl font-bold">
                         <div className="inline-flex items-center space-x-1">
@@ -438,7 +438,7 @@ export default function ApiToMcpAnimation() {
                     <motion.div
                       animate={{ rotate: [0, 360] }}
                       transition={{ repeat: Infinity, duration: 8, ease: 'linear' }}
-                      className="bg-orange-500/20 border-2 border-orange-500/50 rounded-full p-8 text-center"
+                      className={`bg-orange-500/20 border-2 border-orange-500/50 rounded-full text-center ${isMobile ? 'p-6' : 'p-8'}`}
                     >
                       <div className="text-orange-500 text-2xl font-bold">
                         <div className="inline-flex items-center space-x-1">
@@ -461,7 +461,7 @@ export default function ApiToMcpAnimation() {
                         ],
                       }}
                       transition={{ repeat: Infinity, duration: 3 }}
-                      className="bg-green-500/20 border-2 border-green-500/50 rounded-full p-8 text-center"
+                      className={`bg-green-500/20 border-2 border-green-500/50 rounded-full text-center ${isMobile ? 'p-6' : 'p-8'}`}
                     >
                       <div className="text-green-500 text-2xl font-bold">
                         <div className="inline-flex items-center space-x-1">
@@ -532,7 +532,7 @@ export default function ApiToMcpAnimation() {
                       transition={
                         currentPhase === 2 ? { repeat: Infinity, duration: 2, delay: i * 0.15 } : {}
                       }
-                      className="rounded-lg p-4 text-center min-w-[105px]"
+                      className={`rounded-lg text-center ${isMobile ? 'p-3 min-w-[90px]' : 'p-4 min-w-[105px]'}`}
                       style={{ background: v.bg, border: v.border }}
                     >
                       <div className={`text-xs font-medium whitespace-nowrap ${v.title}`}>
@@ -560,7 +560,7 @@ export default function ApiToMcpAnimation() {
                         transition={{ delay: 0.4 + i * 0.1, duration: 0.3 }}
                       >
                         <div
-                          className="rounded-lg p-3 text-center min-w-[64px]"
+                          className={`rounded-lg text-center ${isMobile ? 'p-2 min-w-[60px]' : 'p-3 min-w-[64px]'}`}
                           style={{ background: v.bg, border: v.border }}
                         >
                           <div className={`text-xs font-bold ${v.text}`}>MCP</div>
