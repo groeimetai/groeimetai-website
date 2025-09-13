@@ -216,30 +216,30 @@ export default function AgentReadinessPage() {
     if (!quizPreFillData) return false;
     
     const skipMap: Record<number, { condition: boolean; field: string; value: any }> = {
-      1: { // API question (now step 1)
-        condition: !!(quizPreFillData.hasApis && formData.hasApis),
+      1: { // APIs question (step 1)
+        condition: !!(quizPreFillData.hasApis),
         field: 'hasApis',
         value: quizPreFillData.hasApis
       },
-      2: { // Data access question (now step 2)
-        condition: !!(quizPreFillData.dataAccess && formData.dataAccess),
+      2: { // Data access question (step 2)
+        condition: !!(quizPreFillData.dataAccess),
         field: 'dataAccess',
         value: quizPreFillData.dataAccess
       },
-      5: { // Main blocker question (now step 5)
-        condition: !!(quizPreFillData.mainBlocker && formData.mainBlocker),
+      3: { // Process documentation question (step 3)
+        condition: !!(quizPreFillData.processDocumentation),
+        field: 'processDocumentation',
+        value: quizPreFillData.processDocumentation
+      },
+      4: { // Automation experience question (step 4)
+        condition: !!(quizPreFillData.automationExperience),
+        field: 'automationExperience',
+        value: quizPreFillData.automationExperience
+      },
+      5: { // Main blocker question (step 5)
+        condition: !!(quizPreFillData.mainBlocker),
         field: 'mainBlocker',
         value: quizPreFillData.mainBlocker
-      },
-      8: { // Highest impact system question (now step 8)
-        condition: !!(quizPreFillData.highestImpact && formData.highestImpactSystem),
-        field: 'highestImpact',
-        value: quizPreFillData.highestImpact
-      },
-      13: { // Budget reality question (now step 13)
-        condition: !!(quizPreFillData.budgetReality && formData.budgetReality),
-        field: 'budgetReality',
-        value: quizPreFillData.budgetReality
       }
     };
     
