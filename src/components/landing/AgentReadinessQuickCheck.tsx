@@ -154,11 +154,11 @@ export function AgentReadinessQuickCheck() {
           <Button
             onClick={() => {
               const preFillData = {
-                coreBusiness: formData.coreBusiness,
-                systems: formData.systems,
-                highestImpactSystem: formData.highestImpactSystem,
                 hasApis: formData.hasApis,
                 dataAccess: formData.dataAccess,
+                processDocumentation: formData.processDocumentation,
+                automationExperience: formData.automationExperience,
+                mainBlocker: formData.mainBlocker,
                 quickCheckScore: score,
                 quickCheckLevel: level,
                 source: 'hero_quiz',
