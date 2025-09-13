@@ -576,8 +576,16 @@ function DashboardPageContent() {
                           <div className="text-sm text-white/60">
                             {assessment.createdAt ? new Date(assessment.createdAt).toLocaleDateString() : 'Recent'}
                           </div>
-                          <Badge className="bg-green-500 text-white mt-1">
-                            {assessment.status === 'assessment_submitted' ? 'Voltooid' : assessment.status}
+                          <Badge className={`mt-1 ${
+                            assessment.status === 'generating' ? 'bg-orange-500 text-white' :
+                            assessment.status === 'ready' ? 'bg-green-500 text-white' :
+                            assessment.status === 'assessment_submitted' ? 'bg-blue-500 text-white' :
+                            'bg-gray-500 text-white'
+                          }`}>
+                            {assessment.status === 'assessment_submitted' ? 'Rapport wordt gegenereerd...' :
+                             assessment.status === 'generating' ? 'Aan het genereren...' :
+                             assessment.status === 'ready' ? 'Rapport klaar!' :
+                             assessment.status}
                           </Badge>
                         </div>
                       </div>
