@@ -277,53 +277,51 @@ export function AgentReadinessQuickCheck() {
 
             {currentStep === 2 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🏗️ Welke systemen MOETEN agent-ready worden?</h4>
-                <p className="text-white/70 text-sm mb-4">Selecteer maximaal 3 systemen die je prioriteit hebben</p>
-                <div className="space-y-2 sm:space-y-3">
-                  {[
-                    'Klantenservice/Helpdesk',
-                    'CRM/Sales', 
-                    'ERP/Finance',
-                    'HR/Personeelszaken',
-                    'Kennisbank/Documentatie',
-                    'Planning/Logistics',
-                    'Eigen software/Maatwerk',
-                    'Anders'
-                  ].map((system) => (
-                    <Label key={system} className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <Checkbox 
-                        checked={formData.systems.includes(system)}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          const checked = e.target.checked;
-                          if (checked && formData.systems.length < 3) {
-                            setFormData(prev => ({ ...prev, systems: [...prev.systems, system] }));
-                          } else if (!checked) {
-                            setFormData(prev => ({ ...prev, systems: prev.systems.filter(s => s !== system) }));
-                          }
-                        }}
-                        disabled={!formData.systems.includes(system) && formData.systems.length >= 3}
-                        className="mt-0.5"
-                      />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{system}</span>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📊 Kun je snel klantdata vinden?</h4>
+                <RadioGroup value={formData.dataAccess} onValueChange={(value) => setFormData(prev => ({ ...prev, dataAccess: value }))}>
+                  <div className="space-y-2 sm:space-y-3">
+                    <Label htmlFor="instant" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="instant" id="instant" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, paar clicks en ik heb alles</span>
                     </Label>
-                  ))}
-                </div>
-                <p className="text-white/50 text-xs mt-2">Geselecteerd: {formData.systems.length}/3 systemen</p>
+                    <Label htmlFor="minutes" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="minutes" id="minutes" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, maar moet door 2-3 systemen</span>
+                    </Label>
+                    <Label htmlFor="difficult" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="difficult" id="difficult" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Lastig, data zit verspreid</span>
+                    </Label>
+                    <Label htmlFor="impossible" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="impossible" id="impossible" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, veel data is niet digitaal</span>
+                    </Label>
+                  </div>
+                </RadioGroup>
               </div>
             )}
 
             {currentStep === 3 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🎯 Welk systeem heeft de GROOTSTE impact?</h4>
-                <p className="text-white/70 text-sm mb-4">Kies uit de systemen die je net selecteerde</p>
-                <RadioGroup value={formData.highestImpactSystem} onValueChange={(value) => setFormData(prev => ({ ...prev, highestImpactSystem: value }))}>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📋 Staan jullie processen beschreven?</h4>
+                <RadioGroup value={formData.processDocumentation} onValueChange={(value) => setFormData(prev => ({ ...prev, processDocumentation: value }))}>
                   <div className="space-y-2 sm:space-y-3">
-                    {formData.systems.map((system) => (
-                      <Label key={system} className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                        <RadioGroupItem value={system} id={system.toLowerCase().replace(/[^a-z0-9]/g, '-')} className="mt-0.5" />
-                        <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{system}</span>
-                      </Label>
-                    ))}
+                    <Label htmlFor="documented" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="documented" id="documented" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, alles gedocumenteerd</span>
+                    </Label>
+                    <Label htmlFor="partially" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="partially" id="partially" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Belangrijkste processen wel</span>
+                    </Label>
+                    <Label htmlFor="tribal" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="tribal" id="tribal" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, zit in hoofden van medewerkers</span>
+                    </Label>
+                    <Label htmlFor="chaos" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="chaos" id="chaos" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Iedereen doet het anders</span>
+                    </Label>
                   </div>
                 </RadioGroup>
               </div>
@@ -331,25 +329,24 @@ export function AgentReadinessQuickCheck() {
 
             {currentStep === 4 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🔌 Hebben deze systemen APIs?</h4>
-                <p className="text-white/70 text-sm mb-4">Agents moeten kunnen verbinden met je systemen</p>
-                <RadioGroup value={formData.hasApis} onValueChange={(value) => setFormData(prev => ({ ...prev, hasApis: value }))}>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🤖 Welke automation gebruik je al?</h4>
+                <RadioGroup value={formData.automationExperience} onValueChange={(value) => setFormData(prev => ({ ...prev, automationExperience: value }))}>
                   <div className="space-y-2 sm:space-y-3">
-                    <Label htmlFor="most" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="most" id="most" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, de meeste hebben APIs</span>
+                    <Label htmlFor="advanced" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="advanced" id="advanced" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Zapier, Power Automate, RPA tools</span>
                     </Label>
-                    <Label htmlFor="some" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="some" id="some" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Sommige wel, sommige niet</span>
+                    <Label htmlFor="basic" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="basic" id="basic" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Email automation, basis workflows</span>
                     </Label>
-                    <Label htmlFor="unknown" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="unknown" id="unknown" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Geen idee eigenlijk</span>
+                    <Label htmlFor="trying" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="trying" id="trying" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Proberen dingen, maar breekt vaak</span>
                     </Label>
-                    <Label htmlFor="none" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="none" id="none" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, nog geen APIs</span>
+                    <Label htmlFor="none-auto" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="none" id="none-auto" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, alles nog handmatig</span>
                     </Label>
                   </div>
                 </RadioGroup>
@@ -358,25 +355,32 @@ export function AgentReadinessQuickCheck() {
 
             {currentStep === 5 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📊 Kun je snel klantdata vinden?</h4>
-                <p className="text-white/70 text-sm mb-4">Test: Kun je binnen 5 minuten alle data van klant "Jan de Vries" vinden?</p>
-                <RadioGroup value={formData.dataAccess} onValueChange={(value) => setFormData(prev => ({ ...prev, dataAccess: value }))}>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🚧 Wat is je grootste blocker voor automation?</h4>
+                <RadioGroup value={formData.mainBlocker} onValueChange={(value) => setFormData(prev => ({ ...prev, mainBlocker: value }))}>
                   <div className="space-y-2 sm:space-y-3">
-                    <Label htmlFor="instant" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="instant" id="instant" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, binnen 1 minuut</span>
+                    <Label htmlFor="security" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="Security/compliance zorgen" id="security" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Security/compliance zorgen</span>
                     </Label>
-                    <Label htmlFor="minutes" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="minutes" id="minutes" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, binnen 5 minuten</span>
+                    <Label htmlFor="budget" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="Budget/resources beperkt" id="budget" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Budget/resources beperkt</span>
                     </Label>
-                    <Label htmlFor="difficult" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="difficult" id="difficult" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Moeilijk, data zit verspreid</span>
+                    <Label htmlFor="guidance" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="Geen idee waar te beginnen" id="guidance" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Geen idee waar te beginnen</span>
                     </Label>
-                    <Label htmlFor="impossible" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
-                      <RadioGroupItem value="impossible" id="impossible" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Bijna onmogelijk</span>
+                    <Label htmlFor="knowledge" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="Technische kennis ontbreekt" id="knowledge" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Technische kennis ontbreekt</span>
+                    </Label>
+                    <Label htmlFor="integration" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="Systemen praten niet met elkaar" id="integration" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Systemen praten niet met elkaar</span>
+                    </Label>
+                    <Label htmlFor="other" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="Anders" id="other" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Anders</span>
                     </Label>
                   </div>
                 </RadioGroup>
