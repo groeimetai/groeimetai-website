@@ -345,29 +345,37 @@ export default function AgentReadinessPage() {
     }
   };
 
-  // Poll assessment results until ready
+  // Poll assessment results until ready (with rate limiting)
   const pollAssessmentResults = async (assessmentId: string, initialScore?: number) => {
+    setLoadingResults(true);
     let attempts = 0;
-    const maxAttempts = 30; // 5 minutes max
+    const maxAttempts = 6; // Reduced to 1 minute max (6 * 10 seconds)
+    let isActive = true;
     
     const poll = async () => {
+      if (!isActive) return; // Prevent multiple polling instances
+      
       try {
+        attempts++;
+        console.log(`⏳ Polling attempt ${attempts}/${maxAttempts} for assessment ${assessmentId}`);
+        
         const response = await fetch(`/api/assessment/get-by-id?assessmentId=${assessmentId}`);
         const data = await response.json();
         
-        if (data.success && data.assessment) {
+        if (data.success && data.assessment && isActive) {
           // Assessment is ready, show results
           setAssessmentResults(data.assessment);
           setLoadingResults(false);
           setResultsReady(true);
+          isActive = false;
           return;
         }
         
-        attempts++;
-        if (attempts < maxAttempts) {
+        if (attempts < maxAttempts && isActive) {
           setTimeout(poll, 10000); // Poll every 10 seconds
-        } else {
+        } else if (isActive) {
           // Timeout - show basic results with initialScore if available
+          console.log('⏰ Polling timeout - showing preview score');
           if (initialScore) {
             setAssessmentResults({
               id: assessmentId,
@@ -375,18 +383,19 @@ export default function AgentReadinessPage() {
               level: getLevelFromScore(initialScore),
               createdAt: new Date(),
               status: 'completed',
-              type: 'agent_readiness'
+              type: 'agent_readiness',
+              preview: true
             });
           }
           setLoadingResults(false);
           setResultsReady(true);
+          isActive = false;
         }
       } catch (error) {
         console.error('Error polling assessment results:', error);
-        attempts++;
-        if (attempts < maxAttempts) {
-          setTimeout(poll, 10000);
-        } else {
+        if (attempts < maxAttempts && isActive) {
+          setTimeout(poll, 15000); // Longer delay on error
+        } else if (isActive) {
           setLoadingResults(false);
           // Show error or basic results if available
           if (initialScore) {
