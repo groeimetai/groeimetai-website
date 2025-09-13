@@ -215,28 +215,28 @@ export default function AgentReadinessPage() {
   const shouldSkipStep = (step: number): boolean => {
     if (!quizPreFillData) return false;
     
-    const skipMap = {
-      3: { // Highest impact system question
-        condition: !!(quizPreFillData.highestImpact && formData.highestImpactSystem),
-        field: 'highestImpact',
-        value: quizPreFillData.highestImpact
-      },
-      4: { // API question
+    const skipMap: Record<number, { condition: boolean; field: string; value: any }> = {
+      1: { // API question (now step 1)
         condition: !!(quizPreFillData.hasApis && formData.hasApis),
         field: 'hasApis',
         value: quizPreFillData.hasApis
       },
-      5: { // Data access question  
+      2: { // Data access question (now step 2)
         condition: !!(quizPreFillData.dataAccess && formData.dataAccess),
         field: 'dataAccess',
         value: quizPreFillData.dataAccess
       },
-      11: { // Main blocker question (updated step number)
+      5: { // Main blocker question (now step 5)
         condition: !!(quizPreFillData.mainBlocker && formData.mainBlocker),
         field: 'mainBlocker',
         value: quizPreFillData.mainBlocker
       },
-      14: { // Budget reality question (updated step number)
+      8: { // Highest impact system question (now step 8)
+        condition: !!(quizPreFillData.highestImpact && formData.highestImpactSystem),
+        field: 'highestImpact',
+        value: quizPreFillData.highestImpact
+      },
+      13: { // Budget reality question (now step 13)
         condition: !!(quizPreFillData.budgetReality && formData.budgetReality),
         field: 'budgetReality',
         value: quizPreFillData.budgetReality
@@ -257,10 +257,10 @@ export default function AgentReadinessPage() {
     if (!quizPreFillData) return 0;
     
     let count = 0;
-    if (shouldSkipStep(3)) count++; // Step 3 - Highest impact system
-    if (shouldSkipStep(4)) count++; // Step 4 - APIs
-    if (shouldSkipStep(5)) count++; // Step 5 - Data access
-    if (shouldSkipStep(10)) count++; // Step 10 - Main blocker
+    if (shouldSkipStep(1)) count++; // Step 1 - APIs
+    if (shouldSkipStep(2)) count++; // Step 2 - Data access
+    if (shouldSkipStep(5)) count++; // Step 5 - Main blocker
+    if (shouldSkipStep(8)) count++; // Step 8 - Highest impact system
     if (shouldSkipStep(13)) count++; // Step 13 - Budget reality
     
     return count;
@@ -536,15 +536,16 @@ export default function AgentReadinessPage() {
 
   const canProceed = () => {
     switch (currentStep) {
-      case 1: return formData.coreBusiness !== '';
-      case 2: return (formData.systems || []).length > 0;
-      case 3: return formData.highestImpactSystem !== '' && (formData.systems || []).length > 0;
-      case 4: return formData.hasApis !== '';
-      case 5: return formData.dataAccess !== '';
-      case 6: return formData.dataLocation !== '';
-      case 7: return formData.processDocumentation !== '';
-      case 8: return formData.automationExperience !== '';
-      case 9: {
+      case 1: return formData.hasApis !== ''; // API Status
+      case 2: return formData.dataAccess !== ''; // Data Access
+      case 3: return formData.processDocumentation !== ''; // Process Documentation
+      case 4: return formData.automationExperience !== ''; // Automation Experience
+      case 5: return formData.mainBlocker !== ''; // Main Blocker
+      case 6: return formData.coreBusiness !== ''; // Core Business
+      case 7: return (formData.systems || []).length > 0; // Priority Systems
+      case 8: return formData.highestImpactSystem !== '' && (formData.systems || []).length > 0; // Highest Impact System
+      case 9: return formData.dataLocation !== ''; // Data Location
+      case 10: {
         // If they selected "yes", also require at least one platform selection
         if (formData.agentPlatformPreference === 'yes') {
           return formData.agentPlatformPreference !== '' && formData.agentPlatforms.length > 0;
@@ -552,14 +553,12 @@ export default function AgentReadinessPage() {
         // For "no" or "depends", just the preference is enough
         return formData.agentPlatformPreference !== '';
       }
-      case 10: return true; // Step 10 is now always skippable since platforms show in step 9
-      case 11: return formData.mainBlocker !== '';
-      case 12: return formData.adoptionSpeed !== '';
-      case 13: return formData.costOptimization !== '';
-      case 14: return formData.budgetReality !== '';
-      case 15: return formData.itMaturity !== '';
-      case 16: return formData.name && formData.company && formData.email;
-      case 17: return true; // Confirmation step
+      case 11: return formData.adoptionSpeed !== ''; // Adoption Speed
+      case 12: return formData.costOptimization !== ''; // Cost Optimization
+      case 13: return formData.budgetReality !== ''; // Budget Reality
+      case 14: return formData.itMaturity !== ''; // IT Maturity
+      case 15: return formData.name && formData.company && formData.email; // Contact Info
+      case 16: return true; // Confirmation step
       default: return false;
     }
   };
@@ -848,7 +847,7 @@ export default function AgentReadinessPage() {
               15 vragen, 5-8 minuten - kom achter je complete agent readiness score
             </p>
             <p className="text-sm sm:text-base md:text-lg text-white/60 mb-4 sm:mb-6 md:mb-8">
-              Puur focus op: kunnen agents met jouw systemen werken?
+              Begint met 5 snelle radio button vragen voor quick quiz overzicht
             </p>
 
             {/* Progress Bar */}
@@ -890,10 +889,223 @@ export default function AgentReadinessPage() {
           <Card className="bg-white/5 border border-white/10">
             <CardContent className="p-4 sm:p-6 md:p-8">
               <AnimatePresence mode="wait">
-                {/* Step 1: Core Business */}
+                {/* Step 1: API Status */}
                 {currentStep === 1 && (
                   <motion.div
                     key="step1"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    {quizPreFillData?.hasApis && (
+                      <div className="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="w-5 h-5" style={{ color: '#22c55e' }} />
+                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check:</span>
+                          <span className="text-green-300 italic">"{quizPreFillData.hasApis}"</span>
+                        </div>
+                      </div>
+                    )}
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
+                      🔌 Hebben jullie systemen APIs?
+                    </h2>
+                    <p className="text-white/70 mb-6">Agents moeten kunnen verbinden met je systemen</p>
+                    
+                    <RadioGroup value={formData.hasApis} onValueChange={(value) => setFormData(prev => ({ ...prev, hasApis: value }))}>
+                      <div className="space-y-4">
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="most" id="most" />
+                          <Label htmlFor="most" className="text-white/80">Ja, de meeste hebben APIs</Label>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="some" id="some" />
+                          <Label htmlFor="some" className="text-white/80">Sommige wel, sommige niet</Label>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="unknown" id="unknown" />
+                          <Label htmlFor="unknown" className="text-white/80">Geen idee eigenlijk</Label>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="none" id="none" />
+                          <Label htmlFor="none" className="text-white/80">Nee, nog geen APIs</Label>
+                        </div>
+                      </div>
+                    </RadioGroup>
+                  </motion.div>
+                )}
+
+                {/* Step 2: Data Access */}
+                {currentStep === 2 && (
+                  <motion.div
+                    key="step2"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    {quizPreFillData?.dataAccess && (
+                      <div className="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="w-5 h-5" style={{ color: '#22c55e' }} />
+                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check:</span>
+                          <span className="text-green-300 italic">"{quizPreFillData.dataAccess}"</span>
+                        </div>
+                      </div>
+                    )}
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
+                      📊 Kun je snel klantdata vinden?
+                    </h2>
+                    <p className="text-white/70 mb-6">
+                      Test: Kun je binnen 5 minuten alle data van klant &quot;Jan de Vries&quot; vinden?
+                    </p>
+                    
+                    <RadioGroup value={formData.dataAccess} onValueChange={(value) => setFormData(prev => ({ ...prev, dataAccess: value }))}>
+                      <div className="space-y-4">
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="instant" id="data-instant" />
+                          <Label htmlFor="data-instant" className="text-white/80">Ja, paar clicks en ik heb alles</Label>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="minutes" id="data-minutes" />
+                          <Label htmlFor="data-minutes" className="text-white/80">Ja, maar moet door 2-3 systemen</Label>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="difficult" id="data-difficult" />
+                          <Label htmlFor="data-difficult" className="text-white/80">Lastig, data zit verspreid</Label>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="impossible" id="data-impossible" />
+                          <Label htmlFor="data-impossible" className="text-white/80">Nee, veel data is niet digitaal</Label>
+                        </div>
+                      </div>
+                    </RadioGroup>
+                  </motion.div>
+                )}
+
+                {/* Step 3: Process Documentation */}
+                {currentStep === 3 && (
+                  <motion.div
+                    key="step3"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
+                      📋 Staan jullie processen beschreven?
+                    </h2>
+                    <p className="text-white/70 mb-6">
+                      Agents moeten weten wat ze moeten doen
+                    </p>
+                    
+                    <RadioGroup value={formData.processDocumentation} onValueChange={(value) => setFormData(prev => ({ ...prev, processDocumentation: value }))}>
+                      <div className="space-y-4">
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="documented" id="proc-yes" />
+                          <Label htmlFor="proc-yes" className="text-white/80">Ja, alles gedocumenteerd</Label>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="partially" id="proc-partial" />
+                          <Label htmlFor="proc-partial" className="text-white/80">Belangrijkste processen wel</Label>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="tribal" id="proc-tribal" />
+                          <Label htmlFor="proc-tribal" className="text-white/80">Nee, zit in hoofden van medewerkers</Label>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="chaos" id="proc-chaos" />
+                          <Label htmlFor="proc-chaos" className="text-white/80">Iedereen doet het anders</Label>
+                        </div>
+                      </div>
+                    </RadioGroup>
+                  </motion.div>
+                )}
+
+                {/* Step 4: Automation Experience */}
+                {currentStep === 4 && (
+                  <motion.div
+                    key="step4"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
+                      🤖 Welke automation gebruik je al?
+                    </h2>
+                    
+                    <RadioGroup value={formData.automationExperience} onValueChange={(value) => setFormData(prev => ({ ...prev, automationExperience: value }))}>
+                      <div className="space-y-4">
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="advanced" id="auto-advanced" />
+                          <Label htmlFor="auto-advanced" className="text-white/80">Zapier, Power Automate, RPA tools</Label>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="basic" id="auto-basic" />
+                          <Label htmlFor="auto-basic" className="text-white/80">Email automation, basis workflows</Label>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="trying" id="auto-trying" />
+                          <Label htmlFor="auto-trying" className="text-white/80">Proberen dingen, maar breekt vaak</Label>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem value="none" id="auto-none" />
+                          <Label htmlFor="auto-none" className="text-white/80">Nee, alles nog handmatig</Label>
+                        </div>
+                      </div>
+                    </RadioGroup>
+                  </motion.div>
+                )}
+
+                {/* Step 5: Main Blocker */}
+                {currentStep === 5 && (
+                  <motion.div
+                    key="step5"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    {quizPreFillData?.mainBlocker && (
+                      <div className="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="w-5 h-5" style={{ color: '#22c55e' }} />
+                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check:</span>
+                          <span className="text-green-300 italic">"{quizPreFillData.mainBlocker}"</span>
+                        </div>
+                      </div>
+                    )}
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
+                      🚧 Wat is je grootste blocker voor automation?
+                    </h2>
+                    
+                    <RadioGroup value={formData.mainBlocker} onValueChange={(value) => setFormData(prev => ({ ...prev, mainBlocker: value }))}>
+                      <div className="space-y-4">
+                        {blockerOptions.map((blocker) => (
+                          <div key={blocker} className="flex items-center space-x-3">
+                            <RadioGroupItem value={blocker} id={`blocker-${blocker}`} />
+                            <Label htmlFor={`blocker-${blocker}`} className="text-white/80">{blocker}</Label>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                    
+                    {formData.mainBlocker === 'Anders' && (
+                      <div className="mt-4">
+                        <Input
+                          placeholder="Beschrijf je blocker..."
+                          className="bg-white/5 border-white/20 text-white"
+                        />
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+
+                {/* Step 6: Core Business */}
+                {currentStep === 6 && (
+                  <motion.div
+                    key="step6"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -924,10 +1136,10 @@ export default function AgentReadinessPage() {
                   </motion.div>
                 )}
 
-                {/* Step 2: Priority Systems */}
-                {currentStep === 2 && (
+                {/* Step 7: Priority Systems */}
+                {currentStep === 7 && (
                   <motion.div
-                    key="step2"
+                    key="step7"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -985,10 +1197,10 @@ export default function AgentReadinessPage() {
                   </motion.div>
                 )}
 
-                {/* Step 3: Highest Impact System - Part B */}
-                {currentStep === 3 && (
+                {/* Step 8: Highest Impact System */}
+                {currentStep === 8 && (
                   <motion.div
-                    key="step3"
+                    key="step8"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -1020,104 +1232,10 @@ export default function AgentReadinessPage() {
                   </motion.div>
                 )}
 
-                {/* Step 4: API Status */}
-                {currentStep === 4 && (
+                {/* Step 9: Data Location */}
+                {currentStep === 9 && (
                   <motion.div
-                    key="step4"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    {quizPreFillData?.hasApis && (
-                      <div className="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
-                        <div className="flex items-center space-x-2">
-                          <CheckCircle className="w-5 h-5" style={{ color: '#22c55e' }} />
-                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check:</span>
-                          <span className="text-green-300 italic">"{quizPreFillData.hasApis}"</span>
-                        </div>
-                      </div>
-                    )}
-                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      🔗 Hebben deze systemen APIs?
-                    </h2>
-                    <p className="text-white/70 mb-6">Agents moeten kunnen verbinden met je systemen</p>
-                    
-                    <RadioGroup value={formData.hasApis} onValueChange={(value) => setFormData(prev => ({ ...prev, hasApis: value }))}>
-                      <div className="space-y-4">
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="most" id="most" />
-                          <Label htmlFor="most" className="text-white/80">Ja, de meeste hebben APIs</Label>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="some" id="some" />
-                          <Label htmlFor="some" className="text-white/80">Sommige wel, sommige niet</Label>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="unknown" id="unknown" />
-                          <Label htmlFor="unknown" className="text-white/80">Geen idee eigenlijk</Label>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="none" id="none" />
-                          <Label htmlFor="none" className="text-white/80">Nee, nog geen APIs</Label>
-                        </div>
-                      </div>
-                    </RadioGroup>
-                  </motion.div>
-                )}
-
-                {/* Step 5: Data Access */}
-                {currentStep === 5 && (
-                  <motion.div
-                    key="step5"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    {quizPreFillData?.dataAccess && (
-                      <div className="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
-                        <div className="flex items-center space-x-2">
-                          <CheckCircle className="w-5 h-5" style={{ color: '#22c55e' }} />
-                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check:</span>
-                          <span className="text-green-300 italic">"{quizPreFillData.dataAccess}"</span>
-                        </div>
-                      </div>
-                    )}
-                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      📊 Kun je snel klantdata vinden?
-                    </h2>
-                    <p className="text-white/70 mb-6">
-                      Test: Kun je binnen 5 minuten alle data van klant &quot;Jan de Vries&quot; vinden?
-                    </p>
-                    
-                    <RadioGroup value={formData.dataAccess} onValueChange={(value) => setFormData(prev => ({ ...prev, dataAccess: value }))}>
-                      <div className="space-y-4">
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="instant" id="data-instant" />
-                          <Label htmlFor="data-instant" className="text-white/80">Ja, paar clicks en ik heb alles</Label>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="minutes" id="data-minutes" />
-                          <Label htmlFor="data-minutes" className="text-white/80">Ja, maar moet door 2-3 systemen</Label>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="difficult" id="data-difficult" />
-                          <Label htmlFor="data-difficult" className="text-white/80">Lastig, data zit verspreid</Label>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="impossible" id="data-impossible" />
-                          <Label htmlFor="data-impossible" className="text-white/80">Nee, veel data is niet digitaal</Label>
-                        </div>
-                      </div>
-                    </RadioGroup>
-                  </motion.div>
-                )}
-
-                {/* Step 6: Data Location */}
-                {currentStep === 6 && (
-                  <motion.div
-                    key="step6"
+                    key="step9"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -1151,85 +1269,10 @@ export default function AgentReadinessPage() {
                   </motion.div>
                 )}
 
-                {/* Step 7: Process Documentation */}
-                {currentStep === 7 && (
+                {/* Step 10: Agent Platform Preference */}
+                {currentStep === 10 && (
                   <motion.div
-                    key="step7"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      📋 Staan jullie processen beschreven?
-                    </h2>
-                    <p className="text-white/70 mb-6">
-                      Agents moeten weten wat ze moeten doen
-                    </p>
-                    
-                    <RadioGroup value={formData.processDocumentation} onValueChange={(value) => setFormData(prev => ({ ...prev, processDocumentation: value }))}>
-                      <div className="space-y-4">
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="documented" id="proc-yes" />
-                          <Label htmlFor="proc-yes" className="text-white/80">Ja, alles gedocumenteerd</Label>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="partially" id="proc-partial" />
-                          <Label htmlFor="proc-partial" className="text-white/80">Belangrijkste processen wel</Label>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="tribal" id="proc-tribal" />
-                          <Label htmlFor="proc-tribal" className="text-white/80">Nee, zit in hoofden van medewerkers</Label>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="chaos" id="proc-chaos" />
-                          <Label htmlFor="proc-chaos" className="text-white/80">Iedereen doet het anders</Label>
-                        </div>
-                      </div>
-                    </RadioGroup>
-                  </motion.div>
-                )}
-
-                {/* Step 8: Automation Experience */}
-                {currentStep === 8 && (
-                  <motion.div
-                    key="step8"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      🤖 Welke automation gebruik je al?
-                    </h2>
-                    
-                    <RadioGroup value={formData.automationExperience} onValueChange={(value) => setFormData(prev => ({ ...prev, automationExperience: value }))}>
-                      <div className="space-y-4">
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="advanced" id="auto-advanced" />
-                          <Label htmlFor="auto-advanced" className="text-white/80">Zapier, Power Automate, RPA tools</Label>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="basic" id="auto-basic" />
-                          <Label htmlFor="auto-basic" className="text-white/80">Email automation, basis workflows</Label>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="trying" id="auto-trying" />
-                          <Label htmlFor="auto-trying" className="text-white/80">Proberen dingen, maar breekt vaak</Label>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="none" id="auto-none" />
-                          <Label htmlFor="auto-none" className="text-white/80">Nee, alles nog handmatig</Label>
-                        </div>
-                      </div>
-                    </RadioGroup>
-                  </motion.div>
-                )}
-
-                {/* Step 9: Agent Platform Preference */}
-                {currentStep === 9 && (
-                  <motion.div
-                    key="step9"
+                    key="step10"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -1259,8 +1302,8 @@ export default function AgentReadinessPage() {
                   </motion.div>
                 )}
 
-                {/* Step 9B: Agent Platforms Selection - Show immediately after "yes" selection */}
-                {currentStep === 9 && formData.agentPlatformPreference === 'yes' && (
+                {/* Step 10B: Agent Platforms Selection - Show immediately after "yes" selection */}
+                {currentStep === 10 && formData.agentPlatformPreference === 'yes' && (
                   <motion.div
                     key="platforms-selection"
                     initial={{ opacity: 0, y: 20 }}
@@ -1302,49 +1345,6 @@ export default function AgentReadinessPage() {
                   </motion.div>
                 )}
 
-                {/* Step 10: Main Blocker */}
-                {currentStep === 10 && (
-                  <motion.div
-                    key="step10"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    {quizPreFillData?.mainBlocker && (
-                      <div className="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
-                        <div className="flex items-center space-x-2">
-                          <CheckCircle className="w-5 h-5" style={{ color: '#22c55e' }} />
-                          <span className="text-green-400 font-medium">Antwoord overgenomen uit quick check:</span>
-                          <span className="text-green-300 italic">"{quizPreFillData.mainBlocker}"</span>
-                        </div>
-                      </div>
-                    )}
-                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      ⚠️ Wat is je grootste blocker voor automation?
-                    </h2>
-                    
-                    <RadioGroup value={formData.mainBlocker} onValueChange={(value) => setFormData(prev => ({ ...prev, mainBlocker: value }))}>
-                      <div className="space-y-4">
-                        {blockerOptions.map((blocker) => (
-                          <div key={blocker} className="flex items-center space-x-3">
-                            <RadioGroupItem value={blocker} id={`blocker-${blocker}`} />
-                            <Label htmlFor={`blocker-${blocker}`} className="text-white/80">{blocker}</Label>
-                          </div>
-                        ))}
-                      </div>
-                    </RadioGroup>
-                    
-                    {formData.mainBlocker === 'Anders' && (
-                      <div className="mt-4">
-                        <Input
-                          placeholder="Beschrijf je blocker..."
-                          className="bg-white/5 border-white/20 text-white"
-                        />
-                      </div>
-                    )}
-                  </motion.div>
-                )}
 
                 {/* Step 11: Adoption Speed */}
                 {currentStep === 11 && (
@@ -1496,10 +1496,10 @@ export default function AgentReadinessPage() {
                   </motion.div>
                 )}
 
-                {/* Step 16: Contact Info */}
-                {currentStep === 16 && (
+                {/* Step 15: Contact Info */}
+                {currentStep === 15 && (
                   <motion.div
-                    key="step16"
+                    key="step15"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
@@ -1585,7 +1585,7 @@ export default function AgentReadinessPage() {
                   </motion.div>
                 )}
 
-                {/* Step 16/17: Confirmation - This will be handled by the navigation logic below */}
+                {/* Step 15/16: Confirmation - This will be handled by the navigation logic below */}
               </AnimatePresence>
 
               {/* Navigation */}
