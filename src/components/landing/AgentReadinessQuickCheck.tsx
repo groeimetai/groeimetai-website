@@ -251,14 +251,27 @@ export function AgentReadinessQuickCheck() {
           <div className="space-y-6">
             {currentStep === 1 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">💼 Wat is jullie core business?</h4>
-                <p className="text-white/70 text-sm mb-4">In één zin: wat doet jullie bedrijf voor klanten?</p>
-                <Input
-                  value={formData.coreBusiness}
-                  onChange={(e) => setFormData(prev => ({ ...prev, coreBusiness: e.target.value }))}
-                  placeholder="We zijn een [type bedrijf] die [wat jullie doen] voor [doelgroep]"
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                />
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🔌 Hebben jullie systemen APIs?</h4>
+                <RadioGroup value={formData.hasApis} onValueChange={(value) => setFormData(prev => ({ ...prev, hasApis: value }))}>
+                  <div className="space-y-2 sm:space-y-3">
+                    <Label htmlFor="most" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="most" id="most" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, de meeste hebben APIs</span>
+                    </Label>
+                    <Label htmlFor="some" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="some" id="some" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Sommige wel, sommige niet</span>
+                    </Label>
+                    <Label htmlFor="unknown" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="unknown" id="unknown" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Geen idee eigenlijk</span>
+                    </Label>
+                    <Label htmlFor="none" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                      <RadioGroupItem value="none" id="none" className="mt-0.5" />
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, nog geen APIs</span>
+                    </Label>
+                  </div>
+                </RadioGroup>
               </div>
             )}
 
