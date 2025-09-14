@@ -50,6 +50,8 @@ export default function ImplementationProposalPage() {
   });
   const [customSystems, setCustomSystems] = useState('');
   const [showRedirect, setShowRedirect] = useState(false);
+  const [showAssessmentWarning, setShowAssessmentWarning] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const systemOptions = [
     'ServiceNow', 'Salesforce', 'SAP', 'Microsoft 365', 

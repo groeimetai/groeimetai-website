@@ -23,7 +23,7 @@ export default function SettingsPage() {
     email: user?.email || '',
     company: '',
     phone: '',
-    role: '',
+    role: 'guest' as const,
     bio: ''
   });
 

@@ -90,43 +90,48 @@ function calculateConsistentScore(data: any): number {
   // Use EXACT same logic as report generator (4x25 points = 100 total)
   
   // 1. API Connectivity (25 points)
-  const apiScore = {
+  const apiScores = {
     'most': 25,      // Most systems have APIs
     'some': 15,      // Partial API coverage
     'unknown': 8,    // Unknown = likely minimal
     'none': 0        // No APIs yet
-  }[data.hasApis] || 0;
+  } as Record<string, number>;
+  const apiScore = apiScores[data.hasApis] || 0;
   
   // 2. Data Access (25 points)
-  const dataScore = {
+  const dataScores = {
     'instant': 25,      // Agent can access all data immediately
-    'minutes': 18,      // Some friction but accessible  
+    'minutes': 18,      // Some friction but accessible
     'difficult': 8,     // Major data silos
     'impossible': 0     // Not digitized yet
-  }[data.dataAccess] || 0;
+  } as Record<string, number>;
+  const dataScore = dataScores[data.dataAccess] || 0;
   
   // 3. Process Maturity (25 points)
-  const processScore = {
+  const processScores = {
     'documented': 25,    // All processes documented
     'partially': 18,     // Key processes documented
     'tribal': 8,         // Knowledge in people's heads
     'chaos': 0           // No standardization
-  }[data.processDocumentation] || 0;
+  } as Record<string, number>;
+  const processScore = processScores[data.processDocumentation] || 0;
   
   // 4. Team Readiness (25 points)
-  const automationScore = {
+  const automationScores = {
     'advanced': 15,  // Zapier, Power Automate, RPA tools
     'basic': 10,     // Email automation, basis workflows
     'trying': 5,     // Proberen dingen, maar breekt vaak
     'none': 0        // Nee, alles nog handmatig
-  }[data.automationExperience] || 0;
+  } as Record<string, number>;
+  const automationScore = automationScores[data.automationExperience] || 0;
   
-  const adoptionScore = {
+  const adoptionScores = {
     'very-fast': 10,     // Zeer snel (weken)
     'reasonable': 7,     // Redelijk (maanden)
     'slow': 4,           // Traag (kwartalen)
     'very-slow': 1       // Zeer traag (jaren)
-  }[data.adoptionSpeed] || 0;
+  } as Record<string, number>;
+  const adoptionScore = adoptionScores[data.adoptionSpeed] || 0;
   
   const teamScore = automationScore + adoptionScore;
   

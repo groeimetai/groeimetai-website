@@ -494,7 +494,7 @@ export default function AdminProjectsPage() {
   const getSuggestedConsultants = (project: Project): TeamMember[] => {
     const projectSkills = [
       ...project.services,
-      ...project.technologies,
+      ...((project as any).technologies || []),
       project.type,
     ];
     

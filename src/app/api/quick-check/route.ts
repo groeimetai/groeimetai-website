@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 interface QuickCheckData {
+  coreBusiness: string;
+  systems: string[];
+  highestImpactSystem: string;
   hasApis: string;
   dataAccess: string;
   processDocumentation: string;
@@ -116,9 +119,9 @@ async function logQuickCheck(data: QuickCheckData, score: number, level: string)
   console.log('Quick check completed:', {
     score,
     level,
-    coreBusiness: data.coreBusiness,
-    systemsCount: data.systems?.length || 0,
-    highestImpactSystem: data.highestImpactSystem,
+    processDocumentation: data.processDocumentation,
+    automationExperience: data.automationExperience,
+    mainBlocker: data.mainBlocker,
     hasApis: data.hasApis,
     dataAccess: data.dataAccess,
     timestamp: new Date().toISOString(),

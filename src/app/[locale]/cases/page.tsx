@@ -222,7 +222,7 @@ export default function CasesPage() {
             <div className="space-y-12">
               {liveImplementations.map((implementation, index) => (
                 <motion.div
-                  key={implementation.title}
+                  key={implementation.titleKey}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: index * 0.2 }}
@@ -485,7 +485,7 @@ export default function CasesPage() {
             <div className="space-y-8">
               {focusAreas.map((area, index) => (
                 <motion.div
-                  key={area.title}
+                  key={area.titleKey}
                   initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: index * 0.2 }}

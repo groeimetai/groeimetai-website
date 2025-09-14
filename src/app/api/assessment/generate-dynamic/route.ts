@@ -4,8 +4,11 @@ import { doc, updateDoc, addDoc, collection, serverTimestamp } from 'firebase/fi
 import { db } from '@/lib/firebase/config';
 
 export async function POST(req: NextRequest) {
+  let assessmentData = null;
+
   try {
-    const { assessmentId, assessmentData } = await req.json();
+    const { assessmentId, assessmentData: data } = await req.json();
+    assessmentData = data;
     
     if (!assessmentId || !assessmentData) {
       return NextResponse.json(

@@ -1174,7 +1174,7 @@ export default function AdminDashboard() {
                       <p className="text-2xl font-bold text-white">€{totalRevenue.toLocaleString()}</p>
                       <p className="text-xs text-green-500 mt-1">
                         <TrendingUp className="w-3 h-3 inline mr-1" />
-                        {metrics.find(m => m.title === 'Revenue')?.change > 0 ? '+' : ''}{metrics.find(m => m.title === 'Revenue')?.change || 0}% from last {timeRange === '7d' ? 'week' : timeRange === '30d' ? 'month' : 'quarter'}
+                        {(metrics.find(m => m.title === 'Revenue')?.change || 0) > 0 ? '+' : ''}{metrics.find(m => m.title === 'Revenue')?.change || 0}% from last {timeRange === '7d' ? 'week' : timeRange === '30d' ? 'month' : 'quarter'}
                       </p>
                     </div>
                     <div>

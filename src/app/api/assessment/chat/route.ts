@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
+  let assessmentData = null;
+
   try {
-    const { message, assessmentData, chatHistory, fullReport } = await req.json();
+    const { message, assessmentData: data, chatHistory, fullReport } = await req.json();
+    assessmentData = data;
 
     // Validate input
     if (!message || !assessmentData) {

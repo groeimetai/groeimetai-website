@@ -484,9 +484,9 @@ export default function AgentReadinessPage() {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                userId: firebaseUser.uid,
+                userId: firebaseUser?.uid,
                 assessmentId: data.assessmentId,
-                userEmail: firebaseUser.email,
+                userEmail: firebaseUser?.email,
                 source: 'logged_in_user_enhanced'
               })
             });
@@ -547,7 +547,7 @@ export default function AgentReadinessPage() {
       case 10: {
         // If they selected "yes", also require at least one platform selection
         if (formData.agentPlatformPreference === 'yes') {
-          return formData.agentPlatformPreference !== '' && formData.agentPlatforms.length > 0;
+          return formData.agentPlatforms.length > 0;
         }
         // For "no" or "depends", just the preference is enough
         return formData.agentPlatformPreference !== '';

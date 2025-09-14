@@ -59,20 +59,20 @@ export default function AdminDashboardPage() {
   ];
 
   const businessMetrics = {
-    revenue: { current: '[Amount]', change: '[+/-]%', target: '[Target]', percentage: '[%]' },
-    leads: { current: '[N]', change: '[+/-]', target: '[Target]', percentage: '[%]' },
-    conversion: { current: '[%]', change: '[+/-]%', target: '[%]', percentage: '[%]' },
-    projects: { current: '[N]', change: '[+/-]', target: '[Target]', percentage: '[%]' }
+    revenue: { current: 125000, change: 12, target: 200000, percentage: 62 },
+    leads: { current: 45, change: 8, target: 60, percentage: 75 },
+    conversion: { current: 18, change: 3, target: 25, percentage: 72 },
+    projects: { current: 12, change: 2, target: 15, percentage: 80 }
   };
 
   const pipelineData = {
-    leads: '[N]',
-    assessments: '[N]', 
-    pilots: '[N]',
-    implementations: '[N]',
-    live: '[N]',
-    totalValue: '[Amount]',
-    weightedValue: '[Amount]'
+    leads: 23,
+    assessments: 8,
+    pilots: 5,
+    implementations: 3,
+    live: 12,
+    totalValue: 850000,
+    weightedValue: 425000
   };
 
   const reportQueue = [

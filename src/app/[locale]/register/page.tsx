@@ -24,7 +24,7 @@ import {
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { register, loginWithGoogle } = useAuth();
+  const { register, loginWithGoogle, user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -90,17 +90,17 @@ export default function RegisterPage() {
     setError('');
 
     try {
-      const result = await loginWithGoogle();
-      
+      await loginWithGoogle();
+
       // If we have assessment data, attach it to the user profile
       const assessmentId = urlParams?.get('assessment');
-      if (assessmentId && result.user) {
+      if (assessmentId && user) {
         // Store assessment association
         await fetch('/api/user/link-assessment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            userId: result.user.uid,
+            userId: user.uid,
             assessmentId,
             source: 'google_registration'
           })
