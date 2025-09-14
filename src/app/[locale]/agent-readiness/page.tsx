@@ -130,7 +130,7 @@ export default function AgentReadinessPage() {
     // If we have data, pre-fill the form
     if (loadedData && (loadedData.coreBusiness || loadedData.systems || loadedData.hasApis)) {
       setQuizPreFillData(loadedData);
-      
+
       // Pre-fill overlapping fields with validation
       setFormData(prev => ({
         ...prev,
@@ -140,6 +140,15 @@ export default function AgentReadinessPage() {
         hasApis: loadedData.hasApis || '',
         dataAccess: loadedData.dataAccess || ''
       }));
+
+      // Skip to first non-pre-filled question
+      let startStep = 1;
+      while (startStep <= totalSteps && shouldSkipStep(startStep)) {
+        startStep++;
+      }
+      if (startStep !== currentStep) {
+        setCurrentStep(startStep);
+      }
 
       console.log('✅ Quiz-to-Assessment Bridge Successful:', {
         dataSource,
@@ -151,7 +160,8 @@ export default function AgentReadinessPage() {
           dataAccess: !!loadedData.dataAccess
         },
         score: loadedData.quickCheckScore || 'none',
-        level: loadedData.quickCheckLevel || 'none'
+        level: loadedData.quickCheckLevel || 'none',
+        startingAtStep: startStep
       });
 
       // Clean up storage after successful load to prevent reuse
@@ -161,7 +171,7 @@ export default function AgentReadinessPage() {
       if (dataSource === 'localStorage') {
         localStorage.removeItem('quizPreFillBackup');
       }
-      
+
       // Clear URL params to clean up browser history
       if (dataSource === 'urlParams') {
         const cleanUrl = window.location.pathname;
@@ -182,13 +192,7 @@ export default function AgentReadinessPage() {
         if (currentStep < totalSteps) {
           // Same logic as "Volgende" button
           if (canProceed()) {
-            let nextStep = currentStep + 1;
-            
-            // Skip pre-filled questions
-            while (nextStep <= totalSteps && shouldSkipStep(nextStep)) {
-              nextStep++;
-            }
-            
+            const nextStep = getNextStep(currentStep);
             setCurrentStep(nextStep);
           }
         } else {
@@ -214,7 +218,7 @@ export default function AgentReadinessPage() {
   // Enhanced step skipping logic with better validation and logging
   const shouldSkipStep = (step: number): boolean => {
     if (!quizPreFillData) return false;
-    
+
     const skipMap: Record<number, { condition: boolean; field: string; value: any }> = {
       1: { // APIs question (step 1)
         condition: !!(quizPreFillData.hasApis),
@@ -242,14 +246,32 @@ export default function AgentReadinessPage() {
         value: quizPreFillData.mainBlocker
       }
     };
-    
+
     const stepConfig = skipMap[step];
     if (stepConfig && stepConfig.condition) {
       console.log(`⏭️ Skipping step ${step} (${stepConfig.field}): "${stepConfig.value}" - pre-filled from quiz`);
       return true;
     }
-    
+
     return false;
+  };
+
+  // Get the next non-skipped step
+  const getNextStep = (fromStep: number): number => {
+    let nextStep = fromStep + 1;
+    while (nextStep <= totalSteps && shouldSkipStep(nextStep)) {
+      nextStep++;
+    }
+    return nextStep;
+  };
+
+  // Get the previous non-skipped step
+  const getPreviousStep = (fromStep: number): number => {
+    let prevStep = fromStep - 1;
+    while (prevStep >= 1 && shouldSkipStep(prevStep)) {
+      prevStep--;
+    }
+    return Math.max(1, prevStep);
   };
 
   // Calculate how many questions are skipped from quick check
@@ -266,12 +288,27 @@ export default function AgentReadinessPage() {
     return count;
   };
 
+  // Calculate the effective question number (accounting for skipped questions)
+  const getCurrentQuestionNumber = (): number => {
+    if (!quizPreFillData) return currentStep;
+
+    let questionNumber = 1;
+    for (let step = 1; step <= currentStep; step++) {
+      if (step === currentStep || !shouldSkipStep(step)) {
+        if (step < currentStep) {
+          questionNumber++;
+        }
+      }
+    }
+    return questionNumber;
+  };
+
   // Adjusted progress calculation that accounts for skipped questions
   const getAdjustedProgress = (): number => {
     const skippedCount = getSkippedQuestionCount();
-    const totalQuestionsToAnswer = 15 - skippedCount; // Fewer questions to answer due to quiz
-    const questionsAnswered = currentStep - 1; // Just current progress in assessment
-    return Math.round((Math.min(questionsAnswered, totalQuestionsToAnswer) / totalQuestionsToAnswer) * 100);
+    const totalQuestionsToAnswer = totalSteps - skippedCount; // Fewer questions to answer due to quiz
+    const currentQuestionNumber = getCurrentQuestionNumber();
+    return Math.round((Math.min(currentQuestionNumber - 1, totalQuestionsToAnswer - 1) / (totalQuestionsToAnswer - 1)) * 100);
   };
 
   const systemOptions = [
@@ -852,7 +889,7 @@ export default function AgentReadinessPage() {
             {/* Progress Bar */}
             <div className="max-w-sm sm:max-w-md mx-auto mb-6 sm:mb-8">
               <div className="flex justify-between text-sm text-white/60 mb-2">
-                <span>Vraag {currentStep + getSkippedQuestionCount()} van {15}</span>
+                <span>Vraag {getCurrentQuestionNumber()} van {totalSteps - getSkippedQuestionCount()}</span>
                 <span>{getAdjustedProgress()}%</span>
               </div>
               <div className="w-full bg-white/10 rounded-full h-2">
@@ -877,7 +914,7 @@ export default function AgentReadinessPage() {
                     Quick check score: {quizPreFillData.quickCheckScore || 'N/A'}/100 • {quizPreFillData.quickCheckLevel || ''}
                   </div>
                   <div className="mt-1 text-xs text-green-400/80">
-                    🔄 Data overgenomen uit hero quiz
+                    🔄 {getSkippedQuestionCount()} vraag{getSkippedQuestionCount() === 1 ? '' : 'en'} overgeslagen, {totalSteps - getSkippedQuestionCount()} vraag{totalSteps - getSkippedQuestionCount() === 1 ? '' : 'en'} over
                   </div>
                 </div>
               )}
@@ -1592,14 +1629,8 @@ export default function AgentReadinessPage() {
                 <Button
                   variant="outline"
                   onClick={() => {
-                    let prevStep = currentStep - 1;
-                    
-                    // Skip pre-filled questions when going back
-                    while (prevStep >= 1 && shouldSkipStep(prevStep)) {
-                      prevStep--;
-                    }
-                    
-                    setCurrentStep(Math.max(1, prevStep));
+                    const prevStep = getPreviousStep(currentStep);
+                    setCurrentStep(prevStep);
                   }}
                   disabled={currentStep === 1}
                   className="border-white/20 text-white hover:bg-white/10"
@@ -1612,13 +1643,7 @@ export default function AgentReadinessPage() {
                     <Button
                       onClick={() => {
                         console.log('Next clicked! Step:', currentStep, 'Can proceed:', canProceed());
-                        let nextStep = currentStep + 1;
-                        
-                        // Skip pre-filled questions
-                        while (nextStep <= totalSteps && shouldSkipStep(nextStep)) {
-                          nextStep++;
-                        }
-                        
+                        const nextStep = getNextStep(currentStep);
                         setCurrentStep(nextStep);
                       }}
                       disabled={!canProceed()}
