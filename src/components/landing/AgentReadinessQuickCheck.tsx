@@ -22,7 +22,7 @@ interface QuickCheckData {
 }
 
 export function AgentReadinessQuickCheck() {
-  const t = useTranslations('agentReadinessQuiz');
+  const t = useTranslations('agentReadinessAssessment');
   const [currentStep, setCurrentStep] = useState(1);
   const [isCompleted, setIsCompleted] = useState(false);
   const [score, setScore] = useState(0);
