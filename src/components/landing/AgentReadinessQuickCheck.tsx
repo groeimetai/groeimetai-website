@@ -272,6 +272,13 @@ export function AgentReadinessQuickCheck() {
             <div>
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 leading-tight">🎯 {t('title')}</h3>
               <p className="text-sm sm:text-base text-white/70">{t('subtitle')}</p>
+
+              {/* DEBUG: Show current formData values */}
+              <div className="mt-2 p-2 bg-red-500/20 border border-red-500/30 rounded text-xs text-white">
+                <strong>DEBUG:</strong> hasApis="{formData.hasApis}" | dataAccess="{formData.dataAccess}" |
+                process="{formData.processDocumentation}" | automation="{formData.automationExperience}" |
+                blocker="{formData.mainBlocker}"
+              </div>
             </div>
             <div className="text-right">
               <div className="text-white/60 text-sm">
