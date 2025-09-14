@@ -36,6 +36,7 @@ export function AgentReadinessQuickCheck() {
 
   const calculateQuickScore = (data: QuickCheckData): number => {
     let score = 0;
+    console.log('🔍 Quiz Score Debug - Input data:', data);
 
     // APIs (25 points)
     const apiScore = {
@@ -45,6 +46,7 @@ export function AgentReadinessQuickCheck() {
       'none': 0
     }[data.hasApis] || 0;
     score += apiScore;
+    console.log(`📊 API Score: ${apiScore} (input: "${data.hasApis}")`);
 
     // Data Access (25 points)
     const dataScore = {
@@ -54,6 +56,7 @@ export function AgentReadinessQuickCheck() {
       'impossible': 0
     }[data.dataAccess] || 0;
     score += dataScore;
+    console.log(`📊 Data Score: ${dataScore} (input: "${data.dataAccess}")`);
 
     // Process Documentation (25 points)
     const processScore = {
@@ -63,6 +66,7 @@ export function AgentReadinessQuickCheck() {
       'chaos': 0
     }[data.processDocumentation] || 0;
     score += processScore;
+    console.log(`📊 Process Score: ${processScore} (input: "${data.processDocumentation}")`);
 
     // Automation Experience (15 points)
     const automationScore = {
@@ -72,20 +76,23 @@ export function AgentReadinessQuickCheck() {
       'none': 0
     }[data.automationExperience] || 0;
     score += automationScore;
+    console.log(`📊 Automation Score: ${automationScore} (input: "${data.automationExperience}")`);
 
     // Main Blocker (10 points) - LOWER score for HARDER blockers
     const blockerScore = {
-      'Security/compliance zorgen': 2,        // Hardste blocker - complexe regelgeving
-      'Team weerstand tegen verandering': 3,  // Organisatie/mensen probleem
-      'Data is te rommelig/verspreid': 4,     // Data quality issue
-      'Systemen praten niet met elkaar': 5,   // Technisch integratie probleem
-      'Technische kennis ontbreekt': 6,       // Training/hiring probleem
-      'Geen idee waar te beginnen': 7,        // Guidance/advies probleem
-      'Budget/resources beperkt': 8,          // Oplosbaar met financiering
-      'Anders': 5                             // Onbekend - gemiddeld
+      'Security/compliance zorgen': 2,
+      'Team weerstand tegen verandering': 3,
+      'Data is te rommelig/verspreid': 4,
+      'Systemen praten niet met elkaar': 5,
+      'Technische kennis ontbreekt': 6,
+      'Geen idee waar te beginnen': 7,
+      'Budget/resources beperkt': 8,
+      'Anders': 5
     }[data.mainBlocker] || 0;
     score += blockerScore;
+    console.log(`📊 Blocker Score: ${blockerScore} (input: "${data.mainBlocker}")`);
 
+    console.log(`🎯 TOTAL QUIZ SCORE: ${score}/100`);
     return Math.min(score, 100);
   };
 
