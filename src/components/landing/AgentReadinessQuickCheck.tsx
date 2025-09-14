@@ -318,19 +318,19 @@ export function AgentReadinessQuickCheck() {
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="most" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="most" id="most" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, de meeste hebben APIs</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.hasApis.options.most')}</span>
                     </Label>
                     <Label htmlFor="some" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="some" id="some" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Sommige wel, sommige niet</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.hasApis.options.some')}</span>
                     </Label>
                     <Label htmlFor="unknown" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="unknown" id="unknown" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Geen idee eigenlijk</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.hasApis.options.unknown')}</span>
                     </Label>
                     <Label htmlFor="none" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="none" id="none" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, nog geen APIs</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.hasApis.options.none')}</span>
                     </Label>
                   </div>
                 </RadioGroup>
@@ -351,19 +351,19 @@ export function AgentReadinessQuickCheck() {
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="instant" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="instant" id="instant" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, paar clicks en ik heb alles</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.dataAccess.options.instant')}</span>
                     </Label>
                     <Label htmlFor="minutes" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="minutes" id="minutes" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, maar moet door 2-3 systemen</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.dataAccess.options.minutes')}</span>
                     </Label>
                     <Label htmlFor="difficult" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="difficult" id="difficult" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Lastig, data zit verspreid</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.dataAccess.options.difficult')}</span>
                     </Label>
                     <Label htmlFor="impossible" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="impossible" id="impossible" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, veel data is niet digitaal</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.dataAccess.options.impossible')}</span>
                     </Label>
                   </div>
                 </RadioGroup>
