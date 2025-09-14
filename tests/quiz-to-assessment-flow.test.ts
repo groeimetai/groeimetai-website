@@ -9,11 +9,11 @@
  * 4. Edge cases are handled gracefully
  */
 
-import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { AgentReadinessQuickCheck } from '@/components/landing/AgentReadinessQuickCheck';
-import AgentReadinessPage from '@/app/[locale]/agent-readiness/page';
-import { NextIntlClientProvider } from 'next-intl';
+import React from 'react';
+// import { AgentReadinessQuickCheck } from '@/components/landing/AgentReadinessQuickCheck';
+// import AgentReadinessPage from '@/app/[locale]/agent-readiness/page';
 
 // Mock next-intl
 const messages = {
