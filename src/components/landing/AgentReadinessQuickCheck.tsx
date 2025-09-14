@@ -306,7 +306,7 @@ export function AgentReadinessQuickCheck() {
           <div className="space-y-6">
             {currentStep === 1 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🔌 Hebben jullie systemen APIs?</h4>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🔌 {t('questions.hasApis.title')}</h4>
                 <RadioGroup value={formData.hasApis} onValueChange={(value) => {
                   console.log('🔘 QUIZ DEBUG - hasApis radio clicked:', value);
                   setFormData(prev => {
@@ -339,7 +339,7 @@ export function AgentReadinessQuickCheck() {
 
             {currentStep === 2 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📊 Kun je snel klantdata vinden?</h4>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📊 {t('questions.dataAccess.title')}</h4>
                 <RadioGroup value={formData.dataAccess} onValueChange={(value) => {
                   console.log('🔘 QUIZ DEBUG - dataAccess radio clicked:', value);
                   setFormData(prev => {
