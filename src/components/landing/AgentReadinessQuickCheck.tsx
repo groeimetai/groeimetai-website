@@ -42,7 +42,6 @@ export function AgentReadinessQuickCheck() {
 
   const calculateQuickScore = (data: QuickCheckData): number => {
     let score = 0;
-    console.log('🔍 Quiz Score Debug - Input data:', data);
 
     // APIs (25 points)
     const apiScore = {
@@ -52,7 +51,6 @@ export function AgentReadinessQuickCheck() {
       'none': 0
     }[data.hasApis] || 0;
     score += apiScore;
-    console.log(`📊 API Score: ${apiScore} (input: "${data.hasApis}")`);
 
     // Data Access (25 points)
     const dataScore = {
@@ -62,7 +60,6 @@ export function AgentReadinessQuickCheck() {
       'impossible': 0
     }[data.dataAccess] || 0;
     score += dataScore;
-    console.log(`📊 Data Score: ${dataScore} (input: "${data.dataAccess}")`);
 
     // Process Documentation (25 points)
     const processScore = {
@@ -72,7 +69,6 @@ export function AgentReadinessQuickCheck() {
       'chaos': 0
     }[data.processDocumentation] || 0;
     score += processScore;
-    console.log(`📊 Process Score: ${processScore} (input: "${data.processDocumentation}")`);
 
     // Automation Experience (15 points)
     const automationScore = {
@@ -82,7 +78,6 @@ export function AgentReadinessQuickCheck() {
       'none': 0
     }[data.automationExperience] || 0;
     score += automationScore;
-    console.log(`📊 Automation Score: ${automationScore} (input: "${data.automationExperience}")`);
 
     // Main Blocker (10 points) - LOWER score for HARDER blockers
     const blockerScore = {
@@ -96,9 +91,7 @@ export function AgentReadinessQuickCheck() {
       'Anders': 5
     }[data.mainBlocker] || 0;
     score += blockerScore;
-    console.log(`📊 Blocker Score: ${blockerScore} (input: "${data.mainBlocker}")`);
 
-    console.log(`🎯 TOTAL QUIZ SCORE: ${score}/100`);
     return Math.min(score, 100);
   };
 
@@ -188,15 +181,6 @@ export function AgentReadinessQuickCheck() {
             🎯 <strong>{t('results.nextStep')}</strong> {t('results.nextStepDescription')}
           </p>
 
-          {/* DEBUG: Show scoring breakdown */}
-          <div className="p-3 bg-red-500/20 border border-red-500/30 rounded text-xs text-white">
-            <strong>SCORE DEBUG:</strong><br/>
-            APIs: "{formData.hasApis}" = {formData.hasApis === 'most' ? '25' : formData.hasApis === 'some' ? '15' : formData.hasApis === 'unknown' ? '8' : '0'}pts<br/>
-            Data: "{formData.dataAccess}" = {formData.dataAccess === 'instant' ? '25' : formData.dataAccess === 'minutes' ? '18' : formData.dataAccess === 'difficult' ? '8' : '0'}pts<br/>
-            Process: "{formData.processDocumentation}" = {formData.processDocumentation === 'documented' ? '25' : formData.processDocumentation === 'partially' ? '18' : formData.processDocumentation === 'tribal' ? '8' : '0'}pts<br/>
-            Automation: "{formData.automationExperience}" = {formData.automationExperience === 'advanced' ? '15' : formData.automationExperience === 'basic' ? '10' : formData.automationExperience === 'trying' ? '5' : '0'}pts<br/>
-            Blocker: "{formData.mainBlocker}" = {formData.mainBlocker === 'Budget/resources beperkt' ? '8' : formData.mainBlocker === 'Security/compliance zorgen' ? '2' : '0'}pts
-          </div>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
@@ -283,12 +267,6 @@ export function AgentReadinessQuickCheck() {
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 leading-tight">🎯 {t('title')}</h3>
               <p className="text-sm sm:text-base text-white/70">{t('subtitle')}</p>
 
-              {/* DEBUG: Show current formData values */}
-              <div className="mt-2 p-2 bg-red-500/20 border border-red-500/30 rounded text-xs text-white">
-                <strong>DEBUG:</strong> hasApis="{formData.hasApis}" | dataAccess="{formData.dataAccess}" |
-                process="{formData.processDocumentation}" | automation="{formData.automationExperience}" |
-                blocker="{formData.mainBlocker}"
-              </div>
             </div>
             <div className="text-right">
               <div className="text-white/60 text-sm">
