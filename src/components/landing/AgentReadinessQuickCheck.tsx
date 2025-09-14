@@ -25,11 +25,11 @@ export function AgentReadinessQuickCheck() {
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState('');
   const [formData, setFormData] = useState<QuickCheckData>({
-    coreBusiness: '',
-    systems: [],
-    highestImpactSystem: '',
     hasApis: '',
     dataAccess: '',
+    processDocumentation: '',
+    automationExperience: '',
+    mainBlocker: '',
   });
 
   const totalSteps = 5;
