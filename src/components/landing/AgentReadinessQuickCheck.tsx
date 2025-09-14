@@ -16,6 +16,9 @@ interface QuickCheckData {
   highestImpactSystem: string;
   hasApis: string;
   dataAccess: string;
+  processDocumentation: string;    // ✅ FIXED: Added missing field
+  automationExperience: string;    // ✅ FIXED: Added missing field
+  mainBlocker: string;             // ✅ FIXED: Added missing field
 }
 
 export function AgentReadinessQuickCheck() {
@@ -25,6 +28,9 @@ export function AgentReadinessQuickCheck() {
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState('');
   const [formData, setFormData] = useState<QuickCheckData>({
+    coreBusiness: '',
+    systems: [],
+    highestImpactSystem: '',
     hasApis: '',
     dataAccess: '',
     processDocumentation: '',
@@ -105,6 +111,9 @@ export function AgentReadinessQuickCheck() {
   };
 
   const handleComplete = async () => {
+    console.log('🎯 QUIZ COMPLETE - handleComplete started');
+    console.log('📋 QUIZ COMPLETE - Final formData before submission:', formData);
+
     try {
       // Submit to API
       const response = await fetch('/api/quick-check', {
@@ -114,8 +123,9 @@ export function AgentReadinessQuickCheck() {
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
+        console.log('✅ QUIZ COMPLETE - API success:', data);
         setScore(data.score);
         setLevel(data.level);
         setIsCompleted(true);
@@ -124,9 +134,12 @@ export function AgentReadinessQuickCheck() {
       }
     } catch (error) {
       console.error('Quick check submission error:', error);
+      console.log('🔄 QUIZ COMPLETE - Falling back to client-side calculation');
       // Fallback to client-side calculation
       const finalScore = calculateQuickScore(formData);
       const finalLevel = getQuickLevel(finalScore);
+      console.log('🎯 QUIZ COMPLETE - Client-side score:', finalScore);
+      console.log('📊 QUIZ COMPLETE - Client-side level:', finalLevel);
       setScore(finalScore);
       setLevel(finalLevel);
       setIsCompleted(true);
@@ -226,6 +239,7 @@ export function AgentReadinessQuickCheck() {
           
           <Button
             onClick={() => {
+              console.log('🔄 QUIZ RESET - Retry button clicked');
               setIsCompleted(false);
               setCurrentStep(1);
               setFormData({
@@ -234,7 +248,11 @@ export function AgentReadinessQuickCheck() {
                 highestImpactSystem: '',
                 hasApis: '',
                 dataAccess: '',
+                processDocumentation: '',
+                automationExperience: '',
+                mainBlocker: '',
               });
+              console.log('🔄 QUIZ RESET - FormData reset to initial state');
             }}
             variant="outline"
             className="border-white/20 text-white hover:bg-white/10 flex-shrink-0"
@@ -278,7 +296,14 @@ export function AgentReadinessQuickCheck() {
             {currentStep === 1 && (
               <div>
                 <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🔌 Hebben jullie systemen APIs?</h4>
-                <RadioGroup value={formData.hasApis} onValueChange={(value) => setFormData(prev => ({ ...prev, hasApis: value }))}>
+                <RadioGroup value={formData.hasApis} onValueChange={(value) => {
+                  console.log('🔘 QUIZ DEBUG - hasApis radio clicked:', value);
+                  setFormData(prev => {
+                    const newData = { ...prev, hasApis: value };
+                    console.log('📊 QUIZ DEBUG - hasApis updated formData:', newData);
+                    return newData;
+                  });
+                }}>
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="most" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="most" id="most" className="mt-0.5" />
@@ -304,7 +329,14 @@ export function AgentReadinessQuickCheck() {
             {currentStep === 2 && (
               <div>
                 <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📊 Kun je snel klantdata vinden?</h4>
-                <RadioGroup value={formData.dataAccess} onValueChange={(value) => setFormData(prev => ({ ...prev, dataAccess: value }))}>
+                <RadioGroup value={formData.dataAccess} onValueChange={(value) => {
+                  console.log('🔘 QUIZ DEBUG - dataAccess radio clicked:', value);
+                  setFormData(prev => {
+                    const newData = { ...prev, dataAccess: value };
+                    console.log('📊 QUIZ DEBUG - dataAccess updated formData:', newData);
+                    return newData;
+                  });
+                }}>
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="instant" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="instant" id="instant" className="mt-0.5" />
@@ -330,7 +362,14 @@ export function AgentReadinessQuickCheck() {
             {currentStep === 3 && (
               <div>
                 <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📋 Staan jullie processen beschreven?</h4>
-                <RadioGroup value={formData.processDocumentation} onValueChange={(value) => setFormData(prev => ({ ...prev, processDocumentation: value }))}>
+                <RadioGroup value={formData.processDocumentation} onValueChange={(value) => {
+                  console.log('🔘 QUIZ DEBUG - processDocumentation radio clicked:', value);
+                  setFormData(prev => {
+                    const newData = { ...prev, processDocumentation: value };
+                    console.log('📊 QUIZ DEBUG - processDocumentation updated formData:', newData);
+                    return newData;
+                  });
+                }}>
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="documented" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="documented" id="documented" className="mt-0.5" />
@@ -356,7 +395,14 @@ export function AgentReadinessQuickCheck() {
             {currentStep === 4 && (
               <div>
                 <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🤖 Welke automation gebruik je al?</h4>
-                <RadioGroup value={formData.automationExperience} onValueChange={(value) => setFormData(prev => ({ ...prev, automationExperience: value }))}>
+                <RadioGroup value={formData.automationExperience} onValueChange={(value) => {
+                  console.log('🔘 QUIZ DEBUG - automationExperience radio clicked:', value);
+                  setFormData(prev => {
+                    const newData = { ...prev, automationExperience: value };
+                    console.log('📊 QUIZ DEBUG - automationExperience updated formData:', newData);
+                    return newData;
+                  });
+                }}>
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="advanced" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="advanced" id="advanced" className="mt-0.5" />
@@ -382,7 +428,14 @@ export function AgentReadinessQuickCheck() {
             {currentStep === 5 && (
               <div>
                 <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🚧 Wat is je grootste blocker voor automation?</h4>
-                <RadioGroup value={formData.mainBlocker} onValueChange={(value) => setFormData(prev => ({ ...prev, mainBlocker: value }))}>
+                <RadioGroup value={formData.mainBlocker} onValueChange={(value) => {
+                  console.log('🔘 QUIZ DEBUG - mainBlocker radio clicked:', value);
+                  setFormData(prev => {
+                    const newData = { ...prev, mainBlocker: value };
+                    console.log('📊 QUIZ DEBUG - mainBlocker updated formData:', newData);
+                    return newData;
+                  });
+                }}>
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="security" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="Security/compliance zorgen" id="security" className="mt-0.5" />
