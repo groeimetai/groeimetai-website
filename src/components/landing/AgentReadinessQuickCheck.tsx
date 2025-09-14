@@ -37,35 +37,54 @@ export function AgentReadinessQuickCheck() {
   const calculateQuickScore = (data: QuickCheckData): number => {
     let score = 0;
 
-    // Core Business (20 points)
-    const businessScore = data.coreBusiness.trim().length > 10 ? 20 : data.coreBusiness.trim().length > 0 ? 10 : 0;
-    score += businessScore;
-
-    // Systems (25 points - based on number of systems selected)
-    const systemsScore = Math.min(data.systems.length * 8, 25);
-    score += systemsScore;
-
-    // Highest Impact System (15 points)
-    const highestImpactScore = data.highestImpactSystem ? 15 : 0;
-    score += highestImpactScore;
-
     // APIs (25 points)
     const apiScore = {
       'most': 25,
-      'some': 18,
+      'some': 15,
       'unknown': 8,
       'none': 0
     }[data.hasApis] || 0;
     score += apiScore;
 
-    // Data Access (15 points)
+    // Data Access (25 points)
     const dataScore = {
-      'instant': 15,
-      'minutes': 12,
-      'difficult': 6,
+      'instant': 25,
+      'minutes': 18,
+      'difficult': 8,
       'impossible': 0
     }[data.dataAccess] || 0;
     score += dataScore;
+
+    // Process Documentation (25 points)
+    const processScore = {
+      'documented': 25,
+      'partially': 18,
+      'tribal': 8,
+      'chaos': 0
+    }[data.processDocumentation] || 0;
+    score += processScore;
+
+    // Automation Experience (15 points)
+    const automationScore = {
+      'advanced': 15,
+      'basic': 10,
+      'trying': 5,
+      'none': 0
+    }[data.automationExperience] || 0;
+    score += automationScore;
+
+    // Main Blocker (10 points) - inverse scoring
+    const blockerScore = {
+      'Security/compliance zorgen': 10,
+      'Budget/resources beperkt': 8,
+      'Geen idee waar te beginnen': 6,
+      'Technische kennis ontbreekt': 4,
+      'Systemen praten niet met elkaar': 2,
+      'Team weerstand tegen verandering': 1,
+      'Data is te rommelig/verspreid': 1,
+      'Anders': 5
+    }[data.mainBlocker] || 0;
+    score += blockerScore;
 
     return Math.min(score, 100);
   };
