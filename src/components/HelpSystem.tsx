@@ -538,6 +538,48 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
       article.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  // Helper function to parse inline markdown (bold, emojis, etc.)
+  const parseInlineMarkdown = (text: string) => {
+    const parts = [];
+    let currentIndex = 0;
+
+    // Match **bold** text and emojis
+    const regex = /(\*\*([^*]+)\*\*|[🎯🚀🔧🇳🇱💰⚡😊📊📈🎉✅❌🟢🟡🔴🔔💬📋⚙️🏠🎨📁📄🧪🗺️💡📞🎯])/g;
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+      // Add text before the match
+      if (match.index > currentIndex) {
+        parts.push(text.slice(currentIndex, match.index));
+      }
+
+      if (match[0].startsWith('**')) {
+        // Bold text
+        parts.push(
+          <strong key={match.index} className="font-semibold text-orange">
+            {match[2]}
+          </strong>
+        );
+      } else {
+        // Emoji
+        parts.push(
+          <span key={match.index} className="text-lg">
+            {match[0]}
+          </span>
+        );
+      }
+
+      currentIndex = match.index + match[0].length;
+    }
+
+    // Add remaining text
+    if (currentIndex < text.length) {
+      parts.push(text.slice(currentIndex));
+    }
+
+    return parts.length > 0 ? parts : text;
+  };
+
   return (
     <HelpContext.Provider value={{ showTooltip, hideTooltip, startTutorial, openHelpCenter }}>
       {children}
@@ -912,8 +954,15 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                 }
                 if (line.startsWith('- ')) {
                   return (
-                    <li key={index} className="text-white/80 ml-4 list-disc">
-                      {line.slice(2)}
+                    <li key={index} className="text-white/80 ml-4 list-disc mb-1">
+                      {parseInlineMarkdown(line.slice(2))}
+                    </li>
+                  );
+                }
+                if (line.match(/^\d+\./)) {
+                  return (
+                    <li key={index} className="text-white/80 ml-4 list-decimal mb-1">
+                      {parseInlineMarkdown(line.replace(/^\d+\.\s*/, ''))}
                     </li>
                   );
                 }
@@ -922,7 +971,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                 }
                 return (
                   <p key={index} className="text-white/80 mb-3">
-                    {line}
+                    {parseInlineMarkdown(line)}
                   </p>
                 );
               })}
