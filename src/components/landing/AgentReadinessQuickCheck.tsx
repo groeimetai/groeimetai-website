@@ -42,6 +42,7 @@ export function AgentReadinessQuickCheck() {
 
   const calculateQuickScore = (data: QuickCheckData): number => {
     let score = 0;
+    console.log('🔍 Quiz Score Debug - Input data:', data);
 
     // APIs (25 points)
     const apiScore = {
@@ -51,6 +52,7 @@ export function AgentReadinessQuickCheck() {
       'none': 0
     }[data.hasApis] || 0;
     score += apiScore;
+    console.log(`📊 API Score: ${apiScore} (input: "${data.hasApis}")`);
 
     // Data Access (25 points)
     const dataScore = {
@@ -60,6 +62,7 @@ export function AgentReadinessQuickCheck() {
       'impossible': 0
     }[data.dataAccess] || 0;
     score += dataScore;
+    console.log(`📊 Data Score: ${dataScore} (input: "${data.dataAccess}")`);
 
     // Process Documentation (25 points)
     const processScore = {
@@ -69,6 +72,7 @@ export function AgentReadinessQuickCheck() {
       'chaos': 0
     }[data.processDocumentation] || 0;
     score += processScore;
+    console.log(`📊 Process Score: ${processScore} (input: "${data.processDocumentation}")`);
 
     // Automation Experience (15 points)
     const automationScore = {
@@ -78,6 +82,7 @@ export function AgentReadinessQuickCheck() {
       'none': 0
     }[data.automationExperience] || 0;
     score += automationScore;
+    console.log(`📊 Automation Score: ${automationScore} (input: "${data.automationExperience}")`);
 
     // Main Blocker (10 points) - LOWER score for HARDER blockers
     const blockerScore = {
@@ -91,7 +96,9 @@ export function AgentReadinessQuickCheck() {
       'Anders': 5
     }[data.mainBlocker] || 0;
     score += blockerScore;
+    console.log(`📊 Blocker Score: ${blockerScore} (input: "${data.mainBlocker}")`);
 
+    console.log(`🎯 TOTAL QUIZ SCORE: ${score}/100`);
     return Math.min(score, 100);
   };
 
@@ -181,6 +188,15 @@ export function AgentReadinessQuickCheck() {
             🎯 <strong>{t('results.nextStep')}</strong> {t('results.nextStepDescription')}
           </p>
 
+          {/* DEBUG: Show scoring breakdown */}
+          <div className="p-3 bg-red-500/20 border border-red-500/30 rounded text-xs text-white">
+            <strong>SCORE DEBUG:</strong><br/>
+            APIs: "{formData.hasApis}" = {formData.hasApis === 'most' ? '25' : formData.hasApis === 'some' ? '15' : formData.hasApis === 'unknown' ? '8' : '0'}pts<br/>
+            Data: "{formData.dataAccess}" = {formData.dataAccess === 'instant' ? '25' : formData.dataAccess === 'minutes' ? '18' : formData.dataAccess === 'difficult' ? '8' : '0'}pts<br/>
+            Process: "{formData.processDocumentation}" = {formData.processDocumentation === 'documented' ? '25' : formData.processDocumentation === 'partially' ? '18' : formData.processDocumentation === 'tribal' ? '8' : '0'}pts<br/>
+            Automation: "{formData.automationExperience}" = {formData.automationExperience === 'advanced' ? '15' : formData.automationExperience === 'basic' ? '10' : formData.automationExperience === 'trying' ? '5' : '0'}pts<br/>
+            Blocker: "{formData.mainBlocker}" = {formData.mainBlocker === 'Budget/resources beperkt' ? '8' : formData.mainBlocker === 'Security/compliance zorgen' ? '2' : '0'}pts
+          </div>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
@@ -267,6 +283,12 @@ export function AgentReadinessQuickCheck() {
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 leading-tight">🎯 {t('title')}</h3>
               <p className="text-sm sm:text-base text-white/70">{t('subtitle')}</p>
 
+              {/* DEBUG: Show current formData values */}
+              <div className="mt-2 p-2 bg-red-500/20 border border-red-500/30 rounded text-xs text-white">
+                <strong>DEBUG:</strong> hasApis="{formData.hasApis}" | dataAccess="{formData.dataAccess}" |
+                process="{formData.processDocumentation}" | automation="{formData.automationExperience}" |
+                blocker="{formData.mainBlocker}"
+              </div>
             </div>
             <div className="text-right">
               <div className="text-white/60 text-sm">
@@ -290,24 +312,31 @@ export function AgentReadinessQuickCheck() {
           <div className="space-y-6">
             {currentStep === 1 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🔌 {t('questions.hasApis.title')}</h4>
-                <RadioGroup value={formData.hasApis} onValueChange={(value) => setFormData(prev => ({ ...prev, hasApis: value }))}>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🔌 Hebben jullie systemen APIs?</h4>
+                <RadioGroup value={formData.hasApis} onValueChange={(value) => {
+                  console.log('🔘 QUIZ DEBUG - hasApis radio clicked:', value);
+                  setFormData(prev => {
+                    const newData = { ...prev, hasApis: value };
+                    console.log('📊 QUIZ DEBUG - hasApis updated formData:', newData);
+                    return newData;
+                  });
+                }}>
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="most" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="most" id="most" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.hasApis.options.most')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, de meeste hebben APIs</span>
                     </Label>
                     <Label htmlFor="some" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="some" id="some" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.hasApis.options.some')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Sommige wel, sommige niet</span>
                     </Label>
                     <Label htmlFor="unknown" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="unknown" id="unknown" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.hasApis.options.unknown')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Geen idee eigenlijk</span>
                     </Label>
                     <Label htmlFor="none" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="none" id="none" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.hasApis.options.none')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, nog geen APIs</span>
                     </Label>
                   </div>
                 </RadioGroup>
@@ -316,24 +345,31 @@ export function AgentReadinessQuickCheck() {
 
             {currentStep === 2 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📊 {t('questions.dataAccess.title')}</h4>
-                <RadioGroup value={formData.dataAccess} onValueChange={(value) => setFormData(prev => ({ ...prev, dataAccess: value })))}>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📊 Kun je snel klantdata vinden?</h4>
+                <RadioGroup value={formData.dataAccess} onValueChange={(value) => {
+                  console.log('🔘 QUIZ DEBUG - dataAccess radio clicked:', value);
+                  setFormData(prev => {
+                    const newData = { ...prev, dataAccess: value };
+                    console.log('📊 QUIZ DEBUG - dataAccess updated formData:', newData);
+                    return newData;
+                  });
+                }}>
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="instant" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="instant" id="instant" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.dataAccess.options.instant')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, paar clicks en ik heb alles</span>
                     </Label>
                     <Label htmlFor="minutes" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="minutes" id="minutes" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.dataAccess.options.minutes')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, maar moet door 2-3 systemen</span>
                     </Label>
                     <Label htmlFor="difficult" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="difficult" id="difficult" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.dataAccess.options.difficult')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Lastig, data zit verspreid</span>
                     </Label>
                     <Label htmlFor="impossible" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="impossible" id="impossible" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.dataAccess.options.impossible')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, veel data is niet digitaal</span>
                     </Label>
                   </div>
                 </RadioGroup>
@@ -342,7 +378,7 @@ export function AgentReadinessQuickCheck() {
 
             {currentStep === 3 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📋 {t('questions.processDocumentation.title')}</h4>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📋 Staan jullie processen beschreven?</h4>
                 <RadioGroup value={formData.processDocumentation} onValueChange={(value) => {
                   console.log('🔘 QUIZ DEBUG - processDocumentation radio clicked:', value);
                   setFormData(prev => {
@@ -354,19 +390,19 @@ export function AgentReadinessQuickCheck() {
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="documented" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="documented" id="documented" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.processDocumentation.options.documented')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, alles gedocumenteerd</span>
                     </Label>
                     <Label htmlFor="partially" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="partially" id="partially" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.processDocumentation.options.partially')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Belangrijkste processen wel</span>
                     </Label>
                     <Label htmlFor="tribal" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="tribal" id="tribal" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.processDocumentation.options.tribal')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, zit in hoofden van medewerkers</span>
                     </Label>
                     <Label htmlFor="chaos" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="chaos" id="chaos" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.processDocumentation.options.chaos')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Iedereen doet het anders</span>
                     </Label>
                   </div>
                 </RadioGroup>
@@ -375,7 +411,7 @@ export function AgentReadinessQuickCheck() {
 
             {currentStep === 4 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🤖 {t('questions.automationExperience.title')}</h4>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🤖 Welke automation gebruik je al?</h4>
                 <RadioGroup value={formData.automationExperience} onValueChange={(value) => {
                   console.log('🔘 QUIZ DEBUG - automationExperience radio clicked:', value);
                   setFormData(prev => {
@@ -387,19 +423,19 @@ export function AgentReadinessQuickCheck() {
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="advanced" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="advanced" id="advanced" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.automationExperience.options.advanced')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Zapier, Power Automate, RPA tools</span>
                     </Label>
                     <Label htmlFor="basic" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="basic" id="basic" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.automationExperience.options.basic')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Email automation, basis workflows</span>
                     </Label>
                     <Label htmlFor="trying" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="trying" id="trying" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.automationExperience.options.trying')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Proberen dingen, maar breekt vaak</span>
                     </Label>
                     <Label htmlFor="none-auto" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="none" id="none-auto" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.automationExperience.options.none')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, alles nog handmatig</span>
                     </Label>
                   </div>
                 </RadioGroup>
@@ -408,7 +444,7 @@ export function AgentReadinessQuickCheck() {
 
             {currentStep === 5 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🚧 {t('questions.mainBlocker.title')}</h4>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🚧 Wat is je grootste blocker voor automation?</h4>
                 <RadioGroup value={formData.mainBlocker} onValueChange={(value) => {
                   console.log('🔘 QUIZ DEBUG - mainBlocker radio clicked:', value);
                   setFormData(prev => {
@@ -420,27 +456,27 @@ export function AgentReadinessQuickCheck() {
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="security" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="Security/compliance zorgen" id="security" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.security')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Security/compliance zorgen</span>
                     </Label>
                     <Label htmlFor="budget" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="Budget/resources beperkt" id="budget" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.budget')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Budget/resources beperkt</span>
                     </Label>
                     <Label htmlFor="guidance" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="Geen idee waar te beginnen" id="guidance" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.guidance')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Geen idee waar te beginnen</span>
                     </Label>
                     <Label htmlFor="knowledge" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="Technische kennis ontbreekt" id="knowledge" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.knowledge')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Technische kennis ontbreekt</span>
                     </Label>
                     <Label htmlFor="integration" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="Systemen praten niet met elkaar" id="integration" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.integration')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Systemen praten niet met elkaar</span>
                     </Label>
                     <Label htmlFor="other" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="Anders" id="other" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.other')}</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Anders</span>
                     </Label>
                   </div>
                 </RadioGroup>
