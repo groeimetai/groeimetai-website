@@ -145,106 +145,266 @@ const HELP_TOOLTIPS: HelpTooltip[] = [
 ];
 
 const TUTORIALS: Tutorial[] = [
-  {
-    id: 'getting-started',
-    title: 'Getting Started with GroeimetAI',
-    description: 'Learn the basics of navigating your dashboard and key features',
-    category: 'getting-started',
-    steps: [
-      {
-        title: 'Welcome to Your Dashboard',
-        content:
-          'This is your central hub for managing all your AI projects and communications with our team.',
-        targetElement: '[data-help="dashboard-main"]',
-      },
-      {
-        title: 'Customize Your Experience',
-        content: 'You can customize your dashboard by adding widgets that matter most to you.',
-        targetElement: '[data-help="dashboard-main-widgets"]',
-      },
-      {
-        title: 'Stay Connected',
-        content: 'Use the chat widget to communicate directly with our team anytime.',
-        targetElement: '[data-help="chat-widget"]',
-      },
-      {
-        title: 'Track Your Projects',
-        content: 'Monitor your project progress and milestones in real-time.',
-        targetElement: '[data-help="project-timeline"]',
-      },
-    ],
-  },
-  {
-    id: 'managing-projects',
-    title: 'Managing Your Projects',
-    description: 'Learn how to view, track, and manage your AI projects',
-    category: 'features',
-    steps: [
-      {
-        title: 'View All Projects',
-        content: 'Navigate to the Projects page to see all your active and completed projects.',
-        targetElement: '[data-help="projects-link"]',
-      },
-      {
-        title: 'Project Details',
-        content: 'Click on any project to view detailed information, timelines, and deliverables.',
-      },
-      {
-        title: 'Communication',
-        content:
-          'Each project has a dedicated chat for seamless communication with your project team.',
-      },
-    ],
-  },
+  // Tutorials sectie leeggemaakt zoals gevraagd
 ];
 
 const HELP_ARTICLES: HelpArticle[] = [
   {
     id: '1',
-    title: 'How to Request a New Project',
-    category: 'Getting Started',
-    tags: ['project', 'request', 'quote'],
+    title: 'Welcome to GroeimetAI - Your AI Transformation Partner',
+    category: 'About GroeimetAI',
+    tags: ['groeimetai', 'company', 'ai', 'transformation'],
     content: `
-# How to Request a New Project
+# Welcome to GroeimetAI - Your AI Transformation Partner
 
-Requesting a new AI project with GroeimetAI is simple:
+GroeimetAI is een Nederlandse AI consultancy die bedrijven helpt groeien met cutting-edge AI technologie. We zijn gespecialiseerd in het bouwen van agent-ready infrastructuur en multi-agent systemen.
 
-1. **Click "Start Project"** - You'll find this button in the navigation bar
-2. **Fill out the form** - Provide details about your project needs
-3. **Submit for review** - Our team will review and respond within 24 hours
-4. **Receive your quote** - We'll provide a detailed proposal and timeline
+## Onze Expertise
+- **Agent Infrastructure**: MCP servers en API integraties
+- **Multi-Agent Systemen**: Orchestratie van AI-agents voor complexe processen
+- **ServiceNow Development**: Gespecialiseerd in Snow-flow ontwikkeling
+- **RAG Architectuur**: Retrieval-Augmented Generation systemen
 
-## What to include in your request:
-- Clear project objectives
-- Desired timeline
-- Budget range
-- Any specific requirements
+## Waarom GroeimetAI?
+- 🚀 **Agent Infrastructure Pioniers** sinds 2023
+- 🔧 **Praktisch > Theoretisch** - We bouwen wat werkt
+- 🎯 **Custom > Copy-Paste** - Elke oplossing op maat
+- 🇳🇱 **Nederlands & Direct** - Geen Silicon Valley hype
 
-Our team is here to help transform your ideas into reality!
+## Onze Diensten
+1. **Agent Readiness Assessment** - Gratis analyse van je huidige infrastructuur
+2. **Expert Assessment** (€2.500) - Diepgaande roadmap en implementatieplan
+3. **Pilot Trajecten** - Proof-of-concept ontwikkeling
+4. **Full Implementation** - Complete AI transformatie
+
+Begin je reis met onze gratis Agent Readiness Check!
     `,
   },
   {
     id: '2',
-    title: 'Understanding Project Timelines',
-    category: 'Projects',
-    tags: ['timeline', 'milestones', 'progress'],
+    title: 'Agent Readiness Assessment - Hoe het werkt',
+    category: 'Assessments',
+    tags: ['assessment', 'agent-readiness', 'gratis', 'score'],
     content: `
-# Understanding Project Timelines
+# Agent Readiness Assessment - Hoe het werkt
 
-Your project timeline shows the journey from concept to completion:
+Onze gratis Agent Readiness Assessment helpt je begrijpen hoe klaar jouw bedrijf is voor AI agents.
 
-## Timeline Stages:
-1. **Discovery** - Understanding your needs
-2. **Planning** - Defining scope and approach
-3. **Development** - Building your solution
-4. **Delivery** - Implementation and handover
+## Het Assessment Proces
 
-## Tracking Progress:
-- Green checkmarks indicate completed stages
-- Orange circles show current stage
-- Gray circles are upcoming stages
+### 1. Quick Check (5 minuten)
+Start met onze **5 snelle vragen** op de homepage:
+- API beschikbaarheid van je systemen
+- Data toegankelijkheid en vindbaarheid
+- Proces documentatie status
+- Huidige automation ervaring
+- Grootste blockers voor automation
 
-You'll receive notifications at each milestone completion.
+**Result**: Immediate score + niveau (0-100 punten)
+
+### 2. Volledige Assessment (15 minuten)
+Voor een diepere analyse, vul de complete assessment in:
+- Core business beschrijving
+- Systeem prioriteiten en architectuur
+- Budget realiteit en planning
+- Team readiness en adoption snelheid
+- IT maturiteit en security vereisten
+
+**Result**: Uitgebreid rapport via email binnen 2 minuten
+
+## Score Interpretatie
+- **90-100**: Agent-Ready (Level 5) - Start binnen weken
+- **70-89**: Integration-Ready (Level 4) - 2-3 maanden voorbereiding
+- **50-69**: Digitalization-Ready (Level 3) - 6-12 maanden werk
+- **30-49**: Foundation-Building (Level 2) - 1-2 jaar ontwikkeling
+- **0-29**: Pre-Digital (Level 1) - Begin met basis digitalisering
+
+## Volgende Stappen
+- **Hoge scores**: Expert Assessment voor concrete roadmap
+- **Middel scores**: Pilot traject voor proof-of-concept
+- **Lage scores**: Modernisering advies en fundament opbouw
+
+Start vandaag nog met je gratis assessment!
+    `,
+  },
+  {
+    id: '3',
+    title: 'Expert Assessment vs Agent Readiness - Het verschil',
+    category: 'Assessments',
+    tags: ['expert-assessment', 'verschil', 'roadmap', 'advies'],
+    content: `
+# Expert Assessment vs Agent Readiness - Het verschil
+
+Beide assessments helpen je AI readiness te begrijpen, maar hebben verschillende doelen en diepgang.
+
+## Agent Readiness Assessment (Gratis)
+**Doel**: Snelle score en algemene richting
+
+### Wat je krijgt:
+- ✅ **Agent Readiness Score** (0-100)
+- ✅ **Maturity Level** (1-5) met beschrijving
+- ✅ **Algemene inzichten** en best practices
+- ✅ **Indicatie tijd** tot agent-ready
+- ✅ **GroeimetAI certificaat** + LinkedIn badge
+
+### Tijd: 5-15 minuten
+### Prijs: Gratis
+### Output: Geautomatiseerd rapport via email
+
+---
+
+## Expert Assessment (€2.500)
+**Doel**: Concrete roadmap en implementatieplan
+
+### Wat je krijgt:
+- 🎯 **Specifieke gaps analyse** voor jouw situatie
+- 🗺️ **Stap-voor-stap roadmap** met tijdlijnen
+- 💰 **Budget planning** en cost-benefit analyse
+- 🔧 **Technische specificaties** voor implementatie
+- 👥 **Team training plan** en change management
+- 📞 **45-min expert sessie** voor vragen en uitleg
+- 🔄 **3 maanden follow-up** support
+
+### Tijd: 2-3 weken expert analyse
+### Prijs: €2.500 (eenmalig)
+### Output: Persoonlijk expert rapport + consultatie
+
+## Wanneer Welke Kiezen?
+
+**Start altijd met Agent Readiness** (gratis):
+- Geeft je baseline score en richting
+- Helpt prioriteiten stellen
+- Toont waar je staat in de markt
+
+**Upgrade naar Expert Assessment** als je:
+- Score > 50 hebt (concrete implementatie mogelijk)
+- Budget hebt voor daadwerkelijke uitvoering
+- Concrete roadmap en tijdplanning nodig hebt
+- Expert advies wilt voor je specifieke situatie
+
+**Pro tip**: Begin gratis, upgrade als je klaar bent voor actie!
+    `,
+  },
+  {
+    id: '4',
+    title: 'Dashboard Handleiding - Alles wat je moet weten',
+    category: 'Platform',
+    tags: ['dashboard', 'navigatie', 'features', 'handleiding'],
+    content: `
+# Dashboard Handleiding - Alles wat je moet weten
+
+Je GroeimetAI dashboard is je centrale hub voor alle AI projecten en communicatie.
+
+## Dashboard Overzicht
+
+### 📊 **Metrics & Statistics**
+- **Active Projects**: Lopende AI implementaties
+- **Messages**: Directe communicatie met team
+- **Consultations**: Geplande expert sessies
+- **System Health**: Real-time status monitoring
+
+### 📈 **Real-time Data**
+Alle data komt live uit Firestore:
+- Project voortgang updates
+- Team communicatie logs
+- Assessment resultaten
+- System performance metrics
+
+## Hoofdsecties
+
+### 🏠 **Dashboard Home**
+- Project overzicht en voortgang
+- Recent activities en updates
+- Quick actions voor veelgebruikte features
+- System health monitoring
+
+### 💬 **Messages & Communication**
+- Direct chat met GroeimetAI team
+- Project-specifieke communicatie
+- Notification center voor updates
+- Support chat voor vragen
+
+### 📋 **Projects & Quotes**
+- Bekijk alle actieve projecten
+- Track milestones en deliverables
+- Download project documentatie
+- Quote geschiedenis en status
+
+### ⚙️ **Settings & Profile**
+- Persoonlijke voorkeuren instellen
+- Notification instellingen
+- Account informatie bijwerken
+- Security en privacy opties
+
+## Pro Tips
+- 🔔 **Enable notifications** voor real-time updates
+- 💬 **Gebruik chat** voor directe support
+- 📊 **Check metrics** voor project voortgang
+- ⚙️ **Personaliseer** je dashboard ervaring
+
+Heb je vragen? Gebruik de chat widget rechtsonder!
+    `,
+  },
+  {
+    id: '5',
+    title: 'Van Assessment naar Implementatie - De Complete Reis',
+    category: 'Workflow',
+    tags: ['implementatie', 'proces', 'stappen', 'roadmap'],
+    content: `
+# Van Assessment naar Implementatie - De Complete Reis
+
+Ontdek hoe GroeimetAI je begeleidt van eerste assessment tot volledige AI implementatie.
+
+## De Complete Customer Journey
+
+### 🎯 **Stap 1: Assessment & Discovery**
+**Duur**: 5-30 minuten
+- Start met gratis Agent Readiness Check
+- Optioneel: Expert Assessment voor diepere analyse
+- **Output**: Score, niveau, en basisrichtingen
+
+### 🗺️ **Stap 2: Roadmap & Planning**
+**Duur**: 1-2 weken
+- Gedetailleerde gap analyse
+- Technische architectuur planning
+- Budget en timeline bepaling
+- **Output**: Concrete implementatieplan
+
+### 🧪 **Stap 3: Pilot & Proof-of-Concept**
+**Duur**: 4-8 weken
+- Selecteer 1-2 systemen voor pilot
+- Bouw minimum viable automation
+- Test en valideer met je team
+- **Output**: Werkend prototype + learnings
+
+### 🚀 **Stap 4: Full Implementation**
+**Duur**: 3-12 maanden
+- Scale successful pilot naar meer systemen
+- Enterprise-grade security en compliance
+- Team training en change management
+- **Output**: Production-ready agent infrastructure
+
+### 📈 **Stap 5: Optimization & Growth**
+**Duur**: Ongoing
+- Performance monitoring en tuning
+- Nieuwe use cases en expansie
+- Continuous improvement
+- **Output**: Measurable ROI en business impact
+
+## Onze Garanties
+- ✅ **Geen vendor lock-in** - Je behoudt controle
+- ✅ **Open source approach** - Transparante technologie
+- ✅ **GDPR compliant** - Nederlandse privacy standards
+- ✅ **24/7 support** - Nederlandse tijdzone service
+
+## Success Metrics
+Klanten zien gemiddeld:
+- 🎯 **40-60% efficiency gains** binnen 6 maanden
+- 💰 **ROI van 200-400%** binnen eerste jaar
+- ⚡ **80% snellere** proces afhandeling
+- 😊 **Verhoogde tevredenheid** team en klanten
+
+**Klaar om te beginnen? Start met je gratis assessment!**
     `,
   },
 ];
