@@ -880,8 +880,8 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
             </div>
           </DialogHeader>
 
-          <ScrollArea className="flex-1 mt-6">
-            <div className="prose prose-invert max-w-none">
+          <ScrollArea className="flex-1 mt-6 max-h-[60vh]">
+            <div className="prose prose-invert max-w-none p-4">
               {selectedArticle?.content.split('\n').map((line, index) => {
                 if (line.startsWith('# ')) {
                   return (
