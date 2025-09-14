@@ -187,6 +187,16 @@ export function AgentReadinessQuickCheck() {
           <p className="text-white/80 text-sm sm:text-base leading-relaxed">
             🎯 <strong>{t('results.nextStep')}</strong> {t('results.nextStepDescription')}
           </p>
+
+          {/* DEBUG: Show scoring breakdown */}
+          <div className="p-3 bg-red-500/20 border border-red-500/30 rounded text-xs text-white">
+            <strong>SCORE DEBUG:</strong><br/>
+            APIs: "{formData.hasApis}" = {formData.hasApis === 'most' ? '25' : formData.hasApis === 'some' ? '15' : formData.hasApis === 'unknown' ? '8' : '0'}pts<br/>
+            Data: "{formData.dataAccess}" = {formData.dataAccess === 'instant' ? '25' : formData.dataAccess === 'minutes' ? '18' : formData.dataAccess === 'difficult' ? '8' : '0'}pts<br/>
+            Process: "{formData.processDocumentation}" = {formData.processDocumentation === 'documented' ? '25' : formData.processDocumentation === 'partially' ? '18' : formData.processDocumentation === 'tribal' ? '8' : '0'}pts<br/>
+            Automation: "{formData.automationExperience}" = {formData.automationExperience === 'advanced' ? '15' : formData.automationExperience === 'basic' ? '10' : formData.automationExperience === 'trying' ? '5' : '0'}pts<br/>
+            Blocker: "{formData.mainBlocker}" = {formData.mainBlocker === 'Budget/resources beperkt' ? '8' : formData.mainBlocker === 'Security/compliance zorgen' ? '2' : '0'}pts
+          </div>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
