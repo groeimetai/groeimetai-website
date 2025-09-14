@@ -3592,10 +3592,41 @@
       "dataAccess": {
         "title": "Can you quickly find customer data?",
         "options": {
-          "instant": "Few clicks",
-          "minutes": "2-3 systems",
-          "difficult": "Hard to search",
-          "impossible": "Not digital"
+          "instant": "Yes, few clicks and I have everything",
+          "minutes": "Yes, but need to go through 2-3 systems",
+          "difficult": "Difficult, data is scattered",
+          "impossible": "No, much data is not digital"
+        }
+      },
+      "processDocumentation": {
+        "title": "Are your processes documented?",
+        "options": {
+          "documented": "Yes, everything documented",
+          "partially": "Main processes are",
+          "tribal": "No, it's in employees' heads",
+          "chaos": "Everyone does it differently"
+        }
+      },
+      "automationExperience": {
+        "title": "What automation do you already use?",
+        "options": {
+          "advanced": "Zapier, Power Automate, RPA tools",
+          "basic": "Email automation, basic workflows",
+          "trying": "Trying things, but often breaks",
+          "none": "No, everything still manual"
+        }
+      },
+      "mainBlocker": {
+        "title": "What's your biggest blocker for automation?",
+        "options": {
+          "security": "Security/compliance concerns",
+          "budget": "Budget/resources limited",
+          "guidance": "No idea where to start",
+          "knowledge": "Technical knowledge missing",
+          "integration": "Systems don't talk to each other",
+          "resistance": "Team resistance to change",
+          "data": "Data is too messy/scattered",
+          "other": "Other"
         }
       },
       "budgetReality": {

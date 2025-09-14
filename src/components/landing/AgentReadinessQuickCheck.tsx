@@ -372,7 +372,7 @@ export function AgentReadinessQuickCheck() {
 
             {currentStep === 3 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📋 Staan jullie processen beschreven?</h4>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📋 {t('questions.processDocumentation.title')}</h4>
                 <RadioGroup value={formData.processDocumentation} onValueChange={(value) => {
                   console.log('🔘 QUIZ DEBUG - processDocumentation radio clicked:', value);
                   setFormData(prev => {
@@ -384,19 +384,19 @@ export function AgentReadinessQuickCheck() {
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="documented" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="documented" id="documented" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Ja, alles gedocumenteerd</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.processDocumentation.options.documented')}</span>
                     </Label>
                     <Label htmlFor="partially" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="partially" id="partially" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Belangrijkste processen wel</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.processDocumentation.options.partially')}</span>
                     </Label>
                     <Label htmlFor="tribal" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="tribal" id="tribal" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, zit in hoofden van medewerkers</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.processDocumentation.options.tribal')}</span>
                     </Label>
                     <Label htmlFor="chaos" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="chaos" id="chaos" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Iedereen doet het anders</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.processDocumentation.options.chaos')}</span>
                     </Label>
                   </div>
                 </RadioGroup>
@@ -405,7 +405,7 @@ export function AgentReadinessQuickCheck() {
 
             {currentStep === 4 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🤖 Welke automation gebruik je al?</h4>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🤖 {t('questions.automationExperience.title')}</h4>
                 <RadioGroup value={formData.automationExperience} onValueChange={(value) => {
                   console.log('🔘 QUIZ DEBUG - automationExperience radio clicked:', value);
                   setFormData(prev => {
@@ -417,19 +417,19 @@ export function AgentReadinessQuickCheck() {
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="advanced" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="advanced" id="advanced" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Zapier, Power Automate, RPA tools</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.automationExperience.options.advanced')}</span>
                     </Label>
                     <Label htmlFor="basic" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="basic" id="basic" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Email automation, basis workflows</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.automationExperience.options.basic')}</span>
                     </Label>
                     <Label htmlFor="trying" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="trying" id="trying" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Proberen dingen, maar breekt vaak</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.automationExperience.options.trying')}</span>
                     </Label>
                     <Label htmlFor="none-auto" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="none" id="none-auto" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Nee, alles nog handmatig</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.automationExperience.options.none')}</span>
                     </Label>
                   </div>
                 </RadioGroup>
@@ -438,7 +438,7 @@ export function AgentReadinessQuickCheck() {
 
             {currentStep === 5 && (
               <div>
-                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🚧 Wat is je grootste blocker voor automation?</h4>
+                <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🚧 {t('questions.mainBlocker.title')}</h4>
                 <RadioGroup value={formData.mainBlocker} onValueChange={(value) => {
                   console.log('🔘 QUIZ DEBUG - mainBlocker radio clicked:', value);
                   setFormData(prev => {
@@ -450,27 +450,27 @@ export function AgentReadinessQuickCheck() {
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="security" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="Security/compliance zorgen" id="security" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Security/compliance zorgen</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.security')}</span>
                     </Label>
                     <Label htmlFor="budget" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="Budget/resources beperkt" id="budget" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Budget/resources beperkt</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.budget')}</span>
                     </Label>
                     <Label htmlFor="guidance" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="Geen idee waar te beginnen" id="guidance" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Geen idee waar te beginnen</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.guidance')}</span>
                     </Label>
                     <Label htmlFor="knowledge" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="Technische kennis ontbreekt" id="knowledge" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Technische kennis ontbreekt</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.knowledge')}</span>
                     </Label>
                     <Label htmlFor="integration" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="Systemen praten niet met elkaar" id="integration" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Systemen praten niet met elkaar</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.integration')}</span>
                     </Label>
                     <Label htmlFor="other" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                       <RadioGroupItem value="Anders" id="other" className="mt-0.5" />
-                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">Anders</span>
+                      <span className="text-sm sm:text-base text-white/80 leading-relaxed flex-1 text-left">{t('questions.mainBlocker.options.other')}</span>
                     </Label>
                   </div>
                 </RadioGroup>

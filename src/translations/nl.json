@@ -3413,10 +3413,41 @@
       "dataAccess": {
         "title": "Kun je snel klantdata vinden?",
         "options": {
-          "instant": "Paar clicks",
-          "minutes": "2-3 systemen",
-          "difficult": "Lastig zoeken",
-          "impossible": "Niet digitaal"
+          "instant": "Ja, paar clicks en ik heb alles",
+          "minutes": "Ja, maar moet door 2-3 systemen",
+          "difficult": "Lastig, data zit verspreid",
+          "impossible": "Nee, veel data is niet digitaal"
+        }
+      },
+      "processDocumentation": {
+        "title": "Staan jullie processen beschreven?",
+        "options": {
+          "documented": "Ja, alles gedocumenteerd",
+          "partially": "Belangrijkste processen wel",
+          "tribal": "Nee, zit in hoofden van medewerkers",
+          "chaos": "Iedereen doet het anders"
+        }
+      },
+      "automationExperience": {
+        "title": "Welke automation gebruik je al?",
+        "options": {
+          "advanced": "Zapier, Power Automate, RPA tools",
+          "basic": "Email automation, basis workflows",
+          "trying": "Proberen dingen, maar breekt vaak",
+          "none": "Nee, alles nog handmatig"
+        }
+      },
+      "mainBlocker": {
+        "title": "Wat is je grootste blocker voor automation?",
+        "options": {
+          "security": "Security/compliance zorgen",
+          "budget": "Budget/resources beperkt",
+          "guidance": "Geen idee waar te beginnen",
+          "knowledge": "Technische kennis ontbreekt",
+          "integration": "Systemen praten niet met elkaar",
+          "resistance": "Team weerstand tegen verandering",
+          "data": "Data is te rommelig/verspreid",
+          "other": "Anders"
         }
       },
       "budgetReality": {
