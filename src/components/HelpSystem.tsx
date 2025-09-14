@@ -418,6 +418,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [hasSeenTooltips, setHasSeenTooltips] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState<HelpArticle | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -737,7 +738,8 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                     {filteredArticles.map((article) => (
                       <Card
                         key={article.id}
-                        className="bg-white/5 border-white/10 cursor-pointer hover:bg-white/10"
+                        className="bg-white/5 border-white/10 cursor-pointer hover:bg-white/10 transition-colors"
+                        onClick={() => setSelectedArticle(article)}
                       >
                         <CardContent className="p-4">
                           <div className="flex items-start justify-between">
@@ -763,30 +765,14 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                 </ScrollArea>
               </TabsContent>
 
-              <TabsContent value="tutorials" className="grid gap-4">
-                {TUTORIALS.map((tutorial) => (
-                  <Card
-                    key={tutorial.id}
-                    className="bg-white/5 border-white/10 cursor-pointer hover:bg-white/10"
-                    onClick={() => startTutorial(tutorial.id)}
-                  >
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="text-white font-medium mb-1">{tutorial.title}</h4>
-                          <p className="text-white/60 text-sm">{tutorial.description}</p>
-                          <div className="flex items-center gap-4 mt-2 text-white/40 text-sm">
-                            <span>{tutorial.steps.length} steps</span>
-                            <Badge variant="outline" className="text-xs">
-                              {tutorial.category}
-                            </Badge>
-                          </div>
-                        </div>
-                        <Play className="w-5 h-5 text-orange" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+              <TabsContent value="tutorials" className="text-center py-12">
+                <BookOpen className="w-16 h-16 text-white/20 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  Interactive Tutorials Coming Soon
+                </h3>
+                <p className="text-white/60">
+                  We&apos;re creating step-by-step interactive guides to help you master our platform
+                </p>
               </TabsContent>
 
               <TabsContent value="videos" className="text-center py-12">
@@ -872,6 +858,70 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
               </TabsContent>
             </div>
           </Tabs>
+        </DialogContent>
+      </Dialog>
+
+      {/* Article Detail Dialog */}
+      <Dialog open={!!selectedArticle} onOpenChange={() => setSelectedArticle(null)}>
+        <DialogContent className="bg-black/95 border-white/20 max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="text-2xl text-white">
+              {selectedArticle?.title}
+            </DialogTitle>
+            <div className="flex items-center gap-2 mt-2">
+              <Badge variant="outline" className="text-xs">
+                {selectedArticle?.category}
+              </Badge>
+              {selectedArticle?.tags.map((tag) => (
+                <Badge key={tag} variant="secondary" className="text-xs">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </DialogHeader>
+
+          <ScrollArea className="flex-1 mt-6">
+            <div className="prose prose-invert max-w-none">
+              {selectedArticle?.content.split('\n').map((line, index) => {
+                if (line.startsWith('# ')) {
+                  return (
+                    <h1 key={index} className="text-3xl font-bold text-white mb-4">
+                      {line.slice(2)}
+                    </h1>
+                  );
+                }
+                if (line.startsWith('## ')) {
+                  return (
+                    <h2 key={index} className="text-2xl font-semibold text-white mb-3 mt-6">
+                      {line.slice(3)}
+                    </h2>
+                  );
+                }
+                if (line.startsWith('### ')) {
+                  return (
+                    <h3 key={index} className="text-xl font-semibold text-white mb-2 mt-4">
+                      {line.slice(4)}
+                    </h3>
+                  );
+                }
+                if (line.startsWith('- ')) {
+                  return (
+                    <li key={index} className="text-white/80 ml-4 list-disc">
+                      {line.slice(2)}
+                    </li>
+                  );
+                }
+                if (line.trim().length === 0) {
+                  return <br key={index} />;
+                }
+                return (
+                  <p key={index} className="text-white/80 mb-3">
+                    {line}
+                  </p>
+                );
+              })}
+            </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     </HelpContext.Provider>
