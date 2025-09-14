@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 interface QuickCheckData {
-  coreBusiness: string;
-  systems: string[];
-  highestImpactSystem: string;
   hasApis: string;
   dataAccess: string;
+  processDocumentation: string;
+  automationExperience: string;
+  mainBlocker: string;
   email?: string;
   company?: string;
 }
@@ -43,37 +43,54 @@ export async function POST(req: NextRequest) {
 function calculateQuickScore(data: QuickCheckData): number {
   let score = 0;
 
-  // Core Business (20 points) - Business clarity
-  const businessScore = data.coreBusiness?.trim().length > 10 ? 20 : data.coreBusiness?.trim().length > 0 ? 10 : 0;
-  score += businessScore;
-
-  // Systems (25 points) - Number of systems to agent-fy
-  const systemsScore = Math.min(data.systems?.length * 8 || 0, 25);
-  score += systemsScore;
-
-  // Highest Impact System (15 points) - Priority focus
-  const highestImpactScore = data.highestImpactSystem ? 15 : 0;
-  score += highestImpactScore;
-
-  // APIs (25 points) - CRITICAL - Can agents connect to systems?
-  const apiScore =
-    {
-      most: 25, // Agents can connect to most systems
-      some: 18, // Limited agent connectivity
-      unknown: 8, // Unknown = probably minimal APIs
-      none: 0, // Agents can't connect anywhere
-    }[data.hasApis] || 0;
+  // APIs (25 points)
+  const apiScore = {
+    'most': 25,
+    'some': 15,
+    'unknown': 8,
+    'none': 0
+  }[data.hasApis] || 0;
   score += apiScore;
 
-  // Data Access (15 points) - Can agents get the data they need?
-  const dataScore =
-    {
-      instant: 15, // Agents can access data immediately
-      minutes: 12, // Some friction but accessible
-      difficult: 6, // Major data silos block agents
-      impossible: 0, // Data not digitized yet
-    }[data.dataAccess] || 0;
+  // Data Access (25 points)
+  const dataScore = {
+    'instant': 25,
+    'minutes': 18,
+    'difficult': 8,
+    'impossible': 0
+  }[data.dataAccess] || 0;
   score += dataScore;
+
+  // Process Documentation (25 points)
+  const processScore = {
+    'documented': 25,
+    'partially': 18,
+    'tribal': 8,
+    'chaos': 0
+  }[data.processDocumentation] || 0;
+  score += processScore;
+
+  // Automation Experience (15 points)
+  const automationScore = {
+    'advanced': 15,
+    'basic': 10,
+    'trying': 5,
+    'none': 0
+  }[data.automationExperience] || 0;
+  score += automationScore;
+
+  // Main Blocker (10 points) - LOWER score for HARDER blockers
+  const blockerScore = {
+    'Security/compliance zorgen': 2,
+    'Team weerstand tegen verandering': 3,
+    'Data is te rommelig/verspreid': 4,
+    'Systemen praten niet met elkaar': 5,
+    'Technische kennis ontbreekt': 6,
+    'Geen idee waar te beginnen': 7,
+    'Budget/resources beperkt': 8,
+    'Anders': 5
+  }[data.mainBlocker] || 0;
+  score += blockerScore;
 
   return Math.min(score, 100);
 }
