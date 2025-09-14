@@ -880,8 +880,14 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
             </div>
           </DialogHeader>
 
-          <div className="flex-1 mt-6 overflow-y-auto max-h-[60vh]">
-            <div className="prose prose-invert max-w-none p-4">
+          <div
+            className="flex-1 mt-6 overflow-y-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-transparent"
+            style={{
+              maxHeight: 'calc(90vh - 200px)',
+              minHeight: '300px'
+            }}
+          >
+            <div className="prose prose-invert max-w-none p-4 pb-8">
               {selectedArticle?.content.split('\n').map((line, index) => {
                 if (line.startsWith('# ')) {
                   return (
