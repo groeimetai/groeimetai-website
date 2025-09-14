@@ -73,16 +73,16 @@ export function AgentReadinessQuickCheck() {
     }[data.automationExperience] || 0;
     score += automationScore;
 
-    // Main Blocker (10 points) - inverse scoring
+    // Main Blocker (10 points) - LOWER score for HARDER blockers
     const blockerScore = {
-      'Security/compliance zorgen': 10,
-      'Budget/resources beperkt': 8,
-      'Geen idee waar te beginnen': 6,
-      'Technische kennis ontbreekt': 4,
-      'Systemen praten niet met elkaar': 2,
-      'Team weerstand tegen verandering': 1,
-      'Data is te rommelig/verspreid': 1,
-      'Anders': 5
+      'Security/compliance zorgen': 2,        // Hardste blocker - complexe regelgeving
+      'Team weerstand tegen verandering': 3,  // Organisatie/mensen probleem
+      'Data is te rommelig/verspreid': 4,     // Data quality issue
+      'Systemen praten niet met elkaar': 5,   // Technisch integratie probleem
+      'Technische kennis ontbreekt': 6,       // Training/hiring probleem
+      'Geen idee waar te beginnen': 7,        // Guidance/advies probleem
+      'Budget/resources beperkt': 8,          // Oplosbaar met financiering
+      'Anders': 5                             // Onbekend - gemiddeld
     }[data.mainBlocker] || 0;
     score += blockerScore;
 
