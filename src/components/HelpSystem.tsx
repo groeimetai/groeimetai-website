@@ -863,7 +863,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
 
       {/* Article Detail Dialog */}
       <Dialog open={!!selectedArticle} onOpenChange={() => setSelectedArticle(null)}>
-        <DialogContent className="bg-black/95 border-white/20 max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+        <DialogContent className="bg-black/95 border-white/20 max-w-4xl max-h-[90vh] flex flex-col">
           <DialogHeader>
             <DialogTitle className="text-2xl text-white">
               {selectedArticle?.title}
@@ -880,7 +880,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
             </div>
           </DialogHeader>
 
-          <ScrollArea className="flex-1 mt-6 max-h-[60vh]">
+          <div className="flex-1 mt-6 overflow-y-auto max-h-[60vh]">
             <div className="prose prose-invert max-w-none p-4">
               {selectedArticle?.content.split('\n').map((line, index) => {
                 if (line.startsWith('# ')) {
@@ -921,7 +921,7 @@ export function HelpProvider({ children }: { children: React.ReactNode }) {
                 );
               })}
             </div>
-          </ScrollArea>
+          </div>
         </DialogContent>
       </Dialog>
     </HelpContext.Provider>
