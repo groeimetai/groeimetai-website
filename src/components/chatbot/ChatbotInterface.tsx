@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Loader2, X, Maximize2, Minimize2 } from 'lucide-react';
+import { Send, Bot, User, Loader2, X, Maximize2, Minimize2, Mic, MicOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { VoiceInput } from '@/components/voice';
 
 interface Message {
   id: string;
@@ -16,12 +17,16 @@ interface ChatbotInterfaceProps {
   className?: string;
   initialMessage?: string;
   onClose?: () => void;
+  enableVoice?: boolean;
+  voiceLanguage?: string;
 }
 
 export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
   className,
   initialMessage = 'Welkom bij GroeimetAI! 👋 Ik ben uw AI-assistent. Hoe kan ik u helpen met onze AI consultancy diensten? U kunt mij vragen stellen over GenAI, multi-agent orchestration, ServiceNow integratie of een van onze andere expertise gebieden.',
   onClose,
+  enableVoice = true,
+  voiceLanguage = 'nl-NL',
 }) => {
   const [mounted, setMounted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -39,6 +44,8 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isVoiceMode, setIsVoiceMode] = useState(false);
+  const [voiceError, setVoiceError] = useState<string | null>(null);
 
   const scrollToBottom = () => {
     if (mounted && messagesEndRef.current) {
@@ -158,6 +165,37 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
       e.preventDefault();
       handleSend();
     }
+  };
+
+  // Voice input handlers
+  const handleVoiceTranscript = (transcript: string, confidence: number) => {
+    if (transcript.trim()) {
+      setInput(transcript);
+      setVoiceError(null);
+
+      // Auto-send if confidence is high enough
+      if (confidence > 0.8) {
+        // Small delay to show the transcript
+        setTimeout(() => {
+          setInput('');
+          handleSend();
+        }, 500);
+      }
+    }
+  };
+
+  const handleVoiceError = (error: string) => {
+    setVoiceError(error);
+    // Clear error after 5 seconds
+    setTimeout(() => setVoiceError(null), 5000);
+  };
+
+  const handleVoiceStatusChange = (isListening: boolean) => {
+    setIsVoiceMode(isListening);
+  };
+
+  const toggleVoiceMode = () => {
+    setIsVoiceMode(!isVoiceMode);
   };
 
   // Prevent hydration issues
@@ -290,22 +328,72 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
 
           {/* Chat Input */}
           <div className="border-t border-white/10 p-4 bg-black">
+            {/* Voice Error Display */}
+            {voiceError && (
+              <div className="mb-2 p-2 bg-red-500/20 border border-red-500/30 rounded-lg text-red-200 text-xs">
+                {voiceError}
+              </div>
+            )}
+
+            {/* Voice Mode Toggle */}
+            {enableVoice && (
+              <div className="mb-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-white/60">
+                    {isVoiceMode ? 'Voice mode active' : 'Voice input available'}
+                  </span>
+                  <button
+                    onClick={toggleVoiceMode}
+                    className={cn(
+                      'p-1 rounded-full text-xs transition-colors',
+                      isVoiceMode
+                        ? 'bg-orange/20 text-orange'
+                        : 'bg-white/10 text-white/60 hover:text-white'
+                    )}
+                    title={isVoiceMode ? 'Switch to text' : 'Switch to voice'}
+                  >
+                    {isVoiceMode ? <MicOff className="w-3 h-3" /> : <Mic className="w-3 h-3" />}
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center space-x-2">
+              {/* Text Input */}
               <input
                 ref={inputRef}
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
+                placeholder={isVoiceMode ? "Speak or type your message..." : "Type your message..."}
                 className="flex-1 px-4 py-2 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-orange focus:border-transparent bg-white/10 text-white placeholder-white/50"
                 disabled={isLoading}
               />
+
+              {/* Voice Input Component */}
+              {enableVoice && isVoiceMode && (
+                <VoiceInput
+                  onTranscript={handleVoiceTranscript}
+                  onError={handleVoiceError}
+                  onStatusChange={handleVoiceStatusChange}
+                  language={voiceLanguage}
+                  size={isMobile ? 'sm' : 'md'}
+                  variant="compact"
+                  autoSubmit={false}
+                  showTranscript={false}
+                  showSettings={false}
+                  disabled={isLoading}
+                  className="shrink-0"
+                />
+              )}
+
+              {/* Send Button */}
               <button
                 onClick={handleSend}
                 disabled={isLoading || !input.trim()}
                 className={cn(
-                  'p-2 rounded-full transition-all',
+                  'p-2 rounded-full transition-all shrink-0',
                   isLoading || !input.trim()
                     ? 'bg-white/10 text-white/50 cursor-not-allowed opacity-70'
                     : 'bg-gradient-to-r from-orange to-orange-600 text-white hover:shadow-lg transform hover:scale-105 focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:ring-offset-black'
@@ -319,9 +407,14 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
                 )}
               </button>
             </div>
-            <p className="text-xs text-white/50 text-center mt-2">
-              Powered by Gemini • Your data is secure
-            </p>
+
+            {/* Footer */}
+            <div className="flex items-center justify-between mt-2 text-xs text-white/50">
+              <span>Powered by Gemini • Your data is secure</span>
+              {enableVoice && isVoiceMode && (
+                <span className="text-orange/70">🎤 Voice enabled</span>
+              )}
+            </div>
           </div>
         </div>
       )}

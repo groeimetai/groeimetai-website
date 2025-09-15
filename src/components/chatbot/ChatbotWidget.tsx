@@ -13,6 +13,8 @@ interface ChatbotWidgetProps {
   delay?: number;
   proactiveMessage?: string;
   hideButton?: boolean;
+  enableVoice?: boolean;
+  voiceLanguage?: string;
 }
 
 export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
@@ -20,6 +22,8 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
   delay = 5000,
   proactiveMessage = "👋 Need help exploring our AI solutions? I'm here to assist!",
   hideButton = false,
+  enableVoice = true,
+  voiceLanguage = 'nl-NL',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showProactive, setShowProactive] = useState(false);
@@ -99,7 +103,13 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
   }
 
   if (isOpen) {
-    return <ChatbotInterface onClose={handleClose} />;
+    return (
+      <ChatbotInterface
+        onClose={handleClose}
+        enableVoice={enableVoice}
+        voiceLanguage={voiceLanguage}
+      />
+    );
   }
 
   return (

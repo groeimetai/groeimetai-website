@@ -403,19 +403,38 @@ function CommandPaletteBase({
     });
 
     items.push({
-      id: 'action-chat',
+      id: 'action-communications',
       type: 'action',
       category: 'Actions',
-      title: 'Open Chat',
-      description: 'Chat with our team',
+      title: 'Open Communications',
+      description: 'View messages and notifications',
+      icon: <Bell className="w-4 h-4" />,
+      keywords: ['chat', 'message', 'talk', 'support', 'notifications', 'communications'],
+      action: () => {
+        // Trigger unified communication center
+        const event = new CustomEvent('openCommunications');
+        window.dispatchEvent(event);
+        setOpen(false);
+      },
+      shortcut: 'C',
+      badge: 'Unified',
+      badgeVariant: 'default',
+    });
+
+    items.push({
+      id: 'action-messages',
+      type: 'action',
+      category: 'Actions',
+      title: 'Open Messages',
+      description: 'Go to full messages page',
       icon: <MessageSquare className="w-4 h-4" />,
-      keywords: ['chat', 'message', 'talk', 'support'],
+      keywords: ['messages', 'chat', 'conversations', 'support'],
       action: () => {
         // Navigate to messages page
         navigateTo('/dashboard/messages');
         setOpen(false);
       },
-      shortcut: 'C',
+      shortcut: 'M',
     });
 
     items.push({

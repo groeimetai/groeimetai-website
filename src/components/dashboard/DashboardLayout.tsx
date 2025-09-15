@@ -7,7 +7,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   LayoutDashboard,
-  MessageSquare,
   FileText,
   Calendar,
   Settings,
@@ -15,7 +14,6 @@ import {
   LogOut,
   ChevronLeft,
   Menu,
-  Bell,
   User,
   Mail,
   Users,
@@ -34,12 +32,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import UnifiedCommunicationCenter from '@/components/unified/UnifiedCommunicationCenter';
 
 // Dynamic sidebar items based on user role
 const getSidebarItems = (isAdmin: boolean) => {
   const baseItems = [
     { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
-    { icon: MessageSquare, label: 'Messages', href: '/dashboard/messages' },
     { icon: FileText, label: 'Projects', href: '/dashboard/projects' },
     { icon: Calendar, label: 'Consultations', href: '/dashboard/consultations' },
   ];
@@ -216,11 +214,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
 
             <div className="flex items-center gap-2 sm:gap-4">
-              {/* Notifications */}
-              <Button variant="ghost" size="icon" className="relative h-9 w-9 sm:h-10 sm:w-10">
-                <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
-                <span className="absolute top-1 right-1 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-destructive rounded-full" />
-              </Button>
+              {/* Unified Communication Center */}
+              <UnifiedCommunicationCenter className="relative" showBadge={true} />
 
               {/* User menu */}
               <DropdownMenu>
