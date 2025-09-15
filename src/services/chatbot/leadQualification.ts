@@ -16,8 +16,13 @@ interface QualificationResult {
   missingInfo: string[];
 }
 
+interface TranslationFunction {
+  (key: string): string;
+}
+
 export class LeadQualificationService {
   private leadInfo: LeadInfo = {};
+  private t?: TranslationFunction;
 
   // Keywords that indicate high intent
   private highIntentKeywords = [
@@ -158,27 +163,31 @@ export class LeadQualificationService {
     };
   }
 
+  setTranslationFunction(t: TranslationFunction): void {
+    this.t = t;
+  }
+
   getQualifyingQuestions(): string[] {
     const questions: string[] = [];
 
     if (!this.leadInfo.email) {
-      questions.push("What's your email address so we can send you personalized recommendations?");
+      questions.push(this.t?.('leadQualification.questions.email') || "What's your email address so we can send you personalized recommendations?");
     }
 
     if (!this.leadInfo.company) {
-      questions.push('Which company are you with?');
+      questions.push(this.t?.('leadQualification.questions.company') || 'Which company are you with?');
     }
 
     if (!this.leadInfo.needs || this.leadInfo.needs.length === 0) {
-      questions.push('What specific AI challenges are you looking to solve?');
+      questions.push(this.t?.('leadQualification.questions.needs') || 'What specific AI challenges are you looking to solve?');
     }
 
     if (!this.leadInfo.timeline) {
-      questions.push('When are you looking to implement an AI solution?');
+      questions.push(this.t?.('leadQualification.questions.timeline') || 'When are you looking to implement an AI solution?');
     }
 
     if (!this.leadInfo.companySize) {
-      questions.push('How large is your organization?');
+      questions.push(this.t?.('leadQualification.questions.companySize') || 'How large is your organization?');
     }
 
     return questions;
@@ -196,18 +205,16 @@ export class LeadQualificationService {
     // Generate response based on intent and topics
     if (intent === 'high' && topics.length > 0) {
       const topicResponses = {
-        rag: "I see you're interested in RAG implementation. This is one of our specialties! We've helped numerous enterprises build powerful knowledge retrieval systems. Would you like to discuss your specific use case with one of our RAG experts?",
-        llm: "Large Language Models are transforming businesses. We can help you implement and optimize LLMs for your specific needs, whether it's customer service, content generation, or analysis. What's your primary use case?",
-        automation:
-          'AI-powered automation can significantly improve efficiency. We specialize in intelligent process automation that learns and adapts. What processes are you looking to automate?',
-        servicenow:
-          "Our ServiceNow AI integration expertise can help you create intelligent workflows. We've implemented AI-powered ITSM solutions for many enterprises. Are you currently using ServiceNow?",
-        consulting:
-          "Our AI strategy consulting helps organizations navigate their transformation journey. We'd love to understand your current state and desired outcomes. Shall we schedule a strategic assessment call?",
+        rag: this.t?.('leadQualification.responses.rag') || "I see you're interested in RAG implementation. This is one of our specialties! We've helped numerous enterprises build powerful knowledge retrieval systems. Would you like to discuss your specific use case with one of our RAG experts?",
+        llm: this.t?.('leadQualification.responses.llm') || "Large Language Models are transforming businesses. We can help you implement and optimize LLMs for your specific needs, whether it's customer service, content generation, or analysis. What's your primary use case?",
+        automation: this.t?.('leadQualification.responses.automation') || 'AI-powered automation can significantly improve efficiency. We specialize in intelligent process automation that learns and adapts. What processes are you looking to automate?',
+        servicenow: this.t?.('leadQualification.responses.servicenow') || "Our ServiceNow AI integration expertise can help you create intelligent workflows. We've implemented AI-powered ITSM solutions for many enterprises. Are you currently using ServiceNow?",
+        consulting: this.t?.('leadQualification.responses.consulting') || "Our AI strategy consulting helps organizations navigate their transformation journey. We'd love to understand your current state and desired outcomes. Shall we schedule a strategic assessment call?",
       };
 
       return (
         topicResponses[topics[0] as keyof typeof topicResponses] ||
+        this.t?.('leadQualification.fallbacks.highIntent') ||
         "I'd be happy to help you with your AI needs. Can you tell me more about your specific requirements?"
       );
     }
@@ -216,12 +223,13 @@ export class LeadQualificationService {
     if (intent === 'medium') {
       const questions = this.getQualifyingQuestions();
       if (questions.length > 0) {
-        return `That's great! To provide you with the most relevant information, ${questions[0]}`;
+        const mediumIntentPrefix = this.t?.('leadQualification.fallbacks.mediumIntent') || "That's great! To provide you with the most relevant information, ";
+        return `${mediumIntentPrefix}${questions[0]}`;
       }
     }
 
     // For low intent, provide general information
-    return "I'm here to help you explore how AI can transform your business. What aspects of AI are you most curious about?";
+    return this.t?.('leadQualification.fallbacks.lowIntent') || "I'm here to help you explore how AI can transform your business. What aspects of AI are you most curious about?";
   }
 
   shouldEscalateToHuman(): boolean {

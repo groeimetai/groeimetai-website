@@ -4000,6 +4000,62 @@
         "timeframe": "Realistic planning",
         "downtime": "Minimal impact"
       }
+    },
+    "chatbot": {
+      "interface": {
+        "title": "GroeimetAI Assistant",
+        "subtitle": "Always here to help",
+        "initialMessage": "Welcome to GroeimetAI! 👋 I'm your AI assistant. How can I help you with our AI consultancy services? You can ask me questions about GenAI, multi-agent orchestration, ServiceNow integration, or any of our other expertise areas.",
+        "placeholderText": "Type your message...",
+        "placeholderVoice": "Speak or type your message...",
+        "sendMessage": "Send message",
+        "poweredBy": "Powered by Gemini • Your data is secure",
+        "voiceEnabled": "🎤 Voice enabled",
+        "clickToContinue": "Click to continue chatting",
+        "minimizeChat": "Minimize chat",
+        "maximizeChat": "Maximize chat",
+        "closeChat": "Close chat"
+      },
+      "voice": {
+        "modeActive": "Voice mode active",
+        "modeAvailable": "Voice input available",
+        "switchToText": "Switch to text",
+        "switchToVoice": "Switch to voice"
+      },
+      "widget": {
+        "proactiveMessage": "👋 Need help exploring our AI solutions? I'm here to assist!",
+        "notNow": "Not now",
+        "letsChat": "Let's chat",
+        "openChat": "Open chat",
+        "tooltip": "Chat with AI Assistant"
+      },
+      "errors": {
+        "tooManyRequests": "Too many messages. Please try again later.",
+        "invalidMessage": "Invalid message.",
+        "failedResponse": "Failed to get response",
+        "connectionError": "Sorry, I'm currently having connection issues. Please try again later or contact us directly via info@groeimetai.io or our contact form."
+      },
+      "leadQualification": {
+        "questions": {
+          "email": "What's your email address so we can send you personalized recommendations?",
+          "company": "Which company are you with?",
+          "needs": "What specific AI challenges are you looking to solve?",
+          "timeline": "When are you looking to implement an AI solution?",
+          "companySize": "How large is your organization?"
+        },
+        "responses": {
+          "rag": "I see you're interested in RAG implementation. This is one of our specialties! We've helped numerous enterprises build powerful knowledge retrieval systems. Would you like to discuss your specific use case with one of our RAG experts?",
+          "llm": "Large Language Models are transforming businesses. We can help you implement and optimize LLMs for your specific needs, whether it's customer service, content generation, or analysis. What's your primary use case?",
+          "automation": "AI-powered automation can significantly improve efficiency. We specialize in intelligent process automation that learns and adapts. What processes are you looking to automate?",
+          "servicenow": "Our ServiceNow AI integration expertise can help you create intelligent workflows. We've implemented AI-powered ITSM solutions for many enterprises. Are you currently using ServiceNow?",
+          "consulting": "Our AI strategy consulting helps organizations navigate their transformation journey. We'd love to understand your current state and desired outcomes. Shall we schedule a strategic assessment call?"
+        },
+        "fallbacks": {
+          "highIntent": "I'd be happy to help you with your AI needs. Can you tell me more about your specific requirements?",
+          "mediumIntent": "That's great! To provide you with the most relevant information, ",
+          "lowIntent": "I'm here to help you explore how AI can transform your business. What aspects of AI are you most curious about?"
+        }
+      }
     }
   }
 }

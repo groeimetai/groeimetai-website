@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { MessageSquare } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { cn } from '@/lib/utils';
@@ -20,11 +21,12 @@ interface ChatbotWidgetProps {
 export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
   autoOpen = false,
   delay = 5000,
-  proactiveMessage = "👋 Need help exploring our AI solutions? I'm here to assist!",
+  proactiveMessage,
   hideButton = false,
   enableVoice = true,
   voiceLanguage = 'nl-NL',
 }) => {
+  const t = useTranslations('chatbot');
   const [isOpen, setIsOpen] = useState(false);
   const [showProactive, setShowProactive] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
@@ -118,19 +120,19 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
       {showProactive && (
         <div className="fixed bottom-20 right-2 sm:right-4 z-40 animate-fade-in">
           <div className="bg-black rounded-lg shadow-xl p-3 sm:p-4 max-w-[280px] sm:max-w-xs border border-white/20">
-            <p className="text-sm text-white mb-2">{proactiveMessage}</p>
+            <p className="text-sm text-white mb-2">{proactiveMessage || t('widget.proactiveMessage')}</p>
             <div className="flex justify-end space-x-2">
               <button
                 onClick={handleDismissProactive}
                 className="text-xs text-white/60 hover:text-white"
               >
-                Not now
+                {t('widget.notNow')}
               </button>
               <button
                 onClick={handleOpen}
                 className="text-xs bg-orange text-white px-3 py-1 rounded hover:bg-orange-600 transition-colors"
               >
-                Let&apos;s chat
+                {t('widget.letsChat')}
               </button>
             </div>
           </div>
@@ -152,7 +154,7 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
             'hover:bg-orange hover:text-white',
             'group'
           )}
-          aria-label="Open chat"
+          aria-label={t('widget.openChat')}
         >
           <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6" />
           <span className="absolute -top-1 -right-1 h-2.5 w-2.5 sm:h-3 sm:w-3 bg-green-400 rounded-full animate-pulse"></span>
@@ -160,7 +162,7 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
           {/* Hover tooltip */}
           <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none hidden sm:block">
             <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
-              Chat met AI Assistent
+              {t('widget.tooltip')}
             </div>
           </div>
         </button>

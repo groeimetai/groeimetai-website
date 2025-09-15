@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Send, Bot, User, Loader2, X, Maximize2, Minimize2, Mic, MicOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { VoiceInput } from '@/components/voice';
@@ -23,17 +24,18 @@ interface ChatbotInterfaceProps {
 
 export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
   className,
-  initialMessage = 'Welkom bij GroeimetAI! 👋 Ik ben uw AI-assistent. Hoe kan ik u helpen met onze AI consultancy diensten? U kunt mij vragen stellen over GenAI, multi-agent orchestration, ServiceNow integratie of een van onze andere expertise gebieden.',
+  initialMessage,
   onClose,
   enableVoice = true,
   voiceLanguage = 'nl-NL',
 }) => {
+  const t = useTranslations('chatbot');
   const [mounted, setMounted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       role: 'assistant',
-      content: initialMessage,
+      content: initialMessage || t('interface.initialMessage'),
       timestamp: new Date(),
     },
   ]);
@@ -117,15 +119,15 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
 
         // Handle rate limiting
         if (response.status === 429) {
-          throw new Error(errorData.error || 'Te veel berichten. Probeer het later opnieuw.');
+          throw new Error(errorData.error || t('errors.tooManyRequests'));
         }
 
         // Handle validation errors
         if (response.status === 400) {
-          throw new Error(errorData.error || 'Ongeldig bericht.');
+          throw new Error(errorData.error || t('errors.invalidMessage'));
         }
 
-        throw new Error(errorData.error || 'Failed to get response');
+        throw new Error(errorData.error || t('errors.failedResponse'));
       }
 
       const data = await response.json();
@@ -148,9 +150,9 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content:
-          error instanceof Error && error.message.includes('Te veel')
+          error instanceof Error && (error.message.includes('Te veel') || error.message.includes('Too many'))
             ? error.message
-            : 'Mijn excuses, ik heb momenteel problemen met de verbinding. Probeer het later opnieuw of neem direct contact op via info@groeimetai.io of ons contactformulier.',
+            : t('errors.connectionError'),
         timestamp: new Date(),
       };
 
@@ -225,8 +227,8 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
             <div className="absolute -bottom-1 -right-1 h-3 w-3 bg-green-400 rounded-full border-2 border-black"></div>
           </div>
           <div>
-            <h3 className="font-semibold text-lg text-white">GroeimetAI Assistant</h3>
-            <p className="text-xs text-orange font-medium">Always here to help</p>
+            <h3 className="font-semibold text-lg text-white">{t('interface.title')}</h3>
+            <p className="text-xs text-orange font-medium">{t('interface.subtitle')}</p>
           </div>
         </div>
         <div className="flex items-center space-x-2">
@@ -239,7 +241,7 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
               }
             }}
             className="hover:bg-white/20 p-1 rounded transition-colors"
-            aria-label={isMobile ? 'Close chat' : (isMinimized ? 'Maximize chat' : 'Minimize chat')}
+            aria-label={isMobile ? t('interface.closeChat') : (isMinimized ? t('interface.maximizeChat') : t('interface.minimizeChat'))}
           >
             {isMobile ? <X className="h-5 w-5" /> : (isMinimized ? <Maximize2 className="h-5 w-5" /> : <Minimize2 className="h-5 w-5" />)}
           </button>
@@ -340,7 +342,7 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
               <div className="mb-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-white/60">
-                    {isVoiceMode ? 'Voice mode active' : 'Voice input available'}
+                    {isVoiceMode ? t('voice.modeActive') : t('voice.modeAvailable')}
                   </span>
                   <button
                     onClick={toggleVoiceMode}
@@ -350,7 +352,7 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
                         ? 'bg-orange/20 text-orange'
                         : 'bg-white/10 text-white/60 hover:text-white'
                     )}
-                    title={isVoiceMode ? 'Switch to text' : 'Switch to voice'}
+                    title={isVoiceMode ? t('voice.switchToText') : t('voice.switchToVoice')}
                   >
                     {isVoiceMode ? <MicOff className="w-3 h-3" /> : <Mic className="w-3 h-3" />}
                   </button>
@@ -366,7 +368,7 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder={isVoiceMode ? "Speak or type your message..." : "Type your message..."}
+                placeholder={isVoiceMode ? t('interface.placeholderVoice') : t('interface.placeholderText')}
                 className="flex-1 px-4 py-2 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-orange focus:border-transparent bg-white/10 text-white placeholder-white/50"
                 disabled={isLoading}
               />
@@ -398,7 +400,7 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
                     ? 'bg-white/10 text-white/50 cursor-not-allowed opacity-70'
                     : 'bg-gradient-to-r from-orange to-orange-600 text-white hover:shadow-lg transform hover:scale-105 focus:ring-2 focus:ring-orange focus:ring-offset-2 focus:ring-offset-black'
                 )}
-                aria-label="Send message"
+                aria-label={t('interface.sendMessage')}
               >
                 {isLoading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
@@ -410,9 +412,9 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
 
             {/* Footer */}
             <div className="flex items-center justify-between mt-2 text-xs text-white/50">
-              <span>Powered by Gemini • Your data is secure</span>
+              <span>{t('interface.poweredBy')}</span>
               {enableVoice && isVoiceMode && (
-                <span className="text-orange/70">🎤 Voice enabled</span>
+                <span className="text-orange/70">{t('interface.voiceEnabled')}</span>
               )}
             </div>
           </div>
@@ -422,7 +424,7 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
       {/* Minimized State */}
       {isMinimized && (
         <div className="bg-card border border-border rounded-b-lg p-2 text-center text-sm text-foreground shadow-lg">
-          Click to continue chatting
+          {t('interface.clickToContinue')}
         </div>
       )}
     </div>
