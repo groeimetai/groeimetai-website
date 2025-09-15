@@ -306,9 +306,11 @@ export default function AgentReadinessPage() {
   // Adjusted progress calculation that accounts for skipped questions
   const getAdjustedProgress = (): number => {
     const skippedCount = getSkippedQuestionCount();
-    const totalQuestionsToAnswer = totalSteps - skippedCount; // Fewer questions to answer due to quiz
     const currentQuestionNumber = getCurrentQuestionNumber();
-    return Math.round((Math.min(currentQuestionNumber - 1, totalQuestionsToAnswer - 1) / (totalQuestionsToAnswer - 1)) * 100);
+    // Calculate progress based on total 15 questions, with skipped questions counting as completed
+    const totalCompleted = skippedCount + currentQuestionNumber - 1;
+    const totalQuestions = totalSteps - 1; // -1 because we don't count the final result as a question
+    return Math.round((Math.min(totalCompleted, totalQuestions) / totalQuestions) * 100);
   };
 
   const systemOptions = [
@@ -889,7 +891,7 @@ export default function AgentReadinessPage() {
             {/* Progress Bar */}
             <div className="max-w-sm sm:max-w-md mx-auto mb-6 sm:mb-8">
               <div className="flex justify-between text-sm text-white/60 mb-2">
-                <span>Vraag {getCurrentQuestionNumber()} van {totalSteps - getSkippedQuestionCount()}</span>
+                <span>Vraag {getSkippedQuestionCount() + getCurrentQuestionNumber()} van {totalSteps}</span>
                 <span>{getAdjustedProgress()}%</span>
               </div>
               <div className="w-full bg-white/10 rounded-full h-2">
@@ -914,7 +916,7 @@ export default function AgentReadinessPage() {
                     Quick check score: {quizPreFillData.quickCheckScore || 'N/A'}/100 • {quizPreFillData.quickCheckLevel || ''}
                   </div>
                   <div className="mt-1 text-xs text-green-400/80">
-                    🔄 {getSkippedQuestionCount()} vraag{getSkippedQuestionCount() === 1 ? '' : 'en'} overgeslagen, {totalSteps - getSkippedQuestionCount()} vraag{totalSteps - getSkippedQuestionCount() === 1 ? '' : 'en'} over
+                    🔄 {getSkippedQuestionCount()} vraag{getSkippedQuestionCount() === 1 ? '' : 'en'} overgeslagen, {totalSteps - getSkippedQuestionCount()} vraag{totalSteps - getSkippedQuestionCount() === 1 ? '' : 'en'} van {totalSteps} over
                   </div>
                 </div>
               )}

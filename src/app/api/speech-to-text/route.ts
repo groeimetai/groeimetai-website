@@ -5,10 +5,15 @@ import { join } from 'path';
 import { tmpdir } from 'os';
 import { randomUUID } from 'crypto';
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Lazy initialize OpenAI client - only create when needed to avoid build-time errors
+function getOpenAIClient(): OpenAI {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY environment variable is required');
+  }
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+}
 
 // Rate limiting storage (in production, use Redis or similar)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
@@ -141,9 +146,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check OpenAI API key
-    if (!process.env.OPENAI_API_KEY) {
-      console.error('OpenAI API key not configured');
+    // Check OpenAI API key availability
+    try {
+      // This will throw if API key is missing, but won't initialize client during build
+      if (!process.env.OPENAI_API_KEY) {
+        console.error('OpenAI API key not configured');
+        return NextResponse.json(
+          { error: 'Spraakherkenning service is niet geconfigureerd.' },
+          { status: 500 }
+        );
+      }
+    } catch (error) {
+      console.error('OpenAI configuration error:', error);
       return NextResponse.json(
         { error: 'Spraakherkenning service is niet geconfigureerd.' },
         { status: 500 }
@@ -159,6 +173,18 @@ export async function POST(request: NextRequest) {
       await writeFile(tempPath, Buffer.from(arrayBuffer));
 
       // Create file for OpenAI API
+      let openai: OpenAI;
+      try {
+        openai = getOpenAIClient();
+      } catch (clientError) {
+        console.error('Failed to initialize OpenAI client:', clientError);
+        await unlink(tempPath).catch(() => {});
+        return NextResponse.json(
+          { error: 'Spraakherkenning service is niet geconfigureerd.' },
+          { status: 500 }
+        );
+      }
+
       const file = await openai.audio.transcriptions.create({
         file: {
           name: audioFile.name,
