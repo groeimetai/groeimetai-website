@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Link } from '@/i18n/routing';
 import { useRouter } from '@/i18n/routing';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,10 +32,12 @@ import {
 } from '@/components/ui/dialog';
 import { useTranslations } from 'next-intl';
 
-export default function LoginPage() {
+function LoginPageContent() {
   const router = useRouter();
   const { login, loginWithGoogle } = useAuth();
   const t = useTranslations('auth.login');
+  const searchParams = useSearchParams();
+  const [returnUrl, setReturnUrl] = useState<string>('/dashboard');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -47,6 +50,14 @@ export default function LoginPage() {
   const [verificationCode, setVerificationCode] = useState('');
   const [verifying2FA, setVerifying2FA] = useState(false);
 
+  // Get return URL from search params
+  useEffect(() => {
+    const returnUrlParam = searchParams.get('returnUrl');
+    if (returnUrlParam) {
+      setReturnUrl(decodeURIComponent(returnUrlParam));
+    }
+  }, [searchParams]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -55,7 +66,7 @@ export default function LoginPage() {
     try {
       await login(formData.email, formData.password);
       // Redirect to dashboard
-      router.push('/dashboard');
+      router.push(returnUrl);
     } catch (error: any) {
       console.error('Login failed:', error);
       console.error('Error code:', error.code); // Debug log to see actual error code
@@ -108,7 +119,7 @@ export default function LoginPage() {
       setMfaResolver(null);
 
       // Redirect to dashboard
-      router.push('/dashboard');
+      router.push(returnUrl);
     } catch (error: any) {
       console.error('2FA verification failed:', error);
       setError(t('errors.invalidCode'));
@@ -125,7 +136,7 @@ export default function LoginPage() {
     try {
       await loginWithGoogle();
       // Redirect to dashboard
-      router.push('/dashboard');
+      router.push(returnUrl);
     } catch (error: any) {
       console.error('Google login failed:', error);
       if (error.code === 'auth/popup-closed-by-user') {
@@ -420,5 +431,13 @@ export default function LoginPage() {
         </DialogContent>
       </Dialog>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="text-white">Loading...</div></div>}>
+      <LoginPageContent />
+    </Suspense>
   );
 }
