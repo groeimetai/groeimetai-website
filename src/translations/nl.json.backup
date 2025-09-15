@@ -3824,58 +3824,59 @@
     }
   },
   "chatbot": {
-    "interface": {
-      "title": "GroeimetAI Assistant",
-      "subtitle": "Altijd hier om te helpen",
-      "initialMessage": "Welkom bij GroeimetAI! 👋 Ik ben uw AI-assistent. Hoe kan ik u helpen met onze AI consultancy diensten? U kunt mij vragen stellen over GenAI, multi-agent orchestration, ServiceNow integratie of een van onze andere expertise gebieden.",
-      "placeholderText": "Typ uw bericht...",
-      "placeholderVoice": "Spreek of typ uw bericht...",
-      "sendMessage": "Bericht versturen",
-      "poweredBy": "Ondersteund door Gemini • Uw gegevens zijn veilig",
-      "voiceEnabled": "🎤 Spraak ingeschakeld",
-      "clickToContinue": "Klik om door te gaan met chatten",
-      "minimizeChat": "Chat minimaliseren",
-      "maximizeChat": "Chat maximaliseren",
-      "closeChat": "Chat sluiten"
-    },
-    "voice": {
-      "modeActive": "Spraakmodus actief",
-      "modeAvailable": "Spraak invoer beschikbaar",
-      "switchToText": "Schakel naar tekst",
-      "switchToVoice": "Schakel naar spraak"
-    },
-    "widget": {
-      "proactiveMessage": "👋 Hulp nodig bij het verkennen van onze AI oplossingen? Ik ben er om te helpen!",
-      "notNow": "Niet nu",
-      "letsChat": "Laten we chatten",
-      "openChat": "Chat openen",
-      "tooltip": "Chat met AI Assistent"
-    },
-    "errors": {
-      "tooManyRequests": "Te veel berichten. Probeer het later opnieuw.",
-      "invalidMessage": "Ongeldig bericht.",
-      "failedResponse": "Het ophalen van een reactie is mislukt",
-      "connectionError": "Mijn excuses, ik heb momenteel problemen met de verbinding. Probeer het later opnieuw of neem direct contact op via info@groeimetai.io of ons contactformulier."
-    },
-    "leadQualification": {
-      "questions": {
-        "email": "Wat is uw e-mailadres zodat we u gepersonaliseerde aanbevelingen kunnen sturen?",
-        "company": "Bij welk bedrijf werkt u?",
-        "needs": "Welke specifieke AI-uitdagingen wilt u oplossen?",
-        "timeline": "Wanneer wilt u een AI-oplossing implementeren?",
-        "companySize": "Hoe groot is uw organisatie?"
+      "interface": {
+        "title": "GroeimetAI Assistant",
+        "subtitle": "Altijd hier om te helpen",
+        "initialMessage": "Welkom bij GroeimetAI! 👋 Ik ben uw AI-assistent. Hoe kan ik u helpen met onze AI consultancy diensten? U kunt mij vragen stellen over GenAI, multi-agent orchestration, ServiceNow integratie of een van onze andere expertise gebieden.",
+        "placeholderText": "Typ uw bericht...",
+        "placeholderVoice": "Spreek of typ uw bericht...",
+        "sendMessage": "Bericht versturen",
+        "poweredBy": "Ondersteund door Gemini • Uw gegevens zijn veilig",
+        "voiceEnabled": "🎤 Spraak ingeschakeld",
+        "clickToContinue": "Klik om door te gaan met chatten",
+        "minimizeChat": "Chat minimaliseren",
+        "maximizeChat": "Chat maximaliseren",
+        "closeChat": "Chat sluiten"
       },
-      "responses": {
-        "rag": "Ik zie dat u geïnteresseerd bent in RAG implementatie. Dit is een van onze specialiteiten! We hebben talrijke ondernemingen geholpen met het bouwen van krachtige kennisherwinningssystemen. Wilt u uw specifieke use case bespreken met een van onze RAG experts?",
-        "llm": "Grote Taalmodellen transformeren bedrijven. We kunnen u helpen met het implementeren en optimaliseren van LLM's voor uw specifieke behoeften, of het nu gaat om klantenservice, contentgeneratie of analyse. Wat is uw primaire use case?",
-        "automation": "AI-gedreven automatisering kan de efficiëntie aanzienlijk verbeteren. We zijn gespecialiseerd in intelligente procesautomatisering die leert en zich aanpast. Welke processen wilt u automatiseren?",
-        "servicenow": "Onze ServiceNow AI integratie expertise kan u helpen intelligente workflows te creëren. We hebben AI-gedreven ITSM oplossingen geïmplementeerd voor veel ondernemingen. Gebruikt u momenteel ServiceNow?",
-        "consulting": "Onze AI strategie consulting helpt organisaties hun transformatie-reis te navigeren. We willen graag uw huidige staat en gewenste uitkomsten begrijpen. Zullen we een strategische assessment call plannen?"
+      "voice": {
+        "modeActive": "Spraakmodus actief",
+        "modeAvailable": "Spraak invoer beschikbaar",
+        "switchToText": "Schakel naar tekst",
+        "switchToVoice": "Schakel naar spraak"
       },
-      "fallbacks": {
-        "highIntent": "Ik help u graag met uw AI-behoeften. Kunt u me meer vertellen over uw specifieke vereisten?",
-        "mediumIntent": "Dat is geweldig! Om u de meest relevante informatie te geven, ",
-        "lowIntent": "Ik ben er om u te helpen ontdekken hoe AI uw bedrijf kan transformeren. Over welke aspecten van AI bent u het meest nieuwsgierig?"
+      "widget": {
+        "proactiveMessage": "👋 Hulp nodig bij het verkennen van onze AI oplossingen? Ik ben er om te helpen!",
+        "notNow": "Niet nu",
+        "letsChat": "Laten we chatten",
+        "openChat": "Chat openen",
+        "tooltip": "Chat met AI Assistent"
+      },
+      "errors": {
+        "tooManyRequests": "Te veel berichten. Probeer het later opnieuw.",
+        "invalidMessage": "Ongeldig bericht.",
+        "failedResponse": "Het ophalen van een reactie is mislukt",
+        "connectionError": "Mijn excuses, ik heb momenteel problemen met de verbinding. Probeer het later opnieuw of neem direct contact op via info@groeimetai.io of ons contactformulier."
+      },
+      "leadQualification": {
+        "questions": {
+          "email": "Wat is uw e-mailadres zodat we u gepersonaliseerde aanbevelingen kunnen sturen?",
+          "company": "Bij welk bedrijf werkt u?",
+          "needs": "Welke specifieke AI-uitdagingen wilt u oplossen?",
+          "timeline": "Wanneer wilt u een AI-oplossing implementeren?",
+          "companySize": "Hoe groot is uw organisatie?"
+        },
+        "responses": {
+          "rag": "Ik zie dat u geïnteresseerd bent in RAG implementatie. Dit is een van onze specialiteiten! We hebben talrijke ondernemingen geholpen met het bouwen van krachtige kennisherwinningssystemen. Wilt u uw specifieke use case bespreken met een van onze RAG experts?",
+          "llm": "Grote Taalmodellen transformeren bedrijven. We kunnen u helpen met het implementeren en optimaliseren van LLM's voor uw specifieke behoeften, of het nu gaat om klantenservice, contentgeneratie of analyse. Wat is uw primaire use case?",
+          "automation": "AI-gedreven automatisering kan de efficiëntie aanzienlijk verbeteren. We zijn gespecialiseerd in intelligente procesautomatisering die leert en zich aanpast. Welke processen wilt u automatiseren?",
+          "servicenow": "Onze ServiceNow AI integratie expertise kan u helpen intelligente workflows te creëren. We hebben AI-gedreven ITSM oplossingen geïmplementeerd voor veel ondernemingen. Gebruikt u momenteel ServiceNow?",
+          "consulting": "Onze AI strategie consulting helpt organisaties hun transformatie-reis te navigeren. We willen graag uw huidige staat en gewenste uitkomsten begrijpen. Zullen we een strategische assessment call plannen?"
+        },
+        "fallbacks": {
+          "highIntent": "Ik help u graag met uw AI-behoeften. Kunt u me meer vertellen over uw specifieke vereisten?",
+          "mediumIntent": "Dat is geweldig! Om u de meest relevante informatie te geven, ",
+          "lowIntent": "Ik ben er om u te helpen ontdekken hoe AI uw bedrijf kan transformeren. Over welke aspecten van AI bent u het meest nieuwsgierig?"
+        }
       }
     }
   }
