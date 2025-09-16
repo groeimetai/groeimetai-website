@@ -187,16 +187,6 @@ export function AgentReadinessQuickCheck() {
           <p className="text-white/80 text-sm sm:text-base leading-relaxed">
             🎯 <strong>{t('results.nextStep')}</strong> {t('results.nextStepDescription')}
           </p>
-
-          {/* DEBUG: Show scoring breakdown */}
-          <div className="p-3 bg-red-500/20 border border-red-500/30 rounded text-xs text-white">
-            <strong>SCORE DEBUG:</strong><br/>
-            APIs: "{formData.hasApis}" = {formData.hasApis === 'most' ? '25' : formData.hasApis === 'some' ? '15' : formData.hasApis === 'unknown' ? '8' : '0'}pts<br/>
-            Data: "{formData.dataAccess}" = {formData.dataAccess === 'instant' ? '25' : formData.dataAccess === 'minutes' ? '18' : formData.dataAccess === 'difficult' ? '8' : '0'}pts<br/>
-            Process: "{formData.processDocumentation}" = {formData.processDocumentation === 'documented' ? '25' : formData.processDocumentation === 'partially' ? '18' : formData.processDocumentation === 'tribal' ? '8' : '0'}pts<br/>
-            Automation: "{formData.automationExperience}" = {formData.automationExperience === 'advanced' ? '15' : formData.automationExperience === 'basic' ? '10' : formData.automationExperience === 'trying' ? '5' : '0'}pts<br/>
-            Blocker: "{formData.mainBlocker}" = {formData.mainBlocker === 'Budget/resources beperkt' ? '8' : formData.mainBlocker === 'Security/compliance zorgen' ? '2' : '0'}pts
-          </div>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
@@ -308,12 +298,7 @@ export function AgentReadinessQuickCheck() {
               <div>
                 <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🔌 {t('questions.hasApis.title')}</h4>
                 <RadioGroup value={formData.hasApis} onValueChange={(value) => {
-                  console.log('🔘 QUIZ DEBUG - hasApis radio clicked:', value);
-                  setFormData(prev => {
-                    const newData = { ...prev, hasApis: value };
-                    console.log('📊 QUIZ DEBUG - hasApis updated formData:', newData);
-                    return newData;
-                  });
+                  setFormData(prev => ({ ...prev, hasApis: value }));
                 }}>
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="most" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
@@ -341,12 +326,7 @@ export function AgentReadinessQuickCheck() {
               <div>
                 <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📊 {t('questions.dataAccess.title')}</h4>
                 <RadioGroup value={formData.dataAccess} onValueChange={(value) => {
-                  console.log('🔘 QUIZ DEBUG - dataAccess radio clicked:', value);
-                  setFormData(prev => {
-                    const newData = { ...prev, dataAccess: value };
-                    console.log('📊 QUIZ DEBUG - dataAccess updated formData:', newData);
-                    return newData;
-                  });
+                  setFormData(prev => ({ ...prev, dataAccess: value }));
                 }}>
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="instant" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
@@ -374,12 +354,7 @@ export function AgentReadinessQuickCheck() {
               <div>
                 <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">📋 {t('questions.processDocumentation.title')}</h4>
                 <RadioGroup value={formData.processDocumentation} onValueChange={(value) => {
-                  console.log('🔘 QUIZ DEBUG - processDocumentation radio clicked:', value);
-                  setFormData(prev => {
-                    const newData = { ...prev, processDocumentation: value };
-                    console.log('📊 QUIZ DEBUG - processDocumentation updated formData:', newData);
-                    return newData;
-                  });
+                  setFormData(prev => ({ ...prev, processDocumentation: value }));
                 }}>
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="documented" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
@@ -407,12 +382,7 @@ export function AgentReadinessQuickCheck() {
               <div>
                 <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🤖 {t('questions.automationExperience.title')}</h4>
                 <RadioGroup value={formData.automationExperience} onValueChange={(value) => {
-                  console.log('🔘 QUIZ DEBUG - automationExperience radio clicked:', value);
-                  setFormData(prev => {
-                    const newData = { ...prev, automationExperience: value };
-                    console.log('📊 QUIZ DEBUG - automationExperience updated formData:', newData);
-                    return newData;
-                  });
+                  setFormData(prev => ({ ...prev, automationExperience: value }));
                 }}>
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="advanced" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
@@ -440,12 +410,7 @@ export function AgentReadinessQuickCheck() {
               <div>
                 <h4 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 leading-tight text-left">🚧 {t('questions.mainBlocker.title')}</h4>
                 <RadioGroup value={formData.mainBlocker} onValueChange={(value) => {
-                  console.log('🔘 QUIZ DEBUG - mainBlocker radio clicked:', value);
-                  setFormData(prev => {
-                    const newData = { ...prev, mainBlocker: value };
-                    console.log('📊 QUIZ DEBUG - mainBlocker updated formData:', newData);
-                    return newData;
-                  });
+                  setFormData(prev => ({ ...prev, mainBlocker: value }));
                 }}>
                   <div className="space-y-2 sm:space-y-3">
                     <Label htmlFor="security" className="flex items-start space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
