@@ -10,15 +10,23 @@ import { getAnalytics, Analytics, isSupported } from 'firebase/analytics';
 import { getPerformance, FirebasePerformance } from 'firebase/performance';
 
 // Firebase configuration
+// Use placeholder values during build time to allow static analysis
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'placeholder-api-key',
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'placeholder.firebaseapp.com',
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'placeholder-project',
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'placeholder.appspot.com',
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '000000000000',
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:000000000000:web:placeholder',
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-PLACEHOLDER',
 };
+
+// Check if real Firebase config is present (not placeholder values)
+const isFirebaseConfigValid = !!(
+  process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
+  process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN &&
+  process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
+);
 
 // Initialize Firebase
 let app: FirebaseApp;
@@ -39,12 +47,17 @@ auth = getAuth(app);
 db = getFirestore(app);
 storage = getStorage(app);
 
+// Log warning in development if using placeholder config
+if (!isFirebaseConfigValid && process.env.NODE_ENV === 'development') {
+  console.warn('Firebase config is using placeholder values. Set NEXT_PUBLIC_FIREBASE_* environment variables.');
+}
+
 // Initialize Analytics and Performance only on client side
 if (typeof window !== 'undefined') {
   isSupported().then((supported) => {
     if (supported) {
       analytics = getAnalytics(app);
-      
+
       // Only initialize performance if not disabled
       if (process.env.NEXT_PUBLIC_DISABLE_FIREBASE_PERFORMANCE !== 'true') {
         performance = getPerformance(app);
@@ -81,7 +94,7 @@ export const collections = {
   payments: 'payments',
 };
 
-export { app, auth, db, storage, analytics, performance };
+export { app, auth, db, storage, analytics, performance, isFirebaseConfigValid };
 
 // Auth helper functions
 export const getCurrentUser = () => auth.currentUser;

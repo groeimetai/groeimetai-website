@@ -4,6 +4,10 @@ import createIntlMiddleware from 'next-intl/middleware';
 import { locales, defaultLocale } from './i18n';
 import { authMiddleware } from './middleware/auth';
 
+// Use Node.js runtime instead of Edge to avoid compatibility issues
+// with jose, nanoid, and other Node.js modules
+export const runtime = 'nodejs';
+
 // Create the internationalization middleware
 const intlMiddleware = createIntlMiddleware({
   locales,
