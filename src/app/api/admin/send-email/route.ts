@@ -1,11 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import DOMPurify from 'isomorphic-dompurify';
 
 export const dynamic = 'force-dynamic';
 
+/**
+ * Sanitize user input for safe HTML rendering in emails
+ * Allows basic text formatting but removes dangerous HTML
+ */
+function sanitizeForHtml(input: string | undefined | null): string {
+  if (!input) return '';
+  // Strip dangerous HTML tags, keep basic text
+  const stripped = DOMPurify.sanitize(input, { ALLOWED_TAGS: [] });
+  return stripped
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
+/**
+ * Validate email format
+ */
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { to, subject, content, contactId } = await req.json();
+    const { to: rawTo, subject: rawSubject, content: rawContent, contactId } = await req.json();
+
+    // Sanitize inputs to prevent XSS (even from admin)
+    const to = sanitizeForHtml(rawTo);
+    const subject = sanitizeForHtml(rawSubject);
+    const content = sanitizeForHtml(rawContent);
 
     console.log('[Admin Email] Sending email to:', to);
 
@@ -13,6 +43,14 @@ export async function POST(req: NextRequest) {
     if (!to || !subject || !content) {
       return NextResponse.json(
         { error: 'To, subject en content zijn verplicht' },
+        { status: 400 }
+      );
+    }
+
+    // Validate email format
+    if (!isValidEmail(to)) {
+      return NextResponse.json(
+        { error: 'Ongeldig email adres' },
         { status: 400 }
       );
     }

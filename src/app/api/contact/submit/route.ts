@@ -2,17 +2,64 @@ import { NextRequest, NextResponse } from 'next/server';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import nodemailer from 'nodemailer';
+import DOMPurify from 'isomorphic-dompurify';
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
+/**
+ * Sanitize user input for safe HTML rendering in emails
+ * Removes all HTML tags and encodes special characters
+ */
+function sanitizeForHtml(input: string | undefined | null): string {
+  if (!input) return '';
+  // First strip any HTML tags, then encode remaining special characters
+  const stripped = DOMPurify.sanitize(input, { ALLOWED_TAGS: [] });
+  return stripped
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
+/**
+ * Validate email format
+ */
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 export async function POST(req: NextRequest) {
   console.log('[Contact API] Received request');
-  
+
   try {
     const contactData = await req.json();
-    const { name, email, phone, company, message, preferredDate, preferredTime, conversationType } = contactData;
+    const {
+      name: rawName,
+      email: rawEmail,
+      phone: rawPhone,
+      company: rawCompany,
+      message: rawMessage,
+      preferredDate: rawPreferredDate,
+      preferredTime: rawPreferredTime,
+      conversationType: rawConversationType
+    } = contactData;
+
+    // Sanitize all user inputs to prevent XSS
+    const name = sanitizeForHtml(rawName);
+    const email = sanitizeForHtml(rawEmail);
+    const phone = sanitizeForHtml(rawPhone);
+    const company = sanitizeForHtml(rawCompany);
+    const message = sanitizeForHtml(rawMessage);
+    const preferredDate = sanitizeForHtml(rawPreferredDate);
+    const preferredTime = sanitizeForHtml(rawPreferredTime);
+    // conversationType is used in conditionals, sanitize but keep original for logic
+    const conversationType = ['verkennen', 'debrief', 'kickoff', 'general'].includes(rawConversationType)
+      ? rawConversationType
+      : 'general';
     
     console.log('[Contact API] Processing submission for:', { company, email });
 

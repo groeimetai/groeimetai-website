@@ -3,9 +3,16 @@ import type { NextRequest } from 'next/server';
 import { jwtVerify, SignJWT, type JWTPayload } from 'jose';
 import { nanoid } from 'nanoid';
 
-// JWT configuration
+// JWT configuration - JWT_SECRET is required
+if (!process.env.JWT_SECRET) {
+  console.error('CRITICAL: JWT_SECRET environment variable is not set!');
+  // In production, throw an error. In development, use a warning.
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('JWT_SECRET environment variable is required in production');
+  }
+}
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'your-secret-key-change-in-production'
+  process.env.JWT_SECRET || ''
 );
 const JWT_ISSUER = 'groeimetai.io';
 const JWT_AUDIENCE = 'groeimetai-app';

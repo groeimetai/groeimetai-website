@@ -341,12 +341,20 @@ class PaymentService {
   }
 
   /**
-   * Verify webhook signature (for security)
+   * Verify webhook request validity
+   * Note: Mollie doesn't sign webhooks. Security is handled by:
+   * 1. IP allowlisting in the webhook route
+   * 2. Always fetching payment status from Mollie's API (never trusting webhook data)
+   * 3. Idempotency checks to prevent replay attacks
+   *
+   * @deprecated Use IP validation in the webhook route instead
    */
   verifyWebhookSignature(body: string, signature: string): boolean {
-    // Mollie doesn't use webhook signatures by default
-    // You can implement additional security measures here if needed
-    return true;
+    // Mollie doesn't sign webhooks - security is handled at the route level
+    // by IP validation and by always fetching from Mollie's API
+    // Return false to force proper security implementation
+    console.warn('verifyWebhookSignature is deprecated - use IP validation in webhook route');
+    return false;
   }
 }
 

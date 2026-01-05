@@ -3,8 +3,54 @@ import { updateDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import nodemailer from 'nodemailer';
 import { GoogleCalendarService } from '@/lib/google/calendar-service';
+import DOMPurify from 'isomorphic-dompurify';
 
 export const dynamic = 'force-dynamic';
+
+/**
+ * Sanitize user input for safe HTML rendering in emails
+ */
+function sanitizeForHtml(input: string | undefined | null): string {
+  if (!input) return '';
+  const stripped = DOMPurify.sanitize(input, { ALLOWED_TAGS: [] });
+  return stripped
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
+/**
+ * Validate URL to prevent javascript: protocol attacks
+ */
+function sanitizeUrl(url: string | undefined | null): string {
+  if (!url) return '';
+  const trimmed = url.trim();
+  // Only allow http, https, and valid meeting URLs
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    return trimmed;
+  }
+  return '';
+}
+
+/**
+ * Validate date format (YYYY-MM-DD)
+ */
+function isValidDate(dateStr: string): boolean {
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(dateStr)) return false;
+  const date = new Date(dateStr);
+  return !isNaN(date.getTime());
+}
+
+/**
+ * Validate time format (HH:MM)
+ */
+function isValidTime(timeStr: string): boolean {
+  const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+  return timeRegex.test(timeStr);
+}
 
 interface MeetingData {
   contactId: string;
@@ -39,6 +85,50 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Validate date and time formats
+    if (!isValidDate(date)) {
+      return NextResponse.json(
+        { error: 'Ongeldige datum formaat. Gebruik YYYY-MM-DD' },
+        { status: 400 }
+      );
+    }
+
+    if (!isValidTime(time)) {
+      return NextResponse.json(
+        { error: 'Ongeldige tijd formaat. Gebruik HH:MM' },
+        { status: 400 }
+      );
+    }
+
+    // Validate duration bounds (15 minutes to 8 hours)
+    if (typeof duration !== 'number' || duration < 15 || duration > 480) {
+      return NextResponse.json(
+        { error: 'Duur moet tussen 15 en 480 minuten zijn' },
+        { status: 400 }
+      );
+    }
+
+    // Validate meeting type
+    const validTypes = ['google_meet', 'zoom', 'teams', 'phone', 'in_person'];
+    if (!validTypes.includes(type)) {
+      return NextResponse.json(
+        { error: 'Ongeldig meeting type' },
+        { status: 400 }
+      );
+    }
+
+    // Sanitize text inputs for HTML rendering
+    const sanitizedNotes = sanitizeForHtml(notes);
+    const sanitizedLocation = sanitizeUrl(location);
+
+    // Sanitize agenda items
+    const sanitizedAgenda = (agenda || []).map(item => ({
+      time: sanitizeForHtml(item.time),
+      title: sanitizeForHtml(item.title),
+      description: sanitizeForHtml(item.description),
+      duration: typeof item.duration === 'number' ? item.duration : 0
+    }));
 
     // Get contact details from Firestore
     const contactDoc = await getDoc(doc(db, 'contact_submissions', contactId));
@@ -106,7 +196,7 @@ export async function POST(req: NextRequest) {
       startTime: startDateTime,
       endTime: endDateTime,
       location: meetingLink,
-      description: `Agenda:\n${agenda.map(item => `${item.time} - ${item.title}: ${item.description}`).join('\n')}\n\nNotities:\n${notes}`,
+      description: `Agenda:\n${sanitizedAgenda.map(item => `${item.time} - ${item.title}: ${item.description}`).join('\n')}\n\nNotities:\n${sanitizedNotes}`,
       attendees: [...attendees, 'niels@groeimetai.io']
     });
 
@@ -136,8 +226,8 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Create professional agenda HTML table
-    const agendaHtml = agenda.map(item => `
+    // Create professional agenda HTML table (using sanitized agenda)
+    const agendaHtml = sanitizedAgenda.map(item => `
       <tr>
         <td style="padding: 12px 8px; border: 1px solid #e5e7eb; background: rgba(248,115,21,0.05); color: #F87315; font-weight: 600; width: 80px; text-align: center;">${item.time}</td>
         <td style="padding: 12px; border: 1px solid #e5e7eb; color: #111827;">
@@ -212,7 +302,7 @@ export async function POST(req: NextRequest) {
         </table>
       </div>
       
-      ${agenda.length > 0 ? `
+      ${sanitizedAgenda.length > 0 ? `
       <!-- Detailed Agenda -->
       <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
         <h3 style="color: #111827; margin-top: 0; font-size: 16px; margin-bottom: 15px;">📋 Gedetailleerde Agenda</h3>
@@ -230,11 +320,11 @@ export async function POST(req: NextRequest) {
       </div>
       ` : ''}
       
-      ${notes ? `
+      ${sanitizedNotes ? `
       <!-- Preparation Notes -->
       <div style="background: rgba(248,115,21,0.1); border: 1px solid rgba(248,115,21,0.3); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
         <h3 style="color: #F87315; margin-top: 0; font-size: 16px; margin-bottom: 10px;">📝 Voorbereiding & Agenda Notities</h3>
-        <div style="color: #374151; line-height: 1.6; margin: 0; white-space: pre-wrap; background: white; padding: 15px; border-radius: 6px; border-left: 4px solid #F87315;">${notes}</div>
+        <div style="color: #374151; line-height: 1.6; margin: 0; white-space: pre-wrap; background: white; padding: 15px; border-radius: 6px; border-left: 4px solid #F87315;">${sanitizedNotes}</div>
       </div>
       ` : ''}
       

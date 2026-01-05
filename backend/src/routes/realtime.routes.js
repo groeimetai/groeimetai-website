@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticateUser, apiRateLimiter } from '../middleware/auth.middleware.js';
+import { authenticateUser, requireRole, apiRateLimiter } from '../middleware/auth.middleware.js';
 import { asyncHandler } from '../middleware/error.middleware.js';
 import { NotificationService } from '../services/notification.service.js';
 import { getWebSocket } from '../middleware/websocket.middleware.js';
@@ -117,7 +117,7 @@ router.get(
 router.get(
   '/stats',
   authenticateUser,
-  // Add admin role requirement here if needed
+  requireRole('admin'),
   apiRateLimiter,
   asyncHandler(async (req, res) => {
     const webSocket = getWebSocket();
