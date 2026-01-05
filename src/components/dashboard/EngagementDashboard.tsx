@@ -84,7 +84,7 @@ export const EngagementDashboard: React.FC = () => {
         title: 'Requirements Analysis',
         description: 'Analyzed technical requirements and system architecture',
         date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-        status: (currentStage === 'assessment' ? 'current' : 'completed') as const,
+        status: currentStage === 'assessment' ? 'current' as const : 'completed' as const,
         icon: <FileText className="h-5 w-5" />,
       },
       {
@@ -92,8 +92,8 @@ export const EngagementDashboard: React.FC = () => {
         title: 'Pilot Development',
         description: 'Building proof of concept implementation',
         date: new Date(),
-        status: (currentStage === 'pilot' ? 'current' : 
-                currentStage === 'assessment' ? 'upcoming' : 'completed') as const,
+        status: currentStage === 'pilot' ? 'current' as const :
+                currentStage === 'assessment' ? 'upcoming' as const : 'completed' as const,
         icon: <Brain className="h-5 w-5" />,
       },
       {
@@ -101,8 +101,8 @@ export const EngagementDashboard: React.FC = () => {
         title: 'Implementation',
         description: 'Full system implementation and integration',
         date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-        status: (currentStage === 'implementation' ? 'current' : 
-                ['live', 'completed'].includes(currentStage) ? 'completed' : 'upcoming') as const,
+        status: currentStage === 'implementation' ? 'current' as const :
+                ['live', 'completed'].includes(currentStage) ? 'completed' as const : 'upcoming' as const,
         icon: <Zap className="h-5 w-5" />,
       },
       {
@@ -110,7 +110,7 @@ export const EngagementDashboard: React.FC = () => {
         title: 'Production Launch',
         description: 'Live deployment with monitoring and support',
         date: new Date(Date.now() + 28 * 24 * 60 * 60 * 1000),
-        status: (currentStage === 'live' ? 'current' : 'upcoming') as const,
+        status: currentStage === 'live' ? 'current' as const : 'upcoming' as const,
         icon: <Target className="h-5 w-5" />,
       },
     ];

@@ -209,14 +209,14 @@ const nextConfig = {
   // Trailing slash
   trailingSlash: false,
 
-  // Skip TypeScript errors in production build
+  // TypeScript checking during build (enabled for production safety)
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
 
-  // Skip ESLint in production build
+  // ESLint checking during build (enabled for code quality)
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
 };
 

@@ -21,6 +21,7 @@ import {
   AlertCircle,
   Clock,
   Send,
+  type LucideIcon,
 } from 'lucide-react';
 import {
   Sheet,
@@ -156,7 +157,7 @@ export function UnifiedMenu({ className, variant = 'default', placement = 'right
   };
 
   // Get icon for item type
-  const getItemIcon = (item: UnifiedItem) => {
+  const getItemIcon = (item: UnifiedItem): LucideIcon => {
     if (item.type === 'message') {
       return MessageSquare;
     }
@@ -470,7 +471,7 @@ function UnifiedItemsList({
                           "p-2 rounded-lg",
                           item.isRead ? "bg-white/5" : "bg-orange/20"
                         )}>
-                          <Icon className={cn("h-4 w-4", getPriorityColor(item.priority))} />
+                          <Icon {...{ className: cn("h-4 w-4", getPriorityColor(item.priority)) } as React.ComponentProps<typeof Icon>} />
                         </div>
 
                         <div className="flex-1 min-w-0">

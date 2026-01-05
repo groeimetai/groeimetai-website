@@ -28,6 +28,10 @@ export interface Project {
   spent: number;
   assignedTo: string;
   priority: 'high' | 'medium' | 'low';
+  // Optional properties used in dashboard overview
+  type?: string;
+  estimatedHours?: number;
+  actualHours?: number;
 }
 
 export interface Milestone {

@@ -104,17 +104,21 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
   unobserve: jest.fn(),
   disconnect: jest.fn(),
-}));
+})) as unknown as typeof ResizeObserver;
 
 // Mock IntersectionObserver
 global.IntersectionObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
   unobserve: jest.fn(),
   disconnect: jest.fn(),
-}));
+  root: null,
+  rootMargin: '',
+  thresholds: [],
+  takeRecords: jest.fn(() => []),
+})) as unknown as typeof IntersectionObserver;
 
 // Mock fetch
-global.fetch = jest.fn();
+global.fetch = jest.fn() as unknown as typeof fetch;
 
 // Console suppressions for cleaner test output
 const originalError = console.error;

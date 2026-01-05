@@ -320,16 +320,17 @@ export class CustomerJourneyService {
     console.log(`Notifying account manager for ${clientId}`);
   }
 
-  private static async updateActivityFeed(clientId: string, activity: any): Promise<void> {
-    console.log(`Updating activity feed for ${clientId}`);
-  }
-
   private static async incrementROICounter(clientId: string, activity: any): Promise<void> {
     console.log(`Incrementing ROI counter for ${clientId}`);
   }
 
   private static async checkThresholds(clientId: string, activity: any): Promise<void> {
     console.log(`Checking thresholds for ${clientId}`);
+  }
+
+  private static async checkPerformanceThresholds(clientId: string, activityData: any): Promise<void> {
+    console.log(`Checking performance thresholds for ${clientId}`);
+    await this.checkThresholds(clientId, activityData);
   }
 
   private static async showAlert(clientId: string, error: any): Promise<void> {

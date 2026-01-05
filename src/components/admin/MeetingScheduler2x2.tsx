@@ -22,8 +22,8 @@ interface ContactSubmission {
   company: string;
   conversationType: string;
   message?: string;
-  preferredDate?: string;
-  preferredTime?: string;
+  preferredDate?: string | null;
+  preferredTime?: string | null;
   submittedAt?: any;
 }
 
@@ -450,7 +450,7 @@ Niels van der Werf`;
                     return (
                       <div
                         key={type.value}
-                        onClick={() => setScheduleForm({ ...scheduleForm, type: type.value })}
+                        onClick={() => setScheduleForm({ ...scheduleForm, type: type.value as typeof scheduleForm.type })}
                         className={`p-2 rounded border cursor-pointer transition-colors text-sm ${
                           scheduleForm.type === type.value
                             ? 'border-orange bg-orange/20 text-orange'

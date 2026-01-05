@@ -108,8 +108,8 @@ async function generatePDFCertificate(name: string, company: string, report: any
     // Create simpler, stable certificate HTML
     const certificateHtml = createSimpleCertificate(name, company, report);
     
-    const browser = await puppeteer.launch({ 
-      headless: 'new',
+    const browser = await puppeteer.launch({
+      headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
       timeout: 15000
     });
@@ -137,7 +137,7 @@ async function generatePDFCertificate(name: string, company: string, report: any
     
     await browser.close();
     console.log('✅ PDF certificate generated successfully');
-    return pdfBuffer;
+    return Buffer.from(pdfBuffer);
     
   } catch (error) {
     console.error('❌ PDF generation error:', error);

@@ -450,7 +450,7 @@ GroeimetAI - Je AI Implementation Partner`
                       return (
                         <div
                           key={type.value}
-                          onClick={() => setScheduleForm({ ...scheduleForm, type: type.value })}
+                          onClick={() => setScheduleForm({ ...scheduleForm, type: type.value as typeof scheduleForm.type })}
                           className={`p-3 rounded-lg border cursor-pointer transition-colors ${
                             scheduleForm.type === type.value
                               ? 'border-orange bg-orange/10'

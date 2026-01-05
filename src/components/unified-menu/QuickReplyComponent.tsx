@@ -100,7 +100,7 @@ export function QuickReplyComponent({ message, onClose, className }: QuickReplyC
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${message.senderName}`} />
+            <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${message.senderName}`} alt={message.senderName} />
             <AvatarFallback>{message.senderName.charAt(0)}</AvatarFallback>
           </Avatar>
           <div>

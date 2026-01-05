@@ -63,7 +63,7 @@ export default function CustomerJourneyWidget({
       {
         id: 'analysis',
         title: 'Requirements Analysis',
-        status: (stage === 'assessment' ? 'current' : 'completed') as const,
+        status: stage === 'assessment' ? 'current' as const : 'completed' as const,
         description: 'Technical requirements and system architecture review',
         estimatedTime: stage === 'analysis' ? '1-2 weeks' : 'Complete',
         actions: stage === 'analysis' ? ['View Analysis', 'Book Deep Dive'] : undefined,

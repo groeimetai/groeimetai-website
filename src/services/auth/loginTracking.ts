@@ -3,15 +3,15 @@ import { db } from '@/lib/firebase/config';
 
 export class LoginTrackingService {
   static async updateLastLogin(uid: string): Promise<void> {
+    const userRef = doc(db, 'users', uid);
+
     try {
-      const userRef = doc(db, 'users', uid);
-      
       // Try to update existing document
       await updateDoc(userRef, {
         lastLogin: serverTimestamp(),
         lastActivityAt: serverTimestamp()
       });
-      
+
     } catch (error) {
       // If document doesn't exist, create it
       try {

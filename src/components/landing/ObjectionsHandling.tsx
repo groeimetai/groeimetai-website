@@ -8,7 +8,7 @@ import Image from 'next/image';
 export default function ObjectionsHandling() {
   const t = useTranslations('objections');
   
-  const objections = Object.values(t.raw('faqs'));
+  const objections = Object.values(t.raw('faqs')) as Array<{ question: string; answer: string }>;
 
   return (
     <section className="py-20" style={{ backgroundColor: '#080D14' }}>

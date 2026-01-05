@@ -97,8 +97,8 @@ function useAnimationState(autoPlay: boolean, phases: AnimationPhase[]) {
 }
 
 // SVG Icon Components
-const ApiIcon = ({ size = 24, className = '' }: { size?: number; className?: string }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
+const ApiIcon = ({ size = 24, className = '', style }: { size?: number; className?: string; style?: React.CSSProperties }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className} style={style}>
     <path d="M12 2L2 7L12 12L22 7L12 2Z" opacity="0.8"/>
     <path d="M2 17L12 22L22 17"/>
     <path d="M2 12L12 17L22 12"/>
@@ -113,8 +113,8 @@ const McpIcon = ({ size = 32, className = '' }: { size?: number; className?: str
   </svg>
 );
 
-const AgentIcon = ({ size = 28, className = '' }: { size?: number; className?: string }) => (
-  <svg width={size} height={size} viewBox="0 0 28 28" fill="currentColor" className={className}>
+const AgentIcon = ({ size = 28, className = '', style }: { size?: number; className?: string; style?: React.CSSProperties }) => (
+  <svg width={size} height={size} viewBox="0 0 28 28" fill="currentColor" className={className} style={style}>
     <rect x="6" y="8" width="16" height="12" rx="2" opacity="0.8"/>
     <rect x="11" y="4" width="6" height="4" rx="1"/>
     <circle cx="10" cy="14" r="2"/>

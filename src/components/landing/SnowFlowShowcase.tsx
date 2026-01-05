@@ -123,7 +123,7 @@ export default function SnowFlowShowcase() {
                   {Object.values(t.raw('technicalImplementation.features')).map((feature, index) => (
                     <li key={index} className="flex items-center text-white/70">
                       <div className="w-2 h-2 rounded-full mr-3" style={{ backgroundColor: '#F87315' }}></div>
-                      {feature}
+                      {String(feature)}
                     </li>
                   ))}
                 </ul>

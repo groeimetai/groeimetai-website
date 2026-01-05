@@ -225,7 +225,7 @@ export default function DashboardOverview() {
                         </div>
                         <div className="flex items-center justify-between text-sm text-white/60">
                           <span>Started: {project.startDate.toLocaleDateString()}</span>
-                          {project.estimatedHours > 0 && (
+                          {(project.estimatedHours ?? 0) > 0 && (
                             <span>{project.actualHours || 0}/{project.estimatedHours}h</span>
                           )}
                         </div>

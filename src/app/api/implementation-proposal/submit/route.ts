@@ -60,12 +60,13 @@ function calculateComplexityScore(data: any): number {
   complexity += data.systems.length * 5;
   
   // Budget indicator
-  const budgetComplexity = {
+  const budgetComplexityMap: Record<string, number> = {
     '10-25k': 20,
     '25-50k': 40,
     '50-100k': 60,
     '100k+': 80
-  }[data.budget] || 10;
+  };
+  const budgetComplexity = budgetComplexityMap[data.budget as string] || 10;
   complexity += budgetComplexity;
   
   return Math.min(complexity, 100);

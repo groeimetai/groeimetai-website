@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
-    "build": "next build --no-lint",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest --passWithNoTests",
@@ -16,7 +16,7 @@
     "index:content": "npx tsx scripts/generate-content-index.ts"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.5.0",
+    "@google/generative-ai": "^0.24.1",
     "@langchain/openai": "^0.5.18",
     "@mollie/api-client": "^4.3.3",
     "@opentelemetry/api": "^1.9.0",

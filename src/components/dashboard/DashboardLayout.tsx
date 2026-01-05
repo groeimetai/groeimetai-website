@@ -33,10 +33,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import UnifiedCommunicationCenter from '@/components/unified/UnifiedCommunicationCenter';
+import { LucideIcon } from 'lucide-react';
+
+// Type for sidebar navigation items
+interface NavItem {
+  icon: LucideIcon;
+  label: string;
+  href: string;
+  separator?: boolean;
+}
 
 // Dynamic sidebar items based on user role
-const getSidebarItems = (isAdmin: boolean) => {
-  const baseItems = [
+const getSidebarItems = (isAdmin: boolean): NavItem[] => {
+  const baseItems: NavItem[] = [
     { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
     { icon: FileText, label: 'Projects', href: '/dashboard/projects' },
     { icon: Calendar, label: 'Consultations', href: '/dashboard/consultations' },

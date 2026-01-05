@@ -1,6 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DynamicReportGenerator } from '@/services/ai/reportGeneration';
 
+// Calculate a preview score based on assessment data
+function calculatePreviewScore(data: any): number {
+  let score = 50; // Base score
+
+  // Add points based on various factors
+  if (data.aiReadiness && data.aiReadiness > 3) score += 10;
+  if (data.dataQuality && data.dataQuality > 3) score += 10;
+  if (data.teamReadiness && data.teamReadiness > 3) score += 10;
+  if (data.infrastructureReady) score += 10;
+  if (data.hasDefinedUseCase) score += 10;
+
+  return Math.min(100, Math.max(0, score));
+}
+
 export async function POST(req: NextRequest) {
   try {
     const assessmentData = await req.json();

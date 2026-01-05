@@ -122,14 +122,13 @@ export const useTeamData = (options: UseTeamDataOptions = {}): UseTeamDataReturn
 
   // Sanitize user data for security
   const sanitizeUserData = (userData: User): TeamMember => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { permissions: _, subscriptionId: __, organizationId: ___, ...rest } = userData as User & { permissions?: string[]; subscriptionId?: string; organizationId?: string };
     return {
-      ...userData,
+      ...rest,
       currentWorkload: calculateWorkload(userData.stats?.projectsCount || 0),
       projectAssignments: [],
-      // Remove sensitive data that shouldn't be exposed
-      permissions: undefined,
-      subscriptionId: undefined,
-      organizationId: undefined,
+      permissions: [],
     } as TeamMember;
   };
 

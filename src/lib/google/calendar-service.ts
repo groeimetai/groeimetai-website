@@ -129,7 +129,7 @@ export class GoogleCalendarService {
       console.log('✅ Google Calendar event created:', response.data.id);
 
       const meetLink = response.data.conferenceData?.entryPoints?.find(
-        entry => entry.entryPointType === 'video'
+        (entry: { entryPointType?: string; uri?: string }) => entry.entryPointType === 'video'
       )?.uri || 'https://meet.google.com/';
 
       return {

@@ -637,6 +637,17 @@ QUALITY CONTROL CHECKS:
     return 'Pre-Digital (Level 1)';
   }
 
+  private static getAPIStatusLabel(hasApis: string): string {
+    const statusMap: Record<string, string> = {
+      'yes': 'API infrastructuur aanwezig',
+      'partial': 'Gedeeltelijke API dekking',
+      'no': 'Geen APIs beschikbaar',
+      'unknown': 'API status onbekend',
+      'planning': 'API planning fase'
+    };
+    return statusMap[hasApis?.toLowerCase()] || 'API status te bepalen';
+  }
+
   private static getMaturityDescription(score: number): string {
     if (score >= 90) {
       return 'Jullie organisatie kan binnen weken agents implementeren. APIs bestaan, data is toegankelijk, processen zijn gedocumenteerd.';

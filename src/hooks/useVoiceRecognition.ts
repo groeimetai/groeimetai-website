@@ -3,17 +3,22 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 
 // Types for Speech Recognition API
-interface SpeechRecognitionEvent {
-  results: {
-    [index: number]: {
-      [index: number]: {
-        transcript: string;
-        confidence: number;
-      };
-      isFinal: boolean;
-      length: number;
-    };
+interface SpeechRecognitionResult {
+  [index: number]: {
+    transcript: string;
+    confidence: number;
   };
+  isFinal: boolean;
+  length: number;
+}
+
+interface SpeechRecognitionResultList {
+  [index: number]: SpeechRecognitionResult;
+  length: number;
+}
+
+interface SpeechRecognitionEvent {
+  results: SpeechRecognitionResultList;
   resultIndex: number;
 }
 
@@ -185,7 +190,7 @@ export const useVoiceRecognition = (options: VoiceRecognitionOptions = {}) => {
   };
 
   // Request microphone permission
-  const requestPermission = useCallback(async () => {
+  const requestPermission = useCallback(async (): Promise<boolean> => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaStreamRef.current = stream;
@@ -194,6 +199,7 @@ export const useVoiceRecognition = (options: VoiceRecognitionOptions = {}) => {
 
       // Stop the stream immediately - we just needed permission
       stream.getTracks().forEach(track => track.stop());
+      return true;
     } catch (error: any) {
       let errorMessage = 'Microphone toegang geweigerd.';
 
@@ -210,6 +216,7 @@ export const useVoiceRecognition = (options: VoiceRecognitionOptions = {}) => {
         permission: 'denied',
         error: errorMessage
       }));
+      return false;
     }
   }, []);
 
@@ -379,8 +386,8 @@ export const useVoiceRecognition = (options: VoiceRecognitionOptions = {}) => {
 
     // Check permission first
     if (state.permission !== 'granted') {
-      await requestPermission();
-      if (state.permission !== 'granted') {
+      const permissionGranted = await requestPermission();
+      if (!permissionGranted) {
         return;
       }
     }

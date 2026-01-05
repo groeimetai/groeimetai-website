@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { doc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, addDoc, collection, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
 export async function POST(req: NextRequest) {
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
 
 async function handleConversion(userId: string, assessmentId: string): Promise<void> {
   // Update campaign status
-  await doc(db, 'upsell_campaigns', userId).update({
+  await updateDoc(doc(db, 'upsell_campaigns', userId), {
     status: 'converted',
     convertedAt: serverTimestamp(),
     conversionSource: 'dashboard_locked_content'
