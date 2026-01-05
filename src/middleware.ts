@@ -4,9 +4,8 @@ import createIntlMiddleware from 'next-intl/middleware';
 import { locales, defaultLocale } from './i18n';
 import { authMiddleware } from './middleware/auth';
 
-// Use Node.js runtime instead of Edge to avoid compatibility issues
-// with jose, nanoid, and other Node.js modules
-export const runtime = 'nodejs';
+// Note: Middleware always runs in Edge Runtime in Next.js 14
+// All imports must be Edge-compatible (jose is Edge-compatible, we replaced nanoid with crypto.randomUUID)
 
 // Create the internationalization middleware
 const intlMiddleware = createIntlMiddleware({

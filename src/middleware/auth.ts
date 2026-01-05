@@ -1,23 +1,33 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { jwtVerify, SignJWT, type JWTPayload } from 'jose';
-import { nanoid } from 'nanoid';
 
-// JWT configuration - JWT_SECRET is required
-if (!process.env.JWT_SECRET) {
-  console.error('CRITICAL: JWT_SECRET environment variable is not set!');
-  // In production, throw an error. In development, use a warning.
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error('JWT_SECRET environment variable is required in production');
-  }
+// Use crypto.randomUUID() instead of nanoid for Edge Runtime compatibility
+function generateId(): string {
+  return crypto.randomUUID();
 }
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || ''
-);
+
+// JWT configuration - lazy initialization to avoid build-time errors
 const JWT_ISSUER = 'groeimetai.io';
 const JWT_AUDIENCE = 'groeimetai-app';
 const ACCESS_TOKEN_EXPIRY = '15m';
 const REFRESH_TOKEN_EXPIRY = '7d';
+
+// Get JWT secret lazily (only when needed at runtime)
+function getJwtSecret(): Uint8Array {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    console.error('CRITICAL: JWT_SECRET environment variable is not set!');
+    // Return empty secret - will fail token verification gracefully
+    return new TextEncoder().encode('');
+  }
+  return new TextEncoder().encode(secret);
+}
+
+// Check if JWT is properly configured
+function isJwtConfigured(): boolean {
+  return !!process.env.JWT_SECRET;
+}
 
 // User roles
 export enum UserRole {
@@ -54,14 +64,17 @@ export async function generateToken(
   payload: Omit<JWTCustomPayload, 'iat' | 'exp' | 'jti' | 'iss' | 'aud'>,
   expiresIn: string = ACCESS_TOKEN_EXPIRY
 ): Promise<string> {
+  if (!isJwtConfigured()) {
+    throw new Error('JWT_SECRET is not configured');
+  }
   const token = await new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
-    .setJti(nanoid())
+    .setJti(generateId())
     .setIssuedAt()
     .setIssuer(JWT_ISSUER)
     .setAudience(JWT_AUDIENCE)
     .setExpirationTime(expiresIn)
-    .sign(JWT_SECRET);
+    .sign(getJwtSecret());
 
   return token;
 }
@@ -70,8 +83,12 @@ export async function generateToken(
  * Verify JWT token
  */
 export async function verifyToken(token: string): Promise<JWTCustomPayload | null> {
+  if (!isJwtConfigured()) {
+    console.error('JWT_SECRET is not configured - cannot verify token');
+    return null;
+  }
   try {
-    const { payload } = await jwtVerify(token, JWT_SECRET, {
+    const { payload } = await jwtVerify(token, getJwtSecret(), {
       issuer: JWT_ISSUER,
       audience: JWT_AUDIENCE,
     });
