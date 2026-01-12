@@ -14,6 +14,8 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
+import { companySettingsService } from '@/services/companySettingsService';
+import { CompanySettings as CompanySettingsType } from '@/types';
 import {
   Settings,
   Building,
@@ -60,16 +62,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
-interface CompanySettings {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  website: string;
-  logo: string;
-  vat: string;
-  registration: string;
-}
+// Using CompanySettingsType from @/types (imported as CompanySettingsType)
 
 interface EmailTemplate {
   id: string;
@@ -113,17 +106,28 @@ export default function AdminSettingsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
 
-  // Company settings
-  const [companySettings, setCompanySettings] = useState<CompanySettings>({
-    name: 'GroeimetAI',
-    email: 'info@groeimetai.nl',
-    phone: '+31 6 12345678',
-    address: 'Amsterdam, Netherlands',
-    website: 'https://groeimetai.nl',
-    logo: '',
-    vat: 'NL123456789B01',
-    registration: 'KVK 12345678',
-  });
+  // Company settings (loaded from Firestore)
+  const [companySettings, setCompanySettings] = useState<CompanySettingsType | null>(null);
+  const [isLoadingSettings, setIsLoadingSettings] = useState(true);
+
+  // Load company settings from Firestore on mount
+  useEffect(() => {
+    const loadCompanySettings = async () => {
+      try {
+        setIsLoadingSettings(true);
+        const settings = await companySettingsService.getCompanySettings();
+        setCompanySettings(settings);
+      } catch (error) {
+        console.error('Error loading company settings:', error);
+      } finally {
+        setIsLoadingSettings(false);
+      }
+    };
+
+    if (user && isAdmin) {
+      loadCompanySettings();
+    }
+  }, [user, isAdmin]);
 
   // Email templates
   const [emailTemplates, setEmailTemplates] = useState<EmailTemplate[]>([
@@ -239,8 +243,13 @@ export default function AdminSettingsPage() {
     setSaveMessage('');
 
     try {
-      // Simulate saving to database
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (section === 'Company' && companySettings && user) {
+        // Save company settings to Firestore
+        await companySettingsService.updateCompanySettings(companySettings, user.uid);
+      } else {
+        // Simulate saving for other sections (can be extended later)
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
 
       setSaveMessage(`${section} settings saved successfully!`);
       setTimeout(() => setSaveMessage(''), 3000);
@@ -417,109 +426,324 @@ export default function AdminSettingsPage() {
 
           {/* Company Settings */}
           <TabsContent value="company">
-            <Card className="bg-white/5 border-white/10">
-              <CardHeader>
-                <CardTitle className="text-white">Company Information</CardTitle>
-                <CardDescription className="text-white/60">
-                  Basic information about your company
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="company-name" className="text-white/80">
-                      Company Name
-                    </Label>
-                    <Input
-                      id="company-name"
-                      value={companySettings.name}
-                      onChange={(e) =>
-                        setCompanySettings({ ...companySettings, name: e.target.value })
-                      }
-                      className="mt-1 bg-white/5 border-white/10 text-white"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="company-email" className="text-white/80">
-                      Contact Email
-                    </Label>
-                    <Input
-                      id="company-email"
-                      type="email"
-                      value={companySettings.email}
-                      onChange={(e) =>
-                        setCompanySettings({ ...companySettings, email: e.target.value })
-                      }
-                      className="mt-1 bg-white/5 border-white/10 text-white"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="company-phone" className="text-white/80">
-                      Phone Number
-                    </Label>
-                    <Input
-                      id="company-phone"
-                      value={companySettings.phone}
-                      onChange={(e) =>
-                        setCompanySettings({ ...companySettings, phone: e.target.value })
-                      }
-                      className="mt-1 bg-white/5 border-white/10 text-white"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="company-website" className="text-white/80">
-                      Website
-                    </Label>
-                    <Input
-                      id="company-website"
-                      value={companySettings.website}
-                      onChange={(e) =>
-                        setCompanySettings({ ...companySettings, website: e.target.value })
-                      }
-                      className="mt-1 bg-white/5 border-white/10 text-white"
-                    />
-                  </div>
-                  <div className="md:col-span-2">
-                    <Label htmlFor="company-address" className="text-white/80">
-                      Address
-                    </Label>
-                    <Textarea
-                      id="company-address"
-                      value={companySettings.address}
-                      onChange={(e) =>
-                        setCompanySettings({ ...companySettings, address: e.target.value })
-                      }
-                      className="mt-1 bg-white/5 border-white/10 text-white"
-                      rows={3}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="company-vat" className="text-white/80">
-                      VAT Number
-                    </Label>
-                    <Input
-                      id="company-vat"
-                      value={companySettings.vat}
-                      onChange={(e) =>
-                        setCompanySettings({ ...companySettings, vat: e.target.value })
-                      }
-                      className="mt-1 bg-white/5 border-white/10 text-white"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="company-registration" className="text-white/80">
-                      Registration Number
-                    </Label>
-                    <Input
-                      id="company-registration"
-                      value={companySettings.registration}
-                      onChange={(e) =>
-                        setCompanySettings({ ...companySettings, registration: e.target.value })
-                      }
-                      className="mt-1 bg-white/5 border-white/10 text-white"
-                    />
-                  </div>
-                </div>
+            {isLoadingSettings ? (
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-12 flex items-center justify-center">
+                  <Loader2 className="animate-spin h-8 w-8 text-orange" />
+                </CardContent>
+              </Card>
+            ) : companySettings ? (
+              <div className="space-y-6">
+                {/* Basic Company Info */}
+                <Card className="bg-white/5 border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white">Bedrijfsgegevens</CardTitle>
+                    <CardDescription className="text-white/60">
+                      Basisinformatie over je bedrijf (verschijnt op facturen)
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <Label htmlFor="company-name" className="text-white/80">
+                          Bedrijfsnaam
+                        </Label>
+                        <Input
+                          id="company-name"
+                          value={companySettings.name}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, name: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company-legal-name" className="text-white/80">
+                          Juridische naam
+                        </Label>
+                        <Input
+                          id="company-legal-name"
+                          value={companySettings.legalName}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, legalName: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                          placeholder="bijv. GroeimetAI B.V."
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company-email" className="text-white/80">
+                          E-mailadres
+                        </Label>
+                        <Input
+                          id="company-email"
+                          type="email"
+                          value={companySettings.email}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, email: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company-phone" className="text-white/80">
+                          Telefoonnummer
+                        </Label>
+                        <Input
+                          id="company-phone"
+                          value={companySettings.phone}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, phone: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company-website" className="text-white/80">
+                          Website
+                        </Label>
+                        <Input
+                          id="company-website"
+                          value={companySettings.website}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, website: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Address */}
+                <Card className="bg-white/5 border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white">Adres</CardTitle>
+                    <CardDescription className="text-white/60">
+                      Vestigingsadres voor facturen
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="md:col-span-2">
+                        <Label htmlFor="company-street" className="text-white/80">
+                          Straat en huisnummer
+                        </Label>
+                        <Input
+                          id="company-street"
+                          value={companySettings.street}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, street: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                          placeholder="bijv. Herengracht 100"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company-postal" className="text-white/80">
+                          Postcode
+                        </Label>
+                        <Input
+                          id="company-postal"
+                          value={companySettings.postalCode}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, postalCode: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                          placeholder="bijv. 1015 BS"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company-city" className="text-white/80">
+                          Plaats
+                        </Label>
+                        <Input
+                          id="company-city"
+                          value={companySettings.city}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, city: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company-country" className="text-white/80">
+                          Land
+                        </Label>
+                        <Input
+                          id="company-country"
+                          value={companySettings.country}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, country: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Dutch Registration (KvK & BTW) */}
+                <Card className="bg-white/5 border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white">Registratie</CardTitle>
+                    <CardDescription className="text-white/60">
+                      KvK en BTW-nummer (verplicht op Nederlandse facturen)
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <Label htmlFor="company-kvk" className="text-white/80">
+                          KvK-nummer
+                        </Label>
+                        <Input
+                          id="company-kvk"
+                          value={companySettings.kvkNumber}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, kvkNumber: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                          placeholder="bijv. 12345678"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company-btw" className="text-white/80">
+                          BTW-nummer
+                        </Label>
+                        <Input
+                          id="company-btw"
+                          value={companySettings.btwNumber}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, btwNumber: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                          placeholder="bijv. NL123456789B01"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Banking Details */}
+                <Card className="bg-white/5 border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white">Bankgegevens</CardTitle>
+                    <CardDescription className="text-white/60">
+                      Bankrekening voor betalingen (verschijnt op facturen)
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div>
+                        <Label htmlFor="company-bank" className="text-white/80">
+                          Bank
+                        </Label>
+                        <Input
+                          id="company-bank"
+                          value={companySettings.bankName}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, bankName: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                          placeholder="bijv. ABN AMRO"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company-iban" className="text-white/80">
+                          IBAN
+                        </Label>
+                        <Input
+                          id="company-iban"
+                          value={companySettings.iban}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, iban: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                          placeholder="bijv. NL91 ABNA 0417 1643 00"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company-bic" className="text-white/80">
+                          BIC/SWIFT
+                        </Label>
+                        <Input
+                          id="company-bic"
+                          value={companySettings.bic}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, bic: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                          placeholder="bijv. ABNANL2A"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Invoice Settings */}
+                <Card className="bg-white/5 border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white">Factuurinstellingen</CardTitle>
+                    <CardDescription className="text-white/60">
+                      Standaard instellingen voor nieuwe facturen
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div>
+                        <Label htmlFor="company-payment-terms" className="text-white/80">
+                          Betalingstermijn (dagen)
+                        </Label>
+                        <Input
+                          id="company-payment-terms"
+                          type="number"
+                          value={companySettings.defaultPaymentTermsDays}
+                          onChange={(e) =>
+                            setCompanySettings({
+                              ...companySettings,
+                              defaultPaymentTermsDays: parseInt(e.target.value) || 30,
+                            })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company-tax-rate" className="text-white/80">
+                          Standaard BTW-tarief (%)
+                        </Label>
+                        <Input
+                          id="company-tax-rate"
+                          type="number"
+                          value={companySettings.defaultTaxRate}
+                          onChange={(e) =>
+                            setCompanySettings({
+                              ...companySettings,
+                              defaultTaxRate: parseInt(e.target.value) || 21,
+                            })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company-invoice-prefix" className="text-white/80">
+                          Factuurnummer prefix
+                        </Label>
+                        <Input
+                          id="company-invoice-prefix"
+                          value={companySettings.invoicePrefix}
+                          onChange={(e) =>
+                            setCompanySettings({ ...companySettings, invoicePrefix: e.target.value })
+                          }
+                          className="mt-1 bg-white/5 border-white/10 text-white"
+                          placeholder="bijv. INV"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Save Button */}
                 <div className="flex justify-end">
                   <Button
                     onClick={() => saveSettings('Company')}
@@ -529,18 +753,25 @@ export default function AdminSettingsPage() {
                     {isSaving ? (
                       <>
                         <Loader2 className="animate-spin w-4 h-4 mr-2" />
-                        Saving...
+                        Opslaan...
                       </>
                     ) : (
                       <>
                         <Save className="w-4 h-4 mr-2" />
-                        Save Changes
+                        Wijzigingen opslaan
                       </>
                     )}
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            ) : (
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-12 text-center">
+                  <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+                  <p className="text-white/60">Kon bedrijfsgegevens niet laden</p>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           {/* Email Templates */}

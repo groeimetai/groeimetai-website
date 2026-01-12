@@ -42,6 +42,7 @@ import {
   Receipt,
   Link,
   X,
+  BarChart3,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -97,6 +98,15 @@ interface InvoiceFormData {
   notes?: string;
   discount?: number;
   taxRate: number;
+  // Billing details (Dutch compliance)
+  companyName?: string;
+  contactName?: string;
+  kvkNumber?: string;
+  btwNumber?: string;
+  street?: string;
+  postalCode?: string;
+  city?: string;
+  country?: string;
 }
 
 export default function AdminInvoicesPage() {
@@ -126,6 +136,15 @@ export default function AdminInvoicesPage() {
     notes: '',
     discount: 0,
     taxRate: 21, // Default 21% VAT
+    // Billing details
+    companyName: '',
+    contactName: '',
+    kvkNumber: '',
+    btwNumber: '',
+    street: '',
+    postalCode: '',
+    city: '',
+    country: 'Nederland',
   });
 
   const { selectedIds, setSelectedIds, toggleSelection, clearSelection } =
@@ -358,12 +377,25 @@ export default function AdminInvoicesPage() {
         },
         body: JSON.stringify({
           clientId: formData.clientId,
+          // Legacy billing address for backwards compatibility
           billingAddress: {
-            street: selectedClient.company || '',
-            city: '',
+            street: formData.street || '',
+            city: formData.city || '',
             state: '',
-            country: 'Netherlands',
-            postalCode: '',
+            country: formData.country || 'Nederland',
+            postalCode: formData.postalCode || '',
+          },
+          // Extended billing details with Dutch compliance fields
+          billingDetails: {
+            companyName: formData.companyName || '',
+            contactName: formData.contactName || selectedClient.displayName || '',
+            kvkNumber: formData.kvkNumber || '',
+            btwNumber: formData.btwNumber || '',
+            street: formData.street || '',
+            postalCode: formData.postalCode || '',
+            city: formData.city || '',
+            country: formData.country || 'Nederland',
+            email: selectedClient.email || '',
           },
           projectId: formData.projectId,
           type: 'standard',
@@ -399,6 +431,15 @@ export default function AdminInvoicesPage() {
       notes: '',
       discount: 0,
       taxRate: 21,
+      // Reset billing details
+      companyName: '',
+      contactName: '',
+      kvkNumber: '',
+      btwNumber: '',
+      street: '',
+      postalCode: '',
+      city: '',
+      country: 'Nederland',
     });
   };
 
@@ -679,13 +720,23 @@ export default function AdminInvoicesPage() {
             <h1 className="text-3xl font-bold text-white mb-2">Invoices Management</h1>
             <p className="text-white/60">Create and manage invoices for all clients</p>
           </div>
-          <Button
-            onClick={() => setIsCreateDialogOpen(true)}
-            className="bg-orange hover:bg-orange/90"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Create Invoice
-          </Button>
+          <div className="flex gap-3">
+            <Button
+              variant="outline"
+              onClick={() => router.push('/dashboard/admin/invoices/reports')}
+              className="border-white/20 text-white hover:bg-white/10"
+            >
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Rapportages
+            </Button>
+            <Button
+              onClick={() => setIsCreateDialogOpen(true)}
+              className="bg-orange hover:bg-orange/90"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Create Invoice
+            </Button>
+          </div>
         </div>
 
         {/* Stats */}
@@ -1034,13 +1085,13 @@ export default function AdminInvoicesPage() {
             <div className="space-y-6 mt-4">
               {/* Client Selection */}
               <div>
-                <Label className="text-white/80">Client</Label>
+                <Label className="text-white/80">Klant</Label>
                 <Select
                   value={formData.clientId}
                   onValueChange={(value) => setFormData({ ...formData, clientId: value })}
                 >
                   <SelectTrigger className="mt-1 bg-white/5 border-white/10 text-white">
-                    <SelectValue placeholder="Select a client" />
+                    <SelectValue placeholder="Selecteer een klant" />
                   </SelectTrigger>
                   <SelectContent>
                     {clients.map((client) => (
@@ -1051,6 +1102,89 @@ export default function AdminInvoicesPage() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+
+              {/* Billing Details (Dutch Compliance) */}
+              <div className="border border-white/10 rounded-lg p-4 space-y-4">
+                <h3 className="text-sm font-medium text-orange">Factuurgegevens klant</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-white/80">Bedrijfsnaam</Label>
+                    <Input
+                      value={formData.companyName || ''}
+                      onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                      className="mt-1 bg-white/5 border-white/10 text-white"
+                      placeholder="bijv. Acme B.V."
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-white/80">Contactpersoon</Label>
+                    <Input
+                      value={formData.contactName || ''}
+                      onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
+                      className="mt-1 bg-white/5 border-white/10 text-white"
+                      placeholder="bijv. Jan Jansen"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-white/80">KvK-nummer (optioneel)</Label>
+                    <Input
+                      value={formData.kvkNumber || ''}
+                      onChange={(e) => setFormData({ ...formData, kvkNumber: e.target.value })}
+                      className="mt-1 bg-white/5 border-white/10 text-white"
+                      placeholder="bijv. 12345678"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-white/80">BTW-nummer (optioneel)</Label>
+                    <Input
+                      value={formData.btwNumber || ''}
+                      onChange={(e) => setFormData({ ...formData, btwNumber: e.target.value })}
+                      className="mt-1 bg-white/5 border-white/10 text-white"
+                      placeholder="bijv. NL123456789B01"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="md:col-span-2">
+                    <Label className="text-white/80">Straat en huisnummer</Label>
+                    <Input
+                      value={formData.street || ''}
+                      onChange={(e) => setFormData({ ...formData, street: e.target.value })}
+                      className="mt-1 bg-white/5 border-white/10 text-white"
+                      placeholder="bijv. Herengracht 100"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-white/80">Postcode</Label>
+                    <Input
+                      value={formData.postalCode || ''}
+                      onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
+                      className="mt-1 bg-white/5 border-white/10 text-white"
+                      placeholder="bijv. 1015 BS"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-white/80">Plaats</Label>
+                    <Input
+                      value={formData.city || ''}
+                      onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                      className="mt-1 bg-white/5 border-white/10 text-white"
+                      placeholder="bijv. Amsterdam"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-white/80">Land</Label>
+                    <Input
+                      value={formData.country || ''}
+                      onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                      className="mt-1 bg-white/5 border-white/10 text-white"
+                      placeholder="Nederland"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Due Date */}

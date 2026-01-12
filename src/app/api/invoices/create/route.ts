@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyIdToken } from '@/lib/firebase/admin';
-import { InvoiceItem, InvoiceType } from '@/types';
+import { InvoiceItem, InvoiceType, InvoiceBillingDetails } from '@/types';
 
 // POST /api/invoices/create
 export async function POST(request: NextRequest) {
@@ -40,16 +40,11 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Validate billing address
-    const { billingAddress } = body;
-    if (
-      !billingAddress.street ||
-      !billingAddress.city ||
-      !billingAddress.postalCode ||
-      !billingAddress.country
-    ) {
+    // Validate billing address (allow empty values for flexibility)
+    const { billingAddress, billingDetails } = body;
+    if (!billingAddress) {
       return NextResponse.json(
-        { error: 'Invalid billing address. Required: street, city, postalCode, country' },
+        { error: 'Missing billing address' },
         { status: 400 }
       );
     }
@@ -91,6 +86,7 @@ export async function POST(request: NextRequest) {
       clientId: body.clientId,
       organizationId: body.organizationId,
       billingAddress: body.billingAddress,
+      billingDetails: billingDetails as InvoiceBillingDetails | undefined,
       projectId: body.projectId,
       quoteId: body.quoteId,
       milestoneId: body.milestoneId,

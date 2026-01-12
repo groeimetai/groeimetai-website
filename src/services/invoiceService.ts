@@ -71,6 +71,7 @@ class InvoiceService {
     clientId: string;
     organizationId?: string;
     billingAddress: any;
+    billingDetails?: any; // Extended billing details with KvK, BTW, etc.
     projectId?: string;
     quoteId?: string;
     milestoneId?: string;
@@ -105,9 +106,10 @@ class InvoiceService {
         createdBy: invoiceData.createdBy,
       };
 
-      // Save to Firestore
+      // Save to Firestore (including billingDetails for Dutch compliance)
       await setDoc(doc(db, collections.invoices || 'invoices', invoice.id), {
         ...invoice,
+        billingDetails: invoiceData.billingDetails || null,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });

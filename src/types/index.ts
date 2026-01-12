@@ -476,6 +476,52 @@ export interface InvoiceReminder {
   type: 'due_soon' | 'overdue' | 'final_notice';
 }
 
+// Company Settings Types (for Dutch compliance)
+export interface CompanySettings {
+  id: string;
+  // Company Details
+  name: string;
+  legalName: string;
+  email: string;
+  phone: string;
+  website: string;
+  // Dutch Registration
+  kvkNumber: string;       // Chamber of Commerce (KvK)
+  btwNumber: string;       // VAT Number (BTW)
+  // Address
+  street: string;
+  postalCode: string;
+  city: string;
+  country: string;
+  // Banking
+  bankName: string;
+  iban: string;
+  bic: string;
+  // Invoice Settings
+  defaultPaymentTermsDays: number;  // Default 30
+  defaultTaxRate: number;           // Default 21
+  invoicePrefix: string;            // Default 'INV'
+  // Timestamps
+  updatedAt: Date;
+  updatedBy: string;
+}
+
+// Extended billing details for invoices (with Dutch compliance fields)
+export interface InvoiceBillingDetails {
+  // Client Info
+  companyName?: string;
+  contactName?: string;
+  kvkNumber?: string;      // Client's KvK
+  btwNumber?: string;      // Client's BTW
+  // Address
+  street: string;
+  postalCode: string;
+  city: string;
+  country: string;
+  // Contact
+  email?: string;
+}
+
 // Service Types
 export interface Service {
   id: string;

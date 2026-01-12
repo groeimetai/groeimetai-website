@@ -92,6 +92,7 @@ export const collections = {
   activities: 'activities',
   invoices: 'invoices',
   payments: 'payments',
+  companySettings: 'companySettings',
 };
 
 export { app, auth, db, storage, analytics, performance, isFirebaseConfigValid };
