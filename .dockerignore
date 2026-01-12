@@ -82,3 +82,22 @@ memory
 backup*
 backups/
 *.backup
+
+# Scripts (not needed for production)
+scripts/
+
+# Test files
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+jest.config.js
+jest.config.ts
+jest.setup.js
+
+# Sentry source maps (built during CI)
+.sentryclirc
+
+# Large dev dependencies that shouldn't be copied
+**/__tests__/
+**/__mocks__/
