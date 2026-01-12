@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Target, ArrowRight, Zap } from 'lucide-react';
+import { ArrowRight, Zap } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { AgentReadinessQuickCheck } from '@/components/landing/AgentReadinessQuickCheck';
 import { useTranslations } from 'next-intl';
@@ -11,165 +11,151 @@ import { useTranslations } from 'next-intl';
 export default function AgentReadinessHero() {
   const [showQuickCheck, setShowQuickCheck] = useState(false);
   const t = useTranslations('hero');
-  
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 pb-8 sm:py-8 md:py-16" style={{ backgroundColor: '#080D14' }}>
-      {/* Luxe Moving Orange Glow Effect */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none glow-container">
-        {/* Main Central Glow - Slow Orbital Movement */}
-        <motion.div 
-          className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] sm:w-[400px] sm:h-[400px] lg:w-[500px] lg:h-[500px] rounded-full opacity-25 sm:opacity-25 lg:opacity-30 blur-3xl"
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 sm:pt-24 sm:pb-16 md:pt-28 md:pb-20" style={{ backgroundColor: '#080D14' }}>
+      {/* Refined Ambient Glow Effects - More subtle and elegant */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Primary Glow - Soft central warmth */}
+        <motion.div
+          className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] lg:w-[700px] lg:h-[700px] rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(248,115,21,0.8) 0%, rgba(248,115,21,0.3) 40%, rgba(248,115,21,0.1) 70%, transparent 100%)',
-            filter: 'blur(30px) sm:blur(50px) lg:blur(60px)'
+            background: 'radial-gradient(circle, rgba(248,115,21,0.4) 0%, rgba(248,115,21,0.15) 35%, rgba(248,115,21,0.05) 60%, transparent 100%)',
+            filter: 'blur(80px)',
+            opacity: 0.6
           }}
-          animate={{ 
-            x: [0, 5, -3, 0],
-            y: [0, -3, 5, 0],
-            scale: [1, 1.02, 0.99, 1],
-            opacity: [0.25, 0.30, 0.20, 0.25]
+          animate={{
+            scale: [1, 1.03, 1],
+            opacity: [0.5, 0.6, 0.5]
           }}
-          transition={{ 
-            duration: 8,
+          transition={{
+            duration: 10,
             repeat: Infinity,
             ease: "easeInOut"
           }}
-        ></motion.div>
-        
-        {/* Secondary Glow - Figure-8 Movement */}
-        <motion.div 
-          className="absolute top-1/3 right-1/4 w-[150px] h-[150px] sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px] rounded-full opacity-20 sm:opacity-15 lg:opacity-20 blur-2xl"
+        />
+
+        {/* Secondary Glow - Asymmetric accent */}
+        <motion.div
+          className="absolute top-1/4 right-1/3 w-[200px] h-[200px] sm:w-[350px] sm:h-[350px] rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(255,133,51,0.6) 0%, rgba(255,133,51,0.2) 50%, rgba(248,115,21,0.1) 80%, transparent 100%)',
-            filter: 'blur(25px) sm:blur(40px)'
+            background: 'radial-gradient(circle, rgba(255,140,60,0.3) 0%, rgba(248,115,21,0.1) 50%, transparent 100%)',
+            filter: 'blur(60px)',
+            opacity: 0.4
           }}
-          animate={{ 
-            x: [0, 10, 0, -10, 0],
-            y: [0, -8, 0, 8, 0],
-            scale: [1, 1.05, 1.02, 1.03, 1],
-            opacity: [0.20, 0.25, 0.15, 0.20, 0.20]
+          animate={{
+            x: [0, 20, 0],
+            y: [0, -15, 0],
+            opacity: [0.3, 0.45, 0.3]
           }}
-          transition={{ 
+          transition={{
             duration: 12,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 1.5
+            delay: 2
           }}
-        ></motion.div>
-        
-        {/* Accent Glow - Gentle Drift */}
-        <motion.div 
-          className="absolute bottom-1/3 left-1/4 w-[200px] h-[200px] sm:w-[350px] sm:h-[350px] rounded-full opacity-20 sm:opacity-15 blur-3xl"
+        />
+
+        {/* Tertiary Glow - Bottom left balance */}
+        <motion.div
+          className="absolute bottom-1/4 left-1/4 w-[250px] h-[250px] sm:w-[400px] sm:h-[400px] rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(248,115,21,0.5) 0%, rgba(255,165,0,0.2) 60%, rgba(248,115,21,0.05) 80%, transparent 100%)',
-            filter: 'blur(30px) sm:blur(50px)'
+            background: 'radial-gradient(circle, rgba(248,115,21,0.25) 0%, rgba(255,165,0,0.1) 50%, transparent 100%)',
+            filter: 'blur(70px)',
+            opacity: 0.35
           }}
-          animate={{ 
-            x: [0, -8, 12, -5, 0],
-            y: [0, 6, -3, 5, 0],
-            scale: [1, 1.03, 1.01, 1.02, 1],
-            opacity: [0.20, 0.25, 0.15, 0.20, 0.20]
+          animate={{
+            x: [0, -15, 0],
+            y: [0, 10, 0],
+            opacity: [0.3, 0.4, 0.3]
           }}
-          transition={{ 
-            duration: 10,
+          transition={{
+            duration: 14,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 3
+            delay: 4
           }}
-        ></motion.div>
-        
-        {/* Ambient Background Glow - Subtle Overall Warmth */}
-        <motion.div 
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] rounded-full opacity-10"
+        />
+
+        {/* Subtle grid overlay for depth */}
+        <div
+          className="absolute inset-0 opacity-[0.02]"
           style={{
-            background: 'radial-gradient(ellipse, rgba(248,115,21,0.2) 0%, rgba(248,115,21,0.05) 50%, transparent 100%)',
-            filter: 'blur(80px)'
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                             linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px'
           }}
-          animate={{ 
-            scale: [1, 1.01, 1.005, 1],
-            opacity: [0.05, 0.08, 0.04, 0.05]
-          }}
-          transition={{ 
-            duration: 15,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 0.5
-          }}
-        ></motion.div>
+        />
       </div>
       
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 text-center relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="mb-6"
-          >
-          </motion.div>
-
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <div className="max-w-5xl mx-auto">
+          {/* Main Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-            className="text-5xl xs:text-6xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-white mb-3 sm:mb-4 md:mb-6 leading-[1.05] sm:leading-tight"
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-[-0.02em] text-white mb-6 sm:mb-8 leading-[1.1]"
           >
             {t('title')}{' '}
             <span
-              className="text-white px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 inline-block"
-              style={{ 
-                background: 'linear-gradient(135deg, #F87315, #FF8533)',
-                boxShadow: '0 4px 14px 0 rgba(248, 115, 21, 0.3)',
-                borderRadius: 0
+              className="relative inline-block text-white px-3 py-1 sm:px-4 sm:py-2"
+              style={{
+                background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                boxShadow: '0 8px 32px -8px rgba(248, 115, 21, 0.5)',
               }}
             >
               {t('highlight')}
             </span>
           </motion.h1>
 
+          {/* Subtitle */}
           <motion.p
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="text-xl sm:text-xl md:text-2xl lg:text-2xl text-white/90 mb-2 sm:mb-3 md:mb-4 max-w-4xl mx-auto font-light leading-relaxed"
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="text-lg sm:text-xl md:text-2xl text-white/85 mb-4 sm:mb-5 max-w-3xl mx-auto font-normal leading-relaxed"
           >
             {t('subtitle')}
           </motion.p>
 
+          {/* Description */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-base sm:text-base md:text-lg text-white/80 mb-4 sm:mb-5 md:mb-6 max-w-3xl mx-auto leading-relaxed"
+            transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="text-base sm:text-lg text-white/65 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed"
           >
             {t('description')}
           </motion.p>
 
+          {/* CTA Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-            className="space-y-3 sm:space-y-4 md:space-y-6 mb-4 sm:mb-6 md:mb-8"
+            transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-12 sm:mb-16"
           >
             {!showQuickCheck ? (
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Button
                   onClick={() => setShowQuickCheck(true)}
-                  size="default"
-                  className="group text-white border-0 hover-lift transform transition-all duration-300 w-full sm:w-auto h-12 sm:h-11 text-base sm:text-base px-6 sm:px-5 py-3 sm:py-2.5 shadow-lg hover:shadow-xl font-semibold sm:font-medium"
-                  style={{ 
-                    backgroundColor: '#F87315'
+                  size="lg"
+                  className="group text-white border-0 w-full sm:w-auto h-14 text-base font-medium px-8 rounded-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                  style={{
+                    background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                    boxShadow: '0 4px 20px -4px rgba(248, 115, 21, 0.5)',
                   }}
                 >
-                  <Zap className="mr-2 w-4 h-4" />
+                  <Zap className="mr-2 w-5 h-5" />
                   {t('cta.quickCheck')}
-                  <ArrowRight className="ml-2 w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Button>
                 <Link href="/cases" className="w-full sm:w-auto">
                   <Button
-                    size="default"
+                    size="lg"
                     variant="outline"
-                    className="border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 w-full sm:w-auto h-12 sm:h-11 text-base sm:text-base px-6 sm:px-5 py-3 sm:py-2.5 font-semibold sm:font-medium"
+                    className="border-white/25 text-white hover:bg-white/10 hover:border-white/40 w-full sm:w-auto h-14 text-base font-medium px-8 rounded-lg transition-all duration-300"
                   >
                     {t('cta.seeHow')}
                   </Button>
@@ -178,12 +164,12 @@ export default function AgentReadinessHero() {
             ) : (
               <div className="max-w-2xl mx-auto">
                 <AgentReadinessQuickCheck />
-                
-                <div className="text-center mt-3 sm:mt-4">
+
+                <div className="text-center mt-6">
                   <Button
                     onClick={() => setShowQuickCheck(false)}
-                    variant="outline"
-                    className="border-white/20 text-white/70 hover:bg-white/5 min-h-[44px] px-3 sm:px-4 py-2 text-xs sm:text-sm"
+                    variant="ghost"
+                    className="text-white/60 hover:text-white hover:bg-white/5 px-4 py-2 text-sm"
                   >
                     {t('cta.back')}
                   </Button>
@@ -192,18 +178,19 @@ export default function AgentReadinessHero() {
             )}
           </motion.div>
 
+          {/* Trust Badge */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
             className="text-center"
           >
-            <p className="text-xs sm:text-sm text-white/50 mb-2 text-center">
+            <p className="text-xs sm:text-sm text-white/40 mb-3 uppercase tracking-wider font-medium">
               {t('badge')}
             </p>
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white/90 text-center leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-white/75 max-w-2xl mx-auto leading-relaxed">
               {t('explanation')}{' '}
-              <span style={{ color: '#F87315' }}>{t('reason')}</span>
+              <span className="text-[#FF9F43] font-medium">{t('reason')}</span>
             </p>
           </motion.div>
         </div>

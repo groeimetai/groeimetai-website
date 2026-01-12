@@ -1,0 +1,145 @@
+name: Cleanup Artifact Registry
+
+on:
+  schedule:
+    # Run every Sunday at 3 AM UTC
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+    inputs:
+      keep_latest:
+        description: 'Number of recent images to keep'
+        required: false
+        default: '5'
+      dry_run:
+        description: 'Dry run (no actual deletion)'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  REGION: europe-west1
+  REPOSITORY: groeimetai-app
+  IMAGE_NAME: groeimetai-app
+  KEEP_LATEST: ${{ github.event.inputs.keep_latest || '5' }}
+
+jobs:
+  cleanup:
+    name: Cleanup Old Docker Images
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Get current storage info
+        run: |
+          echo "📊 Current Artifact Registry contents:"
+          gcloud artifacts docker images list \
+            ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }} \
+            --format="table(package,version,createTime,updateTime)" \
+            --sort-by=~createTime \
+            --limit=20 || echo "Could not list images"
+
+      - name: Count images
+        id: count
+        run: |
+          TOTAL=$(gcloud artifacts docker images list \
+            ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }} \
+            --format="value(version)" 2>/dev/null | wc -l | tr -d ' ')
+          echo "total=$TOTAL" >> $GITHUB_OUTPUT
+          echo "📦 Total images: $TOTAL"
+
+      - name: Calculate cleanup
+        id: calc
+        run: |
+          TOTAL=${{ steps.count.outputs.total }}
+          KEEP=${{ env.KEEP_LATEST }}
+          DELETE=$((TOTAL - KEEP))
+          if [ $DELETE -lt 0 ]; then DELETE=0; fi
+          echo "to_delete=$DELETE" >> $GITHUB_OUTPUT
+          echo "🗑️ Images to delete: $DELETE (keeping $KEEP)"
+
+      - name: Delete old images
+        if: steps.calc.outputs.to_delete > 0 && github.event.inputs.dry_run != 'true'
+        run: |
+          KEEP=${{ env.KEEP_LATEST }}
+
+          # Get all image versions sorted by creation time (oldest first)
+          IMAGES=$(gcloud artifacts docker images list \
+            ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }} \
+            --format="value(version)" \
+            --sort-by=createTime)
+
+          TOTAL=$(echo "$IMAGES" | wc -l | tr -d ' ')
+          DELETE_COUNT=$((TOTAL - KEEP))
+
+          if [ $DELETE_COUNT -gt 0 ]; then
+            echo "🗑️ Deleting $DELETE_COUNT old images..."
+
+            # Get images to delete (all except latest N)
+            TO_DELETE=$(echo "$IMAGES" | head -n $DELETE_COUNT)
+
+            DELETED=0
+            for VERSION in $TO_DELETE; do
+              IMAGE_PATH="${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}@${VERSION}"
+              echo "Deleting: $VERSION"
+              if gcloud artifacts docker images delete "$IMAGE_PATH" --quiet --delete-tags 2>/dev/null; then
+                ((DELETED++))
+              else
+                echo "⚠️ Failed to delete $VERSION"
+              fi
+            done
+
+            echo "✅ Deleted $DELETED images"
+          fi
+
+      - name: Dry run report
+        if: github.event.inputs.dry_run == 'true'
+        run: |
+          echo "🔍 DRY RUN - Would delete these images:"
+          KEEP=${{ env.KEEP_LATEST }}
+
+          IMAGES=$(gcloud artifacts docker images list \
+            ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }} \
+            --format="value(version)" \
+            --sort-by=createTime)
+
+          TOTAL=$(echo "$IMAGES" | wc -l | tr -d ' ')
+          DELETE_COUNT=$((TOTAL - KEEP))
+
+          if [ $DELETE_COUNT -gt 0 ]; then
+            echo "$IMAGES" | head -n $DELETE_COUNT
+          else
+            echo "No images would be deleted"
+          fi
+
+      - name: Show remaining images
+        run: |
+          echo ""
+          echo "📦 Remaining images after cleanup:"
+          gcloud artifacts docker images list \
+            ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }} \
+            --format="table(package,version,createTime)" \
+            --sort-by=~createTime \
+            --limit=10 || echo "Could not list images"
+
+      - name: Summary
+        run: |
+          echo "================================================"
+          echo "🧹 Artifact Registry Cleanup Complete"
+          echo "================================================"
+          echo "Images before: ${{ steps.count.outputs.total }}"
+          echo "Images deleted: ${{ steps.calc.outputs.to_delete }}"
+          echo "Images kept: ${{ env.KEEP_LATEST }}"
