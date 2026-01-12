@@ -64,38 +64,46 @@ export default function ForEveryBusiness() {
   ];
 
   return (
-    <section className="py-24 relative" style={{ backgroundColor: '#080D14' }}>
-      <div className="container mx-auto px-4">
+    <section className="py-20 sm:py-28 lg:py-36 relative" style={{ backgroundColor: '#080D14' }}>
+      {/* Subtle section divider */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+            className="text-center mb-16 sm:mb-20"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 tracking-[-0.02em]">
               {t('title')}{' '}
-              <span 
-                className="text-white px-4 py-2 inline-block"
-                style={{ background: 'linear-gradient(135deg, #F87315, #FF8533)' }}
+              <span
+                className="text-white px-3 py-1 sm:px-4 sm:py-2 inline-block"
+                style={{
+                  background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                  boxShadow: '0 8px 32px -8px rgba(248, 115, 21, 0.4)',
+                }}
               >
                 {t('highlight')}
               </span>{' '}
               {t('titleEnd')}
             </h2>
-            <p className="text-xl text-white/70 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-white/65 max-w-3xl mx-auto leading-relaxed">
               {t('subtitle')}
             </p>
           </motion.div>
 
           {/* Steps Cards */}
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-16">
             {steps.map((step, index) => (
               <motion.div
                 key={step.number}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
+                transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true }}
                 className="relative group"
               >
                 {/* Connection Line */}
@@ -107,43 +115,43 @@ export default function ForEveryBusiness() {
                   </div>
                 )}
 
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-8 h-full hover:border-white/20 hover:bg-white/10 transition-all duration-300 flex flex-col">
+                <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-6 sm:p-8 h-full hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300 flex flex-col">
                   {/* Step Number */}
                   <div className="flex items-center justify-between mb-6">
-                    <div 
-                      className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold text-white"
-                      style={{ backgroundColor: '#F87315' }}
+                    <div
+                      className="w-14 h-14 rounded-xl flex items-center justify-center text-xl font-bold text-white transition-transform duration-300 group-hover:scale-105"
+                      style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
                     >
                       {step.number}
                     </div>
-                    <step.icon className="w-8 h-8 text-white/60" />
+                    <step.icon className="w-7 h-7 text-white/50" />
                   </div>
 
                   {/* Content */}
                   <div className="flex-grow">
-                    <h3 className="text-2xl font-bold text-white mb-2">{step.title}</h3>
-                    <p className="text-lg font-medium text-white/90 mb-4">{step.subtitle}</p>
-                    <p className="text-white/70 mb-6 leading-relaxed">{step.description}</p>
-                    
+                    <h3 className="text-xl font-semibold text-white mb-2">{step.title}</h3>
+                    <p className="text-base font-medium text-white/85 mb-3">{step.subtitle}</p>
+                    <p className="text-white/60 mb-6 text-sm leading-relaxed">{step.description}</p>
+
                     {/* Features */}
-                    <div className="space-y-2 mb-6">
+                    <div className="space-y-2.5 mb-6">
                       {step.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center text-white/80 text-sm">
-                          <CheckCircle className="w-4 h-4 mr-3 flex-shrink-0" style={{ color: '#F87315' }} />
+                        <div key={idx} className="flex items-start text-white/70 text-sm">
+                          <CheckCircle className="w-4 h-4 mr-2.5 mt-0.5 flex-shrink-0 text-[#FF9F43]" />
                           {feature}
                         </div>
                       ))}
                     </div>
-                    
+
                     {/* Price & Timing */}
                     <div className="flex items-center justify-between text-sm mb-6">
-                      <div className="flex items-center">
-                        <Calendar className="w-4 h-4 mr-2" style={{ color: '#F87315' }} />
-                        <span className="text-white/60">Tijd:</span>
+                      <div className="flex items-center text-white/55">
+                        <Calendar className="w-4 h-4 mr-2 text-[#FF9F43]" />
+                        <span>Tijd:</span>
                         <span className="text-white font-medium ml-1">{step.timeframe}</span>
                       </div>
-                      <div 
-                        className="px-3 py-1 rounded-full text-sm font-bold text-white"
+                      <div
+                        className="px-3 py-1 rounded-full text-xs font-semibold text-white"
                         style={{ backgroundColor: step.pricing === 'GRATIS' ? '#10B981' : '#F87315' }}
                       >
                         {step.pricing}
@@ -154,9 +162,12 @@ export default function ForEveryBusiness() {
                   {/* CTA Button - altijd onderaan */}
                   <div className="mt-auto">
                     <Link href={step.link}>
-                      <button 
-                        className="w-full py-3 rounded-lg font-semibold text-white transition-all duration-300 hover:shadow-lg transform hover:scale-105 border-0"
-                        style={{ backgroundColor: '#F87315' }}
+                      <button
+                        className="w-full py-3.5 rounded-lg font-medium text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                        style={{
+                          background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                          boxShadow: '0 4px 20px -4px rgba(248, 115, 21, 0.4)',
+                        }}
                       >
                         {step.cta}
                         <ArrowRight className="ml-2 w-4 h-4 inline" />
