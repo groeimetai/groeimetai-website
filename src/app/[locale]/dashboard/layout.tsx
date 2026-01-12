@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 
 export default function DashboardLayout({
   children,
@@ -50,6 +51,10 @@ export default function DashboardLayout({
     );
   }
 
-  // User is authenticated, render dashboard content
-  return <>{children}</>;
+  // User is authenticated, render dashboard content with error boundary
+  return (
+    <DashboardErrorBoundary componentName="Dashboard">
+      {children}
+    </DashboardErrorBoundary>
+  );
 }

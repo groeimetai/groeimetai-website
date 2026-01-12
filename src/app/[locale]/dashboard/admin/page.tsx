@@ -558,34 +558,49 @@ export default function AdminDashboard() {
     };
   }, [user, isAdmin, timeRange]);
 
-  // Real-time active users tracking
+  // Real-time active users tracking with memory leak prevention
   useEffect(() => {
     if (!user || !isAdmin) return;
 
+    // Flag to prevent state updates after unmount
+    let isMounted = true;
+
     // Track this admin as online
     const markUserOnline = async () => {
-      if (user) {
+      if (!isMounted || !user) return;
+      try {
         await updateDoc(doc(db, 'users', user.uid), {
           lastActive: serverTimestamp(),
           isOnline: true,
         });
+      } catch (error) {
+        console.error('Error marking user online:', error);
       }
     };
 
     // Query for online users (active in last 5 minutes)
     const checkOnlineUsers = async () => {
-      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
-      const onlineQuery = query(
-        collection(db, 'users'),
-        where('lastActive', '>=', Timestamp.fromDate(fiveMinutesAgo))
-      );
+      if (!isMounted) return;
+      try {
+        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+        const onlineQuery = query(
+          collection(db, 'users'),
+          where('lastActive', '>=', Timestamp.fromDate(fiveMinutesAgo))
+        );
 
-      const snapshot = await getDocs(onlineQuery);
-      const onlineUserIds = snapshot.docs
-        .filter((doc) => !doc.data().isDeleted) // Exclude deleted users
-        .map((doc) => doc.id);
-      setOnlineUsers(onlineUserIds);
-      setActiveUsers(onlineUserIds.length);
+        const snapshot = await getDocs(onlineQuery);
+
+        // Only update state if still mounted
+        if (isMounted) {
+          const onlineUserIds = snapshot.docs
+            .filter((docSnapshot) => !docSnapshot.data().isDeleted)
+            .map((docSnapshot) => docSnapshot.id);
+          setOnlineUsers(onlineUserIds);
+          setActiveUsers(onlineUserIds.length);
+        }
+      } catch (error) {
+        console.error('Error checking online users:', error);
+      }
     };
 
     // Mark user as online initially
@@ -594,12 +609,15 @@ export default function AdminDashboard() {
 
     // Update online status periodically
     const interval = setInterval(() => {
-      markUserOnline();
-      checkOnlineUsers();
+      if (isMounted) {
+        markUserOnline();
+        checkOnlineUsers();
+      }
     }, 30000); // Check every 30 seconds
 
-    // Mark user as offline on unmount
+    // Cleanup: Mark user as offline on unmount
     return () => {
+      isMounted = false;
       clearInterval(interval);
       if (user) {
         updateDoc(doc(db, 'users', user.uid), {

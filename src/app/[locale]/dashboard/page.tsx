@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,31 +15,62 @@ import EngagementDashboard from '@/components/dashboard/EngagementDashboard';
 import CustomerJourneyWidget from '@/components/dashboard/CustomerJourneyWidget';
 import { useTranslations } from 'next-intl';
 import { useDashboardOverview, useSystemMetrics, usePerformanceMetrics } from '@/hooks/useDashboardData';
-import { 
+import {
   BarChart3, Activity, FileText, User,
   TrendingUp, Clock, CheckCircle,
   Download, Database,
   Brain, Target, ArrowRight,
-  AlertTriangle
+  AlertTriangle,
+  Loader2
 } from 'lucide-react';
 import { DashboardStatsSkeleton, MetricCardSkeleton } from '@/components/ui/LoadingSkeleton';
+
+// Type definitions for better type safety
+interface AssessmentData {
+  id: string;
+  score: number | string;
+  level: string;
+  timestamp: string;
+}
+
+interface ExpertAssessmentData {
+  assessmentStage: string;
+  status: string;
+  createdAt?: { seconds: number };
+  paidAt?: boolean;
+}
+
+interface AgentReadinessAssessment {
+  id: string;
+  score?: number;
+  level?: string;
+  status: string;
+  company?: string;
+  role?: string;
+  systems?: string[];
+  reportId?: string;
+  createdAt?: string;
+}
 
 function DashboardPageContent() {
   const t = useTranslations('dashboard');
   const [activeTab, setActiveTab] = useState('overview');
   const [isLiveMode, setIsLiveMode] = useState(true);
   const [lastUpdate, setLastUpdate] = useState('--:--:--');
-  const { user } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [assessmentData, setAssessmentData] = useState<any>(null);
-  const [expertAssessmentData, setExpertAssessmentData] = useState<any>(null);
-  const [agentReadinessAssessments, setAgentReadinessAssessments] = useState<any[]>([]);
+  const { user, loading: authLoading } = useAuth();
+  const [assessmentData, setAssessmentData] = useState<AssessmentData | null>(null);
+  const [expertAssessmentData, setExpertAssessmentData] = useState<ExpertAssessmentData | null>(null);
+  const [agentReadinessAssessments, setAgentReadinessAssessments] = useState<AgentReadinessAssessment[]>([]);
   const searchParams = useSearchParams();
 
   // Use our new data hooks
   const { stats, projects, activities, loading: dashboardLoading, error: dashboardError } = useDashboardOverview();
   const { metrics: systemMetrics, loading: metricsLoading, error: metricsError } = useSystemMetrics();
   const { metrics: performanceMetrics, loading: perfLoading, error: perfError } = usePerformanceMetrics();
+
+  // Unified loading state for better UX
+  const isInitialLoading = authLoading || (dashboardLoading && metricsLoading && perfLoading);
+  const hasAnyError = dashboardError || metricsError || perfError;
 
   // User profile state
   const [userProfile, setUserProfile] = useState({
@@ -48,44 +79,44 @@ function DashboardPageContent() {
     lastLogin: 'Recent'
   });
 
-  // Load Expert Assessment data
-  useEffect(() => {
-    if (user) {
-      loadExpertAssessmentData();
-      loadAgentReadinessAssessments();
-    }
-  }, [user]);
+  // Memoized data fetching functions to prevent unnecessary re-renders
+  const loadExpertAssessmentData = useCallback(async () => {
+    if (!user?.uid) return;
 
-  const loadExpertAssessmentData = async () => {
-    if (!user) return;
-    
     try {
       const response = await fetch(`/api/expert-assessment/get-project?userId=${user.uid}`);
       const data = await response.json();
-      
+
       if (data.success && data.assessment) {
         setExpertAssessmentData(data.assessment);
       }
     } catch (error) {
       console.error('Failed to load Expert Assessment data:', error);
     }
-  };
+  }, [user?.uid]);
 
-  const loadAgentReadinessAssessments = async () => {
-    if (!user) return;
-    
+  const loadAgentReadinessAssessments = useCallback(async () => {
+    if (!user?.uid || !user?.email) return;
+
     try {
-      // Try both userId and email to catch assessments
       const response = await fetch(`/api/assessment/get-user-assessments?userId=${user.uid}&userEmail=${user.email}`);
       const data = await response.json();
-      
+
       if (data.success && data.assessments) {
         setAgentReadinessAssessments(data.assessments);
       }
     } catch (error) {
       console.error('Failed to load Agent Readiness Assessments:', error);
     }
-  };
+  }, [user?.uid, user?.email]);
+
+  // Load assessment data when user is available
+  useEffect(() => {
+    if (user?.uid) {
+      loadExpertAssessmentData();
+      loadAgentReadinessAssessments();
+    }
+  }, [user?.uid, loadExpertAssessmentData, loadAgentReadinessAssessments]);
 
   // Handle URL parameters and user data
   useEffect(() => {
@@ -131,17 +162,32 @@ function DashboardPageContent() {
     const updateTimestamp = () => {
       setLastUpdate(new Date().toLocaleTimeString());
     };
-    
+
     updateTimestamp();
     const interval = setInterval(updateTimestamp, 60000); // Update every minute
-    
+
     return () => clearInterval(interval);
   }, []);
 
-  if (loading) {
+  // User guard - show loading while auth is being checked
+  if (authLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white">{t('loadingDashboard')}</div>
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-orange-500 mx-auto mb-4" />
+          <p className="text-white/60">{t('loadingDashboard')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // User guard - redirect handled by layout, but show message as fallback
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-white">Redirecting to login...</p>
+        </div>
       </div>
     );
   }

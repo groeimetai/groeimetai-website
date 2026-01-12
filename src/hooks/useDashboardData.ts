@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { DashboardService, Project, AgentActivity, SystemMetrics } from '@/services/firestore/dashboard';
 import { activityLogger } from '@/services/activityLogger';
 import { useAuth } from '@/contexts/AuthContext';
@@ -28,6 +28,35 @@ export interface RealtimeActivity {
   type: 'success' | 'warning' | 'info' | 'error';
 }
 
+// Journey data interface for type safety
+export interface JourneyData {
+  stage: string;
+  projects: Project[];
+  activities: ActivityLog[];
+  milestonesCompleted: number;
+  nextMilestone: string;
+}
+
+// Activity log interface
+interface ActivityLog {
+  id?: string;
+  timestamp: { toDate: () => Date };
+  action: string;
+  userName?: string;
+  userEmail: string;
+  description?: string;
+  severity?: 'info' | 'warning' | 'error';
+}
+
+// Performance metric interface
+export interface PerformanceMetric {
+  name: string;
+  current: string;
+  target: string;
+  trend: 'up' | 'down' | 'stable';
+  status: 'good' | 'warning' | 'critical';
+}
+
 // Hook for dashboard overview data
 export const useDashboardOverview = () => {
   const { user } = useAuth();
@@ -37,18 +66,25 @@ export const useDashboardOverview = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Use ref to track mounted state and prevent memory leaks
+  const isMountedRef = useRef(true);
+
   const fetchStats = useCallback(async () => {
-    if (!user) return;
+    if (!user?.uid) return;
 
     try {
       setLoading(true);
-      
+
       // Fetch user's projects
       const userProjects = await DashboardService.getUserProjects(user.uid);
+
+      // Only update state if still mounted
+      if (!isMountedRef.current) return;
+
       setProjects(userProjects);
 
       // Calculate stats from real data
-      const activeProjectsCount = userProjects.filter(p => 
+      const activeProjectsCount = userProjects.filter(p =>
         ['pilot', 'implementation', 'live'].includes(p.status)
       ).length;
 
@@ -58,6 +94,8 @@ export const useDashboardOverview = () => {
         pageSize: 10
       });
 
+      if (!isMountedRef.current) return;
+
       // Convert activity logs to dashboard activities
       const realtimeActivities: RealtimeActivity[] = activityData.logs.map(log => ({
         id: log.id || '',
@@ -65,7 +103,7 @@ export const useDashboardOverview = () => {
         action: log.action,
         user: log.userName || log.userEmail,
         description: log.description || getActionDescription(log.action),
-        type: log.severity === 'error' ? 'error' : 
+        type: log.severity === 'error' ? 'error' :
               log.severity === 'warning' ? 'warning' : 'info'
       }));
 
@@ -74,49 +112,63 @@ export const useDashboardOverview = () => {
       // Get system metrics if available
       const systemMetrics = await DashboardService.getSystemMetrics(user.uid);
 
+      if (!isMountedRef.current) return;
+
       // Build dashboard stats
       const dashboardStats: DashboardStats = {
         activeProjects: activeProjectsCount,
         messages: realtimeActivities.filter(a => a.action.includes('message')).length,
         consultations: userProjects.filter(p => p.status === 'assessment').length,
         teamMembers: systemMetrics?.activeAgents || 0,
-        totalUsers: 1, // Current user for now
+        totalUsers: 1,
         systemUptime: systemMetrics?.uptime || 99.9,
         monthlyGrowth: calculateMonthlyGrowth(userProjects),
-        activeSessions: 1 // Current session
+        activeSessions: 1
       };
 
       setStats(dashboardStats);
       setError(null);
     } catch (err) {
+      if (!isMountedRef.current) return;
       console.error('Error fetching dashboard data:', err);
       setError('Failed to load dashboard data');
     } finally {
-      setLoading(false);
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
     }
-  }, [user]);
+  }, [user?.uid]);
 
+  // Initial fetch and cleanup
   useEffect(() => {
+    isMountedRef.current = true;
     fetchStats();
+
+    return () => {
+      isMountedRef.current = false;
+    };
   }, [fetchStats]);
 
-  // Real-time subscription for projects
+  // Real-time subscription for projects - separate from initial fetch
   useEffect(() => {
-    if (!user) return;
+    if (!user?.uid) return;
 
     const unsubscribe = DashboardService.subscribeToProjects(user.uid, (updatedProjects) => {
+      if (!isMountedRef.current) return;
+
       setProjects(updatedProjects);
-      
-      // Update stats when projects change - FIXED: Remove stats dependency
-      const activeCount = updatedProjects.filter(p => 
+
+      // Update only activeProjects count in stats using functional update
+      // This prevents dependency on stats and avoids infinite loops
+      const activeCount = updatedProjects.filter(p =>
         ['pilot', 'implementation', 'live'].includes(p.status)
       ).length;
-      
+
       setStats(prev => prev ? { ...prev, activeProjects: activeCount } : null);
     });
 
     return unsubscribe;
-  }, [user]); // EMERGENCY FIX: Removed stats dependency causing infinite loop
+  }, [user?.uid]);
 
   return {
     stats,
@@ -134,29 +186,45 @@ export const useSystemMetrics = () => {
   const [metrics, setMetrics] = useState<SystemMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMountedRef = useRef(true);
 
   const fetchMetrics = useCallback(async () => {
-    if (!user) return;
+    if (!user?.uid) return;
 
     try {
       setLoading(true);
       const systemMetrics = await DashboardService.getSystemMetrics(user.uid);
+
+      if (!isMountedRef.current) return;
+
       setMetrics(systemMetrics);
       setError(null);
     } catch (err) {
+      if (!isMountedRef.current) return;
       console.error('Error fetching system metrics:', err);
       setError('Failed to load system metrics');
     } finally {
-      setLoading(false);
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
     }
-  }, [user]);
+  }, [user?.uid]);
 
   useEffect(() => {
+    isMountedRef.current = true;
     fetchMetrics();
-    
-    // EMERGENCY FIX: Reduced polling to 2 minutes to prevent API overload
-    const interval = setInterval(fetchMetrics, 120000);
-    return () => clearInterval(interval);
+
+    // Poll every 2 minutes for system metrics updates
+    const interval = setInterval(() => {
+      if (isMountedRef.current) {
+        fetchMetrics();
+      }
+    }, 120000);
+
+    return () => {
+      isMountedRef.current = false;
+      clearInterval(interval);
+    };
   }, [fetchMetrics]);
 
   return {
@@ -199,20 +267,23 @@ export const useActivityFeed = (limit: number = 50) => {
 // Hook for user journey tracking
 export const useUserJourney = () => {
   const { user } = useAuth();
-  const [journeyData, setJourneyData] = useState<any>(null);
+  const [journeyData, setJourneyData] = useState<JourneyData | null>(null);
   const [currentStage, setCurrentStage] = useState<string>('assessment');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMountedRef = useRef(true);
 
   const fetchJourneyData = useCallback(async () => {
-    if (!user) return;
+    if (!user?.uid) return;
 
     try {
       setLoading(true);
-      
+
       // Get user's projects to determine journey stage
       const userProjects = await DashboardService.getUserProjects(user.uid);
-      
+
+      if (!isMountedRef.current) return;
+
       // Determine current stage based on project status
       let stage = 'assessment';
       if (userProjects.some(p => p.status === 'live')) {
@@ -231,6 +302,8 @@ export const useUserJourney = () => {
         pageSize: 100
       });
 
+      if (!isMountedRef.current) return;
+
       setJourneyData({
         stage,
         projects: userProjects,
@@ -241,15 +314,23 @@ export const useUserJourney = () => {
 
       setError(null);
     } catch (err) {
+      if (!isMountedRef.current) return;
       console.error('Error fetching journey data:', err);
       setError('Failed to load journey data');
     } finally {
-      setLoading(false);
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
     }
-  }, [user]);
+  }, [user?.uid]);
 
   useEffect(() => {
+    isMountedRef.current = true;
     fetchJourneyData();
+
+    return () => {
+      isMountedRef.current = false;
+    };
   }, [fetchJourneyData]);
 
   return {
@@ -264,32 +345,48 @@ export const useUserJourney = () => {
 // Hook for performance metrics
 export const usePerformanceMetrics = () => {
   const { user } = useAuth();
-  const [metrics, setMetrics] = useState<any[]>([]);
+  const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMountedRef = useRef(true);
 
   const fetchMetrics = useCallback(async () => {
-    if (!user) return;
+    if (!user?.uid) return;
 
     try {
       setLoading(true);
       const performanceData = await DashboardService.getPerformanceMetrics(user.uid);
-      setMetrics(performanceData);
+
+      if (!isMountedRef.current) return;
+
+      setMetrics(performanceData as PerformanceMetric[]);
       setError(null);
     } catch (err) {
+      if (!isMountedRef.current) return;
       console.error('Error fetching performance metrics:', err);
       setError('Failed to load performance metrics');
     } finally {
-      setLoading(false);
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
     }
-  }, [user]);
+  }, [user?.uid]);
 
   useEffect(() => {
+    isMountedRef.current = true;
     fetchMetrics();
-    
-    // EMERGENCY FIX: Reduced polling to 5 minutes to prevent API overload
-    const interval = setInterval(fetchMetrics, 300000);
-    return () => clearInterval(interval);
+
+    // Poll every 5 minutes for performance metrics updates
+    const interval = setInterval(() => {
+      if (isMountedRef.current) {
+        fetchMetrics();
+      }
+    }, 300000);
+
+    return () => {
+      isMountedRef.current = false;
+      clearInterval(interval);
+    };
   }, [fetchMetrics]);
 
   return {
