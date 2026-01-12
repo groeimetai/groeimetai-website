@@ -143,7 +143,7 @@ export const EngagementDashboard: React.FC = () => {
     return {
       overallCompletion: stageProgress[currentStage as keyof typeof stageProgress] || 0,
       currentPhase: currentStage.charAt(0).toUpperCase() + currentStage.slice(1),
-      daysActive: Math.floor((Date.now() - (journeyData.activities?.[0]?.timestamp?.seconds * 1000 || Date.now())) / (1000 * 60 * 60 * 24)),
+      daysActive: Math.floor((Date.now() - (journeyData.activities?.[0]?.timestamp?.toDate?.().getTime() || Date.now())) / (1000 * 60 * 60 * 24)),
       consultationsCompleted: journeyData.projects?.filter((p: any) => p.type === 'consultation').length || 0,
       nextMilestone: journeyData.nextMilestone || 'Complete Assessment',
     };
