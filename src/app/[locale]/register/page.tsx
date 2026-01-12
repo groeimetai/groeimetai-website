@@ -28,10 +28,9 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  
-  // Get URL parameters for pre-filling
+
   const [urlParams, setUrlParams] = useState<URLSearchParams | null>(null);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     company: '',
@@ -40,16 +39,15 @@ export default function RegisterPage() {
     confirmPassword: '',
   });
 
-  // Pre-fill form with assessment data
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       setUrlParams(params);
-      
+
       setFormData(prev => ({
         ...prev,
         name: params.get('name') || '',
-        company: params.get('company') || '', 
+        company: params.get('company') || '',
         email: params.get('email') || ''
       }));
     }
@@ -70,8 +68,7 @@ export default function RegisterPage() {
         displayName: formData.name,
         company: formData.company,
       });
-      
-      // Redirect to dashboard with assessment context if available
+
       const assessmentId = urlParams?.get('assessment');
       if (assessmentId) {
         router.push(`/dashboard?assessment=${assessmentId}&first=true`);
@@ -92,10 +89,8 @@ export default function RegisterPage() {
     try {
       await loginWithGoogle();
 
-      // If we have assessment data, attach it to the user profile
       const assessmentId = urlParams?.get('assessment');
       if (assessmentId && user) {
-        // Store assessment association
         await fetch('/api/user/link-assessment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -106,8 +101,7 @@ export default function RegisterPage() {
           })
         });
       }
-      
-      // Redirect with assessment context
+
       if (assessmentId) {
         router.push(`/dashboard?assessment=${assessmentId}&first=true`);
       } else {
@@ -144,59 +138,62 @@ export default function RegisterPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center px-4 py-32 sm:py-20">
+    <main className="min-h-screen bg-black flex items-center justify-center px-4 py-28 sm:py-16">
       <div className="w-full max-w-6xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left side - Register Form */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="mb-8">
               <Link
                 href="/"
-                className="inline-flex items-center text-white/60 hover:text-orange mb-8 sm:mb-12 transition-colors"
+                className="inline-flex items-center text-white/55 hover:text-[#FF9F43] mb-8 sm:mb-10 transition-colors text-sm"
               >
                 <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
                 Terug naar home
               </Link>
-              <h1 className="text-4xl font-bold text-white mb-2">
+              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3 tracking-[-0.02em]">
                 Maak je{' '}
                 <span
-                  className="text-white px-3 py-1 inline-block"
-                  style={{ background: 'linear-gradient(135deg, #F87315, #FF8533)' }}
+                  className="text-white px-2 py-0.5 inline-block"
+                  style={{
+                    background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                    boxShadow: '0 4px 16px -4px rgba(248, 115, 21, 0.4)',
+                  }}
                 >
                   Agent Readiness
                 </span>{' '}
                 Account
               </h1>
-              <p className="text-white/60 text-lg">
+              <p className="text-white/60 text-base sm:text-lg">
                 Start je journey naar een agent-ready organisatie
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
               {error && (
-                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 flex items-start space-x-3">
-                  <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-red-500">{error}</p>
+                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 flex items-start space-x-3">
+                  <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-red-400">{error}</p>
                 </div>
               )}
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="name" className="text-white">
+                  <Label htmlFor="name" className="text-white/80 text-sm">
                     Naam *
                   </Label>
-                  <div className="relative mt-1">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+                  <div className="relative mt-1.5">
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40" />
                     <Input
                       id="name"
                       type="text"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                      className="pl-10 bg-white/[0.03] border-white/15 text-white placeholder:text-white/35 focus:border-[#FF9F43] transition-colors"
                       placeholder="Je naam"
                       required
                     />
@@ -204,17 +201,17 @@ export default function RegisterPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="company" className="text-white">
+                  <Label htmlFor="company" className="text-white/80 text-sm">
                     Bedrijf
                   </Label>
-                  <div className="relative mt-1">
-                    <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+                  <div className="relative mt-1.5">
+                    <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40" />
                     <Input
                       id="company"
                       type="text"
                       value={formData.company}
                       onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                      className="pl-10 bg-white/[0.03] border-white/15 text-white placeholder:text-white/35 focus:border-[#FF9F43] transition-colors"
                       placeholder="Bedrijfsnaam"
                     />
                   </div>
@@ -222,17 +219,17 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <Label htmlFor="email" className="text-white">
+                <Label htmlFor="email" className="text-white/80 text-sm">
                   Email *
                 </Label>
-                <div className="relative mt-1">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+                <div className="relative mt-1.5">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40" />
                   <Input
                     id="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                    className="pl-10 bg-white/[0.03] border-white/15 text-white placeholder:text-white/35 focus:border-[#FF9F43] transition-colors"
                     placeholder="je@bedrijf.nl"
                     required
                   />
@@ -240,17 +237,17 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <Label htmlFor="password" className="text-white">
+                <Label htmlFor="password" className="text-white/80 text-sm">
                   Wachtwoord *
                 </Label>
-                <div className="relative mt-1">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+                <div className="relative mt-1.5">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40" />
                   <Input
                     id="password"
                     type="password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                    className="pl-10 bg-white/[0.03] border-white/15 text-white placeholder:text-white/35 focus:border-[#FF9F43] transition-colors"
                     placeholder="Minimaal 6 karakters"
                     required
                     minLength={6}
@@ -259,17 +256,17 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <Label htmlFor="confirmPassword" className="text-white">
+                <Label htmlFor="confirmPassword" className="text-white/80 text-sm">
                   Bevestig Wachtwoord *
                 </Label>
-                <div className="relative mt-1">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+                <div className="relative mt-1.5">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40" />
                   <Input
                     id="confirmPassword"
                     type="password"
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                    className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                    className="pl-10 bg-white/[0.03] border-white/15 text-white placeholder:text-white/35 focus:border-[#FF9F43] transition-colors"
                     placeholder="Herhaal je wachtwoord"
                     required
                     minLength={6}
@@ -280,8 +277,11 @@ export default function RegisterPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full text-white py-6 text-lg font-medium"
-                style={{ backgroundColor: '#F87315' }}
+                className="w-full h-12 text-white font-medium rounded-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                style={{
+                  background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                  boxShadow: '0 4px 20px -4px rgba(248, 115, 21, 0.5)',
+                }}
               >
                 {isLoading ? (
                   <>
@@ -300,10 +300,10 @@ export default function RegisterPage() {
             {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/20" />
+                <div className="w-full border-t border-white/15" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-black text-white/60">of</span>
+                <span className="px-4 bg-black text-white/50">of</span>
               </div>
             </div>
 
@@ -313,7 +313,7 @@ export default function RegisterPage() {
               onClick={handleGoogleSignIn}
               disabled={isGoogleLoading}
               variant="outline"
-              className="w-full border-white/20 hover:bg-white/10 text-white py-6 text-lg font-medium"
+              className="w-full h-12 border-white/15 hover:bg-white/[0.05] hover:border-white/30 text-white font-medium rounded-lg transition-all duration-300"
             >
               {isGoogleLoading ? (
                 <>
@@ -346,12 +346,11 @@ export default function RegisterPage() {
             </Button>
 
             <div className="mt-8 text-center">
-              <p className="text-white/60">
+              <p className="text-white/55 text-sm">
                 Heb je al een account?{' '}
                 <Link
                   href="/login"
-                  className="font-medium transition-colors"
-                  style={{ color: '#F87315' }}
+                  className="text-[#FF9F43] hover:text-[#FF9F43]/80 transition-colors font-medium"
                 >
                   Log in
                 </Link>
@@ -363,38 +362,38 @@ export default function RegisterPage() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:pl-12"
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:pl-8"
           >
             <div className="mb-8">
-              <h2 className="text-3xl font-bold text-white mb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 tracking-[-0.02em]">
                 Waarom een account aanmaken?
               </h2>
-              <p className="text-white/70 text-lg">
+              <p className="text-white/65 text-base sm:text-lg">
                 Krijg toegang tot gepersonaliseerde Agent Readiness tools en expertise.
               </p>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               {benefits.map((benefit, index) => (
                 <motion.div
                   key={benefit.title}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                  className="flex items-start space-x-4 p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300"
+                  transition={{ duration: 0.5, delay: 0.2 + index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex items-start space-x-4 p-4 bg-white/[0.03] rounded-xl border border-white/10 hover:bg-white/[0.05] hover:border-white/20 transition-all duration-300"
                 >
-                  <div 
-                    className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
-                    style={{ backgroundColor: '#F87315' }}
+                  <div
+                    className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
                   >
-                    <benefit.icon className="w-6 h-6 text-white" />
+                    <benefit.icon className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-2">
+                    <h3 className="text-base font-semibold text-white mb-1">
                       {benefit.title}
                     </h3>
-                    <p className="text-white/70 text-sm leading-relaxed">
+                    <p className="text-white/60 text-sm leading-relaxed">
                       {benefit.description}
                     </p>
                   </div>
@@ -404,38 +403,36 @@ export default function RegisterPage() {
 
             {/* Trust Indicators */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-              className="mt-8 p-6 bg-white/5 rounded-xl border border-white/10"
+              transition={{ duration: 0.5, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-6 p-5 bg-white/[0.03] rounded-xl border border-white/10"
             >
               <div className="grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <div className="text-2xl font-bold text-white">2+</div>
-                  <div className="text-white/60 text-xs">Jaar AI Expertise</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-white">1M+</div>
-                  <div className="text-white/60 text-xs">Tokens Verwerkt</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-white">100%</div>
-                  <div className="text-white/60 text-xs">GDPR Compliant</div>
-                </div>
+                {[
+                  { value: '2+', label: 'Jaar AI Expertise' },
+                  { value: '1M+', label: 'Tokens Verwerkt' },
+                  { value: '100%', label: 'GDPR Compliant' }
+                ].map((stat, idx) => (
+                  <div key={idx}>
+                    <div className="text-xl font-bold text-white">{stat.value}</div>
+                    <div className="text-white/50 text-xs">{stat.label}</div>
+                  </div>
+                ))}
               </div>
             </motion.div>
 
             {/* Final CTA */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1 }}
-              className="mt-8 text-center"
+              transition={{ duration: 0.5, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-6 p-5 bg-gradient-to-br from-[#F87315]/15 to-[#F87315]/5 rounded-xl border border-[#F87315]/20 text-center"
             >
-              <p className="text-white/80 mb-4">
+              <p className="text-white/85 mb-2">
                 <strong>Ready voor Agent Season 2025?</strong>
               </p>
-              <p className="text-white/60 text-sm">
+              <p className="text-white/55 text-sm">
                 Start je Agent Readiness Assessment direct na registratie
               </p>
             </motion.div>

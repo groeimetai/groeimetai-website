@@ -50,12 +50,10 @@ function LoginPageContent() {
   const [verificationCode, setVerificationCode] = useState('');
   const [verifying2FA, setVerifying2FA] = useState(false);
 
-  // Get return URL from search params and strip locale prefix if present
   useEffect(() => {
     const returnUrlParam = searchParams.get('returnUrl');
     if (returnUrlParam) {
       let cleanUrl = decodeURIComponent(returnUrlParam);
-      // Strip locale prefix if present (e.g., /nl/dashboard -> /dashboard)
       const localePattern = /^\/(nl|en)\//;
       if (localePattern.test(cleanUrl)) {
         cleanUrl = cleanUrl.replace(localePattern, '/');
@@ -71,13 +69,10 @@ function LoginPageContent() {
 
     try {
       await login(formData.email, formData.password);
-      // Redirect to dashboard
       router.push(returnUrl);
     } catch (error: any) {
       console.error('Login failed:', error);
-      console.error('Error code:', error.code); // Debug log to see actual error code
 
-      // Set user-friendly error messages
       if (error.code === 'auth/user-not-found') {
         setError(t('errors.userNotFound'));
       } else if (
@@ -91,7 +86,6 @@ function LoginPageContent() {
       } else if (error.code === 'auth/too-many-requests') {
         setError(t('errors.tooManyRequests'));
       } else if (error.code === 'auth/multi-factor-auth-required') {
-        // Handle 2FA requirement
         setMfaResolver(error.resolver);
         setShow2FADialog(true);
         setIsLoading(false);
@@ -117,14 +111,10 @@ function LoginPageContent() {
     setError('');
 
     try {
-      const userCredential = await twoFactorService.verifyTotpCode(mfaResolver, verificationCode);
-
-      // Successfully authenticated with 2FA
+      await twoFactorService.verifyTotpCode(mfaResolver, verificationCode);
       setShow2FADialog(false);
       setVerificationCode('');
       setMfaResolver(null);
-
-      // Redirect to dashboard
       router.push(returnUrl);
     } catch (error: any) {
       console.error('2FA verification failed:', error);
@@ -141,13 +131,10 @@ function LoginPageContent() {
 
     try {
       await loginWithGoogle();
-      // Redirect to dashboard
       router.push(returnUrl);
     } catch (error: any) {
       console.error('Google login failed:', error);
-      if (error.code === 'auth/popup-closed-by-user') {
-        // User closed the popup, no error message needed
-      } else {
+      if (error.code !== 'auth/popup-closed-by-user') {
         setError(t('errors.general'));
       }
     } finally {
@@ -181,45 +168,45 @@ function LoginPageContent() {
   return (
     <main className="min-h-screen bg-black flex items-center justify-center px-4 py-20 sm:py-12">
       <div className="w-full max-w-6xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left side - Login Form */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="mb-8">
               <Link
                 href="/"
-                className="inline-flex items-center text-white/60 hover:text-orange mb-8 sm:mb-12 transition-colors"
+                className="inline-flex items-center text-white/55 hover:text-[#FF9F43] mb-8 sm:mb-10 transition-colors text-sm"
               >
                 <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
                 {t('backToHome')}
               </Link>
-              <h1 className="text-4xl font-bold text-white mb-2">{t('title')}</h1>
-              <p className="text-white/60 text-lg">{t('subtitle')}</p>
+              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3 tracking-[-0.02em]">{t('title')}</h1>
+              <p className="text-white/60 text-base sm:text-lg">{t('subtitle')}</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
               {error && (
-                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 flex items-start space-x-3">
-                  <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-red-500">{error}</p>
+                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 flex items-start space-x-3">
+                  <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-red-400">{error}</p>
                 </div>
               )}
 
               <div>
-                <Label htmlFor="email" className="text-white">
+                <Label htmlFor="email" className="text-white/80 text-sm">
                   {t('emailLabel')}
                 </Label>
-                <div className="relative mt-1">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+                <div className="relative mt-1.5">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40" />
                   <Input
                     id="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                    className="pl-10 bg-white/[0.03] border-white/15 text-white placeholder:text-white/35 focus:border-[#FF9F43] transition-colors"
                     placeholder={t('emailPlaceholder')}
                     required
                   />
@@ -227,25 +214,25 @@ function LoginPageContent() {
               </div>
 
               <div>
-                <div className="flex justify-between items-center mb-1">
-                  <Label htmlFor="password" className="text-white">
+                <div className="flex justify-between items-center mb-1.5">
+                  <Label htmlFor="password" className="text-white/80 text-sm">
                     {t('passwordLabel')}
                   </Label>
                   <Link
                     href="/forgot-password"
-                    className="text-sm text-orange hover:text-orange/80 transition-colors"
+                    className="text-sm text-[#FF9F43] hover:text-[#FF9F43]/80 transition-colors"
                   >
                     {t('forgotPassword')}
                   </Link>
                 </div>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40" />
                   <Input
                     id="password"
                     type="password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                    className="pl-10 bg-white/[0.03] border-white/15 text-white placeholder:text-white/35 focus:border-[#FF9F43] transition-colors"
                     placeholder={t('passwordPlaceholder')}
                     required
                   />
@@ -255,7 +242,11 @@ function LoginPageContent() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-orange hover:bg-orange/90 text-white py-6 text-lg font-medium"
+                className="w-full h-12 text-white font-medium rounded-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                style={{
+                  background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                  boxShadow: '0 4px 20px -4px rgba(248, 115, 21, 0.5)',
+                }}
               >
                 {isLoading ? (
                   <>
@@ -274,10 +265,10 @@ function LoginPageContent() {
             {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/20" />
+                <div className="w-full border-t border-white/15" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-black text-white/60">{t('orDivider')}</span>
+                <span className="px-4 bg-black text-white/50">{t('orDivider')}</span>
               </div>
             </div>
 
@@ -287,7 +278,7 @@ function LoginPageContent() {
               onClick={handleGoogleSignIn}
               disabled={isGoogleLoading}
               variant="outline"
-              className="w-full border-white/20 hover:bg-white/10 text-white py-6 text-lg font-medium"
+              className="w-full h-12 border-white/15 hover:bg-white/[0.05] hover:border-white/30 text-white font-medium rounded-lg transition-all duration-300"
             >
               {isGoogleLoading ? (
                 <>
@@ -320,11 +311,11 @@ function LoginPageContent() {
             </Button>
 
             <div className="mt-8 text-center">
-              <p className="text-white/60">
+              <p className="text-white/55 text-sm">
                 {t('noAccount')}{' '}
                 <Link
                   href="/register"
-                  className="text-orange hover:text-orange/80 transition-colors font-medium"
+                  className="text-[#FF9F43] hover:text-[#FF9F43]/80 transition-colors font-medium"
                 >
                   {t('getStarted')}
                 </Link>
@@ -336,33 +327,36 @@ function LoginPageContent() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:pl-12"
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:pl-8"
           >
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-              <h2 className="text-2xl font-bold text-white mb-6">{t('portalTitle')}</h2>
-              <div className="space-y-6">
+            <div className="bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-white/10">
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 tracking-[-0.02em]">{t('portalTitle')}</h2>
+              <div className="space-y-5">
                 {benefits.map((benefit, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+                    transition={{ duration: 0.5, delay: 0.2 + index * 0.08, ease: [0.22, 1, 0.36, 1] }}
                     className="flex items-start space-x-4"
                   >
-                    <div className="w-12 h-12 bg-orange/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <benefit.icon className="w-6 h-6 text-orange" />
+                    <div
+                      className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0"
+                      style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
+                    >
+                      <benefit.icon className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-white mb-1">{benefit.title}</h3>
-                      <p className="text-sm text-white/60">{benefit.description}</p>
+                      <h3 className="font-semibold text-white mb-1 text-sm">{benefit.title}</h3>
+                      <p className="text-xs text-white/55 leading-relaxed">{benefit.description}</p>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
-              <div className="mt-8 p-4 bg-orange/10 rounded-lg border border-orange/20">
-                <p className="text-sm text-white">{t('trustMessage')}</p>
+              <div className="mt-6 p-4 bg-gradient-to-br from-[#F87315]/15 to-[#F87315]/5 rounded-xl border border-[#F87315]/20">
+                <p className="text-sm text-white/80">{t('trustMessage')}</p>
               </div>
             </div>
           </motion.div>
@@ -381,11 +375,16 @@ function LoginPageContent() {
 
           <div className="space-y-4 py-4">
             <div className="flex justify-center">
-              <Smartphone className="w-16 h-16 text-orange" />
+              <div
+                className="w-16 h-16 rounded-xl flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
+              >
+                <Smartphone className="w-8 h-8 text-white" />
+              </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="2fa-code" className="text-white">
+              <Label htmlFor="2fa-code" className="text-white/80 text-sm">
                 {t('twoFactor.codeLabel')}
               </Label>
               <Input
@@ -394,14 +393,14 @@ function LoginPageContent() {
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value)}
                 placeholder={t('twoFactor.codePlaceholder')}
-                className="bg-white/5 border-white/20 text-white text-center text-lg"
+                className="bg-white/[0.03] border-white/15 text-white text-center text-lg focus:border-[#FF9F43] transition-colors"
                 maxLength={6}
                 autoFocus
               />
             </div>
 
             {error && (
-              <div className="flex items-center space-x-2 text-red-500 text-sm">
+              <div className="flex items-center space-x-2 text-red-400 text-sm">
                 <AlertCircle className="w-4 h-4" />
                 <span>{error}</span>
               </div>
@@ -418,12 +417,16 @@ function LoginPageContent() {
                 setMfaResolver(null);
               }}
               disabled={verifying2FA}
+              className="text-white/60 hover:text-white hover:bg-white/10"
             >
               {t('twoFactor.cancel')}
             </Button>
             <Button
               onClick={handle2FAVerification}
-              className="bg-orange hover:bg-orange/90"
+              className="text-white"
+              style={{
+                background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+              }}
               disabled={verifying2FA || verificationCode.length !== 6}
             >
               {verifying2FA ? (
@@ -442,7 +445,16 @@ function LoginPageContent() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="text-white">Loading...</div></div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black flex items-center justify-center">
+          <div className="text-white text-center">
+            <div className="w-8 h-8 border-2 border-white/30 border-t-[#FF9F43] rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-white/55">Loading...</p>
+          </div>
+        </div>
+      }
+    >
       <LoginPageContent />
     </Suspense>
   );
