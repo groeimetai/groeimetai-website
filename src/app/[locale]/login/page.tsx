@@ -50,11 +50,17 @@ function LoginPageContent() {
   const [verificationCode, setVerificationCode] = useState('');
   const [verifying2FA, setVerifying2FA] = useState(false);
 
-  // Get return URL from search params
+  // Get return URL from search params and strip locale prefix if present
   useEffect(() => {
     const returnUrlParam = searchParams.get('returnUrl');
     if (returnUrlParam) {
-      setReturnUrl(decodeURIComponent(returnUrlParam));
+      let cleanUrl = decodeURIComponent(returnUrlParam);
+      // Strip locale prefix if present (e.g., /nl/dashboard -> /dashboard)
+      const localePattern = /^\/(nl|en)\//;
+      if (localePattern.test(cleanUrl)) {
+        cleanUrl = cleanUrl.replace(localePattern, '/');
+      }
+      setReturnUrl(cleanUrl);
     }
   }, [searchParams]);
 

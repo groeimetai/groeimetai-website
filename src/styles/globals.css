@@ -80,7 +80,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
   html {
     overflow-x: hidden;
