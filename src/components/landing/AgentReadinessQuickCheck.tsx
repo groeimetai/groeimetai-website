@@ -168,12 +168,16 @@ export function AgentReadinessQuickCheck() {
       <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-xl p-3 sm:p-4 md:p-6 lg:p-8 text-center">
         <div className="mb-6">
           <div
-            className="w-24 h-24 rounded-full mx-auto flex items-center justify-center text-3xl font-bold text-white mb-4"
+            className="w-28 h-28 rounded-full mx-auto flex items-center justify-center mb-4 relative"
             style={{
-              background: `conic-gradient(#F87315 ${score}%, rgba(255,255,255,0.1) ${score}%)`,
+              background: `conic-gradient(#F87315 ${score * 3.6}deg, rgba(255,255,255,0.1) 0deg)`,
             }}
           >
-            {score}
+            {/* Inner circle for text readability */}
+            <div className="absolute inset-1.5 bg-[#080D14] rounded-full flex items-center justify-center flex-col">
+              <span className="text-3xl font-bold text-white">{score}</span>
+              <span className="text-white/50 text-xs">/100</span>
+            </div>
           </div>
           <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2">
             {level}

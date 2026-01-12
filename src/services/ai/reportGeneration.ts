@@ -238,226 +238,211 @@ export class DynamicReportGenerator {
 
   private static buildEnhancedClaudePrompt(data: any, score: number): string {
     const maturityLevel = this.getMaturityLevel(score);
-    const businessContext = {
-      full: data.coreBusiness_raw || data.coreBusiness,
-      cleaned: data.coreBusiness_clean || data.coreBusiness,
-      type: data.businessType || 'organisatie',
-      shortRef: data.shortReference || data.company
-    };
-    
-    return `
-Je bent een MCP Implementation specialist van GroeimetAI die een technisch Agent Readiness rapport schrijft.
-Focus op API→MCP conversie mogelijkheden, NIET op algemene digitalisering of business transformation.
+    const businessType = data.businessType || this.detectBusinessType(data.coreBusiness);
+    const systems = data.systems?.join(', ') || 'systemen';
+    const primarySystem = data.highestImpactSystem || data.systems?.[0] || 'primair systeem';
 
-ORGANISATIE: ${businessContext.shortRef}
-CONTACTPERSOON: ${data.name} (${data.role})
-BUSINESS CONTEXT: ${businessContext.type}
-API LANDSCAPE: ${data.apiIntegrations || data.systems?.join(', ') || 'Systemen niet gespecificeerd'} 
-API DOCUMENTATIE: ${data.apiDocumentation || data.processDocumentation || 'Te bepalen'}
-MAIN CHALLENGE: ${data.apiPainPoint || data.mainBlocker}
-TIMELINE: ${data.timeline || data.budgetReality}
+    const apiScore = this.calculateAPIMaturityScore(data);
+    const dataScore = this.calculateDataMaturityScore(data);
+    const processScore = this.calculateProcessMaturityScore(data);
+    const teamScore = this.calculateOrganizationReadinessScore(data);
 
-MCP READINESS SCORE: ${score}/100 (${maturityLevel})
+    // Determine weakest areas for focus
+    const scores = [
+      { name: 'API Connectivity', score: apiScore, max: 25 },
+      { name: 'Data Access', score: dataScore, max: 25 },
+      { name: 'Process Documentation', score: processScore, max: 25 },
+      { name: 'Team Readiness', score: teamScore, max: 25 }
+    ];
+    const weakestArea = scores.reduce((a, b) => (a.score / a.max) < (b.score / b.max) ? a : b);
+    const strongestArea = scores.reduce((a, b) => (a.score / a.max) > (b.score / b.max) ? a : b);
 
-TECHNISCHE ASSESSMENT DATA:
-- API Volume: ${data.apiVolume || data.dataAccess}
-- API Standards: ${data.apiStandards?.join(', ') || 'REST/standaard'}
-- Current Users: ${data.apiUsers || 'Internal'}
-- Management: ${data.apiManagement || data.itMaturity}
-- Agent Use Case: ${data.agentUseCase || data.costOptimization}
-  * "we zijn een X" → "als ${data.businessType}"
-  * Verwijder alle "wij/we/ons" uit citaten
-  * Maak zinnen grammaticaal correct
+    return `Je bent een senior AI Implementation Consultant van GroeimetAI. Schrijf een waardevol, concreet Agent Readiness rapport.
 
-- Onzekere antwoorden interpreteren:
-  * "Weet nog niet" → "nog te bepalen"
-  * "Geen idee" → "nader te onderzoeken"
-  * "Anders" → "alternatieve optie"
-  * NOOIT deze als letterlijke keuzes behandelen
+═══════════════════════════════════════════════════════════════
+ORGANISATIE PROFIEL
+═══════════════════════════════════════════════════════════════
+Bedrijf: ${data.company}
+Contact: ${data.name} (${data.role || 'Beslisser'})
+Sector: ${businessType}
+Email: ${data.email}
 
-BEDRIJF PROFIEL:
-- Organisatie: ${data.company}
-- Contactpersoon: ${data.name} (${data.role})
-- Core Business: interpreteer als "${data.businessType}" 
-- Sector: ${data.businessType}
+═══════════════════════════════════════════════════════════════
+AGENT READINESS SCORE: ${score}/100 — ${maturityLevel}
+═══════════════════════════════════════════════════════════════
+┌─────────────────────┬────────┬─────────────────────────────┐
+│ Categorie           │ Score  │ Status                      │
+├─────────────────────┼────────┼─────────────────────────────┤
+│ API Connectivity    │ ${apiScore}/25   │ ${apiScore >= 20 ? '✅ Excellent' : apiScore >= 15 ? '⚠️ Voldoende' : '❌ Kritiek'}             │
+│ Data Toegang        │ ${dataScore}/25   │ ${dataScore >= 20 ? '✅ Excellent' : dataScore >= 15 ? '⚠️ Voldoende' : '❌ Kritiek'}             │
+│ Process Documentatie│ ${processScore}/25   │ ${processScore >= 20 ? '✅ Excellent' : processScore >= 15 ? '⚠️ Voldoende' : '❌ Kritiek'}             │
+│ Team Readiness      │ ${teamScore}/25   │ ${teamScore >= 20 ? '✅ Excellent' : teamScore >= 15 ? '⚠️ Voldoende' : '❌ Kritiek'}             │
+└─────────────────────┴────────┴─────────────────────────────┘
 
-AGENT READINESS SCORE: ${score}/100 (${maturityLevel})
+Sterkste punt: ${strongestArea.name} (${strongestArea.score}/${strongestArea.max})
+Zwakste punt: ${weakestArea.name} (${weakestArea.score}/${weakestArea.max})
 
-EXACTE SCORES:
-- API Connectivity: ${this.calculateAPIMaturityScore(data)}/25
-- Data Access: ${this.calculateDataMaturityScore(data)}/25
-- Process Docs: ${this.calculateProcessMaturityScore(data)}/25
-- Team Readiness: ${this.calculateOrganizationReadinessScore(data)}/25
+═══════════════════════════════════════════════════════════════
+ASSESSMENT ANTWOORDEN (interpreteer professioneel)
+═══════════════════════════════════════════════════════════════
+• Prioriteit systemen: ${systems}
+• Hoogste impact systeem: ${primarySystem}
+• API beschikbaarheid: ${data.hasApis}
+• Data toegankelijkheid: ${data.dataAccess}
+• Data locatie: ${data.dataLocation || 'Niet gespecificeerd'}
+• Proces documentatie: ${data.processDocumentation}
+• Automation ervaring: ${data.automationExperience}
+• Platform voorkeur: ${data.agentPlatformPreference || 'Nog geen voorkeur'}
+• Hoofdblocker: ${data.mainBlocker}
+• Adoptie snelheid: ${data.adoptionSpeed}
+• Kostenoptimalisatie focus: ${data.costOptimization}
+• Budget realiteit: ${data.budgetReality}
+• IT governance: ${data.itMaturity || 'Intern IT team'}
 
-ASSESSMENT CONTEXT (interpreteer professioneel):
-1. Business type: ${data.businessType}
-2. Prioriteit systemen: ${data.systems.join(', ')}
-3. Grootste impact systeem: ${data.highestImpactSystem}
-4. API status: ${data.hasApis}
-5. Data toegang: ${data.dataAccess}
-6. Data locatie: ${data.dataLocation}
-7. Process documentatie: ${data.processDocumentation}
-8. Automation ervaring: ${data.automationExperience}
-9. AI platform voorkeur: ${data.agentPlatformPreference}
-10. Hoofdblocker: ${data.mainBlocker}
-11. Adoptie snelheid: ${data.adoptionSpeed}
-12. Kostenoptimalisatie focus: ${data.costOptimization}
-13. Budget realiteit: ${data.budgetReality}
-14. IT maturity: ${data.itMaturity}
+═══════════════════════════════════════════════════════════════
+SCHRIJF DIT RAPPORT (gebruik EXACT deze secties)
+═══════════════════════════════════════════════════════════════
 
-SCHRIJF TECHNISCH MCP READINESS RAPPORT MET DEZE STRUCTUUR:
+[EXECUTIVE_SUMMARY]
+Schrijf 250-300 woorden executive summary die:
+1. Direct begint met de score en wat dit betekent voor ${data.company}
+2. De 2 sterkste en 2 zwakste punten benoemt met concrete impact
+3. Een realistische timeline geeft: ${score >= 70 ? '4-8 weken tot agent deployment' : score >= 50 ? '2-4 maanden voorbereiding' : '6-12 maanden transformatie'}
+4. Eindigt met de #1 prioriteit actie
 
-[MCP_READINESS_SUMMARY]
-[200 woorden technische executive summary - Focus op API→MCP conversie potential]
+Schrijf in derde persoon over "${data.company}" (niet "jullie" of "u").
+Wees specifiek voor ${businessType} sector.
 
-Start met: "Met ${data.apiIntegrations || data.systems?.length || 'X'} API integraties en ${score}/100 MCP readiness score is ${data.company} technisch ${score >= 70 ? 'klaar voor MCP conversie' : score >= 50 ? 'bijna klaar voor agent access' : 'in voorbereiding voor API→MCP transitie'}.
+[SCORE_BREAKDOWN_ANALYSIS]
+Analyseer elke score categorie in 300 woorden:
 
-Hoofdblocker: ${data.apiPainPoint || data.mainBlocker} betekent dat ${score < 50 ? 'significante API-architectuur work nodig' : score < 70 ? 'enkele API gaps eerst opgelost moeten' : 'alleen MCP translation layer nodig'}.
+**API Connectivity (${apiScore}/25)**
+- Wat "${data.hasApis}" betekent voor agent implementatie
+- Welke van ${systems} waarschijnlijk wel/geen APIs hebben
+- Concrete impact op ${primarySystem} use case
 
-Met MCP kunnen alle APIs binnen ${score >= 70 ? '4-6 weken' : score >= 50 ? '6-10 weken' : '3-6 maanden'} agent-accessible worden."
+**Data Toegang (${dataScore}/25)**
+- Interpreteer "${data.dataAccess}" voor een ${businessType}
+- Impact van data spreiding op agent effectiviteit
+- Wat agents nodig hebben vs wat beschikbaar is
 
-[API_LANDSCAPE_ANALYSIS]
-[250 woorden - Analyseer hun API ecosystem voor MCP compatibility]
+**Process Documentatie (${processScore}/25)**
+- Wat "${data.processDocumentation}" betekent voor agent training
+- Risico's van undocumented processes voor AI agents
+- Quick wins voor documentatie verbetering
 
-JULLIE API ECOSYSTEEM:
-- ${data.systems?.join(', ') || 'Systemen'} APIs (beoordeel MCP compatibility)
-- ${data.hasApis} = ${this.getAPIStatusLabel(data.hasApis)} 
-- Documentatie niveau: ${data.apiDocumentation || data.processDocumentation}
-- Data spreiding: ${data.dataLocation || data.dataAccess}
-
-CONVERSIE COMPLEXITEIT: ${score >= 70 ? 'LAAG' : score >= 50 ? 'MEDIUM' : 'HOOG'}
-- Geschatte direct converteerbaar: ${score >= 70 ? '85-95%' : score >= 50 ? '60-80%' : '40-60%'}
-- Wrapper/adapter layer nodig: ${score >= 70 ? '5-15%' : score >= 50 ? '20-40%' : '40-60%'}
-- Geschatte implementatie: ${score >= 70 ? '4-6 weken' : score >= 50 ? '6-10 weken' : '3-6 maanden'}
-
-[MCP_IMPLEMENTATION_ROADMAP]
-[300 woorden - Concrete MCP conversie planning]
-
-VAN REST NAAR MCP - Het proces:
-[Visual concept: API] → [MCP Server] → [Alle Agents]
-
-Priority Roadmap gebaseerd op ${data.highestImpactSystem || data.systems?.[0]}:
-
-1. ${data.highestImpactSystem || data.systems?.[0]} APIs (Week 1-2)
-   - ${data.costOptimization.toLowerCase()} optimization focus
-   - Impact: ${score >= 70 ? '60-80% efficiency verbetering' : '40-60% process versnelling'}
-
-2. Secondary Systems (Week 3-4) 
-   - ${data.systems?.slice(1,2)?.join(', ') || 'Overige systemen'}
-   - Integration met primary APIs
-
-3. Complete Ecosystem (Week 5-6)
-   - Full MCP orchestration
-   - Agent testing & validation
-
-[TECHNICAL_IMPLEMENTATION_PATH]
-[200 woorden - Technische details van API→MCP conversie]
-
-Conversie complexiteit analyse:
-- API Documentation: ${data.apiDocumentation || data.processDocumentation} → MCP mapping effort
-- Data architecture: ${data.dataLocation || data.dataAccess} → Agent access patterns
-- Authentication: ${data.itMaturity} → Security integration
-- Management: ${data.apiManagement || data.itMaturity} → Stakeholder coordination
-
-[INVESTMENT_TIMELINE_ANALYSIS] 
-[200 woorden - Budget en timeline realistisch voor hun situatie]
-
-Budget context: ${data.budgetReality}
-Timeline: ${data.timeline || 'Te bepalen op basis van adoptie snelheid'}
-Technical capability: ${data.automationExperience}
-
-Realistische investment voor ${data.company}:
-- API discovery & mapping: Week 1
-- MCP wrapper development: Week 2-4  
-- Agent integration testing: Week 5-6
-- Production rollout: Week 7-8
-
-[EXPERT_ASSESSMENT_BRIDGE]
-[150 woorden - Wat Expert Assessment toevoegt voor hun API landscape]
-
-DIT RAPPORT = ALGEMENE MCP ANALYSE
-
-Voor ${data.company} specifiek met ${data.systems?.length || 'X'} APIs:
-❓ Welke APIs EERST naar MCP converteren voor maximale ROI?
-❓ Exacte development effort per API endpoint?  
-❓ Security/compliance voor ${data.itMaturity} setup?
-❓ Integration roadmap voor ${data.agentPlatformPreference} agents?
-❓ Specifieke cost/benefit voor ${data.costOptimization} optimization?
-
-EXPERT ASSESSMENT (€2.500) levert:
-✓ API-by-API conversie roadmap met effort estimates
-✓ Security assessment voor jullie ${data.itMaturity} environment
-✓ Fixed-price implementation quote per API cluster
-✓ 90-dagen MCP rollout planning specifiek voor ${data.company}
-
-TONE: Technische MCP specialist, geen algemene digitalisation consultant.
-FOCUS: API→MCP conversie expertise, concrete technical implementation.
-AVOID: Vage business transformation language, overly general advice.
-- Impact voor ${data.businessType}
-
-Data Access: ${this.calculateDataMaturityScore(data)}/25
-- Vertaal "${data.dataAccess}" en "${data.dataLocation}"
-- Link aan operationele efficiency
-- Betekenis voor agents
-
-Process Maturity: ${this.calculateProcessMaturityScore(data)}/25
-- "${data.processDocumentation}" impact
-- Agent guidance mogelijkheden
-
-Team Readiness: ${this.calculateOrganizationReadinessScore(data)}/25
-- "${data.automationExperience}" + "${data.adoptionSpeed}"
-- Change capacity voor ${data.businessType}
+**Team Readiness (${teamScore}/25)**
+- Combineer "${data.automationExperience}" met "${data.adoptionSpeed}"
+- Change management overwegingen voor ${data.company}
+- Training en adoption strategie suggesties
 
 [CRITICAL_FINDINGS]
-[4 bullet points - meest kritieke bevindingen]
-- Focus op laagste scores
-- Koppel aan "${data.mainBlocker}"
-- Specifiek voor ${data.company}
-- Geen letterlijke citaten
+Lijst exact 5 kritieke bevindingen als bullet points:
+• [Bevinding 1 - gerelateerd aan zwakste score: ${weakestArea.name}]
+• [Bevinding 2 - gerelateerd aan hoofdblocker: ${data.mainBlocker}]
+• [Bevinding 3 - gerelateerd aan ${primarySystem}]
+• [Bevinding 4 - gerelateerd aan data/integratie]
+• [Bevinding 5 - gerelateerd aan organisatie readiness]
+
+Elke bevinding moet:
+- Specifiek zijn voor ${data.company}
+- Een concrete impact benoemen
+- Impliciet een oplossingsrichting suggereren
 
 [READINESS_GAPS]
-[150 woorden - Gap analyse]
-- Verschil huidige staat vs agent-ready
-- "${data.mainBlocker}" als hoofduitdaging
-- Missing pieces voor ${data.businessType}
-- Concrete gaps, niet algemeen
+Schrijf 200 woorden gap analyse:
+1. Huidige staat vs agent-ready staat voor ${businessType}
+2. Specifieke gaps in ${weakestArea.name}
+3. Hoe "${data.mainBlocker}" deze gaps verergert
+4. Prioritering: welke gaps eerst aanpakken
 
 [AUTOMATION_OPPORTUNITIES]
-[180 woorden - Specifieke kansen]
-- Focus op "${data.costOptimization}" optimalisatie
-- Koppel aan ${data.systems.join(', ')} systemen
-- ROI indicaties voor ${data.businessType}
-- Budget context: "${data.budgetReality}"
+Schrijf 250 woorden over concrete automation kansen:
+
+**Quick Wins (0-3 maanden)**
+- Kansen binnen ${primarySystem}
+- Laag-risico automation voor ${data.costOptimization}
+- ROI indicatie voor ${businessType}
+
+**Medium Term (3-6 maanden)**
+- Cross-system automation met ${systems}
+- Complexere agent workflows
+- Team capability building
+
+**Strategic (6-12 maanden)**
+- Full agent ecosystem voor ${data.company}
+- Competitive advantage voor ${businessType}
+- Schaalvoordelen
+
+Budget context: "${data.budgetReality}" - pas aanbevelingen hierop aan.
 
 [INDUSTRY_CONTEXT]
-[140 woorden - Benchmark]
-- ${data.businessType} specifieke vergelijking
-- Nederlandse markt context
-- Early adopter voorbeelden
-- "${data.adoptionSpeed}" in perspectief
+Schrijf 180 woorden benchmark analyse:
+- Gemiddelde Agent Readiness score in ${businessType}: schat 35-50/100
+- Waar ${data.company} met ${score}/100 staat t.o.v. peers
+- Nederlandse markt trends voor ${businessType}
+- Early adopter voorbeelden (generiek, geen namen)
+- Competitive implicaties van "${data.adoptionSpeed}" adoptie
 
 [STRATEGIC_RECOMMENDATIONS]
-[150 woorden - 3-5 concrete stappen]
-- Prioriteer op laagste scores
-- Specifiek voor ${data.company}
-- Realistisch voor "${data.budgetReality}"
-- Geen gedetailleerde planning
+Geef exact 5 genummerde aanbevelingen:
+
+1. **[Titel - Hoogste Prioriteit]**
+   Actie: [concrete eerste stap]
+   Timeline: [specifiek]
+   Impact: [verwacht resultaat]
+
+2. **[Titel - Gericht op ${weakestArea.name}]**
+   Actie: ...
+   Timeline: ...
+   Impact: ...
+
+3. **[Titel - Gericht op ${primarySystem}]**
+   ...
+
+4. **[Titel - Organisatie/Team]**
+   ...
+
+5. **[Titel - Long-term Strategy]**
+   ...
+
+Pas alle aanbevelingen aan op budget "${data.budgetReality}".
 
 [CONCLUSIONS_AND_NEXT_LEVEL]
-[200 woorden - Professionele afsluiting]
-- Samenvat wat ${data.company} bereikt heeft
-- Expert Assessment (€2.500) meerwaarde
-- Verschil gratis vs betaald duidelijk
-- Call-to-action zonder sales pressure
+Schrijf 250 woorden conclusie:
 
-QUALITY CONTROL CHECKS:
-✓ GEEN letterlijke "${data.coreBusiness}" na eerste interpretatie
-✓ ALTIJD "${data.company}" of "${data.businessType}" gebruiken
-✓ Alle "wij/we" verwijderd uit interpretaties
-✓ Grammaticaal correcte zinnen
-✓ Professionele, zakelijke toon
-✓ Sector-specifieke terminologie
-✓ Geen letterlijke antwoord-citaten`;
+**Samenvatting**
+- ${data.company} positie: ${maturityLevel}
+- Sterke basis in: ${strongestArea.name}
+- Prioriteit voor verbetering: ${weakestArea.name}
+- Realistische timeline: [specifiek voor hun score]
+
+**Dit Rapport vs Expert Assessment**
+Dit gratis rapport geeft:
+✓ Algemene readiness indicatie
+✓ Categorie-niveau analyse
+✓ Directionale aanbevelingen
+
+Expert Assessment (€2.500) levert:
+✓ Systeem-specifieke API audit voor ${systems}
+✓ Exacte ROI berekening voor ${data.costOptimization}
+✓ 90-dagen implementatie roadmap
+✓ Security & compliance assessment voor ${data.itMaturity || 'jullie'} setup
+✓ Hands-on workshop met ${data.name} en team
+
+**Volgende Stap**
+Nodig ${data.name} uit om binnen 2 weken actie te nemen op aanbeveling #1.
+
+═══════════════════════════════════════════════════════════════
+KWALITEITSREGELS
+═══════════════════════════════════════════════════════════════
+✓ Schrijf in het Nederlands
+✓ Gebruik "${data.company}" in plaats van "jullie/u/je"
+✓ Wees concreet en specifiek, vermijd vage taal
+✓ Citeer NOOIT letterlijk de assessment antwoorden
+✓ Interpreteer antwoorden professioneel (bijv. "Geen idee" → "nog te inventariseren")
+✓ Elke sectie moet waarde toevoegen, niet herhalen
+✓ Toon expertise in ${businessType} sector waar mogelijk`;
   }
 
   private static async callClaudeAPI(prompt: string): Promise<any> {
@@ -473,9 +458,9 @@ QUALITY CONTROL CHECKS:
           'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: 'claude-3-5-sonnet-20241022',
-          max_tokens: 3000,
-          temperature: 0.3,
+          model: 'claude-opus-4-5-20251101',
+          max_tokens: 8000,
+          temperature: 0.4,
           messages: [{ 
             role: 'user', 
             content: prompt 
@@ -746,34 +731,37 @@ QUALITY CONTROL CHECKS:
       position: relative;
       z-index: 10;
     }
+    .score-circle-container {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      margin: 30px auto;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     .score-circle {
       width: 160px;
       height: 160px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #F87315, #FF8533);
-      color: white;
+      background: conic-gradient(#F87315 var(--score-deg), rgba(200,200,200,0.2) 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(248, 115, 21, 0.3);
+    }
+    .score-circle-inner {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: white;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin: 30px auto;
-      box-shadow: 0 10px 30px rgba(248, 115, 21, 0.3);
-      position: relative;
-    }
-    .score-circle::after {
-      content: '';
-      position: absolute;
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      border: 2px solid #F87315;
-      opacity: 0.2;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.2; }
-      50% { transform: scale(1.05); opacity: 0.1; }
-      100% { transform: scale(1); opacity: 0.2; }
+      color: #2c3e50;
     }
     .score-number {
       font-size: 48px;
@@ -950,9 +938,13 @@ QUALITY CONTROL CHECKS:
         <strong>Assessment datum:</strong> ${currentDate}
       </p>
       
-      <div class="score-circle">
-        <div class="score-number">${score}</div>
-        <div class="score-total">/ 100</div>
+      <div class="score-circle-container">
+        <div class="score-circle" style="--score-deg: ${score * 3.6}deg;">
+          <div class="score-circle-inner">
+            <div class="score-number">${score}</div>
+            <div class="score-total">/ 100</div>
+          </div>
+        </div>
       </div>
       
       <div class="maturity-level">
@@ -1087,7 +1079,7 @@ QUALITY CONTROL CHECKS:
     <div style="opacity: 0.7; font-size: 14px;">
       <p>www.groeimetai.io • hello@groeimetai.io</p>
       <p style="margin-top: 10px;">
-        Rapport gegenereerd: ${currentDate} • Powered by Claude Sonnet 4<br>
+        Rapport gegenereerd: ${currentDate} • Powered by Claude Opus 4.5<br>
         Voor concrete implementatie planning: Expert Assessment beschikbaar
       </p>
     </div>
