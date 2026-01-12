@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1.4
 # Use multi-stage build for smaller final image
 FROM node:20-alpine AS dependencies
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -8,9 +7,8 @@ WORKDIR /app
 # Copy package files first (for better caching)
 COPY package.json package-lock.json* ./
 
-# Install dependencies with cache mount for faster installs
-RUN --mount=type=cache,target=/root/.npm \
-    npm ci --legacy-peer-deps
+# Install dependencies
+RUN npm ci --legacy-peer-deps
 
 # Rebuild the source code only when needed
 FROM node:20-alpine AS builder
@@ -49,9 +47,8 @@ ENV NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=$NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 # Disable telemetry during build
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Build Next.js application with cache mount for .next/cache
-RUN --mount=type=cache,target=/app/.next/cache \
-    npm run build
+# Build Next.js application
+RUN npm run build
 
 # Production image, copy all the files and run next
 FROM node:20-alpine AS runner
