@@ -1,6 +1,8 @@
 import jsPDF from 'jspdf';
 import { Invoice, InvoiceItem, CompanySettings, InvoiceBillingDetails } from '@/types';
 import { companySettingsService } from './companySettingsService';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Invoice PDF generation service for GroeiMetAI
@@ -84,22 +86,59 @@ export class InvoicePdfService {
     return doc.output('blob');
   }
 
-  // Base64 logo image (PNG) - replace this with your actual logo
-  // To add your logo: export SVG to PNG and convert to base64
+  // Base64 logo image (PNG) - loaded from public folder
   private logoBase64: string | null = null;
+  private logoLoaded = false;
 
   /**
-   * Set the logo image as base64 string
+   * Load logo from public folder
+   */
+  private loadLogo(): void {
+    if (this.logoLoaded) return;
+    this.logoLoaded = true;
+
+    try {
+      // Try multiple possible paths for the logo
+      const possiblePaths = [
+        path.join(process.cwd(), 'public', 'GroeimetAi_logo_small.png'),
+        path.join(process.cwd(), 'public', 'GroeimetAi_logo_text_black.png'),
+        '/app/public/GroeimetAi_logo_small.png', // Docker/Cloud Run path
+        '/app/public/GroeimetAi_logo_text_black.png',
+      ];
+
+      for (const logoPath of possiblePaths) {
+        if (fs.existsSync(logoPath)) {
+          const logoBuffer = fs.readFileSync(logoPath);
+          this.logoBase64 = logoBuffer.toString('base64');
+          console.log('Logo loaded from:', logoPath);
+          break;
+        }
+      }
+
+      if (!this.logoBase64) {
+        console.warn('Logo file not found, using text fallback');
+      }
+    } catch (error) {
+      console.warn('Could not load logo:', error);
+    }
+  }
+
+  /**
+   * Set the logo image as base64 string (manual override)
    * @param base64 - Base64 encoded PNG image (without data:image/png;base64, prefix)
    */
   setLogo(base64: string): void {
     this.logoBase64 = base64;
+    this.logoLoaded = true;
   }
 
   /**
    * Add company header with logo and branding - Modern minimal design
    */
   private addHeader(doc: jsPDF, settings: CompanySettings): void {
+    // Load logo if not already loaded
+    this.loadLogo();
+
     // Clean white header with subtle bottom border
     doc.setDrawColor(226, 232, 240); // borderColor
     doc.setLineWidth(0.5);
@@ -108,9 +147,12 @@ export class InvoicePdfService {
     // Try to add logo image if available
     if (this.logoBase64) {
       try {
-        doc.addImage(this.logoBase64, 'PNG', 15, 10, 60, 15);
+        // Logo aspect ratio is approximately 6:1 (1178x200 original)
+        // Width 55mm, height ~9mm maintains proper proportions
+        doc.addImage(this.logoBase64, 'PNG', 15, 12, 55, 9);
       } catch (e) {
         // Fallback to text logo if image fails
+        console.warn('Failed to add logo image:', e);
         this.addTextLogo(doc);
       }
     } else {
