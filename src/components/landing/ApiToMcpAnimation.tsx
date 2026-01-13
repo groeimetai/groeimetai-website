@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Play,
   Pause,
@@ -9,31 +9,33 @@ import {
   Zap,
   Link2,
   Wallet,
-  Lock,
-  Unlock,
   Server,
   Database,
   BarChart3,
   CreditCard,
   HeadphonesIcon,
   Cpu,
-  CheckCircle2,
   Loader2,
   AlertCircle,
-  ArrowRight,
   type LucideIcon
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-// KLEUREN
-const ORANGE = '#F87315';
-const ORANGE_GLOW = 'rgba(248, 115, 21, 0.6)';
-const GREEN = '#10B981';
-const GREEN_GLOW = 'rgba(16, 185, 129, 0.6)';
-const RED = '#EF4444';
-const RED_GLOW = 'rgba(239, 68, 68, 0.4)';
+// =============================================================================
+// CONSTANTEN
+// =============================================================================
 
-// API configuratie met icons
+const ORANGE = '#F87315';
+const GREEN = '#10B981';
+
+// Vaste afmetingen voor alle elementen (in pixels)
+const DIMENSIONS = {
+  apiCard: { width: 110, height: 95 },
+  mcpNode: { width: 56, height: 52 },
+  agentHub: { width: 100, height: 100 },
+};
+
+// API configuratie
 const API_CONFIG: Array<{ name: string; icon: LucideIcon; color: string }> = [
   { name: 'CRM', icon: Database, color: '#3B82F6' },
   { name: 'Support', icon: HeadphonesIcon, color: '#8B5CF6' },
@@ -42,194 +44,177 @@ const API_CONFIG: Array<{ name: string; icon: LucideIcon; color: string }> = [
   { name: 'Payment', icon: CreditCard, color: '#F59E0B' },
 ];
 
-// Hook voor container grootte
-function useElementSize<T extends HTMLElement>() {
-  const ref = useRef<T | null>(null);
-  const [size, setSize] = useState({ width: 800, height: 520 });
+// =============================================================================
+// HELPER FUNCTIES
+// =============================================================================
 
-  useEffect(() => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    setSize({ width: rect.width, height: rect.height });
-
-    const obs = new ResizeObserver(([entry]) => {
-      const cr = entry.contentRect;
-      setSize({ width: cr.width, height: cr.height });
-    });
-    obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-
-  return { ref, size };
-}
-
-// Radiale posities berekenen
-function radialPositions(count: number, radiusPct = 40, startDeg = -90, isMobile = false) {
-  if (isMobile) {
-    return [{ top: 12, left: 50 }];
-  }
+/**
+ * Bereken posities in een cirkel rondom een centrumpunt
+ * @returns Array van {x, y} coördinaten die de CENTRA van elementen aangeven
+ */
+function getCirclePositions(
+  count: number,
+  radius: number,
+  centerX: number,
+  centerY: number,
+  startAngleDeg: number = -90
+): Array<{ x: number; y: number }> {
   return Array.from({ length: count }, (_, i) => {
-    const angle = ((360 / count) * i + startDeg) * (Math.PI / 180);
-    const cx = 50;
-    const cy = 45;
-    const left = cx + radiusPct * Math.cos(angle);
-    const top = cy + radiusPct * Math.sin(angle);
-    return { top, left };
+    const angleDeg = (360 / count) * i + startAngleDeg;
+    const angleRad = angleDeg * (Math.PI / 180);
+    return {
+      x: centerX + radius * Math.cos(angleRad),
+      y: centerY + radius * Math.sin(angleRad),
+    };
   });
 }
 
-// MCP posities tussen centrum en APIs
-function betweenCenter(pos: { top: number; left: number }, f = 0.55, isMobile = false) {
-  if (isMobile) {
-    return { top: 42, left: 50 };
-  }
-  const cx = 50;
-  const cy = 50;
-  return {
-    top: cy + (pos.top - cy) * f,
-    left: cx + (pos.left - cx) * f,
-  };
-}
+// =============================================================================
+// CONNECTION LINE COMPONENT
+// =============================================================================
 
-// Curved path generator voor vloeiende lijnen (percentage-based)
-function generateCurvedPath(
-  start: { top: number; left: number },
-  end: { top: number; left: number },
-  curvature = 0.3
-) {
-  const startX = start.left;
-  const startY = start.top;
-  const endX = end.left;
-  const endY = end.top;
-
-  const midX = (startX + endX) / 2;
-  const midY = (startY + endY) / 2;
-  const dx = endX - startX;
-  const dy = endY - startY;
-
-  // Control point perpendicular to the line
-  const controlX = midX - dy * curvature;
-  const controlY = midY + dx * curvature;
-
-  return `M ${startX} ${startY} Q ${controlX} ${controlY} ${endX} ${endY}`;
-}
-
-// Animated data packet component
-function DataPacket({
-  path,
-  delay = 0,
-  duration = 2,
-  color = ORANGE,
-}: {
-  path: string;
-  delay?: number;
-  duration?: number;
-  color?: string;
-}) {
-  return (
-    <motion.circle
-      r={4}
-      fill={color}
-      filter="url(#packetGlow)"
-      initial={{ offsetDistance: '0%' }}
-      animate={{ offsetDistance: '100%' }}
-      transition={{
-        delay,
-        duration,
-        repeat: Infinity,
-        ease: 'linear',
-      }}
-      style={{
-        offsetPath: `path('${path}')`,
-      }}
-    />
-  );
-}
-
-// Glowing line component
-function GlowingPath({
-  d,
+/**
+ * Tekent een lijn tussen twee punten met glow effect
+ * BELANGRIJK: from en to zijn de EXACTE pixel coördinaten waar de lijn begint/eindigt
+ */
+function ConnectionLine({
+  from,
+  to,
   color,
   delay = 0,
-  animate = true,
+  showPulse = false,
   dashed = false,
 }: {
-  d: string;
+  from: { x: number; y: number };
+  to: { x: number; y: number };
   color: string;
   delay?: number;
-  animate?: boolean;
+  showPulse?: boolean;
   dashed?: boolean;
 }) {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const length = Math.sqrt(dx * dx + dy * dy);
+  const angleDeg = Math.atan2(dy, dx) * (180 / Math.PI);
+
   return (
-    <g>
-      {/* Glow layer */}
-      <motion.path
-        d={d}
-        fill="none"
-        stroke={color}
-        strokeWidth={8}
-        strokeLinecap="round"
-        strokeOpacity={0.15}
-        filter="url(#lineGlow)"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: animate ? 1 : 0 }}
-        transition={{ delay, duration: 0.8, ease: 'easeOut' }}
+    <motion.div
+      className="absolute pointer-events-none"
+      style={{
+        // Positioneer de lijn EXACT op het startpunt
+        left: from.x,
+        top: from.y,
+        width: length,
+        height: 0,
+        // Roteer vanuit het startpunt (links-midden van de div)
+        transformOrigin: '0% 50%',
+        transform: `rotate(${angleDeg}deg)`,
+      }}
+      initial={{ scaleX: 0, opacity: 0 }}
+      animate={{ scaleX: 1, opacity: 1 }}
+      transition={{ delay, duration: 0.5, ease: 'easeOut' }}
+    >
+      {/* Glow effect achter de lijn */}
+      <div
+        className="absolute blur-sm"
+        style={{
+          left: 0,
+          top: -3,
+          width: '100%',
+          height: 6,
+          background: color,
+          opacity: 0.4,
+        }}
       />
-      {/* Main line */}
-      <motion.path
-        d={d}
-        fill="none"
-        stroke={color}
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeDasharray={dashed ? '8 6' : undefined}
-        initial={{ pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: animate ? 1 : 0, opacity: animate ? 1 : 0 }}
-        transition={{ delay, duration: 0.8, ease: 'easeOut' }}
+
+      {/* Hoofdlijn */}
+      <div
+        className="absolute"
+        style={{
+          left: 0,
+          top: -1,
+          width: '100%',
+          height: 2,
+          background: dashed
+            ? `repeating-linear-gradient(90deg, ${color} 0px, ${color} 6px, transparent 6px, transparent 12px)`
+            : color,
+        }}
       />
-    </g>
+
+      {/* Animated pulse dot */}
+      {showPulse && (
+        <motion.div
+          className="absolute rounded-full"
+          style={{
+            width: 6,
+            height: 6,
+            top: -3,
+            background: color,
+            boxShadow: `0 0 8px ${color}, 0 0 16px ${color}`,
+          }}
+          animate={{ left: [0, length - 6] }}
+          transition={{
+            delay: delay + 0.4,
+            duration: 1.2,
+            repeat: Infinity,
+            ease: 'linear',
+          }}
+        />
+      )}
+    </motion.div>
   );
 }
 
-// Premium API Card component
+// =============================================================================
+// API CARD COMPONENT
+// =============================================================================
+
+/**
+ * API kaart component
+ * @param centerPosition - Het CENTRUM waar de kaart moet verschijnen
+ */
 function ApiCard({
   name,
   icon: Icon,
   color,
   phase,
-  index,
-  position,
-  isMobile,
+  centerPosition,
 }: {
   name: string;
   icon: LucideIcon;
   color: string;
   phase: number;
-  index: number;
-  position: { top: number; left: number };
-  isMobile: boolean;
+  centerPosition: { x: number; y: number };
 }) {
-  const isLocked = phase === 0;
   const isConnecting = phase === 1;
   const isConnected = phase === 2;
 
+  // Bereken TOP-LEFT positie vanuit centrum (GEEN translate transform!)
+  const topLeft = {
+    x: centerPosition.x - DIMENSIONS.apiCard.width / 2,
+    y: centerPosition.y - DIMENSIONS.apiCard.height / 2,
+  };
+
   return (
     <motion.div
-      className="absolute -translate-x-1/2 -translate-y-1/2"
-      style={{ top: `${position.top}%`, left: `${position.left}%`, zIndex: 25 }}
-      initial={{ scale: 0.8, opacity: 0, y: 20 }}
-      animate={{ scale: 1, opacity: 1, y: 0 }}
-      transition={{ delay: 0.1 + index * 0.08, duration: 0.5, ease: 'easeOut' }}
+      className="absolute"
+      style={{
+        left: topLeft.x,
+        top: topLeft.y,
+        width: DIMENSIONS.apiCard.width,
+        height: DIMENSIONS.apiCard.height,
+      }}
+      initial={{ scale: 0.8, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.5 }}
     >
       <motion.div
-        className={`relative rounded-xl backdrop-blur-md border transition-all duration-500 ${
-          isMobile ? 'p-3 min-w-[100px]' : 'p-4 min-w-[120px]'
-        }`}
+        className="w-full h-full rounded-xl backdrop-blur-md border p-3 flex flex-col items-center justify-center"
         style={{
           background: isConnected
-            ? `linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05))`
+            ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05))'
             : isConnecting
-              ? `linear-gradient(135deg, rgba(248, 115, 21, 0.1), rgba(248, 115, 21, 0.05))`
+              ? 'linear-gradient(135deg, rgba(248, 115, 21, 0.1), rgba(248, 115, 21, 0.05))'
               : 'rgba(255, 255, 255, 0.03)',
           borderColor: isConnected
             ? 'rgba(16, 185, 129, 0.4)'
@@ -237,75 +222,41 @@ function ApiCard({
               ? 'rgba(248, 115, 21, 0.3)'
               : 'rgba(255, 255, 255, 0.1)',
           boxShadow: isConnected
-            ? `0 0 30px ${GREEN_GLOW}, inset 0 1px 0 rgba(255,255,255,0.1)`
+            ? '0 0 25px rgba(16, 185, 129, 0.3)'
             : isConnecting
-              ? `0 0 20px ${ORANGE_GLOW}`
-              : 'inset 0 1px 0 rgba(255,255,255,0.05)',
+              ? '0 0 15px rgba(248, 115, 21, 0.2)'
+              : 'none',
         }}
         animate={
           isConnected
-            ? {
-                borderColor: ['rgba(16, 185, 129, 0.4)', 'rgba(16, 185, 129, 0.7)', 'rgba(16, 185, 129, 0.4)'],
-              }
+            ? { borderColor: ['rgba(16, 185, 129, 0.4)', 'rgba(16, 185, 129, 0.7)', 'rgba(16, 185, 129, 0.4)'] }
             : {}
         }
-        transition={{ repeat: Infinity, duration: 2, delay: index * 0.2 }}
+        transition={{ repeat: Infinity, duration: 2 }}
       >
-        {/* Status indicator */}
-        <div className="absolute -top-1 -right-1">
-          {isLocked && (
-            <div className="w-5 h-5 rounded-full bg-red-500/20 border border-red-500/40 flex items-center justify-center">
-              <Lock size={10} className="text-red-400" />
-            </div>
-          )}
-          {isConnecting && (
-            <motion.div
-              className="w-5 h-5 rounded-full bg-orange-500/20 border border-orange-500/40 flex items-center justify-center"
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
-            >
-              <Loader2 size={10} className="text-orange-400" />
-            </motion.div>
-          )}
-          {isConnected && (
-            <motion.div
-              className="w-5 h-5 rounded-full bg-green-500/30 border border-green-500/50 flex items-center justify-center"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              <CheckCircle2 size={10} className="text-green-400" />
-            </motion.div>
-          )}
-        </div>
-
         {/* Icon */}
-        <div className="flex items-center gap-2 mb-2">
-          <div
-            className="p-1.5 rounded-lg"
-            style={{
-              background: `linear-gradient(135deg, ${color}20, ${color}10)`,
-              border: `1px solid ${color}30`,
-            }}
-          >
-            <Icon size={isMobile ? 14 : 16} color={color} />
-          </div>
+        <div
+          className="p-2 rounded-lg mb-2"
+          style={{
+            background: `linear-gradient(135deg, ${color}25, ${color}10)`,
+            border: `1px solid ${color}40`,
+          }}
+        >
+          <Icon size={18} color={color} />
         </div>
 
         {/* Name */}
-        <div className={`font-medium ${isMobile ? 'text-xs' : 'text-sm'} ${
+        <div className={`text-xs font-medium text-center ${
           isConnected ? 'text-green-300' : isConnecting ? 'text-orange-300' : 'text-white/70'
         }`}>
           {name} API
         </div>
 
         {/* Protocol badge */}
-        <div className={`mt-1.5 text-[10px] font-mono px-2 py-0.5 rounded-full inline-block ${
+        <div className={`mt-1.5 text-[9px] font-mono px-2 py-0.5 rounded-full ${
           isConnected
             ? 'bg-green-500/20 text-green-300 border border-green-500/30'
-            : isConnecting
-              ? 'bg-orange-500/10 text-orange-300/70 border border-orange-500/20'
-              : 'bg-white/5 text-white/40 border border-white/10'
+            : 'bg-white/5 text-white/40 border border-white/10'
         }`}>
           {isConnected ? 'MCP' : 'REST'}
         </div>
@@ -314,256 +265,235 @@ function ApiCard({
   );
 }
 
-// Premium MCP Node component
+// =============================================================================
+// MCP NODE COMPONENT
+// =============================================================================
+
+/**
+ * MCP node component
+ * @param centerPosition - Het CENTRUM waar de node moet verschijnen
+ */
 function McpNode({
-  index,
-  position,
+  centerPosition,
   phase,
-  isMobile,
+  delay = 0,
 }: {
-  index: number;
-  position: { top: number; left: number };
+  centerPosition: { x: number; y: number };
   phase: number;
-  isMobile: boolean;
+  delay?: number;
 }) {
   const isInstalling = phase === 1;
   const isActive = phase === 2;
 
+  // Bereken TOP-LEFT positie vanuit centrum
+  const topLeft = {
+    x: centerPosition.x - DIMENSIONS.mcpNode.width / 2,
+    y: centerPosition.y - DIMENSIONS.mcpNode.height / 2,
+  };
+
   return (
     <motion.div
-      className="absolute -translate-x-1/2 -translate-y-1/2"
-      style={{ top: `${position.top}%`, left: `${position.left}%`, zIndex: 30 }}
+      className="absolute"
+      style={{
+        left: topLeft.x,
+        top: topLeft.y,
+        width: DIMENSIONS.mcpNode.width,
+        height: DIMENSIONS.mcpNode.height,
+      }}
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      exit={{ scale: 0.5, opacity: 0 }}
-      transition={{ delay: 0.3 + index * 0.1, duration: 0.4, type: 'spring' }}
+      exit={{ scale: 0, opacity: 0 }}
+      transition={{ delay, duration: 0.4, type: 'spring' }}
     >
       <motion.div
-        className={`relative rounded-xl backdrop-blur-lg border ${
-          isMobile ? 'p-2.5 min-w-[56px]' : 'p-3 min-w-[64px]'
-        }`}
+        className="w-full h-full rounded-xl flex flex-col items-center justify-center"
         style={{
           background: isActive
             ? `linear-gradient(135deg, ${ORANGE}, rgba(248, 115, 21, 0.8))`
-            : `linear-gradient(135deg, rgba(248, 115, 21, 0.3), rgba(248, 115, 21, 0.15))`,
-          borderColor: isActive
-            ? 'rgba(255, 255, 255, 0.3)'
-            : 'rgba(248, 115, 21, 0.5)',
+            : 'linear-gradient(135deg, rgba(248, 115, 21, 0.4), rgba(248, 115, 21, 0.2))',
+          border: isActive ? '2px solid rgba(255, 255, 255, 0.3)' : '2px solid rgba(248, 115, 21, 0.5)',
           boxShadow: isActive
-            ? `0 0 40px ${ORANGE_GLOW}, 0 8px 32px rgba(0,0,0,0.3)`
-            : `0 0 20px rgba(248, 115, 21, 0.2)`,
+            ? '0 0 25px rgba(248, 115, 21, 0.5)'
+            : '0 0 12px rgba(248, 115, 21, 0.2)',
         }}
         animate={
           isActive
-            ? {
-                boxShadow: [
-                  `0 0 30px ${ORANGE_GLOW}`,
-                  `0 0 50px ${ORANGE_GLOW}`,
-                  `0 0 30px ${ORANGE_GLOW}`,
-                ],
-              }
+            ? { boxShadow: ['0 0 15px rgba(248, 115, 21, 0.4)', '0 0 35px rgba(248, 115, 21, 0.6)', '0 0 15px rgba(248, 115, 21, 0.4)'] }
             : isInstalling
               ? { scale: [1, 1.05, 1] }
               : {}
         }
-        transition={{ repeat: Infinity, duration: 2, delay: index * 0.15 }}
+        transition={{ repeat: Infinity, duration: 2 }}
       >
-        {/* Rotating ring for installing state */}
-        {isInstalling && (
-          <motion.div
-            className="absolute inset-0 rounded-xl border-2 border-transparent"
-            style={{
-              borderTopColor: ORANGE,
-              borderRightColor: 'transparent',
-            }}
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
-          />
-        )}
-
-        <div className="flex flex-col items-center">
-          <div className={`font-bold ${isMobile ? 'text-xs' : 'text-sm'} ${
-            isActive ? 'text-white' : 'text-orange-200'
-          }`}>
-            MCP
-          </div>
-          {isActive && (
-            <motion.div
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <Zap size={12} className="text-white mt-0.5" />
-            </motion.div>
-          )}
-          {isInstalling && (
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
-            >
-              <Loader2 size={12} className="text-orange-200 mt-0.5" />
-            </motion.div>
-          )}
+        <div className={`font-bold text-xs ${isActive ? 'text-white' : 'text-orange-200'}`}>
+          MCP
         </div>
+        {isActive && <Zap size={11} className="text-white mt-0.5" />}
+        {isInstalling && (
+          <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}>
+            <Loader2 size={11} className="text-orange-200 mt-0.5" />
+          </motion.div>
+        )}
       </motion.div>
     </motion.div>
   );
 }
 
-// Premium Agent Hub component
-function AgentHub({ phase, isMobile }: { phase: number; isMobile: boolean }) {
+// =============================================================================
+// AGENT HUB COMPONENT
+// =============================================================================
+
+/**
+ * Centrale AI Agent hub
+ * @param centerPosition - Het CENTRUM waar de hub moet verschijnen
+ */
+function AgentHub({
+  centerPosition,
+  phase,
+}: {
+  centerPosition: { x: number; y: number };
+  phase: number;
+}) {
   const isBlind = phase === 0;
   const isConnecting = phase === 1;
   const isConnected = phase === 2;
 
-  const hubColor = isConnected ? GREEN : isConnecting ? ORANGE : RED;
-  const glowColor = isConnected ? GREEN_GLOW : isConnecting ? ORANGE_GLOW : RED_GLOW;
+  const hubColor = isConnected ? GREEN : isConnecting ? ORANGE : '#EF4444';
+
+  // Bereken TOP-LEFT positie vanuit centrum
+  const topLeft = {
+    x: centerPosition.x - DIMENSIONS.agentHub.width / 2,
+    y: centerPosition.y - DIMENSIONS.agentHub.height / 2,
+  };
 
   return (
     <motion.div
-      className="absolute -translate-x-1/2 -translate-y-1/2"
-      style={{ top: isMobile ? '75%' : '50%', left: '50%', zIndex: 35 }}
+      className="absolute"
+      style={{
+        left: topLeft.x,
+        top: topLeft.y,
+        width: DIMENSIONS.agentHub.width,
+        height: DIMENSIONS.agentHub.height,
+      }}
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
       <motion.div
-        className={`relative ${isMobile ? 'w-24 h-24' : 'w-32 h-32'}`}
-        animate={
-          isConnected
-            ? {
-                scale: [1, 1.02, 1],
-              }
-            : isBlind
-              ? {
-                  rotate: [0, 5, -5, 0],
-                }
-              : {}
-        }
-        transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+        className="relative w-full h-full"
+        animate={isConnected ? { scale: [1, 1.02, 1] } : isBlind ? { rotate: [0, 2, -2, 0] } : {}}
+        transition={{ repeat: Infinity, duration: 3 }}
       >
-        {/* Outer glow rings */}
+        {/* Outer glow */}
         <motion.div
           className="absolute inset-0 rounded-full"
-          style={{
-            background: `radial-gradient(circle, ${glowColor} 0%, transparent 70%)`,
-          }}
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+          style={{ background: `radial-gradient(circle, ${hubColor}40 0%, transparent 70%)` }}
+          animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.6, 0.4] }}
+          transition={{ repeat: Infinity, duration: 2 }}
         />
 
-        {/* Rotating orbital ring */}
-        {isConnected && (
-          <motion.div
-            className="absolute inset-2 rounded-full border-2 border-dashed"
-            style={{ borderColor: `${GREEN}40` }}
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 10, ease: 'linear' }}
-          />
-        )}
-
-        {/* Main hub circle */}
-        <motion.div
-          className="absolute inset-4 rounded-full backdrop-blur-xl border-2 flex items-center justify-center"
+        {/* Main circle */}
+        <div
+          className="absolute inset-3 rounded-full flex items-center justify-center backdrop-blur-xl"
           style={{
             background: `linear-gradient(135deg, ${hubColor}30, ${hubColor}10)`,
-            borderColor: `${hubColor}60`,
-            boxShadow: `0 0 40px ${glowColor}, inset 0 0 30px ${glowColor}`,
+            border: `2px solid ${hubColor}60`,
+            boxShadow: `0 0 25px ${hubColor}40`,
           }}
-          animate={
-            isConnecting
-              ? {
-                  borderColor: [`${ORANGE}40`, `${ORANGE}80`, `${ORANGE}40`],
-                }
-              : {}
-          }
-          transition={{ repeat: Infinity, duration: 1.5 }}
         >
-          {/* Inner content */}
-          <div className="flex flex-col items-center">
-            <motion.div
-              className="p-2 rounded-xl"
-              style={{
-                background: `linear-gradient(135deg, ${hubColor}50, ${hubColor}30)`,
-              }}
-              animate={
-                isConnecting ? { rotate: [0, 360] } : {}
-              }
-              transition={{ repeat: Infinity, duration: 3, ease: 'linear' }}
-            >
-              {isBlind && <AlertCircle size={isMobile ? 20 : 28} className="text-red-300" />}
-              {isConnecting && <Cpu size={isMobile ? 20 : 28} className="text-orange-200" />}
-              {isConnected && <Cpu size={isMobile ? 20 : 28} className="text-green-200" />}
-            </motion.div>
+          <div className="p-2 rounded-xl" style={{ background: `${hubColor}40` }}>
+            {isBlind && <AlertCircle size={20} className="text-red-300" />}
+            {isConnecting && (
+              <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 3, ease: 'linear' }}>
+                <Cpu size={20} className="text-orange-200" />
+              </motion.div>
+            )}
+            {isConnected && <Cpu size={20} className="text-green-200" />}
           </div>
-        </motion.div>
+        </div>
 
-        {/* Status label */}
-        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-center">
-          <div className={`text-sm font-bold ${
-            isBlind ? 'text-red-400' : isConnecting ? 'text-orange-400' : 'text-green-400'
-          }`}>
+        {/* Label onder de hub */}
+        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
+          <div className={`text-sm font-bold ${isBlind ? 'text-red-400' : isConnecting ? 'text-orange-400' : 'text-green-400'}`}>
             AI Agent
           </div>
-          <motion.div
-            key={phase}
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={`text-xs mt-0.5 ${
-              isBlind ? 'text-red-300/70' : isConnecting ? 'text-orange-300/70' : 'text-green-300/70'
-            }`}
-          >
+          <div className={`text-xs ${isBlind ? 'text-red-300/70' : isConnecting ? 'text-orange-300/70' : 'text-green-300/70'}`}>
             {isBlind ? 'Geen toegang' : isConnecting ? 'Verbinden...' : 'Volledig verbonden'}
-          </motion.div>
+          </div>
         </div>
       </motion.div>
     </motion.div>
   );
 }
 
+// =============================================================================
+// MAIN COMPONENT
+// =============================================================================
+
 export default function ApiToMcpAnimation() {
   const t = useTranslations('mcpAnimation');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerSize, setContainerSize] = useState({ width: 800, height: 500 });
   const [isMobile, setIsMobile] = useState(false);
   const [currentPhase, setCurrentPhase] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
 
+  // Meet de container grootte
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    const updateSize = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setContainerSize({ width: rect.width, height: rect.height });
+      }
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
   }, []);
 
+  // Fase configuratie
   const phases = useMemo(() => [
-    {
-      id: 0,
-      title: t('phases.before.title'),
-      subtitle: t('phases.before.subtitle'),
-      description: t('phases.before.description'),
-    },
-    {
-      id: 1,
-      title: t('phases.during.title'),
-      subtitle: t('phases.during.subtitle'),
-      description: t('phases.during.description'),
-    },
-    {
-      id: 2,
-      title: t('phases.after.title'),
-      subtitle: t('phases.after.subtitle'),
-      description: t('phases.after.description'),
-    },
+    { id: 0, title: t('phases.before.title'), subtitle: t('phases.before.subtitle'), description: t('phases.before.description') },
+    { id: 1, title: t('phases.during.title'), subtitle: t('phases.during.subtitle'), description: t('phases.during.description') },
+    { id: 2, title: t('phases.after.title'), subtitle: t('phases.after.subtitle'), description: t('phases.after.description') },
   ], [t]);
 
-  const apiPositions = useMemo(() => radialPositions(API_CONFIG.length, 38, -90, isMobile), [isMobile]);
-  const mcpPositions = useMemo(() => apiPositions.map((pos) => betweenCenter(pos, 0.55, isMobile)), [apiPositions, isMobile]);
+  // ==========================================================================
+  // POSITIE BEREKENINGEN - Alle posities zijn CENTRUM coördinaten
+  // ==========================================================================
 
-  const { ref: stageRef } = useElementSize<HTMLDivElement>();
+  const containerCenterX = containerSize.width / 2;
+  const containerCenterY = containerSize.height / 2;
 
-  // Auto-advance
+  // Stralen voor de cirkels
+  const apiRadius = isMobile ? 0 : Math.min(containerSize.width, containerSize.height) * 0.36;
+  const mcpRadius = isMobile ? 0 : Math.min(containerSize.width, containerSize.height) * 0.20;
+
+  // Agent Hub centrum positie
+  const agentHubCenter = useMemo(() => ({
+    x: containerCenterX,
+    y: isMobile ? containerSize.height * 0.7 : containerCenterY,
+  }), [containerCenterX, containerCenterY, containerSize.height, isMobile]);
+
+  // API kaart centrum posities (in een cirkel rondom de agent)
+  const apiCenters = useMemo(() => {
+    if (isMobile) {
+      return [{ x: containerCenterX, y: containerSize.height * 0.15 }];
+    }
+    return getCirclePositions(API_CONFIG.length, apiRadius, containerCenterX, containerCenterY - 10, -90);
+  }, [containerSize, isMobile, apiRadius, containerCenterX, containerCenterY]);
+
+  // MCP node centrum posities (in een kleinere cirkel tussen APIs en agent)
+  const mcpCenters = useMemo(() => {
+    if (isMobile) {
+      return [{ x: containerCenterX, y: containerSize.height * 0.42 }];
+    }
+    return getCirclePositions(API_CONFIG.length, mcpRadius, containerCenterX, containerCenterY - 5, -90);
+  }, [containerSize, isMobile, mcpRadius, containerCenterX, containerCenterY]);
+
+  // Auto-advance door de fases
   useEffect(() => {
     if (!autoPlay) return;
     const interval = setInterval(() => {
@@ -572,40 +502,26 @@ export default function ApiToMcpAnimation() {
     return () => clearInterval(interval);
   }, [autoPlay, phases.length]);
 
-  // Generate paths for connections (using percentage coordinates)
-  const connectionPaths = useMemo(() => {
-    const agentCenter = { top: isMobile ? 75 : 50, left: 50 };
-
-    return (isMobile ? API_CONFIG.slice(0, 1) : API_CONFIG).map((_, i) => {
-      const apiPos = apiPositions[i];
-      const mcpPos = mcpPositions[i];
-
-      return {
-        apiToMcp: generateCurvedPath(apiPos, mcpPos, 0.15),
-        mcpToAgent: generateCurvedPath(mcpPos, agentCenter, 0.1),
-      };
-    });
-  }, [apiPositions, mcpPositions, isMobile]);
-
+  // Bepaal wat er getoond moet worden per fase
   const showMcp = currentPhase >= 1;
   const showLines = currentPhase === 2;
 
+  // Welke items renderen (minder op mobile)
+  const itemsToRender = isMobile ? [0] : API_CONFIG.map((_, i) => i);
+
   return (
     <section className="py-24 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
-      {/* Background gradient effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div
-          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl"
-          style={{ background: `radial-gradient(circle, ${ORANGE}40, transparent)` }}
-        />
-        <div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl"
-          style={{ background: `radial-gradient(circle, ${GREEN}40, transparent)` }}
-        />
+      {/* Background decoraties */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl"
+             style={{ background: `radial-gradient(circle, ${ORANGE}40, transparent)` }} />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl"
+             style={{ background: `radial-gradient(circle, ${GREEN}40, transparent)` }} />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
+
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -616,58 +532,43 @@ export default function ApiToMcpAnimation() {
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
               {t('title')}{' '}
               <span
-                className="relative inline-block px-4 py-2"
+                className="inline-block px-4 py-2"
                 style={{
                   background: 'linear-gradient(135deg, #F87315, #FF8533)',
-                  boxShadow: `0 0 40px ${ORANGE_GLOW}`,
+                  boxShadow: '0 0 40px rgba(248, 115, 21, 0.4)'
                 }}
               >
-                <span className="relative z-10">{t('highlight')}</span>
+                {t('highlight')}
               </span>{' '}
               {t('titleEnd')}
             </h2>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-              {t('subtitle')}
-            </p>
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">{t('subtitle')}</p>
           </motion.div>
 
-          {/* Main Card */}
+          {/* Main Animation Card */}
           <div
             className="relative rounded-2xl p-6 lg:p-10 mb-12 border"
             style={{
               background: 'linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))',
-              borderColor: 'rgba(255,255,255,0.1)',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+              borderColor: 'rgba(255,255,255,0.1)'
             }}
           >
-            {/* Phase controls */}
+            {/* Phase control buttons */}
             <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
               {phases.map((phase, idx) => (
                 <button
                   key={phase.id}
-                  onClick={() => {
-                    setCurrentPhase(idx);
-                    setAutoPlay(false);
-                  }}
-                  className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
-                    idx === currentPhase
-                      ? 'text-white shadow-lg'
-                      : 'text-white/60 hover:text-white/90 hover:bg-white/5'
+                  onClick={() => { setCurrentPhase(idx); setAutoPlay(false); }}
+                  className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
+                    idx === currentPhase ? 'text-white' : 'text-white/60 hover:text-white/90'
                   }`}
                   style={{
-                    background: idx === currentPhase
-                      ? `linear-gradient(135deg, ${ORANGE}, #FF8533)`
-                      : 'transparent',
-                    border: idx === currentPhase
-                      ? 'none'
-                      : '1px solid rgba(255,255,255,0.1)',
-                    boxShadow: idx === currentPhase
-                      ? `0 4px 20px ${ORANGE_GLOW}`
-                      : 'none',
+                    background: idx === currentPhase ? `linear-gradient(135deg, ${ORANGE}, #FF8533)` : 'transparent',
+                    border: idx === currentPhase ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                    boxShadow: idx === currentPhase ? '0 4px 20px rgba(248, 115, 21, 0.4)' : 'none',
                   }}
                 >
-                  <span className="opacity-60 mr-2">{idx + 1}.</span>
-                  {phase.title}
+                  {idx + 1}. {phase.title}
                 </button>
               ))}
 
@@ -675,122 +576,94 @@ export default function ApiToMcpAnimation() {
 
               <button
                 onClick={() => setAutoPlay((v) => !v)}
-                className={`p-2.5 rounded-full transition-all duration-300 ${
-                  autoPlay
-                    ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30'
-                    : 'text-white/60 hover:text-white hover:bg-white/10 border border-white/10'
+                className={`p-2.5 rounded-full transition-colors ${
+                  autoPlay ? 'bg-orange-500/20 text-orange-400' : 'text-white/60 hover:bg-white/10'
                 }`}
-                aria-label={autoPlay ? 'Pauzeer' : 'Afspelen'}
               >
                 {autoPlay ? <Pause size={18} /> : <Play size={18} />}
               </button>
+
               <button
-                onClick={() => {
-                  setCurrentPhase(0);
-                  setAutoPlay(false);
-                }}
-                className="p-2.5 rounded-full text-white/60 hover:text-white hover:bg-white/10 border border-white/10 transition-all duration-300"
-                aria-label="Reset"
+                onClick={() => { setCurrentPhase(0); setAutoPlay(false); }}
+                className="p-2.5 rounded-full text-white/60 hover:bg-white/10 transition-colors"
               >
                 <RotateCcw size={18} />
               </button>
             </div>
 
-            {/* Animation Stage */}
+            {/* ================================================================
+                ANIMATION STAGE - Hier worden alle elementen en lijnen gerenderd
+                Alle posities zijn relatief aan deze container
+                ================================================================ */}
             <div
-              ref={stageRef}
+              ref={containerRef}
               className="relative h-80 sm:h-96 lg:h-[520px] mb-8 rounded-xl overflow-hidden"
               style={{
                 background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.02), transparent)',
-                border: '1px solid rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.05)'
               }}
             >
-              {/* SVG voor lijnen en effecten - using viewBox 0-100 for percentage coordinates */}
-              <svg
-                className="absolute inset-0 w-full h-full pointer-events-none"
-                viewBox="0 0 100 100"
-                preserveAspectRatio="none"
-              >
-                <defs>
-                  {/* Glow filters */}
-                  <filter id="lineGlow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="4" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                  <filter id="packetGlow" x="-100%" y="-100%" width="300%" height="300%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
-
-                {/* Connection lines */}
-                {showLines && connectionPaths.map((paths, i) => (
-                  <g key={`connections-${i}`}>
-                    <GlowingPath
-                      d={paths.apiToMcp}
-                      color={GREEN}
-                      delay={0.3 + i * 0.1}
-                    />
-                    <GlowingPath
-                      d={paths.mcpToAgent}
-                      color={GREEN}
-                      delay={0.5 + i * 0.1}
-                      dashed
-                    />
-
-                    {/* Animated data packets */}
-                    <DataPacket
-                      path={paths.apiToMcp}
-                      delay={1 + i * 0.3}
-                      duration={1.5}
-                      color={GREEN}
-                    />
-                    <DataPacket
-                      path={paths.mcpToAgent}
-                      delay={1.5 + i * 0.3}
-                      duration={1.5}
-                      color={ORANGE}
-                    />
-                  </g>
-                ))}
-              </svg>
-
-              {/* Agent Hub */}
-              <AgentHub phase={currentPhase} isMobile={isMobile} />
-
-              {/* API Cards */}
-              {(isMobile ? API_CONFIG.slice(0, 1) : API_CONFIG).map((api, i) => (
-                <ApiCard
-                  key={api.name}
-                  name={api.name}
-                  icon={api.icon}
-                  color={api.color}
-                  phase={currentPhase}
-                  index={i}
-                  position={apiPositions[i]}
-                  isMobile={isMobile}
-                />
+              {/*
+                LAAG 1: Connection Lines (onderste laag)
+                Lijnen worden getekend van API centrum → MCP centrum → Agent centrum
+              */}
+              {showLines && itemsToRender.map((i) => (
+                <div key={`lines-${i}`}>
+                  {/* Lijn van API centrum naar MCP centrum */}
+                  <ConnectionLine
+                    from={apiCenters[i]}
+                    to={mcpCenters[i]}
+                    color={GREEN}
+                    delay={0.1 + i * 0.08}
+                    showPulse
+                  />
+                  {/* Lijn van MCP centrum naar Agent centrum */}
+                  <ConnectionLine
+                    from={mcpCenters[i]}
+                    to={agentHubCenter}
+                    color={GREEN}
+                    delay={0.25 + i * 0.08}
+                    dashed
+                    showPulse
+                  />
+                </div>
               ))}
 
-              {/* MCP Nodes */}
+              {/*
+                LAAG 2: Agent Hub (midden)
+              */}
+              <AgentHub
+                centerPosition={agentHubCenter}
+                phase={currentPhase}
+              />
+
+              {/*
+                LAAG 3: MCP Nodes (tussen API en Agent)
+              */}
               <AnimatePresence>
-                {showMcp && (isMobile ? mcpPositions.slice(0, 1) : mcpPositions).map((pos, i) => (
+                {showMcp && itemsToRender.map((i) => (
                   <McpNode
                     key={`mcp-${i}`}
-                    index={i}
-                    position={pos}
+                    centerPosition={mcpCenters[i]}
                     phase={currentPhase}
-                    isMobile={isMobile}
+                    delay={0.15 + i * 0.08}
                   />
                 ))}
               </AnimatePresence>
+
+              {/*
+                LAAG 4: API Cards (buitenste laag)
+              */}
+              {itemsToRender.map((i) => (
+                <ApiCard
+                  key={API_CONFIG[i].name}
+                  name={API_CONFIG[i].name}
+                  icon={API_CONFIG[i].icon}
+                  color={API_CONFIG[i].color}
+                  phase={currentPhase}
+                  centerPosition={apiCenters[i]}
+                />
+              ))}
             </div>
 
             {/* Phase description */}
@@ -798,15 +671,10 @@ export default function ApiToMcpAnimation() {
               key={currentPhase}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
               className="text-center"
             >
-              <h3 className="text-2xl font-bold text-white mb-3">
-                {phases[currentPhase].subtitle}
-              </h3>
-              <p className="text-white/60 text-lg max-w-2xl mx-auto">
-                {phases[currentPhase].description}
-              </p>
+              <h3 className="text-2xl font-bold text-white mb-3">{phases[currentPhase].subtitle}</h3>
+              <p className="text-white/60 text-lg max-w-2xl mx-auto">{phases[currentPhase].description}</p>
             </motion.div>
           </div>
 
@@ -821,18 +689,17 @@ export default function ApiToMcpAnimation() {
                 key={benefit.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
+                transition={{ delay: i * 0.1 }}
                 className="text-center group"
               >
                 <div
-                  className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:scale-110"
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-transform group-hover:scale-110"
                   style={{
                     background: `linear-gradient(135deg, ${benefit.color}30, ${benefit.color}10)`,
-                    border: `1px solid ${benefit.color}40`,
-                    boxShadow: `0 0 30px ${benefit.color}20`,
+                    border: `1px solid ${benefit.color}40`
                   }}
                 >
-                  <benefit.icon size={28} style={{ color: benefit.color }} />
+                  <benefit.icon size={28} color={benefit.color} />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">{benefit.title}</h3>
                 <p className="text-white/60">{benefit.description}</p>

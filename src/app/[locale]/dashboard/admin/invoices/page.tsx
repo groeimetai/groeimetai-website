@@ -74,6 +74,7 @@ import {
 } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
 import { format, formatDistanceToNow, addDays, isAfter } from 'date-fns';
 import { BulkActions, useBulkSelection } from '@/components/admin/BulkActions';
 import type { BulkActionType } from '@/components/admin/BulkActions';
@@ -98,6 +99,9 @@ interface InvoiceFormData {
   notes?: string;
   discount?: number;
   taxRate: number;
+  // Manual entry mode (for one-off invoices without a registered client)
+  isManualEntry: boolean;
+  clientEmail?: string; // Email for sending invoice (manual entry)
   // Billing details (Dutch compliance)
   companyName?: string;
   contactName?: string;
@@ -136,6 +140,9 @@ export default function AdminInvoicesPage() {
     notes: '',
     discount: 0,
     taxRate: 21, // Default 21% VAT
+    // Manual entry mode
+    isManualEntry: true, // Default to manual entry for flexibility
+    clientEmail: '',
     // Billing details
     companyName: '',
     contactName: '',
@@ -356,10 +363,27 @@ export default function AdminInvoicesPage() {
       if (!user) return;
 
       const totals = calculateInvoiceTotals();
-      const selectedClient = clients.find((c) => c.uid === formData.clientId);
 
-      if (!selectedClient) {
-        toast.error('Please select a client');
+      // Validate based on mode
+      if (formData.isManualEntry) {
+        // Manual entry: require at least company name or contact name
+        if (!formData.companyName && !formData.contactName) {
+          toast.error('Vul minimaal een bedrijfsnaam of contactpersoon in');
+          return;
+        }
+      } else {
+        // Client selection mode: require client
+        const selectedClient = clients.find((c) => c.uid === formData.clientId);
+        if (!selectedClient) {
+          toast.error('Selecteer een klant');
+          return;
+        }
+      }
+
+      // Validate items
+      const validItems = formData.items.filter((item) => item.description && item.total > 0);
+      if (validItems.length === 0) {
+        toast.error('Voeg minimaal één regel toe');
         return;
       }
 
@@ -369,6 +393,11 @@ export default function AdminInvoicesPage() {
       const token = await currentUser.getIdToken();
       if (!token) throw new Error('No authentication token');
 
+      // Get client info for non-manual entry
+      const selectedClient = !formData.isManualEntry
+        ? clients.find((c) => c.uid === formData.clientId)
+        : null;
+
       const response = await fetch('/api/invoices/create', {
         method: 'POST',
         headers: {
@@ -376,7 +405,7 @@ export default function AdminInvoicesPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          clientId: formData.clientId,
+          clientId: formData.isManualEntry ? 'manual' : formData.clientId,
           // Legacy billing address for backwards compatibility
           billingAddress: {
             street: formData.street || '',
@@ -388,18 +417,18 @@ export default function AdminInvoicesPage() {
           // Extended billing details with Dutch compliance fields
           billingDetails: {
             companyName: formData.companyName || '',
-            contactName: formData.contactName || selectedClient.displayName || '',
+            contactName: formData.contactName || selectedClient?.displayName || '',
             kvkNumber: formData.kvkNumber || '',
             btwNumber: formData.btwNumber || '',
             street: formData.street || '',
             postalCode: formData.postalCode || '',
             city: formData.city || '',
             country: formData.country || 'Nederland',
-            email: selectedClient.email || '',
+            email: formData.clientEmail || selectedClient?.email || '',
           },
           projectId: formData.projectId,
           type: 'standard',
-          items: formData.items.filter((item) => item.description && item.total > 0),
+          items: validItems,
           dueDate: formData.dueDate,
           issueDate: new Date(),
           sendEmail: false,
@@ -412,12 +441,12 @@ export default function AdminInvoicesPage() {
       }
 
       const { data: invoice } = await response.json();
-      toast.success(`Invoice ${invoice.invoiceNumber} created successfully`);
+      toast.success(`Factuur ${invoice.invoiceNumber} aangemaakt`);
       setIsCreateDialogOpen(false);
       resetForm();
     } catch (error) {
       console.error('Error creating invoice:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to create invoice');
+      toast.error(error instanceof Error ? error.message : 'Kon factuur niet aanmaken');
     }
   };
 
@@ -431,6 +460,9 @@ export default function AdminInvoicesPage() {
       notes: '',
       discount: 0,
       taxRate: 21,
+      // Manual entry mode
+      isManualEntry: true,
+      clientEmail: '',
       // Reset billing details
       companyName: '',
       contactName: '',
@@ -1077,32 +1109,52 @@ export default function AdminInvoicesPage() {
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogContent className="bg-black/95 border-white/20 text-white max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Create New Invoice</DialogTitle>
+              <DialogTitle>Nieuwe Factuur Aanmaken</DialogTitle>
               <DialogDescription className="text-white/60">
-                Fill in the details to create a new invoice
+                Vul de gegevens in om een nieuwe factuur aan te maken
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-6 mt-4">
-              {/* Client Selection */}
-              <div>
-                <Label className="text-white/80">Klant</Label>
-                <Select
-                  value={formData.clientId}
-                  onValueChange={(value) => setFormData({ ...formData, clientId: value })}
-                >
-                  <SelectTrigger className="mt-1 bg-white/5 border-white/10 text-white">
-                    <SelectValue placeholder="Selecteer een klant" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {clients.map((client) => (
-                      <SelectItem key={client.uid} value={client.uid}>
-                        {client.displayName || client.email}{' '}
-                        {client.company && `(${client.company})`}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              {/* Manual Entry Toggle */}
+              <div className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10">
+                <div>
+                  <Label className="text-white font-medium">Handmatige invoer</Label>
+                  <p className="text-sm text-white/60">
+                    {formData.isManualEntry
+                      ? 'Voer klantgegevens handmatig in (voor eenmalige opdrachten)'
+                      : 'Selecteer een bestaande klant uit het systeem'}
+                  </p>
+                </div>
+                <Switch
+                  checked={formData.isManualEntry}
+                  onCheckedChange={(checked) =>
+                    setFormData({ ...formData, isManualEntry: checked, clientId: '' })
+                  }
+                />
               </div>
+
+              {/* Client Selection (only when not manual entry) */}
+              {!formData.isManualEntry && (
+                <div>
+                  <Label className="text-white/80">Klant</Label>
+                  <Select
+                    value={formData.clientId}
+                    onValueChange={(value) => setFormData({ ...formData, clientId: value })}
+                  >
+                    <SelectTrigger className="mt-1 bg-white/5 border-white/10 text-white">
+                      <SelectValue placeholder="Selecteer een klant" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {clients.map((client) => (
+                        <SelectItem key={client.uid} value={client.uid}>
+                          {client.displayName || client.email}{' '}
+                          {client.company && `(${client.company})`}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
 
               {/* Billing Details (Dutch Compliance) */}
               <div className="border border-white/10 rounded-lg p-4 space-y-4">
@@ -1185,12 +1237,30 @@ export default function AdminInvoicesPage() {
                     />
                   </div>
                 </div>
+                {/* Email field for sending invoice (especially important for manual entry) */}
+                {formData.isManualEntry && (
+                  <div>
+                    <Label className="text-white/80">
+                      E-mailadres <span className="text-orange">*</span>
+                    </Label>
+                    <Input
+                      type="email"
+                      value={formData.clientEmail || ''}
+                      onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
+                      className="mt-1 bg-white/5 border-white/10 text-white"
+                      placeholder="klant@bedrijf.nl"
+                    />
+                    <p className="text-xs text-white/40 mt-1">
+                      Naar dit adres wordt de factuur verstuurd
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Due Date */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-white/80">Due Date</Label>
+                  <Label className="text-white/80">Vervaldatum</Label>
                   <Input
                     type="date"
                     value={format(formData.dueDate, 'yyyy-MM-dd')}
@@ -1201,7 +1271,7 @@ export default function AdminInvoicesPage() {
                   />
                 </div>
                 <div>
-                  <Label className="text-white/80">Tax Rate (%)</Label>
+                  <Label className="text-white/80">BTW-tarief (%)</Label>
                   <Input
                     type="number"
                     value={formData.taxRate}
@@ -1216,10 +1286,10 @@ export default function AdminInvoicesPage() {
               {/* Invoice Items */}
               <div>
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-white">Invoice Items</h3>
+                  <h3 className="text-lg font-medium text-white">Factuurregels</h3>
                   <Button type="button" size="sm" variant="outline" onClick={addInvoiceItem}>
                     <Plus className="w-4 h-4 mr-2" />
-                    Add Item
+                    Regel Toevoegen
                   </Button>
                 </div>
                 <div className="space-y-2">
@@ -1227,7 +1297,7 @@ export default function AdminInvoicesPage() {
                     <div key={item.id} className="grid grid-cols-12 gap-2 items-center">
                       <div className="col-span-5">
                         <Input
-                          placeholder="Description"
+                          placeholder="Omschrijving"
                           value={item.description}
                           onChange={(e) => updateInvoiceItem(index, 'description', e.target.value)}
                           className="bg-white/5 border-white/10 text-white"
@@ -1236,7 +1306,7 @@ export default function AdminInvoicesPage() {
                       <div className="col-span-2">
                         <Input
                           type="number"
-                          placeholder="Qty"
+                          placeholder="Aantal"
                           value={item.quantity}
                           onChange={(e) =>
                             updateInvoiceItem(index, 'quantity', parseInt(e.target.value) || 0)
@@ -1247,7 +1317,7 @@ export default function AdminInvoicesPage() {
                       <div className="col-span-2">
                         <Input
                           type="number"
-                          placeholder="Rate"
+                          placeholder="Tarief"
                           value={item.unitPrice}
                           onChange={(e) =>
                             updateInvoiceItem(index, 'unitPrice', parseFloat(e.target.value) || 0)
@@ -1276,7 +1346,7 @@ export default function AdminInvoicesPage() {
 
               {/* Discount */}
               <div>
-                <Label className="text-white/80">Discount (€)</Label>
+                <Label className="text-white/80">Korting</Label>
                 <Input
                   type="number"
                   value={formData.discount}
@@ -1295,22 +1365,22 @@ export default function AdminInvoicesPage() {
                   return (
                     <>
                       <div className="flex justify-between text-white/80">
-                        <span>Subtotal</span>
+                        <span>Subtotaal</span>
                         <span>€{totals.subtotal.toFixed(2)}</span>
                       </div>
                       {(formData.discount ?? 0) > 0 && (
                         <div className="flex justify-between text-white/80">
-                          <span>Discount</span>
+                          <span>Korting</span>
                           <span>-€{(formData.discount ?? 0).toFixed(2)}</span>
                         </div>
                       )}
                       <div className="flex justify-between text-white/80">
-                        <span>VAT ({formData.taxRate}%)</span>
+                        <span>BTW ({formData.taxRate}%)</span>
                         <span>€{totals.tax.toFixed(2)}</span>
                       </div>
                       <Separator className="bg-white/10" />
                       <div className="flex justify-between text-xl font-bold text-white">
-                        <span>Total</span>
+                        <span>Totaal</span>
                         <span>€{totals.total.toFixed(2)}</span>
                       </div>
                     </>
@@ -1320,13 +1390,13 @@ export default function AdminInvoicesPage() {
 
               {/* Notes */}
               <div>
-                <Label className="text-white/80">Notes (Optional)</Label>
+                <Label className="text-white/80">Opmerkingen (optioneel)</Label>
                 <Textarea
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   rows={3}
                   className="mt-1 bg-white/5 border-white/10 text-white"
-                  placeholder="Additional notes or payment instructions..."
+                  placeholder="Extra opmerkingen of betalingsinstructies..."
                 />
               </div>
 
@@ -1339,16 +1409,24 @@ export default function AdminInvoicesPage() {
                     resetForm();
                   }}
                 >
-                  Cancel
+                  Annuleren
                 </Button>
                 <Button
                   onClick={createInvoice}
                   className="bg-orange hover:bg-orange/90"
                   disabled={
-                    !formData.clientId || !formData.items.some((i) => i.description && i.total > 0)
+                    // Validate based on mode
+                    (formData.isManualEntry
+                      ? // Manual entry: require email and at least company or contact name
+                        !formData.clientEmail ||
+                        (!formData.companyName && !formData.contactName)
+                      : // Client selection: require client selected
+                        !formData.clientId) ||
+                    // Always require at least one item
+                    !formData.items.some((i) => i.description && i.total > 0)
                   }
                 >
-                  Create Invoice
+                  Factuur Aanmaken
                 </Button>
               </div>
             </div>
