@@ -224,7 +224,7 @@ export default function App() {
             user: {
               id: 'demo',
               name: 'Demo User',
-              email: 'demo@groeimetai.nl'
+              email: 'demo@groeimetai.io'
             },
             notifications: {
               unreadCount: 3,

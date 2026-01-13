@@ -152,7 +152,7 @@ export default function AdminSettingsPage() {
     {
       id: '1',
       name: 'Admin User',
-      email: 'admin@groeimetai.nl',
+      email: 'admin@groeimetai.io',
       role: 'Administrator',
       permissions: ['all'],
       active: true,
@@ -160,7 +160,7 @@ export default function AdminSettingsPage() {
     {
       id: '2',
       name: 'John Doe',
-      email: 'john@groeimetai.nl',
+      email: 'john@groeimetai.io',
       role: 'Project Manager',
       permissions: ['projects', 'quotes', 'users'],
       active: true,
@@ -910,7 +910,7 @@ export default function AdminSettingsPage() {
                             size="sm"
                             variant="ghost"
                             onClick={() => deleteTeamMember(member.id)}
-                            disabled={member.email === 'admin@groeimetai.nl'}
+                            disabled={member.email === 'admin@groeimetai.io'}
                           >
                             <Trash2 className="w-4 h-4 text-red-500" />
                           </Button>

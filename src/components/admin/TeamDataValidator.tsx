@@ -59,8 +59,8 @@ export const TeamDataValidator: React.FC<TeamDataValidatorProps> = ({ className 
     },
     {
       name: 'No fake emails present',
-      status: !teamMembers.some(member => member.email.includes('@groeimetai.nl')),
-      message: teamMembers.filter(member => member.email.includes('@groeimetai.nl')).length > 0 
+      status: !teamMembers.some(member => member.email.includes('@groeimetai.io')),
+      message: teamMembers.filter(member => member.email.includes('@groeimetai.io')).length > 0 
         ? 'Fake emails detected' 
         : 'No fake emails found',
     },

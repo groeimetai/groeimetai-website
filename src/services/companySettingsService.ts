@@ -12,9 +12,9 @@ const DEFAULT_COMPANY_SETTINGS: Omit<CompanySettings, 'id' | 'updatedAt' | 'upda
   // Company Details
   name: 'GroeimetAI',
   legalName: 'GroeimetAI B.V.',
-  email: 'info@groeimetai.nl',
+  email: 'info@groeimetai.io',
   phone: '+31 (0) 20 123 4567',
-  website: 'www.groeimetai.nl',
+  website: 'www.groeimetai.io',
   // Dutch Registration
   kvkNumber: '',
   btwNumber: '',
