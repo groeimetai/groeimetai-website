@@ -497,7 +497,7 @@ export default function AdminInvoicesPage() {
 
       // Try to find client email from clients list
       if (!recipientEmail && invoice.clientId) {
-        const client = clients.find(c => c.id === invoice.clientId);
+        const client = clients.find(c => c.uid === invoice.clientId);
         if (client?.email) {
           recipientEmail = client.email;
           recipientName = recipientName || client.fullName || client.displayName;
@@ -552,7 +552,7 @@ export default function AdminInvoicesPage() {
       }
 
       if (!recipientEmail && invoice.clientId) {
-        const client = clients.find(c => c.id === invoice.clientId);
+        const client = clients.find(c => c.uid === invoice.clientId);
         if (client?.email) {
           recipientEmail = client.email;
           recipientName = recipientName || client.fullName || client.displayName;
