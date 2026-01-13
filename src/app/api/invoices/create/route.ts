@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyIdToken } from '@/lib/firebase/admin';
+import { verifyIdToken, adminDb } from '@/lib/firebase/admin';
 import { InvoiceItem, InvoiceType, InvoiceBillingDetails } from '@/types';
 
 // POST /api/invoices/create
@@ -22,14 +22,28 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user has permission to create invoices (admin or consultant)
-    // Support both single 'role' claim and 'roles' array for compatibility
+    // Check both custom claims AND Firestore user document for role
     const userRole = decodedToken.role as string | undefined;
     const userRoles = (decodedToken.roles as string[] | undefined) || [];
+
+    // Also check Firestore user document
+    let firestoreRole: string | undefined;
+    try {
+      const userDoc = await adminDb.collection('users').doc(decodedToken.uid).get();
+      if (userDoc.exists) {
+        firestoreRole = userDoc.data()?.role;
+      }
+    } catch (e) {
+      console.warn('Could not fetch user document for role check:', e);
+    }
+
     const hasPermission =
       userRole === 'admin' ||
       userRole === 'consultant' ||
       userRoles.includes('admin') ||
-      userRoles.includes('consultant');
+      userRoles.includes('consultant') ||
+      firestoreRole === 'admin' ||
+      firestoreRole === 'consultant';
 
     if (!hasPermission) {
       return NextResponse.json(
