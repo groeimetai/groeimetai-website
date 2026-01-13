@@ -734,7 +734,7 @@ export default function AdminInvoicesPage() {
 
   if (loading || !user || !isAdmin) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#080D14' }}>
         <div className="text-center">
           <Loader2 className="animate-spin h-12 w-12 text-orange mx-auto" />
           <p className="mt-4 text-white/60">Loading...</p>
@@ -744,7 +744,7 @@ export default function AdminInvoicesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen" style={{ backgroundColor: '#080D14' }}>
       <div className="container mx-auto px-4 pt-24 pb-8">
         {/* Header */}
         <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">

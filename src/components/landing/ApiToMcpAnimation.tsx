@@ -83,18 +83,7 @@ function SvgLines({
   show: boolean;
 }) {
   if (!show) return null;
-
-  // Check if we have valid data
   if (!apiPositions.length || !mcpPositions.length) return null;
-
-  // Debug log
-  console.log('SvgLines rendering:', {
-    apiPositions,
-    mcpPositions,
-    agentX,
-    agentY,
-    count: apiPositions.length
-  });
 
   return (
     <svg
@@ -103,43 +92,28 @@ function SvgLines({
       height="100%"
       style={{ zIndex: 5 }}
     >
-      {/* DEBUG: Red rectangle to verify SVG renders */}
-      <rect x="10" y="10" width="30" height="30" fill="red" opacity="0.5" />
-
-      {/* Render all connection lines */}
       {apiPositions.map((apiPos, i) => {
         const mcpPos = mcpPositions[i];
-        if (!mcpPos) {
-          console.log(`Missing mcpPos for index ${i}`);
-          return null;
-        }
-
-        // Get coordinates
-        const ax = apiPos.x;
-        const ay = apiPos.y;
-        const mx = mcpPos.x;
-        const my = mcpPos.y;
-
-        console.log(`Line ${i}: API(${ax.toFixed(0)}, ${ay.toFixed(0)}) → MCP(${mx.toFixed(0)}, ${my.toFixed(0)})`);
+        if (!mcpPos) return null;
 
         return (
           <g key={`connection-${i}`}>
-            {/* API → MCP solid line with glow effect */}
+            {/* API → MCP solid line */}
             <line
-              x1={ax}
-              y1={ay}
-              x2={mx}
-              y2={my}
+              x1={apiPos.x}
+              y1={apiPos.y}
+              x2={mcpPos.x}
+              y2={mcpPos.y}
               stroke={GREEN}
-              strokeWidth={4}
+              strokeWidth={3}
               strokeLinecap="round"
               style={{ filter: 'drop-shadow(0 0 6px rgba(16, 185, 129, 0.6))' }}
             />
 
             {/* MCP → Agent dashed line */}
             <line
-              x1={mx}
-              y1={my}
+              x1={mcpPos.x}
+              y1={mcpPos.y}
               x2={agentX}
               y2={agentY}
               stroke={GREEN}
@@ -150,16 +124,16 @@ function SvgLines({
               style={{ filter: 'drop-shadow(0 0 4px rgba(16, 185, 129, 0.4))' }}
             />
 
-            {/* Animated data particle on API → MCP */}
+            {/* Animated dot API → MCP */}
             <motion.circle
-              r={5}
+              r={4}
               fill={GREEN}
-              style={{ filter: 'drop-shadow(0 0 8px rgba(16, 185, 129, 0.8))' }}
+              style={{ filter: 'drop-shadow(0 0 6px rgba(16, 185, 129, 0.8))' }}
               initial={{ opacity: 0 }}
               animate={{
                 opacity: [0, 1, 1, 0],
-                cx: [ax, mx],
-                cy: [ay, my],
+                cx: [apiPos.x, mcpPos.x],
+                cy: [apiPos.y, mcpPos.y],
               }}
               transition={{
                 delay: 0.3 + i * 0.12,
@@ -169,16 +143,16 @@ function SvgLines({
               }}
             />
 
-            {/* Animated data particle on MCP → Agent */}
+            {/* Animated dot MCP → Agent */}
             <motion.circle
-              r={5}
+              r={4}
               fill={ORANGE}
-              style={{ filter: 'drop-shadow(0 0 8px rgba(248, 115, 21, 0.8))' }}
+              style={{ filter: 'drop-shadow(0 0 6px rgba(248, 115, 21, 0.8))' }}
               initial={{ opacity: 0 }}
               animate={{
                 opacity: [0, 1, 1, 0],
-                cx: [mx, agentX],
-                cy: [my, agentY],
+                cx: [mcpPos.x, agentX],
+                cy: [mcpPos.y, agentY],
               }}
               transition={{
                 delay: 0.8 + i * 0.12,

@@ -975,3 +975,412 @@ export interface CustomTheme {
   warningColor: string;
   errorColor: string;
 }
+
+// =============================================================================
+// Task Management Types
+// =============================================================================
+
+export interface Task {
+  id: string;
+  projectId: string;
+  projectName?: string;
+  title: string;
+  description: string;
+  status: TaskStatus;
+  priority: TaskPriority;
+  type: TaskType;
+  assigneeId?: string;
+  assigneeName?: string;
+  assigneeAvatar?: string;
+  reporterId: string;
+  reporterName: string;
+  dueDate?: Date;
+  startDate?: Date;
+  estimatedHours?: number;
+  actualHours?: number;
+  order: number;
+  tags: string[];
+  subtasks: Subtask[];
+  attachments: TaskAttachment[];
+  watchers: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  completedAt?: Date;
+}
+
+export type TaskStatus = 'todo' | 'in_progress' | 'review' | 'done' | 'blocked';
+export type TaskPriority = 'low' | 'medium' | 'high' | 'urgent';
+export type TaskType = 'feature' | 'bug' | 'improvement' | 'task' | 'documentation';
+
+export interface Subtask {
+  id: string;
+  title: string;
+  completed: boolean;
+  completedAt?: Date;
+  completedBy?: string;
+}
+
+export interface TaskAttachment {
+  id: string;
+  name: string;
+  url: string;
+  type: string;
+  size: number;
+  uploadedBy: string;
+  uploadedAt: Date;
+}
+
+export interface TaskComment {
+  id: string;
+  taskId: string;
+  userId: string;
+  userName: string;
+  userAvatar?: string;
+  content: string;
+  mentions: string[];
+  createdAt: Date;
+  updatedAt?: Date;
+  edited?: boolean;
+}
+
+export interface KanbanColumn {
+  id: TaskStatus;
+  title: string;
+  tasks: Task[];
+  limit?: number;
+  color: string;
+}
+
+export interface TaskFilter {
+  projectId?: string;
+  assigneeId?: string;
+  status?: TaskStatus[];
+  priority?: TaskPriority[];
+  type?: TaskType[];
+  dueDate?: {
+    from?: Date;
+    to?: Date;
+  };
+  search?: string;
+}
+
+// =============================================================================
+// Timesheet / Urenregistratie Types
+// =============================================================================
+
+export interface TimeEntry {
+  id: string;
+  userId: string;
+  userName?: string;
+  userEmail?: string;
+  projectId: string;
+  projectName?: string;
+  taskId?: string;
+  taskName?: string;
+  date: Date;
+  hours: number;
+  minutes: number;
+  description: string;
+  billable: boolean;
+  hourlyRate?: number;
+  status: TimeEntryStatus;
+  approvedBy?: string;
+  approvedByName?: string;
+  approvedAt?: Date;
+  rejectionReason?: string;
+  invoiceId?: string;
+  invoicedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type TimeEntryStatus = 'draft' | 'submitted' | 'approved' | 'rejected' | 'invoiced';
+
+export interface TimesheetWeek {
+  id: string;
+  userId: string;
+  userName?: string;
+  weekNumber: number;
+  year: number;
+  startDate: Date;
+  endDate: Date;
+  totalHours: number;
+  billableHours: number;
+  status: TimesheetWeekStatus;
+  entries: TimeEntry[];
+  submittedAt?: Date;
+  approvedAt?: Date;
+  approvedBy?: string;
+  rejectedAt?: Date;
+  rejectedBy?: string;
+  rejectionReason?: string;
+}
+
+export type TimesheetWeekStatus = 'draft' | 'submitted' | 'partially_approved' | 'approved' | 'rejected';
+
+export interface TimesheetSummary {
+  userId: string;
+  period: 'week' | 'month';
+  startDate: Date;
+  endDate: Date;
+  totalHours: number;
+  billableHours: number;
+  nonBillableHours: number;
+  projectBreakdown: ProjectHours[];
+  pendingApproval: number;
+  approved: number;
+  rejected: number;
+}
+
+export interface ProjectHours {
+  projectId: string;
+  projectName: string;
+  hours: number;
+  billableHours: number;
+  revenue: number;
+}
+
+// =============================================================================
+// Client Portal Types
+// =============================================================================
+
+export interface ClientPortalAccess {
+  id: string;
+  userId: string;
+  clientId: string;
+  organizationId?: string;
+  accessLevel: ClientAccessLevel;
+  permissions: ClientPermission[];
+  projectIds: string[];
+  documentAccess: DocumentAccessRule[];
+  notificationPreferences: ClientNotificationPrefs;
+  lastAccess?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type ClientAccessLevel = 'basic' | 'standard' | 'premium';
+
+export type ClientPermission =
+  | 'view_projects'
+  | 'view_milestones'
+  | 'view_invoices'
+  | 'pay_invoices'
+  | 'view_documents'
+  | 'download_documents'
+  | 'view_progress'
+  | 'send_messages'
+  | 'request_changes';
+
+export interface DocumentAccessRule {
+  documentId?: string;
+  category?: string;
+  canView: boolean;
+  canDownload: boolean;
+}
+
+export interface ClientNotificationPrefs {
+  milestoneUpdates: boolean;
+  invoiceCreated: boolean;
+  paymentReminder: boolean;
+  documentShared: boolean;
+  projectStatusChange: boolean;
+}
+
+export interface ClientDashboardData {
+  activeProjects: number;
+  completedProjects: number;
+  upcomingMilestones: Milestone[];
+  pendingInvoices: Invoice[];
+  totalOutstanding: number;
+  recentDocuments: Document[];
+  projectProgress: ProjectProgressSummary[];
+}
+
+export interface ProjectProgressSummary {
+  projectId: string;
+  projectName: string;
+  status: ProjectStatus;
+  progress: number;
+  currentMilestone?: string;
+  nextMilestone?: {
+    name: string;
+    dueDate: Date;
+  };
+  lastUpdate: Date;
+}
+
+// =============================================================================
+// Contract Management Types
+// =============================================================================
+
+export interface Contract {
+  id: string;
+  contractNumber: string;
+  title: string;
+  type: ContractType;
+  status: ContractStatus;
+  templateId?: string;
+  clientId: string;
+  clientName: string;
+  clientEmail: string;
+  organizationId?: string;
+  projectId?: string;
+  quoteId?: string;
+  content: ContractContent;
+  financials: ContractFinancials;
+  dates: ContractDates;
+  signatories: ContractSignatory[];
+  attachments: ContractAttachment[];
+  history: ContractHistoryEntry[];
+  reminders: ContractReminder[];
+  metadata: ContractMetadata;
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+}
+
+export type ContractType =
+  | 'service_agreement'
+  | 'nda'
+  | 'sow'
+  | 'master_agreement'
+  | 'amendment'
+  | 'renewal';
+
+export type ContractStatus =
+  | 'draft'
+  | 'pending_review'
+  | 'sent'
+  | 'viewed'
+  | 'signed'
+  | 'active'
+  | 'expired'
+  | 'terminated'
+  | 'cancelled';
+
+export interface ContractContent {
+  body: string;
+  variables: { [key: string]: string };
+  sections: ContractSection[];
+}
+
+export interface ContractSection {
+  id: string;
+  title: string;
+  content: string;
+  order: number;
+  required: boolean;
+}
+
+export interface ContractFinancials {
+  totalValue: number;
+  currency: string;
+  paymentTerms: string;
+  billingSchedule?: BillingScheduleItem[];
+}
+
+export interface BillingScheduleItem {
+  description: string;
+  amount: number;
+  dueDate: Date;
+  invoiceId?: string;
+}
+
+export interface ContractDates {
+  effectiveDate?: Date;
+  expirationDate?: Date;
+  signedDate?: Date;
+  sentDate?: Date;
+  renewalDate?: Date;
+  terminationDate?: Date;
+  noticePeriodDays: number;
+}
+
+export interface ContractSignatory {
+  id: string;
+  name: string;
+  email: string;
+  role: 'client' | 'company' | 'witness';
+  signatureUrl?: string;
+  signedAt?: Date;
+  ipAddress?: string;
+  order: number;
+}
+
+export interface ContractAttachment {
+  id: string;
+  name: string;
+  url: string;
+  type: string;
+  size: number;
+  uploadedAt: Date;
+  uploadedBy: string;
+}
+
+export interface ContractHistoryEntry {
+  id: string;
+  action: ContractAction;
+  description: string;
+  userId: string;
+  userName: string;
+  timestamp: Date;
+  metadata?: { [key: string]: any };
+}
+
+export type ContractAction =
+  | 'created'
+  | 'updated'
+  | 'sent'
+  | 'viewed'
+  | 'signed'
+  | 'approved'
+  | 'rejected'
+  | 'activated'
+  | 'expired'
+  | 'renewed'
+  | 'terminated';
+
+export interface ContractReminder {
+  id: string;
+  type: 'expiration' | 'renewal' | 'signature_pending';
+  dueDate: Date;
+  sent: boolean;
+  sentAt?: Date;
+  recipients: string[];
+}
+
+export interface ContractMetadata {
+  version: number;
+  parentContractId?: string;
+  tags: string[];
+  customFields: { [key: string]: any };
+}
+
+export interface ContractTemplate {
+  id: string;
+  name: string;
+  description: string;
+  type: ContractType;
+  content: ContractContent;
+  defaultFinancials?: Partial<ContractFinancials>;
+  defaultDates?: {
+    validityDays: number;
+    noticePeriodDays: number;
+  };
+  variables: TemplateVariable[];
+  isActive: boolean;
+  usageCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+}
+
+export interface TemplateVariable {
+  key: string;
+  label: string;
+  type: 'text' | 'number' | 'date' | 'select';
+  required: boolean;
+  defaultValue?: string;
+  options?: string[];
+}

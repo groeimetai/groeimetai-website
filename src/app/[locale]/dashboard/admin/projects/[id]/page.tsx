@@ -45,6 +45,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from '@/i18n/routing';
 import { firestoreProjectService as projectService } from '@/services/firestore/projects';
 import { Project, ProjectStatus, ProjectPriority, ProjectType } from '@/types';
+import { KanbanBoard } from '@/components/tasks';
 import { format } from 'date-fns';
 import { db } from '@/lib/firebase/config';
 import { doc, onSnapshot, updateDoc, deleteDoc, collection, query, where, getDocs, addDoc, serverTimestamp, setDoc } from 'firebase/firestore';
@@ -92,6 +93,7 @@ export default function AdminProjectDetailPage() {
   const [editingTimeline, setEditingTimeline] = useState(false);
   const [timelineStages, setTimelineStages] = useState<any[]>([]);
   const [isSavingTimeline, setIsSavingTimeline] = useState(false);
+  const [teamMembers, setTeamMembers] = useState<Array<{ id: string; name: string; avatar?: string }>>([]);
 
   // Default timeline stages structure
   interface TimelineStage {
@@ -309,6 +311,29 @@ export default function AdminProjectDetailPage() {
       unsubscribeTimeline?.();
     };
   }, [user, projectId]);
+
+  // Fetch team members (admins and consultants)
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, where('role', 'in', ['admin', 'consultant']));
+        const snapshot = await getDocs(q);
+        const members = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().displayName || doc.data().email || 'Unknown',
+          avatar: doc.data().photoURL,
+        }));
+        setTeamMembers(members);
+      } catch (error) {
+        console.error('Error fetching team members:', error);
+      }
+    };
+
+    if (user) {
+      fetchTeamMembers();
+    }
+  }, [user]);
 
   const updateProjectStatus = async (newStatus: ProjectStatus) => {
     if (!project) return;
@@ -626,10 +651,18 @@ export default function AdminProjectDetailPage() {
         )}
       </div>
 
-      {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Project Details */}
-        <div className="lg:col-span-2 space-y-6">
+      {/* Main Content with Tabs */}
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="bg-white/5 mb-6">
+          <TabsTrigger value="overview">Overzicht</TabsTrigger>
+          <TabsTrigger value="tasks">Taken</TabsTrigger>
+        </TabsList>
+
+        {/* Overview Tab */}
+        <TabsContent value="overview">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left Column - Project Details */}
+            <div className="lg:col-span-2 space-y-6">
           {/* Project Overview */}
           <Card>
             <CardHeader>
@@ -1063,8 +1096,22 @@ export default function AdminProjectDetailPage() {
               )}
             </CardContent>
           </Card>
-        </div>
-      </div>
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* Tasks Tab */}
+        <TabsContent value="tasks">
+          <KanbanBoard
+            projectId={projectId}
+            projectName={project.name}
+            currentUserId={user?.uid || ''}
+            currentUserName={user?.displayName || user?.email || 'Unknown'}
+            currentUserAvatar={user?.photoURL}
+            teamMembers={teamMembers}
+          />
+        </TabsContent>
+      </Tabs>
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>

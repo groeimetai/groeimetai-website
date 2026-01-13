@@ -746,7 +746,7 @@ export default function UsersManagementPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#080D14' }}>
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-orange animate-spin mx-auto" />
           <p className="mt-4 text-white/60">Loading users...</p>
@@ -795,7 +795,7 @@ export default function UsersManagementPage() {
 
   return (
     <TooltipProvider>
-      <main className="min-h-screen bg-black">
+      <main className="min-h-screen" style={{ backgroundColor: '#080D14' }}>
         <div className="container mx-auto px-4 pt-24 pb-8">
           {/* Header */}
           <div className="mb-8">
@@ -866,62 +866,66 @@ export default function UsersManagementPage() {
           {/* Filters */}
           <Card className="bg-white/5 border-white/10 mb-6">
             <CardContent className="p-4">
-              <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-                <div className="md:col-span-2">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-                    <Input
-                      placeholder="Search users..."
-                      value={filters.search}
-                      onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-                      className="pl-10 bg-white/5 border-white/10 text-white"
-                    />
+              <div className="space-y-4">
+                {/* Row 1: Search and Filters */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="sm:col-span-2 lg:col-span-1">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                      <Input
+                        placeholder="Search users..."
+                        value={filters.search}
+                        onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                        className="pl-10 bg-white/5 border-white/10 text-white"
+                      />
+                    </div>
                   </div>
+                  <Select
+                    value={filters.role}
+                    onValueChange={(value) => setFilters({ ...filters, role: value })}
+                  >
+                    <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                      <SelectValue placeholder="Role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Roles</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
+                      <SelectItem value="consultant">Consultant</SelectItem>
+                      <SelectItem value="client">Client</SelectItem>
+                      <SelectItem value="guest">Guest</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select
+                    value={filters.status}
+                    onValueChange={(value) => setFilters({ ...filters, status: value })}
+                  >
+                    <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                      <SelectValue placeholder="Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Status</SelectItem>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select
+                    value={filters.dateRange}
+                    onValueChange={(value) => setFilters({ ...filters, dateRange: value })}
+                  >
+                    <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                      <SelectValue placeholder="Date Range" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Time</SelectItem>
+                      <SelectItem value="today">Today</SelectItem>
+                      <SelectItem value="week">Last 7 Days</SelectItem>
+                      <SelectItem value="month">Last Month</SelectItem>
+                      <SelectItem value="year">Last Year</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-                <Select
-                  value={filters.role}
-                  onValueChange={(value) => setFilters({ ...filters, role: value })}
-                >
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
-                    <SelectValue placeholder="Role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Roles</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="consultant">Consultant</SelectItem>
-                    <SelectItem value="client">Client</SelectItem>
-                    <SelectItem value="guest">Guest</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select
-                  value={filters.status}
-                  onValueChange={(value) => setFilters({ ...filters, status: value })}
-                >
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select
-                  value={filters.dateRange}
-                  onValueChange={(value) => setFilters({ ...filters, dateRange: value })}
-                >
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
-                    <SelectValue placeholder="Date Range" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Time</SelectItem>
-                    <SelectItem value="today">Today</SelectItem>
-                    <SelectItem value="week">Last 7 Days</SelectItem>
-                    <SelectItem value="month">Last Month</SelectItem>
-                    <SelectItem value="year">Last Year</SelectItem>
-                  </SelectContent>
-                </Select>
-                <div className="flex gap-2">
+                {/* Row 2: Action Buttons */}
+                <div className="flex flex-wrap items-center gap-2">
                   <Button variant="outline" size="icon" onClick={() => setShowExportDialog(true)}>
                     <Download className="w-4 h-4" />
                   </Button>

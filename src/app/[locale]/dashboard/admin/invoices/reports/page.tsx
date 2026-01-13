@@ -265,14 +265,14 @@ export default function InvoiceReportsPage() {
 
   if (loading || !user || !isAdmin) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#080D14' }}>
         <Loader2 className="animate-spin h-12 w-12 text-orange" />
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen" style={{ backgroundColor: '#080D14' }}>
       <div className="container mx-auto px-4 pt-24 pb-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
