@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyIdToken, adminDb } from '@/lib/firebase/admin';
+import { verifyIdToken } from '@/lib/firebase/admin';
 import { InvoiceItem, InvoiceType, InvoiceBillingDetails } from '@/types';
+import { isAdminEmail } from '@/lib/constants/adminEmails';
 
 // POST /api/invoices/create
 export async function POST(request: NextRequest) {
@@ -22,28 +23,21 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user has permission to create invoices (admin or consultant)
-    // Check both custom claims AND Firestore user document for role
     const userRole = decodedToken.role as string | undefined;
     const userRoles = (decodedToken.roles as string[] | undefined) || [];
+    const userEmail = decodedToken.email as string | undefined;
 
-    // Also check Firestore user document
-    let firestoreRole: string | undefined;
-    try {
-      const userDoc = await adminDb.collection('users').doc(decodedToken.uid).get();
-      if (userDoc.exists) {
-        firestoreRole = userDoc.data()?.role;
-      }
-    } catch (e) {
-      console.warn('Could not fetch user document for role check:', e);
-    }
+    // Log for debugging
+    console.log('Permission check - Email:', userEmail, 'Role:', userRole, 'IsAdminEmail:', userEmail ? isAdminEmail(userEmail) : false);
 
+    // Check permission: custom claims OR admin email list
+    // Note: Firestore role check removed due to Admin SDK auth issues in production
     const hasPermission =
       userRole === 'admin' ||
       userRole === 'consultant' ||
       userRoles.includes('admin') ||
       userRoles.includes('consultant') ||
-      firestoreRole === 'admin' ||
-      firestoreRole === 'consultant';
+      (userEmail && isAdminEmail(userEmail));
 
     if (!hasPermission) {
       return NextResponse.json(

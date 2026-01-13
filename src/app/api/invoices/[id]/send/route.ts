@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyIdToken } from '@/lib/firebase/admin';
+import { isAdminEmail } from '@/lib/constants/adminEmails';
 
 // POST /api/invoices/[id]/send
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
@@ -31,11 +32,13 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     }
 
     const invoice = { id: invoiceDoc.id, ...invoiceDoc.data() } as any;
+    const userEmail = decodedToken.email as string | undefined;
 
-    // Check permissions: admin, consultant, or the client who owns the invoice
+    // Check permissions: admin, consultant, admin email, or the client who owns the invoice
     const hasPermission =
       decodedToken.role === 'admin' ||
       decodedToken.role === 'consultant' ||
+      (userEmail && isAdminEmail(userEmail)) ||
       invoice.clientId === decodedToken.uid;
 
     if (!hasPermission) {

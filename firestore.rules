@@ -5,14 +5,22 @@ service cloud.firestore {
     function isAuthenticated() {
       return request.auth != null;
     }
-    
+
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
     }
-    
-    function isAdmin() {
+
+    // Check if email is in admin list
+    function isAdminEmail() {
       return isAuthenticated() &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+        request.auth.token.email in ['info@groeimetai.io', 'niels@groeimetai.io', 'admin@groeimetai.io'];
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        isAdminEmail()
+      );
     }
 
     function isConsultant() {

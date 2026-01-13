@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyIdToken } from '@/lib/firebase/admin';
+import { isAdminEmail } from '@/lib/constants/adminEmails';
 
 // GET /api/invoices/[id]/pdf
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
@@ -20,7 +21,6 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 });
     }
 
-    // Get invoice
     // Get invoice using dynamic imports
     const { getDoc, doc } = await import('firebase/firestore');
     const { db, collections } = await import('@/lib/firebase/config');
@@ -32,11 +32,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     }
 
     const invoice = { id: invoiceDoc.id, ...invoiceDoc.data() } as any;
+    const userEmail = decodedToken.email as string | undefined;
 
-    // Check permissions: admin, consultant, or the client who owns the invoice
+    // Check permissions: admin, consultant, admin email, or the client who owns the invoice
     const hasPermission =
       decodedToken.role === 'admin' ||
       decodedToken.role === 'consultant' ||
+      (userEmail && isAdminEmail(userEmail)) ||
       invoice.clientId === decodedToken.uid;
 
     if (!hasPermission) {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyIdToken } from '@/lib/firebase/admin';
+import { isAdminEmail } from '@/lib/constants/adminEmails';
 
 // POST /api/payments/create
 export async function POST(request: NextRequest) {
@@ -39,12 +40,14 @@ export async function POST(request: NextRequest) {
     }
 
     const invoice = { id: invoiceDoc.id, ...invoiceDoc.data() } as any;
+    const userEmail = decodedToken.email as string | undefined;
 
     // Check permissions: anyone can pay their own invoice, admin/consultant can create payment links for any invoice
     const hasPermission =
       invoice.clientId === decodedToken.uid ||
       decodedToken.role === 'admin' ||
-      decodedToken.role === 'consultant';
+      decodedToken.role === 'consultant' ||
+      (userEmail && isAdminEmail(userEmail));
 
     if (!hasPermission) {
       return NextResponse.json(
