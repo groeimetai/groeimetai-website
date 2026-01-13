@@ -19,6 +19,7 @@ import {
   Globe,
   Bell,
   User,
+  Shield,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from '@/i18n/routing';
@@ -32,7 +33,7 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
   const router = useRouter();
   const t = useTranslations('navigation');
   const pathname = usePathname();
@@ -137,6 +138,17 @@ export default function Navigation() {
                       {t('dashboard')}
                     </Button>
                   </Link>
+                  {isAdmin && (
+                    <Link href="/dashboard/admin">
+                      <Button
+                        variant="ghost"
+                        className="text-white hover:text-orange hover:bg-white/10 hover-lift"
+                      >
+                        <Shield className="w-4 h-4 mr-2" />
+                        Admin
+                      </Button>
+                    </Link>
+                  )}
                   <ClientOnly>
                     <Button
                       onClick={handleLogout}
@@ -248,6 +260,17 @@ export default function Navigation() {
                           {t('dashboard')}
                         </Button>
                       </Link>
+                      {isAdmin && (
+                        <Link href="/dashboard/admin" onClick={() => setIsMobileMenuOpen(false)}>
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start text-white hover:bg-white/5 py-3"
+                          >
+                            <Shield className="w-5 h-5 mr-3" />
+                            Admin
+                          </Button>
+                        </Link>
+                      )}
                       <ClientOnly>
                         <Button
                           onClick={() => {

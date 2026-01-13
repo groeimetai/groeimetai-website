@@ -1093,6 +1093,24 @@ export default function AdminDashboard() {
                         Database
                       </Button>
                     </Link>
+                    <Link href="/dashboard/admin/invoices">
+                      <Button variant="outline" className="w-full justify-start">
+                        <DollarSign className="w-4 h-4 mr-2" />
+                        Invoices
+                      </Button>
+                    </Link>
+                    <Link href="/dashboard/admin/timesheets">
+                      <Button variant="outline" className="w-full justify-start">
+                        <Clock className="w-4 h-4 mr-2" />
+                        Timesheets
+                      </Button>
+                    </Link>
+                    <Link href="/dashboard/admin/contracts">
+                      <Button variant="outline" className="w-full justify-start">
+                        <FileText className="w-4 h-4 mr-2" />
+                        Contracts
+                      </Button>
+                    </Link>
                     <Link href="/dashboard/admin/workflows">
                       <Button variant="outline" className="w-full justify-start">
                         <GitBranch className="w-4 h-4 mr-2" />
