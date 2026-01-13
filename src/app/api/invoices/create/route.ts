@@ -130,11 +130,7 @@ export async function POST(request: NextRequest) {
       id: invoiceRef.id,
       invoiceNumber,
       clientId: body.clientId,
-      organizationId: body.organizationId,
       billingAddress: body.billingAddress,
-      projectId: body.projectId,
-      quoteId: body.quoteId,
-      milestoneId: body.milestoneId,
       status: 'draft',
       type: body.type as InvoiceType,
       items,
@@ -155,13 +151,23 @@ export async function POST(request: NextRequest) {
       createdBy: decodedToken.uid,
     };
 
-    // Save with Admin SDK (bypasses Firestore rules)
-    await invoiceRef.set({
+    // Build document data, only including defined optional fields
+    // Firestore Admin SDK doesn't accept undefined values
+    const docData: Record<string, any> = {
       ...invoice,
-      billingDetails: billingDetails || null,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-    });
+    };
+
+    // Add optional fields only if they have values
+    if (body.organizationId) docData.organizationId = body.organizationId;
+    if (body.projectId) docData.projectId = body.projectId;
+    if (body.quoteId) docData.quoteId = body.quoteId;
+    if (body.milestoneId) docData.milestoneId = body.milestoneId;
+    if (billingDetails) docData.billingDetails = billingDetails;
+
+    // Save with Admin SDK (bypasses Firestore rules)
+    await invoiceRef.set(docData);
 
     // Send invoice email if requested
     if (body.sendEmail) {
