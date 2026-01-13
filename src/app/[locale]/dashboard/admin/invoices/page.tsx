@@ -522,8 +522,7 @@ export default function AdminInvoicesPage() {
       }
 
       toast.success(`Invoice ${invoice.invoiceNumber} sent successfully`);
-      // Refresh invoices to update status
-      loadInvoices();
+      // Note: Invoices will auto-refresh via Firestore listener
     } catch (error: any) {
       console.error('Error sending invoice:', error);
       toast.error(error.message || 'Failed to send invoice');
@@ -579,7 +578,7 @@ export default function AdminInvoicesPage() {
       }
 
       toast.success('Payment reminder sent successfully');
-      loadInvoices();
+      // Note: Invoices will auto-refresh via Firestore listener
     } catch (error: any) {
       console.error('Error sending reminder:', error);
       toast.error(error.message || 'Failed to send payment reminder');
