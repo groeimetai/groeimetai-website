@@ -84,6 +84,18 @@ export class InvoicePdfService {
     return doc.output('blob');
   }
 
+  // Base64 logo image (PNG) - replace this with your actual logo
+  // To add your logo: export SVG to PNG and convert to base64
+  private logoBase64: string | null = null;
+
+  /**
+   * Set the logo image as base64 string
+   * @param base64 - Base64 encoded PNG image (without data:image/png;base64, prefix)
+   */
+  setLogo(base64: string): void {
+    this.logoBase64 = base64;
+  }
+
   /**
    * Add company header with logo and branding - Modern minimal design
    */
@@ -93,23 +105,18 @@ export class InvoicePdfService {
     doc.setLineWidth(0.5);
     doc.line(15, 45, 195, 45);
 
-    // Draw text-based logo: "Groeimet" in black, "Ai" with orange accent
-    doc.setFontSize(28);
-    doc.setFont('helvetica', 'bold');
-
-    // "Groeimet" part - black text
-    doc.setTextColor(26, 26, 26); // brandBlack
-    doc.text('Groeimet', 15, 22);
-
-    // "Ai" part - black with orange underline accent
-    const groeimetWidth = doc.getTextWidth('Groeimet');
-    doc.text('Ai', 15 + groeimetWidth + 1, 22);
-
-    // Orange accent line under "Ai"
-    doc.setDrawColor(255, 122, 0); // brandOrange
-    doc.setLineWidth(2);
-    const aiWidth = doc.getTextWidth('Ai');
-    doc.line(15 + groeimetWidth + 1, 24, 15 + groeimetWidth + 1 + aiWidth, 24);
+    // Try to add logo image if available
+    if (this.logoBase64) {
+      try {
+        doc.addImage(this.logoBase64, 'PNG', 15, 10, 60, 15);
+      } catch (e) {
+        // Fallback to text logo if image fails
+        this.addTextLogo(doc);
+      }
+    } else {
+      // Text-based logo fallback
+      this.addTextLogo(doc);
+    }
 
     // Company address on the left under logo
     doc.setFontSize(9);
@@ -143,6 +150,46 @@ export class InvoicePdfService {
 
     // Reset text color
     doc.setTextColor(26, 32, 44); // primaryTextColor
+  }
+
+  /**
+   * Draw text-based logo as fallback when no image is available
+   * Mimics the italic bold style with orange accent
+   */
+  private addTextLogo(doc: jsPDF): void {
+    // "Groeimet" in bold italic style with orange underline accent
+    doc.setFontSize(26);
+    doc.setFont('helvetica', 'bolditalic');
+    doc.setTextColor(26, 26, 26); // brandBlack
+
+    // Draw "Groeimet" with slight orange stroke effect (simulated by drawing twice)
+    const xStart = 15;
+    const yLogo = 20;
+
+    // Orange "shadow" slightly offset
+    doc.setTextColor(255, 122, 0);
+    doc.text('Groeimet', xStart + 0.3, yLogo + 0.3);
+
+    // Black text on top
+    doc.setTextColor(26, 26, 26);
+    doc.text('Groeimet', xStart, yLogo);
+
+    // "AI" part - with white stroke effect
+    const groeimetWidth = doc.getTextWidth('Groeimet');
+
+    // White "shadow"
+    doc.setTextColor(255, 255, 255);
+    doc.text('AI', xStart + groeimetWidth + 0.3, yLogo + 0.3);
+
+    // Black text on top
+    doc.setTextColor(26, 26, 26);
+    doc.text('AI', xStart + groeimetWidth, yLogo);
+
+    // Orange accent bar under the logo
+    doc.setDrawColor(255, 122, 0);
+    doc.setLineWidth(1.5);
+    const totalWidth = groeimetWidth + doc.getTextWidth('AI');
+    doc.line(xStart, yLogo + 3, xStart + totalWidth, yLogo + 3);
   }
 
   /**
