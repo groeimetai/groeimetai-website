@@ -50,10 +50,11 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     const recipientEmail = body.recipientEmail;
     const recipientName = body.recipientName;
 
-    // Determine email recipient:
-    // 1. Use provided recipientEmail
+    // Determine email recipient (in order of priority):
+    // 1. Use provided recipientEmail from request
     // 2. Use stored clientEmail on invoice
-    // 3. Look up from users collection
+    // 3. Use email from billingDetails
+    // 4. Look up from users collection
     let email = recipientEmail;
     let name = recipientName;
 
@@ -62,21 +63,43 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       if (invoice.clientEmail) {
         email = invoice.clientEmail;
         name = name || invoice.clientName;
-      } else {
-        // Fall back to looking up from users collection
+        console.log('Using clientEmail from invoice:', email);
+      }
+      // Try billingDetails email
+      else if (invoice.billingDetails?.email) {
+        email = invoice.billingDetails.email;
+        name = name || invoice.billingDetails.contactName || invoice.billingDetails.companyName;
+        console.log('Using email from billingDetails:', email);
+      }
+      // Fall back to looking up from users collection
+      else if (invoice.clientId) {
         const clientDoc = await adminDb.collection('users').doc(invoice.clientId).get();
         const client = clientDoc.exists ? clientDoc.data() : null;
 
-        if (!client?.email) {
-          return NextResponse.json(
-            { error: 'No email address found for invoice recipient. Please provide a recipient email.' },
-            { status: 400 }
-          );
+        if (client?.email) {
+          email = client.email;
+          name = name || client.fullName || client.displayName;
+          console.log('Using email from users collection:', email);
         }
-
-        email = client.email;
-        name = name || client.fullName || client.displayName;
       }
+    }
+
+    // Final check - if still no email, return detailed error
+    if (!email) {
+      console.error('No email found for invoice:', {
+        invoiceId: params.id,
+        clientId: invoice.clientId,
+        hasClientEmail: !!invoice.clientEmail,
+        hasBillingDetails: !!invoice.billingDetails,
+      });
+      return NextResponse.json(
+        {
+          error: 'No email address found for invoice recipient.',
+          hint: 'Please provide a recipientEmail in the request body.',
+          invoiceId: params.id,
+        },
+        { status: 400 }
+      );
     }
 
     // Set PDF URL if not already set

@@ -485,6 +485,25 @@ export default function AdminInvoicesPage() {
       const token = await currentUser.getIdToken();
       if (!token) throw new Error('No authentication token');
 
+      // Try multiple sources for email: clientEmail, billingDetails, or find client
+      let recipientEmail = invoice.clientEmail;
+      let recipientName = invoice.clientName;
+
+      // Try billingDetails if no clientEmail
+      if (!recipientEmail && (invoice as any).billingDetails?.email) {
+        recipientEmail = (invoice as any).billingDetails.email;
+        recipientName = recipientName || (invoice as any).billingDetails.contactName || (invoice as any).billingDetails.companyName;
+      }
+
+      // Try to find client email from clients list
+      if (!recipientEmail && invoice.clientId) {
+        const client = clients.find(c => c.id === invoice.clientId);
+        if (client?.email) {
+          recipientEmail = client.email;
+          recipientName = recipientName || client.fullName || client.displayName;
+        }
+      }
+
       const response = await fetch(`/api/invoices/${invoice.id}/send`, {
         method: 'POST',
         headers: {
@@ -492,19 +511,22 @@ export default function AdminInvoicesPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          recipientEmail: invoice.clientEmail,
-          recipientName: invoice.clientName,
+          recipientEmail,
+          recipientName,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send invoice');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to send invoice');
       }
 
       toast.success(`Invoice ${invoice.invoiceNumber} sent successfully`);
-    } catch (error) {
+      // Refresh invoices to update status
+      loadInvoices();
+    } catch (error: any) {
       console.error('Error sending invoice:', error);
-      toast.error('Failed to send invoice');
+      toast.error(error.message || 'Failed to send invoice');
     } finally {
       setSendingInvoice(false);
     }
@@ -520,6 +542,23 @@ export default function AdminInvoicesPage() {
       const token = await currentUser.getIdToken();
       if (!token) throw new Error('No authentication token');
 
+      // Try multiple sources for email
+      let recipientEmail = invoice.clientEmail;
+      let recipientName = invoice.clientName;
+
+      if (!recipientEmail && (invoice as any).billingDetails?.email) {
+        recipientEmail = (invoice as any).billingDetails.email;
+        recipientName = recipientName || (invoice as any).billingDetails.contactName;
+      }
+
+      if (!recipientEmail && invoice.clientId) {
+        const client = clients.find(c => c.id === invoice.clientId);
+        if (client?.email) {
+          recipientEmail = client.email;
+          recipientName = recipientName || client.fullName || client.displayName;
+        }
+      }
+
       const reminderType = invoice.status === 'overdue' ? 'overdue' : 'due_soon';
       const response = await fetch(`/api/invoices/${invoice.id}/send`, {
         method: 'POST',
@@ -528,20 +567,22 @@ export default function AdminInvoicesPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          recipientEmail: invoice.clientEmail,
-          recipientName: invoice.clientName,
-          reminderType: reminderType,
+          recipientEmail,
+          recipientName,
+          reminderType,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send reminder');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to send reminder');
       }
 
       toast.success('Payment reminder sent successfully');
-    } catch (error) {
+      loadInvoices();
+    } catch (error: any) {
       console.error('Error sending reminder:', error);
-      toast.error('Failed to send payment reminder');
+      toast.error(error.message || 'Failed to send payment reminder');
     } finally {
       setSendingReminder(false);
     }
