@@ -9,32 +9,21 @@ import { getStorage, FirebaseStorage } from 'firebase/storage';
 import { getAnalytics, Analytics, isSupported } from 'firebase/analytics';
 import { getPerformance, FirebasePerformance } from 'firebase/performance';
 
-// Check if Firebase credentials are available
-function hasFirebaseConfig(): boolean {
-  return Boolean(
-    process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
-    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN &&
-    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
-    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET &&
-    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID &&
-    process.env.NEXT_PUBLIC_FIREBASE_APP_ID
-  );
-}
-
-// Firebase configuration from environment variables
+// Firebase configuration - hardcoded (client-side, public keys)
+// These are safe to expose - security is handled by Firebase Security Rules
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
-  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET!,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyDava1yANafho1-TCfFaWmr5PscZUi1D3E",
+  authDomain: "groeimetai-458417.firebaseapp.com",
+  databaseURL: "https://groeimetai-458417-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "groeimetai-458417",
+  storageBucket: "groeimetai-458417.firebasestorage.app",
+  messagingSenderId: "194122035772",
+  appId: "1:194122035772:web:2b31d75962fc5f7cfec939",
+  measurementId: "G-9PJWBTPMLH",
 };
 
-// Config validity check
-const isFirebaseConfigValid = hasFirebaseConfig();
+// Config is always valid (hardcoded)
+const isFirebaseConfigValid = true;
 
 // Initialize Firebase
 let app: FirebaseApp;
@@ -44,54 +33,40 @@ let storage: FirebaseStorage;
 let analytics: Analytics | null = null;
 let performance: FirebasePerformance | null = null;
 
-// Only initialize if config is available (not during build time)
-if (hasFirebaseConfig()) {
-  if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
-  } else {
-    app = getApps()[0];
-  }
+// Initialize Firebase
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApps()[0];
+}
 
-  // Initialize services
-  auth = getAuth(app);
-  db = getFirestore(app);
-  storage = getStorage(app);
+// Initialize services
+auth = getAuth(app);
+db = getFirestore(app);
+storage = getStorage(app);
 
-  // Initialize Analytics and Performance only on client side
-  if (typeof window !== 'undefined') {
-    isSupported().then((supported) => {
-      if (supported) {
-        analytics = getAnalytics(app);
+// Initialize Analytics and Performance only on client side
+if (typeof window !== 'undefined') {
+  isSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(app);
 
-        // Only initialize performance if not disabled
-        if (process.env.NEXT_PUBLIC_DISABLE_FIREBASE_PERFORMANCE !== 'true') {
-          performance = getPerformance(app);
+      // Only initialize performance if not disabled
+      if (process.env.NEXT_PUBLIC_DISABLE_FIREBASE_PERFORMANCE !== 'true') {
+        performance = getPerformance(app);
 
-          // Disable automatic instrumentation to prevent CSS class attribute errors
-          if (performance) {
-            try {
-              (performance as any).dataCollectionEnabled = false;
-              (performance as any).instrumentationEnabled = false;
-            } catch (error) {
-              console.debug('Failed to configure Firebase Performance:', error);
-            }
+        // Disable automatic instrumentation to prevent CSS class attribute errors
+        if (performance) {
+          try {
+            (performance as any).dataCollectionEnabled = false;
+            (performance as any).instrumentationEnabled = false;
+          } catch (error) {
+            console.debug('Failed to configure Firebase Performance:', error);
           }
         }
       }
-    });
-  }
-} else {
-  // During build time, these will be undefined but typed as if they exist
-  // This is safe because client-side code only runs in the browser with env vars
-  app = null as unknown as FirebaseApp;
-  auth = null as unknown as Auth;
-  db = null as unknown as Firestore;
-  storage = null as unknown as FirebaseStorage;
-
-  // Log warning in development
-  if (process.env.NODE_ENV === 'development') {
-    console.warn('Firebase config not available. Set NEXT_PUBLIC_FIREBASE_* environment variables.');
-  }
+    }
+  });
 }
 
 // Offline persistence is now enabled by default in newer Firebase versions
