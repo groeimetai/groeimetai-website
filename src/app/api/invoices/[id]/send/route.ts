@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyIdToken } from '@/lib/firebase/admin';
+import { verifyIdToken, adminDb } from '@/lib/firebase/admin';
 import { isAdminEmail } from '@/lib/constants/adminEmails';
 
 // POST /api/invoices/[id]/send
@@ -21,13 +21,10 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 });
     }
 
-    // Get invoice to check permissions using dynamic import
-    const { getDoc, doc } = await import('firebase/firestore');
-    const { db, collections } = await import('@/lib/firebase/config');
+    // Get invoice using Admin SDK
+    const invoiceDoc = await adminDb.collection('invoices').doc(params.id).get();
 
-    const invoiceDoc = await getDoc(doc(db, collections.invoices, params.id));
-
-    if (!invoiceDoc.exists()) {
+    if (!invoiceDoc.exists) {
       return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
 
@@ -53,15 +50,12 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     const recipientEmail = body.recipientEmail;
     const recipientName = body.recipientName;
 
-    // If no email provided, get from client
+    // If no email provided, get from client using Admin SDK
     let email = recipientEmail;
     let name = recipientName;
 
     if (!email) {
-      const { getDoc, doc } = await import('firebase/firestore');
-      const { db, collections } = await import('@/lib/firebase/config');
-
-      const clientDoc = await getDoc(doc(db, collections.users, invoice.clientId));
+      const clientDoc = await adminDb.collection('users').doc(invoice.clientId).get();
       const client = clientDoc.data();
 
       if (!client?.email) {

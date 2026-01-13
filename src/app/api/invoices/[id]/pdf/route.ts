@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyIdToken } from '@/lib/firebase/admin';
+import { verifyIdToken, adminDb } from '@/lib/firebase/admin';
 import { isAdminEmail } from '@/lib/constants/adminEmails';
 
 // GET /api/invoices/[id]/pdf
@@ -21,13 +21,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 });
     }
 
-    // Get invoice using dynamic imports
-    const { getDoc, doc } = await import('firebase/firestore');
-    const { db, collections } = await import('@/lib/firebase/config');
+    // Get invoice using Admin SDK
+    const invoiceDoc = await adminDb.collection('invoices').doc(params.id).get();
 
-    const invoiceDoc = await getDoc(doc(db, collections.invoices, params.id));
-
-    if (!invoiceDoc.exists()) {
+    if (!invoiceDoc.exists) {
       return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
 
