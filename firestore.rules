@@ -11,8 +11,17 @@ service cloud.firestore {
     }
     
     function isAdmin() {
-      return isAuthenticated() && 
+      return isAuthenticated() &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isConsultant() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'consultant';
+    }
+
+    function isAdminOrConsultant() {
+      return isAdmin() || isConsultant();
     }
     
     function isValidContactSubmission(data) {
@@ -525,19 +534,19 @@ service cloud.firestore {
     
     // Invoices collection
     match /invoices/{invoiceId} {
-      // Users can read their own invoices, admins can read all
+      // Users can read their own invoices, admins/consultants can read all
       allow read: if isAuthenticated() && (
         resource.data.clientId == request.auth.uid ||
         resource.data.clientEmail == request.auth.token.email ||
-        isAdmin()
+        isAdminOrConsultant()
       );
-      
-      // Only admins can create invoices
-      allow create: if isAdmin();
-      
-      // Only admins can update invoices
-      allow update: if isAdmin();
-      
+
+      // Admins and consultants can create invoices
+      allow create: if isAdminOrConsultant();
+
+      // Admins and consultants can update invoices
+      allow update: if isAdminOrConsultant();
+
       // Only admins can delete invoices
       allow delete: if isAdmin();
     }

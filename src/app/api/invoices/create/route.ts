@@ -22,7 +22,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user has permission to create invoices (admin or consultant)
-    if (decodedToken.role !== 'admin' && decodedToken.role !== 'consultant') {
+    // Support both single 'role' claim and 'roles' array for compatibility
+    const userRole = decodedToken.role as string | undefined;
+    const userRoles = (decodedToken.roles as string[] | undefined) || [];
+    const hasPermission =
+      userRole === 'admin' ||
+      userRole === 'consultant' ||
+      userRoles.includes('admin') ||
+      userRoles.includes('consultant');
+
+    if (!hasPermission) {
       return NextResponse.json(
         { error: 'Insufficient permissions to create invoices' },
         { status: 403 }
