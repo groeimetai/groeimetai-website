@@ -101,6 +101,14 @@ export async function POST(request: NextRequest) {
       return invoiceItem;
     });
 
+    // Fetch client info using Admin SDK
+    const clientDoc = await adminDb.collection('users').doc(body.clientId).get();
+    const clientData = clientDoc.exists ? clientDoc.data() : null;
+    const clientName = clientData?.displayName || clientData?.fullName || clientData?.firstName
+      ? `${clientData.firstName || ''} ${clientData.lastName || ''}`.trim()
+      : 'Unknown';
+    const clientEmail = clientData?.email || '';
+
     // Generate invoice number
     const date = new Date();
     const year = date.getFullYear();
@@ -163,6 +171,10 @@ export async function POST(request: NextRequest) {
       updatedAt: serverTimestamp(),
     };
 
+    // Add client info
+    docData.clientName = clientName;
+    if (clientEmail) docData.clientEmail = clientEmail;
+
     // Add optional fields only if they have values
     if (body.organizationId) docData.organizationId = body.organizationId;
     if (body.projectId) docData.projectId = body.projectId;
@@ -172,6 +184,9 @@ export async function POST(request: NextRequest) {
 
     // Save with Admin SDK (bypasses Firestore rules)
     await invoiceRef.set(docData);
+
+    // Add client info to response object
+    const responseInvoice = { ...invoice, clientName, clientEmail };
 
     // Send invoice email if requested
     if (body.sendEmail) {
@@ -192,7 +207,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        data: invoice,
+        data: responseInvoice,
         message: `Invoice ${invoice.invoiceNumber} created successfully`,
       },
       { status: 201 }
