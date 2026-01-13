@@ -41,25 +41,28 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center px-4 py-12">
+    <main className="min-h-screen flex items-center justify-center px-4 py-12 relative" style={{ backgroundColor: '#080D14' }}>
+      {/* Subtle section divider */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
       <div className="w-full max-w-md mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="bg-black/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-white/10"
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="bg-white/[0.03] backdrop-blur-sm rounded-2xl p-8 border border-white/10"
         >
           {!isSuccess ? (
             <>
               <div className="mb-8">
                 <Link
                   href="/login"
-                  className="inline-flex items-center text-white/60 hover:text-orange mb-6 transition-colors"
+                  className="inline-flex items-center text-white/60 hover:text-[#FF9F43] mb-6 transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to login
                 </Link>
-                <h1 className="text-3xl font-bold text-white mb-2">Forgot Password?</h1>
+                <h1 className="text-3xl font-bold text-white mb-2 tracking-[-0.02em]">Forgot Password?</h1>
                 <p className="text-white/60">No worries, we&apos;ll send you reset instructions.</p>
               </div>
 
@@ -76,13 +79,13 @@ export default function ForgotPasswordPage() {
                     Email Address
                   </Label>
                   <div className="relative mt-1">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/50" />
                     <Input
                       id="email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                      className="pl-10 bg-white/[0.03] border-white/10 text-white placeholder:text-white/40 focus:border-[#FF9F43] focus:ring-[#FF9F43]/20"
                       placeholder="you@company.com"
                       required
                     />
@@ -92,7 +95,11 @@ export default function ForgotPasswordPage() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-orange hover:bg-orange/90 text-white py-6 text-lg font-medium"
+                  className="w-full text-white py-6 text-lg font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                  style={{
+                    background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                    boxShadow: '0 4px 20px -4px rgba(248, 115, 21, 0.5)'
+                  }}
                 >
                   {isLoading ? (
                     <>
@@ -115,10 +122,13 @@ export default function ForgotPasswordPage() {
               transition={{ duration: 0.3 }}
               className="text-center py-8"
             >
-              <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-8 h-8 text-green-500" />
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
+                style={{ background: 'linear-gradient(135deg, #10B981 0%, #34D399 100%)' }}
+              >
+                <CheckCircle className="w-8 h-8 text-white" />
               </div>
-              <h2 className="text-2xl font-bold text-white mb-2">Check your email</h2>
+              <h2 className="text-2xl font-bold text-white mb-2 tracking-[-0.02em]">Check your email</h2>
               <p className="text-white/60 mb-6">
                 We&apos;ve sent password reset instructions to:
                 <br />
@@ -134,7 +144,7 @@ export default function ForgotPasswordPage() {
                 Didn&apos;t receive the email? Check your spam folder or{' '}
                 <button
                   onClick={() => setIsSuccess(false)}
-                  className="text-orange hover:text-orange/80 transition-colors underline"
+                  className="text-[#FF9F43] hover:text-[#FF9F43]/80 transition-colors underline"
                 >
                   try again
                 </button>

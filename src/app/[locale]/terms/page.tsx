@@ -233,22 +233,35 @@ Language:
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen" style={{ backgroundColor: '#080D14' }}>
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-purple-600/10" />
+        {/* Subtle section divider */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-              <FileText className="w-10 h-10 text-primary" />
+            <div
+              className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
+              style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
+            >
+              <FileText className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 gradient-text">
-              Terms of Service
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white tracking-[-0.02em]">
+              Terms of{' '}
+              <span
+                className="text-white px-3 py-1 inline-block"
+                style={{
+                  background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                  boxShadow: '0 8px 32px -8px rgba(248, 115, 21, 0.4)',
+                }}
+              >
+                Service
+              </span>
             </h1>
-            <p className="text-xl text-muted-foreground mb-4">
+            <p className="text-xl text-white/65 mb-4">
               Professional AI Consultancy Services Agreement
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-white/50">
               Last updated: July 2, 2025 | Effective date: July 2, 2025
             </p>
           </div>
@@ -260,21 +273,21 @@ export default function TermsPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* Table of Contents */}
-            <Card className="p-6 mb-12 print:break-inside-avoid">
-              <h2 className="text-xl font-semibold mb-4">Table of Contents</h2>
+            <Card className="p-6 mb-12 print:break-inside-avoid bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl">
+              <h2 className="text-xl font-semibold mb-4 text-white">Table of Contents</h2>
               <div className="grid md:grid-cols-2 gap-3">
                 {sections.map((section, index) => (
                   <Link
                     key={section.id}
                     href={`#${section.id}`}
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 transition-colors group"
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/[0.06] transition-all duration-300 group"
                     onClick={(e) => {
                       e.preventDefault();
                       document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' });
                     }}
                   >
-                    <section.icon className="w-5 h-5 text-primary" />
-                    <span className="text-sm group-hover:text-primary transition-colors">
+                    <section.icon className="w-5 h-5 text-[#FF9F43]" />
+                    <span className="text-sm text-white/70 group-hover:text-white/90 transition-colors">
                       {index + 1}. {section.title}
                     </span>
                   </Link>
@@ -291,36 +304,41 @@ export default function TermsPage() {
                   className="print:break-inside-avoid scroll-mt-20"
                 >
                   <div className="flex items-center gap-3 mb-4">
-                    <section.icon className="w-6 h-6 text-primary" />
-                    <h2 className="text-2xl font-semibold">
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
+                    >
+                      <section.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <h2 className="text-2xl font-semibold text-white tracking-[-0.02em]">
                       {index + 1}. {section.title}
                     </h2>
                   </div>
-                  <div className="prose prose-lg dark:prose-invert max-w-none">
-                    <p className="whitespace-pre-line text-muted-foreground">{section.content}</p>
+                  <div className="prose prose-lg max-w-none">
+                    <p className="whitespace-pre-line text-white/60">{section.content}</p>
                   </div>
-                  {index < sections.length - 1 && <Separator className="mt-8" />}
+                  {index < sections.length - 1 && <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-8" />}
                 </div>
               ))}
             </div>
 
             {/* Additional Sections */}
-            <Separator className="my-12" />
+            <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-12" />
 
             <div className="space-y-12">
               {/* Modifications */}
               <div className="print:break-inside-avoid">
-                <h2 className="text-2xl font-semibold mb-4">Modifications to Terms</h2>
-                <p className="text-muted-foreground mb-4">
+                <h2 className="text-2xl font-semibold mb-4 text-white tracking-[-0.02em]">Modifications to Terms</h2>
+                <p className="text-white/60 mb-4">
                   We reserve the right to modify these Terms at any time. Material changes will be
                   notified via:
                 </p>
-                <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-                  <li>Email notification to your registered email address</li>
-                  <li>Prominent notice on our website</li>
-                  <li>In-platform notifications for active clients</li>
+                <ul className="list-none space-y-2">
+                  <li className="flex items-start text-white/60"><span className="text-[#FF9F43] mr-2">•</span>Email notification to your registered email address</li>
+                  <li className="flex items-start text-white/60"><span className="text-[#FF9F43] mr-2">•</span>Prominent notice on our website</li>
+                  <li className="flex items-start text-white/60"><span className="text-[#FF9F43] mr-2">•</span>In-platform notifications for active clients</li>
                 </ul>
-                <p className="text-muted-foreground mt-4">
+                <p className="text-white/60 mt-4">
                   Continued use of our services after notification constitutes acceptance of the
                   modified Terms.
                 </p>
@@ -328,8 +346,8 @@ export default function TermsPage() {
 
               {/* Severability */}
               <div className="print:break-inside-avoid">
-                <h2 className="text-2xl font-semibold mb-4">Severability</h2>
-                <p className="text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-4 text-white tracking-[-0.02em]">Severability</h2>
+                <p className="text-white/60">
                   If any provision of these Terms is found to be unenforceable or invalid by a court
                   of competent jurisdiction, that provision shall be limited or eliminated to the
                   minimum extent necessary so that these Terms shall otherwise remain in full force
@@ -339,8 +357,8 @@ export default function TermsPage() {
 
               {/* Entire Agreement */}
               <div className="print:break-inside-avoid">
-                <h2 className="text-2xl font-semibold mb-4">Entire Agreement</h2>
-                <p className="text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-4 text-white tracking-[-0.02em]">Entire Agreement</h2>
+                <p className="text-white/60">
                   These Terms, together with any applicable service agreements, statements of work,
                   and our Privacy Policy, constitute the entire agreement between you and GroeimetAI
                   regarding the use of our services. These Terms supersede any prior agreements or
@@ -350,8 +368,8 @@ export default function TermsPage() {
 
               {/* Assignment */}
               <div className="print:break-inside-avoid">
-                <h2 className="text-2xl font-semibold mb-4">Assignment</h2>
-                <p className="text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-4 text-white tracking-[-0.02em]">Assignment</h2>
+                <p className="text-white/60">
                   You may not assign or transfer these Terms or any rights granted hereunder without
                   our prior written consent. We may assign our rights and obligations under these
                   Terms without restriction. Any attempted assignment in violation of this provision
@@ -361,45 +379,45 @@ export default function TermsPage() {
             </div>
 
             {/* Contact Section */}
-            <Card className="p-8 mt-12 bg-gradient-to-br from-primary/5 to-purple-600/5 print:break-inside-avoid">
-              <h2 className="text-2xl font-semibold mb-4">Contact Information</h2>
-              <p className="text-muted-foreground mb-6">
+            <Card className="p-8 mt-12 bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl print:break-inside-avoid">
+              <h2 className="text-2xl font-semibold mb-4 text-white tracking-[-0.02em]">Contact Information</h2>
+              <p className="text-white/60 mb-6">
                 For questions about these Terms of Service or our services, please contact us:
               </p>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <Building className="w-5 h-5 text-primary" />
+                  <Building className="w-5 h-5 text-[#FF9F43]" />
                   <div>
-                    <p className="font-semibold">GroeimetAI</p>
-                    <p className="text-sm text-muted-foreground">Registered in the Netherlands</p>
+                    <p className="font-semibold text-white">GroeimetAI</p>
+                    <p className="text-sm text-white/50">Registered in the Netherlands</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-primary" />
-                  <a href="mailto:legal@groeimetai.io" className="text-primary hover:underline">
+                  <Mail className="w-5 h-5 text-[#FF9F43]" />
+                  <a href="mailto:legal@groeimetai.io" className="text-[#FF9F43] hover:underline">
                     legal@groeimetai.io
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-primary" />
-                  <a href="tel:+31201234567" className="text-primary hover:underline">
+                  <Phone className="w-5 h-5 text-[#FF9F43]" />
+                  <a href="tel:+31201234567" className="text-[#FF9F43] hover:underline">
                     +31 (6)81 739 018
                   </a>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Globe className="w-5 h-5 text-primary mt-0.5" />
+                  <Globe className="w-5 h-5 text-[#FF9F43] mt-0.5" />
                   <div>
-                    <p>Headquarters</p>
-                    <p className="text-sm text-muted-foreground">Apeldoorn, Netherlands</p>
+                    <p className="text-white">Headquarters</p>
+                    <p className="text-sm text-white/50">Apeldoorn, Netherlands</p>
                   </div>
                 </div>
               </div>
 
-              <Separator className="my-6" />
+              <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-6" />
 
               <div>
-                <h3 className="font-semibold mb-2">Legal Notice</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="font-semibold mb-2 text-white">Legal Notice</h3>
+                <p className="text-sm text-white/50">
                   By using our services, you acknowledge that you have read, understood, and agree
                   to be bound by these Terms of Service. If you are entering into these Terms on
                   behalf of a company or other legal entity, you represent that you have the
@@ -409,7 +427,7 @@ export default function TermsPage() {
             </Card>
 
             {/* Print Notice */}
-            <div className="mt-8 text-center text-sm text-muted-foreground print:block hidden">
+            <div className="mt-8 text-center text-sm text-white/50 print:block hidden">
               <p>This document was printed from groeimetai.io/terms</p>
               <p>For the most current version, please visit our website.</p>
             </div>

@@ -605,7 +605,7 @@ export default function AgentReadinessPage() {
     // If results are ready, show them
     if (resultsReady && assessmentResults) {
       return (
-        <div className="min-h-screen bg-black">
+        <div className="min-h-screen" style={{ backgroundColor: '#080D14' }}>
           <div className="container mx-auto px-4 py-24">
             <div className="max-w-6xl mx-auto">
               {/* Success Header */}
@@ -863,7 +863,7 @@ export default function AgentReadinessPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen" style={{ backgroundColor: '#080D14' }}>
       <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-24 xl:py-32">
         <div className="max-w-4xl mx-auto">
           {/* Header */}

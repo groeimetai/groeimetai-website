@@ -94,7 +94,7 @@ export default function PilotIntakePage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#080D14' }}>
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <motion.div
@@ -141,7 +141,7 @@ export default function PilotIntakePage() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen" style={{ backgroundColor: '#080D14' }}>
       <div className="container mx-auto px-4 py-32">
         <div className="max-w-4xl mx-auto">
           {/* Header */}

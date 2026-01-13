@@ -653,22 +653,35 @@ Wij zijn aangesloten bij:
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen" style={{ backgroundColor: '#080D14' }}>
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-purple-600/5 dark:from-primary/10 dark:to-purple-600/10" />
+        {/* Subtle section divider */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-              <Shield className="w-10 h-10 text-primary" />
+            <div
+              className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
+              style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
+            >
+              <Shield className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 gradient-text">
-              Privacybeleid
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white tracking-[-0.02em]">
+              Privacy
+              <span
+                className="text-white px-3 py-1 ml-2 inline-block"
+                style={{
+                  background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                  boxShadow: '0 8px 32px -8px rgba(248, 115, 21, 0.4)',
+                }}
+              >
+                beleid
+              </span>
             </h1>
-            <p className="text-xl text-muted-foreground mb-4">
+            <p className="text-xl text-white/65 mb-4">
               Uw privacy is onze prioriteit - Volledig AVG/GDPR compliant
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-sm text-muted-foreground">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-sm text-white/50">
               <span>Versie 2.0</span>
               <span className="hidden sm:block">•</span>
               <span>Laatst bijgewerkt: 2 July 2025</span>
@@ -680,38 +693,38 @@ export default function PrivacyPage() {
       </section>
 
       {/* Quick Actions */}
-      <section className="py-8 border-y border-border/50">
+      <section className="py-8 border-y border-white/10">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 href="/cookies"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300 text-white/80"
               >
-                <Cookie className="w-4 h-4" />
+                <Cookie className="w-4 h-4 text-[#FF9F43]" />
                 <span className="text-sm font-medium">Cookie Policy</span>
               </Link>
               <Link
                 href="#your-rights"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300 text-white/80"
               >
-                <FileText className="w-4 h-4" />
+                <FileText className="w-4 h-4 text-[#FF9F43]" />
                 <span className="text-sm font-medium">Uw Rechten</span>
               </Link>
               <Link
                 href="#contact"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300 text-white/80"
               >
-                <Mail className="w-4 h-4" />
+                <Mail className="w-4 h-4 text-[#FF9F43]" />
                 <span className="text-sm font-medium">Contact DPO</span>
               </Link>
               <a
                 href="https://autoriteitpersoonsgegevens.nl"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300 text-white/80"
               >
-                <ExternalLink className="w-4 h-4" />
+                <ExternalLink className="w-4 h-4 text-[#FF9F43]" />
                 <span className="text-sm font-medium">AP Website</span>
               </a>
             </div>
@@ -724,17 +737,17 @@ export default function PrivacyPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* Table of Contents */}
-            <Card className="p-6 mb-12 bg-card/50 backdrop-blur-sm">
-              <h2 className="text-xl font-semibold mb-4">Inhoudsopgave</h2>
+            <Card className="p-6 mb-12 bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl">
+              <h2 className="text-xl font-semibold mb-4 text-white">Inhoudsopgave</h2>
               <div className="grid md:grid-cols-2 gap-2">
                 {sections.map((section) => (
                   <Link
                     key={section.id}
                     href={`#${section.id}`}
-                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-primary/5 transition-colors group"
+                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-white/[0.06] transition-all duration-300 group"
                   >
-                    <section.icon className="w-5 h-5 text-primary mt-0.5 group-hover:scale-110 transition-transform" />
-                    <span className="text-sm leading-tight">{section.title}</span>
+                    <section.icon className="w-5 h-5 text-[#FF9F43] mt-0.5 group-hover:scale-110 transition-transform" />
+                    <span className="text-sm leading-tight text-white/70 group-hover:text-white/90">{section.title}</span>
                   </Link>
                 ))}
               </div>
@@ -745,32 +758,35 @@ export default function PrivacyPage() {
               {sections.map((section, index) => (
                 <div key={section.id} id={section.id} className="scroll-mt-24">
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <section.icon className="w-6 h-6 text-primary" />
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
+                    >
+                      <section.icon className="w-6 h-6 text-white" />
                     </div>
-                    <h2 className="text-2xl font-semibold">{section.title}</h2>
+                    <h2 className="text-2xl font-semibold text-white tracking-[-0.02em]">{section.title}</h2>
                   </div>
-                  <div className="prose prose-lg dark:prose-invert max-w-none">
-                    <div className="whitespace-pre-line text-muted-foreground leading-relaxed">
+                  <div className="prose prose-lg max-w-none">
+                    <div className="whitespace-pre-line text-white/60 leading-relaxed">
                       {section.content.split('\n\n').map((paragraph, pIndex) => {
                         // Check if paragraph contains bullet points
                         if (paragraph.includes('•')) {
                           const [intro, ...bullets] = paragraph.split('\n');
                           return (
                             <div key={pIndex} className="mb-6">
-                              {intro && <p className="mb-3">{intro}</p>}
+                              {intro && <p className="mb-3 text-white/60">{intro}</p>}
                               <ul className="space-y-2 ml-4">
                                 {bullets.map((bullet, bIndex) => {
                                   if (bullet.trim().startsWith('•')) {
                                     const content = bullet.replace('•', '').trim();
                                     const [label, ...rest] = content.split(':');
                                     return (
-                                      <li key={bIndex} className="flex items-start">
-                                        <span className="text-primary mr-2 mt-1">•</span>
+                                      <li key={bIndex} className="flex items-start text-white/60">
+                                        <span className="text-[#FF9F43] mr-2 mt-1">•</span>
                                         <span>
                                           {rest.length > 0 ? (
                                             <>
-                                              <strong>{label}:</strong> {rest.join(':')}
+                                              <strong className="text-white/80">{label}:</strong> {rest.join(':')}
                                             </>
                                           ) : (
                                             content
@@ -789,33 +805,33 @@ export default function PrivacyPage() {
                         // Handle headers with **
                         const processedParagraph = paragraph.replace(
                           /\*\*(.*?)\*\*/g,
-                          '<strong class="text-foreground">$1</strong>'
+                          '<strong class="text-white/90">$1</strong>'
                         );
 
                         return (
                           <p
                             key={pIndex}
-                            className="mb-6"
+                            className="mb-6 text-white/60"
                             dangerouslySetInnerHTML={{ __html: processedParagraph }}
                           />
                         );
                       })}
                     </div>
                   </div>
-                  {index < sections.length - 1 && <Separator className="mt-12" />}
+                  {index < sections.length - 1 && <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-12" />}
                 </div>
               ))}
             </div>
 
             {/* Download and Print Options */}
-            <Card className="p-8 mt-16 bg-gradient-to-br from-primary/5 to-purple-600/5">
-              <h2 className="text-xl font-semibold mb-4">Documentopties</h2>
+            <Card className="p-8 mt-16 bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl">
+              <h2 className="text-xl font-semibold mb-4 text-white">Documentopties</h2>
               <div className="flex flex-wrap gap-4">
                 <PrintButton />
                 <a
                   href="/privacy-policy-groeimetai.pdf"
                   download
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white/[0.06] border border-white/10 text-white/80 hover:bg-white/[0.1] hover:border-white/20 transition-all duration-300"
                 >
                   <FileText className="w-5 h-5" />
                   Download als PDF

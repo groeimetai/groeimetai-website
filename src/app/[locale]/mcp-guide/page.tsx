@@ -14,9 +14,9 @@ export default function McpGuidePage() {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen" style={{ backgroundColor: '#080D14' }}>
       {/* Hero Section */}
-      <section className="py-32 relative" style={{ backgroundColor: '#080D14' }}>
+      <section className="py-32 relative">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div
