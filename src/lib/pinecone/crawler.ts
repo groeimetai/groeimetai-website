@@ -1,5 +1,6 @@
 import { generateEmbeddings, chunkText } from '../embeddings/openai';
 import type { IndexableContent } from './indexer';
+import * as cheerio from 'cheerio';
 
 // List of pages to crawl
 export const PAGES_TO_CRAWL = [
@@ -87,38 +88,31 @@ export async function crawlPage(
   return content;
 }
 
-// Extract content from HTML
+// Extract content from HTML using cheerio for safe parsing
 function extractContentFromHtml(html: string): {
   title: string;
   description: string;
   textContent: string;
 } {
+  // Use cheerio for safe HTML parsing (avoids regex-based HTML manipulation vulnerabilities)
+  const $ = cheerio.load(html);
+
   // Extract title
-  const titleMatch = html.match(/<title[^>]*>(.*?)<\/title>/i);
-  const title = titleMatch ? titleMatch[1].replace(' | GroeimetAI', '').trim() : 'Untitled';
+  const title = $('title').text().replace(' | GroeimetAI', '').trim() || 'Untitled';
 
   // Extract meta description
-  const descMatch = html.match(/<meta\s+name=["']description["']\s+content=["'](.*?)["']/i);
-  const description = descMatch ? descMatch[1] : '';
+  const description = $('meta[name="description"]').attr('content') || '';
 
-  // Remove script and style tags
-  let cleanHtml = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
-  cleanHtml = cleanHtml.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '');
+  // Remove script, style, and non-content elements (using DOM manipulation, not regex)
+  $('script, style, nav, footer, header, noscript, iframe').remove();
 
-  // Remove navigation, footer, and other non-content elements
-  cleanHtml = cleanHtml.replace(/<nav\b[^<]*(?:(?!<\/nav>)<[^<]*)*<\/nav>/gi, '');
-  cleanHtml = cleanHtml.replace(/<footer\b[^<]*(?:(?!<\/footer>)<[^<]*)*<\/footer>/gi, '');
-  cleanHtml = cleanHtml.replace(/<header\b[^<]*(?:(?!<\/header>)<[^<]*)*<\/header>/gi, '');
+  // Extract text from main content area if possible, otherwise use body
+  const mainContent = $('main').length > 0 ? $('main') : $('body');
 
-  // Extract text from main content area if possible
-  const mainMatch = cleanHtml.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
-  const contentHtml = mainMatch ? mainMatch[1] : cleanHtml;
-
-  // Convert HTML to text
-  const textContent = contentHtml
-    .replace(/<[^>]+>/g, ' ') // Remove HTML tags
-    .replace(/&[^;]+;/g, ' ') // Remove HTML entities
-    .replace(/\s+/g, ' ') // Normalize whitespace
+  // Get text content and normalize whitespace
+  const textContent = mainContent
+    .text()
+    .replace(/\s+/g, ' ')
     .trim();
 
   return { title, description, textContent };

@@ -16,8 +16,7 @@ export const getPineconeClient = () => {
       });
     } catch (error) {
       console.error('Failed to initialize Pinecone client:', error);
-      console.log('API Key length:', apiKey.length);
-      console.log('API Key preview:', apiKey.substring(0, 8) + '...');
+      console.log('API Key configured:', apiKey ? 'yes' : 'no');
       throw error;
     }
   }
