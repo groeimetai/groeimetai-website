@@ -91,30 +91,27 @@ function betweenCenter(pos: { top: number; left: number }, f = 0.55, isMobile = 
   };
 }
 
-// Percentage naar pixels
-function pctToPx(pct: { top: number; left: number }, size: { width: number; height: number }) {
-  return {
-    x: (pct.left / 100) * size.width,
-    y: (pct.top / 100) * size.height,
-  };
-}
-
-// Curved path generator voor vloeiende lijnen
+// Curved path generator voor vloeiende lijnen (percentage-based)
 function generateCurvedPath(
-  start: { x: number; y: number },
-  end: { x: number; y: number },
+  start: { top: number; left: number },
+  end: { top: number; left: number },
   curvature = 0.3
 ) {
-  const midX = (start.x + end.x) / 2;
-  const midY = (start.y + end.y) / 2;
-  const dx = end.x - start.x;
-  const dy = end.y - start.y;
+  const startX = start.left;
+  const startY = start.top;
+  const endX = end.left;
+  const endY = end.top;
+
+  const midX = (startX + endX) / 2;
+  const midY = (startY + endY) / 2;
+  const dx = endX - startX;
+  const dy = endY - startY;
 
   // Control point perpendicular to the line
   const controlX = midX - dy * curvature;
   const controlY = midY + dx * curvature;
 
-  return `M ${start.x} ${start.y} Q ${controlX} ${controlY} ${end.x} ${end.y}`;
+  return `M ${startX} ${startY} Q ${controlX} ${controlY} ${endX} ${endY}`;
 }
 
 // Animated data packet component
@@ -564,7 +561,7 @@ export default function ApiToMcpAnimation() {
   const apiPositions = useMemo(() => radialPositions(API_CONFIG.length, 38, -90, isMobile), [isMobile]);
   const mcpPositions = useMemo(() => apiPositions.map((pos) => betweenCenter(pos, 0.55, isMobile)), [apiPositions, isMobile]);
 
-  const { ref: stageRef, size: stageSize } = useElementSize<HTMLDivElement>();
+  const { ref: stageRef } = useElementSize<HTMLDivElement>();
 
   // Auto-advance
   useEffect(() => {
@@ -575,20 +572,20 @@ export default function ApiToMcpAnimation() {
     return () => clearInterval(interval);
   }, [autoPlay, phases.length]);
 
-  // Generate paths for connections
+  // Generate paths for connections (using percentage coordinates)
   const connectionPaths = useMemo(() => {
-    const agentCenter = pctToPx({ top: isMobile ? 75 : 50, left: 50 }, stageSize);
+    const agentCenter = { top: isMobile ? 75 : 50, left: 50 };
 
     return (isMobile ? API_CONFIG.slice(0, 1) : API_CONFIG).map((_, i) => {
-      const apiPos = pctToPx(apiPositions[i], stageSize);
-      const mcpPos = pctToPx(mcpPositions[i], stageSize);
+      const apiPos = apiPositions[i];
+      const mcpPos = mcpPositions[i];
 
       return {
         apiToMcp: generateCurvedPath(apiPos, mcpPos, 0.15),
         mcpToAgent: generateCurvedPath(mcpPos, agentCenter, 0.1),
       };
     });
-  }, [apiPositions, mcpPositions, stageSize, isMobile]);
+  }, [apiPositions, mcpPositions, isMobile]);
 
   const showMcp = currentPhase >= 1;
   const showLines = currentPhase === 2;
@@ -708,10 +705,10 @@ export default function ApiToMcpAnimation() {
                 border: '1px solid rgba(255,255,255,0.05)',
               }}
             >
-              {/* SVG voor lijnen en effecten */}
+              {/* SVG voor lijnen en effecten - using viewBox 0-100 for percentage coordinates */}
               <svg
                 className="absolute inset-0 w-full h-full pointer-events-none"
-                viewBox={`0 0 ${stageSize.width} ${stageSize.height}`}
+                viewBox="0 0 100 100"
                 preserveAspectRatio="none"
               >
                 <defs>
