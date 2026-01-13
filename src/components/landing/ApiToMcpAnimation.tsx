@@ -114,9 +114,9 @@ function SvgLines({
               stroke={GREEN}
               strokeWidth={2}
               filter="url(#glow)"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.05 + i * 0.08, duration: 0.4 }}
             />
 
             {/* MCP → Agent (dashed line) */}
@@ -129,9 +129,9 @@ function SvgLines({
               strokeWidth={2}
               strokeDasharray="6 4"
               filter="url(#glow)"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 + i * 0.08, duration: 0.4 }}
             />
 
             {/* Animated dot on API → MCP */}

@@ -16,6 +16,7 @@
     "index:content": "npx tsx scripts/generate-content-index.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.71.2",
     "@google/generative-ai": "^0.24.1",
     "@langchain/openai": "^0.5.18",
     "@mollie/api-client": "^4.3.3",

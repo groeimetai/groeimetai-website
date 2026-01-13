@@ -31,10 +31,21 @@ function initializeAdmin() {
   }
 
   try {
+    // Handle private key - support both escaped \n and actual newlines
+    let privateKey = process.env.FIREBASE_PRIVATE_KEY || '';
+    // If the key contains literal \n, replace them with actual newlines
+    if (privateKey.includes('\\n')) {
+      privateKey = privateKey.replace(/\\n/g, '\n');
+    }
+    // Also handle double-escaped \\n
+    if (privateKey.includes('\\\\n')) {
+      privateKey = privateKey.replace(/\\\\n/g, '\n');
+    }
+
     const serviceAccount: ServiceAccount = {
       projectId: process.env.FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      privateKey: privateKey,
     };
 
     if (!getApps().length) {
