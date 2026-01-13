@@ -66,100 +66,115 @@ function getCirclePositions(
 }
 
 // =============================================================================
-// CONNECTION LINE COMPONENT - Simpel en direct
+// SVG LINES COMPONENT - Direct met pixel coördinaten
 // =============================================================================
 
-function ConnectionLine({
-  startX,
-  startY,
-  endX,
-  endY,
-  color,
-  delay = 0,
-  showPulse = false,
-  dashed = false,
+function SvgLines({
+  apiPositions,
+  mcpPositions,
+  agentX,
+  agentY,
+  show,
 }: {
-  startX: number;
-  startY: number;
-  endX: number;
-  endY: number;
-  color: string;
-  delay?: number;
-  showPulse?: boolean;
-  dashed?: boolean;
+  apiPositions: Array<{ x: number; y: number }>;
+  mcpPositions: Array<{ x: number; y: number }>;
+  agentX: number;
+  agentY: number;
+  show: boolean;
 }) {
-  // Bereken lengte en hoek
-  const dx = endX - startX;
-  const dy = endY - startY;
-  const length = Math.sqrt(dx * dx + dy * dy);
-  const angleDeg = Math.atan2(dy, dx) * (180 / Math.PI);
-
-  if (length < 1) return null; // Geen lijn tekenen als punten te dicht bij elkaar zijn
+  if (!show) return null;
 
   return (
-    <motion.div
-      className="absolute pointer-events-none"
-      style={{
-        left: startX,
-        top: startY,
-        width: length,
-        height: 2,
-        transformOrigin: 'left center',
-        transform: `rotate(${angleDeg}deg)`,
-      }}
-      initial={{ scaleX: 0, opacity: 0 }}
-      animate={{ scaleX: 1, opacity: 1 }}
-      transition={{ delay, duration: 0.5, ease: 'easeOut' }}
+    <svg
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ zIndex: 1 }}
     >
-      {/* Glow */}
-      <div
-        className="absolute blur-sm"
-        style={{
-          left: 0,
-          top: -2,
-          width: '100%',
-          height: 6,
-          background: color,
-          opacity: 0.4,
-        }}
-      />
+      <defs>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
 
-      {/* Lijn */}
-      <div
-        className="absolute"
-        style={{
-          left: 0,
-          top: 0,
-          width: '100%',
-          height: 2,
-          background: dashed
-            ? `repeating-linear-gradient(90deg, ${color} 0px, ${color} 6px, transparent 6px, transparent 12px)`
-            : color,
-        }}
-      />
+      {apiPositions.map((apiPos, i) => {
+        const mcpPos = mcpPositions[i];
+        if (!mcpPos) return null;
 
-      {/* Pulse dot */}
-      {showPulse && (
-        <motion.div
-          className="absolute rounded-full"
-          style={{
-            width: 6,
-            height: 6,
-            top: -2,
-            left: 0,
-            background: color,
-            boxShadow: `0 0 8px ${color}, 0 0 16px ${color}`,
-          }}
-          animate={{ left: [0, length - 6] }}
-          transition={{
-            delay: delay + 0.3,
-            duration: 1.2,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-        />
-      )}
-    </motion.div>
+        return (
+          <g key={`lines-${i}`}>
+            {/* API → MCP (solid line) */}
+            <motion.line
+              x1={apiPos.x}
+              y1={apiPos.y}
+              x2={mcpPos.x}
+              y2={mcpPos.y}
+              stroke={GREEN}
+              strokeWidth={2}
+              filter="url(#glow)"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }}
+            />
+
+            {/* MCP → Agent (dashed line) */}
+            <motion.line
+              x1={mcpPos.x}
+              y1={mcpPos.y}
+              x2={agentX}
+              y2={agentY}
+              stroke={GREEN}
+              strokeWidth={2}
+              strokeDasharray="6 4"
+              filter="url(#glow)"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
+            />
+
+            {/* Animated dot on API → MCP */}
+            <motion.circle
+              r={4}
+              fill={GREEN}
+              filter="url(#glow)"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0, 1, 1, 0],
+                cx: [apiPos.x, mcpPos.x],
+                cy: [apiPos.y, mcpPos.y],
+              }}
+              transition={{
+                delay: 0.5 + i * 0.15,
+                duration: 1.5,
+                repeat: Infinity,
+                ease: 'linear',
+              }}
+            />
+
+            {/* Animated dot on MCP → Agent */}
+            <motion.circle
+              r={4}
+              fill={ORANGE}
+              filter="url(#glow)"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0, 1, 1, 0],
+                cx: [mcpPos.x, agentX],
+                cy: [mcpPos.y, agentY],
+              }}
+              transition={{
+                delay: 1 + i * 0.15,
+                duration: 1.5,
+                repeat: Infinity,
+                ease: 'linear',
+              }}
+            />
+          </g>
+        );
+      })}
+    </svg>
   );
 }
 
@@ -586,32 +601,14 @@ export default function ApiToMcpAnimation() {
             >
               {isReady && (
                 <>
-                  {/* LAAG 1: Lijnen */}
-                  {showLines && itemIndices.map((i) => (
-                    <div key={`lines-${i}`}>
-                      {/* API → MCP */}
-                      <ConnectionLine
-                        startX={apiPositions[i].x}
-                        startY={apiPositions[i].y}
-                        endX={mcpPositions[i].x}
-                        endY={mcpPositions[i].y}
-                        color={GREEN}
-                        delay={0.05 + i * 0.08}
-                        showPulse
-                      />
-                      {/* MCP → Agent */}
-                      <ConnectionLine
-                        startX={mcpPositions[i].x}
-                        startY={mcpPositions[i].y}
-                        endX={agentX}
-                        endY={agentY}
-                        color={GREEN}
-                        delay={0.15 + i * 0.08}
-                        dashed
-                        showPulse
-                      />
-                    </div>
-                  ))}
+                  {/* LAAG 1: SVG Lijnen */}
+                  <SvgLines
+                    apiPositions={apiPositions}
+                    mcpPositions={mcpPositions}
+                    agentX={agentX}
+                    agentY={agentY}
+                    show={showLines}
+                  />
 
                   {/* LAAG 2: Agent Hub */}
                   <AgentHub

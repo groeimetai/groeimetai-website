@@ -1,21 +1,12 @@
-import { Metadata } from 'next';
+'use client';
+
+import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link } from '@/i18n/routing';
-import Image from 'next/image';
 import { Calendar, Clock, User, Search, ArrowRight, Tag } from 'lucide-react';
-
-export const metadata: Metadata = {
-  title: 'Blog - GroeimetAI',
-  description:
-    'Lees de laatste insights over AI, machine learning, LLM integratie en meer op de GroeimetAI blog.',
-  openGraph: {
-    title: 'GroeimetAI Blog - AI Insights & Updates',
-    description: 'Blijf op de hoogte van de laatste ontwikkelingen in AI en machine learning',
-  },
-};
 
 // Mock blog data - in production this would come from a CMS or database
 const blogPosts = [
@@ -121,211 +112,284 @@ const categories = [
 
 export default function BlogPage() {
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen" style={{ backgroundColor: '#080D14' }}>
       {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 overflow-hidden bg-black">
-        <div className="absolute inset-0 bg-gradient-to-br from-orange/5 to-green/5" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1
-              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white px-8 py-4 inline-block"
-              style={{ background: 'linear-gradient(135deg, #FF6600, #FF8833)' }}
-            >
-              GroeimetAI Blog
+      <section className="pt-28 pb-20 sm:pt-32 sm:pb-28 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#F87315]/5 via-transparent to-transparent" />
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="max-w-4xl mx-auto text-center"
+          >
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-[-0.02em]">
+              <span
+                className="text-white px-4 py-2 inline-block"
+                style={{
+                  background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                  boxShadow: '0 8px 32px -8px rgba(248, 115, 21, 0.4)',
+                }}
+              >
+                GroeimetAI Blog
+              </span>
             </h1>
-            <p className="text-xl text-white/80 mb-8">
+            <p className="text-lg sm:text-xl text-white/70 mb-8">
               Insights, tutorials en de laatste ontwikkelingen in AI
             </p>
+
             {/* Search Bar */}
             <div className="max-w-2xl mx-auto relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/40 w-5 h-5" />
               <Input
                 type="search"
                 placeholder="Zoek artikelen..."
-                className="pl-10 pr-4 py-6 text-lg"
+                className="pl-12 pr-4 py-6 text-lg bg-white/5 border-white/20 text-white placeholder:text-white/40 focus:border-[#FF9F43] transition-colors"
               />
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
+      {/* Section Divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
       {/* Featured Posts */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-12">Uitgelichte Artikelen</h2>
+      <section className="py-20 sm:py-28">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-[-0.02em]">
+              Uitgelichte{' '}
+              <span
+                className="text-white px-2 py-0.5 inline-block"
+                style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
+              >
+                Artikelen
+              </span>
+            </h2>
+          </motion.div>
+
           <div className="grid md:grid-cols-2 gap-8">
             {blogPosts
               .filter((post) => post.featured)
-              .map((post) => (
-                <Card
+              .map((post, index) => (
+                <motion.div
                   key={post.id}
-                  className="overflow-hidden hover-lift hover:shadow-premium transition-all"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  viewport={{ once: true }}
                 >
-                  <div className="aspect-video bg-gray-200 dark:bg-gray-800 relative">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-muted-foreground">Artikel afbeelding</span>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-4 mb-4">
-                      <Badge variant="secondary">{post.category}</Badge>
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Calendar className="w-4 h-4" />
-                        {new Date(post.date).toLocaleDateString('nl-NL', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                        })}
+                  <Card className="overflow-hidden bg-white/[0.03] border-white/10 hover:border-white/20 transition-all duration-300 group">
+                    <div className="aspect-video bg-gradient-to-br from-white/5 to-white/10 relative">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-white/30 text-sm">Artikel afbeelding</span>
                       </div>
                     </div>
-                    <h3 className="text-2xl font-semibold mb-3">
-                      <Link
-                        href={`/blog/${post.slug}`}
-                        className="hover:text-primary transition-colors"
-                      >
-                        {post.title}
-                      </Link>
-                    </h3>
-                    <p className="text-muted-foreground mb-4">{post.excerpt}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <User className="w-4 h-4" />
-                          {post.author}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          {post.readTime}
+                    <div className="p-6">
+                      <div className="flex items-center gap-4 mb-4">
+                        <Badge
+                          className="bg-[#F87315]/20 text-[#FF9F43] border-[#F87315]/30 hover:bg-[#F87315]/30"
+                        >
+                          {post.category}
+                        </Badge>
+                        <div className="flex items-center gap-1 text-sm text-white/50">
+                          <Calendar className="w-4 h-4" />
+                          {new Date(post.date).toLocaleDateString('nl-NL', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })}
                         </div>
                       </div>
-                      <Link href={`/blog/${post.slug}`}>
-                        <Button variant="ghost" size="sm" className="hover-lift">
-                          Lees meer
-                          <ArrowRight className="ml-2 w-4 h-4" />
-                        </Button>
-                      </Link>
+                      <h3 className="text-xl sm:text-2xl font-semibold mb-3 text-white group-hover:text-[#FF9F43] transition-colors">
+                        <Link href={`/blog/${post.slug}`}>
+                          {post.title}
+                        </Link>
+                      </h3>
+                      <p className="text-white/60 mb-4 leading-relaxed">{post.excerpt}</p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4 text-sm text-white/50">
+                          <div className="flex items-center gap-1">
+                            <User className="w-4 h-4" />
+                            {post.author}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-4 h-4" />
+                            {post.readTime}
+                          </div>
+                        </div>
+                        <Link href={`/blog/${post.slug}`}>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-[#FF9F43] hover:text-white hover:bg-white/10 transition-colors"
+                          >
+                            Lees meer
+                            <ArrowRight className="ml-2 w-4 h-4" />
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                </Card>
+                  </Card>
+                </motion.div>
               ))}
           </div>
         </div>
       </section>
 
+      {/* Section Divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
       {/* All Posts with Categories */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-900/50">
-        <div className="container mx-auto px-4">
+      <section className="py-20 sm:py-28">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row gap-12">
               {/* Sidebar */}
-              <aside className="lg:w-64">
-                <h3 className="text-xl font-semibold mb-6">Categorieën</h3>
-                <div className="space-y-2">
-                  {categories.map((category, index) => (
-                    <Button key={index} variant="ghost" className="w-full justify-start">
-                      {category}
-                      {category === 'Alle Artikelen' && (
-                        <span className="ml-auto text-muted-foreground">{blogPosts.length}</span>
-                      )}
-                    </Button>
-                  ))}
-                </div>
+              <aside className="lg:w-64 flex-shrink-0">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  viewport={{ once: true }}
+                >
+                  <h3 className="text-xl font-semibold text-white mb-6">Categorieën</h3>
+                  <div className="space-y-2">
+                    {categories.map((category, index) => (
+                      <Button
+                        key={index}
+                        variant="ghost"
+                        className="w-full justify-start text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+                      >
+                        {category}
+                        {category === 'Alle Artikelen' && (
+                          <span className="ml-auto text-white/50">{blogPosts.length}</span>
+                        )}
+                      </Button>
+                    ))}
+                  </div>
 
-                {/* Popular Tags */}
-                <h3 className="text-xl font-semibold mt-12 mb-6">Populaire Tags</h3>
-                <div className="flex flex-wrap gap-2">
-                  {['AI Agents', 'LLM', 'RAG', 'ServiceNow', 'Security', 'GenAI'].map((tag) => (
-                    <Badge
-                      key={tag}
-                      variant="outline"
-                      className="cursor-pointer hover:bg-primary/10"
-                    >
-                      <Tag className="w-3 h-3 mr-1" />
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
+                  {/* Popular Tags */}
+                  <h3 className="text-xl font-semibold text-white mt-12 mb-6">Populaire Tags</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {['AI Agents', 'LLM', 'RAG', 'ServiceNow', 'Security', 'GenAI'].map((tag) => (
+                      <Badge
+                        key={tag}
+                        variant="outline"
+                        className="cursor-pointer border-white/20 text-white/70 hover:border-[#FF9F43] hover:text-[#FF9F43] transition-colors"
+                      >
+                        <Tag className="w-3 h-3 mr-1" />
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </motion.div>
               </aside>
 
               {/* Blog Posts Grid */}
               <div className="flex-1">
-                <h2 className="text-3xl font-bold mb-8">Alle Artikelen</h2>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  viewport={{ once: true }}
+                  className="mb-8"
+                >
+                  <h2 className="text-3xl font-bold text-white tracking-[-0.02em]">Alle Artikelen</h2>
+                </motion.div>
+
                 <div className="grid md:grid-cols-2 gap-8">
                   {blogPosts
                     .filter((post) => !post.featured)
-                    .map((post) => (
-                      <Card
+                    .map((post, index) => (
+                      <motion.div
                         key={post.id}
-                        className="overflow-hidden hover-lift hover:shadow-premium transition-all"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true }}
                       >
-                        <div className="aspect-video bg-gray-200 dark:bg-gray-800 relative">
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-muted-foreground">Artikel afbeelding</span>
-                          </div>
-                        </div>
-                        <div className="p-6">
-                          <div className="flex items-center gap-4 mb-4">
-                            <Badge variant="secondary">{post.category}</Badge>
-                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                              <Calendar className="w-4 h-4" />
-                              {new Date(post.date).toLocaleDateString('nl-NL', {
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric',
-                              })}
+                        <Card className="overflow-hidden bg-white/[0.03] border-white/10 hover:border-white/20 transition-all duration-300 group">
+                          <div className="aspect-video bg-gradient-to-br from-white/5 to-white/10 relative">
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <span className="text-white/30 text-sm">Artikel afbeelding</span>
                             </div>
                           </div>
-                          <h3 className="text-xl font-semibold mb-3">
-                            <Link
-                              href={`/blog/${post.slug}`}
-                              className="hover:text-primary transition-colors"
-                            >
-                              {post.title}
-                            </Link>
-                          </h3>
-                          <p className="text-muted-foreground mb-4 line-clamp-2">{post.excerpt}</p>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <div className="flex items-center gap-1">
-                                <User className="w-4 h-4" />
-                                {post.author}
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <Clock className="w-4 h-4" />
-                                {post.readTime}
+                          <div className="p-6">
+                            <div className="flex items-center gap-4 mb-4">
+                              <Badge className="bg-[#F87315]/20 text-[#FF9F43] border-[#F87315]/30">
+                                {post.category}
+                              </Badge>
+                              <div className="flex items-center gap-1 text-sm text-white/50">
+                                <Calendar className="w-4 h-4" />
+                                {new Date(post.date).toLocaleDateString('nl-NL', {
+                                  year: 'numeric',
+                                  month: 'short',
+                                  day: 'numeric',
+                                })}
                               </div>
                             </div>
-                            <Link href={`/blog/${post.slug}`}>
-                              <Button variant="ghost" size="sm" className="hover-lift">
-                                Lees meer
-                                <ArrowRight className="ml-2 w-4 h-4" />
-                              </Button>
-                            </Link>
+                            <h3 className="text-xl font-semibold mb-3 text-white group-hover:text-[#FF9F43] transition-colors">
+                              <Link href={`/blog/${post.slug}`}>
+                                {post.title}
+                              </Link>
+                            </h3>
+                            <p className="text-white/60 mb-4 line-clamp-2 leading-relaxed">{post.excerpt}</p>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-4 text-sm text-white/50">
+                                <div className="flex items-center gap-1">
+                                  <User className="w-4 h-4" />
+                                  {post.author}
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <Clock className="w-4 h-4" />
+                                  {post.readTime}
+                                </div>
+                              </div>
+                              <Link href={`/blog/${post.slug}`}>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-[#FF9F43] hover:text-white hover:bg-white/10 transition-colors"
+                                >
+                                  Lees meer
+                                  <ArrowRight className="ml-2 w-4 h-4" />
+                                </Button>
+                              </Link>
+                            </div>
                           </div>
-                        </div>
-                      </Card>
+                        </Card>
+                      </motion.div>
                     ))}
                 </div>
 
                 {/* Pagination */}
                 <div className="flex justify-center gap-2 mt-12">
-                  <Button variant="outline" size="sm" disabled>
+                  <Button variant="outline" size="sm" disabled className="border-white/20 text-white/50">
                     Vorige
                   </Button>
                   <Button
-                    variant="outline"
                     size="sm"
-                    className="bg-primary text-primary-foreground"
+                    className="text-white"
+                    style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
                   >
                     1
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="border-white/20 text-white hover:bg-white/10">
                     2
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="border-white/20 text-white hover:bg-white/10">
                     3
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="border-white/20 text-white hover:bg-white/10">
                     Volgende
                   </Button>
                 </div>
@@ -335,24 +399,47 @@ export default function BlogPage() {
         </div>
       </section>
 
+      {/* Section Divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
       {/* Newsletter CTA */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <Card className="max-w-4xl mx-auto p-8 md:p-12 bg-gradient-to-br from-primary/10 to-purple-600/10">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold mb-4">Blijf op de hoogte</h2>
-              <p className="text-xl text-muted-foreground mb-8">
+      <section className="py-20 sm:py-28">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto"
+          >
+            <div className="bg-gradient-to-r from-white/[0.05] to-white/[0.08] backdrop-blur-sm border border-white/10 rounded-2xl p-8 sm:p-12 text-center">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 tracking-[-0.02em]">
+                Blijf op de hoogte
+              </h2>
+              <p className="text-lg text-white/70 mb-8">
                 Ontvang de laatste AI insights en updates direct in uw inbox
               </p>
               <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                <Input type="email" placeholder="uw.email@bedrijf.nl" className="flex-1" />
-                <Button className="shadow-premium hover-lift">Aanmelden</Button>
+                <Input
+                  type="email"
+                  placeholder="uw.email@bedrijf.nl"
+                  className="flex-1 bg-white/5 border-white/20 text-white placeholder:text-white/40 focus:border-[#FF9F43]"
+                />
+                <Button
+                  className="text-white font-medium transition-all duration-300 hover:scale-[1.02]"
+                  style={{
+                    background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                    boxShadow: '0 4px 20px -4px rgba(248, 115, 21, 0.5)',
+                  }}
+                >
+                  Aanmelden
+                </Button>
               </div>
-              <p className="text-sm text-muted-foreground mt-4">
+              <p className="text-sm text-white/50 mt-4">
                 Geen spam, alleen waardevolle content. Uitschrijven kan altijd.
               </p>
             </div>
-          </Card>
+          </motion.div>
         </div>
       </section>
     </main>
