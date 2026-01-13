@@ -40,7 +40,7 @@ steps:
       - 'push'
       - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app:latest'
 
-  # Deploy to Cloud Run (env vars are already set in Cloud Run, just deploy the new image)
+  # Deploy to Cloud Run with ALL env vars (clears old secret references)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -53,6 +53,22 @@ steps:
       - 'europe-west1'
       - '--platform'
       - 'managed'
+      - '--allow-unauthenticated'
+      - '--clear-secrets'
+      - '--set-env-vars'
+      - 'NODE_ENV=production,FIREBASE_PROJECT_ID=${_FIREBASE_PROJECT_ID},FIREBASE_CLIENT_EMAIL=${_FIREBASE_CLIENT_EMAIL},FIREBASE_PRIVATE_KEY=${_FIREBASE_PRIVATE_KEY},FIREBASE_STORAGE_BUCKET=${_FIREBASE_STORAGE_BUCKET},NEXT_PUBLIC_APP_URL=${_NEXT_PUBLIC_APP_URL},SMTP_HOST=${_SMTP_HOST},SMTP_PORT=${_SMTP_PORT},SMTP_USER=${_SMTP_USER},SMTP_PASS=${_SMTP_PASS},GEMINI_API_KEY=${_GEMINI_API_KEY},PINECONE_API_KEY=${_PINECONE_API_KEY},OPENAI_API_KEY=${_OPENAI_API_KEY},ANTHROPIC_API_KEY=${_ANTHROPIC_API_KEY}'
+      - '--min-instances'
+      - '1'
+      - '--max-instances'
+      - '10'
+      - '--memory'
+      - '1Gi'
+      - '--cpu'
+      - '1'
+      - '--timeout'
+      - '300'
+      - '--port'
+      - '8080'
 
 options:
   logging: CLOUD_LOGGING_ONLY
