@@ -1,28 +1,8 @@
 steps:
-  # Build the Docker image with NEXT_PUBLIC_* variables
+  # Build the Docker image (no build args needed - Firebase config is hardcoded)
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_API_KEY=${_NEXT_PUBLIC_FIREBASE_API_KEY}'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${_NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_PROJECT_ID=${_NEXT_PUBLIC_FIREBASE_PROJECT_ID}'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${_NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${_NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_APP_ID=${_NEXT_PUBLIC_FIREBASE_APP_ID}'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${_NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID}'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_GEMINI_API_KEY=${_NEXT_PUBLIC_GEMINI_API_KEY}'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_APP_URL=${_NEXT_PUBLIC_APP_URL}'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${_NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}'
       - '-t'
       - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app:${COMMIT_SHA}'
       - '-t'
@@ -40,7 +20,7 @@ steps:
       - 'push'
       - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app:latest'
 
-  # Deploy to Cloud Run with ALL env vars (clears old secret references)
+  # Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -56,7 +36,7 @@ steps:
       - '--allow-unauthenticated'
       - '--clear-secrets'
       - '--set-env-vars'
-      - 'NODE_ENV=production,FIREBASE_PROJECT_ID=${_FIREBASE_PROJECT_ID},FIREBASE_CLIENT_EMAIL=${_FIREBASE_CLIENT_EMAIL},FIREBASE_PRIVATE_KEY=${_FIREBASE_PRIVATE_KEY},FIREBASE_STORAGE_BUCKET=${_FIREBASE_STORAGE_BUCKET},NEXT_PUBLIC_APP_URL=${_NEXT_PUBLIC_APP_URL},SMTP_HOST=${_SMTP_HOST},SMTP_PORT=${_SMTP_PORT},SMTP_USER=${_SMTP_USER},SMTP_PASS=${_SMTP_PASS},GEMINI_API_KEY=${_GEMINI_API_KEY},PINECONE_API_KEY=${_PINECONE_API_KEY},OPENAI_API_KEY=${_OPENAI_API_KEY},ANTHROPIC_API_KEY=${_ANTHROPIC_API_KEY}'
+      - 'NODE_ENV=production,FIREBASE_PROJECT_ID=groeimetai-458417,FIREBASE_CLIENT_EMAIL=${_FIREBASE_CLIENT_EMAIL},FIREBASE_PRIVATE_KEY=${_FIREBASE_PRIVATE_KEY},FIREBASE_STORAGE_BUCKET=groeimetai-458417.firebasestorage.app,NEXT_PUBLIC_APP_URL=https://groeimetai.io,SMTP_HOST=${_SMTP_HOST},SMTP_PORT=${_SMTP_PORT},SMTP_USER=${_SMTP_USER},SMTP_PASS=${_SMTP_PASS},GEMINI_API_KEY=${_GEMINI_API_KEY},PINECONE_API_KEY=${_PINECONE_API_KEY},OPENAI_API_KEY=${_OPENAI_API_KEY},ANTHROPIC_API_KEY=${_ANTHROPIC_API_KEY}'
       - '--min-instances'
       - '1'
       - '--max-instances'

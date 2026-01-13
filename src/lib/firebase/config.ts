@@ -9,24 +9,20 @@ import { getStorage, FirebaseStorage } from 'firebase/storage';
 import { getAnalytics, Analytics, isSupported } from 'firebase/analytics';
 import { getPerformance, FirebasePerformance } from 'firebase/performance';
 
-// Firebase configuration
-// Use placeholder values during build time to allow static analysis
+// Firebase configuration - hardcoded (client-side, public keys)
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'placeholder-api-key',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'placeholder.firebaseapp.com',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'placeholder-project',
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'placeholder.appspot.com',
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '000000000000',
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:000000000000:web:placeholder',
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-PLACEHOLDER',
+  apiKey: "AIzaSyDava1yANafho1-TCfFaWmr5PscZUi1D3E",
+  authDomain: "groeimetai-458417.firebaseapp.com",
+  databaseURL: "https://groeimetai-458417-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "groeimetai-458417",
+  storageBucket: "groeimetai-458417.firebasestorage.app",
+  messagingSenderId: "194122035772",
+  appId: "1:194122035772:web:2b31d75962fc5f7cfec939",
+  measurementId: "G-9PJWBTPMLH",
 };
 
-// Check if real Firebase config is present (not placeholder values)
-const isFirebaseConfigValid = !!(
-  process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
-  process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN &&
-  process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
-);
+// Config is always valid now (hardcoded)
+const isFirebaseConfigValid = true;
 
 // Initialize Firebase
 let app: FirebaseApp;

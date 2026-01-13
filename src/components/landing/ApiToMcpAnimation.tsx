@@ -48,10 +48,6 @@ const API_CONFIG: Array<{ name: string; icon: LucideIcon; color: string }> = [
 // HELPER FUNCTIES
 // =============================================================================
 
-/**
- * Bereken posities in een cirkel rondom een centrumpunt
- * @returns Array van {x, y} coördinaten die de CENTRA van elementen aangeven
- */
 function getCirclePositions(
   count: number,
   radius: number,
@@ -70,56 +66,57 @@ function getCirclePositions(
 }
 
 // =============================================================================
-// CONNECTION LINE COMPONENT
+// CONNECTION LINE COMPONENT - Simpel en direct
 // =============================================================================
 
-/**
- * Tekent een lijn tussen twee punten met glow effect
- * BELANGRIJK: from en to zijn de EXACTE pixel coördinaten waar de lijn begint/eindigt
- */
 function ConnectionLine({
-  from,
-  to,
+  startX,
+  startY,
+  endX,
+  endY,
   color,
   delay = 0,
   showPulse = false,
   dashed = false,
 }: {
-  from: { x: number; y: number };
-  to: { x: number; y: number };
+  startX: number;
+  startY: number;
+  endX: number;
+  endY: number;
   color: string;
   delay?: number;
   showPulse?: boolean;
   dashed?: boolean;
 }) {
-  const dx = to.x - from.x;
-  const dy = to.y - from.y;
+  // Bereken lengte en hoek
+  const dx = endX - startX;
+  const dy = endY - startY;
   const length = Math.sqrt(dx * dx + dy * dy);
   const angleDeg = Math.atan2(dy, dx) * (180 / Math.PI);
+
+  if (length < 1) return null; // Geen lijn tekenen als punten te dicht bij elkaar zijn
 
   return (
     <motion.div
       className="absolute pointer-events-none"
       style={{
-        // Positioneer de lijn EXACT op het startpunt
-        left: from.x,
-        top: from.y,
+        left: startX,
+        top: startY,
         width: length,
-        height: 0,
-        // Roteer vanuit het startpunt (links-midden van de div)
-        transformOrigin: '0% 50%',
+        height: 2,
+        transformOrigin: 'left center',
         transform: `rotate(${angleDeg}deg)`,
       }}
       initial={{ scaleX: 0, opacity: 0 }}
       animate={{ scaleX: 1, opacity: 1 }}
       transition={{ delay, duration: 0.5, ease: 'easeOut' }}
     >
-      {/* Glow effect achter de lijn */}
+      {/* Glow */}
       <div
         className="absolute blur-sm"
         style={{
           left: 0,
-          top: -3,
+          top: -2,
           width: '100%',
           height: 6,
           background: color,
@@ -127,12 +124,12 @@ function ConnectionLine({
         }}
       />
 
-      {/* Hoofdlijn */}
+      {/* Lijn */}
       <div
         className="absolute"
         style={{
           left: 0,
-          top: -1,
+          top: 0,
           width: '100%',
           height: 2,
           background: dashed
@@ -141,20 +138,21 @@ function ConnectionLine({
         }}
       />
 
-      {/* Animated pulse dot */}
+      {/* Pulse dot */}
       {showPulse && (
         <motion.div
           className="absolute rounded-full"
           style={{
             width: 6,
             height: 6,
-            top: -3,
+            top: -2,
+            left: 0,
             background: color,
             boxShadow: `0 0 8px ${color}, 0 0 16px ${color}`,
           }}
           animate={{ left: [0, length - 6] }}
           transition={{
-            delay: delay + 0.4,
+            delay: delay + 0.3,
             duration: 1.2,
             repeat: Infinity,
             ease: 'linear',
@@ -169,38 +167,34 @@ function ConnectionLine({
 // API CARD COMPONENT
 // =============================================================================
 
-/**
- * API kaart component
- * @param centerPosition - Het CENTRUM waar de kaart moet verschijnen
- */
 function ApiCard({
   name,
   icon: Icon,
   color,
   phase,
-  centerPosition,
+  centerX,
+  centerY,
 }: {
   name: string;
   icon: LucideIcon;
   color: string;
   phase: number;
-  centerPosition: { x: number; y: number };
+  centerX: number;
+  centerY: number;
 }) {
   const isConnecting = phase === 1;
   const isConnected = phase === 2;
 
-  // Bereken TOP-LEFT positie vanuit centrum (GEEN translate transform!)
-  const topLeft = {
-    x: centerPosition.x - DIMENSIONS.apiCard.width / 2,
-    y: centerPosition.y - DIMENSIONS.apiCard.height / 2,
-  };
+  // TOP-LEFT positie (geen CSS translate!)
+  const left = centerX - DIMENSIONS.apiCard.width / 2;
+  const top = centerY - DIMENSIONS.apiCard.height / 2;
 
   return (
     <motion.div
       className="absolute"
       style={{
-        left: topLeft.x,
-        top: topLeft.y,
+        left,
+        top,
         width: DIMENSIONS.apiCard.width,
         height: DIMENSIONS.apiCard.height,
       }}
@@ -234,7 +228,6 @@ function ApiCard({
         }
         transition={{ repeat: Infinity, duration: 2 }}
       >
-        {/* Icon */}
         <div
           className="p-2 rounded-lg mb-2"
           style={{
@@ -245,14 +238,12 @@ function ApiCard({
           <Icon size={18} color={color} />
         </div>
 
-        {/* Name */}
         <div className={`text-xs font-medium text-center ${
           isConnected ? 'text-green-300' : isConnecting ? 'text-orange-300' : 'text-white/70'
         }`}>
           {name} API
         </div>
 
-        {/* Protocol badge */}
         <div className={`mt-1.5 text-[9px] font-mono px-2 py-0.5 rounded-full ${
           isConnected
             ? 'bg-green-500/20 text-green-300 border border-green-500/30'
@@ -269,34 +260,29 @@ function ApiCard({
 // MCP NODE COMPONENT
 // =============================================================================
 
-/**
- * MCP node component
- * @param centerPosition - Het CENTRUM waar de node moet verschijnen
- */
 function McpNode({
-  centerPosition,
+  centerX,
+  centerY,
   phase,
   delay = 0,
 }: {
-  centerPosition: { x: number; y: number };
+  centerX: number;
+  centerY: number;
   phase: number;
   delay?: number;
 }) {
   const isInstalling = phase === 1;
   const isActive = phase === 2;
 
-  // Bereken TOP-LEFT positie vanuit centrum
-  const topLeft = {
-    x: centerPosition.x - DIMENSIONS.mcpNode.width / 2,
-    y: centerPosition.y - DIMENSIONS.mcpNode.height / 2,
-  };
+  const left = centerX - DIMENSIONS.mcpNode.width / 2;
+  const top = centerY - DIMENSIONS.mcpNode.height / 2;
 
   return (
     <motion.div
       className="absolute"
       style={{
-        left: topLeft.x,
-        top: topLeft.y,
+        left,
+        top,
         width: DIMENSIONS.mcpNode.width,
         height: DIMENSIONS.mcpNode.height,
       }}
@@ -343,15 +329,13 @@ function McpNode({
 // AGENT HUB COMPONENT
 // =============================================================================
 
-/**
- * Centrale AI Agent hub
- * @param centerPosition - Het CENTRUM waar de hub moet verschijnen
- */
 function AgentHub({
-  centerPosition,
+  centerX,
+  centerY,
   phase,
 }: {
-  centerPosition: { x: number; y: number };
+  centerX: number;
+  centerY: number;
   phase: number;
 }) {
   const isBlind = phase === 0;
@@ -360,18 +344,15 @@ function AgentHub({
 
   const hubColor = isConnected ? GREEN : isConnecting ? ORANGE : '#EF4444';
 
-  // Bereken TOP-LEFT positie vanuit centrum
-  const topLeft = {
-    x: centerPosition.x - DIMENSIONS.agentHub.width / 2,
-    y: centerPosition.y - DIMENSIONS.agentHub.height / 2,
-  };
+  const left = centerX - DIMENSIONS.agentHub.width / 2;
+  const top = centerY - DIMENSIONS.agentHub.height / 2;
 
   return (
     <motion.div
       className="absolute"
       style={{
-        left: topLeft.x,
-        top: topLeft.y,
+        left,
+        top,
         width: DIMENSIONS.agentHub.width,
         height: DIMENSIONS.agentHub.height,
       }}
@@ -412,7 +393,7 @@ function AgentHub({
           </div>
         </div>
 
-        {/* Label onder de hub */}
+        {/* Label */}
         <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
           <div className={`text-sm font-bold ${isBlind ? 'text-red-400' : isConnecting ? 'text-orange-400' : 'text-green-400'}`}>
             AI Agent
@@ -433,12 +414,12 @@ function AgentHub({
 export default function ApiToMcpAnimation() {
   const t = useTranslations('mcpAnimation');
   const containerRef = useRef<HTMLDivElement>(null);
-  const [containerSize, setContainerSize] = useState({ width: 800, height: 500 });
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const [isMobile, setIsMobile] = useState(false);
   const [currentPhase, setCurrentPhase] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
 
-  // Meet de container grootte
+  // Meet de container
   useEffect(() => {
     const updateSize = () => {
       if (containerRef.current) {
@@ -449,11 +430,15 @@ export default function ApiToMcpAnimation() {
     };
 
     updateSize();
+    // Kleine delay om te zorgen dat de container correct gemeten is
+    const timeout = setTimeout(updateSize, 100);
     window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('resize', updateSize);
+    };
   }, []);
 
-  // Fase configuratie
   const phases = useMemo(() => [
     { id: 0, title: t('phases.before.title'), subtitle: t('phases.before.subtitle'), description: t('phases.before.description') },
     { id: 1, title: t('phases.during.title'), subtitle: t('phases.during.subtitle'), description: t('phases.during.description') },
@@ -461,39 +446,38 @@ export default function ApiToMcpAnimation() {
   ], [t]);
 
   // ==========================================================================
-  // POSITIE BEREKENINGEN - Alle posities zijn CENTRUM coördinaten
+  // POSITIE BEREKENINGEN
   // ==========================================================================
 
-  const containerCenterX = containerSize.width / 2;
-  const containerCenterY = containerSize.height / 2;
+  // Centrum van de container
+  const centerX = containerSize.width / 2;
+  const centerY = containerSize.height / 2;
 
-  // Stralen voor de cirkels
-  const apiRadius = isMobile ? 0 : Math.min(containerSize.width, containerSize.height) * 0.36;
-  const mcpRadius = isMobile ? 0 : Math.min(containerSize.width, containerSize.height) * 0.20;
+  // Grotere stralen voor meer ruimte
+  const apiRadius = isMobile ? 0 : Math.min(containerSize.width * 0.42, containerSize.height * 0.42);
+  const mcpRadius = isMobile ? 0 : Math.min(containerSize.width * 0.24, containerSize.height * 0.24);
 
-  // Agent Hub centrum positie
-  const agentHubCenter = useMemo(() => ({
-    x: containerCenterX,
-    y: isMobile ? containerSize.height * 0.7 : containerCenterY,
-  }), [containerCenterX, containerCenterY, containerSize.height, isMobile]);
+  // Agent Hub positie (centrum)
+  const agentX = centerX;
+  const agentY = isMobile ? containerSize.height * 0.7 : centerY;
 
-  // API kaart centrum posities (in een cirkel rondom de agent)
-  const apiCenters = useMemo(() => {
-    if (isMobile) {
-      return [{ x: containerCenterX, y: containerSize.height * 0.15 }];
+  // API posities (buitenste cirkel)
+  const apiPositions = useMemo(() => {
+    if (isMobile || containerSize.width === 0) {
+      return [{ x: centerX, y: containerSize.height * 0.15 }];
     }
-    return getCirclePositions(API_CONFIG.length, apiRadius, containerCenterX, containerCenterY - 10, -90);
-  }, [containerSize, isMobile, apiRadius, containerCenterX, containerCenterY]);
+    return getCirclePositions(API_CONFIG.length, apiRadius, centerX, centerY, -90);
+  }, [containerSize.width, containerSize.height, isMobile, apiRadius, centerX, centerY]);
 
-  // MCP node centrum posities (in een kleinere cirkel tussen APIs en agent)
-  const mcpCenters = useMemo(() => {
-    if (isMobile) {
-      return [{ x: containerCenterX, y: containerSize.height * 0.42 }];
+  // MCP posities (binnenste cirkel)
+  const mcpPositions = useMemo(() => {
+    if (isMobile || containerSize.width === 0) {
+      return [{ x: centerX, y: containerSize.height * 0.42 }];
     }
-    return getCirclePositions(API_CONFIG.length, mcpRadius, containerCenterX, containerCenterY - 5, -90);
-  }, [containerSize, isMobile, mcpRadius, containerCenterX, containerCenterY]);
+    return getCirclePositions(API_CONFIG.length, mcpRadius, centerX, centerY, -90);
+  }, [containerSize.width, containerSize.height, isMobile, mcpRadius, centerX, centerY]);
 
-  // Auto-advance door de fases
+  // Auto-advance
   useEffect(() => {
     if (!autoPlay) return;
     const interval = setInterval(() => {
@@ -502,16 +486,16 @@ export default function ApiToMcpAnimation() {
     return () => clearInterval(interval);
   }, [autoPlay, phases.length]);
 
-  // Bepaal wat er getoond moet worden per fase
   const showMcp = currentPhase >= 1;
   const showLines = currentPhase === 2;
+  const itemIndices = isMobile ? [0] : [0, 1, 2, 3, 4];
 
-  // Welke items renderen (minder op mobile)
-  const itemsToRender = isMobile ? [0] : API_CONFIG.map((_, i) => i);
+  // Wacht tot container gemeten is
+  const isReady = containerSize.width > 0 && containerSize.height > 0;
 
   return (
     <section className="py-24 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
-      {/* Background decoraties */}
+      {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl"
              style={{ background: `radial-gradient(circle, ${ORANGE}40, transparent)` }} />
@@ -545,7 +529,7 @@ export default function ApiToMcpAnimation() {
             <p className="text-xl text-white/70 max-w-3xl mx-auto">{t('subtitle')}</p>
           </motion.div>
 
-          {/* Main Animation Card */}
+          {/* Main Card */}
           <div
             className="relative rounded-2xl p-6 lg:p-10 mb-12 border"
             style={{
@@ -553,7 +537,7 @@ export default function ApiToMcpAnimation() {
               borderColor: 'rgba(255,255,255,0.1)'
             }}
           >
-            {/* Phase control buttons */}
+            {/* Controls */}
             <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
               {phases.map((phase, idx) => (
                 <button
@@ -591,10 +575,7 @@ export default function ApiToMcpAnimation() {
               </button>
             </div>
 
-            {/* ================================================================
-                ANIMATION STAGE - Hier worden alle elementen en lijnen gerenderd
-                Alle posities zijn relatief aan deze container
-                ================================================================ */}
+            {/* Animation Stage */}
             <div
               ref={containerRef}
               className="relative h-80 sm:h-96 lg:h-[520px] mb-8 rounded-xl overflow-hidden"
@@ -603,67 +584,69 @@ export default function ApiToMcpAnimation() {
                 border: '1px solid rgba(255,255,255,0.05)'
               }}
             >
-              {/*
-                LAAG 1: Connection Lines (onderste laag)
-                Lijnen worden getekend van API centrum → MCP centrum → Agent centrum
-              */}
-              {showLines && itemsToRender.map((i) => (
-                <div key={`lines-${i}`}>
-                  {/* Lijn van API centrum naar MCP centrum */}
-                  <ConnectionLine
-                    from={apiCenters[i]}
-                    to={mcpCenters[i]}
-                    color={GREEN}
-                    delay={0.1 + i * 0.08}
-                    showPulse
-                  />
-                  {/* Lijn van MCP centrum naar Agent centrum */}
-                  <ConnectionLine
-                    from={mcpCenters[i]}
-                    to={agentHubCenter}
-                    color={GREEN}
-                    delay={0.25 + i * 0.08}
-                    dashed
-                    showPulse
-                  />
-                </div>
-              ))}
+              {isReady && (
+                <>
+                  {/* LAAG 1: Lijnen */}
+                  {showLines && itemIndices.map((i) => (
+                    <div key={`lines-${i}`}>
+                      {/* API → MCP */}
+                      <ConnectionLine
+                        startX={apiPositions[i].x}
+                        startY={apiPositions[i].y}
+                        endX={mcpPositions[i].x}
+                        endY={mcpPositions[i].y}
+                        color={GREEN}
+                        delay={0.05 + i * 0.08}
+                        showPulse
+                      />
+                      {/* MCP → Agent */}
+                      <ConnectionLine
+                        startX={mcpPositions[i].x}
+                        startY={mcpPositions[i].y}
+                        endX={agentX}
+                        endY={agentY}
+                        color={GREEN}
+                        delay={0.15 + i * 0.08}
+                        dashed
+                        showPulse
+                      />
+                    </div>
+                  ))}
 
-              {/*
-                LAAG 2: Agent Hub (midden)
-              */}
-              <AgentHub
-                centerPosition={agentHubCenter}
-                phase={currentPhase}
-              />
-
-              {/*
-                LAAG 3: MCP Nodes (tussen API en Agent)
-              */}
-              <AnimatePresence>
-                {showMcp && itemsToRender.map((i) => (
-                  <McpNode
-                    key={`mcp-${i}`}
-                    centerPosition={mcpCenters[i]}
+                  {/* LAAG 2: Agent Hub */}
+                  <AgentHub
+                    centerX={agentX}
+                    centerY={agentY}
                     phase={currentPhase}
-                    delay={0.15 + i * 0.08}
                   />
-                ))}
-              </AnimatePresence>
 
-              {/*
-                LAAG 4: API Cards (buitenste laag)
-              */}
-              {itemsToRender.map((i) => (
-                <ApiCard
-                  key={API_CONFIG[i].name}
-                  name={API_CONFIG[i].name}
-                  icon={API_CONFIG[i].icon}
-                  color={API_CONFIG[i].color}
-                  phase={currentPhase}
-                  centerPosition={apiCenters[i]}
-                />
-              ))}
+                  {/* LAAG 3: MCP Nodes */}
+                  <AnimatePresence>
+                    {showMcp && itemIndices.map((i) => (
+                      <McpNode
+                        key={`mcp-${i}`}
+                        centerX={mcpPositions[i].x}
+                        centerY={mcpPositions[i].y}
+                        phase={currentPhase}
+                        delay={0.1 + i * 0.06}
+                      />
+                    ))}
+                  </AnimatePresence>
+
+                  {/* LAAG 4: API Cards */}
+                  {itemIndices.map((i) => (
+                    <ApiCard
+                      key={API_CONFIG[i].name}
+                      name={API_CONFIG[i].name}
+                      icon={API_CONFIG[i].icon}
+                      color={API_CONFIG[i].color}
+                      phase={currentPhase}
+                      centerX={apiPositions[i].x}
+                      centerY={apiPositions[i].y}
+                    />
+                  ))}
+                </>
+              )}
             </div>
 
             {/* Phase description */}
@@ -678,7 +661,7 @@ export default function ApiToMcpAnimation() {
             </motion.div>
           </div>
 
-          {/* Benefits section */}
+          {/* Benefits */}
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { icon: Zap, title: t('benefits.faster.title'), description: t('benefits.faster.description'), color: '#F59E0B' },
