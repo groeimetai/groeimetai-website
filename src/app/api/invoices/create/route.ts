@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyIdToken } from '@/lib/firebase/admin';
-import { InvoiceItem, InvoiceType, InvoiceBillingDetails } from '@/types';
+import { verifyIdToken, adminDb, serverTimestamp } from '@/lib/firebase/admin';
+import { InvoiceItem, InvoiceType, InvoiceBillingDetails, Invoice } from '@/types';
 import { isAdminEmail } from '@/lib/constants/adminEmails';
 
 // POST /api/invoices/create
@@ -97,33 +97,80 @@ export async function POST(request: NextRequest) {
       timeEntryIds: item.timeEntryIds,
     }));
 
-    // Create invoice using dynamic import
-    const { invoiceService } = await import('@/services/invoiceService');
-    const invoice = await invoiceService.createInvoice({
+    // Generate invoice number
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+
+    // Get last invoice number for this month using Admin SDK
+    const invoicesRef = adminDb.collection('invoices');
+    const lastInvoiceQuery = await invoicesRef
+      .where('invoiceNumber', '>=', `INV-${year}${month}-001`)
+      .where('invoiceNumber', '<=', `INV-${year}${month}-999`)
+      .orderBy('invoiceNumber', 'desc')
+      .limit(1)
+      .get();
+
+    let nextNumber = 1;
+    if (!lastInvoiceQuery.empty) {
+      const lastInvoice = lastInvoiceQuery.docs[0].data();
+      const lastNum = parseInt(lastInvoice.invoiceNumber.split('-')[2]);
+      nextNumber = lastNum + 1;
+    }
+    const invoiceNumber = `INV-${year}${month}-${String(nextNumber).padStart(3, '0')}`;
+
+    // Calculate financials
+    const subtotal = items.reduce((sum: number, item: InvoiceItem) => sum + item.total, 0);
+    const tax = items.reduce((sum: number, item: InvoiceItem) => sum + item.tax, 0);
+    const total = subtotal + tax;
+
+    // Create invoice document
+    const invoiceRef = invoicesRef.doc();
+    const invoice: Invoice = {
+      id: invoiceRef.id,
+      invoiceNumber,
       clientId: body.clientId,
       organizationId: body.organizationId,
       billingAddress: body.billingAddress,
-      billingDetails: billingDetails as InvoiceBillingDetails | undefined,
       projectId: body.projectId,
       quoteId: body.quoteId,
       milestoneId: body.milestoneId,
+      status: 'draft',
       type: body.type as InvoiceType,
       items,
-      dueDate: new Date(body.dueDate),
+      financial: {
+        subtotal,
+        discount: 0,
+        tax,
+        total,
+        paid: 0,
+        balance: total,
+        currency: 'EUR',
+      },
       issueDate: body.issueDate ? new Date(body.issueDate) : new Date(),
+      dueDate: new Date(body.dueDate),
+      reminders: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
       createdBy: decodedToken.uid,
+    };
+
+    // Save with Admin SDK (bypasses Firestore rules)
+    await invoiceRef.set({
+      ...invoice,
+      billingDetails: billingDetails || null,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     });
 
     // Send invoice email if requested
     if (body.sendEmail) {
-      // Get client email
-      const { getDoc, doc } = await import('firebase/firestore');
-      const { db, collections } = await import('@/lib/firebase/config');
-
-      const clientDoc = await getDoc(doc(db, collections.users, body.clientId));
+      // Get client email using Admin SDK
+      const clientDoc = await adminDb.collection('users').doc(body.clientId).get();
       const client = clientDoc.data();
 
       if (client?.email) {
+        const { invoiceService } = await import('@/services/invoiceService');
         await invoiceService.sendInvoice(
           invoice.id,
           client.email,
