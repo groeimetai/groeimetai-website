@@ -87,7 +87,7 @@ function SvgLines({
   return (
     <svg
       className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ zIndex: 1 }}
+      style={{ zIndex: 0 }}
     >
       <defs>
         <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
@@ -212,6 +212,7 @@ function ApiCard({
         top,
         width: DIMENSIONS.apiCard.width,
         height: DIMENSIONS.apiCard.height,
+        zIndex: 10,
       }}
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
@@ -300,6 +301,7 @@ function McpNode({
         top,
         width: DIMENSIONS.mcpNode.width,
         height: DIMENSIONS.mcpNode.height,
+        zIndex: 20,
       }}
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
@@ -370,6 +372,7 @@ function AgentHub({
         top,
         width: DIMENSIONS.agentHub.width,
         height: DIMENSIONS.agentHub.height,
+        zIndex: 30,
       }}
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}

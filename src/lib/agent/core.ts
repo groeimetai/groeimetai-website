@@ -15,7 +15,8 @@ const anthropic = new Anthropic({
 });
 
 // Model configuration
-const MODEL = 'claude-sonnet-4-5-20250514';
+// Claude Sonnet 4 - balanced performance and cost
+const MODEL = 'claude-sonnet-4-20250514';
 const MAX_TOKENS = 1024;
 
 /**
