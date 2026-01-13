@@ -85,17 +85,21 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Calculate item totals and tax
-    const items: InvoiceItem[] = body.items.map((item: any) => ({
-      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-      description: item.description,
-      quantity: item.quantity,
-      unitPrice: item.unitPrice,
-      tax: item.tax || item.unitPrice * item.quantity * 0.21, // Default 21% VAT
-      total: item.unitPrice * item.quantity,
-      projectId: item.projectId,
-      timeEntryIds: item.timeEntryIds,
-    }));
+    // Calculate item totals and tax - filter out undefined values for Firestore Admin SDK
+    const items: InvoiceItem[] = body.items.map((item: any) => {
+      const invoiceItem: any = {
+        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+        description: item.description,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        tax: item.tax || item.unitPrice * item.quantity * 0.21, // Default 21% VAT
+        total: item.unitPrice * item.quantity,
+      };
+      // Only add optional fields if they have values
+      if (item.projectId) invoiceItem.projectId = item.projectId;
+      if (item.timeEntryIds && item.timeEntryIds.length > 0) invoiceItem.timeEntryIds = item.timeEntryIds;
+      return invoiceItem;
+    });
 
     // Generate invoice number
     const date = new Date();
