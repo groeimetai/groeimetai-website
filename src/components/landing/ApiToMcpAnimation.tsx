@@ -84,89 +84,105 @@ function SvgLines({
 }) {
   if (!show) return null;
 
+  // Check if we have valid data
+  if (!apiPositions.length || !mcpPositions.length) return null;
+
+  // Debug log
+  console.log('SvgLines rendering:', {
+    apiPositions,
+    mcpPositions,
+    agentX,
+    agentY,
+    count: apiPositions.length
+  });
+
   return (
     <svg
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ zIndex: 0 }}
+      className="absolute top-0 left-0 pointer-events-none"
+      width="100%"
+      height="100%"
+      style={{ zIndex: 5 }}
     >
-      <defs>
-        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="3" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
+      {/* DEBUG: Red rectangle to verify SVG renders */}
+      <rect x="10" y="10" width="30" height="30" fill="red" opacity="0.5" />
 
+      {/* Render all connection lines */}
       {apiPositions.map((apiPos, i) => {
         const mcpPos = mcpPositions[i];
-        if (!mcpPos) return null;
+        if (!mcpPos) {
+          console.log(`Missing mcpPos for index ${i}`);
+          return null;
+        }
+
+        // Get coordinates
+        const ax = apiPos.x;
+        const ay = apiPos.y;
+        const mx = mcpPos.x;
+        const my = mcpPos.y;
+
+        console.log(`Line ${i}: API(${ax.toFixed(0)}, ${ay.toFixed(0)}) → MCP(${mx.toFixed(0)}, ${my.toFixed(0)})`);
 
         return (
-          <g key={`lines-${i}`}>
-            {/* API → MCP (solid line) */}
-            <motion.line
-              x1={apiPos.x}
-              y1={apiPos.y}
-              x2={mcpPos.x}
-              y2={mcpPos.y}
+          <g key={`connection-${i}`}>
+            {/* API → MCP solid line with glow effect */}
+            <line
+              x1={ax}
+              y1={ay}
+              x2={mx}
+              y2={my}
               stroke={GREEN}
-              strokeWidth={2}
-              filter="url(#glow)"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.05 + i * 0.08, duration: 0.4 }}
+              strokeWidth={4}
+              strokeLinecap="round"
+              style={{ filter: 'drop-shadow(0 0 6px rgba(16, 185, 129, 0.6))' }}
             />
 
-            {/* MCP → Agent (dashed line) */}
-            <motion.line
-              x1={mcpPos.x}
-              y1={mcpPos.y}
+            {/* MCP → Agent dashed line */}
+            <line
+              x1={mx}
+              y1={my}
               x2={agentX}
               y2={agentY}
               stroke={GREEN}
               strokeWidth={2}
-              strokeDasharray="6 4"
-              filter="url(#glow)"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 + i * 0.08, duration: 0.4 }}
+              strokeDasharray="8 4"
+              strokeLinecap="round"
+              opacity={0.7}
+              style={{ filter: 'drop-shadow(0 0 4px rgba(16, 185, 129, 0.4))' }}
             />
 
-            {/* Animated dot on API → MCP */}
+            {/* Animated data particle on API → MCP */}
             <motion.circle
-              r={4}
+              r={5}
               fill={GREEN}
-              filter="url(#glow)"
+              style={{ filter: 'drop-shadow(0 0 8px rgba(16, 185, 129, 0.8))' }}
               initial={{ opacity: 0 }}
               animate={{
                 opacity: [0, 1, 1, 0],
-                cx: [apiPos.x, mcpPos.x],
-                cy: [apiPos.y, mcpPos.y],
+                cx: [ax, mx],
+                cy: [ay, my],
               }}
               transition={{
-                delay: 0.5 + i * 0.15,
-                duration: 1.5,
+                delay: 0.3 + i * 0.12,
+                duration: 1.2,
                 repeat: Infinity,
                 ease: 'linear',
               }}
             />
 
-            {/* Animated dot on MCP → Agent */}
+            {/* Animated data particle on MCP → Agent */}
             <motion.circle
-              r={4}
+              r={5}
               fill={ORANGE}
-              filter="url(#glow)"
+              style={{ filter: 'drop-shadow(0 0 8px rgba(248, 115, 21, 0.8))' }}
               initial={{ opacity: 0 }}
               animate={{
                 opacity: [0, 1, 1, 0],
-                cx: [mcpPos.x, agentX],
-                cy: [mcpPos.y, agentY],
+                cx: [mx, agentX],
+                cy: [my, agentY],
               }}
               transition={{
-                delay: 1 + i * 0.15,
-                duration: 1.5,
+                delay: 0.8 + i * 0.12,
+                duration: 1.2,
                 repeat: Infinity,
                 ease: 'linear',
               }}
@@ -479,20 +495,21 @@ export default function ApiToMcpAnimation() {
   const agentX = centerX;
   const agentY = isMobile ? containerSize.height * 0.7 : centerY;
 
-  // API posities (buitenste cirkel)
+  // API posities (buitenste cirkel) - start at -72 degrees to avoid top edge clipping
   const apiPositions = useMemo(() => {
     if (isMobile || containerSize.width === 0) {
       return [{ x: centerX, y: containerSize.height * 0.15 }];
     }
-    return getCirclePositions(API_CONFIG.length, apiRadius, centerX, centerY, -90);
+    // -72 graden start = eerste element rechtsboven ipv recht boven
+    return getCirclePositions(API_CONFIG.length, apiRadius, centerX, centerY, -72);
   }, [containerSize.width, containerSize.height, isMobile, apiRadius, centerX, centerY]);
 
-  // MCP posities (binnenste cirkel)
+  // MCP posities (binnenste cirkel) - zelfde starthoek als API posities
   const mcpPositions = useMemo(() => {
     if (isMobile || containerSize.width === 0) {
       return [{ x: centerX, y: containerSize.height * 0.42 }];
     }
-    return getCirclePositions(API_CONFIG.length, mcpRadius, centerX, centerY, -90);
+    return getCirclePositions(API_CONFIG.length, mcpRadius, centerX, centerY, -72);
   }, [containerSize.width, containerSize.height, isMobile, mcpRadius, centerX, centerY]);
 
   // Auto-advance

@@ -4010,7 +4010,7 @@
       "placeholderText": "Type your message...",
       "placeholderVoice": "Speak or type your message...",
       "sendMessage": "Send message",
-      "poweredBy": "Powered by Gemini • Your data is secure",
+      "poweredBy": "Powered by Claude • Your data is secure",
       "voiceEnabled": "🎤 Voice enabled",
       "clickToContinue": "Click to continue chatting",
       "minimizeChat": "Minimize chat",
