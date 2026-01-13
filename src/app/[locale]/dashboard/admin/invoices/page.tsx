@@ -500,7 +500,7 @@ export default function AdminInvoicesPage() {
         const client = clients.find(c => c.uid === invoice.clientId);
         if (client?.email) {
           recipientEmail = client.email;
-          recipientName = recipientName || client.fullName || client.displayName;
+          recipientName = recipientName || client.displayName || `${client.firstName} ${client.lastName}`.trim();
         }
       }
 
@@ -555,7 +555,7 @@ export default function AdminInvoicesPage() {
         const client = clients.find(c => c.uid === invoice.clientId);
         if (client?.email) {
           recipientEmail = client.email;
-          recipientName = recipientName || client.fullName || client.displayName;
+          recipientName = recipientName || client.displayName || `${client.firstName} ${client.lastName}`.trim();
         }
       }
 
