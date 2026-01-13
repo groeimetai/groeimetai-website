@@ -1,6 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyIdToken, adminDb } from '@/lib/firebase/admin';
 import { isAdminEmail } from '@/lib/constants/adminEmails';
+import { CompanySettings } from '@/types';
+
+// Helper to convert Firestore Timestamp to Date
+function toDate(value: any): Date {
+  if (!value) return new Date();
+  if (value.toDate && typeof value.toDate === 'function') {
+    return value.toDate();
+  }
+  if (value instanceof Date) return value;
+  if (typeof value === 'string') return new Date(value);
+  return new Date();
+}
+
+// Default company settings
+const DEFAULT_COMPANY_SETTINGS: Partial<CompanySettings> = {
+  name: 'GroeimetAI',
+  legalName: 'GroeimetAI B.V.',
+  email: 'info@groeimetai.nl',
+  phone: '+31 (0) 20 123 4567',
+  website: 'www.groeimetai.nl',
+  city: 'Amsterdam',
+  country: 'Nederland',
+  bankName: 'ABN AMRO',
+  bic: 'ABNANL2A',
+  defaultPaymentTermsDays: 30,
+  defaultTaxRate: 21,
+  invoicePrefix: 'INV',
+};
 
 // GET /api/invoices/[id]/pdf
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
@@ -28,7 +56,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
 
-    const invoice = { id: invoiceDoc.id, ...invoiceDoc.data() } as any;
+    const invoiceData = invoiceDoc.data() as any;
     const userEmail = decodedToken.email as string | undefined;
 
     // Check permissions: admin, consultant, admin email, or the client who owns the invoice
@@ -36,7 +64,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       decodedToken.role === 'admin' ||
       decodedToken.role === 'consultant' ||
       (userEmail && isAdminEmail(userEmail)) ||
-      invoice.clientId === decodedToken.uid;
+      invoiceData.clientId === decodedToken.uid;
 
     if (!hasPermission) {
       return NextResponse.json(
@@ -48,21 +76,60 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     // Check if we should return existing PDF URL or generate new one
     const action = request.nextUrl.searchParams.get('action');
 
-    if (action === 'url' && invoice.pdfUrl) {
+    if (action === 'url' && invoiceData.pdfUrl) {
       // Return existing PDF URL
       return NextResponse.json(
         {
           success: true,
-          pdfUrl: invoice.pdfUrl,
-          generatedAt: invoice.pdfGeneratedAt,
+          pdfUrl: invoiceData.pdfUrl,
+          generatedAt: invoiceData.pdfGeneratedAt,
         },
         { status: 200 }
       );
     }
 
+    // Convert Firestore Timestamps to Dates for the invoice
+    const invoice = {
+      id: invoiceDoc.id,
+      ...invoiceData,
+      issueDate: toDate(invoiceData.issueDate),
+      dueDate: toDate(invoiceData.dueDate),
+      createdAt: toDate(invoiceData.createdAt),
+      updatedAt: toDate(invoiceData.updatedAt),
+    };
+
+    // Fetch company settings using Admin SDK
+    let companySettings: CompanySettings;
+    try {
+      const settingsDoc = await adminDb.collection('companySettings').doc('groeimetai').get();
+      if (settingsDoc.exists) {
+        const data = settingsDoc.data() as any;
+        companySettings = {
+          id: settingsDoc.id,
+          ...data,
+          updatedAt: toDate(data.updatedAt),
+        };
+      } else {
+        companySettings = {
+          id: 'groeimetai',
+          ...DEFAULT_COMPANY_SETTINGS,
+          updatedAt: new Date(),
+          updatedBy: 'system',
+        } as CompanySettings;
+      }
+    } catch (settingsError) {
+      console.warn('Could not fetch company settings, using defaults:', settingsError);
+      companySettings = {
+        id: 'groeimetai',
+        ...DEFAULT_COMPANY_SETTINGS,
+        updatedAt: new Date(),
+        updatedBy: 'system',
+      } as CompanySettings;
+    }
+
     // Generate PDF buffer for direct download using dynamic import
     const { invoicePdfService } = await import('@/services/invoicePdfService');
-    const pdfBuffer = Buffer.from(await invoicePdfService.generateInvoicePDF(invoice), 'base64');
+    const pdfBuffer = Buffer.from(await invoicePdfService.generateInvoicePDF(invoice, companySettings), 'base64');
 
     // Return PDF as response
     return new NextResponse(pdfBuffer, {

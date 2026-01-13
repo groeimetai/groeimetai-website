@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyIdToken, adminDb } from '@/lib/firebase/admin';
+import { verifyIdToken, adminDb, serverTimestamp } from '@/lib/firebase/admin';
 import { isAdminEmail } from '@/lib/constants/adminEmails';
 
 // POST /api/invoices/[id]/send
@@ -50,28 +50,60 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     const recipientEmail = body.recipientEmail;
     const recipientName = body.recipientName;
 
-    // If no email provided, get from client using Admin SDK
+    // Determine email recipient:
+    // 1. Use provided recipientEmail
+    // 2. Use stored clientEmail on invoice
+    // 3. Look up from users collection
     let email = recipientEmail;
     let name = recipientName;
 
     if (!email) {
-      const clientDoc = await adminDb.collection('users').doc(invoice.clientId).get();
-      const client = clientDoc.data();
+      // Try stored clientEmail on invoice first
+      if (invoice.clientEmail) {
+        email = invoice.clientEmail;
+        name = name || invoice.clientName;
+      } else {
+        // Fall back to looking up from users collection
+        const clientDoc = await adminDb.collection('users').doc(invoice.clientId).get();
+        const client = clientDoc.exists ? clientDoc.data() : null;
 
-      if (!client?.email) {
-        return NextResponse.json(
-          { error: 'No email address found for invoice recipient' },
-          { status: 400 }
-        );
+        if (!client?.email) {
+          return NextResponse.json(
+            { error: 'No email address found for invoice recipient. Please provide a recipient email.' },
+            { status: 400 }
+          );
+        }
+
+        email = client.email;
+        name = name || client.fullName || client.displayName;
       }
-
-      email = client.email;
-      name = client.fullName || client.displayName || undefined;
     }
 
-    // Send the invoice using dynamic import
-    const { invoiceService } = await import('@/services/invoiceService');
-    await invoiceService.sendInvoice(params.id, email, name);
+    // Set PDF URL if not already set
+    if (!invoice.pdfUrl) {
+      const pdfUrl = `/api/invoices/${invoice.id}/pdf`;
+      await adminDb.collection('invoices').doc(params.id).update({
+        pdfUrl,
+        pdfGeneratedAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      invoice.pdfUrl = pdfUrl;
+    }
+
+    // Send email using emailService
+    const { emailService } = await import('@/services/emailService');
+    await emailService.sendInvoiceEmail({
+      recipientEmail: email,
+      recipientName: name,
+      invoice,
+      pdfUrl: invoice.pdfUrl,
+    });
+
+    // Update invoice status to 'sent' using Admin SDK
+    await adminDb.collection('invoices').doc(params.id).update({
+      status: 'sent',
+      updatedAt: serverTimestamp(),
+    });
 
     return NextResponse.json(
       {
