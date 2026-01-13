@@ -1,6 +1,10 @@
+# Cloud Build configuration for GroeimetAI
+# Just builds and deploys - env vars are set directly in Cloud Run
+
 steps:
-  # Build the Docker image (no build args needed - Firebase config is hardcoded)
+  # Step 1: Build Docker image
   - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build'
     args:
       - 'build'
       - '-t'
@@ -9,50 +13,30 @@ steps:
       - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app:latest'
       - '.'
 
-  # Push the images
+  # Step 2: Push images
   - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push'
     args:
       - 'push'
-      - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app:${COMMIT_SHA}'
+      - '--all-tags'
+      - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app'
 
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app:latest'
-
-  # Deploy to Cloud Run
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  # Step 3: Deploy to Cloud Run (env vars already configured in Cloud Run)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    id: 'Deploy'
     entrypoint: gcloud
     args:
       - 'run'
       - 'deploy'
       - 'groeimetai-app'
-      - '--image'
-      - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app:${COMMIT_SHA}'
-      - '--region'
-      - 'europe-west1'
-      - '--platform'
-      - 'managed'
-      - '--allow-unauthenticated'
-      - '--clear-secrets'
-      - '--set-env-vars'
-      - 'NODE_ENV=production,FIREBASE_PROJECT_ID=groeimetai-458417,FIREBASE_CLIENT_EMAIL=${_FIREBASE_CLIENT_EMAIL},FIREBASE_PRIVATE_KEY=${_FIREBASE_PRIVATE_KEY},FIREBASE_STORAGE_BUCKET=groeimetai-458417.firebasestorage.app,NEXT_PUBLIC_APP_URL=https://groeimetai.io,SMTP_HOST=${_SMTP_HOST},SMTP_PORT=${_SMTP_PORT},SMTP_USER=${_SMTP_USER},SMTP_PASS=${_SMTP_PASS},GEMINI_API_KEY=${_GEMINI_API_KEY},PINECONE_API_KEY=${_PINECONE_API_KEY},OPENAI_API_KEY=${_OPENAI_API_KEY},ANTHROPIC_API_KEY=${_ANTHROPIC_API_KEY}'
-      - '--min-instances'
-      - '1'
-      - '--max-instances'
-      - '10'
-      - '--memory'
-      - '1Gi'
-      - '--cpu'
-      - '1'
-      - '--timeout'
-      - '300'
-      - '--port'
-      - '8080'
-
-options:
-  logging: CLOUD_LOGGING_ONLY
+      - '--platform=managed'
+      - '--image=europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app:${COMMIT_SHA}'
+      - '--region=europe-west1'
+      - '--quiet'
 
 images:
   - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app:${COMMIT_SHA}'
   - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
