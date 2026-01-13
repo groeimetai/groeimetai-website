@@ -31,16 +31,21 @@ function initializeAdmin() {
   }
 
   try {
-    // Handle private key - support both escaped \n and actual newlines
+    // Handle private key - support various formats from different environments
     let privateKey = process.env.FIREBASE_PRIVATE_KEY || '';
-    // If the key contains literal \n, replace them with actual newlines
-    if (privateKey.includes('\\n')) {
-      privateKey = privateKey.replace(/\\n/g, '\n');
+
+    // Remove surrounding quotes if present (common in Cloud Run/Docker)
+    if ((privateKey.startsWith('"') && privateKey.endsWith('"')) ||
+        (privateKey.startsWith("'") && privateKey.endsWith("'"))) {
+      privateKey = privateKey.slice(1, -1);
     }
-    // Also handle double-escaped \\n
-    if (privateKey.includes('\\\\n')) {
-      privateKey = privateKey.replace(/\\\\n/g, '\n');
-    }
+
+    // Replace literal \n strings with actual newlines
+    // This handles: \\n, \n as string literals
+    privateKey = privateKey.replace(/\\n/g, '\n');
+
+    // Log for debugging (first 50 chars only)
+    console.log('Firebase Admin: Private key starts with:', privateKey.substring(0, 50));
 
     const serviceAccount: ServiceAccount = {
       projectId: process.env.FIREBASE_PROJECT_ID,
