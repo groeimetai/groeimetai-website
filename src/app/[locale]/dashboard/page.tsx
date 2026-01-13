@@ -244,9 +244,10 @@ function DashboardPageContent() {
             );
           }
           
-          // Show next action card if no assessment
-          return (
-          <Card className="bg-gradient-to-r from-orange-500/10 to-orange-600/10 border-orange-500/30 mb-8">
+          // Only show next action card if user has NO assessments yet
+          if (agentReadinessAssessments.length === 0) {
+            return (
+            <Card className="bg-gradient-to-r from-orange-500/10 to-orange-600/10 border-orange-500/30 mb-8">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Target className="w-5 h-5 mr-2" style={{ color: '#F87315' }} />
@@ -282,7 +283,11 @@ function DashboardPageContent() {
               </div>
             </CardContent>
           </Card>
-          );
+            );
+          }
+
+          // User already has assessments, don't show the "next step" card
+          return null;
         })()}
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
