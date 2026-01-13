@@ -1004,14 +1004,16 @@ const MessagingWidget = ({
                       {selectedFiles.map((file, index) => {
                         const isImage = file.type.startsWith('image/');
                         const previewUrl = filePreviewUrls.get(file.name);
-                        
+                        // Validate that previewUrl is a safe blob URL (created by URL.createObjectURL)
+                        const isSafeBlobUrl = previewUrl?.startsWith('blob:');
+
                         return (
                           <div
                             key={index}
                             className="flex items-center gap-2 bg-white/5 rounded p-2"
                           >
                             {/* File preview */}
-                            {isImage && previewUrl ? (
+                            {isImage && previewUrl && isSafeBlobUrl ? (
                               <img
                                 src={previewUrl}
                                 alt={file.name}

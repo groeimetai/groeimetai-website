@@ -15,7 +15,9 @@ export const emailConfig = {
   // SMTP configuration getter to evaluate environment variables at runtime
   get smtp() {
     const port = parseInt(process.env.SMTP_PORT || '587');
-    const isNamecheap = process.env.SMTP_HOST?.includes('privateemail.com');
+    // Use endsWith for proper domain validation (prevents bypass via subdomain/path injection)
+    const host = process.env.SMTP_HOST?.toLowerCase() || '';
+    const isNamecheap = host.endsWith('.privateemail.com') || host === 'privateemail.com';
 
     const config: any = {
       host: process.env.SMTP_HOST || 'smtp.gmail.com',

@@ -130,10 +130,36 @@ export const sanitizers = {
   },
 
   /**
-   * Remove HTML tags
+   * Remove HTML tags safely using iterative approach
+   * Handles nested tags and encoded characters that could bypass single-pass regex
    */
   stripHtml: (value) => {
-    return value?.replace(/<[^>]*>/g, '');
+    if (!value) return value;
+
+    let result = value;
+    let previous;
+
+    // Decode common HTML entities first
+    result = result
+      .replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>')
+      .replace(/&quot;/gi, '"')
+      .replace(/&#x27;/gi, "'")
+      .replace(/&#x2F;/gi, '/')
+      .replace(/&amp;/gi, '&');
+
+    // Iteratively remove tags until stable (handles nested/encoded tags)
+    do {
+      previous = result;
+      // Remove HTML comments
+      result = result.replace(/<!--[\s\S]*?-->/g, '');
+      // Remove CDATA sections
+      result = result.replace(/<!\[CDATA\[[\s\S]*?\]\]>/gi, '');
+      // Remove HTML tags (including self-closing and with attributes)
+      result = result.replace(/<\/?[a-z][a-z0-9]*[^>]*>/gi, '');
+    } while (result !== previous);
+
+    return result;
   },
 
   /**

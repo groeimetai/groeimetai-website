@@ -28,8 +28,8 @@ router.post(
 // Get current user profile
 router.get(
   '/me',
-  authenticateUser,
   apiRateLimiter,
+  authenticateUser,
   (req, res, next) => {
     req.params.userId = req.user.uid;
     next();
@@ -40,8 +40,8 @@ router.get(
 // Update current user profile
 router.put(
   '/me',
-  authenticateUser,
   apiRateLimiter,
+  authenticateUser,
   validateRequest(userValidation.updateProfile),
   (req, res, next) => {
     req.params.userId = req.user.uid;
@@ -53,8 +53,8 @@ router.put(
 // Get specific user profile
 router.get(
   '/:userId',
-  authenticateUser,
   apiRateLimiter,
+  authenticateUser,
   validateRequest(userValidation.getUserById),
   UserController.getUserProfile
 );
@@ -62,8 +62,8 @@ router.get(
 // Update specific user profile
 router.put(
   '/:userId',
-  authenticateUser,
   apiRateLimiter,
+  authenticateUser,
   validateRequest(userValidation.updateProfile),
   UserController.updateUserProfile
 );
@@ -71,8 +71,8 @@ router.put(
 // Delete user account
 router.delete(
   '/:userId',
-  authenticateUser,
   apiRateLimiter,
+  authenticateUser,
   validateRequest(userValidation.getUserById),
   UserController.deleteUser
 );
@@ -83,9 +83,9 @@ router.delete(
 // List all users
 router.get(
   '/',
+  apiRateLimiter,
   authenticateUser,
   requireRole('admin'),
-  apiRateLimiter,
   validateRequest(userValidation.listUsers),
   UserController.listUsers
 );
@@ -93,9 +93,9 @@ router.get(
 // Update user role
 router.put(
   '/:userId/role',
+  apiRateLimiter,
   authenticateUser,
   requireRole('admin'),
-  apiRateLimiter,
   validateRequest(userValidation.updateRole),
   UserController.updateUserRole
 );
@@ -103,9 +103,9 @@ router.put(
 // Get user statistics
 router.get(
   '/stats/overview',
+  apiRateLimiter,
   authenticateUser,
   requireRole('admin'),
-  apiRateLimiter,
   UserController.getUserStats
 );
 
