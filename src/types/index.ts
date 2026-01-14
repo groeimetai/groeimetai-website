@@ -1384,3 +1384,215 @@ export interface TemplateVariable {
   defaultValue?: string;
   options?: string[];
 }
+
+// ==========================================
+// Assessment Types (All 7 Assessment Types)
+// ==========================================
+
+export type AssessmentType =
+  | 'agent_readiness'
+  | 'data_readiness'
+  | 'ai_security'
+  | 'process_automation'
+  | 'cx_ai'
+  | 'ai_maturity'
+  | 'integration_readiness'
+  | 'roi_calculator';
+
+export type AssessmentStatus =
+  | 'draft'
+  | 'submitted'
+  | 'generating'
+  | 'ready'
+  | 'sent'
+  | 'error';
+
+export type MaturityLevel =
+  | 'pre-digital'
+  | 'foundation'
+  | 'digitalization'
+  | 'integration'
+  | 'agent-ready';
+
+export interface BaseAssessment {
+  id: string;
+  leadId: string;
+  type: AssessmentType;
+  status: AssessmentStatus;
+  userId?: string;
+  email: string;
+  name: string;
+  company: string;
+  role?: string;
+  phone?: string;
+  score: number;
+  level: MaturityLevel;
+  report?: AssessmentReport;
+  createdAt: Date;
+  updatedAt: Date;
+  submissionMethod: 'authenticated' | 'anonymous';
+}
+
+export interface AssessmentReport {
+  score: number;
+  breakdown: {
+    [category: string]: number;
+  };
+  executiveSummary: string;
+  scoreBreakdownAnalysis: string;
+  criticalFindings: string;
+  readinessGaps: string;
+  opportunities: string;
+  industryBenchmark: string;
+  recommendations: string;
+  conclusions: string;
+  htmlReport: string;
+  lockedSections?: string[];
+}
+
+// Data Readiness Assessment
+export interface DataReadinessAssessment extends BaseAssessment {
+  type: 'data_readiness';
+  responses: {
+    dataQuality: 'excellent' | 'good' | 'moderate' | 'poor';
+    dataGovernance: 'mature' | 'developing' | 'basic' | 'none';
+    dataAccessibility: 'centralized' | 'multiple_sources' | 'siloed' | 'manual';
+    dataDocumentation: 'comprehensive' | 'partial' | 'minimal' | 'none';
+    dataPrivacy: 'gdpr_compliant' | 'partially_compliant' | 'working_on_it' | 'not_compliant';
+    dataPipelines: 'automated' | 'semi_automated' | 'manual' | 'none';
+    dataLiteracy: 'high' | 'medium' | 'low' | 'very_low';
+    dataVolume: 'big_data' | 'medium' | 'small' | 'minimal';
+    dataVariety: 'structured_unstructured' | 'mainly_structured' | 'mainly_unstructured' | 'mixed_chaos';
+    realTimeData: 'yes' | 'partial' | 'batch_only' | 'no';
+    coreBusiness: string;
+    mainChallenge: string;
+    priorityArea: string;
+  };
+}
+
+// AI Security & Compliance Assessment
+export interface AISecurityAssessment extends BaseAssessment {
+  type: 'ai_security';
+  responses: {
+    aiActAwareness: 'fully_aware' | 'partially_aware' | 'heard_of_it' | 'not_aware';
+    riskClassification: 'mapped' | 'partially_mapped' | 'planned' | 'not_started';
+    dataProtection: 'gdpr_compliant' | 'partially_compliant' | 'working_on_it' | 'not_compliant';
+    modelTransparency: 'explainable' | 'documented' | 'black_box' | 'unknown';
+    biasAudit: 'regular_audits' | 'occasional' | 'planned' | 'never';
+    securityFramework: 'iso27001' | 'soc2' | 'custom' | 'none';
+    incidentResponse: 'mature' | 'basic' | 'planned' | 'none';
+    vendorAssessment: 'thorough' | 'basic' | 'trust_based' | 'none';
+    humanOversight: 'always' | 'critical_decisions' | 'minimal' | 'none';
+    trainingData: 'audited' | 'partially_audited' | 'not_audited' | 'unknown';
+    coreBusiness: string;
+    mainConcern: string;
+    complianceDeadline: string;
+  };
+}
+
+// Process Automation Assessment
+export interface ProcessAutomationAssessment extends BaseAssessment {
+  type: 'process_automation';
+  responses: {
+    processDocumentation: 'fully_documented' | 'mostly_documented' | 'partially' | 'tribal_knowledge';
+    repetitiveTasks: 'many' | 'some' | 'few' | 'rare';
+    errorRate: 'high' | 'moderate' | 'low' | 'minimal';
+    processVolume: 'thousands_daily' | 'hundreds_daily' | 'tens_daily' | 'few_daily';
+    systemIntegration: 'fully_integrated' | 'partially_integrated' | 'siloed' | 'manual';
+    decisionComplexity: 'rule_based' | 'some_judgment' | 'highly_complex' | 'unpredictable';
+    exceptionHandling: 'standardized' | 'ad_hoc' | 'chaotic' | 'undefined';
+    staffAvailability: 'overloaded' | 'busy' | 'balanced' | 'underutilized';
+    rpaExperience: 'advanced' | 'basic' | 'piloting' | 'none';
+    bottlenecks: string[];
+    coreBusiness: string;
+    priorityProcess: string;
+    expectedSavings: string;
+  };
+}
+
+// Customer Experience AI Assessment
+export interface CXAIAssessment extends BaseAssessment {
+  type: 'cx_ai';
+  responses: {
+    customerChannels: string[];
+    responseTime: 'instant' | 'minutes' | 'hours' | 'days';
+    personalization: 'advanced' | 'basic' | 'minimal' | 'none';
+    customerDataUnification: 'unified_360' | 'partially_unified' | 'siloed' | 'no_data';
+    chatbotExperience: 'ai_powered' | 'rule_based' | 'planned' | 'none';
+    sentimentAnalysis: 'real_time' | 'periodic' | 'manual' | 'none';
+    selfService: 'comprehensive' | 'basic' | 'minimal' | 'none';
+    predictiveService: 'proactive' | 'reactive' | 'planned' | 'none';
+    customerJourney: 'mapped' | 'partially_mapped' | 'planned' | 'unknown';
+    npsScore: 'promoter' | 'passive' | 'detractor' | 'not_measured';
+    coreBusiness: string;
+    biggestPainPoint: string;
+    targetImprovement: string;
+  };
+}
+
+// AI Maturity Assessment
+export interface AIMaturityAssessment extends BaseAssessment {
+  type: 'ai_maturity';
+  responses: {
+    aiStrategy: 'defined' | 'emerging' | 'ad_hoc' | 'none';
+    aiGovernance: 'mature' | 'developing' | 'basic' | 'none';
+    aiTalent: 'in_house_team' | 'some_expertise' | 'external_only' | 'none';
+    aiInfrastructure: 'cloud_native' | 'hybrid' | 'on_premise' | 'none';
+    aiUseCases: 'production' | 'pilots' | 'experiments' | 'none';
+    mlOps: 'automated' | 'semi_automated' | 'manual' | 'none';
+    dataScience: 'advanced' | 'intermediate' | 'basic' | 'none';
+    aiEthics: 'framework' | 'guidelines' | 'ad_hoc' | 'none';
+    aiBudget: 'dedicated' | 'project_based' | 'limited' | 'none';
+    aiCulture: 'embracing' | 'curious' | 'skeptical' | 'resistant';
+    coreBusiness: string;
+    aiVision: string;
+    biggestBarrier: string;
+  };
+}
+
+// Integration Readiness Assessment
+export interface IntegrationReadinessAssessment extends BaseAssessment {
+  type: 'integration_readiness';
+  responses: {
+    apiAvailability: 'rest_graphql' | 'rest_only' | 'legacy' | 'none';
+    apiDocumentation: 'comprehensive' | 'basic' | 'minimal' | 'none';
+    authMechanisms: 'oauth2' | 'api_keys' | 'basic_auth' | 'custom';
+    cloudReadiness: 'cloud_native' | 'hybrid' | 'on_premise' | 'planning';
+    microservices: 'fully' | 'partially' | 'monolith' | 'legacy';
+    eventDriven: 'kafka_rabbitmq' | 'basic_events' | 'polling' | 'none';
+    ciCd: 'automated' | 'semi_automated' | 'manual' | 'none';
+    monitoring: 'comprehensive' | 'basic' | 'logs_only' | 'none';
+    security: 'zero_trust' | 'perimeter' | 'basic' | 'minimal';
+    scalability: 'auto_scaling' | 'manual_scaling' | 'limited' | 'not_possible';
+    coreBusiness: string;
+    integrationPriority: string;
+    legacyChallenge: string;
+  };
+}
+
+// ROI Calculator Assessment
+export interface ROICalculatorAssessment extends BaseAssessment {
+  type: 'roi_calculator';
+  responses: {
+    employeeCount: number;
+    avgSalary: number;
+    processHoursWeekly: number;
+    errorCostMonthly: number;
+    customerServiceCalls: number;
+    avgCallDuration: number;
+    manualDataEntry: number;
+    complianceCost: number;
+    targetAutomation: number;
+    implementationTimeline: '3_months' | '6_months' | '12_months' | '18_months';
+    coreBusiness: string;
+    primaryGoal: string;
+    budgetRange: string;
+  };
+  calculatedROI?: {
+    annualSavings: number;
+    implementationCost: number;
+    paybackPeriod: number;
+    threeYearROI: number;
+    efficiencyGain: number;
+  };
+}

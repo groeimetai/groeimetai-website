@@ -21,7 +21,8 @@ import {
   Download, Database,
   Brain, Target, ArrowRight,
   AlertTriangle,
-  Loader2
+  Loader2,
+  Shield, Settings, Users, Calculator, Zap, GitBranch
 } from 'lucide-react';
 import { DashboardStatsSkeleton, MetricCardSkeleton } from '@/components/ui/LoadingSkeleton';
 
@@ -671,6 +672,39 @@ function DashboardPageContent() {
               </div>
             )}
             
+            {/* All Available Assessments */}
+            <div className="space-y-4">
+              <h4 className="text-lg font-bold text-white">Beschikbare Assessments</h4>
+              <p className="text-white/60 text-sm mb-4">Kies een assessment om jouw AI-gereedheid te meten. Elk assessment genereert een gepersonaliseerd rapport met aanbevelingen.</p>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  { id: 'agent-readiness', title: 'Agent Readiness', desc: 'Meet hoe klaar je bent voor AI agents', icon: Brain, href: '/agent-readiness', color: '#F87315' },
+                  { id: 'data-readiness', title: 'Data Readiness', desc: 'Beoordeel jouw data-infrastructuur', icon: Database, href: '/assessments/data-readiness', color: '#3B82F6' },
+                  { id: 'ai-security', title: 'AI Security Scan', desc: 'Controleer security & compliance', icon: Shield, href: '/assessments/ai-security', color: '#EF4444' },
+                  { id: 'process-automation', title: 'Process Automation', desc: 'Identificeer automatiseringskansen', icon: Settings, href: '/assessments/process-automation', color: '#8B5CF6' },
+                  { id: 'cx-ai', title: 'Customer Experience AI', desc: 'Verbeter klantervaring met AI', icon: Users, href: '/assessments/cx-ai', color: '#EC4899' },
+                  { id: 'ai-maturity', title: 'AI Maturity Scan', desc: 'Bepaal je AI volwassenheidsniveau', icon: TrendingUp, href: '/assessments/ai-maturity', color: '#10B981' },
+                  { id: 'integration-readiness', title: 'Integration Readiness', desc: 'Check je integratie mogelijkheden', icon: GitBranch, href: '/assessments/integration-readiness', color: '#06B6D4' },
+                  { id: 'roi-calculator', title: 'AI ROI Calculator', desc: 'Bereken de ROI van AI implementatie', icon: Calculator, href: '/assessments/roi-calculator', color: '#F59E0B' },
+                ].map((assessment) => (
+                  <Link key={assessment.id} href={assessment.href}>
+                    <Card className="bg-white/5 border-white/10 hover:border-white/30 hover:bg-white/10 transition-all duration-300 cursor-pointer h-full">
+                      <CardContent className="p-4">
+                        <div
+                          className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
+                          style={{ backgroundColor: assessment.color }}
+                        >
+                          <assessment.icon className="w-5 h-5 text-white" />
+                        </div>
+                        <h5 className="text-sm font-bold text-white mb-1">{assessment.title}</h5>
+                        <p className="text-white/60 text-xs">{assessment.desc}</p>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             {assessmentData ? (
               <Card className="bg-white/5 border-white/10">
                 <CardHeader>
@@ -710,9 +744,9 @@ function DashboardPageContent() {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex gap-3 pt-4 border-t border-white/10">
-                      <Button 
+                      <Button
                         onClick={() => window.open('mailto:hello@groeimetai.io?subject=Assessment Status')}
                         variant="outline"
                         className="border-white/20 text-white hover:bg-white/10"
@@ -720,7 +754,7 @@ function DashboardPageContent() {
                         {t('assessments.contactSupport')}
                       </Button>
                       <Link href="/expert-assessment" className="flex-1">
-                        <Button 
+                        <Button
                           className="w-full text-white font-semibold"
                           style={{ backgroundColor: '#F87315' }}
                         >
@@ -732,24 +766,7 @@ function DashboardPageContent() {
                   </div>
                 </CardContent>
               </Card>
-            ) : (
-              <Card className="bg-white/5 border-white/10">
-                <CardContent className="p-12 text-center">
-                  <h4 className="text-xl font-bold text-white mb-4">{t('assessments.noAssessments')}</h4>
-                  <p className="text-white/70 mb-8">
-                    {t('assessments.startFirst')}
-                  </p>
-                  <Link href="/agent-readiness">
-                    <Button
-                      className="text-white"
-                      style={{ backgroundColor: '#F87315' }}
-                    >
-                      {t('assessments.startAssessment')}
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            )}
+            ) : null}
           </TabsContent>
 
           {/* MONITORING TAB */}
