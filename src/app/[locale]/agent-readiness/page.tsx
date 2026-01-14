@@ -950,9 +950,18 @@ export default function AgentReadinessPage() {
                       </div>
                     )}
                     <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      🔌 Hebben jullie systemen APIs?
+                      🔌 Kunnen jullie systemen met elkaar praten?
                     </h2>
-                    <p className="text-white/70 mb-6">Agents moeten kunnen verbinden met je systemen</p>
+                    <p className="text-white/70 mb-4">
+                      APIs zijn de &quot;deuren&quot; waardoor AI agents toegang krijgen tot je systemen.
+                      Zonder APIs moet een agent handmatig data kopiëren - net zoals een medewerker dat zou doen.
+                    </p>
+                    <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg mb-6">
+                      <p className="text-blue-300 text-sm">
+                        💡 <strong>Tip:</strong> Als je CRM automatisch gegevens naar je facturatiesysteem kan sturen,
+                        dan heb je waarschijnlijk al APIs.
+                      </p>
+                    </div>
                     
                     <RadioGroup value={formData.hasApis} onValueChange={(value) => setFormData(prev => ({ ...prev, hasApis: value }))}>
                       <div className="space-y-4">
@@ -1035,11 +1044,18 @@ export default function AgentReadinessPage() {
                     transition={{ duration: 0.5 }}
                   >
                     <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      📋 Staan jullie processen beschreven?
+                      📋 Staan jullie werkprocessen ergens beschreven?
                     </h2>
-                    <p className="text-white/70 mb-6">
-                      Agents moeten weten wat ze moeten doen
+                    <p className="text-white/70 mb-4">
+                      AI agents leren van beschreven processen. Hoe beter je werkwijze gedocumenteerd is,
+                      hoe sneller een agent kan leren hoe jullie dingen doen.
                     </p>
+                    <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg mb-6">
+                      <p className="text-blue-300 text-sm">
+                        💡 <strong>Voorbeelden:</strong> Handleidingen, werkinstructies, flowcharts, checklists,
+                        of zelfs uitgebreide Excel-bestanden met &quot;hoe we dingen doen&quot;.
+                      </p>
+                    </div>
                     
                     <RadioGroup value={formData.processDocumentation} onValueChange={(value) => setFormData(prev => ({ ...prev, processDocumentation: value }))}>
                       <div className="space-y-4">
@@ -1074,9 +1090,19 @@ export default function AgentReadinessPage() {
                     transition={{ duration: 0.5 }}
                   >
                     <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      🤖 Welke automation gebruik je al?
+                      🤖 Hoeveel automatiseren jullie al?
                     </h2>
-                    
+                    <p className="text-white/70 mb-4">
+                      Teams die al ervaring hebben met automatisering adopteren AI agents veel sneller.
+                      Het gaat niet om perfectie - elke automatisering telt!
+                    </p>
+                    <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg mb-6">
+                      <p className="text-blue-300 text-sm">
+                        💡 <strong>Denk aan:</strong> Automatische emails, facturen die zelf verstuurd worden,
+                        leads die automatisch in je CRM komen, rapportages die vanzelf gegenereerd worden.
+                      </p>
+                    </div>
+
                     <RadioGroup value={formData.automationExperience} onValueChange={(value) => setFormData(prev => ({ ...prev, automationExperience: value }))}>
                       <div className="space-y-4">
                         <div className="flex items-center space-x-3">
@@ -1188,9 +1214,18 @@ export default function AgentReadinessPage() {
                     transition={{ duration: 0.5 }}
                   >
                     <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      🏗️ Welke systemen MOETEN agent-ready worden?
+                      🏗️ Welke systemen wil je slimmer maken met AI?
                     </h2>
-                    <p className="text-white/70 mb-6">Selecteer maximaal 3 systemen</p>
+                    <p className="text-white/70 mb-4">
+                      &quot;Agent-ready&quot; betekent dat een AI agent zelfstandig taken kan uitvoeren in dat systeem.
+                      Denk aan: automatisch tickets afhandelen, klantgegevens opzoeken, of rapporten genereren.
+                    </p>
+                    <div className="p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg mb-6">
+                      <p className="text-orange-300 text-sm">
+                        <strong>Selecteer max. 3 systemen</strong> waar je het meeste tijd aan kwijt bent,
+                        of waar de meeste fouten gemaakt worden.
+                      </p>
+                    </div>
                     
                     <div className="space-y-4">
                       {systemOptions.map((system) => {
@@ -1284,9 +1319,18 @@ export default function AgentReadinessPage() {
                     transition={{ duration: 0.5 }}
                   >
                     <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      📍 Waar staat die klantdata?
+                      📍 Hoe verspreid is jullie klantdata?
                     </h2>
-                    <p className="text-white/70 mb-6">Hoe verspreid is je data over systemen?</p>
+                    <p className="text-white/70 mb-4">
+                      AI agents werken het best als ze alle relevante informatie op één plek kunnen vinden.
+                      Hoe meer systemen een agent moet doorzoeken, hoe complexer de implementatie.
+                    </p>
+                    <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg mb-6">
+                      <p className="text-blue-300 text-sm">
+                        💡 <strong>Test:</strong> Als je alle info over klant &quot;Jansen BV&quot; wilt zien,
+                        in hoeveel verschillende programma&apos;s moet je dan kijken?
+                      </p>
+                    </div>
                     
                     <RadioGroup value={formData.dataLocation} onValueChange={(value) => setFormData(prev => ({ ...prev, dataLocation: value }))}>
                       <div className="space-y-4">
@@ -1321,9 +1365,18 @@ export default function AgentReadinessPage() {
                     transition={{ duration: 0.5 }}
                   >
                     <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      🧠 Heb je al een voorkeur voor AI platform?
+                      🧠 Heb je al een specifieke AI in gedachten?
                     </h2>
-                    <p className="text-white/70 mb-6">We willen weten of je al specifieke wensen hebt</p>
+                    <p className="text-white/70 mb-4">
+                      Er zijn verschillende AI-platforms zoals ChatGPT, Claude, of Gemini.
+                      Sommige bedrijven hebben hier al een voorkeur voor (bijv. vanwege bestaande contracten of privacy-eisen).
+                    </p>
+                    <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg mb-6">
+                      <p className="text-blue-300 text-sm">
+                        💡 <strong>Geen idee?</strong> Dat is prima! Wij helpen je de juiste keuze maken
+                        op basis van jouw situatie en eisen.
+                      </p>
+                    </div>
                     
                     <RadioGroup value={formData.agentPlatformPreference} onValueChange={(value) => setFormData(prev => ({ ...prev, agentPlatformPreference: value }))}>
                       <div className="space-y-4">
@@ -1398,26 +1451,47 @@ export default function AgentReadinessPage() {
                     transition={{ duration: 0.5 }}
                   >
                     <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      ⚡ Hoe snel kan jullie team nieuwe tools adopteren?
+                      ⚡ Hoe snel pikken jullie nieuwe tools op?
                     </h2>
-                    
+                    <p className="text-white/70 mb-4">
+                      Dit helpt ons inschatten hoeveel training en ondersteuning nodig is bij een AI implementatie.
+                    </p>
+                    <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg mb-6">
+                      <p className="text-blue-300 text-sm">
+                        💡 <strong>Denk aan:</strong> Toen jullie de laatste keer een nieuw systeem introduceerden
+                        (bijv. Teams, nieuw CRM, ticketsysteem) - hoe lang duurde het voordat iedereen het gebruikte?
+                      </p>
+                    </div>
+
                     <RadioGroup value={formData.adoptionSpeed} onValueChange={(value) => setFormData(prev => ({ ...prev, adoptionSpeed: value }))}>
                       <div className="space-y-4">
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="very-fast" id="adoption-very-fast" />
-                          <Label htmlFor="adoption-very-fast" className="text-white/80">Zeer snel (weken)</Label>
+                        <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
+                          <RadioGroupItem value="very-fast" id="adoption-very-fast" className="mt-1" />
+                          <div>
+                            <Label htmlFor="adoption-very-fast" className="text-white/90 font-medium cursor-pointer">Zeer snel</Label>
+                            <p className="text-white/60 text-sm">Binnen een paar weken gebruikt iedereen het actief</p>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="reasonable" id="adoption-reasonable" />
-                          <Label htmlFor="adoption-reasonable" className="text-white/80">Redelijk (maanden)</Label>
+                        <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
+                          <RadioGroupItem value="reasonable" id="adoption-reasonable" className="mt-1" />
+                          <div>
+                            <Label htmlFor="adoption-reasonable" className="text-white/90 font-medium cursor-pointer">Redelijk</Label>
+                            <p className="text-white/60 text-sm">Na 1-3 maanden is de meerderheid aan boord</p>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="slow" id="adoption-slow" />
-                          <Label htmlFor="adoption-slow" className="text-white/80">Traag (kwartalen)</Label>
+                        <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
+                          <RadioGroupItem value="slow" id="adoption-slow" className="mt-1" />
+                          <div>
+                            <Label htmlFor="adoption-slow" className="text-white/90 font-medium cursor-pointer">Traag</Label>
+                            <p className="text-white/60 text-sm">Kost een half jaar+ om iedereen mee te krijgen</p>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="very-slow" id="adoption-very-slow" />
-                          <Label htmlFor="adoption-very-slow" className="text-white/80">Zeer traag (jaren)</Label>
+                        <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
+                          <RadioGroupItem value="very-slow" id="adoption-very-slow" className="mt-1" />
+                          <div>
+                            <Label htmlFor="adoption-very-slow" className="text-white/90 font-medium cursor-pointer">Zeer traag</Label>
+                            <p className="text-white/60 text-sm">Verandering is lastig, sommigen gebruiken nog oude systemen</p>
+                          </div>
                         </div>
                       </div>
                     </RadioGroup>
@@ -1434,9 +1508,18 @@ export default function AgentReadinessPage() {
                     transition={{ duration: 0.5 }}
                   >
                     <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      💰 Wat is jullie grootste operational kostenpost die je zou willen optimaliseren?
+                      💰 Waar gaat de meeste tijd (en dus geld) naartoe?
                     </h2>
-                    <p className="text-white/70 mb-6">Dit helpt agents prioriteren waar de grootste impact ligt</p>
+                    <p className="text-white/70 mb-4">
+                      AI agents zijn het meest waardevol waar ze repetitief werk kunnen overnemen.
+                      Dit helpt ons bepalen waar de grootste winst te behalen valt.
+                    </p>
+                    <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg mb-6">
+                      <p className="text-green-300 text-sm">
+                        🎯 <strong>Tip:</strong> De beste kandidaten voor AI zijn taken die veel tijd kosten,
+                        vaak fout gaan, of waar medewerkers niet blij van worden.
+                      </p>
+                    </div>
                     
                     <RadioGroup value={formData.costOptimization} onValueChange={(value) => setFormData(prev => ({ ...prev, costOptimization: value }))}>
                       <div className="space-y-4">
@@ -1470,9 +1553,18 @@ export default function AgentReadinessPage() {
                       </div>
                     )}
                     <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      💰 Wat is realistisch voor agent infrastructure dit jaar?
+                      💰 Wat is jullie budget voor AI dit jaar?
                     </h2>
-                    <p className="text-white/70 mb-6">Zodat we realistische aanbevelingen kunnen doen</p>
+                    <p className="text-white/70 mb-4">
+                      AI implementatie omvat: consulting, API-koppelingen bouwen, training, en maandelijkse AI-kosten.
+                      Dit helpt ons realistische aanbevelingen doen.
+                    </p>
+                    <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg mb-6">
+                      <p className="text-blue-300 text-sm">
+                        💡 <strong>Weet je het niet precies?</strong> Geen probleem - een ruwe inschatting helpt al
+                        om te bepalen of we met een pilot moeten beginnen of direct groter kunnen uitrollen.
+                      </p>
+                    </div>
                     
                     <RadioGroup value={formData.budgetReality} onValueChange={(value) => setFormData(prev => ({ ...prev, budgetReality: value }))}>
                       <div className="space-y-4">
@@ -1511,27 +1603,48 @@ export default function AgentReadinessPage() {
                     transition={{ duration: 0.5 }}
                   >
                     <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-                      🔧 Hoe worden systemen nu beheerd?
+                      🔧 Wie beheert jullie IT-systemen?
                     </h2>
-                    <p className="text-white/70 mb-6">Dit helpt ons inschatten wie de implementatie gaat doen</p>
-                    
+                    <p className="text-white/70 mb-4">
+                      AI agents moeten geïnstalleerd en onderhouden worden. Dit helpt ons bepalen
+                      wie daarbij kan helpen - of wij dat moeten doen.
+                    </p>
+                    <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg mb-6">
+                      <p className="text-blue-300 text-sm">
+                        💡 <strong>Geen zorgen:</strong> Of je nu een IT-team hebt of niet,
+                        we passen onze aanpak aan op jullie situatie.
+                      </p>
+                    </div>
+
                     <RadioGroup value={formData.itMaturity} onValueChange={(value) => setFormData(prev => ({ ...prev, itMaturity: value }))}>
                       <div className="space-y-4">
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="internal" id="it-internal" />
-                          <Label htmlFor="it-internal" className="text-white/80">Interne IT afdeling</Label>
+                        <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
+                          <RadioGroupItem value="internal" id="it-internal" className="mt-1" />
+                          <div>
+                            <Label htmlFor="it-internal" className="text-white/90 font-medium cursor-pointer">Interne IT-afdeling</Label>
+                            <p className="text-white/60 text-sm">We hebben eigen IT-mensen die systemen beheren</p>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="external" id="it-external" />
-                          <Label htmlFor="it-external" className="text-white/80">Externe IT partner</Label>
+                        <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
+                          <RadioGroupItem value="external" id="it-external" className="mt-1" />
+                          <div>
+                            <Label htmlFor="it-external" className="text-white/90 font-medium cursor-pointer">Externe IT-partner</Label>
+                            <p className="text-white/60 text-sm">We werken met een extern IT-bedrijf</p>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="mixed" id="it-mixed" />
-                          <Label htmlFor="it-mixed" className="text-white/80">Beetje van beide</Label>
+                        <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
+                          <RadioGroupItem value="mixed" id="it-mixed" className="mt-1" />
+                          <div>
+                            <Label htmlFor="it-mixed" className="text-white/90 font-medium cursor-pointer">Mix van beide</Label>
+                            <p className="text-white/60 text-sm">Sommige dingen intern, andere extern</p>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="adhoc" id="it-adhoc" />
-                          <Label htmlFor="it-adhoc" className="text-white/80">Ad-hoc/niemand specifiek</Label>
+                        <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
+                          <RadioGroupItem value="adhoc" id="it-adhoc" className="mt-1" />
+                          <div>
+                            <Label htmlFor="it-adhoc" className="text-white/90 font-medium cursor-pointer">Geen vaste IT-support</Label>
+                            <p className="text-white/60 text-sm">We lossen problemen op als ze zich voordoen</p>
+                          </div>
                         </div>
                       </div>
                     </RadioGroup>
