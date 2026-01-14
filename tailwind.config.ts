@@ -120,13 +120,18 @@ const config: Config = {
         display: ['Helvetica Neue', 'Arial', 'sans-serif'],
       },
       animation: {
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'pulse-slow': 'pulse-slow 4s ease-in-out infinite',
+        'pulse-slower': 'pulse-slow 6s ease-in-out infinite',
         float: 'float 6s ease-in-out infinite',
         'agent-move': 'agentMove 4s ease-in-out infinite',
         'memory-pulse': 'memoryPulse 2s ease-in-out infinite',
         'connection-flow': 'connectionFlow 1.5s ease-in-out infinite',
       },
       keyframes: {
+        'pulse-slow': {
+          '0%, 100%': { opacity: '0.4' },
+          '50%': { opacity: '0.6' },
+        },
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-20px)' },
