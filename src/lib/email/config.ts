@@ -16,16 +16,29 @@ export const emailConfig = {
   get smtp() {
     const port = parseInt(process.env.SMTP_PORT || '587');
     // Use endsWith for proper domain validation (prevents bypass via subdomain/path injection)
-    const host = process.env.SMTP_HOST?.toLowerCase() || '';
+    const host = (process.env.SMTP_HOST || '').trim().toLowerCase();
     const isNamecheap = host.endsWith('.privateemail.com') || host === 'privateemail.com';
 
+    // Trim whitespace from credentials (Cloud Run can add trailing chars)
+    const user = (process.env.SMTP_USER || '').trim();
+    const pass = (process.env.SMTP_PASS || '').trim();
+
+    // Debug logging for production troubleshooting
+    console.log('SMTP Config loading:', {
+      host: host || 'smtp.gmail.com',
+      port,
+      user,
+      passLength: pass.length,
+      isNamecheap,
+    });
+
     const config: any = {
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      host: host || 'smtp.gmail.com',
       port: port,
       secure: port === 465, // true for 465, false for other ports
       auth: {
-        user: process.env.SMTP_USER || '', // Full email address for Namecheap
-        pass: process.env.SMTP_PASS || '', // Email password or app password
+        user: user, // Full email address for Namecheap
+        pass: pass, // Email password or app password
       },
     };
     

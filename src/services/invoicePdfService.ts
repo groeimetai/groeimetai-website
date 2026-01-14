@@ -26,9 +26,10 @@ export class InvoicePdfService {
    * Generate a PDF invoice with company settings from Firestore
    * @param invoice - Invoice data
    * @param companySettings - Optional company settings (will fetch from Firestore if not provided)
+   * @param paymentUrl - Optional Mollie payment URL for online payment button
    * @returns Base64 encoded PDF string
    */
-  async generateInvoicePDF(invoice: Invoice, companySettings?: CompanySettings): Promise<string> {
+  async generateInvoicePDF(invoice: Invoice, companySettings?: CompanySettings, paymentUrl?: string): Promise<string> {
     // Fetch company settings if not provided
     const settings = companySettings || await companySettingsService.getCompanySettings();
 
@@ -47,7 +48,7 @@ export class InvoicePdfService {
     this.addBillingDetails(doc, invoice);
     this.addLineItems(doc, invoice.items);
     this.addTotals(doc, invoice);
-    this.addPaymentTerms(doc, invoice, settings);
+    this.addPaymentTerms(doc, invoice, settings, paymentUrl);
     this.addFooter(doc, settings);
 
     // Return as base64 string
@@ -58,9 +59,10 @@ export class InvoicePdfService {
    * Generate a PDF invoice and return as Blob
    * @param invoice - Invoice data
    * @param companySettings - Optional company settings
+   * @param paymentUrl - Optional Mollie payment URL for online payment button
    * @returns PDF as Blob
    */
-  async generateInvoicePDFBlob(invoice: Invoice, companySettings?: CompanySettings): Promise<Blob> {
+  async generateInvoicePDFBlob(invoice: Invoice, companySettings?: CompanySettings, paymentUrl?: string): Promise<Blob> {
     // Fetch company settings if not provided
     const settings = companySettings || await companySettingsService.getCompanySettings();
 
@@ -79,7 +81,7 @@ export class InvoicePdfService {
     this.addBillingDetails(doc, invoice);
     this.addLineItems(doc, invoice.items);
     this.addTotals(doc, invoice);
-    this.addPaymentTerms(doc, invoice, settings);
+    this.addPaymentTerms(doc, invoice, settings, paymentUrl);
     this.addFooter(doc, settings);
 
     // Return as Blob
@@ -492,9 +494,9 @@ export class InvoicePdfService {
   }
 
   /**
-   * Add payment terms section - Clean modern design
+   * Add payment terms section - Clean modern design with online payment option
    */
-  private addPaymentTerms(doc: jsPDF, invoice: Invoice, settings: CompanySettings): void {
+  private addPaymentTerms(doc: jsPDF, invoice: Invoice, settings: CompanySettings, paymentUrl?: string): void {
     const yPos = 240;
 
     // Payment info box
@@ -534,6 +536,9 @@ export class InvoicePdfService {
     doc.setFontSize(9);
     doc.text(`Referentie: ${invoice.invoiceNumber}`, 20, bankY + 2);
 
+    // Online payment section (right side)
+    const rightBoxX = 130;
+
     // Due date reminder on the right
     doc.setFontSize(9);
     doc.setTextColor(100, 116, 139);
@@ -542,6 +547,37 @@ export class InvoicePdfService {
     doc.setTextColor(26, 32, 44);
     doc.setFontSize(11);
     doc.text(this.formatDateDutch(invoice.dueDate), 195, yPos + 10, { align: 'right' });
+
+    // Online payment button/link (if invoice is not paid)
+    if (invoice.status !== 'paid' && invoice.status !== 'cancelled') {
+      // Generate payment URL if not provided
+      const payUrl = paymentUrl || `https://groeimetai.io/betalen/${invoice.id}`;
+
+      // Draw orange payment button
+      const buttonY = yPos + 20;
+      doc.setFillColor(255, 122, 0); // brandOrange
+      doc.roundedRect(rightBoxX, buttonY, 65, 12, 2, 2, 'F');
+
+      // Button text
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(255, 255, 255); // white
+      doc.text('BETAAL ONLINE', rightBoxX + 32.5, buttonY + 7.5, { align: 'center' });
+
+      // Add clickable link annotation
+      doc.link(rightBoxX, buttonY, 65, 12, { url: payUrl });
+
+      // Payment URL text below button
+      doc.setFontSize(7);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 116, 139);
+      doc.text('of ga naar:', rightBoxX + 32.5, buttonY + 17, { align: 'center' });
+      doc.setTextColor(255, 122, 0);
+      doc.text(payUrl, rightBoxX + 32.5, buttonY + 21, { align: 'center' });
+
+      // Also make the URL clickable
+      doc.link(rightBoxX, buttonY + 14, 65, 10, { url: payUrl });
+    }
   }
 
   /**
@@ -646,8 +682,8 @@ export class InvoicePdfService {
 export const invoicePdfService = new InvoicePdfService();
 
 // Export main function for convenience
-export const generateInvoicePDF = (invoice: Invoice, companySettings?: CompanySettings) =>
-  invoicePdfService.generateInvoicePDF(invoice, companySettings);
+export const generateInvoicePDF = (invoice: Invoice, companySettings?: CompanySettings, paymentUrl?: string) =>
+  invoicePdfService.generateInvoicePDF(invoice, companySettings, paymentUrl);
 
-export const generateInvoicePDFBlob = (invoice: Invoice, companySettings?: CompanySettings) =>
-  invoicePdfService.generateInvoicePDFBlob(invoice, companySettings);
+export const generateInvoicePDFBlob = (invoice: Invoice, companySettings?: CompanySettings, paymentUrl?: string) =>
+  invoicePdfService.generateInvoicePDFBlob(invoice, companySettings, paymentUrl);
