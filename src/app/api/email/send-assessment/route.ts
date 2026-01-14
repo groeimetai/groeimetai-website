@@ -99,11 +99,11 @@ function createAssessmentEmail(name: string, company: string, score: number, lev
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5;">
 
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
-    <!-- Header -->
+    <!-- Header with Logo -->
     <tr>
       <td style="background: linear-gradient(135deg, #F87315, #FF8533); color: white; padding: 30px; text-align: center;">
-        <h1 style="margin: 0; font-size: 28px; font-weight: bold;">🚀 GroeimetAI</h1>
-        <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;">Agent Infrastructure Specialists</p>
+        <img src="https://groeimetai.io/GroeimetAi_logo_small.png" alt="GroeimetAI" style="height: 50px; width: auto; margin-bottom: 15px;" />
+        <p style="margin: 0; font-size: 16px; opacity: 0.9;">Agent Infrastructure Specialists</p>
       </td>
     </tr>
 
@@ -175,11 +175,12 @@ function createAssessmentEmail(name: string, company: string, score: number, lev
       </td>
     </tr>
 
-    <!-- Footer -->
+    <!-- Footer with Logo -->
     <tr>
       <td style="background: #f8f9fa; padding: 25px 30px; text-align: center; border-top: 1px solid #e9ecef;">
-        <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;">
-          <strong>GroeimetAI</strong> - Agent Infrastructure Specialists
+        <img src="https://groeimetai.io/GroeimetAi_logo_small.png" alt="GroeimetAI" style="height: 30px; width: auto; margin-bottom: 10px; opacity: 0.7;" />
+        <p style="margin: 0 0 5px 0; color: #666; font-size: 14px;">
+          Agent Infrastructure Specialists
         </p>
         <p style="margin: 0; color: #999; font-size: 12px;">
           Dit rapport is geldig tot ${new Date(Date.now() + 90*24*60*60*1000).toLocaleDateString('nl-NL')}<br/>
