@@ -133,6 +133,28 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
     const invoiceData = invoiceDoc.data() as any;
 
+    // Build client name from multiple sources with priority
+    let clientName =
+      invoiceData.clientName ||
+      invoiceData.billingDetails?.companyName ||
+      invoiceData.billingDetails?.contactName ||
+      null;
+
+    // If still no name, try to get from users collection
+    if (!clientName && invoiceData.clientId && invoiceData.clientId !== 'manual') {
+      try {
+        const clientDoc = await adminDb.collection('users').doc(invoiceData.clientId).get();
+        if (clientDoc.exists) {
+          const client = clientDoc.data();
+          clientName = client?.displayName || client?.fullName ||
+                       (client?.firstName ? `${client.firstName} ${client.lastName || ''}`.trim() : null) ||
+                       client?.company || client?.email;
+        }
+      } catch (e) {
+        console.warn('Could not fetch client name:', e);
+      }
+    }
+
     // Return only public-safe invoice data
     return NextResponse.json({
       success: true,
@@ -144,7 +166,12 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
         balance: invoiceData.financial?.balance || invoiceData.financial?.total || 0,
         currency: invoiceData.financial?.currency || 'EUR',
         dueDate: invoiceData.dueDate?.toDate?.()?.toISOString() || invoiceData.dueDate,
-        clientName: invoiceData.clientName || invoiceData.billingDetails?.companyName || invoiceData.billingDetails?.contactName,
+        clientName: clientName,
+        // Also include billing details for more complete display
+        billingDetails: invoiceData.billingDetails ? {
+          companyName: invoiceData.billingDetails.companyName,
+          contactName: invoiceData.billingDetails.contactName,
+        } : null,
         items: invoiceData.items?.map((item: any) => ({
           description: item.description,
           quantity: item.quantity,
