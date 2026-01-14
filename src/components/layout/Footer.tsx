@@ -51,23 +51,22 @@ export default function Footer() {
       { label: t('resources.apiStatus'), href: '/status' }
     ],
     developers: [
-      { label: t('developers.mcpFormatGuide'), href: '/developers/mcp-guide', external: false },
-      { label: t('developers.agentSetup'), href: '/developers/agent-setup', external: false },
-      { label: t('developers.apiDocs'), href: '/developers/api-docs', external: false }
+      { label: t('developers.mcpFormatGuide'), href: '/mcp-guide', external: false },
+      { label: t('developers.agentSetup'), href: '/docs', external: false },
+      { label: t('developers.apiDocs'), href: '/docs', external: false }
     ],
     company: [
       { label: t('company.about'), href: '/about' },
       { label: t('company.cases'), href: '/cases' },
       { label: t('company.roadmap'), href: '/roadmap' },
       { label: t('company.team'), href: '/team' },
-      { label: t('company.partners'), href: '/partners' },
       { label: t('company.contact'), href: '/contact' }
     ],
     support: [
       { label: t('support.clientPortal'), href: '/dashboard' },
-      { label: t('support.helpCenter'), href: '/help' },
+      { label: t('support.helpCenter'), href: '/docs' },
       { label: t('support.systemStatus'), href: '/status' },
-      { label: t('support.reportIssue'), href: '/support/issue' },
+      { label: t('support.reportIssue'), href: '/contact' },
       { label: t('support.scheduleCall'), href: '/contact' }
     ]
   };

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase/admin';
+import { adminDb, serverTimestamp } from '@/lib/firebase/admin';
+import { createMollieClient } from '@mollie/api-client';
 
 // POST /api/invoices/[id]/pay - Public endpoint to create payment for invoice
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
@@ -22,28 +23,87 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       return NextResponse.json({ error: 'Deze factuur is geannuleerd' }, { status: 400 });
     }
 
+    // Check Mollie API key
+    const apiKey = process.env.MOLLIE_API_KEY;
+    if (!apiKey) {
+      console.error('MOLLIE_API_KEY not configured');
+      return NextResponse.json(
+        { error: 'Betalingsservice is niet geconfigureerd. Neem contact op met support.' },
+        { status: 503 }
+      );
+    }
+
     // Generate URLs
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `https://${request.headers.get('host')}`;
     const redirectUrl = `${baseUrl}/betalen/${params.id}/success`;
     const cancelUrl = `${baseUrl}/betalen/${params.id}`;
     const webhookUrl = `${baseUrl}/api/webhooks/mollie`;
 
-    // Create payment using dynamic import
-    const { paymentService } = await import('@/services/paymentService');
-    const payment = await paymentService.createPayment({
-      invoiceId: params.id,
-      redirectUrl,
-      webhookUrl,
-      cancelUrl,
+    // Get client details using Admin SDK
+    let clientLocale = 'nl_NL';
+    if (invoice.clientId && invoice.clientId !== 'manual') {
+      try {
+        const clientDoc = await adminDb.collection('users').doc(invoice.clientId).get();
+        if (clientDoc.exists) {
+          const client = clientDoc.data();
+          clientLocale = client?.preferences?.language === 'en' ? 'en_US' : 'nl_NL';
+        }
+      } catch (e) {
+        console.warn('Could not fetch client for locale:', e);
+      }
+    }
+
+    // Create Mollie payment directly
+    const mollieClient = createMollieClient({ apiKey });
+    const paymentAmount = invoice.financial?.balance || invoice.financial?.total || 0;
+
+    const molliePayment = await mollieClient.payments.create({
+      amount: {
+        value: paymentAmount.toFixed(2),
+        currency: invoice.financial?.currency || 'EUR',
+      },
+      description: `Factuur ${invoice.invoiceNumber}`,
+      redirectUrl: redirectUrl,
+      webhookUrl: webhookUrl,
+      metadata: {
+        invoiceId: invoice.id,
+        clientId: invoice.clientId || 'manual',
+        invoiceNumber: invoice.invoiceNumber,
+      },
+      locale: clientLocale as any,
+    });
+
+    // Create payment record using Admin SDK
+    const paymentRef = adminDb.collection('payments').doc();
+    await paymentRef.set({
+      id: paymentRef.id,
+      invoiceId: invoice.id,
+      clientId: invoice.clientId || 'manual',
+      amount: molliePayment.amount,
+      status: molliePayment.status,
+      description: molliePayment.description,
+      metadata: {
+        invoiceId: invoice.id,
+        clientId: invoice.clientId || 'manual',
+        invoiceNumber: invoice.invoiceNumber,
+      },
+      molliePaymentId: molliePayment.id,
+      checkoutUrl: (molliePayment as any)._links?.checkout?.href,
+      webhookUrl: webhookUrl,
+      redirectUrl: redirectUrl,
+      cancelUrl: cancelUrl,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      expiresAt: molliePayment.expiresAt ? new Date(molliePayment.expiresAt) : null,
     });
 
     return NextResponse.json(
       {
         success: true,
         data: {
-          paymentId: payment.id,
-          checkoutUrl: payment.checkoutUrl,
-          expiresAt: payment.expiresAt,
+          paymentId: paymentRef.id,
+          checkoutUrl: (molliePayment as any)._links?.checkout?.href,
+          expiresAt: molliePayment.expiresAt,
         },
       },
       { status: 201 }
@@ -51,19 +111,10 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
   } catch (error) {
     console.error('Error creating public payment:', error);
 
-    if (error instanceof Error) {
-      if (error.message === 'Payment service not configured') {
-        return NextResponse.json(
-          { error: 'Betalingsservice is niet geconfigureerd. Neem contact op met support.' },
-          { status: 503 }
-        );
-      }
-    }
-
     return NextResponse.json(
       {
         error: 'Kon betaling niet aanmaken',
-        details: process.env.NODE_ENV === 'development' ? error : undefined,
+        details: process.env.NODE_ENV === 'development' ? String(error) : undefined,
       },
       { status: 500 }
     );
