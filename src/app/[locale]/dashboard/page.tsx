@@ -62,6 +62,7 @@ function DashboardPageContent() {
   const [assessmentData, setAssessmentData] = useState<AssessmentData | null>(null);
   const [expertAssessmentData, setExpertAssessmentData] = useState<ExpertAssessmentData | null>(null);
   const [agentReadinessAssessments, setAgentReadinessAssessments] = useState<AgentReadinessAssessment[]>([]);
+  const [assessmentsLoaded, setAssessmentsLoaded] = useState(false);
   const searchParams = useSearchParams();
 
   // Use our new data hooks
@@ -108,6 +109,8 @@ function DashboardPageContent() {
       }
     } catch (error) {
       console.error('Failed to load Agent Readiness Assessments:', error);
+    } finally {
+      setAssessmentsLoaded(true);
     }
   }, [user?.uid, user?.email]);
 
@@ -245,8 +248,10 @@ function DashboardPageContent() {
             );
           }
           
-          // Only show next action card if user has NO assessments yet
-          if (agentReadinessAssessments.length === 0) {
+          // Only show next action card if:
+          // 1. Assessments have finished loading AND
+          // 2. User has NO assessments yet
+          if (assessmentsLoaded && agentReadinessAssessments.length === 0) {
             return (
             <Card className="bg-gradient-to-r from-orange-500/10 to-orange-600/10 border-orange-500/30 mb-8">
             <CardHeader>
