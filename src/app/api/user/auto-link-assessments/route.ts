@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { collection, query, where, getDocs, writeBatch, doc } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
-import { verifyIdToken } from '@/lib/firebase/admin';
+import { adminDb, verifyIdToken } from '@/lib/firebase/admin';
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = 'force-dynamic';
@@ -46,39 +44,38 @@ export async function POST(req: NextRequest) {
 
     console.log('🔄 Auto-linking assessments for user:', { userId, userEmail });
 
-    const batch = writeBatch(db);
+    const batch = adminDb.batch();
     let linkedCount = 0;
     let skippedCount = 0;
     const linkedAssessments: any[] = [];
 
     // Find all assessments with matching email that don't have userId set
-    const emailQuery = query(
-      collection(db, 'agent_assessments'),
-      where('email', '==', userEmail)
-    );
-    
-    const snapshot = await getDocs(emailQuery);
+    const snapshot = await adminDb
+      .collection('agent_assessments')
+      .where('email', '==', userEmail)
+      .get();
+
     console.log(`📊 Found ${snapshot.size} assessments for email ${userEmail}`);
 
     snapshot.forEach((docSnap) => {
       const data = docSnap.data();
-      
+
       if (!data.userId) {
         // Link this assessment to the user
-        const assessmentRef = doc(db, 'agent_assessments', docSnap.id);
+        const assessmentRef = adminDb.collection('agent_assessments').doc(docSnap.id);
         batch.update(assessmentRef, {
           userId: userId,
           autoLinkedAt: new Date(),
           linkingMethod: 'auto_authentication',
           authenticatedEmail: userEmail
         });
-        
+
         linkedAssessments.push({
           id: docSnap.id,
           leadId: data.leadId,
           createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt
         });
-        
+
         linkedCount++;
       } else if (data.userId === userId) {
         // Already properly linked
@@ -97,7 +94,7 @@ export async function POST(req: NextRequest) {
 
     // Create summary link record
     if (linkedCount > 0) {
-      const summaryRef = doc(db, 'user_assessment_links', `${userId}_${Date.now()}`);
+      const summaryRef = adminDb.collection('user_assessment_links').doc(`${userId}_${Date.now()}`);
       batch.set(summaryRef, {
         userId,
         userEmail,
@@ -152,7 +149,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const userEmail = searchParams.get('userEmail');
-    
+
     if (!userEmail) {
       return NextResponse.json(
         { error: 'userEmail parameter required' },
@@ -160,12 +157,11 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const emailQuery = query(
-      collection(db, 'agent_assessments'),
-      where('email', '==', userEmail)
-    );
-    
-    const snapshot = await getDocs(emailQuery);
+    const snapshot = await adminDb
+      .collection('agent_assessments')
+      .where('email', '==', userEmail)
+      .get();
+
     const assessments: any[] = [];
 
     snapshot.forEach((docSnap) => {

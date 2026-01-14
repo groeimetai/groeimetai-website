@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { doc, setDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { adminDb } from '@/lib/firebase/admin';
+
+// Force dynamic rendering to avoid static generation issues
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
   try {
     const { userId, assessmentId, source, userEmail } = await req.json();
-    
+
     if (!userId || !assessmentId) {
       return NextResponse.json(
         { error: 'User ID and assessment ID required' },
@@ -15,20 +18,19 @@ export async function POST(req: NextRequest) {
 
     console.log('🔗 Linking assessment to user:', { userId, assessmentId, source, userEmail });
 
-    const batch = writeBatch(db);
+    const batch = adminDb.batch();
     let linkedCount = 0;
 
     // Method 1: Link by specific assessmentId (leadId)
     if (assessmentId) {
       try {
-        const assessmentQuery = query(
-          collection(db, 'agent_assessments'),
-          where('leadId', '==', assessmentId)
-        );
-        
-        const snapshot = await getDocs(assessmentQuery);
+        const snapshot = await adminDb
+          .collection('agent_assessments')
+          .where('leadId', '==', assessmentId)
+          .get();
+
         snapshot.forEach((docSnap) => {
-          const assessmentRef = doc(db, 'agent_assessments', docSnap.id);
+          const assessmentRef = adminDb.collection('agent_assessments').doc(docSnap.id);
           batch.update(assessmentRef, {
             userId: userId,
             linkedAt: new Date(),
@@ -45,19 +47,18 @@ export async function POST(req: NextRequest) {
     // Method 2: Link by email if provided (retroactive linking)
     if (userEmail && linkedCount === 0) {
       try {
-        const emailQuery = query(
-          collection(db, 'agent_assessments'),
-          where('email', '==', userEmail)
-        );
-        
-        const emailSnapshot = await getDocs(emailQuery);
+        const emailSnapshot = await adminDb
+          .collection('agent_assessments')
+          .where('email', '==', userEmail)
+          .get();
+
         console.log(`📝 Found ${emailSnapshot.size} assessments for email ${userEmail}`);
-        
+
         emailSnapshot.forEach((docSnap) => {
           const data = docSnap.data();
           // Only link if not already linked to prevent overwrites
           if (!data.userId) {
-            const assessmentRef = doc(db, 'agent_assessments', docSnap.id);
+            const assessmentRef = adminDb.collection('agent_assessments').doc(docSnap.id);
             batch.update(assessmentRef, {
               userId: userId,
               linkedAt: new Date(),
@@ -65,10 +66,10 @@ export async function POST(req: NextRequest) {
               retroactiveLink: true
             });
             linkedCount++;
-            console.log('✅ Queued retroactive link:', { 
-              firestoreId: docSnap.id, 
+            console.log('✅ Queued retroactive link:', {
+              firestoreId: docSnap.id,
               leadId: data.leadId,
-              email: userEmail 
+              email: userEmail
             });
           } else {
             console.log('⚠️ Skipping already linked assessment:', {
@@ -83,7 +84,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Create assessment link document in separate collection for easy querying
-    const linkRef = doc(db, 'assessment_links', `${userId}_${assessmentId}`);
+    const linkRef = adminDb.collection('assessment_links').doc(`${userId}_${assessmentId}`);
     batch.set(linkRef, {
       userId: userId,
       assessmentId: assessmentId,
@@ -95,9 +96,9 @@ export async function POST(req: NextRequest) {
       status: 'linked',
       assessmentsLinked: linkedCount
     });
-    
+
     // Update user's lastActivity (simple update, no arrays)
-    const userRef = doc(db, 'users', userId);
+    const userRef = adminDb.collection('users').doc(userId);
     batch.update(userRef, {
       lastActivityAt: new Date(),
       lastAssessmentId: assessmentId,

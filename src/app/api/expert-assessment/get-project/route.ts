@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { adminDb } from '@/lib/firebase/admin';
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = 'force-dynamic';
@@ -11,7 +10,7 @@ export async function GET(req: NextRequest) {
   const userId = searchParams.get('userId');
 
   try {
-    
+
     if (!userId) {
       return NextResponse.json(
         { error: 'User ID required' },
@@ -19,18 +18,16 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Get user's Expert Assessment project
-    const q = query(
-      collection(db, 'expert_assessments'), 
-      where('userId', '==', userId)
-    );
-    
-    const querySnapshot = await getDocs(q);
-    
+    // Get user's Expert Assessment project using Admin SDK (bypasses security rules)
+    const querySnapshot = await adminDb
+      .collection('expert_assessments')
+      .where('userId', '==', userId)
+      .get();
+
     if (!querySnapshot.empty) {
       const assessmentDoc = querySnapshot.docs[0];
       const assessmentData = assessmentDoc.data();
-      
+
       return NextResponse.json({
         success: true,
         assessment: {

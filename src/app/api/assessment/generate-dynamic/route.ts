@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DynamicReportGenerator } from '@/services/ai/reportGeneration';
-import { doc, updateDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { adminDb, serverTimestamp } from '@/lib/firebase/admin';
+
+// Force dynamic rendering to avoid static generation issues
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
   let assessmentData = null;
@@ -9,7 +12,7 @@ export async function POST(req: NextRequest) {
   try {
     const { assessmentId, assessmentData: data } = await req.json();
     assessmentData = data;
-    
+
     if (!assessmentId || !assessmentData) {
       return NextResponse.json(
         { error: 'Assessment ID and data required' },
@@ -19,9 +22,9 @@ export async function POST(req: NextRequest) {
 
     // Generate dynamic report with Claude Sonnet 4
     const dynamicReport = await DynamicReportGenerator.generateFreemiumReport(assessmentData);
-    
+
     // Store report in Firestore
-    await addDoc(collection(db, 'reports'), {
+    await adminDb.collection('reports').add({
       assessmentId,
       userId: assessmentData.userId,
       type: 'freemium',
@@ -32,9 +35,9 @@ export async function POST(req: NextRequest) {
 
     // Calculate and store lead score
     const leadScore = await calculateLeadScore(assessmentData, dynamicReport.score);
-    
+
     // Store lead scoring data
-    await addDoc(collection(db, 'lead_scores'), {
+    await adminDb.collection('lead_scores').add({
       userId: assessmentData.userId,
       assessmentId,
       score: leadScore.score,
@@ -130,7 +133,7 @@ async function calculateLeadScore(assessmentData: any, readinessScore: number): 
 
 async function initializeUpsellSequence(
   userId: string,
-  assessmentId: string, 
+  assessmentId: string,
   readinessScore: number,
   leadScore: any
 ): Promise<void> {
@@ -147,11 +150,11 @@ async function initializeUpsellSequence(
     status: 'active'
   };
 
-  await addDoc(collection(db, 'upsell_campaigns'), campaign);
+  await adminDb.collection('upsell_campaigns').add(campaign);
 
   // Set dashboard locks
   const lockedSections = generateLockedSections(leadScore.score);
-  await addDoc(collection(db, 'dashboard_locks'), {
+  await adminDb.collection('dashboard_locks').add({
     userId,
     sections: lockedSections,
     leadScore: leadScore.score,
@@ -159,7 +162,7 @@ async function initializeUpsellSequence(
   });
 
   // Schedule first email
-  await addDoc(collection(db, 'scheduled_emails'), {
+  await adminDb.collection('scheduled_emails').add({
     userId,
     template: leadScore.score === 'hot' ? 'report_ready_hot' : 'report_ready_standard',
     scheduledFor: new Date(),

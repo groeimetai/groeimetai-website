@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { adminDb } from '@/lib/firebase/admin';
+
+// Force dynamic rendering to avoid static generation issues
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function GET(req: NextRequest) {
   try {
@@ -16,9 +19,10 @@ export async function GET(req: NextRequest) {
 
     // Try to get the full report from Firestore
     try {
-      const assessmentsRef = collection(db, 'agent_assessments');
-      const q = query(assessmentsRef, where('id', '==', assessmentId));
-      const querySnapshot = await getDocs(q);
+      const querySnapshot = await adminDb
+        .collection('agent_assessments')
+        .where('id', '==', assessmentId)
+        .get();
 
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
