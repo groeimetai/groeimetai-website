@@ -181,17 +181,37 @@ export default function AdminInvoicesPage() {
           const invoicesList = await Promise.all(
             snapshot.docs.map(async (doc) => {
               const invoiceData = doc.data();
-              // Get client data
-              const clientDoc = await getDocs(
-                query(collection(db, collections.users), where('uid', '==', invoiceData.clientId))
-              );
-              const clientData = clientDoc.docs[0]?.data();
+
+              // Get client data - try users collection first
+              let clientData = null;
+              if (invoiceData.clientId && invoiceData.clientId !== 'manual') {
+                const clientDoc = await getDocs(
+                  query(collection(db, collections.users), where('uid', '==', invoiceData.clientId))
+                );
+                clientData = clientDoc.docs[0]?.data();
+              }
+
+              // Determine client name and email from multiple sources
+              // Priority: billingDetails > clientName/clientEmail stored on invoice > users collection > Unknown
+              const clientName =
+                invoiceData.billingDetails?.companyName ||
+                invoiceData.billingDetails?.contactName ||
+                invoiceData.clientName ||
+                clientData?.displayName ||
+                clientData?.email ||
+                'Unknown';
+
+              const clientEmail =
+                invoiceData.billingDetails?.email ||
+                invoiceData.clientEmail ||
+                clientData?.email ||
+                '';
 
               return {
                 id: doc.id,
                 ...invoiceData,
-                clientName: clientData?.displayName || clientData?.email || 'Unknown',
-                clientEmail: clientData?.email || '',
+                clientName,
+                clientEmail,
                 issueDate: invoiceData.issueDate?.toDate() || new Date(),
                 dueDate: invoiceData.dueDate?.toDate() || new Date(),
                 createdAt: invoiceData.createdAt?.toDate() || new Date(),
