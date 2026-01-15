@@ -45,11 +45,6 @@ export async function POST(req: NextRequest) {
             filename: `Agent-Readiness-Report-${company.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`,
             content: pdfBuffer,
             contentType: 'application/pdf'
-          },
-          {
-            filename: 'groeimet-ai-logo.png',
-            path: '/Users/nielsvanderwerf/groeimetai-agents/groeimetai-website/public/groeimet-ai-logo.svg',
-            cid: 'groeimetai-logo' // Content ID for embedding
           }
         ]
       });
@@ -972,7 +967,7 @@ function createProfessionalEmailTemplate(name: string, company: string, report: 
   <div class="container">
     <div class="header">
       <div class="logo">
-        <img src="cid:groeimetai-logo" alt="GroeimetAI" style="height: 40px; width: auto; filter: brightness(0) invert(1);" />
+        <img src="https://groeimetai.io/GroeimetAi_logo_small.png" alt="GroeimetAI" style="height: 40px; width: auto; filter: brightness(0) invert(1);" />
       </div>
       <h1 style="margin: 10px 0; font-size: 32px; font-weight: 700;">Agent Readiness Report</h1>
       <p style="opacity: 0.8; margin: 0; font-weight: 300;">Agent Infrastructure Specialists</p>
@@ -1038,7 +1033,7 @@ function createProfessionalEmailTemplate(name: string, company: string, report: 
     <div class="footer">
       <div style="margin-bottom: 20px;">
         <div class="logo" style="margin-bottom: 15px;">
-          <img src="cid:groeimetai-logo" alt="GroeimetAI" style="height: 30px; width: auto; filter: brightness(0) invert(1); opacity: 0.8;" />
+          <img src="https://groeimetai.io/GroeimetAi_logo_small.png" alt="GroeimetAI" style="height: 30px; width: auto; filter: brightness(0) invert(1); opacity: 0.8;" />
         </div>
         <p style="margin: 5px 0; color: rgba(255,255,255,0.6);">Agent Infrastructure Specialists</p>
       </div>

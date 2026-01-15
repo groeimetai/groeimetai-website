@@ -324,16 +324,18 @@ function getReportConfig(type: string): any {
 // Update assessment document with generated report
 async function updateAssessmentWithReport(leadId: string, report: any, type: string): Promise<void> {
   try {
-    const { collection, query, where, getDocs, updateDoc } = await import('firebase/firestore');
-    const { db } = await import('@/lib/firebase/config');
+    const { adminDb } = await import('@/lib/firebase/admin');
 
     const collectionName = getCollectionName(type);
-    const q = query(collection(db, collectionName), where('leadId', '==', leadId));
-    const snapshot = await getDocs(q);
+    const snapshot = await adminDb
+      .collection(collectionName)
+      .where('leadId', '==', leadId)
+      .limit(1)
+      .get();
 
     if (!snapshot.empty) {
       const docRef = snapshot.docs[0].ref;
-      await updateDoc(docRef, {
+      await docRef.update({
         report,
         status: 'ready',
         updatedAt: new Date()
@@ -394,9 +396,8 @@ async function createLead(leadData: any): Promise<string> {
   try {
     const leadId = `assessment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-    // Store in Firestore - use appropriate collection based on assessment type
-    const { collection, addDoc } = await import('firebase/firestore');
-    const { db } = await import('@/lib/firebase/config');
+    // Store in Firestore using Admin SDK
+    const { adminDb } = await import('@/lib/firebase/admin');
 
     // Determine collection based on assessment type
     const assessmentType = leadData.type || 'agent_readiness';
@@ -422,7 +423,7 @@ async function createLead(leadData: any): Promise<string> {
       emailMatch: assessmentDoc.email === assessmentDoc.authenticatedEmail
     });
 
-    const docRef = await addDoc(collection(db, collectionName), assessmentDoc);
+    const docRef = await adminDb.collection(collectionName).add(assessmentDoc);
 
     console.log(`✅ ${assessmentType} Assessment stored in Firestore:`, {
       firestoreId: docRef.id,
