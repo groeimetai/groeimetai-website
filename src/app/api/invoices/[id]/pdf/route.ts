@@ -36,23 +36,10 @@ const DEFAULT_COMPANY_SETTINGS: Partial<CompanySettings> = {
 // GET /api/invoices/[id]/pdf
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // Verify authentication
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json(
-        { error: 'Missing or invalid authorization header' },
-        { status: 401 }
-      );
-    }
+    // Check for token-based access first (for email links)
+    const accessToken = request.nextUrl.searchParams.get('token');
 
-    const token = authHeader.split('Bearer ')[1];
-    const { valid, decodedToken } = await verifyIdToken(token);
-
-    if (!valid || !decodedToken) {
-      return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 });
-    }
-
-    // Get invoice using Admin SDK
+    // Get invoice using Admin SDK (needed for both auth methods)
     const invoiceDoc = await adminDb.collection('invoices').doc(params.id).get();
 
     if (!invoiceDoc.exists) {
@@ -60,20 +47,51 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     }
 
     const invoiceData = invoiceDoc.data() as any;
-    const userEmail = decodedToken.email as string | undefined;
 
-    // Check permissions: admin, consultant, admin email, or the client who owns the invoice
-    const hasPermission =
-      decodedToken.role === 'admin' ||
-      decodedToken.role === 'consultant' ||
-      (userEmail && isAdminEmail(userEmail)) ||
-      invoiceData.clientId === decodedToken.uid;
+    // Authentication method 1: Token-based access (for email links)
+    if (accessToken) {
+      const isValidToken = invoiceData.pdfAccessToken === accessToken;
+      const isNotExpired = invoiceData.pdfTokenExpiry && invoiceData.pdfTokenExpiry > Date.now();
 
-    if (!hasPermission) {
-      return NextResponse.json(
-        { error: 'Insufficient permissions to view this invoice' },
-        { status: 403 }
-      );
+      if (!isValidToken || !isNotExpired) {
+        return NextResponse.json(
+          { error: 'Invalid or expired access token' },
+          { status: 401 }
+        );
+      }
+      // Token is valid - continue to PDF generation
+    } else {
+      // Authentication method 2: Bearer token (for dashboard access)
+      const authHeader = request.headers.get('authorization');
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return NextResponse.json(
+          { error: 'Missing or invalid authorization header' },
+          { status: 401 }
+        );
+      }
+
+      const token = authHeader.split('Bearer ')[1];
+      const { valid, decodedToken } = await verifyIdToken(token);
+
+      if (!valid || !decodedToken) {
+        return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 });
+      }
+
+      const userEmail = decodedToken.email as string | undefined;
+
+      // Check permissions: admin, consultant, admin email, or the client who owns the invoice
+      const hasPermission =
+        decodedToken.role === 'admin' ||
+        decodedToken.role === 'consultant' ||
+        (userEmail && isAdminEmail(userEmail)) ||
+        invoiceData.clientId === decodedToken.uid;
+
+      if (!hasPermission) {
+        return NextResponse.json(
+          { error: 'Insufficient permissions to view this invoice' },
+          { status: 403 }
+        );
+      }
     }
 
     // Check if we should return existing PDF URL or generate new one

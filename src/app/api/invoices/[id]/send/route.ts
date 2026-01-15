@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyIdToken, adminDb, serverTimestamp } from '@/lib/firebase/admin';
 import { isAdminEmail } from '@/lib/constants/adminEmails';
+import crypto from 'crypto';
 
 // Helper to convert Firestore Timestamp to Date
 function toDate(value: any): Date {
@@ -122,18 +123,23 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       );
     }
 
-    // Set PDF URL with absolute path
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://groeimetai.io';
-    const pdfUrl = `${baseUrl}/api/invoices/${invoice.id}/pdf`;
+    // Generate secure PDF access token (valid for 30 days)
+    const pdfAccessToken = crypto.randomBytes(32).toString('hex');
+    const pdfTokenExpiry = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30 days
 
-    if (!invoice.pdfUrl || !invoice.pdfUrl.startsWith('http')) {
-      await adminDb.collection('invoices').doc(params.id).update({
-        pdfUrl,
-        pdfGeneratedAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
-      invoice.pdfUrl = pdfUrl;
-    }
+    // Set PDF URL with token for email access
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://groeimetai.io';
+    const pdfUrl = `${baseUrl}/api/invoices/${invoice.id}/pdf?token=${pdfAccessToken}`;
+
+    // Store token in Firestore
+    await adminDb.collection('invoices').doc(params.id).update({
+      pdfUrl,
+      pdfAccessToken,
+      pdfTokenExpiry,
+      pdfGeneratedAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    invoice.pdfUrl = pdfUrl;
 
     // Create Mollie payment link
     let paymentUrl = '';

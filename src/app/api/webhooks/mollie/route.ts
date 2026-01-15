@@ -1,15 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { paymentService } from '@/services/paymentService';
 
-// Mollie webhook IP allowlist (Mollie's production IPs)
-// See: https://docs.mollie.com/overview/webhooks#webhook-endpoint-requirements
-const MOLLIE_IPS = [
-  '87.233.217.240', // Mollie production
-  '87.233.217.241',
-  '87.233.217.242',
-  '87.233.217.243',
-];
-
 // Track processed webhook IDs to prevent replay attacks (simple in-memory cache)
 const processedWebhooks = new Map<string, number>();
 const WEBHOOK_CACHE_TTL = 60 * 60 * 1000; // 1 hour
@@ -28,21 +19,16 @@ function cleanupProcessedWebhooks() {
 // POST /api/webhooks/mollie
 export async function POST(request: NextRequest) {
   try {
-    // Log webhook received
-    console.log('Mollie webhook received');
-
-    // Get client IP for validation
+    // Log webhook received with source info
     const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
                      request.headers.get('x-real-ip') ||
                      'unknown';
+    console.log('Mollie webhook received from IP:', clientIp);
 
-    // In production, verify the request comes from Mollie's IPs
-    if (process.env.NODE_ENV === 'production' && process.env.MOLLIE_IP_VALIDATION !== 'false') {
-      if (!MOLLIE_IPS.includes(clientIp)) {
-        console.error('Webhook request from unauthorized IP:', clientIp);
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-      }
-    }
+    // NOTE: We don't validate IP addresses anymore because:
+    // 1. Cloud Run/proxies don't reliably forward the original IP
+    // 2. Security is handled by verifying the payment with Mollie's API (line ~70)
+    // 3. IP-based validation is unreliable in cloud environments
 
     // Mollie sends webhooks as application/x-www-form-urlencoded
     // The body contains: id=tr_xxxxx or id=payment_xxxxx

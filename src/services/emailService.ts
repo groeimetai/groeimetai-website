@@ -1,7 +1,6 @@
 import { createTransporter, emailConfig, verifyEmailConnection } from '@/lib/email/config';
 import { getEmailTemplate } from '@/lib/email/templates/index';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { adminDb } from '@/lib/firebase/admin';
 
 export interface EmailOptions {
   to: string | string[];
@@ -14,21 +13,23 @@ export interface EmailOptions {
 class EmailService {
   private async getUserLanguage(email: string): Promise<string> {
     try {
-      // Query users collection by email
-      const usersRef = collection(db, 'users');
-      const q = query(usersRef, where('email', '==', email));
-      const querySnapshot = await getDocs(q);
-      
+      // Query users collection by email using Admin SDK
+      const querySnapshot = await adminDb
+        .collection('users')
+        .where('email', '==', email)
+        .limit(1)
+        .get();
+
       if (!querySnapshot.empty) {
         const userData = querySnapshot.docs[0].data();
-        return userData?.preferences?.language || 'en';
+        return userData?.preferences?.language || 'nl';
       }
-      
-      // Default to English if user not found
-      return 'en';
+
+      // Default to Dutch if user not found
+      return 'nl';
     } catch (error) {
       console.error('Error getting user language:', error);
-      return 'en';
+      return 'nl';
     }
   }
 
