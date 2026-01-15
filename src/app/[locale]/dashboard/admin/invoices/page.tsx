@@ -684,6 +684,25 @@ export default function AdminInvoicesPage() {
     }
   };
 
+  // Mark invoice as paid manually
+  const markAsPaid = async (invoice: InvoiceWithClient) => {
+    if (!confirm(`Weet je zeker dat je factuur ${invoice.invoiceNumber} als betaald wilt markeren?`)) return;
+
+    try {
+      await updateDoc(doc(db, collections.invoices || 'invoices', invoice.id), {
+        status: 'paid',
+        paidDate: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+        'financial.paid': invoice.financial.total,
+        'financial.balance': 0,
+      });
+      toast.success(`Factuur ${invoice.invoiceNumber} gemarkeerd als betaald`);
+    } catch (error) {
+      console.error('Error marking invoice as paid:', error);
+      toast.error('Kon factuur niet als betaald markeren');
+    }
+  };
+
   // Delete invoice
   const deleteInvoice = async (invoiceId: string) => {
     if (!confirm('Are you sure you want to delete this invoice?')) return;
@@ -1113,6 +1132,15 @@ export default function AdminInvoicesPage() {
                             )}
                             {['sent', 'viewed', 'overdue'].includes(invoice.status) && (
                               <>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => markAsPaid(invoice)}
+                                  title="Mark as paid"
+                                  className="text-green-500 hover:text-green-600"
+                                >
+                                  <CheckCircle className="w-4 h-4" />
+                                </Button>
                                 <Button
                                   size="sm"
                                   variant="ghost"
