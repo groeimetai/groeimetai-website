@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { paymentService } from '@/services/paymentService';
+import { getMollieService } from '@/services/mollieService';
+import { invoiceService } from '@/services/invoiceService';
+import { emailService } from '@/services/emailService';
+import { adminDb, serverTimestamp } from '@/lib/firebase/admin';
 
 // Track processed webhook IDs to prevent replay attacks (simple in-memory cache)
 const processedWebhooks = new Map<string, number>();
@@ -61,9 +64,75 @@ export async function POST(request: NextRequest) {
     // Log payment ID
     console.log('Processing payment webhook for:', paymentId);
 
-    // Handle the webhook - this fetches the actual payment from Mollie's API
-    // This is the security model: never trust webhook data, always verify with Mollie
-    await paymentService.handleWebhook(paymentId);
+    // Fetch payment from Mollie API - this is the security model
+    // We never trust webhook data, always verify with Mollie
+    const mollieService = getMollieService();
+    const webhookResult = await mollieService.handleWebhook({ id: paymentId });
+
+    const { payment, invoiceId, customerId, shouldUpdateInvoice } = webhookResult;
+
+    console.log('Mollie payment status:', {
+      paymentId: payment.id,
+      status: payment.status,
+      invoiceId,
+      customerId,
+      shouldUpdateInvoice,
+    });
+
+    // Update invoice based on payment status
+    if (shouldUpdateInvoice) {
+      if (payment.status === 'paid') {
+        // Update invoice to paid status
+        await invoiceService.updatePaymentStatus(invoiceId, 'paid', {
+          paymentMethod: payment.method || 'unknown',
+          paidAmount: parseFloat(payment.amount.value),
+          transactionId: payment.id,
+        });
+
+        console.log('Invoice updated to paid:', invoiceId);
+
+        // Send payment confirmation email
+        try {
+          const invoice = await invoiceService.getInvoice(invoiceId);
+          if (invoice) {
+            // Try to get client email from invoice or users collection
+            // Cast to any to access potentially stored fields
+            const invoiceData = invoice as any;
+            let clientEmail = invoiceData.clientEmail || invoiceData.billingDetails?.email;
+            let clientName = invoiceData.clientName || invoiceData.billingDetails?.contactName;
+
+            if (!clientEmail && invoice.clientId) {
+              const clientDoc = await adminDb.collection('users').doc(invoice.clientId).get();
+              if (clientDoc.exists) {
+                const clientData = clientDoc.data();
+                clientEmail = clientData?.email;
+                clientName = clientData?.fullName || clientName;
+              }
+            }
+
+            if (clientEmail) {
+              await emailService.sendPaymentConfirmationEmail({
+                recipientEmail: clientEmail,
+                recipientName: clientName,
+                invoice,
+                paymentMethod: payment.method || 'unknown',
+                transactionId: payment.id,
+              });
+              console.log('Payment confirmation email sent to:', clientEmail);
+            }
+          }
+        } catch (emailError) {
+          // Don't fail the webhook if email fails
+          console.error('Error sending payment confirmation email:', emailError);
+        }
+      } else if (['failed', 'canceled', 'expired'].includes(payment.status)) {
+        // Revert invoice to sent status
+        await invoiceService.updateInvoice(invoiceId, {
+          status: 'sent',
+        });
+        console.log('Invoice reverted to sent due to payment', payment.status);
+      }
+    }
 
     // Return success response
     return NextResponse.json({ status: 'ok' }, { status: 200 });
