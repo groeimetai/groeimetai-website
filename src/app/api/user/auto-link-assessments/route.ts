@@ -5,9 +5,22 @@ import { adminDb, verifyIdToken } from '@/lib/firebase/admin';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
+// All assessment collection names
+const ASSESSMENT_COLLECTIONS = [
+  'agent_assessments',
+  'data_readiness_assessments',
+  'ai_security_assessments',
+  'process_automation_assessments',
+  'cx_ai_assessments',
+  'ai_maturity_assessments',
+  'integration_readiness_assessments',
+  'roi_calculator_assessments',
+];
+
 /**
  * Auto-link assessments for authenticated users
  * This API automatically finds and links assessments based on user authentication
+ * Searches across ALL assessment collection types
  */
 export async function POST(req: NextRequest) {
   try {
@@ -47,50 +60,67 @@ export async function POST(req: NextRequest) {
     const batch = adminDb.batch();
     let linkedCount = 0;
     let skippedCount = 0;
+    let totalFound = 0;
     const linkedAssessments: any[] = [];
+    const collectionStats: Record<string, { found: number; linked: number }> = {};
 
-    // Find all assessments with matching email that don't have userId set
-    const snapshot = await adminDb
-      .collection('agent_assessments')
-      .where('email', '==', userEmail)
-      .get();
+    // Search across ALL assessment collections
+    for (const collectionName of ASSESSMENT_COLLECTIONS) {
+      try {
+        const snapshot = await adminDb
+          .collection(collectionName)
+          .where('email', '==', userEmail)
+          .get();
 
-    console.log(`📊 Found ${snapshot.size} assessments for email ${userEmail}`);
+        collectionStats[collectionName] = { found: snapshot.size, linked: 0 };
+        totalFound += snapshot.size;
 
-    snapshot.forEach((docSnap) => {
-      const data = docSnap.data();
+        if (snapshot.size > 0) {
+          console.log(`📊 Found ${snapshot.size} assessments in ${collectionName}`);
+        }
 
-      if (!data.userId) {
-        // Link this assessment to the user
-        const assessmentRef = adminDb.collection('agent_assessments').doc(docSnap.id);
-        batch.update(assessmentRef, {
-          userId: userId,
-          autoLinkedAt: new Date(),
-          linkingMethod: 'auto_authentication',
-          authenticatedEmail: userEmail
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+
+          if (!data.userId) {
+            // Link this assessment to the user
+            const assessmentRef = adminDb.collection(collectionName).doc(docSnap.id);
+            batch.update(assessmentRef, {
+              userId: userId,
+              autoLinkedAt: new Date(),
+              linkingMethod: 'auto_authentication',
+              authenticatedEmail: userEmail
+            });
+
+            linkedAssessments.push({
+              id: docSnap.id,
+              collection: collectionName,
+              leadId: data.leadId,
+              type: data.type || collectionName.replace('_assessments', ''),
+              createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt
+            });
+
+            linkedCount++;
+            collectionStats[collectionName].linked++;
+          } else if (data.userId === userId) {
+            // Already properly linked
+            skippedCount++;
+          } else {
+            // Linked to different user - potential issue
+            console.warn('⚠️ Assessment linked to different user:', {
+              collection: collectionName,
+              firestoreId: docSnap.id,
+              existingUserId: data.userId,
+              requestedUserId: userId,
+              email: userEmail
+            });
+            skippedCount++;
+          }
         });
-
-        linkedAssessments.push({
-          id: docSnap.id,
-          leadId: data.leadId,
-          createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt
-        });
-
-        linkedCount++;
-      } else if (data.userId === userId) {
-        // Already properly linked
-        skippedCount++;
-      } else {
-        // Linked to different user - potential issue
-        console.warn('⚠️ Assessment linked to different user:', {
-          firestoreId: docSnap.id,
-          existingUserId: data.userId,
-          requestedUserId: userId,
-          email: userEmail
-        });
-        skippedCount++;
+      } catch (collectionError) {
+        console.warn(`⚠️ Error querying ${collectionName}:`, collectionError);
       }
-    });
+    }
 
     // Create summary link record
     if (linkedCount > 0) {
@@ -102,7 +132,8 @@ export async function POST(req: NextRequest) {
         skippedCount,
         linkedAt: new Date(),
         method: 'auto_authentication',
-        assessmentIds: linkedAssessments.map(a => a.leadId)
+        assessmentIds: linkedAssessments.map(a => a.leadId),
+        collectionStats
       });
     }
 
@@ -114,7 +145,8 @@ export async function POST(req: NextRequest) {
       userEmail,
       linkedCount,
       skippedCount,
-      totalProcessed: snapshot.size
+      totalFound,
+      collectionsSearched: ASSESSMENT_COLLECTIONS.length
     });
 
     return NextResponse.json({
@@ -125,15 +157,17 @@ export async function POST(req: NextRequest) {
         userEmail,
         linkedCount,
         skippedCount,
-        totalFound: snapshot.size,
-        linkedAssessments: linkedAssessments.slice(0, 5) // First 5 for reference
+        totalFound,
+        collectionsSearched: ASSESSMENT_COLLECTIONS.length,
+        collectionStats,
+        linkedAssessments: linkedAssessments.slice(0, 10) // First 10 for reference
       }
     });
 
   } catch (error) {
     console.error('❌ Auto-linking failed:', error);
     return NextResponse.json(
-      { 
+      {
         error: 'Auto-linking failed',
         details: error instanceof Error ? error.message : String(error)
       },
@@ -143,7 +177,7 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * GET endpoint to preview auto-linkable assessments
+ * GET endpoint to preview auto-linkable assessments across ALL collections
  */
 export async function GET(req: NextRequest) {
   try {
@@ -157,37 +191,50 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const snapshot = await adminDb
-      .collection('agent_assessments')
-      .where('email', '==', userEmail)
-      .get();
+    const allAssessments: any[] = [];
+    const collectionStats: Record<string, number> = {};
 
-    const assessments: any[] = [];
+    // Search across ALL assessment collections
+    for (const collectionName of ASSESSMENT_COLLECTIONS) {
+      try {
+        const snapshot = await adminDb
+          .collection(collectionName)
+          .where('email', '==', userEmail)
+          .get();
 
-    snapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      assessments.push({
-        id: docSnap.id,
-        leadId: data.leadId,
-        email: data.email,
-        userId: data.userId,
-        canAutoLink: !data.userId,
-        createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt,
-        alreadyLinked: !!data.userId
-      });
-    });
+        collectionStats[collectionName] = snapshot.size;
 
-    const canLink = assessments.filter(a => a.canAutoLink);
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          allAssessments.push({
+            id: docSnap.id,
+            collection: collectionName,
+            type: data.type || collectionName.replace('_assessments', ''),
+            leadId: data.leadId,
+            email: data.email,
+            userId: data.userId,
+            canAutoLink: !data.userId,
+            createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt,
+            alreadyLinked: !!data.userId
+          });
+        });
+      } catch (error) {
+        console.warn(`⚠️ Error querying ${collectionName}:`, error);
+      }
+    }
+
+    const canLink = allAssessments.filter(a => a.canAutoLink);
 
     return NextResponse.json({
       success: true,
       userEmail,
       stats: {
-        total: assessments.length,
+        total: allAssessments.length,
         canAutoLink: canLink.length,
-        alreadyLinked: assessments.length - canLink.length
+        alreadyLinked: allAssessments.length - canLink.length,
+        byCollection: collectionStats
       },
-      assessments,
+      assessments: allAssessments,
       preview: {
         linkableAssessments: canLink.slice(0, 10)
       }
