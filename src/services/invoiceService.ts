@@ -1,19 +1,10 @@
-import { db, collections } from '@/lib/firebase/config';
-import {
-  doc,
-  collection,
-  setDoc,
-  getDoc,
-  updateDoc,
-  query,
-  where,
-  orderBy,
-  getDocs,
-  serverTimestamp,
-  Timestamp,
-} from 'firebase/firestore';
+import { adminDb, serverTimestamp } from '@/lib/firebase/admin';
 import { Invoice, InvoiceStatus, InvoiceType, InvoiceItem, InvoiceFinancial } from '@/types';
 import { emailService } from './emailService';
+
+// Collection names
+const INVOICES_COLLECTION = 'invoices';
+const USERS_COLLECTION = 'users';
 // PDF generation is handled by invoicePdfService when needed
 
 class InvoiceService {
@@ -25,15 +16,15 @@ class InvoiceService {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
 
-    // Get the last invoice of the current month
-    const q = query(
-      collection(db, collections.invoices || 'invoices'),
-      where('invoiceNumber', '>=', `INV-${year}${month}-001`),
-      where('invoiceNumber', '<=', `INV-${year}${month}-999`),
-      orderBy('invoiceNumber', 'desc')
-    );
+    // Get the last invoice of the current month using Admin SDK
+    const snapshot = await adminDb
+      .collection(INVOICES_COLLECTION)
+      .where('invoiceNumber', '>=', `INV-${year}${month}-001`)
+      .where('invoiceNumber', '<=', `INV-${year}${month}-999`)
+      .orderBy('invoiceNumber', 'desc')
+      .limit(1)
+      .get();
 
-    const snapshot = await getDocs(q);
     let nextNumber = 1;
 
     if (!snapshot.empty) {
@@ -86,7 +77,7 @@ class InvoiceService {
       const financial = this.calculateFinancials(invoiceData.items);
 
       const invoice: Invoice = {
-        id: doc(collection(db, collections.invoices || 'invoices')).id,
+        id: adminDb.collection(INVOICES_COLLECTION).doc().id,
         invoiceNumber,
         clientId: invoiceData.clientId,
         organizationId: invoiceData.organizationId,
@@ -106,8 +97,8 @@ class InvoiceService {
         createdBy: invoiceData.createdBy,
       };
 
-      // Save to Firestore (including billingDetails for Dutch compliance)
-      await setDoc(doc(db, collections.invoices || 'invoices', invoice.id), {
+      // Save to Firestore using Admin SDK (including billingDetails for Dutch compliance)
+      await adminDb.collection(INVOICES_COLLECTION).doc(invoice.id).set({
         ...invoice,
         billingDetails: invoiceData.billingDetails || null,
         createdAt: serverTimestamp(),
@@ -126,9 +117,9 @@ class InvoiceService {
    */
   async getInvoice(invoiceId: string): Promise<Invoice | null> {
     try {
-      const invoiceDoc = await getDoc(doc(db, collections.invoices || 'invoices', invoiceId));
+      const invoiceDoc = await adminDb.collection(INVOICES_COLLECTION).doc(invoiceId).get();
 
-      if (!invoiceDoc.exists()) {
+      if (!invoiceDoc.exists) {
         return null;
       }
 
@@ -147,7 +138,7 @@ class InvoiceService {
    */
   async updateInvoice(invoiceId: string, updates: Partial<Invoice>): Promise<void> {
     try {
-      await updateDoc(doc(db, collections.invoices || 'invoices', invoiceId), {
+      await adminDb.collection(INVOICES_COLLECTION).doc(invoiceId).update({
         ...updates,
         updatedAt: serverTimestamp(),
       });
@@ -250,13 +241,12 @@ class InvoiceService {
    */
   async getClientInvoices(clientId: string): Promise<Invoice[]> {
     try {
-      const q = query(
-        collection(db, collections.invoices || 'invoices'),
-        where('clientId', '==', clientId),
-        orderBy('createdAt', 'desc')
-      );
+      const snapshot = await adminDb
+        .collection(INVOICES_COLLECTION)
+        .where('clientId', '==', clientId)
+        .orderBy('createdAt', 'desc')
+        .get();
 
-      const snapshot = await getDocs(q);
       return snapshot.docs.map(
         (doc) =>
           ({
@@ -276,14 +266,13 @@ class InvoiceService {
   async getOverdueInvoices(): Promise<Invoice[]> {
     try {
       const now = new Date();
-      const q = query(
-        collection(db, collections.invoices || 'invoices'),
-        where('status', 'in', ['sent', 'viewed', 'partial']),
-        where('dueDate', '<', now),
-        orderBy('dueDate', 'asc')
-      );
+      const snapshot = await adminDb
+        .collection(INVOICES_COLLECTION)
+        .where('status', 'in', ['sent', 'viewed', 'partial'])
+        .where('dueDate', '<', now)
+        .orderBy('dueDate', 'asc')
+        .get();
 
-      const snapshot = await getDocs(q);
       return snapshot.docs.map(
         (doc) =>
           ({
@@ -310,9 +299,9 @@ class InvoiceService {
         throw new Error('Invoice not found');
       }
 
-      // Get client details
-      const clientDoc = await getDoc(doc(db, collections.users, invoice.clientId));
-      const client = clientDoc.data();
+      // Get client details using Admin SDK
+      const clientDoc = await adminDb.collection(USERS_COLLECTION).doc(invoice.clientId).get();
+      const client = clientDoc.exists ? clientDoc.data() : null;
 
       if (client) {
         await emailService.sendInvoiceReminderEmail({

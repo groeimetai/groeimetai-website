@@ -1,8 +1,8 @@
 import { createMollieClient } from '@mollie/api-client';
-import { db } from '@/lib/firebase/config';
-import { doc, collection, setDoc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { adminDb, serverTimestamp } from '@/lib/firebase/admin';
 import { invoiceService } from './invoiceService';
 import { emailService } from './emailService';
+import { FieldValue } from 'firebase-admin/firestore';
 
 // Payment types
 export interface Payment {
@@ -76,12 +76,12 @@ class PaymentService {
         throw new Error('Invoice is already paid');
       }
 
-      // Get client details
-      const clientDoc = await getDoc(doc(db, 'users', invoice.clientId));
-      const client = clientDoc.data();
-      if (!client) {
+      // Get client details using Admin SDK
+      const clientDoc = await adminDb.collection('users').doc(invoice.clientId).get();
+      if (!clientDoc.exists) {
         throw new Error('Client not found');
       }
+      const client = clientDoc.data()!;
 
       // Create Mollie payment
       const mollieClient = this.getMollieClient();
@@ -104,7 +104,7 @@ class PaymentService {
 
       // Create payment record
       const payment: Payment = {
-        id: doc(collection(db, "payments")).id,
+        id: adminDb.collection('payments').doc().id,
         invoiceId: invoice.id,
         clientId: invoice.clientId,
         amount: molliePayment.amount,
@@ -126,8 +126,8 @@ class PaymentService {
         expiresAt: molliePayment.expiresAt ? new Date(molliePayment.expiresAt) : undefined,
       };
 
-      // Save payment to Firestore
-      await setDoc(doc(db, 'payments', payment.id), {
+      // Save payment to Firestore using Admin SDK
+      await adminDb.collection('payments').doc(payment.id).set({
         ...payment,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
@@ -191,8 +191,8 @@ class PaymentService {
           // Send confirmation email
           const invoice = await invoiceService.getInvoice(payment.invoiceId);
           if (invoice) {
-            const clientDoc = await getDoc(doc(db, "users", payment.clientId));
-            const client = clientDoc.data();
+            const clientDoc = await adminDb.collection('users').doc(payment.clientId).get();
+            const client = clientDoc.exists ? clientDoc.data() : null;
             if (client) {
               await emailService.sendPaymentConfirmationEmail({
                 recipientEmail: client.email,
@@ -226,8 +226,8 @@ class PaymentService {
           break;
       }
 
-      // Update payment record
-      await updateDoc(doc(db, "payments", paymentDoc.id), updates);
+      // Update payment record using Admin SDK
+      await adminDb.collection('payments').doc(paymentDoc.id).update(updates);
     } catch (error) {
       console.error('Error handling webhook:', error);
       throw error;
@@ -239,9 +239,9 @@ class PaymentService {
    */
   async getPayment(paymentId: string): Promise<Payment | null> {
     try {
-      const paymentDoc = await getDoc(doc(db, "payments", paymentId));
+      const paymentDoc = await adminDb.collection('payments').doc(paymentId).get();
 
-      if (!paymentDoc.exists()) {
+      if (!paymentDoc.exists) {
         return null;
       }
 
@@ -262,21 +262,22 @@ class PaymentService {
     molliePaymentId: string
   ): Promise<{ id: string; data: Payment } | null> {
     try {
-      // In a real implementation, you would query the payments collection
-      // For now, we'll iterate through all payments (not efficient for production)
-      const paymentsSnapshot = await getDocs(collection(db, "payments"));
+      // Query payments collection by molliePaymentId using Admin SDK
+      const paymentsSnapshot = await adminDb
+        .collection('payments')
+        .where('molliePaymentId', '==', molliePaymentId)
+        .limit(1)
+        .get();
 
-      for (const doc of paymentsSnapshot.docs) {
-        const payment = doc.data() as Payment;
-        if (payment.molliePaymentId === molliePaymentId) {
-          return {
-            id: doc.id,
-            data: payment,
-          };
-        }
+      if (paymentsSnapshot.empty) {
+        return null;
       }
 
-      return null;
+      const doc = paymentsSnapshot.docs[0];
+      return {
+        id: doc.id,
+        data: doc.data() as Payment,
+      };
     } catch (error) {
       console.error('Error finding payment by Mollie ID:', error);
       throw error;
@@ -306,7 +307,7 @@ class PaymentService {
 
         // Update local status if different
         if (newStatus !== payment.status) {
-          await updateDoc(doc(db, "payments", paymentId), {
+          await adminDb.collection('payments').doc(paymentId).update({
             status: newStatus,
             updatedAt: serverTimestamp(),
           });
@@ -357,9 +358,6 @@ class PaymentService {
     return false;
   }
 }
-
-// Import necessary functions from firebase/firestore
-import { getDocs } from 'firebase/firestore';
 
 // Export singleton instance
 export const paymentService = new PaymentService();
