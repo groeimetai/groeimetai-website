@@ -311,75 +311,105 @@ This is an automated notification from GroeimetAI.
     }),
 
     // Email template for sending invoices (to customer)
-    sendInvoice: (data: EmailTemplateData) => ({
-      subject: `Invoice #${data.invoice?.invoiceNumber} from GroeimetAI`,
-      html: `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <style>
-              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background-color: #FF6600; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
-              .content { background-color: #f4f4f4; padding: 20px; border-radius: 0 0 5px 5px; }
-              .invoice-details { background-color: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
-              .amount { font-size: 24px; font-weight: bold; color: #FF6600; }
-              .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
-              .button { display: inline-block; padding: 10px 20px; background-color: #FF6600; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px; }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <div class="header">
-                <h1>Invoice</h1>
-              </div>
-              <div class="content">
-                <p>Dear ${data.recipientName || 'Valued Client'},</p>
-                <p>Please find attached your invoice from GroeimetAI.</p>
-                
-                <div class="invoice-details">
-                  <p><strong>Invoice Number:</strong> ${data.invoice?.invoiceNumber}</p>
-                  <p><strong>Date:</strong> ${new Date(data.invoice?.createdAt || Date.now()).toLocaleDateString()}</p>
-                  <p><strong>Due Date:</strong> ${new Date(data.invoice?.dueDate || Date.now()).toLocaleDateString()}</p>
-                  <p class="amount">Total: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}</p>
+    sendInvoice: (data: EmailTemplateData) => {
+      // Helper to format date safely
+      const formatDate = (dateValue: any): string => {
+        if (!dateValue) return 'N/A';
+        if (dateValue instanceof Date) return dateValue.toLocaleDateString('en-GB');
+        if (typeof dateValue === 'string') return new Date(dateValue).toLocaleDateString('en-GB');
+        if (dateValue.toDate) return dateValue.toDate().toLocaleDateString('en-GB');
+        return 'N/A';
+      };
+
+      // Get financial data safely
+      const currency = data.invoice?.financial?.currency || 'EUR';
+      const total = data.invoice?.financial?.total;
+      const formattedTotal = typeof total === 'number' ? total.toFixed(2) : '0.00';
+
+      return {
+        subject: `Invoice #${data.invoice?.invoiceNumber} from GroeimetAI`,
+        html: `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                .header { background-color: #FF6600; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
+                .content { background-color: #f4f4f4; padding: 20px; border-radius: 0 0 5px 5px; }
+                .invoice-details { background-color: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
+                .amount { font-size: 24px; font-weight: bold; color: #FF6600; }
+                .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+                .button { display: inline-block; padding: 12px 24px; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px; font-weight: bold; }
+                .button-pay { background-color: #28a745; font-size: 18px; padding: 15px 30px; }
+                .button-pdf { background-color: #FF6600; }
+                .button-container { text-align: center; margin: 20px 0; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <div class="header">
+                  <h1>Invoice</h1>
                 </div>
-                
-                ${data.pdfUrl ? `
+                <div class="content">
+                  <p>Dear ${data.recipientName || 'Valued Client'},</p>
+                  <p>Please find your invoice from GroeimetAI below.</p>
+
+                  <div class="invoice-details">
+                    <p><strong>Invoice Number:</strong> ${data.invoice?.invoiceNumber || 'N/A'}</p>
+                    <p><strong>Date:</strong> ${formatDate(data.invoice?.createdAt)}</p>
+                    <p><strong>Due Date:</strong> ${formatDate(data.invoice?.dueDate)}</p>
+                    <p class="amount">Total: ${currency} ${formattedTotal}</p>
+                  </div>
+
+                  ${data.paymentUrl ? `
+                    <div class="button-container">
+                      <a href="${data.paymentUrl}" class="button button-pay">
+                        💳 Pay Now
+                      </a>
+                    </div>
+                  ` : ''}
+
+                  ${data.pdfUrl ? `
+                    <div class="button-container">
+                      <a href="${data.pdfUrl}" class="button button-pdf">
+                        📄 Download Invoice PDF
+                      </a>
+                    </div>
+                  ` : ''}
+
                   <p style="margin-top: 20px;">
-                    <a href="${data.pdfUrl}" class="button">
-                      Download Invoice PDF
-                    </a>
+                    If you have any questions about this invoice, please don't hesitate to contact us at <a href="mailto:info@groeimetai.io">info@groeimetai.io</a>.
                   </p>
-                ` : ''}
-                
-                <p style="margin-top: 20px;">
-                  If you have any questions about this invoice, please don't hesitate to contact us.
-                </p>
+                </div>
+                <div class="footer">
+                  <p>© ${new Date().getFullYear()} GroeimetAI. All rights reserved.</p>
+                  <p>GroeimetAI | Fabriekstraat 20 | 7311GP Apeldoorn | Netherlands</p>
+                </div>
               </div>
-              <div class="footer">
-                <p>© ${new Date().getFullYear()} GroeimetAI. All rights reserved.</p>
-              </div>
-            </div>
-          </body>
-        </html>
-      `,
-      text: `
+            </body>
+          </html>
+        `,
+        text: `
 Dear ${data.recipientName || 'Valued Client'},
 
-Please find attached your invoice from GroeimetAI.
+Please find your invoice from GroeimetAI below.
 
-Invoice Number: ${data.invoice?.invoiceNumber}
-Date: ${new Date(data.invoice?.createdAt || Date.now()).toLocaleDateString()}
-Due Date: ${new Date(data.invoice?.dueDate || Date.now()).toLocaleDateString()}
-Total: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}
+Invoice Number: ${data.invoice?.invoiceNumber || 'N/A'}
+Date: ${formatDate(data.invoice?.createdAt)}
+Due Date: ${formatDate(data.invoice?.dueDate)}
+Total: ${currency} ${formattedTotal}
 
+${data.paymentUrl ? `Pay now: ${data.paymentUrl}\n` : ''}
 ${data.pdfUrl ? `Download Invoice PDF: ${data.pdfUrl}\n` : ''}
 
-If you have any questions about this invoice, please don't hesitate to contact us.
+If you have any questions about this invoice, please don't hesitate to contact us at info@groeimetai.io.
 
 © ${new Date().getFullYear()} GroeimetAI. All rights reserved.
-      `,
-    }),
+GroeimetAI | Fabriekstraat 20 | 7311GP Apeldoorn | Netherlands
+        `,
+      };
+    },
 
     // Email template for invoice reminders
     sendInvoiceReminder: (data: EmailTemplateData) => {

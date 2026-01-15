@@ -311,75 +311,105 @@ Dit is een automatische notificatie van GroeimetAI.
     }),
 
     // Email template voor het versturen van facturen (naar klant)
-    sendInvoice: (data: EmailTemplateData) => ({
-      subject: `Factuur #${data.invoice?.invoiceNumber} van GroeimetAI`,
-      html: `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <style>
-              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background-color: #FF6600; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
-              .content { background-color: #f4f4f4; padding: 20px; border-radius: 0 0 5px 5px; }
-              .invoice-details { background-color: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
-              .amount { font-size: 24px; font-weight: bold; color: #FF6600; }
-              .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
-              .button { display: inline-block; padding: 10px 20px; background-color: #FF6600; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px; }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <div class="header">
-                <h1>Factuur</h1>
-              </div>
-              <div class="content">
-                <p>Beste ${data.recipientName || 'klant'},</p>
-                <p>Hierbij ontvangt u uw factuur van GroeimetAI.</p>
-                
-                <div class="invoice-details">
-                  <p><strong>Factuurnummer:</strong> ${data.invoice?.invoiceNumber}</p>
-                  <p><strong>Datum:</strong> ${new Date(data.invoice?.createdAt || Date.now()).toLocaleDateString('nl-NL')}</p>
-                  <p><strong>Vervaldatum:</strong> ${new Date(data.invoice?.dueDate || Date.now()).toLocaleDateString('nl-NL')}</p>
-                  <p class="amount">Totaal: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}</p>
+    sendInvoice: (data: EmailTemplateData) => {
+      // Helper to format date safely
+      const formatDate = (dateValue: any): string => {
+        if (!dateValue) return 'N/B';
+        if (dateValue instanceof Date) return dateValue.toLocaleDateString('nl-NL');
+        if (typeof dateValue === 'string') return new Date(dateValue).toLocaleDateString('nl-NL');
+        if (dateValue.toDate) return dateValue.toDate().toLocaleDateString('nl-NL');
+        return 'N/B';
+      };
+
+      // Get financial data safely
+      const currency = data.invoice?.financial?.currency || 'EUR';
+      const total = data.invoice?.financial?.total;
+      const formattedTotal = typeof total === 'number' ? total.toFixed(2) : '0.00';
+
+      return {
+        subject: `Factuur #${data.invoice?.invoiceNumber} van GroeimetAI`,
+        html: `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                .header { background-color: #FF6600; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
+                .content { background-color: #f4f4f4; padding: 20px; border-radius: 0 0 5px 5px; }
+                .invoice-details { background-color: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
+                .amount { font-size: 24px; font-weight: bold; color: #FF6600; }
+                .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+                .button { display: inline-block; padding: 12px 24px; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px; font-weight: bold; }
+                .button-pay { background-color: #28a745; font-size: 18px; padding: 15px 30px; }
+                .button-pdf { background-color: #FF6600; }
+                .button-container { text-align: center; margin: 20px 0; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <div class="header">
+                  <h1>Factuur</h1>
                 </div>
-                
-                ${data.pdfUrl ? `
+                <div class="content">
+                  <p>Beste ${data.recipientName || 'klant'},</p>
+                  <p>Hierbij ontvangt u uw factuur van GroeimetAI.</p>
+
+                  <div class="invoice-details">
+                    <p><strong>Factuurnummer:</strong> ${data.invoice?.invoiceNumber || 'N/B'}</p>
+                    <p><strong>Datum:</strong> ${formatDate(data.invoice?.createdAt)}</p>
+                    <p><strong>Vervaldatum:</strong> ${formatDate(data.invoice?.dueDate)}</p>
+                    <p class="amount">Totaal: ${currency} ${formattedTotal}</p>
+                  </div>
+
+                  ${data.paymentUrl ? `
+                    <div class="button-container">
+                      <a href="${data.paymentUrl}" class="button button-pay">
+                        💳 Direct Betalen
+                      </a>
+                    </div>
+                  ` : ''}
+
+                  ${data.pdfUrl ? `
+                    <div class="button-container">
+                      <a href="${data.pdfUrl}" class="button button-pdf">
+                        📄 Download Factuur PDF
+                      </a>
+                    </div>
+                  ` : ''}
+
                   <p style="margin-top: 20px;">
-                    <a href="${data.pdfUrl}" class="button">
-                      Download Factuur PDF
-                    </a>
+                    Heeft u vragen over deze factuur? Aarzel niet om contact met ons op te nemen via <a href="mailto:info@groeimetai.io">info@groeimetai.io</a>.
                   </p>
-                ` : ''}
-                
-                <p style="margin-top: 20px;">
-                  Heeft u vragen over deze factuur? Aarzel niet om contact met ons op te nemen.
-                </p>
+                </div>
+                <div class="footer">
+                  <p>© ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.</p>
+                  <p>GroeimetAI | Fabriekstraat 20 | 7311GP Apeldoorn</p>
+                </div>
               </div>
-              <div class="footer">
-                <p>© ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.</p>
-              </div>
-            </div>
-          </body>
-        </html>
-      `,
-      text: `
+            </body>
+          </html>
+        `,
+        text: `
 Beste ${data.recipientName || 'klant'},
 
 Hierbij ontvangt u uw factuur van GroeimetAI.
 
-Factuurnummer: ${data.invoice?.invoiceNumber}
-Datum: ${new Date(data.invoice?.createdAt || Date.now()).toLocaleDateString('nl-NL')}
-Vervaldatum: ${new Date(data.invoice?.dueDate || Date.now()).toLocaleDateString('nl-NL')}
-Totaal: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}
+Factuurnummer: ${data.invoice?.invoiceNumber || 'N/B'}
+Datum: ${formatDate(data.invoice?.createdAt)}
+Vervaldatum: ${formatDate(data.invoice?.dueDate)}
+Totaal: ${currency} ${formattedTotal}
 
+${data.paymentUrl ? `Direct betalen: ${data.paymentUrl}\n` : ''}
 ${data.pdfUrl ? `Download Factuur PDF: ${data.pdfUrl}\n` : ''}
 
-Heeft u vragen over deze factuur? Aarzel niet om contact met ons op te nemen.
+Heeft u vragen over deze factuur? Aarzel niet om contact met ons op te nemen via info@groeimetai.io.
 
 © ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.
-      `,
-    }),
+GroeimetAI | Fabriekstraat 20 | 7311GP Apeldoorn
+        `,
+      };
+    },
 
     // Email template voor factuur herinneringen
     sendInvoiceReminder: (data: EmailTemplateData) => {

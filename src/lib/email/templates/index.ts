@@ -35,6 +35,7 @@ export interface EmailTemplateData {
   meetingId?: string;
   invoice?: any;
   pdfUrl?: string;
+  paymentUrl?: string;
   reminderType?: 'due_soon' | 'overdue' | 'final_notice';
   paymentMethod?: string;
   transactionId?: string;

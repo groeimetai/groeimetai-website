@@ -166,6 +166,7 @@ class EmailService {
     recipientEmail: string;
     invoice: any;
     pdfUrl?: string;
+    paymentUrl?: string;
   }) {
     // Get user's preferred language
     const userLanguage = await this.getUserLanguage(data.recipientEmail);

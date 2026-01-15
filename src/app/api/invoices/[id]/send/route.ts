@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyIdToken, adminDb, serverTimestamp } from '@/lib/firebase/admin';
 import { isAdminEmail } from '@/lib/constants/adminEmails';
 
+// Helper to convert Firestore Timestamp to Date
+function toDate(value: any): Date {
+  if (!value) return new Date();
+  if (value.toDate && typeof value.toDate === 'function') {
+    return value.toDate();
+  }
+  if (value instanceof Date) return value;
+  if (typeof value === 'string') return new Date(value);
+  return new Date();
+}
+
 // POST /api/invoices/[id]/send
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -28,7 +39,16 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
 
-    const invoice = { id: invoiceDoc.id, ...invoiceDoc.data() } as any;
+    const invoiceData = invoiceDoc.data() as any;
+    // Convert Firestore Timestamps to Date objects
+    const invoice = {
+      id: invoiceDoc.id,
+      ...invoiceData,
+      issueDate: toDate(invoiceData.issueDate),
+      dueDate: toDate(invoiceData.dueDate),
+      createdAt: toDate(invoiceData.createdAt),
+      updatedAt: toDate(invoiceData.updatedAt),
+    } as any;
     const userEmail = decodedToken.email as string | undefined;
 
     // Check permissions: admin, consultant, admin email, or the client who owns the invoice
@@ -102,9 +122,11 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       );
     }
 
-    // Set PDF URL if not already set
-    if (!invoice.pdfUrl) {
-      const pdfUrl = `/api/invoices/${invoice.id}/pdf`;
+    // Set PDF URL with absolute path
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://groeimetai.io';
+    const pdfUrl = `${baseUrl}/api/invoices/${invoice.id}/pdf`;
+
+    if (!invoice.pdfUrl || !invoice.pdfUrl.startsWith('http')) {
       await adminDb.collection('invoices').doc(params.id).update({
         pdfUrl,
         pdfGeneratedAt: serverTimestamp(),
@@ -113,13 +135,34 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       invoice.pdfUrl = pdfUrl;
     }
 
+    // Create Mollie payment link
+    let paymentUrl = '';
+    try {
+      const { getMollieService } = await import('@/services/mollieService');
+      const mollieService = getMollieService();
+      const payment = await mollieService.createPayment({
+        id: invoice.id,
+        customerId: invoice.clientId || 'guest',
+        customerName: name || invoice.clientName || invoice.billingDetails?.companyName || 'Klant',
+        amount: invoice.financial?.total || 0,
+        currency: invoice.financial?.currency || 'EUR',
+        description: `Factuur ${invoice.invoiceNumber}`,
+      });
+      paymentUrl = payment.checkoutUrl;
+      console.log('Mollie payment created:', { paymentId: payment.paymentId, checkoutUrl: paymentUrl });
+    } catch (err) {
+      console.warn('Could not create Mollie payment link:', err);
+      // Continue without payment link - email will still be sent
+    }
+
     // Send email using emailService
     const { emailService } = await import('@/services/emailService');
     await emailService.sendInvoiceEmail({
       recipientEmail: email,
       recipientName: name,
       invoice,
-      pdfUrl: invoice.pdfUrl,
+      pdfUrl: invoice.pdfUrl || pdfUrl,
+      paymentUrl,
     });
 
     // Update invoice status to 'sent' using Admin SDK
