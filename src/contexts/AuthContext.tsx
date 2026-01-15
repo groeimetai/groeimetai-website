@@ -564,6 +564,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  // Auto-link assessments for authenticated user
+  const autoLinkAssessments = async (uid: string, email: string, idToken: string) => {
+    try {
+      console.log('🔗 Auto-linking assessments for user:', email);
+      const response = await fetch('/api/user/auto-link-assessments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ userId: uid, userEmail: email }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.stats?.linkedCount > 0) {
+          console.log(`✅ Auto-linked ${data.stats.linkedCount} assessments to user account`);
+        }
+      }
+    } catch (error) {
+      console.warn('⚠️ Auto-link assessments failed (non-critical):', error);
+    }
+  };
+
   // Listen to auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -585,6 +609,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               // User exists in Firebase but not in Firestore, create document
               const newUser = await createOrUpdateUserDoc(firebaseUser);
               setUser(newUser);
+            }
+
+            // Auto-link any orphaned assessments to this user
+            if (firebaseUser.email) {
+              try {
+                const idToken = await firebaseUser.getIdToken();
+                autoLinkAssessments(firebaseUser.uid, firebaseUser.email, idToken);
+              } catch (tokenError) {
+                console.warn('⚠️ Could not get ID token for auto-link:', tokenError);
+              }
             }
           } catch (firestoreError) {
             console.error('Firestore error in auth state change:', firestoreError);

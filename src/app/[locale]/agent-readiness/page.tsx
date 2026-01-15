@@ -182,6 +182,22 @@ export default function AgentReadinessPage() {
     }
   }, []);
 
+  // Update contact fields when user auth loads (to ensure authenticated email is used)
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        // Only update if fields are empty (don't override user edits)
+        name: prev.name || user.displayName || user.firstName || '',
+        role: prev.role || user.jobTitle || '',
+        company: prev.company || user.company || '',
+        email: prev.email || user.email || '',
+        phone: prev.phone || user.phoneNumber || '',
+      }));
+      console.log('🔐 Pre-filled contact fields from authenticated user:', user.email);
+    }
+  }, [user]);
+
   // Keyboard shortcuts for navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
