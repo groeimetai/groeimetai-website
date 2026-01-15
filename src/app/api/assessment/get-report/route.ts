@@ -5,6 +5,18 @@ import { adminDb } from '@/lib/firebase/admin';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
+// All assessment collection names
+const ASSESSMENT_COLLECTIONS = [
+  'agent_assessments',
+  'data_readiness_assessments',
+  'ai_security_assessments',
+  'process_automation_assessments',
+  'cx_ai_assessments',
+  'ai_maturity_assessments',
+  'integration_readiness_assessments',
+  'roi_calculator_assessments',
+];
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -17,77 +29,113 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Try to get the full report from Firestore
-    try {
-      const querySnapshot = await adminDb
-        .collection('agent_assessments')
-        .where('id', '==', assessmentId)
-        .get();
+    console.log('🔍 Looking for assessment report:', assessmentId);
 
-      if (!querySnapshot.empty) {
-        const doc = querySnapshot.docs[0];
-        const data = doc.data();
-        
-        // Return the full report if available
-        if (data.report) {
-          return NextResponse.json({
-            success: true,
-            report: data.report,
-            reportType: 'full_generated_report'
+    // Search across ALL assessment collections
+    for (const collectionName of ASSESSMENT_COLLECTIONS) {
+      try {
+        // Try querying by leadId (the format from submit route: assessment_xxx_xxx)
+        const querySnapshot = await adminDb
+          .collection(collectionName)
+          .where('leadId', '==', assessmentId)
+          .limit(1)
+          .get();
+
+        if (!querySnapshot.empty) {
+          const doc = querySnapshot.docs[0];
+          const data = doc.data();
+
+          console.log(`✅ Found assessment in ${collectionName}:`, {
+            firestoreId: doc.id,
+            leadId: data.leadId,
+            hasReport: !!data.report,
+            status: data.status
           });
-        }
-        
-        // If no report but we have raw data, return formatted summary
-        if (data.responses) {
-          const summaryReport = `
-ASSESSMENT SUMMARY REPORT
 
-Bedrijf: ${data.responses.company || 'N/A'}
-Core Business: ${data.responses.coreBusiness || 'N/A'}
+          // Return the full report if available
+          if (data.report) {
+            return NextResponse.json({
+              success: true,
+              report: data.report,
+              reportType: 'full_generated_report',
+              assessmentType: data.type || collectionName.replace('_assessments', ''),
+              collection: collectionName,
+              status: data.status
+            });
+          }
 
-SCORE BREAKDOWN:
-- Overall Score: ${data.score || 0}/100
-- Level: ${data.level || 'N/A'}
+          // If status is still processing, let the user know
+          if (data.status === 'assessment_submitted') {
+            return NextResponse.json({
+              success: false,
+              status: 'processing',
+              message: 'Je rapport wordt nog gegenereerd. Dit duurt meestal 2-5 minuten.',
+              assessmentType: data.type || collectionName.replace('_assessments', '')
+            });
+          }
 
-PRIORITY SYSTEMS:
-${data.responses.systems?.map((s: string, i: number) => `${i + 1}. ${s}`).join('\n') || 'None specified'}
+          // If no report but we have raw data, return formatted summary
+          const responses = data.responses || data;
+          const summaryReport = generateSummaryReport(responses, data);
 
-HIGHEST IMPACT: ${data.responses.highestImpactSystem || 'N/A'}
-
-TECHNICAL READINESS:
-- APIs Available: ${data.responses.hasApis || 'N/A'}
-- Data Access: ${data.responses.dataAccess || 'N/A'}
-- Process Documentation: ${data.responses.processDocumentation || 'N/A'}
-
-BLOCKERS & CHALLENGES:
-- Main Blocker: ${data.responses.mainBlocker || 'N/A'}
-- Budget Reality: ${data.responses.budgetReality || 'N/A'}
-- IT Maturity: ${data.responses.itMaturity || 'N/A'}
-
-PLATFORM PREFERENCES:
-- Agent Platform: ${data.responses.agentPlatformPreference || 'N/A'}
-- Specific Platforms: ${data.responses.agentPlatforms?.join(', ') || 'N/A'}
-
-IMPLEMENTATION TIMELINE:
-- Adoption Speed: ${data.responses.adoptionSpeed || 'N/A'}
-- Cost Optimization Focus: ${data.responses.costOptimization || 'N/A'}
-          `;
-          
           return NextResponse.json({
             success: true,
             report: summaryReport,
-            reportType: 'summary_from_responses'
+            reportType: 'summary_from_responses',
+            assessmentType: data.type || collectionName.replace('_assessments', ''),
+            collection: collectionName
           });
         }
+      } catch (collectionError) {
+        console.warn(`⚠️ Error querying ${collectionName}:`, collectionError);
       }
-    } catch (firestoreError) {
-      console.error('Firestore error:', firestoreError);
+    }
+
+    // Also try searching by Firestore document ID directly
+    for (const collectionName of ASSESSMENT_COLLECTIONS) {
+      try {
+        const docSnapshot = await adminDb
+          .collection(collectionName)
+          .doc(assessmentId)
+          .get();
+
+        if (docSnapshot.exists) {
+          const data = docSnapshot.data()!;
+
+          console.log(`✅ Found assessment by doc ID in ${collectionName}`);
+
+          if (data.report) {
+            return NextResponse.json({
+              success: true,
+              report: data.report,
+              reportType: 'full_generated_report',
+              assessmentType: data.type || collectionName.replace('_assessments', ''),
+              collection: collectionName
+            });
+          }
+
+          const responses = data.responses || data;
+          const summaryReport = generateSummaryReport(responses, data);
+
+          return NextResponse.json({
+            success: true,
+            report: summaryReport,
+            reportType: 'summary_from_responses',
+            assessmentType: data.type || collectionName.replace('_assessments', ''),
+            collection: collectionName
+          });
+        }
+      } catch (error) {
+        // Document doesn't exist in this collection, continue
+      }
     }
 
     // No report found
+    console.log('❌ Assessment not found:', assessmentId);
     return NextResponse.json({
       success: false,
-      error: 'No report found for this assessment'
+      error: 'Assessment niet gevonden. Het rapport kan nog in verwerking zijn.',
+      hint: 'Het duurt meestal 2-5 minuten voordat het rapport klaar is.'
     }, { status: 404 });
 
   } catch (error) {
@@ -97,4 +145,40 @@ IMPLEMENTATION TIMELINE:
       { status: 500 }
     );
   }
+}
+
+function generateSummaryReport(responses: any, data: any): string {
+  return `
+ASSESSMENT SUMMARY REPORT
+
+Bedrijf: ${responses.company || 'N/A'}
+Core Business: ${responses.coreBusiness || 'N/A'}
+
+SCORE BREAKDOWN:
+- Overall Score: ${data.score || responses.score || 0}/100
+- Level: ${data.level || responses.level || 'N/A'}
+
+PRIORITY SYSTEMS:
+${responses.systems?.map((s: string, i: number) => `${i + 1}. ${s}`).join('\n') || 'None specified'}
+
+HIGHEST IMPACT: ${responses.highestImpactSystem || 'N/A'}
+
+TECHNICAL READINESS:
+- APIs Available: ${responses.hasApis || 'N/A'}
+- Data Access: ${responses.dataAccess || 'N/A'}
+- Process Documentation: ${responses.processDocumentation || 'N/A'}
+
+BLOCKERS & CHALLENGES:
+- Main Blocker: ${responses.mainBlocker || 'N/A'}
+- Budget Reality: ${responses.budgetReality || 'N/A'}
+- IT Maturity: ${responses.itMaturity || 'N/A'}
+
+PLATFORM PREFERENCES:
+- Agent Platform: ${responses.agentPlatformPreference || 'N/A'}
+- Specific Platforms: ${responses.agentPlatforms?.join(', ') || 'N/A'}
+
+IMPLEMENTATION TIMELINE:
+- Adoption Speed: ${responses.adoptionSpeed || 'N/A'}
+- Cost Optimization Focus: ${responses.costOptimization || 'N/A'}
+  `.trim();
 }
