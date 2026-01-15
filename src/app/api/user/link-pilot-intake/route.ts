@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { adminDb, FieldValue } from '@/lib/firebase/admin';
 
 export async function POST(req: NextRequest) {
   try {
     const { userId, intakeId, source } = await req.json();
-    
+
     if (!userId || !intakeId) {
       return NextResponse.json(
         { error: 'Missing userId or intakeId' },
@@ -14,9 +13,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Update user document to link pilot intake
-    const userRef = doc(db, 'users', userId);
-    await updateDoc(userRef, {
-      pilotIntakes: arrayUnion({
+    await adminDb.collection('users').doc(userId).update({
+      pilotIntakes: FieldValue.arrayUnion({
         id: intakeId,
         type: 'pilot_intake',
         source: source || 'manual_link',

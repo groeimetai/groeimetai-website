@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { adminDb } from '@/lib/firebase/admin';
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = 'force-dynamic';
@@ -13,43 +12,42 @@ export const runtime = 'nodejs';
 export async function POST(req: NextRequest) {
   try {
     const { targetEmail, targetUserId } = await req.json();
-    
+
     if (!targetEmail || !targetUserId) {
       return NextResponse.json({
         error: 'Both targetEmail and targetUserId are required'
       }, { status: 400 });
     }
 
-    console.log('🔍 Starting assessment migration for:', { targetEmail, targetUserId });
+    console.log('Starting assessment migration for:', { targetEmail, targetUserId });
 
     // Find all assessments with this email but no userId
-    const assessmentsQuery = query(
-      collection(db, 'agent_assessments'),
-      where('email', '==', targetEmail)
-    );
-    
-    const querySnapshot = await getDocs(assessmentsQuery);
-    console.log('📊 Found', querySnapshot.size, 'assessments for email:', targetEmail);
+    const querySnapshot = await adminDb
+      .collection('agent_assessments')
+      .where('email', '==', targetEmail)
+      .get();
+
+    console.log('Found', querySnapshot.size, 'assessments for email:', targetEmail);
 
     let updatedCount = 0;
     let skippedCount = 0;
-    const updates: Promise<void>[] = [];
+    const updates: Promise<FirebaseFirestore.WriteResult>[] = [];
 
     querySnapshot.forEach((docSnap) => {
       const data = docSnap.data();
-      
+
       if (!data.userId) {
         // Update document to add userId
-        const updatePromise = updateDoc(doc(db, 'agent_assessments', docSnap.id), {
+        const updatePromise = adminDb.collection('agent_assessments').doc(docSnap.id).update({
           userId: targetUserId,
           migrated: true,
           migratedAt: new Date()
         });
-        
+
         updates.push(updatePromise);
         updatedCount++;
-        
-        console.log('✅ Queued update for assessment:', {
+
+        console.log('Queued update for assessment:', {
           firestoreId: docSnap.id,
           leadId: data.leadId,
           email: data.email,
@@ -57,7 +55,7 @@ export async function POST(req: NextRequest) {
         });
       } else {
         skippedCount++;
-        console.log('⏭️ Skipping assessment (already has userId):', {
+        console.log('Skipping assessment (already has userId):', {
           firestoreId: docSnap.id,
           existingUserId: data.userId
         });
@@ -79,16 +77,16 @@ export async function POST(req: NextRequest) {
       }
     };
 
-    console.log('🎉 Migration completed:', result);
-    
+    console.log('Migration completed:', result);
+
     return NextResponse.json(result);
 
   } catch (error) {
-    console.error('❌ Migration failed:', error);
+    console.error('Migration failed:', error);
     return NextResponse.json(
-      { 
-        error: 'Migration failed', 
-        details: error instanceof Error ? error.message : String(error) 
+      {
+        error: 'Migration failed',
+        details: error instanceof Error ? error.message : String(error)
       },
       { status: 500 }
     );
@@ -102,21 +100,20 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const email = searchParams.get('email');
-    
+
     if (!email) {
       return NextResponse.json({
         error: 'Email parameter required'
       }, { status: 400 });
     }
 
-    console.log('🔍 Preview migration for email:', email);
+    console.log('Preview migration for email:', email);
 
-    const assessmentsQuery = query(
-      collection(db, 'agent_assessments'),
-      where('email', '==', email)
-    );
-    
-    const querySnapshot = await getDocs(assessmentsQuery);
+    const querySnapshot = await adminDb
+      .collection('agent_assessments')
+      .where('email', '==', email)
+      .get();
+
     const assessments: any[] = [];
 
     querySnapshot.forEach((docSnap) => {
@@ -147,7 +144,7 @@ export async function GET(req: NextRequest) {
     });
 
   } catch (error) {
-    console.error('❌ Preview failed:', error);
+    console.error('Preview failed:', error);
     return NextResponse.json(
       { error: 'Preview failed', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }

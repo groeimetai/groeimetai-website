@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { updateDoc, doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { adminDb } from '@/lib/firebase/admin';
 import nodemailer from 'nodemailer';
 import { GoogleCalendarService } from '@/lib/google/calendar-service';
 import DOMPurify from 'isomorphic-dompurify';
@@ -131,11 +130,11 @@ export async function POST(req: NextRequest) {
     }));
 
     // Get contact details from Firestore
-    const contactDoc = await getDoc(doc(db, 'contact_submissions', contactId));
-    if (!contactDoc.exists()) {
+    const contactDoc = await adminDb.collection('contact_submissions').doc(contactId).get();
+    if (!contactDoc.exists) {
       return NextResponse.json({ error: 'Contact niet gevonden' }, { status: 404 });
     }
-    const contactData = contactDoc.data();
+    const contactData = contactDoc.data()!;  // Safe: we checked exists above
 
     let meetingLink = location;
     let googleEventId = null;
@@ -201,7 +200,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Update contact in Firestore with Google Calendar data
-    await updateDoc(doc(db, 'contact_submissions', contactId), {
+    await adminDb.collection('contact_submissions').doc(contactId).update({
       status: 'scheduled',
       meetingDate: date,
       meetingTime: time,

@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { adminDb } from '@/lib/firebase/admin';
 import { generateAssessmentFollowUpHTML } from '@/lib/email/templates';
 
 export async function POST(req: NextRequest) {
   try {
     const { email, name, company, score, level, assessmentId } = await req.json();
-    
+
     if (!email || !assessmentId) {
       return NextResponse.json(
         { error: 'Email and assessment ID required' },
@@ -14,14 +13,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log('📅 Scheduling follow-up sequence for:', email);
+    console.log('Scheduling follow-up sequence for:', email);
 
     // Use Firebase Send Email Extension - just add to 'mail' collection
     const emailTemplates = [
       {
         to: email,
         message: {
-          subject: `🏆 Je Agent Readiness Score: ${score}/100 - ${level}`,
+          subject: `Je Agent Readiness Score: ${score}/100 - ${level}`,
           html: generateAssessmentFollowUpHTML({ name, company, score, level, assessmentId })
         },
         template: {
@@ -34,8 +33,8 @@ export async function POST(req: NextRequest) {
     // Add immediate follow-up to mail collection (Firebase extension picks this up automatically)
     const scheduledEmails = [];
     for (const emailTemplate of emailTemplates) {
-      const docRef = await addDoc(collection(db, 'mail'), emailTemplate);
-      
+      const docRef = await adminDb.collection('mail').add(emailTemplate);
+
       scheduledEmails.push({
         id: docRef.id,
         type: 'immediate_followup',
@@ -57,7 +56,7 @@ export async function POST(req: NextRequest) {
 
     // Store delayed emails in scheduled_emails for processing later
     for (const delayedEmail of delayedEmails) {
-      const docRef = await addDoc(collection(db, 'scheduled_emails'), {
+      const docRef = await adminDb.collection('scheduled_emails').add({
         ...delayedEmail,
         email,
         name,
@@ -68,14 +67,14 @@ export async function POST(req: NextRequest) {
         status: 'scheduled',
         createdAt: new Date()
       });
-      
+
       scheduledEmails.push({
         id: docRef.id,
         ...delayedEmail
       });
     }
 
-    console.log('✅ Follow-up sequence scheduled:', scheduledEmails.length, 'emails');
+    console.log('Follow-up sequence scheduled:', scheduledEmails.length, 'emails');
 
     return NextResponse.json({
       success: true,
@@ -88,7 +87,7 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error) {
-    console.error('❌ Failed to schedule follow-ups:', error);
+    console.error('Failed to schedule follow-ups:', error);
     return NextResponse.json(
       { error: 'Failed to schedule follow-ups' },
       { status: 500 }

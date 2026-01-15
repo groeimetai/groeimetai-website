@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { adminDb } from '@/lib/firebase/admin';
 import nodemailer from 'nodemailer';
 import DOMPurify from 'isomorphic-dompurify';
 
@@ -89,8 +88,8 @@ export async function POST(req: NextRequest) {
       source: 'website_contact_form'
     };
 
-    // Save to contacts collection
-    const contactDoc = await addDoc(collection(db, 'contact_submissions'), contactSubmission);
+    // Save to contacts collection using Admin SDK
+    const contactDoc = await adminDb.collection('contact_submissions').add(contactSubmission);
     console.log('[Contact API] Contact saved with ID:', contactDoc.id);
     
     // Use exact same SMTP pattern as working assessment emails

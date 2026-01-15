@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { adminDb, FieldValue } from '@/lib/firebase/admin';
 
 export async function POST(req: NextRequest) {
   try {
     const { userId, requestType, source } = await req.json();
-    
+
     if (!userId || !requestType) {
       return NextResponse.json(
         { error: 'Missing userId or requestType' },
@@ -14,9 +13,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Update user document to link expert request
-    const userRef = doc(db, 'users', userId);
-    await updateDoc(userRef, {
-      expertRequests: arrayUnion({
+    await adminDb.collection('users').doc(userId).update({
+      expertRequests: FieldValue.arrayUnion({
         id: `expert_${Date.now()}`,
         type: requestType,
         source: source || 'manual_link',

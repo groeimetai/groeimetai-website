@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getMollieService, type InvoiceData } from '@/services/mollieService';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { adminDb, serverTimestamp } from '@/lib/firebase/admin';
 import { getServerSession } from 'next-auth';
 import { Invoice } from '@/types';
 
@@ -19,11 +18,10 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
     const invoiceId = params.id;
 
-    // Fetch invoice from Firebase
-    const invoiceRef = doc(db, 'invoices', invoiceId);
-    const invoiceSnap = await getDoc(invoiceRef);
+    // Fetch invoice from Firebase using Admin SDK
+    const invoiceSnap = await adminDb.collection('invoices').doc(invoiceId).get();
 
-    if (!invoiceSnap.exists()) {
+    if (!invoiceSnap.exists) {
       return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
 
@@ -77,13 +75,12 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     const mollieService = getMollieService();
     const paymentResult = await mollieService.createPayment(invoiceData);
 
-    // Update invoice with payment details
-    const { updateDoc, Timestamp } = await import('firebase/firestore');
-    await updateDoc(invoiceRef, {
+    // Update invoice with payment details using Admin SDK
+    await adminDb.collection('invoices').doc(invoiceId).update({
       'paymentDetails.transactionId': paymentResult.paymentId,
       'paymentDetails.reference': paymentResult.checkoutUrl,
       'paymentDetails.notes': `Payment status: ${paymentResult.status}`,
-      updatedAt: Timestamp.now(),
+      updatedAt: serverTimestamp(),
     });
 
     // TODO: Log activity once activity logs collection is set up
@@ -137,11 +134,10 @@ export async function GET(request: NextRequest, { params }: { params: { invoiceI
 
     const { invoiceId } = params;
 
-    // Fetch invoice from Firebase
-    const invoiceRef = doc(db, 'invoices', invoiceId);
-    const invoiceSnap = await getDoc(invoiceRef);
+    // Fetch invoice from Firebase using Admin SDK
+    const invoiceSnap = await adminDb.collection('invoices').doc(invoiceId).get();
 
-    if (!invoiceSnap.exists()) {
+    if (!invoiceSnap.exists) {
       return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
 

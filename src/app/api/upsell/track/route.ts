@@ -1,17 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { doc, addDoc, collection, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { adminDb, serverTimestamp } from '@/lib/firebase/admin';
 
 export async function POST(req: NextRequest) {
   try {
     const { action, component, userId, assessmentId, variant } = await req.json();
-    
+
     if (!userId) {
       return NextResponse.json({ error: 'User ID required' }, { status: 400 });
     }
 
     // Log interaction for conversion analytics
-    await addDoc(collection(db, 'upsell_analytics'), {
+    await adminDb.collection('upsell_analytics').add({
       userId,
       action, // 'view', 'click', 'dismiss', 'convert'
       component, // 'locked_section', 'email_cta', 'dashboard_banner'
@@ -35,7 +34,7 @@ export async function POST(req: NextRequest) {
       await notifyAdminHotLeadEngagement(userId, component);
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       message: 'Interaction tracked successfully'
     });
@@ -51,14 +50,14 @@ export async function POST(req: NextRequest) {
 
 async function handleConversion(userId: string, assessmentId: string): Promise<void> {
   // Update campaign status
-  await updateDoc(doc(db, 'upsell_campaigns', userId), {
+  await adminDb.collection('upsell_campaigns').doc(userId).update({
     status: 'converted',
     convertedAt: serverTimestamp(),
     conversionSource: 'dashboard_locked_content'
   });
 
   // Create expert assessment request
-  await addDoc(collection(db, 'expert_assessment_requests'), {
+  await adminDb.collection('expert_assessment_requests').add({
     userId,
     assessmentId,
     requestedAt: serverTimestamp(),
@@ -68,7 +67,7 @@ async function handleConversion(userId: string, assessmentId: string): Promise<v
   });
 
   // Notify sales team immediately
-  await addDoc(collection(db, 'admin_notifications'), {
+  await adminDb.collection('admin_notifications').add({
     type: 'expert_assessment_conversion',
     priority: 'critical',
     title: 'Expert Assessment Conversion!',
@@ -84,7 +83,7 @@ async function handleConversion(userId: string, assessmentId: string): Promise<v
 }
 
 async function notifyAdminHotLeadEngagement(userId: string, component: string): Promise<void> {
-  await addDoc(collection(db, 'admin_notifications'), {
+  await adminDb.collection('admin_notifications').add({
     type: 'hot_lead_engagement',
     priority: 'high',
     title: 'Hot Lead Engaging with Locked Content',

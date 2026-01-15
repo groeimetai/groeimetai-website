@@ -143,6 +143,9 @@ export const createCustomToken = async (uid: string, additionalClaims?: Record<s
   return await auth.createCustomToken(uid, additionalClaims);
 };
 
+// Export FieldValue for array operations etc.
+export { FieldValue };
+
 // Firestore helpers
 export const serverTimestamp = () => FieldValue.serverTimestamp();
 
