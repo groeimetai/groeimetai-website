@@ -332,81 +332,202 @@ Dit is een automatische notificatie van GroeimetAI.
           <!DOCTYPE html>
           <html>
             <head>
-              <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                .header { background-color: #FF6600; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
-                .content { background-color: #f4f4f4; padding: 20px; border-radius: 0 0 5px 5px; }
-                .invoice-details { background-color: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
-                .amount { font-size: 24px; font-weight: bold; color: #FF6600; }
-                .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
-                .button { display: inline-block; padding: 12px 24px; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px; font-weight: bold; }
-                .button-pay { background-color: #28a745; font-size: 18px; padding: 15px 30px; }
-                .button-pdf { background-color: #FF6600; }
-                .button-container { text-align: center; margin: 20px 0; }
-              </style>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Factuur van GroeimetAI</title>
             </head>
-            <body>
-              <div class="container">
-                <div class="header">
-                  <h1>Factuur</h1>
-                </div>
-                <div class="content">
-                  <p>Beste ${data.recipientName || 'klant'},</p>
-                  <p>Hierbij ontvangt u uw factuur van GroeimetAI.</p>
+            <body style="margin: 0; padding: 0; background-color: #0a0a0a; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #0a0a0a;">
+                <tr>
+                  <td style="padding: 40px 20px;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width: 600px; margin: 0 auto; background-color: #141414; border-radius: 16px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
 
-                  <div class="invoice-details">
-                    <p><strong>Factuurnummer:</strong> ${data.invoice?.invoiceNumber || 'N/B'}</p>
-                    <p><strong>Datum:</strong> ${formatDate(data.invoice?.createdAt)}</p>
-                    <p><strong>Vervaldatum:</strong> ${formatDate(data.invoice?.dueDate)}</p>
-                    <p class="amount">Totaal: ${currency} ${formattedTotal}</p>
-                  </div>
+                      <!-- Header with Logo -->
+                      <tr>
+                        <td style="background: linear-gradient(135deg, #FF6600 0%, #cc5200 100%); padding: 40px 40px; text-align: center;">
+                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                            <tr>
+                              <td style="text-align: center;">
+                                <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px;">GroeimetAI</h1>
+                                <p style="margin: 8px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.9); letter-spacing: 2px; text-transform: uppercase;">AI Automation Partner</p>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
 
-                  ${data.paymentUrl ? `
-                    <div class="button-container">
-                      <a href="${data.paymentUrl}" class="button button-pay">
-                        💳 Direct Betalen
-                      </a>
-                    </div>
-                  ` : ''}
+                      <!-- Invoice Badge -->
+                      <tr>
+                        <td style="padding: 30px 40px 0 40px; text-align: center;">
+                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 auto;">
+                            <tr>
+                              <td style="background-color: rgba(255, 102, 0, 0.15); border: 1px solid rgba(255, 102, 0, 0.3); border-radius: 50px; padding: 10px 24px;">
+                                <span style="color: #FF6600; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Factuur</span>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
 
-                  ${data.pdfUrl ? `
-                    <div class="button-container">
-                      <a href="${data.pdfUrl}" class="button button-pdf">
-                        📄 Download Factuur PDF
-                      </a>
-                    </div>
-                  ` : ''}
+                      <!-- Greeting -->
+                      <tr>
+                        <td style="padding: 30px 40px 20px 40px;">
+                          <p style="margin: 0; color: #ffffff; font-size: 18px; line-height: 1.6;">Beste ${data.recipientName || 'klant'},</p>
+                          <p style="margin: 16px 0 0 0; color: #a3a3a3; font-size: 16px; line-height: 1.6;">Bedankt voor uw vertrouwen. Hieronder vindt u de details van uw factuur.</p>
+                        </td>
+                      </tr>
 
-                  <p style="margin-top: 20px;">
-                    Heeft u vragen over deze factuur? Aarzel niet om contact met ons op te nemen via <a href="mailto:info@groeimetai.io">info@groeimetai.io</a>.
-                  </p>
-                </div>
-                <div class="footer">
-                  <p>© ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.</p>
-                  <p>GroeimetAI | Fabriekstraat 20 | 7311GP Apeldoorn</p>
-                </div>
-              </div>
+                      <!-- Invoice Details Card -->
+                      <tr>
+                        <td style="padding: 0 40px 30px 40px;">
+                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #1f1f1f; border-radius: 12px; border: 1px solid #2a2a2a;">
+                            <tr>
+                              <td style="padding: 30px;">
+                                <!-- Invoice Number -->
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
+                                  <tr>
+                                    <td style="color: #737373; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; padding-bottom: 6px;">Factuurnummer</td>
+                                  </tr>
+                                  <tr>
+                                    <td style="color: #ffffff; font-size: 18px; font-weight: 600;">${data.invoice?.invoiceNumber || 'N/B'}</td>
+                                  </tr>
+                                </table>
+
+                                <!-- Dates Row -->
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 24px;">
+                                  <tr>
+                                    <td width="50%" style="vertical-align: top;">
+                                      <p style="margin: 0; color: #737373; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Factuurdatum</p>
+                                      <p style="margin: 6px 0 0 0; color: #ffffff; font-size: 15px;">${formatDate(data.invoice?.createdAt)}</p>
+                                    </td>
+                                    <td width="50%" style="vertical-align: top;">
+                                      <p style="margin: 0; color: #737373; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Vervaldatum</p>
+                                      <p style="margin: 6px 0 0 0; color: #ffffff; font-size: 15px;">${formatDate(data.invoice?.dueDate)}</p>
+                                    </td>
+                                  </tr>
+                                </table>
+
+                                <!-- Divider -->
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                  <tr>
+                                    <td style="border-top: 1px solid #2a2a2a; padding-top: 24px;">
+                                      <p style="margin: 0; color: #737373; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Te Betalen</p>
+                                      <p style="margin: 10px 0 0 0; color: #FF6600; font-size: 36px; font-weight: 700; letter-spacing: -1px;">${currency} ${formattedTotal}</p>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- Action Buttons -->
+                      <tr>
+                        <td style="padding: 0 40px 20px 40px;">
+                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                            ${data.paymentUrl ? `
+                            <tr>
+                              <td style="padding-bottom: 16px;">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                  <tr>
+                                    <td style="background: linear-gradient(135deg, #125312 0%, #0f4a0f 100%); border-radius: 10px; text-align: center;">
+                                      <a href="${data.paymentUrl}" target="_blank" style="display: block; padding: 18px 40px; color: #ffffff; font-size: 16px; font-weight: 600; text-decoration: none; letter-spacing: 0.3px;">Direct Betalen</a>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                            ` : ''}
+                            ${data.pdfUrl ? `
+                            <tr>
+                              <td>
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                  <tr>
+                                    <td style="border: 2px solid #2a2a2a; border-radius: 10px; text-align: center;">
+                                      <a href="${data.pdfUrl}" target="_blank" style="display: block; padding: 16px 40px; color: #ffffff; font-size: 15px; font-weight: 500; text-decoration: none;">Download Factuur PDF</a>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                            ` : ''}
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- Support Message -->
+                      <tr>
+                        <td style="padding: 10px 40px 40px 40px;">
+                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #1a1a1a; border-radius: 10px; border-left: 4px solid #FF6600;">
+                            <tr>
+                              <td style="padding: 20px 24px;">
+                                <p style="margin: 0; color: #a3a3a3; font-size: 14px; line-height: 1.6;">
+                                  Vragen over deze factuur? Neem contact met ons op via
+                                  <a href="mailto:info@groeimetai.io" style="color: #FF6600; text-decoration: none; font-weight: 500;">info@groeimetai.io</a>
+                                </p>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- Footer -->
+                      <tr>
+                        <td style="background-color: #0f0f0f; padding: 30px 40px; border-top: 1px solid #1f1f1f;">
+                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                            <tr>
+                              <td style="text-align: center;">
+                                <p style="margin: 0 0 8px 0; color: #FF6600; font-size: 16px; font-weight: 600;">GroeimetAI</p>
+                                <p style="margin: 0 0 16px 0; color: #525252; font-size: 13px; line-height: 1.5;">
+                                  Fabriekstraat 20 · 7311GP Apeldoorn · Nederland
+                                </p>
+                                <p style="margin: 0; color: #404040; font-size: 12px;">
+                                  © ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.
+                                </p>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                    </table>
+                  </td>
+                </tr>
+              </table>
             </body>
           </html>
         `,
         text: `
+GROEIMETAI - FACTUUR
+
 Beste ${data.recipientName || 'klant'},
 
-Hierbij ontvangt u uw factuur van GroeimetAI.
+Bedankt voor uw vertrouwen. Hieronder vindt u de details van uw factuur.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FACTUURGEGEVENS
 
 Factuurnummer: ${data.invoice?.invoiceNumber || 'N/B'}
-Datum: ${formatDate(data.invoice?.createdAt)}
+Factuurdatum: ${formatDate(data.invoice?.createdAt)}
 Vervaldatum: ${formatDate(data.invoice?.dueDate)}
-Totaal: ${currency} ${formattedTotal}
 
-${data.paymentUrl ? `Direct betalen: ${data.paymentUrl}\n` : ''}
-${data.pdfUrl ? `Download Factuur PDF: ${data.pdfUrl}\n` : ''}
+TE BETALEN: ${currency} ${formattedTotal}
 
-Heeft u vragen over deze factuur? Aarzel niet om contact met ons op te nemen via info@groeimetai.io.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${data.paymentUrl ? `DIRECT BETALEN: ${data.paymentUrl}\n` : ''}
+${data.pdfUrl ? `DOWNLOAD PDF: ${data.pdfUrl}\n` : ''}
+
+Vragen? Neem contact met ons op via info@groeimetai.io
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GroeimetAI
+Fabriekstraat 20 · 7311GP Apeldoorn · Nederland
 
 © ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.
-GroeimetAI | Fabriekstraat 20 | 7311GP Apeldoorn
         `,
       };
     },
@@ -417,18 +538,25 @@ GroeimetAI | Fabriekstraat 20 | 7311GP Apeldoorn
         due_soon: {
           subject: `Herinnering: Factuur #${data.invoice?.invoiceNumber} vervalt binnenkort`,
           intro: 'Dit is een vriendelijke herinnering dat uw factuur binnenkort vervalt.',
+          badgeColor: '#FF6600',
+          badgeText: 'Betalingsherinnering',
         },
         overdue: {
           subject: `Betalingsherinnering: Factuur #${data.invoice?.invoiceNumber}`,
           intro: 'Dit is een herinnering dat uw factuur inmiddels is vervallen.',
+          badgeColor: '#f59e0b',
+          badgeText: 'Vervallen',
         },
         final_notice: {
           subject: `Laatste Herinnering: Factuur #${data.invoice?.invoiceNumber}`,
           intro: 'Dit is een laatste herinnering betreffende uw openstaande factuur.',
+          badgeColor: '#ef4444',
+          badgeText: 'Laatste Aanmaning',
         },
       };
 
       const reminder = reminderMessages[data.reminderType || 'due_soon'];
+      const amountColor = data.reminderType === 'final_notice' ? '#ef4444' : '#FF6600';
 
       return {
         subject: reminder.subject,
@@ -436,61 +564,149 @@ GroeimetAI | Fabriekstraat 20 | 7311GP Apeldoorn
           <!DOCTYPE html>
           <html>
             <head>
-              <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                .header { background-color: #FF6600; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
-                .content { background-color: #f4f4f4; padding: 20px; border-radius: 0 0 5px 5px; }
-                .invoice-details { background-color: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
-                .amount { font-size: 24px; font-weight: bold; color: ${data.reminderType === 'final_notice' ? '#f44336' : '#FF6600'}; }
-                .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
-                .button { display: inline-block; padding: 10px 20px; background-color: #FF6600; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px; }
-              </style>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Factuur Herinnering van GroeimetAI</title>
             </head>
-            <body>
-              <div class="container">
-                <div class="header">
-                  <h1>Factuur Herinnering</h1>
-                </div>
-                <div class="content">
-                  <p>Beste ${data.recipientName || 'klant'},</p>
-                  <p>${reminder.intro}</p>
-                  
-                  <div class="invoice-details">
-                    <p><strong>Factuurnummer:</strong> ${data.invoice?.invoiceNumber}</p>
-                    <p><strong>Factuurdatum:</strong> ${new Date(data.invoice?.createdAt || Date.now()).toLocaleDateString('nl-NL')}</p>
-                    <p><strong>Vervaldatum:</strong> ${new Date(data.invoice?.dueDate || Date.now()).toLocaleDateString('nl-NL')}</p>
-                    <p class="amount">Openstaand bedrag: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}</p>
-                  </div>
-                  
-                  <p>Wij verzoeken u vriendelijk om de betaling zo spoedig mogelijk te voldoen om eventuele kosten of onderbreking van diensten te voorkomen.</p>
-                  
-                  <p style="margin-top: 20px;">
-                    <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/invoices/${data.invoice?.id}" class="button">
-                      Bekijk Factuur
-                    </a>
-                  </p>
-                </div>
-                <div class="footer">
-                  <p>© ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.</p>
-                </div>
-              </div>
+            <body style="margin: 0; padding: 0; background-color: #0a0a0a; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #0a0a0a;">
+                <tr>
+                  <td style="padding: 40px 20px;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width: 600px; margin: 0 auto; background-color: #141414; border-radius: 16px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+
+                      <!-- Header -->
+                      <tr>
+                        <td style="background: linear-gradient(135deg, #FF6600 0%, #cc5200 100%); padding: 40px 40px; text-align: center;">
+                          <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px;">GroeimetAI</h1>
+                          <p style="margin: 8px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.9); letter-spacing: 2px; text-transform: uppercase;">AI Automation Partner</p>
+                        </td>
+                      </tr>
+
+                      <!-- Reminder Badge -->
+                      <tr>
+                        <td style="padding: 30px 40px 0 40px; text-align: center;">
+                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 auto;">
+                            <tr>
+                              <td style="background-color: ${reminder.badgeColor}20; border: 1px solid ${reminder.badgeColor}50; border-radius: 50px; padding: 10px 24px;">
+                                <span style="color: ${reminder.badgeColor}; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">${reminder.badgeText}</span>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- Greeting -->
+                      <tr>
+                        <td style="padding: 30px 40px 20px 40px;">
+                          <p style="margin: 0; color: #ffffff; font-size: 18px; line-height: 1.6;">Beste ${data.recipientName || 'klant'},</p>
+                          <p style="margin: 16px 0 0 0; color: #a3a3a3; font-size: 16px; line-height: 1.6;">${reminder.intro}</p>
+                        </td>
+                      </tr>
+
+                      <!-- Invoice Details Card -->
+                      <tr>
+                        <td style="padding: 0 40px 30px 40px;">
+                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #1f1f1f; border-radius: 12px; border: 1px solid #2a2a2a;">
+                            <tr>
+                              <td style="padding: 30px;">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
+                                  <tr>
+                                    <td style="color: #737373; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; padding-bottom: 6px;">Factuurnummer</td>
+                                  </tr>
+                                  <tr>
+                                    <td style="color: #ffffff; font-size: 18px; font-weight: 600;">${data.invoice?.invoiceNumber}</td>
+                                  </tr>
+                                </table>
+
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 24px;">
+                                  <tr>
+                                    <td width="50%" style="vertical-align: top;">
+                                      <p style="margin: 0; color: #737373; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Factuurdatum</p>
+                                      <p style="margin: 6px 0 0 0; color: #ffffff; font-size: 15px;">${new Date(data.invoice?.createdAt || Date.now()).toLocaleDateString('nl-NL')}</p>
+                                    </td>
+                                    <td width="50%" style="vertical-align: top;">
+                                      <p style="margin: 0; color: #737373; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Vervaldatum</p>
+                                      <p style="margin: 6px 0 0 0; color: ${amountColor}; font-size: 15px; font-weight: 600;">${new Date(data.invoice?.dueDate || Date.now()).toLocaleDateString('nl-NL')}</p>
+                                    </td>
+                                  </tr>
+                                </table>
+
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                  <tr>
+                                    <td style="border-top: 1px solid #2a2a2a; padding-top: 24px;">
+                                      <p style="margin: 0; color: #737373; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Te Betalen</p>
+                                      <p style="margin: 10px 0 0 0; color: ${amountColor}; font-size: 36px; font-weight: 700; letter-spacing: -1px;">${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}</p>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- Action Button -->
+                      <tr>
+                        <td style="padding: 0 40px 30px 40px;">
+                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                            <tr>
+                              <td style="background: linear-gradient(135deg, #125312 0%, #0f4a0f 100%); border-radius: 10px; text-align: center;">
+                                <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/invoices/${data.invoice?.id}" target="_blank" style="display: block; padding: 18px 40px; color: #ffffff; font-size: 16px; font-weight: 600; text-decoration: none;">Bekijk & Betaal Factuur</a>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- Message -->
+                      <tr>
+                        <td style="padding: 0 40px 40px 40px;">
+                          <p style="margin: 0; color: #a3a3a3; font-size: 14px; line-height: 1.6;">Wij verzoeken u vriendelijk om de betaling zo spoedig mogelijk te voldoen om eventuele kosten of onderbreking van diensten te voorkomen.</p>
+                        </td>
+                      </tr>
+
+                      <!-- Footer -->
+                      <tr>
+                        <td style="background-color: #0f0f0f; padding: 30px 40px; border-top: 1px solid #1f1f1f;">
+                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                            <tr>
+                              <td style="text-align: center;">
+                                <p style="margin: 0 0 8px 0; color: #FF6600; font-size: 16px; font-weight: 600;">GroeimetAI</p>
+                                <p style="margin: 0 0 16px 0; color: #525252; font-size: 13px;">Fabriekstraat 20 · 7311GP Apeldoorn · Nederland</p>
+                                <p style="margin: 0; color: #404040; font-size: 12px;">© ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.</p>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                    </table>
+                  </td>
+                </tr>
+              </table>
             </body>
           </html>
         `,
         text: `
+GROEIMETAI - ${reminder.badgeText.toUpperCase()}
+
 Beste ${data.recipientName || 'klant'},
 
 ${reminder.intro}
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Factuurnummer: ${data.invoice?.invoiceNumber}
 Factuurdatum: ${new Date(data.invoice?.createdAt || Date.now()).toLocaleDateString('nl-NL')}
 Vervaldatum: ${new Date(data.invoice?.dueDate || Date.now()).toLocaleDateString('nl-NL')}
-Openstaand bedrag: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}
 
-Wij verzoeken u vriendelijk om de betaling zo spoedig mogelijk te voldoen om eventuele kosten of onderbreking van diensten te voorkomen.
+TE BETALEN: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}
 
-Bekijk Factuur: ${process.env.NEXT_PUBLIC_APP_URL}/dashboard/invoices/${data.invoice?.id}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BEKIJK FACTUUR: ${process.env.NEXT_PUBLIC_APP_URL}/dashboard/invoices/${data.invoice?.id}
+
+Wij verzoeken u vriendelijk om de betaling zo spoedig mogelijk te voldoen.
 
 © ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.
         `,
@@ -504,60 +720,154 @@ Bekijk Factuur: ${process.env.NEXT_PUBLIC_APP_URL}/dashboard/invoices/${data.inv
         <!DOCTYPE html>
         <html>
           <head>
-            <style>
-              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background-color: #4CAF50; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
-              .content { background-color: #f4f4f4; padding: 20px; border-radius: 0 0 5px 5px; }
-              .payment-details { background-color: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
-              .amount { font-size: 24px; font-weight: bold; color: #4CAF50; }
-              .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
-            </style>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Betalingsbevestiging van GroeimetAI</title>
           </head>
-          <body>
-            <div class="container">
-              <div class="header">
-                <h1>Betaling Ontvangen</h1>
-              </div>
-              <div class="content">
-                <p>Beste ${data.recipientName || 'klant'},</p>
-                <p>Bedankt! We hebben uw betaling ontvangen.</p>
-                
-                <div class="payment-details">
-                  <p><strong>Factuurnummer:</strong> ${data.invoice?.invoiceNumber}</p>
-                  <p><strong>Betalingsdatum:</strong> ${new Date().toLocaleDateString('nl-NL')}</p>
-                  <p><strong>Betalingsmethode:</strong> ${data.paymentMethod}</p>
-                  <p><strong>Transactie ID:</strong> ${data.transactionId}</p>
-                  <p class="amount">Betaald bedrag: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}</p>
-                </div>
-                
-                <p>Uw account is bijgewerkt en de factuur is gemarkeerd als betaald.</p>
-                
-                <p style="margin-top: 20px;">
-                  Als u een kwitantie nodig heeft of vragen heeft, aarzel dan niet om contact met ons op te nemen.
-                </p>
-              </div>
-              <div class="footer">
-                <p>© ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.</p>
-              </div>
-            </div>
+          <body style="margin: 0; padding: 0; background-color: #0a0a0a; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #0a0a0a;">
+              <tr>
+                <td style="padding: 40px 20px;">
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width: 600px; margin: 0 auto; background-color: #141414; border-radius: 16px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+
+                    <!-- Header with Success Color -->
+                    <tr>
+                      <td style="background: linear-gradient(135deg, #125312 0%, #0f4a0f 100%); padding: 40px 40px; text-align: center;">
+                        <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px;">GroeimetAI</h1>
+                        <p style="margin: 8px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.9); letter-spacing: 2px; text-transform: uppercase;">AI Automation Partner</p>
+                      </td>
+                    </tr>
+
+                    <!-- Success Badge -->
+                    <tr>
+                      <td style="padding: 30px 40px 0 40px; text-align: center;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 auto;">
+                          <tr>
+                            <td style="background-color: rgba(18, 83, 18, 0.2); border: 1px solid rgba(18, 83, 18, 0.4); border-radius: 50px; padding: 10px 24px;">
+                              <span style="color: #22c55e; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">✓ Betaling Ontvangen</span>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <!-- Greeting -->
+                    <tr>
+                      <td style="padding: 30px 40px 20px 40px;">
+                        <p style="margin: 0; color: #ffffff; font-size: 18px; line-height: 1.6;">Beste ${data.recipientName || 'klant'},</p>
+                        <p style="margin: 16px 0 0 0; color: #a3a3a3; font-size: 16px; line-height: 1.6;">Bedankt! We hebben uw betaling succesvol ontvangen.</p>
+                      </td>
+                    </tr>
+
+                    <!-- Payment Details Card -->
+                    <tr>
+                      <td style="padding: 0 40px 30px 40px;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #1f1f1f; border-radius: 12px; border: 1px solid #2a2a2a;">
+                          <tr>
+                            <td style="padding: 30px;">
+                              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
+                                <tr>
+                                  <td style="color: #737373; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; padding-bottom: 6px;">Factuurnummer</td>
+                                </tr>
+                                <tr>
+                                  <td style="color: #ffffff; font-size: 18px; font-weight: 600;">${data.invoice?.invoiceNumber}</td>
+                                </tr>
+                              </table>
+
+                              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 24px;">
+                                <tr>
+                                  <td width="50%" style="vertical-align: top; padding-bottom: 16px;">
+                                    <p style="margin: 0; color: #737373; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Betalingsdatum</p>
+                                    <p style="margin: 6px 0 0 0; color: #ffffff; font-size: 15px;">${new Date().toLocaleDateString('nl-NL')}</p>
+                                  </td>
+                                  <td width="50%" style="vertical-align: top; padding-bottom: 16px;">
+                                    <p style="margin: 0; color: #737373; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Betalingsmethode</p>
+                                    <p style="margin: 6px 0 0 0; color: #ffffff; font-size: 15px;">${data.paymentMethod}</p>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2" style="vertical-align: top;">
+                                    <p style="margin: 0; color: #737373; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Transactie ID</p>
+                                    <p style="margin: 6px 0 0 0; color: #ffffff; font-size: 14px; font-family: monospace;">${data.transactionId}</p>
+                                  </td>
+                                </tr>
+                              </table>
+
+                              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                  <td style="border-top: 1px solid #2a2a2a; padding-top: 24px;">
+                                    <p style="margin: 0; color: #737373; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Betaald Bedrag</p>
+                                    <p style="margin: 10px 0 0 0; color: #22c55e; font-size: 36px; font-weight: 700; letter-spacing: -1px;">${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}</p>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <!-- Confirmation Message -->
+                    <tr>
+                      <td style="padding: 0 40px 40px 40px;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #1a1a1a; border-radius: 10px; border-left: 4px solid #22c55e;">
+                          <tr>
+                            <td style="padding: 20px 24px;">
+                              <p style="margin: 0; color: #a3a3a3; font-size: 14px; line-height: 1.6;">
+                                Uw account is bijgewerkt en de factuur is gemarkeerd als betaald. Heeft u een kwitantie nodig of heeft u vragen? Neem contact met ons op via
+                                <a href="mailto:info@groeimetai.io" style="color: #FF6600; text-decoration: none; font-weight: 500;">info@groeimetai.io</a>
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                      <td style="background-color: #0f0f0f; padding: 30px 40px; border-top: 1px solid #1f1f1f;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                          <tr>
+                            <td style="text-align: center;">
+                              <p style="margin: 0 0 8px 0; color: #FF6600; font-size: 16px; font-weight: 600;">GroeimetAI</p>
+                              <p style="margin: 0 0 16px 0; color: #525252; font-size: 13px;">Fabriekstraat 20 · 7311GP Apeldoorn · Nederland</p>
+                              <p style="margin: 0; color: #404040; font-size: 12px;">© ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.</p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                  </table>
+                </td>
+              </tr>
+            </table>
           </body>
         </html>
       `,
       text: `
+GROEIMETAI - BETALINGSBEVESTIGING
+
 Beste ${data.recipientName || 'klant'},
 
-Bedankt! We hebben uw betaling ontvangen.
+Bedankt! We hebben uw betaling succesvol ontvangen.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BETALINGSGEGEVENS
 
 Factuurnummer: ${data.invoice?.invoiceNumber}
 Betalingsdatum: ${new Date().toLocaleDateString('nl-NL')}
 Betalingsmethode: ${data.paymentMethod}
 Transactie ID: ${data.transactionId}
-Betaald bedrag: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}
+
+BETAALD BEDRAG: ${data.invoice?.currency || 'EUR'} ${data.invoice?.totalAmount?.toFixed(2)}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Uw account is bijgewerkt en de factuur is gemarkeerd als betaald.
 
-Als u een kwitantie nodig heeft of vragen heeft, aarzel dan niet om contact met ons op te nemen.
+Vragen? Neem contact met ons op via info@groeimetai.io
 
 © ${new Date().getFullYear()} GroeimetAI. Alle rechten voorbehouden.
       `,
