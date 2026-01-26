@@ -342,17 +342,17 @@ This is an automated notification from GroeimetAI.
                   <td style="padding: 40px 20px;">
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width: 600px; margin: 0 auto; background-color: #141414; border-radius: 16px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
 
-                      <!-- Header with Logo -->
+                      <!-- Logo Section -->
                       <tr>
-                        <td style="background: linear-gradient(135deg, #FF6600 0%, #cc5200 100%); padding: 40px 40px; text-align: center;">
-                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                            <tr>
-                              <td style="text-align: center;">
-                                <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px;">GroeimetAI</h1>
-                                <p style="margin: 8px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.9); letter-spacing: 2px; text-transform: uppercase;">AI Automation Partner</p>
-                              </td>
-                            </tr>
-                          </table>
+                        <td style="background-color: #0a0a0a; padding: 30px 40px; text-align: center; border-bottom: 1px solid #1f1f1f;">
+                          <img src="https://groeimetai.io/GroeimetAi_logo_small.png" alt="GroeimetAI" width="160" height="auto" style="display: block; margin: 0 auto; max-width: 160px;" />
+                        </td>
+                      </tr>
+
+                      <!-- Header Accent Bar -->
+                      <tr>
+                        <td style="background: linear-gradient(135deg, #FF6600 0%, #cc5200 100%); padding: 20px 40px; text-align: center;">
+                          <p style="margin: 0; font-size: 13px; color: rgba(255,255,255,0.95); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500;">AI Automation Partner</p>
                         </td>
                       </tr>
 
@@ -574,11 +574,17 @@ Fabriekstraat 20 · 7311GP Apeldoorn · Netherlands
                   <td style="padding: 40px 20px;">
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width: 600px; margin: 0 auto; background-color: #141414; border-radius: 16px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
 
-                      <!-- Header -->
+                      <!-- Logo Section -->
                       <tr>
-                        <td style="background: linear-gradient(135deg, #FF6600 0%, #cc5200 100%); padding: 40px 40px; text-align: center;">
-                          <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px;">GroeimetAI</h1>
-                          <p style="margin: 8px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.9); letter-spacing: 2px; text-transform: uppercase;">AI Automation Partner</p>
+                        <td style="background-color: #0a0a0a; padding: 30px 40px; text-align: center; border-bottom: 1px solid #1f1f1f;">
+                          <img src="https://groeimetai.io/GroeimetAi_logo_small.png" alt="GroeimetAI" width="160" height="auto" style="display: block; margin: 0 auto; max-width: 160px;" />
+                        </td>
+                      </tr>
+
+                      <!-- Header Accent Bar -->
+                      <tr>
+                        <td style="background: linear-gradient(135deg, #FF6600 0%, #cc5200 100%); padding: 20px 40px; text-align: center;">
+                          <p style="margin: 0; font-size: 13px; color: rgba(255,255,255,0.95); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500;">AI Automation Partner</p>
                         </td>
                       </tr>
 
@@ -730,11 +736,17 @@ Please arrange payment at your earliest convenience.
                 <td style="padding: 40px 20px;">
                   <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width: 600px; margin: 0 auto; background-color: #141414; border-radius: 16px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
 
-                    <!-- Header with Success Color -->
+                    <!-- Logo Section -->
                     <tr>
-                      <td style="background: linear-gradient(135deg, #125312 0%, #0f4a0f 100%); padding: 40px 40px; text-align: center;">
-                        <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px;">GroeimetAI</h1>
-                        <p style="margin: 8px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.9); letter-spacing: 2px; text-transform: uppercase;">AI Automation Partner</p>
+                      <td style="background-color: #0a0a0a; padding: 30px 40px; text-align: center; border-bottom: 1px solid #1f1f1f;">
+                        <img src="https://groeimetai.io/GroeimetAi_logo_small.png" alt="GroeimetAI" width="160" height="auto" style="display: block; margin: 0 auto; max-width: 160px;" />
+                      </td>
+                    </tr>
+
+                    <!-- Header Accent Bar (Success) -->
+                    <tr>
+                      <td style="background: linear-gradient(135deg, #125312 0%, #0f4a0f 100%); padding: 20px 40px; text-align: center;">
+                        <p style="margin: 0; font-size: 13px; color: rgba(255,255,255,0.95); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500;">AI Automation Partner</p>
                       </td>
                     </tr>
 
