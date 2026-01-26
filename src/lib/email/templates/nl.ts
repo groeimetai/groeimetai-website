@@ -352,7 +352,7 @@ Dit is een automatische notificatie van GroeimetAI.
                       <!-- Header Accent Bar -->
                       <tr>
                         <td style="background: linear-gradient(135deg, #FF6600 0%, #cc5200 100%); padding: 16px 40px; text-align: center;">
-                          <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.95); letter-spacing: 2px; text-transform: uppercase; font-weight: 500;">AI Automation Partner</p>
+                          <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.95); letter-spacing: 2px; text-transform: uppercase; font-weight: 500;">You have API's, but agent can't talk to them.</p>
                         </td>
                       </tr>
 
@@ -584,7 +584,7 @@ Fabriekstraat 20 · 7311GP Apeldoorn · Nederland
                       <!-- Header Accent Bar -->
                       <tr>
                         <td style="background: linear-gradient(135deg, #FF6600 0%, #cc5200 100%); padding: 16px 40px; text-align: center;">
-                          <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.95); letter-spacing: 2px; text-transform: uppercase; font-weight: 500;">AI Automation Partner</p>
+                          <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.95); letter-spacing: 2px; text-transform: uppercase; font-weight: 500;">You have API's, but agent can't talk to them.</p>
                         </td>
                       </tr>
 
@@ -746,7 +746,7 @@ Wij verzoeken u vriendelijk om de betaling zo spoedig mogelijk te voldoen.
                     <!-- Header Accent Bar (Success) -->
                     <tr>
                       <td style="background: linear-gradient(135deg, #125312 0%, #0f4a0f 100%); padding: 16px 40px; text-align: center;">
-                        <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.95); letter-spacing: 2px; text-transform: uppercase; font-weight: 500;">AI Automation Partner</p>
+                        <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.95); letter-spacing: 2px; text-transform: uppercase; font-weight: 500;">You have API's, but agent can't talk to them.</p>
                       </td>
                     </tr>
 
