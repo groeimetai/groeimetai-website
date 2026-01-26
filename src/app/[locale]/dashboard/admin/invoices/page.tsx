@@ -81,14 +81,35 @@ import type { BulkActionType } from '@/components/admin/BulkActions';
 import { notificationService } from '@/services/notificationService';
 // Invoice and payment operations are handled through API routes
 import { Invoice, InvoiceItem, InvoiceStatus, User } from '@/types';
+// New invoice components for Mollie sync
+import {
+  SyncPaymentsButton,
+  SyncSinglePaymentButton,
+  PaymentStatusBadge,
+  InvoiceDetailPanel,
+  MolliePaymentStatus,
+} from '@/components/admin/invoices';
 import { updateDoc } from 'firebase/firestore';
 import { toast } from 'react-hot-toast';
 import { auth } from '@/lib/firebase/config';
 
-// Extend Invoice type to include client info
+// Extend Invoice type to include client info and Mollie status
 interface InvoiceWithClient extends Invoice {
   clientName?: string;
   clientEmail?: string;
+  molliePaymentStatus?: string;
+  lastPaymentSync?: Date;
+  billingDetails?: {
+    companyName?: string;
+    contactName?: string;
+    kvkNumber?: string;
+    btwNumber?: string;
+    street?: string;
+    postalCode?: string;
+    city?: string;
+    country?: string;
+    email?: string;
+  };
 }
 
 interface InvoiceFormData {
@@ -217,6 +238,9 @@ export default function AdminInvoicesPage() {
                 createdAt: invoiceData.createdAt?.toDate() || new Date(),
                 updatedAt: invoiceData.updatedAt?.toDate() || new Date(),
                 paidDate: invoiceData.paidDate?.toDate(),
+                molliePaymentStatus: invoiceData.molliePaymentStatus || null,
+                lastPaymentSync: invoiceData.lastPaymentSync?.toDate() || null,
+                billingDetails: invoiceData.billingDetails || null,
               } as InvoiceWithClient;
             })
           );
@@ -831,7 +855,12 @@ export default function AdminInvoicesPage() {
             <h1 className="text-3xl font-bold text-white mb-2">Invoices Management</h1>
             <p className="text-white/60">Create and manage invoices for all clients</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-start">
+            <SyncPaymentsButton
+              onSyncComplete={() => {
+                // Invoices will auto-refresh via Firestore listener
+              }}
+            />
             <Button
               variant="outline"
               onClick={() => router.push('/dashboard/admin/invoices/reports')}
@@ -1027,6 +1056,7 @@ export default function AdminInvoicesPage() {
                     <TableHead className="text-white/60">Invoice</TableHead>
                     <TableHead className="text-white/60">Client</TableHead>
                     <TableHead className="text-white/60">Status</TableHead>
+                    <TableHead className="text-white/60">Mollie</TableHead>
                     <TableHead className="text-white/60">Issue Date</TableHead>
                     <TableHead className="text-white/60">Due Date</TableHead>
                     <TableHead className="text-white/60">Amount</TableHead>
@@ -1072,6 +1102,18 @@ export default function AdminInvoicesPage() {
                             <StatusIcon className="w-3 h-3 mr-1" />
                             {invoice.status}
                           </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <PaymentStatusBadge
+                              status={invoice.molliePaymentStatus as MolliePaymentStatus}
+                              size="sm"
+                              showIcon={false}
+                            />
+                            {['sent', 'viewed', 'overdue'].includes(invoice.status) && (
+                              <SyncSinglePaymentButton invoiceId={invoice.id} />
+                            )}
+                          </div>
                         </TableCell>
                         <TableCell className="text-white/80">
                           {format(invoice.issueDate, 'MMM d, yyyy')}
@@ -1521,175 +1563,30 @@ export default function AdminInvoicesPage() {
           </DialogContent>
         </Dialog>
 
-        {/* View Invoice Dialog */}
-        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent className="bg-black/95 border-white/20 text-white max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Invoice Details</DialogTitle>
-            </DialogHeader>
-            {selectedInvoice && (
-              <div className="space-y-6 mt-4">
-                {/* Invoice Header */}
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h2 className="text-2xl font-bold text-white">
-                      {selectedInvoice.invoiceNumber}
-                    </h2>
-                    <Badge
-                      variant="outline"
-                      className={`mt-2 ${getStatusColor(selectedInvoice.status)} bg-opacity-20 border-0`}
-                    >
-                      {selectedInvoice.status.toUpperCase()}
-                    </Badge>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-white/60">Issue Date</p>
-                    <p className="text-white">
-                      {format(selectedInvoice.issueDate, 'MMMM d, yyyy')}
-                    </p>
-                    <p className="text-white/60 mt-2">Due Date</p>
-                    <p className="text-white">{format(selectedInvoice.dueDate, 'MMMM d, yyyy')}</p>
-                  </div>
-                </div>
-
-                {/* Client Information */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h3 className="text-sm font-medium text-white/60 mb-2">Bill To</h3>
-                    <p className="text-white font-medium">{selectedInvoice.clientName}</p>
-                    <p className="text-white/80">{selectedInvoice.clientEmail}</p>
-                    {selectedInvoice.billingAddress && (
-                      <>
-                        <p className="text-white/80">{selectedInvoice.billingAddress.street}</p>
-                        <p className="text-white/80">
-                          {selectedInvoice.billingAddress.city}{' '}
-                          {selectedInvoice.billingAddress.postalCode}
-                        </p>
-                        <p className="text-white/80">{selectedInvoice.billingAddress.country}</p>
-                      </>
-                    )}
-                  </div>
-                  {selectedInvoice.projectId && (
-                    <div>
-                      <h3 className="text-sm font-medium text-white/60 mb-2">Project</h3>
-                      <p className="text-white">Project ID: {selectedInvoice.projectId}</p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Invoice Items */}
-                <div>
-                  <h3 className="text-lg font-medium text-white mb-4">Items</h3>
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="border-white/10">
-                        <TableHead className="text-white/60">Description</TableHead>
-                        <TableHead className="text-right text-white/60">Qty</TableHead>
-                        <TableHead className="text-right text-white/60">Rate</TableHead>
-                        <TableHead className="text-right text-white/60">Tax</TableHead>
-                        <TableHead className="text-right text-white/60">Amount</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {selectedInvoice.items.map((item) => (
-                        <TableRow key={item.id} className="border-white/10">
-                          <TableCell className="text-white">{item.description}</TableCell>
-                          <TableCell className="text-right text-white">{item.quantity}</TableCell>
-                          <TableCell className="text-right text-white">
-                            €{item.unitPrice.toFixed(2)}
-                          </TableCell>
-                          <TableCell className="text-right text-white">
-                            €{item.tax.toFixed(2)}
-                          </TableCell>
-                          <TableCell className="text-right text-white">
-                            €{item.total.toFixed(2)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-
-                {/* Totals */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-white/80">
-                    <span>Subtotal</span>
-                    <span>€{selectedInvoice.financial.subtotal.toFixed(2)}</span>
-                  </div>
-                  {selectedInvoice.financial.discount > 0 && (
-                    <div className="flex justify-between text-white/80">
-                      <span>Discount</span>
-                      <span>-€{selectedInvoice.financial.discount.toFixed(2)}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between text-white/80">
-                    <span>Tax</span>
-                    <span>€{selectedInvoice.financial.tax.toFixed(2)}</span>
-                  </div>
-                  <Separator className="bg-white/10" />
-                  <div className="flex justify-between text-xl font-bold text-white">
-                    <span>Total</span>
-                    <span>€{selectedInvoice.financial.total.toFixed(2)}</span>
-                  </div>
-                  {selectedInvoice.financial.paid > 0 && (
-                    <>
-                      <div className="flex justify-between text-white/80">
-                        <span>Paid</span>
-                        <span>€{selectedInvoice.financial.paid.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between text-white/80">
-                        <span>Balance</span>
-                        <span>€{selectedInvoice.financial.balance.toFixed(2)}</span>
-                      </div>
-                    </>
-                  )}
-                </div>
-
-                {/* Actions */}
-                <div className="flex justify-end gap-3">
-                  <Button variant="outline" onClick={() => downloadInvoicePDF(selectedInvoice)}>
-                    <Download className="w-4 h-4 mr-2" />
-                    Export PDF
-                  </Button>
-                  {selectedInvoice.status === 'draft' && (
-                    <Button
-                      onClick={() => {
-                        sendInvoice(selectedInvoice);
-                        setIsEditDialogOpen(false);
-                      }}
-                      className="bg-orange hover:bg-orange/90"
-                      disabled={sendingInvoice}
-                    >
-                      {sendingInvoice ? (
-                        <Loader2 className="animate-spin w-4 h-4 mr-2" />
-                      ) : (
-                        <Send className="w-4 h-4 mr-2" />
-                      )}
-                      Send Invoice
-                    </Button>
-                  )}
-                  {['sent', 'viewed', 'overdue'].includes(selectedInvoice.status) && (
-                    <Button
-                      onClick={() => {
-                        createPaymentLink(selectedInvoice);
-                        setIsEditDialogOpen(false);
-                      }}
-                      className="bg-green-500 hover:bg-green-600"
-                      disabled={creatingPaymentLink}
-                    >
-                      {creatingPaymentLink ? (
-                        <Loader2 className="animate-spin w-4 h-4 mr-2" />
-                      ) : (
-                        <Link className="w-4 h-4 mr-2" />
-                      )}
-                      Create Payment Link
-                    </Button>
-                  )}
-                </div>
-              </div>
-            )}
-          </DialogContent>
-        </Dialog>
+        {/* Invoice Detail Panel (Sheet) */}
+        <InvoiceDetailPanel
+          invoice={selectedInvoice}
+          open={isEditDialogOpen}
+          onOpenChange={setIsEditDialogOpen}
+          onSendInvoice={(invoice) => {
+            sendInvoice(invoice);
+            setIsEditDialogOpen(false);
+          }}
+          onCreatePaymentLink={(invoice) => {
+            createPaymentLink(invoice);
+          }}
+          onMarkAsPaid={(invoice) => {
+            markAsPaid(invoice);
+            setIsEditDialogOpen(false);
+          }}
+          onDownloadPDF={downloadInvoicePDF}
+          onSendReminder={(invoice) => {
+            sendPaymentReminder(invoice);
+          }}
+          sendingInvoice={sendingInvoice}
+          creatingPaymentLink={creatingPaymentLink}
+          sendingReminder={sendingReminder}
+        />
       </div>
     </main>
   );
