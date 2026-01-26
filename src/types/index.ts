@@ -1596,3 +1596,81 @@ export interface ROICalculatorAssessment extends BaseAssessment {
     efficiencyGain: number;
   };
 }
+
+// =============================================================================
+// Admin Settings Types
+// =============================================================================
+
+export interface AdminEmailTemplate {
+  id: string;
+  name: string;
+  slug: string;
+  subject: string;
+  body: string;
+  variables: string[];
+  isActive: boolean;
+  isSystem: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface AdminService {
+  id: string;
+  name: string;
+  description: string;
+  basePrice: number;
+  priceType: 'fixed' | 'hourly' | 'custom';
+  isActive: boolean;
+  sortOrder: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface AdminNotificationSettings {
+  emailNotifications: boolean;
+  recipients: string[];
+  events: {
+    newQuotes: boolean;
+    projectUpdates: boolean;
+    userRegistrations: boolean;
+    systemAlerts: boolean;
+    weeklyReport: boolean;
+    invoicePayments: boolean;
+  };
+  updatedAt: Date;
+  updatedBy: string;
+}
+
+export interface AdminApiKey {
+  id: string;
+  name: string;
+  keyPrefix: string;
+  keyHash: string;
+  permissions: string[];
+  lastUsedAt?: Date;
+  isActive: boolean;
+  createdAt: Date;
+  createdBy: string;
+}
+
+export interface AdminSettings {
+  id: string;
+  emailTemplates: AdminEmailTemplate[];
+  services: AdminService[];
+  notificationSettings: AdminNotificationSettings;
+  updatedAt: Date;
+  updatedBy: string;
+}
+
+export interface TeamMember {
+  id: string;
+  userId: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'consultant' | 'project_manager' | 'developer' | 'designer' | 'marketing';
+  permissions: string[];
+  isActive: boolean;
+  invitedAt?: Date;
+  invitedBy?: string;
+  joinedAt?: Date;
+}

@@ -1,21 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/contexts/AuthContext';
-import {
-  collection,
-  query,
-  getDocs,
-  doc,
-  updateDoc,
-  addDoc,
-  deleteDoc,
-  serverTimestamp,
-} from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
 import { companySettingsService } from '@/services/companySettingsService';
-import { CompanySettings as CompanySettingsType } from '@/types';
+import { adminSettingsService } from '@/services/adminSettingsService';
+import { teamManagementService } from '@/services/teamManagementService';
+import {
+  CompanySettings as CompanySettingsType,
+  AdminEmailTemplate,
+  AdminService,
+  AdminNotificationSettings,
+  AdminApiKey,
+  TeamMember,
+} from '@/types';
 import {
   Settings,
   Building,
@@ -36,6 +34,11 @@ import {
   Palette,
   Database,
   AlertCircle,
+  Copy,
+  Eye,
+  EyeOff,
+  Send,
+  RefreshCw,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -62,41 +65,29 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
-// Using CompanySettingsType from @/types (imported as CompanySettingsType)
-
-interface EmailTemplate {
+// Local interfaces for editing (before saving to backend)
+interface EditingEmailTemplate {
   id: string;
   name: string;
+  slug: string;
   subject: string;
   body: string;
   variables: string[];
+  isActive: boolean;
+  isSystem: boolean;
 }
 
-interface TeamMember {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  permissions: string[];
-  active: boolean;
-}
-
-interface Service {
+interface EditingService {
   id: string;
   name: string;
   description: string;
   basePrice: number;
   priceType: 'fixed' | 'hourly' | 'custom';
-  active: boolean;
+  isActive: boolean;
 }
 
-interface NotificationSettings {
-  emailNotifications: boolean;
-  newQuotes: boolean;
-  projectUpdates: boolean;
-  userRegistrations: boolean;
-  systemAlerts: boolean;
-  weeklyReport: boolean;
+interface ApiKeyWithFullKey extends AdminApiKey {
+  fullKey?: string;
 }
 
 export default function AdminSettingsPage() {
@@ -110,126 +101,129 @@ export default function AdminSettingsPage() {
   const [companySettings, setCompanySettings] = useState<CompanySettingsType | null>(null);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
 
-  // Load company settings from Firestore on mount
-  useEffect(() => {
-    const loadCompanySettings = async () => {
-      try {
-        setIsLoadingSettings(true);
-        const settings = await companySettingsService.getCompanySettings();
-        setCompanySettings(settings);
-      } catch (error) {
-        console.error('Error loading company settings:', error);
-      } finally {
-        setIsLoadingSettings(false);
-      }
-    };
+  // Email templates (loaded from Firestore)
+  const [emailTemplates, setEmailTemplates] = useState<AdminEmailTemplate[]>([]);
+  const [isLoadingTemplates, setIsLoadingTemplates] = useState(true);
 
-    if (user && isAdmin) {
-      loadCompanySettings();
-    }
-  }, [user, isAdmin]);
+  // Team members (loaded from Firestore)
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [isLoadingTeam, setIsLoadingTeam] = useState(true);
 
-  // Email templates
-  const [emailTemplates, setEmailTemplates] = useState<EmailTemplate[]>([
-    {
-      id: '1',
-      name: 'Quote Approved',
-      subject: 'Your quote has been approved - {{projectName}}',
-      body: 'Dear {{clientName}},\n\nWe are pleased to inform you that your quote for {{projectName}} has been approved.\n\nBest regards,\n{{companyName}}',
-      variables: ['clientName', 'projectName', 'companyName'],
-    },
-    {
-      id: '2',
-      name: 'New User Welcome',
-      subject: 'Welcome to GroeimetAI',
-      body: "Welcome {{userName}}!\n\nThank you for joining GroeimetAI. We're excited to help you grow with AI.\n\nBest regards,\nThe GroeimetAI Team",
-      variables: ['userName'],
-    },
-  ]);
+  // Services (loaded from Firestore)
+  const [services, setServices] = useState<AdminService[]>([]);
+  const [isLoadingServices, setIsLoadingServices] = useState(true);
 
-  // Team members
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([
-    {
-      id: '1',
-      name: 'Admin User',
-      email: 'admin@groeimetai.io',
-      role: 'Administrator',
-      permissions: ['all'],
-      active: true,
-    },
-    {
-      id: '2',
-      name: 'John Doe',
-      email: 'john@groeimetai.io',
-      role: 'Project Manager',
-      permissions: ['projects', 'quotes', 'users'],
-      active: true,
-    },
-  ]);
+  // Notification settings (loaded from Firestore)
+  const [notificationSettings, setNotificationSettings] = useState<AdminNotificationSettings | null>(null);
+  const [isLoadingNotifications, setIsLoadingNotifications] = useState(true);
 
-  // Services
-  const [services, setServices] = useState<Service[]>([
-    {
-      id: '1',
-      name: 'AI Consulting',
-      description: 'Strategic AI implementation consulting',
-      basePrice: 2500,
-      priceType: 'fixed',
-      active: true,
-    },
-    {
-      id: '2',
-      name: 'Chatbot Development',
-      description: 'Custom chatbot development and integration',
-      basePrice: 150,
-      priceType: 'hourly',
-      active: true,
-    },
-    {
-      id: '3',
-      name: 'Process Automation',
-      description: 'Business process automation with AI',
-      basePrice: 0,
-      priceType: 'custom',
-      active: true,
-    },
-  ]);
+  // API Keys (loaded from Firestore)
+  const [apiKeys, setApiKeys] = useState<ApiKeyWithFullKey[]>([]);
+  const [isLoadingApiKeys, setIsLoadingApiKeys] = useState(true);
+  const [newKeyFullKey, setNewKeyFullKey] = useState<string | null>(null);
+  const [showNewKey, setShowNewKey] = useState(false);
 
-  // Notification settings
-  const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({
-    emailNotifications: true,
-    newQuotes: true,
-    projectUpdates: true,
-    userRegistrations: true,
-    systemAlerts: true,
-    weeklyReport: false,
-  });
-
-  // API Keys
-  const [apiKeys, setApiKeys] = useState([
-    {
-      id: '1',
-      name: 'Production API',
-      key: 'sk-...abc123',
-      created: '2024-01-01',
-      lastUsed: '2024-01-15',
-    },
-    {
-      id: '2',
-      name: 'Development API',
-      key: 'sk-...def456',
-      created: '2024-01-10',
-      lastUsed: '2024-01-14',
-    },
-  ]);
+  // Test email state
+  const [testEmailAddress, setTestEmailAddress] = useState('');
+  const [isSendingTestEmail, setIsSendingTestEmail] = useState(false);
 
   // Dialog states
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
   const [isTeamDialogOpen, setIsTeamDialogOpen] = useState(false);
   const [isServiceDialogOpen, setIsServiceDialogOpen] = useState(false);
-  const [editingTemplate, setEditingTemplate] = useState<EmailTemplate | null>(null);
+  const [isApiKeyDialogOpen, setIsApiKeyDialogOpen] = useState(false);
+  const [editingTemplate, setEditingTemplate] = useState<EditingEmailTemplate | null>(null);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
-  const [editingService, setEditingService] = useState<Service | null>(null);
+  const [editingService, setEditingService] = useState<EditingService | null>(null);
+  const [newApiKeyName, setNewApiKeyName] = useState('');
+
+  // Load all data functions
+  const loadCompanySettings = useCallback(async () => {
+    try {
+      setIsLoadingSettings(true);
+      const settings = await companySettingsService.getCompanySettings();
+      setCompanySettings(settings);
+    } catch (error) {
+      console.error('Error loading company settings:', error);
+    } finally {
+      setIsLoadingSettings(false);
+    }
+  }, []);
+
+  const loadEmailTemplates = useCallback(async () => {
+    try {
+      setIsLoadingTemplates(true);
+      const templates = await adminSettingsService.getEmailTemplates();
+      setEmailTemplates(templates);
+    } catch (error) {
+      console.error('Error loading email templates:', error);
+    } finally {
+      setIsLoadingTemplates(false);
+    }
+  }, []);
+
+  const loadTeamMembers = useCallback(async () => {
+    try {
+      setIsLoadingTeam(true);
+      const members = await teamManagementService.getTeamMembers();
+      setTeamMembers(members);
+    } catch (error) {
+      console.error('Error loading team members:', error);
+    } finally {
+      setIsLoadingTeam(false);
+    }
+  }, []);
+
+  const loadServices = useCallback(async () => {
+    try {
+      setIsLoadingServices(true);
+      const servicesList = await adminSettingsService.getServices();
+      setServices(servicesList);
+    } catch (error) {
+      console.error('Error loading services:', error);
+    } finally {
+      setIsLoadingServices(false);
+    }
+  }, []);
+
+  const loadNotificationSettings = useCallback(async () => {
+    try {
+      setIsLoadingNotifications(true);
+      const settings = await adminSettingsService.getNotificationSettings();
+      setNotificationSettings(settings);
+    } catch (error) {
+      console.error('Error loading notification settings:', error);
+    } finally {
+      setIsLoadingNotifications(false);
+    }
+  }, []);
+
+  const loadApiKeys = useCallback(async () => {
+    try {
+      setIsLoadingApiKeys(true);
+      const response = await fetch('/api/admin/api-keys');
+      const data = await response.json();
+      if (data.success) {
+        setApiKeys(data.data);
+      }
+    } catch (error) {
+      console.error('Error loading API keys:', error);
+    } finally {
+      setIsLoadingApiKeys(false);
+    }
+  }, []);
+
+  // Load all settings on mount
+  useEffect(() => {
+    if (user && isAdmin) {
+      loadCompanySettings();
+      loadEmailTemplates();
+      loadTeamMembers();
+      loadServices();
+      loadNotificationSettings();
+      loadApiKeys();
+    }
+  }, [user, isAdmin, loadCompanySettings, loadEmailTemplates, loadTeamMembers, loadServices, loadNotificationSettings, loadApiKeys]);
 
   // Redirect if not admin
   useEffect(() => {
@@ -244,11 +238,9 @@ export default function AdminSettingsPage() {
 
     try {
       if (section === 'Company' && companySettings && user) {
-        // Save company settings to Firestore
         await companySettingsService.updateCompanySettings(companySettings, user.uid);
-      } else {
-        // Simulate saving for other sections (can be extended later)
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+      } else if (section === 'Notifications' && notificationSettings && user) {
+        await adminSettingsService.updateNotificationSettings(notificationSettings, user.uid);
       }
 
       setSaveMessage(`${section} settings saved successfully!`);
@@ -261,70 +253,178 @@ export default function AdminSettingsPage() {
     }
   };
 
+  // Email Template CRUD
   const addEmailTemplate = () => {
     setEditingTemplate({
       id: '',
       name: '',
+      slug: '',
       subject: '',
       body: '',
       variables: [],
+      isActive: true,
+      isSystem: false,
     });
     setIsTemplateDialogOpen(true);
   };
 
-  const saveEmailTemplate = () => {
-    if (!editingTemplate) return;
+  const saveEmailTemplate = async () => {
+    if (!editingTemplate || !user) return;
 
-    if (editingTemplate.id) {
-      setEmailTemplates((templates) =>
-        templates.map((t) => (t.id === editingTemplate.id ? editingTemplate : t))
-      );
-    } else {
-      setEmailTemplates((templates) => [
-        ...templates,
-        { ...editingTemplate, id: Date.now().toString() },
-      ]);
+    setIsSaving(true);
+    try {
+      if (editingTemplate.id) {
+        await adminSettingsService.updateEmailTemplate(editingTemplate.id, editingTemplate, user.uid);
+      } else {
+        await adminSettingsService.addEmailTemplate(
+          {
+            name: editingTemplate.name,
+            slug: editingTemplate.slug || editingTemplate.name.toLowerCase().replace(/\s+/g, '-'),
+            subject: editingTemplate.subject,
+            body: editingTemplate.body,
+            variables: editingTemplate.variables,
+            isActive: editingTemplate.isActive,
+            isSystem: false,
+          },
+          user.uid
+        );
+      }
+
+      await loadEmailTemplates();
+      setIsTemplateDialogOpen(false);
+      setEditingTemplate(null);
+      setSaveMessage('Email template saved successfully!');
+      setTimeout(() => setSaveMessage(''), 3000);
+    } catch (error) {
+      console.error('Error saving email template:', error);
+      setSaveMessage('Error saving email template. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const deleteEmailTemplate = async (id: string) => {
+    if (!user) return;
+
+    try {
+      await adminSettingsService.deleteEmailTemplate(id, user.uid);
+      await loadEmailTemplates();
+      setSaveMessage('Email template deleted successfully!');
+      setTimeout(() => setSaveMessage(''), 3000);
+    } catch (error: any) {
+      console.error('Error deleting email template:', error);
+      setSaveMessage(error.message || 'Error deleting email template.');
+    }
+  };
+
+  const sendTestEmail = async (template: AdminEmailTemplate) => {
+    if (!testEmailAddress) {
+      setSaveMessage('Please enter a test email address');
+      return;
     }
 
-    setIsTemplateDialogOpen(false);
-    setEditingTemplate(null);
+    setIsSendingTestEmail(true);
+    try {
+      const response = await fetch('/api/admin/test-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: testEmailAddress,
+          subject: template.subject,
+          body: template.body,
+          variables: {},
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setSaveMessage(`Test email sent to ${testEmailAddress}!`);
+      } else {
+        setSaveMessage(data.error || 'Failed to send test email');
+      }
+      setTimeout(() => setSaveMessage(''), 3000);
+    } catch (error) {
+      console.error('Error sending test email:', error);
+      setSaveMessage('Error sending test email. Please try again.');
+    } finally {
+      setIsSendingTestEmail(false);
+    }
   };
 
-  const deleteEmailTemplate = (id: string) => {
-    setEmailTemplates((templates) => templates.filter((t) => t.id !== id));
-  };
-
+  // Team Member operations
   const addTeamMember = () => {
     setEditingMember({
       id: '',
+      userId: '',
       name: '',
       email: '',
-      role: 'Project Manager',
+      role: 'project_manager',
       permissions: [],
-      active: true,
+      isActive: true,
     });
     setIsTeamDialogOpen(true);
   };
 
-  const saveTeamMember = () => {
-    if (!editingMember) return;
+  const saveTeamMember = async () => {
+    if (!editingMember || !user) return;
 
-    if (editingMember.id) {
-      setTeamMembers((members) =>
-        members.map((m) => (m.id === editingMember.id ? editingMember : m))
-      );
-    } else {
-      setTeamMembers((members) => [...members, { ...editingMember, id: Date.now().toString() }]);
+    setIsSaving(true);
+    try {
+      if (editingMember.id) {
+        // Update existing member role
+        await teamManagementService.updateMemberRole(
+          editingMember.userId,
+          editingMember.role as TeamMember['role'],
+          editingMember.permissions
+        );
+        await loadTeamMembers();
+        setSaveMessage('Team member updated successfully!');
+      } else {
+        // Send invitation to new member
+        const response = await fetch('/api/admin/invite-team-member', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: editingMember.email,
+            role: editingMember.role,
+            invitedBy: user.uid,
+            invitedByName: user.displayName || user.email,
+          }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          setSaveMessage('Invitation sent successfully!');
+        } else {
+          throw new Error(data.error || 'Failed to send invitation');
+        }
+      }
+
+      setIsTeamDialogOpen(false);
+      setEditingMember(null);
+      setTimeout(() => setSaveMessage(''), 3000);
+    } catch (error: any) {
+      console.error('Error saving team member:', error);
+      setSaveMessage(error.message || 'Error saving team member. Please try again.');
+    } finally {
+      setIsSaving(false);
     }
-
-    setIsTeamDialogOpen(false);
-    setEditingMember(null);
   };
 
-  const deleteTeamMember = (id: string) => {
-    setTeamMembers((members) => members.filter((m) => m.id !== id));
+  const toggleMemberActive = async (member: TeamMember) => {
+    try {
+      if (member.isActive) {
+        await teamManagementService.deactivateMember(member.userId);
+      } else {
+        await teamManagementService.reactivateMember(member.userId);
+      }
+      await loadTeamMembers();
+    } catch (error) {
+      console.error('Error toggling member status:', error);
+    }
   };
 
+  // Service CRUD
   const addService = () => {
     setEditingService({
       id: '',
@@ -332,39 +432,125 @@ export default function AdminSettingsPage() {
       description: '',
       basePrice: 0,
       priceType: 'fixed',
-      active: true,
+      isActive: true,
     });
     setIsServiceDialogOpen(true);
   };
 
-  const saveService = () => {
-    if (!editingService) return;
+  const saveService = async () => {
+    if (!editingService || !user) return;
 
-    if (editingService.id) {
-      setServices((services) =>
-        services.map((s) => (s.id === editingService.id ? editingService : s))
-      );
-    } else {
-      setServices((services) => [...services, { ...editingService, id: Date.now().toString() }]);
+    setIsSaving(true);
+    try {
+      if (editingService.id) {
+        await adminSettingsService.updateService(editingService.id, editingService, user.uid);
+      } else {
+        await adminSettingsService.addService(
+          {
+            name: editingService.name,
+            description: editingService.description,
+            basePrice: editingService.basePrice,
+            priceType: editingService.priceType,
+            isActive: editingService.isActive,
+            sortOrder: services.length + 1,
+          },
+          user.uid
+        );
+      }
+
+      await loadServices();
+      setIsServiceDialogOpen(false);
+      setEditingService(null);
+      setSaveMessage('Service saved successfully!');
+      setTimeout(() => setSaveMessage(''), 3000);
+    } catch (error) {
+      console.error('Error saving service:', error);
+      setSaveMessage('Error saving service. Please try again.');
+    } finally {
+      setIsSaving(false);
     }
-
-    setIsServiceDialogOpen(false);
-    setEditingService(null);
   };
 
-  const deleteService = (id: string) => {
-    setServices((services) => services.filter((s) => s.id !== id));
+  const deleteService = async (id: string) => {
+    if (!user) return;
+
+    try {
+      await adminSettingsService.deleteService(id, user.uid);
+      await loadServices();
+      setSaveMessage('Service deleted successfully!');
+      setTimeout(() => setSaveMessage(''), 3000);
+    } catch (error) {
+      console.error('Error deleting service:', error);
+      setSaveMessage('Error deleting service. Please try again.');
+    }
   };
 
-  const generateApiKey = () => {
-    const newKey = {
-      id: Date.now().toString(),
-      name: `API Key ${apiKeys.length + 1}`,
-      key: `sk-...${Math.random().toString(36).substr(2, 9)}`,
-      created: new Date().toISOString().split('T')[0],
-      lastUsed: 'Never',
-    };
-    setApiKeys([...apiKeys, newKey]);
+  const toggleServiceActive = async (service: AdminService) => {
+    if (!user) return;
+
+    try {
+      await adminSettingsService.updateService(service.id, { isActive: !service.isActive }, user.uid);
+      await loadServices();
+    } catch (error) {
+      console.error('Error toggling service status:', error);
+    }
+  };
+
+  // API Key operations
+  const generateApiKey = async () => {
+    if (!newApiKeyName || !user) return;
+
+    setIsSaving(true);
+    try {
+      const response = await fetch('/api/admin/api-keys', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newApiKeyName,
+          permissions: ['read', 'write'],
+          createdBy: user.uid,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setNewKeyFullKey(data.data.fullKey);
+        setShowNewKey(true);
+        await loadApiKeys();
+        setNewApiKeyName('');
+        setIsApiKeyDialogOpen(false);
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (error) {
+      console.error('Error generating API key:', error);
+      setSaveMessage('Error generating API key. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const revokeApiKey = async (keyId: string) => {
+    try {
+      const response = await fetch(`/api/admin/api-keys?id=${keyId}`, {
+        method: 'DELETE',
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        await loadApiKeys();
+        setSaveMessage('API key revoked successfully!');
+        setTimeout(() => setSaveMessage(''), 3000);
+      }
+    } catch (error) {
+      console.error('Error revoking API key:', error);
+    }
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setSaveMessage('Copied to clipboard!');
+    setTimeout(() => setSaveMessage(''), 2000);
   };
 
   if (loading || !user || !isAdmin) {
@@ -796,47 +982,106 @@ export default function AdminSettingsPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {emailTemplates.map((template) => (
-                    <div
-                      key={template.id}
-                      className="p-4 bg-white/5 rounded-lg border border-white/10"
-                    >
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h4 className="font-medium text-white">{template.name}</h4>
-                          <p className="text-sm text-white/60 mt-1">{template.subject}</p>
-                          <div className="flex flex-wrap gap-1 mt-2">
-                            {template.variables.map((variable) => (
-                              <Badge key={variable} variant="outline" className="text-xs">
-                                {`{{${variable}}}`}
-                              </Badge>
-                            ))}
+                {/* Test Email Address Input */}
+                <div className="mb-6 p-4 bg-white/5 rounded-lg border border-white/10">
+                  <Label className="text-white/80">Test Email Address</Label>
+                  <div className="flex gap-2 mt-2">
+                    <Input
+                      type="email"
+                      placeholder="Enter email for testing templates"
+                      value={testEmailAddress}
+                      onChange={(e) => setTestEmailAddress(e.target.value)}
+                      className="bg-white/5 border-white/10 text-white"
+                    />
+                  </div>
+                  <p className="text-xs text-white/40 mt-1">
+                    Enter an email address to send test emails with sample data
+                  </p>
+                </div>
+
+                {isLoadingTemplates ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="animate-spin h-8 w-8 text-orange" />
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {emailTemplates.map((template) => (
+                      <div
+                        key={template.id}
+                        className="p-4 bg-white/5 rounded-lg border border-white/10"
+                      >
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-medium text-white">{template.name}</h4>
+                              {template.isSystem && (
+                                <Badge variant="outline" className="text-xs bg-blue-500/20 border-blue-500/30">
+                                  System
+                                </Badge>
+                              )}
+                              {!template.isActive && (
+                                <Badge variant="outline" className="text-xs bg-red-500/20 border-red-500/30">
+                                  Inactive
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-sm text-white/60 mt-1">{template.subject}</p>
+                            <div className="flex flex-wrap gap-1 mt-2">
+                              {template.variables.map((variable) => (
+                                <Badge key={variable} variant="outline" className="text-xs">
+                                  {`{{${variable}}}`}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => sendTestEmail(template)}
+                              disabled={!testEmailAddress || isSendingTestEmail}
+                              title="Send test email"
+                            >
+                              {isSendingTestEmail ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <Send className="w-4 h-4" />
+                              )}
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => {
+                                setEditingTemplate({
+                                  id: template.id,
+                                  name: template.name,
+                                  slug: template.slug,
+                                  subject: template.subject,
+                                  body: template.body,
+                                  variables: template.variables,
+                                  isActive: template.isActive,
+                                  isSystem: template.isSystem,
+                                });
+                                setIsTemplateDialogOpen(true);
+                              }}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            {!template.isSystem && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => deleteEmailTemplate(template.id)}
+                              >
+                                <Trash2 className="w-4 h-4 text-red-500" />
+                              </Button>
+                            )}
                           </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => {
-                              setEditingTemplate(template);
-                              setIsTemplateDialogOpen(true);
-                            }}
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => deleteEmailTemplate(template.id)}
-                          >
-                            <Trash2 className="w-4 h-4 text-red-500" />
-                          </Button>
-                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -852,73 +1097,86 @@ export default function AdminSettingsPage() {
                       Manage team members and their permissions
                     </CardDescription>
                   </div>
-                  <Button
-                    onClick={addTeamMember}
-                    size="sm"
-                    className="bg-orange hover:bg-orange/90"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Member
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={loadTeamMembers}
+                      size="sm"
+                      variant="outline"
+                      disabled={isLoadingTeam}
+                    >
+                      <RefreshCw className={`w-4 h-4 mr-2 ${isLoadingTeam ? 'animate-spin' : ''}`} />
+                      Refresh
+                    </Button>
+                    <Button
+                      onClick={addTeamMember}
+                      size="sm"
+                      className="bg-orange hover:bg-orange/90"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Invite Member
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {teamMembers.map((member) => (
-                    <div
-                      key={member.id}
-                      className="p-4 bg-white/5 rounded-lg border border-white/10"
-                    >
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full bg-orange/20 flex items-center justify-center">
-                            <span className="text-sm font-medium text-white">
-                              {member.name
-                                .split(' ')
-                                .map((n) => n[0])
-                                .join('')}
-                            </span>
+                {isLoadingTeam ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="animate-spin h-8 w-8 text-orange" />
+                  </div>
+                ) : teamMembers.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Users className="w-12 h-12 text-white/20 mx-auto mb-4" />
+                    <p className="text-white/60">No team members found</p>
+                    <p className="text-sm text-white/40">Invite team members to get started</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {teamMembers.map((member) => (
+                      <div
+                        key={member.id}
+                        className="p-4 bg-white/5 rounded-lg border border-white/10"
+                      >
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-full bg-orange/20 flex items-center justify-center">
+                              <span className="text-sm font-medium text-white">
+                                {member.name
+                                  .split(' ')
+                                  .map((n) => n[0])
+                                  .join('')
+                                  .toUpperCase()
+                                  .slice(0, 2)}
+                              </span>
+                            </div>
+                            <div>
+                              <h4 className="font-medium text-white">{member.name}</h4>
+                              <p className="text-sm text-white/60">{member.email}</p>
+                            </div>
                           </div>
-                          <div>
-                            <h4 className="font-medium text-white">{member.name}</h4>
-                            <p className="text-sm text-white/60">{member.email}</p>
+                          <div className="flex items-center gap-4">
+                            <Badge variant="outline">
+                              {teamManagementService.getRoleDisplayName(member.role)}
+                            </Badge>
+                            <Switch
+                              checked={member.isActive}
+                              onCheckedChange={() => toggleMemberActive(member)}
+                            />
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => {
+                                setEditingMember(member);
+                                setIsTeamDialogOpen(true);
+                              }}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
                           </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <Badge variant="outline">{member.role}</Badge>
-                          <Switch
-                            checked={member.active}
-                            onCheckedChange={(checked) => {
-                              setTeamMembers((members) =>
-                                members.map((m) =>
-                                  m.id === member.id ? { ...m, active: checked } : m
-                                )
-                              );
-                            }}
-                          />
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => {
-                              setEditingMember(member);
-                              setIsTeamDialogOpen(true);
-                            }}
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => deleteTeamMember(member.id)}
-                            disabled={member.email === 'admin@groeimetai.io'}
-                          >
-                            <Trash2 className="w-4 h-4 text-red-500" />
-                          </Button>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -941,59 +1199,73 @@ export default function AdminSettingsPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {services.map((service) => (
-                    <div
-                      key={service.id}
-                      className="p-4 bg-white/5 rounded-lg border border-white/10"
-                    >
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h4 className="font-medium text-white">{service.name}</h4>
-                          <p className="text-sm text-white/60 mt-1">{service.description}</p>
-                          <div className="flex items-center gap-4 mt-2">
-                            {service.priceType !== 'custom' && (
-                              <span className="text-white">
-                                €{service.basePrice}{' '}
-                                {service.priceType === 'hourly' ? '/ hour' : ''}
-                              </span>
-                            )}
-                            <Badge variant="outline">{service.priceType}</Badge>
+                {isLoadingServices ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="animate-spin h-8 w-8 text-orange" />
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {services.map((service) => (
+                      <div
+                        key={service.id}
+                        className="p-4 bg-white/5 rounded-lg border border-white/10"
+                      >
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-medium text-white">{service.name}</h4>
+                              {!service.isActive && (
+                                <Badge variant="outline" className="text-xs bg-red-500/20 border-red-500/30">
+                                  Inactive
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-sm text-white/60 mt-1">{service.description}</p>
+                            <div className="flex items-center gap-4 mt-2">
+                              {service.priceType !== 'custom' && (
+                                <span className="text-white">
+                                  €{service.basePrice.toLocaleString('nl-NL')}{' '}
+                                  {service.priceType === 'hourly' ? '/ hour' : ''}
+                                </span>
+                              )}
+                              <Badge variant="outline">{service.priceType}</Badge>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <Switch
+                              checked={service.isActive}
+                              onCheckedChange={() => toggleServiceActive(service)}
+                            />
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => {
+                                setEditingService({
+                                  id: service.id,
+                                  name: service.name,
+                                  description: service.description,
+                                  basePrice: service.basePrice,
+                                  priceType: service.priceType,
+                                  isActive: service.isActive,
+                                });
+                                setIsServiceDialogOpen(true);
+                              }}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => deleteService(service.id)}
+                            >
+                              <Trash2 className="w-4 h-4 text-red-500" />
+                            </Button>
                           </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                          <Switch
-                            checked={service.active}
-                            onCheckedChange={(checked) => {
-                              setServices((services) =>
-                                services.map((s) =>
-                                  s.id === service.id ? { ...s, active: checked } : s
-                                )
-                              );
-                            }}
-                          />
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => {
-                              setEditingService(service);
-                              setIsServiceDialogOpen(true);
-                            }}
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => deleteService(service.id)}
-                          >
-                            <Trash2 className="w-4 h-4 text-red-500" />
-                          </Button>
-                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -1008,144 +1280,174 @@ export default function AdminSettingsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label htmlFor="email-notifications" className="text-white">
-                        Email Notifications
-                      </Label>
-                      <p className="text-sm text-white/60">Receive notifications via email</p>
-                    </div>
-                    <Switch
-                      id="email-notifications"
-                      checked={notificationSettings.emailNotifications}
-                      onCheckedChange={(checked) =>
-                        setNotificationSettings({
-                          ...notificationSettings,
-                          emailNotifications: checked,
-                        })
-                      }
-                    />
+                {isLoadingNotifications || !notificationSettings ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="animate-spin h-8 w-8 text-orange" />
                   </div>
-                  <Separator className="bg-white/10" />
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <Label htmlFor="new-quotes" className="text-white">
-                          New Quotes
-                        </Label>
-                        <p className="text-sm text-white/60">
-                          Get notified when new quotes are submitted
-                        </p>
+                ) : (
+                  <>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label htmlFor="email-notifications" className="text-white">
+                            Email Notifications
+                          </Label>
+                          <p className="text-sm text-white/60">Receive notifications via email</p>
+                        </div>
+                        <Switch
+                          id="email-notifications"
+                          checked={notificationSettings.emailNotifications}
+                          onCheckedChange={(checked) =>
+                            setNotificationSettings({
+                              ...notificationSettings,
+                              emailNotifications: checked,
+                            })
+                          }
+                        />
                       </div>
-                      <Switch
-                        id="new-quotes"
-                        checked={notificationSettings.newQuotes}
-                        onCheckedChange={(checked) =>
-                          setNotificationSettings({ ...notificationSettings, newQuotes: checked })
-                        }
-                        disabled={!notificationSettings.emailNotifications}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <Label htmlFor="project-updates" className="text-white">
-                          Project Updates
-                        </Label>
-                        <p className="text-sm text-white/60">
-                          Notifications for project status changes
-                        </p>
+                      <Separator className="bg-white/10" />
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label htmlFor="new-quotes" className="text-white">
+                              New Quotes
+                            </Label>
+                            <p className="text-sm text-white/60">
+                              Get notified when new quotes are submitted
+                            </p>
+                          </div>
+                          <Switch
+                            id="new-quotes"
+                            checked={notificationSettings.events.newQuotes}
+                            onCheckedChange={(checked) =>
+                              setNotificationSettings({
+                                ...notificationSettings,
+                                events: { ...notificationSettings.events, newQuotes: checked },
+                              })
+                            }
+                            disabled={!notificationSettings.emailNotifications}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label htmlFor="project-updates" className="text-white">
+                              Project Updates
+                            </Label>
+                            <p className="text-sm text-white/60">
+                              Notifications for project status changes
+                            </p>
+                          </div>
+                          <Switch
+                            id="project-updates"
+                            checked={notificationSettings.events.projectUpdates}
+                            onCheckedChange={(checked) =>
+                              setNotificationSettings({
+                                ...notificationSettings,
+                                events: { ...notificationSettings.events, projectUpdates: checked },
+                              })
+                            }
+                            disabled={!notificationSettings.emailNotifications}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label htmlFor="user-registrations" className="text-white">
+                              User Registrations
+                            </Label>
+                            <p className="text-sm text-white/60">New user sign-ups</p>
+                          </div>
+                          <Switch
+                            id="user-registrations"
+                            checked={notificationSettings.events.userRegistrations}
+                            onCheckedChange={(checked) =>
+                              setNotificationSettings({
+                                ...notificationSettings,
+                                events: { ...notificationSettings.events, userRegistrations: checked },
+                              })
+                            }
+                            disabled={!notificationSettings.emailNotifications}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label htmlFor="system-alerts" className="text-white">
+                              System Alerts
+                            </Label>
+                            <p className="text-sm text-white/60">Important system notifications</p>
+                          </div>
+                          <Switch
+                            id="system-alerts"
+                            checked={notificationSettings.events.systemAlerts}
+                            onCheckedChange={(checked) =>
+                              setNotificationSettings({
+                                ...notificationSettings,
+                                events: { ...notificationSettings.events, systemAlerts: checked },
+                              })
+                            }
+                            disabled={!notificationSettings.emailNotifications}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label htmlFor="weekly-report" className="text-white">
+                              Weekly Report
+                            </Label>
+                            <p className="text-sm text-white/60">Receive weekly summary reports</p>
+                          </div>
+                          <Switch
+                            id="weekly-report"
+                            checked={notificationSettings.events.weeklyReport}
+                            onCheckedChange={(checked) =>
+                              setNotificationSettings({
+                                ...notificationSettings,
+                                events: { ...notificationSettings.events, weeklyReport: checked },
+                              })
+                            }
+                            disabled={!notificationSettings.emailNotifications}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label htmlFor="invoice-payments" className="text-white">
+                              Invoice Payments
+                            </Label>
+                            <p className="text-sm text-white/60">Get notified when invoices are paid</p>
+                          </div>
+                          <Switch
+                            id="invoice-payments"
+                            checked={notificationSettings.events.invoicePayments}
+                            onCheckedChange={(checked) =>
+                              setNotificationSettings({
+                                ...notificationSettings,
+                                events: { ...notificationSettings.events, invoicePayments: checked },
+                              })
+                            }
+                            disabled={!notificationSettings.emailNotifications}
+                          />
+                        </div>
                       </div>
-                      <Switch
-                        id="project-updates"
-                        checked={notificationSettings.projectUpdates}
-                        onCheckedChange={(checked) =>
-                          setNotificationSettings({
-                            ...notificationSettings,
-                            projectUpdates: checked,
-                          })
-                        }
-                        disabled={!notificationSettings.emailNotifications}
-                      />
                     </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <Label htmlFor="user-registrations" className="text-white">
-                          User Registrations
-                        </Label>
-                        <p className="text-sm text-white/60">New user sign-ups</p>
-                      </div>
-                      <Switch
-                        id="user-registrations"
-                        checked={notificationSettings.userRegistrations}
-                        onCheckedChange={(checked) =>
-                          setNotificationSettings({
-                            ...notificationSettings,
-                            userRegistrations: checked,
-                          })
-                        }
-                        disabled={!notificationSettings.emailNotifications}
-                      />
+                    <div className="flex justify-end">
+                      <Button
+                        onClick={() => saveSettings('Notifications')}
+                        disabled={isSaving}
+                        className="bg-orange hover:bg-orange/90"
+                      >
+                        {isSaving ? (
+                          <>
+                            <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                            Saving...
+                          </>
+                        ) : (
+                          <>
+                            <Save className="w-4 h-4 mr-2" />
+                            Save Changes
+                          </>
+                        )}
+                      </Button>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <Label htmlFor="system-alerts" className="text-white">
-                          System Alerts
-                        </Label>
-                        <p className="text-sm text-white/60">Important system notifications</p>
-                      </div>
-                      <Switch
-                        id="system-alerts"
-                        checked={notificationSettings.systemAlerts}
-                        onCheckedChange={(checked) =>
-                          setNotificationSettings({
-                            ...notificationSettings,
-                            systemAlerts: checked,
-                          })
-                        }
-                        disabled={!notificationSettings.emailNotifications}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <Label htmlFor="weekly-report" className="text-white">
-                          Weekly Report
-                        </Label>
-                        <p className="text-sm text-white/60">Receive weekly summary reports</p>
-                      </div>
-                      <Switch
-                        id="weekly-report"
-                        checked={notificationSettings.weeklyReport}
-                        onCheckedChange={(checked) =>
-                          setNotificationSettings({
-                            ...notificationSettings,
-                            weeklyReport: checked,
-                          })
-                        }
-                        disabled={!notificationSettings.emailNotifications}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-end">
-                  <Button
-                    onClick={() => saveSettings('Notifications')}
-                    disabled={isSaving}
-                    className="bg-orange hover:bg-orange/90"
-                  >
-                    {isSaving ? (
-                      <>
-                        <Loader2 className="animate-spin w-4 h-4 mr-2" />
-                        Saving...
-                      </>
-                    ) : (
-                      <>
-                        <Save className="w-4 h-4 mr-2" />
-                        Save Changes
-                      </>
-                    )}
-                  </Button>
-                </div>
+                  </>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -1162,7 +1464,7 @@ export default function AdminSettingsPage() {
                     </CardDescription>
                   </div>
                   <Button
-                    onClick={generateApiKey}
+                    onClick={() => setIsApiKeyDialogOpen(true)}
                     size="sm"
                     className="bg-orange hover:bg-orange/90"
                   >
@@ -1176,37 +1478,113 @@ export default function AdminSettingsPage() {
                   <AlertCircle className="w-4 h-4 text-yellow-500" />
                   <AlertDescription className="text-white">
                     Keep your API keys secure. Never share them publicly or commit them to version
-                    control.
+                    control. Full keys are shown only once when created.
                   </AlertDescription>
                 </Alert>
-                <div className="space-y-4">
-                  {apiKeys.map((apiKey) => (
-                    <div
-                      key={apiKey.id}
-                      className="p-4 bg-white/5 rounded-lg border border-white/10"
-                    >
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <h4 className="font-medium text-white">{apiKey.name}</h4>
-                          <p className="text-sm text-white/60 font-mono mt-1">{apiKey.key}</p>
-                          <div className="flex items-center gap-4 mt-2 text-xs text-white/60">
-                            <span>Created: {apiKey.created}</span>
-                            <span>Last used: {apiKey.lastUsed}</span>
-                          </div>
-                        </div>
+
+                {/* Show newly generated key */}
+                {newKeyFullKey && (
+                  <Alert className="mb-6 bg-green-500/10 border-green-500/30">
+                    <Key className="w-4 h-4 text-green-500" />
+                    <AlertDescription className="text-white">
+                      <p className="font-medium mb-2">New API Key Generated!</p>
+                      <p className="text-sm text-white/80 mb-2">
+                        Copy this key now. It will not be shown again.
+                      </p>
+                      <div className="flex items-center gap-2 bg-black/30 p-2 rounded font-mono text-sm">
+                        {showNewKey ? (
+                          <span className="flex-1 break-all">{newKeyFullKey}</span>
+                        ) : (
+                          <span className="flex-1">••••••••••••••••••••••••••••</span>
+                        )}
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() =>
-                            setApiKeys((keys) => keys.filter((k) => k.id !== apiKey.id))
-                          }
+                          onClick={() => setShowNewKey(!showNewKey)}
                         >
-                          <Trash2 className="w-4 h-4 text-red-500" />
+                          {showNewKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => copyToClipboard(newKeyFullKey)}
+                        >
+                          <Copy className="w-4 h-4" />
                         </Button>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="mt-2"
+                        onClick={() => {
+                          setNewKeyFullKey(null);
+                          setShowNewKey(false);
+                        }}
+                      >
+                        Dismiss
+                      </Button>
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {isLoadingApiKeys ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="animate-spin h-8 w-8 text-orange" />
+                  </div>
+                ) : apiKeys.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Key className="w-12 h-12 text-white/20 mx-auto mb-4" />
+                    <p className="text-white/60">No API keys yet</p>
+                    <p className="text-sm text-white/40">Generate a key to get started</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {apiKeys.map((apiKey) => (
+                      <div
+                        key={apiKey.id}
+                        className={`p-4 bg-white/5 rounded-lg border ${
+                          apiKey.isActive ? 'border-white/10' : 'border-red-500/30 opacity-60'
+                        }`}
+                      >
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-medium text-white">{apiKey.name}</h4>
+                              {!apiKey.isActive && (
+                                <Badge variant="outline" className="text-xs bg-red-500/20 border-red-500/30">
+                                  Revoked
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-sm text-white/60 font-mono mt-1">{apiKey.keyPrefix}</p>
+                            <div className="flex items-center gap-4 mt-2 text-xs text-white/60">
+                              <span>
+                                Created:{' '}
+                                {apiKey.createdAt
+                                  ? new Date(apiKey.createdAt).toLocaleDateString('nl-NL')
+                                  : 'Unknown'}
+                              </span>
+                              {apiKey.lastUsedAt && (
+                                <span>
+                                  Last used: {new Date(apiKey.lastUsedAt).toLocaleDateString('nl-NL')}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          {apiKey.isActive && (
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => revokeApiKey(apiKey.id)}
+                            >
+                              <Trash2 className="w-4 h-4 text-red-500" />
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -1214,23 +1592,42 @@ export default function AdminSettingsPage() {
 
         {/* Email Template Dialog */}
         <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
-          <DialogContent className="bg-black/95 border-white/20 text-white">
+          <DialogContent className="bg-black/95 border-white/20 text-white max-w-2xl">
             <DialogHeader>
               <DialogTitle>{editingTemplate?.id ? 'Edit' : 'Add'} Email Template</DialogTitle>
+              <DialogDescription className="text-white/60">
+                {editingTemplate?.isSystem
+                  ? 'System templates can be edited but not deleted.'
+                  : 'Create custom email templates for automated communications.'}
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 mt-4">
-              <div>
-                <Label className="text-white/80">Template Name</Label>
-                <Input
-                  value={editingTemplate?.name || ''}
-                  onChange={(e) =>
-                    setEditingTemplate((prev) => (prev ? { ...prev, name: e.target.value } : null))
-                  }
-                  className="mt-1 bg-white/5 border-white/10 text-white"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-white/80">Template Name</Label>
+                  <Input
+                    value={editingTemplate?.name || ''}
+                    onChange={(e) =>
+                      setEditingTemplate((prev) => (prev ? { ...prev, name: e.target.value } : null))
+                    }
+                    className="mt-1 bg-white/5 border-white/10 text-white"
+                    placeholder="e.g., Quote Approved"
+                  />
+                </div>
+                <div>
+                  <Label className="text-white/80">Slug (URL-friendly)</Label>
+                  <Input
+                    value={editingTemplate?.slug || ''}
+                    onChange={(e) =>
+                      setEditingTemplate((prev) => (prev ? { ...prev, slug: e.target.value } : null))
+                    }
+                    className="mt-1 bg-white/5 border-white/10 text-white"
+                    placeholder="e.g., quote-approved"
+                  />
+                </div>
               </div>
               <div>
-                <Label className="text-white/80">Subject</Label>
+                <Label className="text-white/80">Subject Line</Label>
                 <Input
                   value={editingTemplate?.subject || ''}
                   onChange={(e) =>
@@ -1239,17 +1636,19 @@ export default function AdminSettingsPage() {
                     )
                   }
                   className="mt-1 bg-white/5 border-white/10 text-white"
+                  placeholder="e.g., Your quote has been approved - {{projectName}}"
                 />
               </div>
               <div>
-                <Label className="text-white/80">Body</Label>
+                <Label className="text-white/80">Email Body</Label>
                 <Textarea
                   value={editingTemplate?.body || ''}
                   onChange={(e) =>
                     setEditingTemplate((prev) => (prev ? { ...prev, body: e.target.value } : null))
                   }
-                  rows={6}
-                  className="mt-1 bg-white/5 border-white/10 text-white"
+                  rows={8}
+                  className="mt-1 bg-white/5 border-white/10 text-white font-mono text-sm"
+                  placeholder="Dear {{clientName}},&#10;&#10;Your message here...&#10;&#10;Best regards,&#10;{{companyName}}"
                 />
               </div>
               <div>
@@ -1272,14 +1671,37 @@ export default function AdminSettingsPage() {
                   className="mt-1 bg-white/5 border-white/10 text-white"
                   placeholder="clientName, projectName, companyName"
                 />
+                <p className="text-xs text-white/40 mt-1">
+                  Use {'{{variableName}}'} in subject and body to insert dynamic values
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Switch
+                  checked={editingTemplate?.isActive ?? true}
+                  onCheckedChange={(checked) =>
+                    setEditingTemplate((prev) => (prev ? { ...prev, isActive: checked } : null))
+                  }
+                />
+                <Label className="text-white/80">Active</Label>
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-6">
               <Button variant="outline" onClick={() => setIsTemplateDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={saveEmailTemplate} className="bg-orange hover:bg-orange/90">
-                Save Template
+              <Button
+                onClick={saveEmailTemplate}
+                className="bg-orange hover:bg-orange/90"
+                disabled={isSaving}
+              >
+                {isSaving ? (
+                  <>
+                    <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                    Saving...
+                  </>
+                ) : (
+                  'Save Template'
+                )}
               </Button>
             </div>
           </DialogContent>
@@ -1289,19 +1711,27 @@ export default function AdminSettingsPage() {
         <Dialog open={isTeamDialogOpen} onOpenChange={setIsTeamDialogOpen}>
           <DialogContent className="bg-black/95 border-white/20 text-white">
             <DialogHeader>
-              <DialogTitle>{editingMember?.id ? 'Edit' : 'Add'} Team Member</DialogTitle>
+              <DialogTitle>
+                {editingMember?.id ? 'Edit Team Member' : 'Invite New Team Member'}
+              </DialogTitle>
+              <DialogDescription className="text-white/60">
+                {editingMember?.id
+                  ? 'Update team member role and permissions.'
+                  : 'Send an invitation to join your team.'}
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 mt-4">
-              <div>
-                <Label className="text-white/80">Name</Label>
-                <Input
-                  value={editingMember?.name || ''}
-                  onChange={(e) =>
-                    setEditingMember((prev) => (prev ? { ...prev, name: e.target.value } : null))
-                  }
-                  className="mt-1 bg-white/5 border-white/10 text-white"
-                />
-              </div>
+              {editingMember?.id ? (
+                // Editing existing member - show name (readonly)
+                <div>
+                  <Label className="text-white/80">Name</Label>
+                  <Input
+                    value={editingMember?.name || ''}
+                    disabled
+                    className="mt-1 bg-white/5 border-white/10 text-white/60"
+                  />
+                </div>
+              ) : null}
               <div>
                 <Label className="text-white/80">Email</Label>
                 <Input
@@ -1310,26 +1740,31 @@ export default function AdminSettingsPage() {
                   onChange={(e) =>
                     setEditingMember((prev) => (prev ? { ...prev, email: e.target.value } : null))
                   }
+                  disabled={!!editingMember?.id}
                   className="mt-1 bg-white/5 border-white/10 text-white"
+                  placeholder="team.member@company.com"
                 />
               </div>
               <div>
                 <Label className="text-white/80">Role</Label>
                 <Select
-                  value={editingMember?.role || 'Project Manager'}
-                  onValueChange={(value: string) =>
-                    setEditingMember((prev) => (prev ? { ...prev, role: value } : null))
+                  value={editingMember?.role || 'project_manager'}
+                  onValueChange={(value) =>
+                    setEditingMember((prev) =>
+                      prev ? { ...prev, role: value as TeamMember['role'] } : null
+                    )
                   }
                 >
                   <SelectTrigger className="bg-white/5 border-white/10 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Administrator">Administrator</SelectItem>
-                    <SelectItem value="Project Manager">Project Manager</SelectItem>
-                    <SelectItem value="Developer">Developer</SelectItem>
-                    <SelectItem value="Designer">Designer</SelectItem>
-                    <SelectItem value="Marketing">Marketing</SelectItem>
+                    <SelectItem value="admin">Administrator</SelectItem>
+                    <SelectItem value="consultant">Consultant</SelectItem>
+                    <SelectItem value="project_manager">Project Manager</SelectItem>
+                    <SelectItem value="developer">Developer</SelectItem>
+                    <SelectItem value="designer">Designer</SelectItem>
+                    <SelectItem value="marketing">Marketing</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -1338,8 +1773,24 @@ export default function AdminSettingsPage() {
               <Button variant="outline" onClick={() => setIsTeamDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={saveTeamMember} className="bg-orange hover:bg-orange/90">
-                Save Member
+              <Button
+                onClick={saveTeamMember}
+                className="bg-orange hover:bg-orange/90"
+                disabled={isSaving}
+              >
+                {isSaving ? (
+                  <>
+                    <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                    {editingMember?.id ? 'Saving...' : 'Sending Invite...'}
+                  </>
+                ) : editingMember?.id ? (
+                  'Save Changes'
+                ) : (
+                  <>
+                    <Send className="w-4 h-4 mr-2" />
+                    Send Invitation
+                  </>
+                )}
               </Button>
             </div>
           </DialogContent>
@@ -1350,6 +1801,9 @@ export default function AdminSettingsPage() {
           <DialogContent className="bg-black/95 border-white/20 text-white">
             <DialogHeader>
               <DialogTitle>{editingService?.id ? 'Edit' : 'Add'} Service</DialogTitle>
+              <DialogDescription className="text-white/60">
+                Configure service details and pricing options.
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 mt-4">
               <div>
@@ -1360,6 +1814,7 @@ export default function AdminSettingsPage() {
                     setEditingService((prev) => (prev ? { ...prev, name: e.target.value } : null))
                   }
                   className="mt-1 bg-white/5 border-white/10 text-white"
+                  placeholder="e.g., AI Consulting"
                 />
               </div>
               <div>
@@ -1373,6 +1828,7 @@ export default function AdminSettingsPage() {
                   }
                   rows={3}
                   className="mt-1 bg-white/5 border-white/10 text-white"
+                  placeholder="Brief description of the service..."
                 />
               </div>
               <div>
@@ -1397,7 +1853,9 @@ export default function AdminSettingsPage() {
               </div>
               {editingService?.priceType !== 'custom' && (
                 <div>
-                  <Label className="text-white/80">Base Price (EUR)</Label>
+                  <Label className="text-white/80">
+                    Base Price (EUR) {editingService?.priceType === 'hourly' && '/ hour'}
+                  </Label>
                   <Input
                     type="number"
                     value={editingService?.basePrice || 0}
@@ -1410,13 +1868,88 @@ export default function AdminSettingsPage() {
                   />
                 </div>
               )}
+              <div className="flex items-center gap-2">
+                <Switch
+                  checked={editingService?.isActive ?? true}
+                  onCheckedChange={(checked) =>
+                    setEditingService((prev) => (prev ? { ...prev, isActive: checked } : null))
+                  }
+                />
+                <Label className="text-white/80">Active</Label>
+              </div>
             </div>
             <div className="flex justify-end gap-3 mt-6">
               <Button variant="outline" onClick={() => setIsServiceDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={saveService} className="bg-orange hover:bg-orange/90">
-                Save Service
+              <Button
+                onClick={saveService}
+                className="bg-orange hover:bg-orange/90"
+                disabled={isSaving}
+              >
+                {isSaving ? (
+                  <>
+                    <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                    Saving...
+                  </>
+                ) : (
+                  'Save Service'
+                )}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* API Key Dialog */}
+        <Dialog open={isApiKeyDialogOpen} onOpenChange={setIsApiKeyDialogOpen}>
+          <DialogContent className="bg-black/95 border-white/20 text-white">
+            <DialogHeader>
+              <DialogTitle>Generate New API Key</DialogTitle>
+              <DialogDescription className="text-white/60">
+                Create a new API key for external integrations. The full key will only be shown once.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 mt-4">
+              <div>
+                <Label className="text-white/80">Key Name</Label>
+                <Input
+                  value={newApiKeyName}
+                  onChange={(e) => setNewApiKeyName(e.target.value)}
+                  className="mt-1 bg-white/5 border-white/10 text-white"
+                  placeholder="e.g., Production API, Development API"
+                />
+                <p className="text-xs text-white/40 mt-1">
+                  Give your key a descriptive name so you can identify it later.
+                </p>
+              </div>
+            </div>
+            <Alert className="mt-4 bg-yellow-500/10 border-yellow-500/30">
+              <AlertCircle className="w-4 h-4 text-yellow-500" />
+              <AlertDescription className="text-white text-sm">
+                The API key will only be displayed once after generation. Make sure to copy and
+                store it securely.
+              </AlertDescription>
+            </Alert>
+            <div className="flex justify-end gap-3 mt-6">
+              <Button variant="outline" onClick={() => setIsApiKeyDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                onClick={generateApiKey}
+                className="bg-orange hover:bg-orange/90"
+                disabled={isSaving || !newApiKeyName}
+              >
+                {isSaving ? (
+                  <>
+                    <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Key className="w-4 h-4 mr-2" />
+                    Generate Key
+                  </>
+                )}
               </Button>
             </div>
           </DialogContent>

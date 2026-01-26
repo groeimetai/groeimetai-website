@@ -86,6 +86,8 @@ export const collections = {
   invoices: 'invoices',
   payments: 'payments',
   companySettings: 'companySettings',
+  adminSettings: 'adminSettings',
+  apiKeys: 'apiKeys',
 };
 
 export { app, auth, db, storage, analytics, performance, isFirebaseConfigValid };
