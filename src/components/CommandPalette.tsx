@@ -635,15 +635,15 @@ function CommandPaletteBase({
       });
 
       items.push({
-        id: 'admin-analytics',
+        id: 'admin-pipeline',
         type: 'navigation',
         category: 'Admin',
-        title: 'System Analytics',
-        description: 'View system metrics',
+        title: 'Sales Pipeline',
+        description: 'Manage leads and quotes',
         icon: <Activity className="w-4 h-4" />,
-        keywords: ['analytics', 'metrics', 'system', 'admin'],
+        keywords: ['pipeline', 'sales', 'leads', 'quotes', 'admin'],
         action: () => {
-          navigateTo('/dashboard/admin/analytics');
+          navigateTo('/dashboard/admin/pipeline');
           setOpen(false);
         },
         isAdmin: true,

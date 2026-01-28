@@ -214,12 +214,12 @@ export default function QuickActions({ onOpenCommandPalette }: QuickActionsProps
       category: 'admin',
     },
     {
-      id: 'admin-analytics',
-      label: 'System Analytics',
+      id: 'admin-pipeline',
+      label: 'Sales Pipeline',
       icon: Activity,
       action: () => {
-        navigateTo('/dashboard/admin/analytics');
-        trackAction('admin-analytics');
+        navigateTo('/dashboard/admin/pipeline');
+        trackAction('admin-pipeline');
         setIsOpen(false);
       },
       requiredRole: ['admin'],
