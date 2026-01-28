@@ -15,12 +15,11 @@ import {
   ChevronLeft,
   Menu,
   User,
-  Mail,
   Users,
-  DollarSign,
+  Receipt,
   Shield,
-  BarChart3,
-  Database,
+  Kanban,
+  FolderKanban,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -46,25 +45,23 @@ interface NavItem {
 // Dynamic sidebar items based on user role
 const getSidebarItems = (isAdmin: boolean): NavItem[] => {
   const baseItems: NavItem[] = [
-    { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
-    { icon: FileText, label: 'Projects', href: '/dashboard/projects' },
-    { icon: Calendar, label: 'Consultations', href: '/dashboard/consultations' },
+    { icon: LayoutDashboard, label: 'Home', href: '/dashboard' },
+    { icon: FolderKanban, label: 'Projecten', href: '/dashboard/projects' },
+    { icon: Receipt, label: 'Facturen', href: '/dashboard/invoices' },
+    { icon: Settings, label: 'Instellingen', href: '/dashboard/settings' },
   ];
 
-  // Add admin-specific items
+  // Add admin-specific items - simplified structure
   if (isAdmin) {
     baseItems.push(
       { icon: Shield, label: 'Admin Panel', href: '/dashboard/admin', separator: true },
-      { icon: Mail, label: 'Contact Aanvragen', href: '/dashboard/admin/contacts' },
+      { icon: Kanban, label: 'Pipeline', href: '/dashboard/admin/pipeline' },
+      { icon: FolderKanban, label: 'Projecten', href: '/dashboard/admin/projects' },
+      { icon: Receipt, label: 'Facturatie', href: '/dashboard/admin/invoices' },
+      { icon: Users, label: 'Klanten', href: '/dashboard/admin/users' },
       { icon: Calendar, label: 'Calendar', href: '/dashboard/admin/calendar' },
-      { icon: Users, label: 'User Management', href: '/dashboard/admin/users' },
-      { icon: DollarSign, label: 'Quotes & Invoices', href: '/dashboard/admin/quotes' },
-      { icon: BarChart3, label: 'Analytics', href: '/dashboard/admin/analytics' },
     );
   }
-
-  // Settings always last
-  baseItems.push({ icon: Settings, label: 'Settings', href: '/dashboard/settings' });
 
   return baseItems;
 };
