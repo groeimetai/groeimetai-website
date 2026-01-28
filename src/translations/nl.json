@@ -74,16 +74,16 @@
     },
     "benefits": {
       "faster": {
-        "title": "Eenmalig Bouwen",
-        "description": "Eén keer opzetten, oneindig veel agents - geen herbouw per AI tool"
+        "title": "Agents Implementeren",
+        "description": "Wij bouwen AI agents die jouw werk automatiseren - van idee tot productie"
       },
       "universal": {
-        "title": "Elke Agent",
-        "description": "Claude, GPT, Gemini - elke AI werkt direct met jouw systemen"
+        "title": "API → MCP",
+        "description": "Jouw bestaande systemen worden agent-ready via MCP protocol"
       },
       "roi": {
-        "title": "Snel Schalen",
-        "description": "Nieuwe AI capabilities in dagen, niet maanden. Groei zonder grenzen"
+        "title": "Klaar voor Agent Era",
+        "description": "De agent revolutie komt eraan. Wij zorgen dat je er klaar voor bent"
       }
     }
   },

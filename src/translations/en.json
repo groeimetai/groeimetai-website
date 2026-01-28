@@ -74,16 +74,16 @@
     },
     "benefits": {
       "faster": {
-        "title": "Build Once",
-        "description": "One-time setup, infinite agents - no rebuilding for each AI tool"
+        "title": "Implement Agents",
+        "description": "We build AI agents that automate your work - from idea to production"
       },
       "universal": {
-        "title": "Any Agent",
-        "description": "Claude, GPT, Gemini - any AI works instantly with your systems"
+        "title": "API → MCP",
+        "description": "Your existing systems become agent-ready via MCP protocol"
       },
       "roi": {
-        "title": "Scale Fast",
-        "description": "Add new AI capabilities in days, not months. Grow without limits"
+        "title": "Ready for Agent Era",
+        "description": "The agent revolution is coming. We make sure you're prepared"
       }
     }
   },
