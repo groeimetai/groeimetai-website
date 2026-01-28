@@ -3419,7 +3419,7 @@
         "stats": {
           "stars": { "label": "GitHub Stars", "value": "44" },
           "tools": { "label": "MCP Tools", "value": "400+" },
-          "license": { "label": "License", "value": "MIT" },
+          "license": { "label": "License", "value": "ELv2" },
           "status": { "label": "Status", "value": "Active" }
         },
         "githubLink": "View on GitHub"

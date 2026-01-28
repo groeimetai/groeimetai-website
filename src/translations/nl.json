@@ -551,7 +551,7 @@
         "stats": {
           "stars": { "label": "GitHub Stars", "value": "44" },
           "tools": { "label": "MCP Tools", "value": "400+" },
-          "license": { "label": "Licentie", "value": "MIT" },
+          "license": { "label": "Licentie", "value": "ELv2" },
           "status": { "label": "Status", "value": "Actief" }
         },
         "githubLink": "Bekijk op GitHub"
