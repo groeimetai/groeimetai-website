@@ -616,17 +616,10 @@
     },
     "voiceAI": {
       "title": "Voice AI",
-      "titleHighlight": "Development",
-      "subtitle": "We werken ook aan voice AI oplossingen onder NDA.",
-      "description": "We ontwikkelen inbound en outbound voice AI agent oplossingen voor enterprise klanten. Vanwege geheimhoudingsafspraken kunnen we geen specifieke details delen.",
-      "capabilities": {
-        "title": "Mogelijkheden",
-        "inbound": "Inbound voice AI agents",
-        "outbound": "Outbound voice automatisering",
-        "integration": "Telefoniesysteem integratie",
-        "nlp": "Natural language processing"
-      },
-      "note": "Details beschikbaar onder NDA"
+      "titleHighlight": "Ervaring",
+      "subtitle": "Naast onze focus op MCP en agents hebben we ook ervaring met voice AI projecten.",
+      "description": "We hebben ervaring opgebouwd met het bouwen van voice AI oplossingen. Dit werk valt onder vertrouwelijkheidsafspraken.",
+      "note": "Interesse? Neem contact op voor een gesprek."
     },
     "techStack": {
       "title": "Technologie",

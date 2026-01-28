@@ -3484,17 +3484,10 @@
     },
     "voiceAI": {
       "title": "Voice AI",
-      "titleHighlight": "Development",
-      "subtitle": "We also work on voice AI solutions under NDA.",
-      "description": "We develop inbound and outbound voice AI agent solutions for enterprise clients. Due to confidentiality agreements, we cannot share specific details.",
-      "capabilities": {
-        "title": "Capabilities",
-        "inbound": "Inbound voice AI agents",
-        "outbound": "Outbound voice automation",
-        "integration": "Telephony system integration",
-        "nlp": "Natural language processing"
-      },
-      "note": "Details available under NDA"
+      "titleHighlight": "Experience",
+      "subtitle": "Beyond our focus on MCP and agents, we also have experience with voice AI projects.",
+      "description": "We have built up experience developing voice AI solutions. This work falls under confidentiality agreements.",
+      "note": "Interested? Get in touch to discuss."
     },
     "techStack": {
       "title": "Technology",

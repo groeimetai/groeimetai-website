@@ -339,62 +339,44 @@ export default function CasesPage() {
         </div>
       </section>
 
-      {/* Voice AI Development */}
-      <section className="py-20 sm:py-28 bg-black relative overflow-hidden">
+      {/* Voice AI Experience */}
+      <section className="py-16 sm:py-20 bg-black relative overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
-              className="mb-12 sm:mb-16"
+              className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 text-center"
             >
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 tracking-[-0.02em]">
-                {t('voiceAI.title')}{' '}
-                <span className="text-[#FF9F43]">{t('voiceAI.titleHighlight')}</span>
-              </h2>
-              <p className="text-lg text-white/65 max-w-2xl">
-                {t('voiceAI.subtitle')}
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true }}
-              className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8"
-            >
-              <div className="flex items-center mb-6">
+              <div className="flex justify-center mb-4">
                 <div
-                  className="w-14 h-14 rounded-xl flex items-center justify-center mr-4"
+                  className="w-14 h-14 rounded-xl flex items-center justify-center"
                   style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)' }}
                 >
                   <Mic className="w-7 h-7 text-white" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white">{t('voiceAI.capabilities.title')}</h3>
-                </div>
               </div>
 
-              <p className="text-white/70 mb-8 leading-relaxed max-w-3xl">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                {t('voiceAI.title')}{' '}
+                <span className="text-[#FF9F43]">{t('voiceAI.titleHighlight')}</span>
+              </h2>
+
+              <p className="text-white/65 mb-4 max-w-xl mx-auto">
+                {t('voiceAI.subtitle')}
+              </p>
+
+              <p className="text-white/50 text-sm">
                 {t('voiceAI.description')}
               </p>
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                {['inbound', 'outbound', 'integration', 'nlp'].map((capability) => (
-                  <div key={capability} className="bg-white/[0.05] rounded-xl p-4 text-center">
-                    <div className="text-white/80 text-sm">{t(`voiceAI.capabilities.${capability}`)}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="text-white/50 text-sm italic">
+              <p className="text-[#FF9F43] text-sm mt-4 font-medium">
                 {t('voiceAI.note')}
-              </div>
+              </p>
             </motion.div>
           </div>
         </div>
