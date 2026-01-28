@@ -74,16 +74,16 @@
     },
     "benefits": {
       "faster": {
-        "title": "Implement Agents",
-        "description": "We build AI agents that automate your work - from idea to production"
+        "title": "AI Strategy",
+        "description": "Use case discovery, roadmap planning and implementation strategy - where does AI deliver the most value?"
       },
       "universal": {
-        "title": "API → MCP",
-        "description": "Your existing systems become agent-ready via MCP protocol"
+        "title": "Agent & MCP Development",
+        "description": "Build AI agents, convert APIs to MCP - make your systems ready for the agent era"
       },
       "roi": {
-        "title": "Ready for Agent Era",
-        "description": "The agent revolution is coming. We make sure you're prepared"
+        "title": "Full-Stack Development",
+        "description": "Build complete applications and platforms - from concept to production"
       }
     }
   },

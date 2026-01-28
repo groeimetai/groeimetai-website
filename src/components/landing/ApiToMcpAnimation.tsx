@@ -8,7 +8,8 @@ import {
   RotateCcw,
   Zap,
   Link2,
-  Wallet,
+  Lightbulb,
+  Code,
   Server,
   Database,
   BarChart3,
@@ -655,9 +656,9 @@ export default function ApiToMcpAnimation() {
           {/* Benefits */}
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { icon: Zap, title: t('benefits.faster.title'), description: t('benefits.faster.description'), color: '#F59E0B' },
-              { icon: Link2, title: t('benefits.universal.title'), description: t('benefits.universal.description'), color: '#3B82F6' },
-              { icon: Wallet, title: t('benefits.roi.title'), description: t('benefits.roi.description'), color: '#10B981' },
+              { icon: Lightbulb, title: t('benefits.faster.title'), description: t('benefits.faster.description'), color: '#F59E0B' },
+              { icon: Cpu, title: t('benefits.universal.title'), description: t('benefits.universal.description'), color: '#3B82F6' },
+              { icon: Code, title: t('benefits.roi.title'), description: t('benefits.roi.description'), color: '#10B981' },
             ].map((benefit, i) => (
               <motion.div
                 key={benefit.title}

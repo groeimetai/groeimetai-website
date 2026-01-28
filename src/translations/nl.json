@@ -74,16 +74,16 @@
     },
     "benefits": {
       "faster": {
-        "title": "Agents Implementeren",
-        "description": "Wij bouwen AI agents die jouw werk automatiseren - van idee tot productie"
+        "title": "AI Strategie",
+        "description": "Use case discovery, roadmap planning en implementatie strategie - waar levert AI het meeste op?"
       },
       "universal": {
-        "title": "API → MCP",
-        "description": "Jouw bestaande systemen worden agent-ready via MCP protocol"
+        "title": "Agent & MCP Development",
+        "description": "AI agents bouwen, APIs naar MCP converteren - jouw systemen klaar voor de agent era"
       },
       "roi": {
-        "title": "Klaar voor Agent Era",
-        "description": "De agent revolutie komt eraan. Wij zorgen dat je er klaar voor bent"
+        "title": "Full-Stack Development",
+        "description": "Complete applicaties en platforms bouwen - van concept tot productie"
       }
     }
   },
