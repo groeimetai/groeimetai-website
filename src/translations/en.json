@@ -3311,179 +3311,219 @@
     "roiGuarantee": "ROI guarantee in contract",
     "startAssessment": "Start with Free Assessment"
   },
+  "caseStudiesSection": {
+    "title": "What We've Built",
+    "subtitle": "Real projects from our GitHub organization and client work",
+    "challengeLabel": "What we built",
+    "viewOnGithub": "View on GitHub →",
+    "readCaseStudy": "Read case study →",
+    "snowFlow": {
+      "title": "Snow-Flow",
+      "client": "Open Source • groeimetai/snow-flow",
+      "industry": "ServiceNow AI",
+      "challenge": "Enterprise ServiceNow AI development framework with 400+ MCP tools for intelligent automation and multi-agent orchestration",
+      "results": {
+        "tools": {
+          "metric": "400+",
+          "label": "MCP Tools"
+        },
+        "stars": {
+          "metric": "44",
+          "label": "GitHub Stars"
+        },
+        "production": {
+          "metric": "Live",
+          "label": "In Production"
+        }
+      }
+    },
+    "novaSkin": {
+      "title": "NovaSkin",
+      "client": "Client Project • E-commerce",
+      "industry": "E-commerce",
+      "challenge": "Complete skincare e-commerce platform built from scratch with product catalog, checkout, and customer management",
+      "results": {
+        "timeline": {
+          "metric": "3 mo",
+          "label": "Development Time"
+        },
+        "features": {
+          "metric": "Full",
+          "label": "E-commerce Features"
+        },
+        "platform": {
+          "metric": "Live",
+          "label": "Platform Status"
+        }
+      }
+    },
+    "requestAiWidget": {
+      "title": "Request AI Widget",
+      "client": "Open Source • ServiceNow Widget",
+      "industry": "ServiceNow",
+      "challenge": "AI-powered universal request widget with chatbot interface, intelligent ticket automation, and knowledge base AI integration",
+      "results": {
+        "automation": {
+          "metric": "AI",
+          "label": "Ticket Automation"
+        },
+        "integration": {
+          "metric": "Native",
+          "label": "ServiceNow Integration"
+        },
+        "kb": {
+          "metric": "Smart",
+          "label": "Knowledge Base AI"
+        }
+      }
+    },
+    "stats": {
+      "projects": {
+        "value": "2+",
+        "label": "Open Source Projects"
+      },
+      "tools": {
+        "value": "400+",
+        "label": "MCP Tools Built"
+      },
+      "production": {
+        "value": "100%",
+        "label": "Production Ready"
+      },
+      "ventures": {
+        "value": "1",
+        "label": "Own SaaS Venture"
+      }
+    }
+  },
   "casesPage": {
     "hero": {
-      "title": "Case Studies",
-      "titleSuffix": "& Innovations",
-      "subtitle": "From concept to reality - our journey in agent infrastructure"
+      "title": "What We've",
+      "titleHighlight": "Built",
+      "subtitle": "Real projects from our GitHub organization, client work, and own ventures"
     },
     "openSource": {
       "title": "Open Source",
-      "titleHighlight": "Initiative",
-      "project": {
-        "title": "Snow-flow: MCP Server for ServiceNow",
-        "subtitle": "Our flagship open source project"
-      },
-      "whatItIs": {
-        "title": "What it is",
+      "titleHighlight": "Spotlight",
+      "subtitle": "We build in public. These projects are fully open source on GitHub.",
+      "snowFlow": {
+        "title": "Snow-Flow",
+        "subtitle": "ServiceNow AI Development Framework",
+        "description": "Our flagship open source project. A comprehensive MCP server implementation for ServiceNow with 400+ tools for intelligent automation, widget deployment, and multi-agent orchestration.",
         "features": {
-          "proof": "Proof of concept for MCP implementation",
-          "functions": "200+ ServiceNow functions exposed",
-          "opensource": "Fully open source on GitHub",
-          "active": "Active development & community"
-        }
-      },
-      "whyImportant": {
-        "title": "Why important",
-        "description": "This demonstrates what's possible when enterprise systems become agent-accessible. From closed silo to open platform."
-      },
-      "buttons": {
-        "github": "View on GitHub",
-        "demo": "Try Demo"
-      },
-      "stats": {
-        "title": "Repository Stats",
-        "stars": {
-          "label": "Stars",
-          "value": "Growing"
+          "tools": "400+ MCP Tools",
+          "realtime": "Real-time ServiceNow integration",
+          "multiAgent": "Multi-agent orchestration",
+          "production": "Production-ready architecture"
         },
-        "contributors": {
-          "label": "Contributors",
-          "value": "Community"
+        "stats": {
+          "stars": { "label": "GitHub Stars", "value": "44" },
+          "tools": { "label": "MCP Tools", "value": "400+" },
+          "license": { "label": "License", "value": "MIT" },
+          "status": { "label": "Status", "value": "Active" }
         },
-        "license": {
-          "label": "License",
-          "value": "MIT"
+        "githubLink": "View on GitHub"
+      },
+      "requestWidget": {
+        "title": "Request AI Widget",
+        "subtitle": "ServiceNow AI-Powered Universal Request Widget",
+        "description": "An intelligent ServiceNow widget combining chatbot interface, automated ticket creation, and knowledge base AI integration. Built for service portals.",
+        "features": {
+          "chatbot": "Conversational AI interface",
+          "automation": "Intelligent ticket automation",
+          "knowledge": "Knowledge base AI integration",
+          "native": "Native ServiceNow widget"
         },
-        "status": {
-          "label": "Status",
-          "value": "Active"
+        "githubLink": "View on GitHub"
+      }
+    },
+    "clientProjects": {
+      "title": "Client",
+      "titleHighlight": "Projects",
+      "subtitle": "Selected projects we've delivered for clients.",
+      "novaSkin": {
+        "title": "NovaSkin",
+        "subtitle": "E-commerce Platform",
+        "industry": "Skincare & Beauty",
+        "description": "Complete skincare e-commerce platform built from the ground up. Features product catalog with variants, shopping cart, secure checkout, customer accounts, and order management.",
+        "features": {
+          "catalog": "Full product catalog with variants",
+          "checkout": "Secure payment integration",
+          "accounts": "Customer account management",
+          "orders": "Order tracking & management"
+        },
+        "stats": {
+          "timeline": { "label": "Development", "value": "3 months" },
+          "features": { "label": "Features", "value": "Complete" },
+          "status": { "label": "Status", "value": "Live" }
         }
       }
     },
-    "liveImplementations": {
-      "title": "Live",
-      "titleHighlight": "Implementations",
-      "keyFeatures": "Key Features",
-      "impactMetrics": "Impact Metrics",
+    "ownVentures": {
+      "title": "Own",
+      "titleHighlight": "Ventures",
+      "subtitle": "We don't just build for clients - we build our own products too.",
       "snelnotuleren": {
         "title": "Snelnotuleren.nl",
-        "subtitle": "Extreme Context Processing in Production",
-        "stats": {
-          "meetings": {
-            "value": "1500+",
-            "label": "hours of meetings processed"
-          },
-          "tokens": {
-            "value": "1M+",
-            "label": "tokens processed"
-          },
-          "gdpr": {
-            "value": "100%",
-            "label": "GDPR compliant"
-          }
-        },
-        "highlight": "Proof that smart architecture > expensive RAG systems",
+        "subtitle": "AI Transcription Platform",
+        "description": "Our own SaaS venture. An AI-powered meeting transcription platform processing 1M+ tokens with proprietary prompt orchestration - no expensive vector databases needed.",
         "features": {
-          "orchestration": "Proprietary prompt orchestration",
-          "noVector": "No vector databases needed",
-          "zeroContext": "Zero context degradation",
-          "privacy": "Enterprise privacy compliance"
+          "transcription": "AI-powered transcription",
+          "processing": "1M+ tokens processed",
+          "gdpr": "100% GDPR compliant",
+          "architecture": "Smart architecture over RAG"
         },
-        "status": "Live in production"
-      },
-      "enterprise": {
-        "title": "Enterprise LLM Implementation",
-        "subtitle": "50,000 employees, one AI system",
         "stats": {
-          "users": {
-            "value": "50k",
-            "label": "users"
-          },
-          "availability": {
-            "value": "24/7",
-            "label": "availability"
-          },
-          "nda": {
-            "value": "NDA",
-            "label": "details"
-          }
+          "hours": { "label": "Hours Transcribed", "value": "1500+" },
+          "tokens": { "label": "Tokens Processed", "value": "1M+" },
+          "compliance": { "label": "GDPR", "value": "100%" }
         },
-        "highlight": "Substantial cost savings vs cloud LLM APIs",
-        "features": {
-          "routing": "Intelligent ticket routing",
-          "agentic": "Agentic decision framework",
-          "azure": "Azure OpenAI integration",
-          "workflow": "Custom workflow automation"
-        },
-        "status": "Details under NDA"
+        "highlight": "Proof that smart architecture beats expensive RAG systems",
+        "link": "Visit snelnotuleren.nl"
       }
     },
-    "technologyLeadership": {
+    "voiceAI": {
+      "title": "Voice AI",
+      "titleHighlight": "Development",
+      "subtitle": "We also work on voice AI solutions under NDA.",
+      "description": "We develop inbound and outbound voice AI agent solutions for enterprise clients. Due to confidentiality agreements, we cannot share specific details.",
+      "capabilities": {
+        "title": "Capabilities",
+        "inbound": "Inbound voice AI agents",
+        "outbound": "Outbound voice automation",
+        "integration": "Telephony system integration",
+        "nlp": "Natural language processing"
+      },
+      "note": "Details available under NDA"
+    },
+    "techStack": {
       "title": "Technology",
-      "titleHighlight": "Leadership",
-      "intelligentTicket": {
-        "title": "Intelligent Ticket Classification",
-        "subtitle": "Deep ITSM expertise meets AI innovation",
-        "description": "Our system doesn't just understand tickets - it understands processes. From incident to HR query: every request in the right place.",
-        "tagline": "ITSM expertise + AI = Operational excellence"
-      },
-      "agenticAI": {
-        "title": "Agentic Conversational AI",
-        "subtitle": "The chatbot that thinks and decides",
-        "capabilities": {
-          "liveAgent": "Need live agent? → Warm handoff with context",
-          "knowledge": "Knowledge article? → Get the right one instantly",
-          "catalog": "Catalog item? → Automatically request and track", 
-          "simple": "Simple question? → Instant accurate answer"
+      "titleHighlight": "Stack",
+      "subtitle": "The tools and technologies we use to build.",
+      "categories": {
+        "ai": {
+          "title": "AI & ML",
+          "items": ["Claude API", "OpenAI", "Azure OpenAI", "LangChain", "MCP Protocol"]
         },
-        "tagline": "50,000 employees, one intelligent assistant"
-      },
-      "multiAgent": {
-        "title": "Multi-Agent Orchestration",
-        "subtitle": "We determine HOW it works best",
-        "description": "We're not researching if it can be done. Agent teams collaborating on complex business challenges.",
-        "tagline": "First implementations live"
-      },
-      "extremeContext": {
-        "title": "Extreme Context Processing",
-        "subtitle": "In production. 1M+ tokens without RAG",
-        "description": "Our proprietary technology proves that intelligent prompt orchestration works better than expensive vector databases.",
-        "tagline": "Technology available for customers"
-      },
-      "mcpExcellence": {
-        "title": "MCP Excellence",
-        "subtitle": "Snow-flow is a statement",
-        "description": "We contribute to the MCP standard that the industry will use. Open source, transparent, and proven effective.",
-        "tagline": "This is the standard"
-      }
-    },
-    "focusAreas": {
-      "title": "Our",
-      "titleHighlight": "Focus Areas",
-      "subtitle": "These solutions are no accident. They emerge from our focus on:",
-      "mcpExpertise": {
-        "title": "MCP Protocol Expertise",
-        "description": "Snow-flow is the beginning. We develop expertise in making ANY software agent-ready - not specific brands."
-      },
-      "customImplementations": {
-        "title": "Custom Implementations",
-        "description": "Every company has unique systems. We build custom MCP servers, not predetermined connectors."
-      },
-      "openSource": {
-        "title": "Open Source Contribution",
-        "description": "We share our knowledge. Snow-flow is open source so the entire community can learn and contribute."
+        "platforms": {
+          "title": "Platforms",
+          "items": ["ServiceNow", "Next.js", "Node.js", "TypeScript", "React"]
+        },
+        "infrastructure": {
+          "title": "Infrastructure",
+          "items": ["Vercel", "Firebase", "AWS", "Docker", "GitHub Actions"]
+        }
       }
     },
     "testimonials": {
-      "title": "Client",
-      "titleHighlight": "Testimonials",
+      "title": "What",
+      "titleHighlight": "They Say",
       "first": {
         "quote": "That someone could put this together so quickly not only shows how much talent is out there in the greater ServiceNow community, but also indicates how much the entire development process is now changing. Niels van der Werf is just one of thousands who are out there now putting AI tools to work, and we're still truly in the early days of applying this tech.",
         "author": "- Manager, AI Product Content at ServiceNow"
       },
       "second": {
-        "quote": "From meeting to minutes in minutes. Snelnotuleren has transformed our team.",
+        "quote": "From meeting to minutes in minutes. Snelnotuleren has transformed how our team works.",
         "author": "- Project Manager, Consultancy"
       }
     },
@@ -3491,13 +3531,13 @@
       "title": "Start Your Project",
       "subtitle": "We don't build one-size-fits-all solutions.",
       "statement": "We build what",
-      "statementHighlight": "YOU",
+      "statementHighlight": "you",
       "statementEnd": "need.",
       "buttons": {
-        "discuss": "Discuss your use case",
-        "downloadGuide": "Download MCP Guide"
+        "discuss": "Discuss your project",
+        "github": "View our GitHub"
       },
-      "note": "Every project starts with a free assessment of your specific situation"
+      "note": "Every project starts with understanding your specific needs"
     }
   },
   "contactPage": {

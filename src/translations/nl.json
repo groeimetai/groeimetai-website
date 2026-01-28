@@ -443,179 +443,219 @@
       "consultation": "Plan Consult"
     }
   },
+  "caseStudiesSection": {
+    "title": "Wat We Hebben Gebouwd",
+    "subtitle": "Echte projecten uit onze GitHub organisatie en klantwerk",
+    "challengeLabel": "Wat we bouwden",
+    "viewOnGithub": "Bekijk op GitHub →",
+    "readCaseStudy": "Lees case study →",
+    "snowFlow": {
+      "title": "Snow-Flow",
+      "client": "Open Source • groeimetai/snow-flow",
+      "industry": "ServiceNow AI",
+      "challenge": "Enterprise ServiceNow AI development framework met 400+ MCP tools voor intelligente automatisering en multi-agent orchestratie",
+      "results": {
+        "tools": {
+          "metric": "400+",
+          "label": "MCP Tools"
+        },
+        "stars": {
+          "metric": "44",
+          "label": "GitHub Stars"
+        },
+        "production": {
+          "metric": "Live",
+          "label": "In Productie"
+        }
+      }
+    },
+    "novaSkin": {
+      "title": "NovaSkin",
+      "client": "Klantproject • E-commerce",
+      "industry": "E-commerce",
+      "challenge": "Complete skincare e-commerce platform vanaf scratch gebouwd met productcatalogus, checkout en klantbeheer",
+      "results": {
+        "timeline": {
+          "metric": "3 mnd",
+          "label": "Ontwikkeltijd"
+        },
+        "features": {
+          "metric": "Volledig",
+          "label": "E-commerce Features"
+        },
+        "platform": {
+          "metric": "Live",
+          "label": "Platform Status"
+        }
+      }
+    },
+    "requestAiWidget": {
+      "title": "Request AI Widget",
+      "client": "Open Source • ServiceNow Widget",
+      "industry": "ServiceNow",
+      "challenge": "AI-powered universal request widget met chatbot interface, intelligente ticket automatisering en knowledge base AI integratie",
+      "results": {
+        "automation": {
+          "metric": "AI",
+          "label": "Ticket Automatisering"
+        },
+        "integration": {
+          "metric": "Natief",
+          "label": "ServiceNow Integratie"
+        },
+        "kb": {
+          "metric": "Slim",
+          "label": "Knowledge Base AI"
+        }
+      }
+    },
+    "stats": {
+      "projects": {
+        "value": "2+",
+        "label": "Open Source Projecten"
+      },
+      "tools": {
+        "value": "400+",
+        "label": "MCP Tools Gebouwd"
+      },
+      "production": {
+        "value": "100%",
+        "label": "Productie Ready"
+      },
+      "ventures": {
+        "value": "1",
+        "label": "Eigen SaaS Venture"
+      }
+    }
+  },
   "casesPage": {
     "hero": {
-      "title": "Case Studies",
-      "titleSuffix": "& Innovations",
-      "subtitle": "Van concept naar realiteit - onze journey in agent infrastructure"
+      "title": "Wat We Hebben",
+      "titleHighlight": "Gebouwd",
+      "subtitle": "Echte projecten uit onze GitHub organisatie, klantwerk en eigen ventures"
     },
     "openSource": {
       "title": "Open Source",
-      "titleHighlight": "Initiative",
-      "project": {
-        "title": "Snow-flow: MCP Server voor ServiceNow",
-        "subtitle": "Ons vlaggenschip open source project"
-      },
-      "whatItIs": {
-        "title": "Wat het is",
+      "titleHighlight": "Spotlight",
+      "subtitle": "We bouwen in het openbaar. Deze projecten zijn volledig open source op GitHub.",
+      "snowFlow": {
+        "title": "Snow-Flow",
+        "subtitle": "ServiceNow AI Development Framework",
+        "description": "Ons vlaggenschip open source project. Een uitgebreide MCP server implementatie voor ServiceNow met 400+ tools voor intelligente automatisering, widget deployment en multi-agent orchestratie.",
         "features": {
-          "proof": "Proof of concept voor MCP implementatie",
-          "functions": "200+ ServiceNow functies exposed",
-          "opensource": "Volledig open source op GitHub",
-          "active": "Actieve development & community"
-        }
-      },
-      "whyImportant": {
-        "title": "Waarom belangrijk",
-        "description": "Dit toont aan wat mogelijk is wanneer enterprise systemen agent-accessible worden. Van gesloten silo naar open platform."
-      },
-      "buttons": {
-        "github": "View on GitHub",
-        "demo": "Try Demo"
-      },
-      "stats": {
-        "title": "Repository Stats",
-        "stars": {
-          "label": "Stars",
-          "value": "Growing"
+          "tools": "400+ MCP Tools",
+          "realtime": "Real-time ServiceNow integratie",
+          "multiAgent": "Multi-agent orchestratie",
+          "production": "Productie-klare architectuur"
         },
-        "contributors": {
-          "label": "Contributors",
-          "value": "Community"
+        "stats": {
+          "stars": { "label": "GitHub Stars", "value": "44" },
+          "tools": { "label": "MCP Tools", "value": "400+" },
+          "license": { "label": "Licentie", "value": "MIT" },
+          "status": { "label": "Status", "value": "Actief" }
         },
-        "license": {
-          "label": "License",
-          "value": "MIT"
+        "githubLink": "Bekijk op GitHub"
+      },
+      "requestWidget": {
+        "title": "Request AI Widget",
+        "subtitle": "ServiceNow AI-Powered Universal Request Widget",
+        "description": "Een intelligente ServiceNow widget die chatbot interface, geautomatiseerde ticket creatie en knowledge base AI integratie combineert. Gebouwd voor service portals.",
+        "features": {
+          "chatbot": "Conversational AI interface",
+          "automation": "Intelligente ticket automatisering",
+          "knowledge": "Knowledge base AI integratie",
+          "native": "Native ServiceNow widget"
         },
-        "status": {
-          "label": "Status",
-          "value": "Active"
+        "githubLink": "Bekijk op GitHub"
+      }
+    },
+    "clientProjects": {
+      "title": "Klant",
+      "titleHighlight": "Projecten",
+      "subtitle": "Geselecteerde projecten die we voor klanten hebben opgeleverd.",
+      "novaSkin": {
+        "title": "NovaSkin",
+        "subtitle": "E-commerce Platform",
+        "industry": "Skincare & Beauty",
+        "description": "Compleet skincare e-commerce platform vanaf de grond opgebouwd. Met productcatalogus met varianten, winkelwagen, veilige checkout, klantaccounts en orderbeheer.",
+        "features": {
+          "catalog": "Volledige productcatalogus met varianten",
+          "checkout": "Veilige betaalintegratie",
+          "accounts": "Klantaccountbeheer",
+          "orders": "Ordertracking & beheer"
+        },
+        "stats": {
+          "timeline": { "label": "Ontwikkeling", "value": "3 maanden" },
+          "features": { "label": "Features", "value": "Compleet" },
+          "status": { "label": "Status", "value": "Live" }
         }
       }
     },
-    "liveImplementations": {
-      "title": "Live",
-      "titleHighlight": "Implementations",
-      "keyFeatures": "Key Features",
-      "impactMetrics": "Impact Metrics",
+    "ownVentures": {
+      "title": "Eigen",
+      "titleHighlight": "Ventures",
+      "subtitle": "We bouwen niet alleen voor klanten - we bouwen ook onze eigen producten.",
       "snelnotuleren": {
         "title": "Snelnotuleren.nl",
-        "subtitle": "Extreme Context Processing in Productie",
-        "stats": {
-          "meetings": {
-            "value": "1500+",
-            "label": "uur meetings verwerkt"
-          },
-          "tokens": {
-            "value": "1M+",
-            "label": "tokens processed"
-          },
-          "gdpr": {
-            "value": "100%",
-            "label": "GDPR compliant"
-          }
-        },
-        "highlight": "Bewijs dat slimme architectuur > dure RAG systemen",
+        "subtitle": "AI Transcriptie Platform",
+        "description": "Onze eigen SaaS venture. Een AI-powered meeting transcriptie platform dat 1M+ tokens verwerkt met proprietary prompt orchestratie - geen dure vector databases nodig.",
         "features": {
-          "orchestration": "Proprietary prompt orchestration",
-          "noVector": "Geen vector databases nodig",
-          "zeroContext": "Zero context degradation",
-          "privacy": "Enterprise privacy compliance"
+          "transcription": "AI-powered transcriptie",
+          "processing": "1M+ tokens verwerkt",
+          "gdpr": "100% GDPR compliant",
+          "architecture": "Slimme architectuur boven RAG"
         },
-        "status": "Live in productie"
-      },
-      "enterprise": {
-        "title": "Enterprise LLM Implementation",
-        "subtitle": "50.000 medewerkers, één AI systeem",
         "stats": {
-          "users": {
-            "value": "50k",
-            "label": "gebruikers"
-          },
-          "availability": {
-            "value": "24/7",
-            "label": "beschikbaarheid"
-          },
-          "nda": {
-            "value": "NDA",
-            "label": "details"
-          }
+          "hours": { "label": "Uren Getranscribeerd", "value": "1500+" },
+          "tokens": { "label": "Tokens Verwerkt", "value": "1M+" },
+          "compliance": { "label": "GDPR", "value": "100%" }
         },
-        "highlight": "Substantiële kostenbesparing vs cloud LLM APIs",
-        "features": {
-          "routing": "Intelligente ticket routing",
-          "agentic": "Agentic beslissingsframework",
-          "azure": "Azure OpenAI integratie",
-          "workflow": "Custom workflow automation"
-        },
-        "status": "Details onder NDA"
+        "highlight": "Bewijs dat slimme architectuur dure RAG systemen verslaat",
+        "link": "Bezoek snelnotuleren.nl"
       }
     },
-    "technologyLeadership": {
-      "title": "Technology",
-      "titleHighlight": "Leadership",
-      "intelligentTicket": {
-        "title": "Intelligent Ticket Classification",
-        "subtitle": "Diepgaande ITSM expertise meets AI innovation",
-        "description": "Ons systeem begrijpt niet alleen tickets - het begrijpt processen. Van incident tot HR query: elk verzoek op de juiste plek.",
-        "tagline": "ITSM expertise + AI = Operationele excellentie"
+    "voiceAI": {
+      "title": "Voice AI",
+      "titleHighlight": "Development",
+      "subtitle": "We werken ook aan voice AI oplossingen onder NDA.",
+      "description": "We ontwikkelen inbound en outbound voice AI agent oplossingen voor enterprise klanten. Vanwege geheimhoudingsafspraken kunnen we geen specifieke details delen.",
+      "capabilities": {
+        "title": "Mogelijkheden",
+        "inbound": "Inbound voice AI agents",
+        "outbound": "Outbound voice automatisering",
+        "integration": "Telefoniesysteem integratie",
+        "nlp": "Natural language processing"
       },
-      "agenticAI": {
-        "title": "Agentic Conversational AI",
-        "subtitle": "De chatbot die zelf denkt en beslist",
-        "capabilities": {
-          "liveAgent": "Live agent nodig? → Warme overdracht met context",
-          "knowledge": "Knowledge artikel? → Direct het juiste ophalen",
-          "catalog": "Catalog item? → Automatisch aanvragen en tracken",
-          "simple": "Simpele vraag? → Instant accuraat antwoord"
-        },
-        "tagline": "50.000 medewerkers, één intelligente assistant"
-      },
-      "multiAgent": {
-        "title": "Multi-Agent Orchestration",
-        "subtitle": "We bepalen HOE het het beste werkt",
-        "description": "We zijn niet aan het onderzoeken óf het kan. Agent teams die samenwerken aan complexe business challenges.",
-        "tagline": "Eerste implementaties live"
-      },
-      "extremeContext": {
-        "title": "Extreme Context Processing",
-        "subtitle": "In productie. 1M+ tokens zonder RAG",
-        "description": "Onze proprietary technologie bewijst dat intelligent prompt orchestration beter werkt dan dure vector databases.",
-        "tagline": "Technologie beschikbaar voor klanten"
-      },
-      "mcpExcellence": {
-        "title": "MCP Excellence",
-        "subtitle": "Snow-flow is een statement",
-        "description": "We schrijven mee aan de MCP standaard die de industrie gaat gebruiken. Open source, transparant, en bewezen effectief.",
-        "tagline": "Dit is de standaard"
-      }
+      "note": "Details beschikbaar onder NDA"
     },
-    "focusAreas": {
-      "title": "Onze",
-      "titleHighlight": "Focus Gebieden",
-      "subtitle": "Deze oplossingen zijn geen toeval. Ze komen voort uit onze focus op:",
-      "mcpExpertise": {
-        "title": "MCP Protocol Expertise",
-        "description": "Snow-flow is het begin. We ontwikkelen expertise in het agent-ready maken van ELKE software - niet specifieke merken."
-      },
-      "customImplementations": {
-        "title": "Custom Implementations",
-        "description": "Elk bedrijf heeft unieke systemen. We bouwen MCP servers op maat, niet vooraf bepaalde connectors."
-      },
-      "openSource": {
-        "title": "Open Source Contributie",
-        "description": "We delen onze kennis. Snow-flow is open source zodat de hele community kan leren en bijdragen."
+    "techStack": {
+      "title": "Technologie",
+      "titleHighlight": "Stack",
+      "subtitle": "De tools en technologieën waarmee we bouwen.",
+      "categories": {
+        "ai": {
+          "title": "AI & ML",
+          "items": ["Claude API", "OpenAI", "Azure OpenAI", "LangChain", "MCP Protocol"]
+        },
+        "platforms": {
+          "title": "Platforms",
+          "items": ["ServiceNow", "Next.js", "Node.js", "TypeScript", "React"]
+        },
+        "infrastructure": {
+          "title": "Infrastructuur",
+          "items": ["Vercel", "Firebase", "AWS", "Docker", "GitHub Actions"]
+        }
       }
     },
     "testimonials": {
-      "title": "Client",
-      "titleHighlight": "Testimonials",
+      "title": "Wat",
+      "titleHighlight": "Ze Zeggen",
       "first": {
         "quote": "Dat iemand dit zo snel kon opzetten toont niet alleen hoeveel talent er is in de ServiceNow community, maar geeft ook aan hoe het hele ontwikkelproces nu verandert. Niels van der Werf is een van duizenden die nu AI tools aan het werk zetten, en we zijn nog steeds in de vroege dagen van deze tech.",
         "author": "- Manager, AI Product Content bij ServiceNow"
       },
       "second": {
-        "quote": "Van meeting naar notulen in minuten. Snelnotuleren heeft ons team getransformeerd.",
+        "quote": "Van meeting naar notulen in minuten. Snelnotuleren heeft de manier veranderd waarop ons team werkt.",
         "author": "- Project Manager, Consultancy"
       }
     },
@@ -623,13 +663,13 @@
       "title": "Start Jouw Project",
       "subtitle": "We bouwen geen one-size-fits-all oplossingen.",
       "statement": "We bouwen wat",
-      "statementHighlight": "JIJ",
+      "statementHighlight": "jij",
       "statementEnd": "nodig hebt.",
       "buttons": {
-        "discuss": "Bespreek jouw use case",
-        "downloadGuide": "Download MCP Guide"
+        "discuss": "Bespreek jouw project",
+        "github": "Bekijk onze GitHub"
       },
-      "note": "Elk project start met een gratis assessment van jouw specifieke situation"
+      "note": "Elk project start met het begrijpen van jouw specifieke behoeften"
     }
   },
   "services": {
