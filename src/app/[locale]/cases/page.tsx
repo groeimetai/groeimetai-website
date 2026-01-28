@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   Github, ExternalLink, ArrowRight, CheckCircle, ShoppingBag,
-  Bot, FileText, Mic, Code, Server, Cloud
+  Bot, FileText, Mic, Brain, Wrench, Layers, Cloud
 } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
@@ -404,10 +404,11 @@ export default function CasesPage() {
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { key: 'ai', icon: Code, gradient: 'from-purple-500 to-pink-500' },
-                { key: 'platforms', icon: Server, gradient: 'from-blue-500 to-cyan-500' },
+                { key: 'ai', icon: Brain, gradient: 'from-purple-500 to-pink-500' },
+                { key: 'devTools', icon: Wrench, gradient: 'from-blue-500 to-cyan-500' },
+                { key: 'frameworks', icon: Layers, gradient: 'from-emerald-500 to-teal-500' },
                 { key: 'infrastructure', icon: Cloud, gradient: 'from-orange-500 to-yellow-500' }
               ].map((category, index) => (
                 <motion.div
@@ -423,7 +424,7 @@ export default function CasesPage() {
                   </div>
                   <h3 className="text-lg font-semibold text-white mb-4">{t(`techStack.categories.${category.key}.title`)}</h3>
                   <div className="flex flex-wrap gap-2">
-                    {['0', '1', '2', '3', '4'].map((idx) => {
+                    {['0', '1', '2', '3', '4', '5', '6'].map((idx) => {
                       try {
                         const item = t(`techStack.categories.${category.key}.items.${idx}`);
                         return (
