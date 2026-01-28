@@ -74,16 +74,16 @@
     },
     "benefits": {
       "faster": {
-        "title": "Faster",
-        "description": "From 40-80 hours per agent to one-time 120-160 hour setup"
+        "title": "Build Once",
+        "description": "One-time setup, infinite agents - no rebuilding for each AI tool"
       },
       "universal": {
-        "title": "Universal",
-        "description": "Every agent speaks MCP - no custom integrations needed"
+        "title": "Any Agent",
+        "description": "Claude, GPT, Gemini - any AI works instantly with your systems"
       },
       "roi": {
-        "title": "ROI",
-        "description": "Break-even at 2nd agent, 80% maintenance reduction"
+        "title": "Scale Fast",
+        "description": "Add new AI capabilities in days, not months. Grow without limits"
       }
     }
   },

@@ -74,16 +74,16 @@
     },
     "benefits": {
       "faster": {
-        "title": "Sneller",
-        "description": "Van 40-80 uur per agent naar eenmalige 120-160 uur setup"
+        "title": "Eenmalig Bouwen",
+        "description": "Eén keer opzetten, oneindig veel agents - geen herbouw per AI tool"
       },
       "universal": {
-        "title": "Universeel",
-        "description": "Elke agent spreekt MCP - geen custom integraties meer"
+        "title": "Elke Agent",
+        "description": "Claude, GPT, Gemini - elke AI werkt direct met jouw systemen"
       },
       "roi": {
-        "title": "ROI",
-        "description": "Break-even bij 2e agent, 80% maintenance reductie"
+        "title": "Snel Schalen",
+        "description": "Nieuwe AI capabilities in dagen, niet maanden. Groei zonder grenzen"
       }
     }
   },
