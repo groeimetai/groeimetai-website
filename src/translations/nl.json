@@ -443,6 +443,69 @@
       "consultation": "Plan Consult"
     }
   },
+  "servicesOverview": {
+    "hero": {
+      "title": "Onze",
+      "titleHighlight": "Diensten",
+      "subtitle": "Van strategie tot implementatie - wij helpen je met elke stap van je digitale en AI transformatie."
+    },
+    "services": {
+      "cta": "Neem contact op",
+      "web": {
+        "title": "Full-stack Webontwikkeling",
+        "description": "Moderne, schaalbare websites en web applicaties gebouwd met de nieuwste technologieën. Van landingspagina's tot complexe platforms.",
+        "examples": ["E-commerce platforms", "Web applicaties", "Dashboards", "Landing pages"]
+      },
+      "aiStrategy": {
+        "title": "AI Strategie & Consultancy",
+        "description": "Praktisch advies over hoe AI jouw bedrijf kan versterken. Van use case discovery tot implementatie roadmaps.",
+        "examples": ["AI Roadmaps", "Use Case Discovery", "ROI Analyse", "Vendor Selectie"]
+      },
+      "mcp": {
+        "title": "MCP/API Development",
+        "description": "Maak je systemen agent-ready. Wij bouwen de brug tussen je bestaande APIs en AI agents via het MCP protocol.",
+        "examples": ["API → MCP conversie", "Custom MCP servers", "System integraties"]
+      },
+      "voice": {
+        "title": "Voice AI Development",
+        "description": "Conversational AI oplossingen voor telefonie en spraakinteractie. Van voice agents tot IVR systemen.",
+        "examples": ["Voice Agents", "IVR systemen", "Telefonie integraties"]
+      },
+      "training": {
+        "title": "Training & Workshops",
+        "description": "Breng je team op snelheid met AI. Van fundamentals tot hands-on agent development workshops.",
+        "examples": ["AI Fundamentals", "Prompt Engineering", "Agent Development"]
+      }
+    },
+    "agentJourney": {
+      "badge": "Complete Aanpak",
+      "title": "Volledig Agent Traject",
+      "description": "Van eerste gesprek tot productie-ready agents. Ons bewezen 5-stappen proces neemt je mee van verkenning tot volledige agent infrastructure.",
+      "cta": "Bekijk het complete traject"
+    },
+    "faq": {
+      "title": "Veelgestelde Vragen",
+      "questions": {
+        "0": {
+          "question": "Hoe weet ik welke dienst ik nodig heb?",
+          "answer": "Plan een gratis gesprek en we helpen je de juiste aanpak te bepalen. Geen verplichtingen, wel eerlijk advies over wat het beste bij jouw situatie past."
+        },
+        "1": {
+          "question": "Werken jullie ook voor kleinere projecten?",
+          "answer": "Ja, we werken met bedrijven van elke grootte. Of het nu gaat om een simpele website of een complexe AI implementatie - we schalen mee met jouw behoeften."
+        },
+        "2": {
+          "question": "Wat zijn de doorlooptijden voor een project?",
+          "answer": "Dit varieert per project. Een website kan in enkele weken live staan, terwijl een volledige AI implementatie enkele maanden kan duren. We geven je altijd een realistische planning."
+        }
+      }
+    },
+    "cta": {
+      "title": "Klaar om te starten?",
+      "description": "Plan een vrijblijvend gesprek en ontdek hoe we je kunnen helpen.",
+      "button": "Neem contact op"
+    }
+  },
   "caseStudiesSection": {
     "title": "Wat We Hebben Gebouwd",
     "subtitle": "Echte projecten uit onze GitHub organisatie en klantwerk",
@@ -627,16 +690,20 @@
       "subtitle": "De tools en technologieën waarmee we bouwen.",
       "categories": {
         "ai": {
-          "title": "AI & ML",
-          "items": ["Claude API", "OpenAI", "Azure OpenAI", "LangChain", "MCP Protocol"]
+          "title": "AI & LLMs",
+          "items": ["Claude API", "OpenAI", "Gemini", "ElevenLabs", "LangChain", "Vercel AI SDK", "MCP Protocol"]
         },
-        "platforms": {
-          "title": "Platforms",
-          "items": ["ServiceNow", "Next.js", "Node.js", "TypeScript", "React"]
+        "devTools": {
+          "title": "Dev Tools",
+          "items": ["Claude Code", "Cursor", "TypeScript", "Bun", "Turbo", "Vitest"]
+        },
+        "frameworks": {
+          "title": "Frameworks",
+          "items": ["Next.js", "React", "Hono", "SolidJS", "TailwindCSS", "Zod"]
         },
         "infrastructure": {
           "title": "Infrastructuur",
-          "items": ["Vercel", "Firebase", "AWS", "Docker", "GitHub Actions"]
+          "items": ["Google Cloud", "Firebase", "Supabase", "Vercel", "GitHub Actions", "Twilio"]
         }
       }
     },
@@ -3427,6 +3494,19 @@
       },
       "submit": "Verstuur aanvraag",
       "responseTime": "Response binnen 4 uur tijdens kantooruren"
+    },
+    "serviceType": {
+      "label": "Waar kunnen we je mee helpen?",
+      "placeholder": "Selecteer een dienst...",
+      "options": {
+        "web": "Full-stack Webontwikkeling",
+        "aiStrategy": "AI Strategie & Consultancy",
+        "mcp": "MCP/API Development",
+        "voice": "Voice AI Development",
+        "training": "Training & Workshops",
+        "agentJourney": "Agent Implementation Traject",
+        "other": "Anders / Algemene vraag"
+      }
     }
   },
   "agentReadinessQuiz": {

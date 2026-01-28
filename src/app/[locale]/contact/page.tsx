@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
@@ -11,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import {
   Phone, Mail, Calendar, Target, Rocket, MessageCircle,
-  User, Building, Clock, ArrowRight, CheckCircle
+  User, Building, Clock, ArrowRight, CheckCircle, Briefcase
 } from 'lucide-react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
@@ -28,9 +29,12 @@ const GoogleMapEmbed = dynamic(() => import('@/components/contact/GoogleMapEmbed
   )
 });
 
-export default function SafeContactPage() {
+// Wrapper component to handle URL params with Suspense
+function ContactPageContent() {
   const t = useTranslations('contactPage');
+  const searchParams = useSearchParams();
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedService, setSelectedService] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -43,6 +47,17 @@ export default function SafeContactPage() {
     preferredDate: '',
     preferredTime: ''
   });
+
+  // Service type options for dropdown
+  const serviceTypes = [
+    { id: 'web', label: t('serviceType.options.web') },
+    { id: 'aiStrategy', label: t('serviceType.options.aiStrategy') },
+    { id: 'mcp', label: t('serviceType.options.mcp') },
+    { id: 'voice', label: t('serviceType.options.voice') },
+    { id: 'training', label: t('serviceType.options.training') },
+    { id: 'agent-journey', label: t('serviceType.options.agentJourney') },
+    { id: 'other', label: t('serviceType.options.other') }
+  ];
 
   const gespreksTypes = [
     {
@@ -85,7 +100,12 @@ export default function SafeContactPage() {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    // Pre-fill service type from URL parameter
+    const serviceParam = searchParams.get('service');
+    if (serviceParam && serviceTypes.some(s => s.id === serviceParam)) {
+      setSelectedService(serviceParam);
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,6 +126,7 @@ export default function SafeContactPage() {
         body: JSON.stringify({
           ...formData,
           conversationType: selectedType,
+          serviceType: selectedService,
         }),
       });
 
@@ -125,6 +146,7 @@ export default function SafeContactPage() {
           preferredTime: ''
         });
         setSelectedType(null);
+        setSelectedService('');
 
         setTimeout(() => {
           setIsSuccess(false);
@@ -355,6 +377,26 @@ export default function SafeContactPage() {
                       </div>
 
                       <div>
+                        <Label htmlFor="serviceType" className="text-white/70 text-sm flex items-center gap-2">
+                          <Briefcase className="w-4 h-4" />
+                          {t('serviceType.label')}
+                        </Label>
+                        <select
+                          id="serviceType"
+                          value={selectedService}
+                          onChange={(e) => setSelectedService(e.target.value)}
+                          className="w-full bg-white/[0.03] border border-white/15 text-white rounded-md px-3 py-2 mt-1.5 focus:border-[#FF9F43] transition-colors"
+                        >
+                          <option value="" className="bg-black">{t('serviceType.placeholder')}</option>
+                          {serviceTypes.map((service) => (
+                            <option key={service.id} value={service.id} className="bg-black">
+                              {service.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
                         <Label htmlFor="message" className="text-white/70 text-sm">{t('form.fields.message.label')}</Label>
                         <Textarea
                           id="message"
@@ -555,5 +597,21 @@ export default function SafeContactPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+// Main export with Suspense boundary for useSearchParams
+export default function SafeContactPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white text-center">
+          <div className="w-8 h-8 border-2 border-white/30 border-t-[#FF9F43] rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/60">Loading...</p>
+        </div>
+      </div>
+    }>
+      <ContactPageContent />
+    </Suspense>
   );
 }

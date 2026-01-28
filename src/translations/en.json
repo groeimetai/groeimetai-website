@@ -513,6 +513,69 @@
       "consultation": "Schedule Consultation"
     }
   },
+  "servicesOverview": {
+    "hero": {
+      "title": "Our",
+      "titleHighlight": "Services",
+      "subtitle": "From strategy to implementation - we help you with every step of your digital and AI transformation."
+    },
+    "services": {
+      "cta": "Get in touch",
+      "web": {
+        "title": "Full-stack Web Development",
+        "description": "Modern, scalable websites and web applications built with the latest technologies. From landing pages to complex platforms.",
+        "examples": ["E-commerce platforms", "Web applications", "Dashboards", "Landing pages"]
+      },
+      "aiStrategy": {
+        "title": "AI Strategy & Consultancy",
+        "description": "Practical advice on how AI can strengthen your business. From use case discovery to implementation roadmaps.",
+        "examples": ["AI Roadmaps", "Use Case Discovery", "ROI Analysis", "Vendor Selection"]
+      },
+      "mcp": {
+        "title": "MCP/API Development",
+        "description": "Make your systems agent-ready. We build the bridge between your existing APIs and AI agents via the MCP protocol.",
+        "examples": ["API → MCP conversion", "Custom MCP servers", "System integrations"]
+      },
+      "voice": {
+        "title": "Voice AI Development",
+        "description": "Conversational AI solutions for telephony and voice interaction. From voice agents to IVR systems.",
+        "examples": ["Voice Agents", "IVR systems", "Telephony integrations"]
+      },
+      "training": {
+        "title": "Training & Workshops",
+        "description": "Get your team up to speed with AI. From fundamentals to hands-on agent development workshops.",
+        "examples": ["AI Fundamentals", "Prompt Engineering", "Agent Development"]
+      }
+    },
+    "agentJourney": {
+      "badge": "Complete Approach",
+      "title": "Full Agent Journey",
+      "description": "From first conversation to production-ready agents. Our proven 5-step process takes you from exploration to full agent infrastructure.",
+      "cta": "View the complete journey"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "questions": {
+        "0": {
+          "question": "How do I know which service I need?",
+          "answer": "Schedule a free conversation and we'll help you determine the right approach. No obligations, just honest advice about what best fits your situation."
+        },
+        "1": {
+          "question": "Do you also work on smaller projects?",
+          "answer": "Yes, we work with companies of all sizes. Whether it's a simple website or a complex AI implementation - we scale with your needs."
+        },
+        "2": {
+          "question": "What are the timelines for a project?",
+          "answer": "This varies per project. A website can go live in a few weeks, while a full AI implementation can take several months. We always provide a realistic timeline."
+        }
+      }
+    },
+    "cta": {
+      "title": "Ready to get started?",
+      "description": "Schedule a no-obligation conversation and discover how we can help you.",
+      "button": "Get in touch"
+    }
+  },
   "serviceDetails": {
     "backToServices": "Back to Services",
     "startProject": "Start This Project",
@@ -3495,16 +3558,20 @@
       "subtitle": "The tools and technologies we use to build.",
       "categories": {
         "ai": {
-          "title": "AI & ML",
-          "items": ["Claude API", "OpenAI", "Azure OpenAI", "LangChain", "MCP Protocol"]
+          "title": "AI & LLMs",
+          "items": ["Claude API", "OpenAI", "Gemini", "ElevenLabs", "LangChain", "Vercel AI SDK", "MCP Protocol"]
         },
-        "platforms": {
-          "title": "Platforms",
-          "items": ["ServiceNow", "Next.js", "Node.js", "TypeScript", "React"]
+        "devTools": {
+          "title": "Dev Tools",
+          "items": ["Claude Code", "Cursor", "TypeScript", "Bun", "Turbo", "Vitest"]
+        },
+        "frameworks": {
+          "title": "Frameworks",
+          "items": ["Next.js", "React", "Hono", "SolidJS", "TailwindCSS", "Zod"]
         },
         "infrastructure": {
           "title": "Infrastructure",
-          "items": ["Vercel", "Firebase", "AWS", "Docker", "GitHub Actions"]
+          "items": ["Google Cloud", "Firebase", "Supabase", "Vercel", "GitHub Actions", "Twilio"]
         }
       }
     },
@@ -3605,6 +3672,19 @@
       },
       "submit": "Send request",
       "responseTime": "Response within 4 hours during business hours"
+    },
+    "serviceType": {
+      "label": "How can we help you?",
+      "placeholder": "Select a service...",
+      "options": {
+        "web": "Full-stack Web Development",
+        "aiStrategy": "AI Strategy & Consultancy",
+        "mcp": "MCP/API Development",
+        "voice": "Voice AI Development",
+        "training": "Training & Workshops",
+        "agentJourney": "Agent Implementation Program",
+        "other": "Other / General inquiry"
+      }
     }
   },
   "agentReadinessQuiz": {
