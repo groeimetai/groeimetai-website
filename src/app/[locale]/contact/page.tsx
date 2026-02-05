@@ -55,7 +55,6 @@ function ContactPageContent() {
     { id: 'mcp', label: t('serviceType.options.mcp') },
     { id: 'voice', label: t('serviceType.options.voice') },
     { id: 'training', label: t('serviceType.options.training') },
-    { id: 'agent-journey', label: t('serviceType.options.agentJourney') },
     { id: 'other', label: t('serviceType.options.other') }
   ];
 

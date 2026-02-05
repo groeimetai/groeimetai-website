@@ -36,12 +36,11 @@ export default function Footer() {
 
   const footerSections = {
     services: [
-      { label: t('services.agentReadiness'), href: '/agent-readiness' },
-      { label: t('services.mcpImplementation'), href: '/services' },
-      { label: t('services.pilotProjects'), href: '/pilot-intake' },
-      { label: t('services.agentMonitoring'), href: '/services' },
-      { label: t('services.multiAgentOrchestration'), href: '/services' },
-      { label: t('services.legacyBridging'), href: '/services' }
+      { label: t('services.web'), href: '/services#web' },
+      { label: t('services.aiStrategy'), href: '/services#aiStrategy' },
+      { label: t('services.mcp'), href: '/services#mcp' },
+      { label: t('services.voice'), href: '/services#voice' },
+      { label: t('services.training'), href: '/services#training' }
     ],
     resources: [
       { label: t('resources.mcpGuide'), href: '/mcp-guide' },
@@ -250,11 +249,11 @@ export default function Footer() {
         <div className="border-t border-white/10 pt-8 mb-8">
           <div className="text-center mb-8">
             <h3 className="text-2xl font-bold text-white mb-4">
-              {t('cta.title').includes('Agent Season') ? (
+              {t('cta.title').includes('AI') ? (
                 <>
-                  {t('cta.title').split('Agent Season')[0]}
-                  <span className="text-[#F87315]">Agent Season</span>
-                  {t('cta.title').split('Agent Season')[1]}
+                  {t('cta.title').split('AI')[0]}
+                  <span className="text-[#F87315]">AI</span>
+                  {t('cta.title').split('AI').slice(1).join('AI')}
                 </>
               ) : (
                 t('cta.title')
@@ -264,7 +263,7 @@ export default function Footer() {
               {t('cta.description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/agent-readiness">
+              <Link href="/contact">
                 <Button
                   size="lg"
                   className="bg-[#F87315] hover:bg-[#E5680F] text-white font-semibold shadow-lg shadow-[#F87315]/20 hover:shadow-[#F87315]/30 transition-all duration-300"

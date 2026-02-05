@@ -2,10 +2,18 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Zap } from 'lucide-react';
+import { ArrowRight, Zap, Code, Lightbulb, Mic, Users, Calendar } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { AgentReadinessQuickCheck } from '@/components/landing/AgentReadinessQuickCheck';
 import { useTranslations } from 'next-intl';
+
+const servicePills = [
+  { id: 'web', icon: Code },
+  { id: 'aiStrategy', icon: Lightbulb },
+  { id: 'mcp', icon: Zap },
+  { id: 'voice', icon: Mic },
+  { id: 'training', icon: Users },
+] as const;
 
 export default function AgentReadinessHero() {
   const [showQuickCheck, setShowQuickCheck] = useState(false);
@@ -74,7 +82,7 @@ export default function AgentReadinessHero() {
           <div className="mb-6 animate-fade-in-down">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-medium text-orange-300 border border-orange-500/30 bg-orange-500/10 backdrop-blur-sm">
               <span className="w-2 h-2 rounded-full bg-orange-400" />
-              Nu beschikbaar: AI Agent Readiness Assessment
+              {t('badge')}
             </span>
           </div>
 
@@ -98,27 +106,55 @@ export default function AgentReadinessHero() {
           </p>
 
           {/* Description */}
-          <p className="text-base sm:text-lg text-white/60 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200">
+          <p className="text-base sm:text-lg text-white/60 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200">
             {t('description')}
           </p>
+
+          {/* Service Pills */}
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 animate-fade-in-up animation-delay-200">
+            {servicePills.map((service) => {
+              const Icon = service.icon;
+              return (
+                <Link
+                  key={service.id}
+                  href={`/services#${service.id}`}
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium text-white/80 border border-white/15 bg-white/[0.05] hover:bg-white/[0.1] hover:border-white/25 transition-all duration-200"
+                >
+                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FF9F43]" />
+                  {t(`services.${service.id}`)}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Stats Bar */}
+          <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mb-8 sm:mb-10 animate-fade-in-up animation-delay-300">
+            {(['roi', 'speed', 'guarantee'] as const).map((stat) => (
+              <div key={stat} className="text-center">
+                <div className="text-lg sm:text-xl font-bold text-white">{t(`stats.${stat}.value`)}</div>
+                <div className="text-xs sm:text-sm text-white/50">{t(`stats.${stat}.label`)}</div>
+              </div>
+            ))}
+          </div>
 
           {/* CTA Buttons */}
           <div className="mb-12 sm:mb-16 animate-fade-in-up animation-delay-300">
             {!showQuickCheck ? (
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Button
-                  onClick={() => setShowQuickCheck(true)}
-                  size="lg"
-                  className="group text-white border-0 w-full sm:w-auto h-14 text-base font-medium px-8 rounded-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                  style={{
-                    background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
-                    boxShadow: '0 4px 20px -4px rgba(248, 115, 21, 0.5)',
-                  }}
-                >
-                  <Zap className="mr-2 w-5 h-5" />
-                  {t('cta.quickCheck')}
-                  <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </Button>
+                <Link href="/contact" className="w-full sm:w-auto">
+                  <Button
+                    size="lg"
+                    className="group text-white border-0 w-full sm:w-auto h-14 text-base font-medium px-8 rounded-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                    style={{
+                      background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                      boxShadow: '0 4px 20px -4px rgba(248, 115, 21, 0.5)',
+                    }}
+                  >
+                    <Calendar className="mr-2 w-5 h-5" />
+                    {t('cta.consultation')}
+                    <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </Link>
                 <Link href="/cases" className="w-full sm:w-auto">
                   <Button
                     size="lg"
@@ -144,13 +180,23 @@ export default function AgentReadinessHero() {
                 </div>
               </div>
             )}
+
+            {/* Quick Check tertiary link */}
+            {!showQuickCheck && (
+              <div className="mt-4">
+                <button
+                  onClick={() => setShowQuickCheck(true)}
+                  className="text-white/50 hover:text-white/70 text-sm transition-colors underline underline-offset-4 decoration-white/20 hover:decoration-white/40"
+                >
+                  <Zap className="w-3.5 h-3.5 inline mr-1.5" />
+                  {t('cta.quickCheck')}
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Trust Badge */}
           <div className="text-center animate-fade-in-up animation-delay-400">
-            <p className="text-xs sm:text-sm text-white/40 mb-3 uppercase tracking-wider font-medium">
-              {t('badge')}
-            </p>
             <p className="text-sm sm:text-base md:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
               {t('explanation')}{' '}
               <span className="text-[#FF9F43] font-medium">{t('reason')}</span>

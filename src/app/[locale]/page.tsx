@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import AgentReadinessHero from '@/components/landing/AgentReadinessHero';
+import ServicesOverviewSection from '@/components/landing/ServicesOverviewSection';
 import AgentBlindnessProblems from '@/components/landing/AgentBlindnessProblems';
 import ApiToMcpAnimation from '@/components/landing/ApiToMcpAnimation';
 import OnzeRolPartner from '@/components/landing/OnzeRolPartner';
@@ -62,6 +63,7 @@ function HomePageContent() {
         </AnimatePresence>
 
         <AgentReadinessHero />
+        <ServicesOverviewSection />
         <AgentBlindnessProblems />
         <ApiToMcpAnimation />
         <OnzeRolPartner />

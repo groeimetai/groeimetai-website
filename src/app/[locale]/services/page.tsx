@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n/routing';
 import {
   Code, Lightbulb, Zap, Mic, Users,
-  ArrowRight, CheckCircle, Sparkles
+  ArrowRight, CheckCircle, Sparkles, Clock
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -13,75 +13,40 @@ import Image from 'next/image';
 export default function ServicesPage() {
   const t = useTranslations('servicesOverview');
 
-  const services = [
-    {
-      id: 'web',
-      icon: Code,
-      gradient: 'from-blue-500 to-cyan-400',
-      bgGradient: 'linear-gradient(135deg, #3B82F6 0%, #22D3EE 100%)',
-      title: t('services.web.title'),
-      description: t('services.web.description'),
-      examples: [
-        t('services.web.examples.0'),
-        t('services.web.examples.1'),
-        t('services.web.examples.2'),
-        t('services.web.examples.3')
-      ]
-    },
-    {
-      id: 'aiStrategy',
-      icon: Lightbulb,
-      gradient: 'from-purple-500 to-pink-400',
-      bgGradient: 'linear-gradient(135deg, #A855F7 0%, #F472B6 100%)',
-      title: t('services.aiStrategy.title'),
-      description: t('services.aiStrategy.description'),
-      examples: [
-        t('services.aiStrategy.examples.0'),
-        t('services.aiStrategy.examples.1'),
-        t('services.aiStrategy.examples.2'),
-        t('services.aiStrategy.examples.3')
-      ]
-    },
-    {
-      id: 'mcp',
-      icon: Zap,
-      gradient: 'from-orange-500 to-yellow-400',
-      bgGradient: 'linear-gradient(135deg, #F97316 0%, #FACC15 100%)',
-      title: t('services.mcp.title'),
-      description: t('services.mcp.description'),
-      examples: [
-        t('services.mcp.examples.0'),
-        t('services.mcp.examples.1'),
-        t('services.mcp.examples.2')
-      ]
-    },
-    {
-      id: 'voice',
-      icon: Mic,
-      gradient: 'from-blue-600 to-purple-500',
-      bgGradient: 'linear-gradient(135deg, #2563EB 0%, #A855F7 100%)',
-      title: t('services.voice.title'),
-      description: t('services.voice.description'),
-      examples: [
-        t('services.voice.examples.0'),
-        t('services.voice.examples.1'),
-        t('services.voice.examples.2')
-      ]
-    },
-    {
-      id: 'training',
-      icon: Users,
-      gradient: 'from-green-500 to-teal-400',
-      bgGradient: 'linear-gradient(135deg, #22C55E 0%, #2DD4BF 100%)',
-      title: t('services.training.title'),
-      description: t('services.training.description'),
-      examples: [
-        t('services.training.examples.0'),
-        t('services.training.examples.1'),
-        t('services.training.examples.2')
-      ]
-    }
-  ];
+  const labels = {
+    whoItsFor: t('services.labels.whoItsFor'),
+    whatYouGet: t('services.labels.whatYouGet'),
+    includes: t('services.labels.includes'),
+    timeline: t('services.labels.timeline'),
+  };
+
+  const serviceIds = ['web', 'aiStrategy', 'mcp', 'voice', 'training'] as const;
+  const icons = { web: Code, aiStrategy: Lightbulb, mcp: Zap, voice: Mic, training: Users };
+  const gradients: Record<string, string> = {
+    web: 'linear-gradient(135deg, #3B82F6 0%, #22D3EE 100%)',
+    aiStrategy: 'linear-gradient(135deg, #A855F7 0%, #F472B6 100%)',
+    mcp: 'linear-gradient(135deg, #F97316 0%, #FACC15 100%)',
+    voice: 'linear-gradient(135deg, #2563EB 0%, #A855F7 100%)',
+    training: 'linear-gradient(135deg, #22C55E 0%, #2DD4BF 100%)',
+  };
+
+  const services = serviceIds.map((id) => {
+    const deliverableKeys = Object.keys(
+      (t.raw(`services.${id}.deliverables`) as Record<string, string>) || {}
+    );
+    return {
+      id,
+      icon: icons[id],
+      bgGradient: gradients[id],
+      title: t(`services.${id}.title`),
+      tagline: t(`services.${id}.tagline`),
+      description: t(`services.${id}.description`),
+      targetAudience: t(`services.${id}.targetAudience`),
+      outcome: t(`services.${id}.outcome`),
+      timeframe: t(`services.${id}.timeframe`),
+      deliverables: deliverableKeys.map((key) => t(`services.${id}.deliverables.${key}`)),
+    };
+  });
 
   const faqs = [
     { q: t('faq.questions.0.question'), a: t('faq.questions.0.answer') },
@@ -132,11 +97,12 @@ export default function ServicesPage() {
                 return (
                   <motion.div
                     key={service.id}
+                    id={service.id}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
                     viewport={{ once: true }}
-                    className="group bg-white/[0.03] border border-white/10 rounded-2xl p-6 hover:border-white/20 hover:bg-white/[0.05] transition-all duration-300 flex flex-col"
+                    className="group bg-white/[0.03] border border-white/10 rounded-2xl p-6 hover:border-white/20 hover:bg-white/[0.05] transition-all duration-300 flex flex-col scroll-mt-24"
                   >
                     <div
                       className="w-14 h-14 rounded-xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-105"
@@ -145,18 +111,40 @@ export default function ServicesPage() {
                       <Icon className="w-7 h-7 text-white" />
                     </div>
 
-                    <h3 className="text-xl font-bold text-white mb-3">{service.title}</h3>
-                    <p className="text-white/70 text-sm leading-relaxed mb-5">{service.description}</p>
+                    <h3 className="text-xl font-bold text-white mb-1">{service.title}</h3>
+                    <p className="text-[#FF9F43] text-sm font-medium mb-3">{service.tagline}</p>
+                    <p className="text-white/70 text-sm leading-relaxed mb-4">{service.description}</p>
 
-                    <div className="mb-6 flex-grow">
-                      <ul className="space-y-2">
-                        {service.examples.map((example, idx) => (
+                    {/* Who it's for */}
+                    <div className="mb-3">
+                      <p className="text-white/50 text-xs font-medium uppercase tracking-wider mb-1">{labels.whoItsFor}</p>
+                      <p className="text-white/70 text-sm">{service.targetAudience}</p>
+                    </div>
+
+                    {/* What you get */}
+                    <div className="mb-4">
+                      <p className="text-white/50 text-xs font-medium uppercase tracking-wider mb-1">{labels.whatYouGet}</p>
+                      <p className="text-white/80 text-sm font-medium">{service.outcome}</p>
+                    </div>
+
+                    {/* Deliverables */}
+                    <div className="mb-4 flex-grow">
+                      <p className="text-white/50 text-xs font-medium uppercase tracking-wider mb-2">{labels.includes}</p>
+                      <ul className="space-y-1.5">
+                        {service.deliverables.map((item, idx) => (
                           <li key={idx} className="flex items-center text-white/60 text-sm">
-                            <CheckCircle className="w-4 h-4 mr-2 flex-shrink-0 text-[#FF9F43]" />
-                            {example}
+                            <CheckCircle className="w-3.5 h-3.5 mr-2 flex-shrink-0 text-[#FF9F43]" />
+                            {item}
                           </li>
                         ))}
                       </ul>
+                    </div>
+
+                    {/* Timeframe badge */}
+                    <div className="flex items-center text-white/60 text-sm mb-4">
+                      <Clock className="w-4 h-4 mr-2 text-[#FF9F43]" />
+                      <span className="text-white/50">{labels.timeline}:</span>
+                      <span className="text-white font-medium ml-1">{service.timeframe}</span>
                     </div>
 
                     <Link href={`/contact?service=${service.id}`}>

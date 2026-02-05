@@ -21,17 +21,39 @@
     "sectionGetStarted": "Aan de slag"
   },
   "hero": {
-    "title": "Van APIs naar",
-    "highlight": "MCP-ready",
-    "subtitle": "Je hebt APIs, maar agents kunnen er niet mee praten.",
-    "description": "Wij maken je bestaande APIs agent-compatible via MCP - zonder rebuilding.",
+    "title": "Groei je bedrijf met",
+    "highlight": "AI die werkt",
+    "subtitle": "Strategie, development, voice AI en training — bewezen resultaat in 2-4 weken.",
+    "description": "Vijf gespecialiseerde diensten om je AI transformatie te versnellen. Van eerste gesprek tot productie.",
     "badge": "AI implementatie expertise sinds 2023",
-    "explanation": "Je APIs werken perfect. Maar Claude, GPT en andere agents kunnen er niet bij.",
-    "reason": "Niet omdat je APIs slecht zijn. Maar omdat agents MCP protocol spreken, niet REST.",
+    "explanation": "Wij adviseren niet alleen — wij bouwen. Websites, AI integraties, voice agents en meer.",
+    "reason": "Echte resultaten voor echte bedrijven. Vaste prijzen, geen verrassingen.",
     "cta": {
+      "consultation": "Gratis Gesprek",
+      "seeHow": "Bekijk ons werk",
       "quickCheck": "Quick Check - 2 minuten",
-      "seeHow": "Zie hoe",
       "back": "Terug"
+    },
+    "services": {
+      "web": "Web Dev",
+      "aiStrategy": "AI Strategie",
+      "mcp": "MCP/API",
+      "voice": "Voice AI",
+      "training": "Training"
+    },
+    "stats": {
+      "roi": {
+        "value": "300-800%",
+        "label": "ROI binnen 12 maanden"
+      },
+      "speed": {
+        "value": "2-4 weken",
+        "label": "typische doorlooptijd"
+      },
+      "guarantee": {
+        "value": "Vaste prijs",
+        "label": "geen verrassingen"
+      }
     }
   },
   "mcpAnimation": {
@@ -451,30 +473,56 @@
     },
     "services": {
       "cta": "Neem contact op",
+      "labels": {
+        "whoItsFor": "Voor wie",
+        "whatYouGet": "Wat je krijgt",
+        "includes": "Inclusief",
+        "timeline": "Doorlooptijd"
+      },
       "web": {
         "title": "Full-stack Webontwikkeling",
+        "tagline": "Van idee naar live platform",
         "description": "Moderne, schaalbare websites en web applicaties gebouwd met de nieuwste technologieën. Van landingspagina's tot complexe platforms.",
-        "examples": ["E-commerce platforms", "Web applicaties", "Dashboards", "Landing pages"]
+        "targetAudience": "Bedrijven die een moderne website, platform of interne tool nodig hebben",
+        "outcome": "Een live, production-ready web applicatie of platform",
+        "timeframe": "2-8 weken",
+        "deliverables": ["E-commerce platforms", "Web applicaties", "Dashboards", "Landing pages"]
       },
       "aiStrategy": {
         "title": "AI Strategie & Consultancy",
+        "tagline": "Weet waar AI de meeste waarde levert",
         "description": "Praktisch advies over hoe AI jouw bedrijf kan versterken. Van use case discovery tot implementatie roadmaps.",
-        "examples": ["AI Roadmaps", "Use Case Discovery", "ROI Analyse", "Vendor Selectie"]
+        "targetAudience": "Leiders die AI strategisch willen inzetten maar niet weten waar te beginnen",
+        "outcome": "Een concrete AI roadmap met geprioriteerde use cases en ROI analyse",
+        "timeframe": "1-3 weken",
+        "deliverables": ["AI Roadmaps", "Use Case Discovery", "ROI Analyse", "Vendor Selectie"]
       },
       "mcp": {
         "title": "MCP/API Development",
+        "tagline": "Laat je systemen praten met AI agents",
         "description": "Maak je systemen agent-ready. Wij bouwen de brug tussen je bestaande APIs en AI agents via het MCP protocol.",
-        "examples": ["API → MCP conversie", "Custom MCP servers", "System integraties"]
+        "targetAudience": "Bedrijven met bestaande APIs die AI agent integratie willen mogelijk maken",
+        "outcome": "Agent-compatible systemen via MCP — geen rebuild nodig",
+        "timeframe": "2-12 weken",
+        "deliverables": ["API naar MCP conversie", "Custom MCP servers", "Systeem integraties", "Agent configuratie"]
       },
       "voice": {
         "title": "Voice AI Development",
-        "description": "Conversational AI oplossingen voor telefonie en spraakinteractie. Van voice agents tot IVR systemen.",
-        "examples": ["Voice Agents", "IVR systemen", "Telefonie integraties"]
+        "tagline": "Intelligente voice agents die 24/7 werken",
+        "description": "Implementeer intelligente voice agents die inkomende oproepen afhandelen, leads kwalificeren, afspraken plannen en 24/7 klantenservice bieden.",
+        "targetAudience": "Bedrijven die telefooninteracties willen automatiseren of voice aan hun producten willen toevoegen",
+        "outcome": "Een live voice agent die zelfstandig oproepen afhandelt",
+        "timeframe": "2-6 weken",
+        "deliverables": ["Inbound voice agents", "Lead kwalificatie bots", "Afspraak planning", "IVR systemen", "Telefonie integraties"]
       },
       "training": {
         "title": "Training & Workshops",
+        "tagline": "Maak je team AI-ready",
         "description": "Breng je team op snelheid met AI. Van fundamentals tot hands-on agent development workshops.",
-        "examples": ["AI Fundamentals", "Prompt Engineering", "Agent Development"]
+        "targetAudience": "Teams die effectief met AI tools willen werken en de mogelijkheden willen begrijpen",
+        "outcome": "Een team dat zelfstandig AI oplossingen kan gebruiken en beoordelen",
+        "timeframe": "1-3 dagen",
+        "deliverables": ["AI Fundamentals", "Prompt Engineering", "Agent Development", "Hands-on workshops"]
       }
     },
     "agentJourney": {
@@ -1453,7 +1501,7 @@
     "openWith": "Open met {provider}"
   },
   "footer": {
-    "tagline": "Wij maken bedrijven agent-ready. Van API naar MCP. Van blind naar connected. Van handmatig naar autonoom.",
+    "tagline": "AI strategie, development en training. Van eerste gesprek tot productie.",
     "newsletter": {
       "title": "Blijf op de hoogte",
       "placeholder": "je@bedrijf.nl",
@@ -1468,12 +1516,11 @@
       "support": "Support"
     },
     "services": {
-      "agentReadiness": "Agent Readiness Assessment",
-      "mcpImplementation": "MCP Implementation",
-      "pilotProjects": "Pilot Projects",
-      "agentMonitoring": "Agent Monitoring",
-      "multiAgentOrchestration": "Multi-Agent Orchestration",
-      "legacyBridging": "Legacy System Bridging"
+      "web": "Webontwikkeling",
+      "aiStrategy": "AI Strategie",
+      "mcp": "MCP/API Development",
+      "voice": "Voice AI",
+      "training": "Training & Workshops"
     },
     "resources": {
       "mcpGuide": "MCP Guide (PDF)",
@@ -1509,9 +1556,9 @@
       "location": "Apeldoorn, Nederland"
     },
     "cta": {
-      "title": "Ready voor Agent Season?",
-      "description": "Start vandaag met je Agent Readiness journey",
-      "startAssessment": "Start Assessment",
+      "title": "Klaar om te groeien met AI?",
+      "description": "Plan een gratis gesprek en ontdek wat AI voor jouw bedrijf kan betekenen.",
+      "startAssessment": "Gratis Gesprek",
       "planCall": "Plan Gesprek"
     },
     "legal": {
@@ -3510,7 +3557,6 @@
         "mcp": "MCP/API Development",
         "voice": "Voice AI Development",
         "training": "Training & Workshops",
-        "agentJourney": "Agent Implementation Traject",
         "other": "Anders / Algemene vraag"
       }
     }
@@ -3868,33 +3914,33 @@
     }
   },
   "nextSteps": {
-    "title": "Jouw API",
-    "highlight": "Transformatie",
+    "title": "Jouw",
+    "highlight": "Project",
     "titleEnd": "in 3 stappen",
-    "subtitle": "Altijd in drie stappen - Eerst assessment, dan pas offerte. Vaste prijzen per fase. Geen verrassingen.",
+    "subtitle": "Altijd in drie stappen - Eerst gesprek, dan pas offerte. Vaste prijzen per fase. Geen verrassingen.",
     "steps": {
       "step1": {
-        "title": "Online Quick Scan",
-        "subtitle": "Gratis API Assessment",
-        "description": "10 vragen over je huidige APIs. Direct je score en algemeen rapport.",
+        "title": "Gratis Gesprek",
+        "subtitle": "Verken Mogelijkheden",
+        "description": "30 minuten sparren over je doelen. We bepalen samen welke dienst het beste past.",
         "pricing": "GRATIS",
-        "timeframe": "5 min",
+        "timeframe": "30 min",
         "features": [
-          "API inventarisatie",
-          "Agent readiness score",
-          "Algemene aanbevelingen",
+          "Bespreek je doelen en uitdagingen",
+          "Ontdek welke dienst past",
+          "Krijg eerlijk advies",
           "Geen verplichtingen"
         ],
-        "cta": "Start Quick Scan"
+        "cta": "Plan Gratis Gesprek"
       },
       "step2": {
         "title": "Expert Assessment",
-        "subtitle": "Diepgaande Analyse",
-        "description": "2-4 uur deep dive met concrete roadmap en offerte op maat.",
+        "subtitle": "Concrete Roadmap",
+        "description": "Diepgaande analyse van je situatie met een concreet actieplan en vaste prijs offerte.",
         "pricing": "€2.500",
         "timeframe": "2-4 uur",
         "features": [
-          "Technische gap analyse",
+          "Technische of strategische analyse",
           "Concrete implementatie roadmap",
           "ROI berekening",
           "Vaste prijs offerte"
@@ -3902,18 +3948,18 @@
         "cta": "Boek Expert Assessment"
       },
       "step3": {
-        "title": "Implementation",
-        "subtitle": "Agent-Ready Realisatie",
-        "description": "Vaste prijs per project implementatie. Van plan naar werkende agent-ready APIs.",
+        "title": "Implementatie",
+        "subtitle": "Jouw Project, Opgeleverd",
+        "description": "Vaste prijs oplevering. Of het nu een website, AI strategie, voice agent of training is — wij leveren op tijd.",
         "pricing": "Op maat",
-        "timeframe": "2-12 weken",
+        "timeframe": "1-12 weken",
         "features": [
-          "MCP server development",
-          "API wrapper implementatie",
+          "Dedicated projectteam",
+          "Wekelijkse voortgangsupdate",
           "Testing en validatie",
           "Go-live ondersteuning"
         ],
-        "cta": "Krijg Implementation Quote"
+        "cta": "Vraag Implementatie Offerte"
       }
     },
     "explanation": {
@@ -3922,9 +3968,9 @@
         "title": "Duidelijke Aanpak",
         "description": "Geen verborgen kosten of verrassingen",
         "ranges": [
-          "Quick Scan: Altijd gratis",
+          "Eerste gesprek: Altijd gratis",
           "Expert Assessment: Vaste prijs vooraf bekend",
-          "Implementation: Op basis van assessment"
+          "Implementatie: Op basis van assessment"
         ]
       },
       "roiGuarantee": {

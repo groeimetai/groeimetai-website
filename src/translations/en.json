@@ -21,17 +21,39 @@
     "sectionGetStarted": "Get Started"
   },
   "hero": {
-    "title": "From APIs to",
-    "highlight": "MCP-ready",
-    "subtitle": "You have APIs, but agents can't talk to them.",
-    "description": "We make your existing APIs agent-compatible via MCP - no rebuilding required.",
+    "title": "Grow your business with",
+    "highlight": "AI that works",
+    "subtitle": "Strategy, development, voice AI, and training — proven results in 2-4 weeks.",
+    "description": "Five specialized services to accelerate your AI transformation. From first conversation to production.",
     "badge": "AI implementation expertise since 2023",
-    "explanation": "Your APIs work perfectly. But Claude, GPT and other agents can't access them.",
-    "reason": "Not because your APIs are bad. But because agents speak MCP protocol, not REST.",
+    "explanation": "We don't just advise — we build. Websites, AI integrations, voice agents, and more.",
+    "reason": "Real results for real businesses. Fixed prices, no surprises.",
     "cta": {
+      "consultation": "Free Consultation",
+      "seeHow": "See our work",
       "quickCheck": "Quick Check - 2 minutes",
-      "seeHow": "See how",
       "back": "Back"
+    },
+    "services": {
+      "web": "Web Dev",
+      "aiStrategy": "AI Strategy",
+      "mcp": "MCP/API",
+      "voice": "Voice AI",
+      "training": "Training"
+    },
+    "stats": {
+      "roi": {
+        "value": "300-800%",
+        "label": "ROI within 12 months"
+      },
+      "speed": {
+        "value": "2-4 weeks",
+        "label": "typical delivery"
+      },
+      "guarantee": {
+        "value": "Fixed price",
+        "label": "no surprises"
+      }
     }
   },
   "mcpAnimation": {
@@ -521,30 +543,56 @@
     },
     "services": {
       "cta": "Get in touch",
+      "labels": {
+        "whoItsFor": "Who it's for",
+        "whatYouGet": "What you get",
+        "includes": "Includes",
+        "timeline": "Timeline"
+      },
       "web": {
         "title": "Full-stack Web Development",
+        "tagline": "From idea to live platform",
         "description": "Modern, scalable websites and web applications built with the latest technologies. From landing pages to complex platforms.",
-        "examples": ["E-commerce platforms", "Web applications", "Dashboards", "Landing pages"]
+        "targetAudience": "Companies that need a modern website, platform, or internal tool",
+        "outcome": "A live, production-ready web application or platform",
+        "timeframe": "2-8 weeks",
+        "deliverables": ["E-commerce platforms", "Web applications", "Dashboards", "Landing pages"]
       },
       "aiStrategy": {
         "title": "AI Strategy & Consultancy",
+        "tagline": "Know where AI delivers the most value",
         "description": "Practical advice on how AI can strengthen your business. From use case discovery to implementation roadmaps.",
-        "examples": ["AI Roadmaps", "Use Case Discovery", "ROI Analysis", "Vendor Selection"]
+        "targetAudience": "Leaders who want to use AI strategically but don't know where to start",
+        "outcome": "A concrete AI roadmap with prioritized use cases and ROI analysis",
+        "timeframe": "1-3 weeks",
+        "deliverables": ["AI Roadmaps", "Use Case Discovery", "ROI Analysis", "Vendor Selection"]
       },
       "mcp": {
         "title": "MCP/API Development",
+        "tagline": "Make your systems talk to AI agents",
         "description": "Make your systems agent-ready. We build the bridge between your existing APIs and AI agents via the MCP protocol.",
-        "examples": ["API → MCP conversion", "Custom MCP servers", "System integrations"]
+        "targetAudience": "Companies with existing APIs that want to enable AI agent integration",
+        "outcome": "Agent-compatible systems via MCP — no rebuild required",
+        "timeframe": "2-12 weeks",
+        "deliverables": ["API to MCP conversion", "Custom MCP servers", "System integrations", "Agent configuration"]
       },
       "voice": {
         "title": "Voice AI Development",
-        "description": "Conversational AI solutions for telephony and voice interaction. From voice agents to IVR systems.",
-        "examples": ["Voice Agents", "IVR systems", "Telephony integrations"]
+        "tagline": "Intelligent voice agents that work 24/7",
+        "description": "Deploy intelligent voice agents that handle inbound calls, qualify leads, book appointments, and provide 24/7 customer support.",
+        "targetAudience": "Companies that want to automate phone interactions or add voice to their products",
+        "outcome": "A live voice agent that handles calls autonomously",
+        "timeframe": "2-6 weeks",
+        "deliverables": ["Inbound voice agents", "Lead qualification bots", "Appointment scheduling", "IVR systems", "Telephony integrations"]
       },
       "training": {
         "title": "Training & Workshops",
+        "tagline": "Get your team AI-ready",
         "description": "Get your team up to speed with AI. From fundamentals to hands-on agent development workshops.",
-        "examples": ["AI Fundamentals", "Prompt Engineering", "Agent Development"]
+        "targetAudience": "Teams that want to work effectively with AI tools and understand the possibilities",
+        "outcome": "A team that can independently use and evaluate AI solutions",
+        "timeframe": "1-3 days",
+        "deliverables": ["AI Fundamentals", "Prompt Engineering", "Agent Development", "Hands-on workshops"]
       }
     },
     "agentJourney": {
@@ -1271,7 +1319,7 @@
     "openWith": "Open with {provider}"
   },
   "footer": {
-    "tagline": "We make companies agent-ready. From API to MCP. From blind to connected. From manual to autonomous.",
+    "tagline": "AI strategy, development, and training. From first conversation to production.",
     "newsletter": {
       "title": "Stay updated",
       "placeholder": "you@company.com",
@@ -1286,12 +1334,11 @@
       "support": "Support"
     },
     "services": {
-      "agentReadiness": "Agent Readiness Assessment",
-      "mcpImplementation": "MCP Implementation",
-      "pilotProjects": "Pilot Projects",
-      "agentMonitoring": "Agent Monitoring",
-      "multiAgentOrchestration": "Multi-Agent Orchestration",
-      "legacyBridging": "Legacy System Bridging"
+      "web": "Web Development",
+      "aiStrategy": "AI Strategy",
+      "mcp": "MCP/API Development",
+      "voice": "Voice AI",
+      "training": "Training & Workshops"
     },
     "resources": {
       "mcpGuide": "MCP Guide (PDF)",
@@ -1327,9 +1374,9 @@
       "location": "Apeldoorn, Netherlands"
     },
     "cta": {
-      "title": "Ready for Agent Season?",
-      "description": "Start your Agent Readiness journey today",
-      "startAssessment": "Start Assessment",
+      "title": "Ready to grow with AI?",
+      "description": "Schedule a free consultation and discover what AI can do for your business.",
+      "startAssessment": "Free Consultation",
       "planCall": "Schedule Call",
       "caseStudies": "View Cases",
       "consultation": "Schedule Consultation"
@@ -3688,7 +3735,6 @@
         "mcp": "MCP/API Development",
         "voice": "Voice AI Development",
         "training": "Training & Workshops",
-        "agentJourney": "Agent Implementation Program",
         "other": "Other / General inquiry"
       }
     }
@@ -4046,33 +4092,33 @@
     }
   },
   "nextSteps": {
-    "title": "Your API",
-    "highlight": "Transformation",
+    "title": "Your",
+    "highlight": "Project",
     "titleEnd": "in 3 steps",
-    "subtitle": "Always in three steps - First assessment, then quote. Fixed prices per phase. No surprises.",
+    "subtitle": "Always in three steps - First conversation, then quote. Fixed prices per phase. No surprises.",
     "steps": {
       "step1": {
-        "title": "Online Quick Scan",
-        "subtitle": "Free API Assessment",
-        "description": "10 questions about your current APIs. Instant score and general report.",
+        "title": "Free Consultation",
+        "subtitle": "Explore Possibilities",
+        "description": "30-minute conversation about your goals. We determine together which service fits best.",
         "pricing": "FREE",
-        "timeframe": "5 min",
+        "timeframe": "30 min",
         "features": [
-          "API inventory analysis",
-          "Agent readiness score",
-          "General recommendations",
+          "Discuss your goals and challenges",
+          "Explore which service fits",
+          "Get honest advice",
           "No obligations"
         ],
-        "cta": "Start Quick Scan"
+        "cta": "Schedule Free Consultation"
       },
       "step2": {
         "title": "Expert Assessment",
-        "subtitle": "Deep Dive Analysis",
-        "description": "2-4 hour deep dive with concrete roadmap and custom quote.",
+        "subtitle": "Concrete Roadmap",
+        "description": "Deep dive into your situation with a concrete plan of action and fixed price quote.",
         "pricing": "€2,500",
         "timeframe": "2-4 hours",
         "features": [
-          "Technical gap analysis",
+          "Technical or strategic analysis",
           "Concrete implementation roadmap",
           "ROI calculation",
           "Fixed price quote"
@@ -4081,13 +4127,13 @@
       },
       "step3": {
         "title": "Implementation",
-        "subtitle": "Agent-Ready Realization",
-        "description": "Fixed price per project implementation. From plan to working agent-ready APIs.",
+        "subtitle": "Your Project, Delivered",
+        "description": "Fixed price delivery. Whether it's a website, AI strategy, voice agent, or training — we deliver on time.",
         "pricing": "Custom",
-        "timeframe": "2-12 weeks",
+        "timeframe": "1-12 weeks",
         "features": [
-          "MCP server development",
-          "API wrapper implementation",
+          "Dedicated project team",
+          "Weekly progress updates",
           "Testing and validation",
           "Go-live support"
         ],
@@ -4100,7 +4146,7 @@
         "title": "Clear Approach",
         "description": "No hidden costs or surprises",
         "ranges": [
-          "Quick Scan: Always free",
+          "First conversation: Always free",
           "Expert Assessment: Fixed price known upfront",
           "Implementation: Based on assessment"
         ]
