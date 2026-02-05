@@ -21,7 +21,7 @@ export default function ObjectionsHandling() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-bold text-white mb-6">
-              {t('title')} <span style={{ color: '#F87315' }}>{t('titleHighlight')}</span>
+              {t('title')} <span className="text-[#F87315]">{t('titleHighlight')}</span>
             </h2>
             <p className="text-xl text-white/70">
               {t('subtitle')}
@@ -40,7 +40,7 @@ export default function ObjectionsHandling() {
                   className="bg-white/5 border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all duration-300"
                 >
                   <div className="flex items-start gap-4">
-                    <HelpCircle className="w-6 h-6 mt-1 flex-shrink-0" style={{ color: '#F87315' }} />
+                    <HelpCircle className="w-6 h-6 mt-1 flex-shrink-0 text-[#F87315]" />
                     <div className="flex-1">
                       <h3 className="text-lg font-bold text-white mb-3">
                         "{objection.question}"

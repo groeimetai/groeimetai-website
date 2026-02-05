@@ -76,7 +76,11 @@ function HomePageContent() {
 
 export default function HomePage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#080D14] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-white/20 border-t-[#F87315] rounded-full animate-spin" />
+      </div>
+    }>
       <HomePageContent />
     </Suspense>
   );

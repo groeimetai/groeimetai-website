@@ -170,15 +170,15 @@ export default function AgentBlindnessProblems() {
               <div className="grid md:grid-cols-3 gap-4 sm:gap-6 mb-8">
                 <div className="flex items-center justify-center md:justify-start bg-white/[0.03] rounded-lg p-4">
                   <CheckCircle className="w-5 h-5 mr-3 text-[#FF9F43] flex-shrink-0" />
-                  <span className="text-white/75 text-sm text-left">{t('keepExisting')}</span>
+                  <span className="text-white/70 text-sm text-left">{t('keepExisting')}</span>
                 </div>
                 <div className="flex items-center justify-center md:justify-start bg-white/[0.03] rounded-lg p-4">
                   <CheckCircle className="w-5 h-5 mr-3 text-[#FF9F43] flex-shrink-0" />
-                  <span className="text-white/75 text-sm text-left">{t('worksWithEverything')}</span>
+                  <span className="text-white/70 text-sm text-left">{t('worksWithEverything')}</span>
                 </div>
                 <div className="flex items-center justify-center md:justify-start bg-white/[0.03] rounded-lg p-4">
                   <CheckCircle className="w-5 h-5 mr-3 text-[#FF9F43] flex-shrink-0" />
-                  <span className="text-white/75 text-sm text-left">{t('apiToMcp')}</span>
+                  <span className="text-white/70 text-sm text-left">{t('apiToMcp')}</span>
                 </div>
               </div>
 

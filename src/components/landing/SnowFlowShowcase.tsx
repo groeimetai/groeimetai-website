@@ -20,7 +20,7 @@ export default function SnowFlowShowcase() {
           >
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
               {t('title')}{' '}
-              <span style={{ color: '#F87315' }}>{t('titleHighlight')}</span>
+              <span className="text-[#F87315]">{t('titleHighlight')}</span>
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-white/70 max-w-4xl mx-auto leading-relaxed px-2 sm:px-0">
               {t('subtitle')}
@@ -49,7 +49,7 @@ export default function SnowFlowShowcase() {
                 {t('whyServiceNow.solution')}
               </p>
               <div className="mt-4 pt-4 border-t border-white/10">
-                <p className="text-xs sm:text-sm" style={{ color: '#F87315' }}>
+                <p className="text-xs sm:text-sm text-[#F87315]">
                   <strong>{t('whyServiceNow.conclusion')}</strong>
                 </p>
               </div>
@@ -86,7 +86,7 @@ export default function SnowFlowShowcase() {
               
               <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                 <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white/5 rounded-lg">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F87315' }}>
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}>
                     <Zap className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -96,7 +96,7 @@ export default function SnowFlowShowcase() {
                 </div>
 
                 <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white/5 rounded-lg">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F87315' }}>
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}>
                     <Activity className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -106,7 +106,7 @@ export default function SnowFlowShowcase() {
                 </div>
 
                 <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white/5 rounded-lg">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F87315' }}>
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}>
                     <Shield className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -122,7 +122,7 @@ export default function SnowFlowShowcase() {
                 <ul className="space-y-2 text-sm">
                   {Object.values(t.raw('technicalImplementation.features')).map((feature, index) => (
                     <li key={index} className="flex items-center text-white/70">
-                      <div className="w-2 h-2 rounded-full mr-3" style={{ backgroundColor: '#F87315' }}></div>
+                      <div className="w-2 h-2 rounded-full mr-3 bg-[#F87315]"></div>
                       {String(feature)}
                     </li>
                   ))}
@@ -158,7 +158,7 @@ export default function SnowFlowShowcase() {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold" style={{ color: '#F87315' }}>{t('github.openSourceBadge')}</div>
+                <div className="text-2xl font-bold text-[#F87315]">{t('github.openSourceBadge')}</div>
                 <div className="text-white/60 text-sm">{t('github.transparency')}</div>
               </div>
             </div>
@@ -184,12 +184,8 @@ export default function SnowFlowShowcase() {
                 {t('github.buttons.github')}
                 <ExternalLink className="ml-2 w-4 h-4" />
               </button>
-              <button 
-                className="inline-flex items-center px-6 py-3 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-xl transform hover:scale-105"
-                style={{ 
-                  backgroundColor: '#F87315',
-                  boxShadow: '0 10px 25px -5px rgba(248, 115, 21, 0.25)'
-                }}
+              <button
+                className="inline-flex items-center px-6 py-3 bg-[#F87315] hover:bg-[#E5680F] text-white font-semibold rounded-lg transition-all duration-300 shadow-lg shadow-[#F87315]/25 hover:shadow-xl hover:shadow-[#F87315]/30 hover:scale-[1.02] active:scale-[0.98]"
               >
                 {t('github.buttons.demo')}
                 <ArrowRight className="ml-2 w-4 h-4" />
@@ -211,14 +207,10 @@ export default function SnowFlowShowcase() {
               <p className="text-white/80 mb-6 text-lg">
                 {t('futureDescription')}
               </p>
-              <button 
-                className="inline-flex items-center px-8 py-4 text-white font-bold rounded-lg transition-all duration-300 hover:shadow-xl transform hover:scale-105 text-lg"
-                style={{ 
-                  backgroundColor: '#F87315',
-                  boxShadow: '0 10px 25px -5px rgba(248, 115, 21, 0.25)'
-                }}
+              <button
+                className="inline-flex items-center px-8 py-4 bg-[#F87315] hover:bg-[#E5680F] text-white font-bold rounded-lg transition-all duration-300 shadow-lg shadow-[#F87315]/25 hover:shadow-xl hover:shadow-[#F87315]/30 hover:scale-[1.02] active:scale-[0.98] text-lg"
               >
-{t('ctaButton')}
+                {t('ctaButton')}
                 <ArrowRight className="ml-3 w-6 h-6" />
               </button>
             </div>

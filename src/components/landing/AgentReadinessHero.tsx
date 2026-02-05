@@ -93,12 +93,12 @@ export default function AgentReadinessHero() {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg sm:text-xl md:text-2xl text-white/85 mb-4 sm:mb-5 max-w-3xl mx-auto font-normal leading-relaxed animate-fade-in-up animation-delay-100">
+          <p className="text-lg sm:text-xl md:text-2xl text-white/80 mb-4 sm:mb-5 max-w-3xl mx-auto font-normal leading-relaxed animate-fade-in-up animation-delay-100">
             {t('subtitle')}
           </p>
 
           {/* Description */}
-          <p className="text-base sm:text-lg text-white/65 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200">
+          <p className="text-base sm:text-lg text-white/60 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200">
             {t('description')}
           </p>
 
@@ -151,7 +151,7 @@ export default function AgentReadinessHero() {
             <p className="text-xs sm:text-sm text-white/40 mb-3 uppercase tracking-wider font-medium">
               {t('badge')}
             </p>
-            <p className="text-sm sm:text-base md:text-lg text-white/75 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
               {t('explanation')}{' '}
               <span className="text-[#FF9F43] font-medium">{t('reason')}</span>
             </p>

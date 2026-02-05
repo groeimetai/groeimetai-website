@@ -72,7 +72,7 @@ export default function CompanyTimeline() {
           >
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
               {t('title')}{' '}
-              <span style={{ color: '#F87315' }}>{t('titleHighlight')}</span>
+              <span className="text-[#F87315]">{t('titleHighlight')}</span>
             </h2>
             <p className="text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
               {t('subtitle')}
@@ -94,8 +94,7 @@ export default function CompanyTimeline() {
                 >
                   {/* Timeline dot */}
                   <div 
-                    className="w-16 h-16 rounded-full flex items-center justify-center z-10 border-4 border-white/10"
-                    style={{ backgroundColor: '#F87315' }}
+                    className="w-16 h-16 rounded-full flex items-center justify-center z-10 border-4 border-white/10 bg-[#F87315]"
                   >
                     <milestone.icon className="w-8 h-8 text-white" />
                   </div>
@@ -122,7 +121,7 @@ export default function CompanyTimeline() {
                       
                       <div className="flex items-center text-sm">
                         <span className="text-white/60 mr-2">{t('statusLabels.impact')}</span>
-                        <span style={{ color: '#F87315' }} className="font-semibold">
+                        <span className="text-[#F87315] font-semibold">
                           {milestone.impact}
                         </span>
                       </div>
@@ -158,7 +157,7 @@ export default function CompanyTimeline() {
               <p className="text-2xl font-bold text-white mb-2">
                 {t('readyQuestion')}
               </p>
-              <p className="text-lg" style={{ color: '#F87315' }}>
+              <p className="text-lg text-[#F87315]">
                 {t('weAreReady')}
               </p>
             </div>

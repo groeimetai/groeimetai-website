@@ -23,7 +23,7 @@ const GoogleMapEmbed = dynamic(() => import('@/components/contact/GoogleMapEmbed
     <div className="w-full h-[400px] rounded-xl overflow-hidden relative bg-white/[0.03] border border-white/10 flex items-center justify-center">
       <div className="text-center p-6">
         <div className="w-8 h-8 border-2 border-white/30 border-t-[#FF9F43] rounded-full animate-spin mx-auto mb-2"></div>
-        <p className="text-white/55 text-sm">Loading interactive map...</p>
+        <p className="text-white/50 text-sm">Loading interactive map...</p>
       </div>
     </div>
   )
@@ -176,7 +176,7 @@ function ContactPageContent() {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <section className="pt-28 pb-20 sm:pt-32 sm:pb-28 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
+      <section className="pt-28 pb-20 sm:pt-32 sm:pb-28 relative overflow-hidden bg-[#080D14]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-6xl mx-auto text-center">
             <motion.div
@@ -196,7 +196,7 @@ function ContactPageContent() {
                   {t('header.highlight')}
                 </span>
               </h1>
-              <p className="text-lg sm:text-xl text-white/75 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-lg sm:text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
                 {t('header.subtitle')}
               </p>
             </motion.div>
@@ -254,7 +254,7 @@ function ContactPageContent() {
                             </div>
                             <div>
                               <h3 className="text-lg font-semibold text-white">{type.title}</h3>
-                              <p className="text-white/55 text-sm">{type.subtitle}</p>
+                              <p className="text-white/50 text-sm">{type.subtitle}</p>
                             </div>
                           </div>
 
@@ -308,7 +308,7 @@ function ContactPageContent() {
                             <item.icon className="w-4 h-4 mr-3 text-[#FF9F43]" />
                             <div>
                               <p className={item.muted ? 'text-white/70 text-sm' : 'text-white text-sm font-medium'}>{item.content}</p>
-                              {item.sub && <p className="text-white/55 text-xs">{item.sub}</p>}
+                              {item.sub && <p className="text-white/50 text-xs">{item.sub}</p>}
                             </div>
                           </div>
                         ))}
@@ -325,7 +325,7 @@ function ContactPageContent() {
                 transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-white/[0.05] backdrop-blur-sm border border-white/15 rounded-2xl overflow-hidden">
+                <Card className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
                   <CardContent className="p-6 sm:p-8">
                     <h3 className="text-xl font-semibold text-white mb-6">{t('form.title')}</h3>
 
@@ -337,7 +337,7 @@ function ContactPageContent() {
                             id="cname"
                             value={formData.name}
                             onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                            className="bg-white/[0.03] border-white/15 text-white mt-1.5 focus:border-[#FF9F43] transition-colors"
+                            className="bg-white/[0.03] border-white/10 text-white mt-1.5 focus:border-[#FF9F43] transition-colors"
                             required
                           />
                         </div>
@@ -347,7 +347,7 @@ function ContactPageContent() {
                             id="ccompany"
                             value={formData.company}
                             onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
-                            className="bg-white/[0.03] border-white/15 text-white mt-1.5 focus:border-[#FF9F43] transition-colors"
+                            className="bg-white/[0.03] border-white/10 text-white mt-1.5 focus:border-[#FF9F43] transition-colors"
                             required
                           />
                         </div>
@@ -361,7 +361,7 @@ function ContactPageContent() {
                             type="email"
                             value={formData.email}
                             onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                            className="bg-white/[0.03] border-white/15 text-white mt-1.5 focus:border-[#FF9F43] transition-colors"
+                            className="bg-white/[0.03] border-white/10 text-white mt-1.5 focus:border-[#FF9F43] transition-colors"
                             required
                           />
                         </div>
@@ -371,7 +371,7 @@ function ContactPageContent() {
                             id="cphone"
                             value={formData.phone}
                             onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                            className="bg-white/[0.03] border-white/15 text-white mt-1.5 focus:border-[#FF9F43] transition-colors"
+                            className="bg-white/[0.03] border-white/10 text-white mt-1.5 focus:border-[#FF9F43] transition-colors"
                           />
                         </div>
                       </div>
@@ -385,7 +385,7 @@ function ContactPageContent() {
                           id="serviceType"
                           value={selectedService}
                           onChange={(e) => setSelectedService(e.target.value)}
-                          className="w-full bg-white/[0.03] border border-white/15 text-white rounded-md px-3 py-2 mt-1.5 focus:border-[#FF9F43] transition-colors"
+                          className="w-full bg-white/[0.03] border border-white/10 text-white rounded-md px-3 py-2 mt-1.5 focus:border-[#FF9F43] focus:outline-none hover:border-white/20 transition-colors"
                         >
                           <option value="" className="bg-black">{t('serviceType.placeholder')}</option>
                           {serviceTypes.map((service) => (
@@ -402,7 +402,7 @@ function ContactPageContent() {
                           id="message"
                           value={formData.message}
                           onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                          className="bg-white/[0.03] border-white/15 text-white mt-1.5 focus:border-[#FF9F43] transition-colors resize-none"
+                          className="bg-white/[0.03] border-white/10 text-white mt-1.5 focus:border-[#FF9F43] transition-colors resize-none"
                           placeholder={t('form.fields.message.placeholder')}
                           rows={4}
                         />
@@ -416,7 +416,7 @@ function ContactPageContent() {
                             type="date"
                             value={formData.preferredDate}
                             onChange={(e) => setFormData(prev => ({ ...prev, preferredDate: e.target.value }))}
-                            className="bg-white/[0.03] border-white/15 text-white mt-1.5 focus:border-[#FF9F43] transition-colors"
+                            className="bg-white/[0.03] border-white/10 text-white mt-1.5 focus:border-[#FF9F43] transition-colors"
                           />
                         </div>
                         <div>
@@ -424,7 +424,7 @@ function ContactPageContent() {
                           <select
                             value={formData.preferredTime}
                             onChange={(e) => setFormData(prev => ({ ...prev, preferredTime: e.target.value }))}
-                            className="w-full bg-white/[0.03] border border-white/15 text-white rounded-md px-3 py-2 mt-1.5 focus:border-[#FF9F43] transition-colors"
+                            className="w-full bg-white/[0.03] border border-white/10 text-white rounded-md px-3 py-2 mt-1.5 focus:border-[#FF9F43] focus:outline-none hover:border-white/20 transition-colors"
                           >
                             <option value="" className="bg-black">{t('form.fields.preferredTime.placeholder')}</option>
                             <option value="morning" className="bg-black">{t('form.fields.preferredTime.options.morning')}</option>
@@ -501,7 +501,7 @@ function ContactPageContent() {
       </section>
 
       {/* Location Section */}
-      <section className="py-20 sm:py-28 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
+      <section className="py-20 sm:py-28 relative overflow-hidden bg-[#080D14]">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -540,7 +540,7 @@ function ContactPageContent() {
                   <div className="grid md:grid-cols-2 gap-8 items-center">
                     <div className="text-left">
                       <h3 className="text-xl font-semibold text-white mb-5">GroeimetAI</h3>
-                      <div className="space-y-3.5 text-white/75">
+                      <div className="space-y-3.5 text-white/70">
                         {[
                           { icon: Building, text: 'Apeldoorn, Nederland' },
                           { icon: Mail, text: 'info@groeimetai.io' },
@@ -575,7 +575,7 @@ function ContactPageContent() {
 
                     <div className="bg-gradient-to-br from-[#F87315]/15 to-[#F87315]/5 rounded-xl p-6 border border-[#F87315]/20">
                       <h4 className="text-white font-semibold mb-4">Waarom een persoonlijk gesprek?</h4>
-                      <ul className="space-y-2.5 text-white/75 text-sm">
+                      <ul className="space-y-2.5 text-white/70 text-sm">
                         {[
                           'Begrijp uw specifieke uitdagingen',
                           'Krijg direct bruikbare AI inzichten',

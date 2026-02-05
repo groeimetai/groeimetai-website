@@ -140,7 +140,7 @@ export default function AboutPage() {
                     <div className="text-3xl sm:text-4xl font-bold text-white mb-2 group-hover:text-[#FF9F43] transition-colors duration-300">
                       {stat.value}
                     </div>
-                    <div className="text-white/55 text-sm">{stat.label}</div>
+                    <div className="text-white/50 text-sm">{stat.label}</div>
                   </div>
                 </motion.div>
               ))}
@@ -186,7 +186,7 @@ export default function AboutPage() {
                 {t('whatWeDo.title')}{' '}
                 <span className="text-[#FF9F43]">{t('whatWeDo.highlight')}</span>
               </h2>
-              <p className="text-lg sm:text-xl text-white/65 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-lg sm:text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
                 {t('whatWeDo.subtitle')}
               </p>
             </motion.div>
@@ -204,7 +204,7 @@ export default function AboutPage() {
                     className="bg-white/[0.03] border border-white/10 rounded-xl p-6 sm:p-8 hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300"
                   >
                     <h3 className="text-xl sm:text-2xl font-semibold text-white mb-3">{capability.title}</h3>
-                    <p className="text-white/65 text-base leading-relaxed">{capability.description}</p>
+                    <p className="text-white/60 text-base leading-relaxed">{capability.description}</p>
                   </motion.div>
                 ))}
               </div>
@@ -310,7 +310,7 @@ export default function AboutPage() {
                 >
                   <item.icon className="w-8 h-8 mx-auto mb-4 text-[#FF9F43] transition-transform duration-300 group-hover:scale-110" />
                   <h3 className="text-lg font-semibold text-white mb-3">{item.title}</h3>
-                  <p className="text-white/75">{item.content}</p>
+                  <p className="text-white/70">{item.content}</p>
                   {item.sub && <p className="text-white/50 text-sm mt-1">{item.sub}</p>}
                 </motion.div>
               ))}
@@ -346,7 +346,7 @@ export default function AboutPage() {
                   </span>
                   ?
                 </h2>
-                <p className="text-lg sm:text-xl text-white/75 mb-3">
+                <p className="text-lg sm:text-xl text-white/70 mb-3">
                   {t('finalCta.subtitle')}
                 </p>
                 <p className="text-base sm:text-lg text-white/60 mb-5">

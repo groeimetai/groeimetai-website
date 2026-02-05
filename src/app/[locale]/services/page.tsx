@@ -112,7 +112,7 @@ export default function ServicesPage() {
                   {t('hero.titleHighlight')}
                 </span>
               </h1>
-              <p className="text-lg sm:text-xl text-white/75 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-lg sm:text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
                 {t('hero.subtitle')}
               </p>
             </motion.div>
@@ -152,7 +152,7 @@ export default function ServicesPage() {
                       <ul className="space-y-2">
                         {service.examples.map((example, idx) => (
                           <li key={idx} className="flex items-center text-white/60 text-sm">
-                            <CheckCircle className="w-4 h-4 mr-2 flex-shrink-0 text-white/40" />
+                            <CheckCircle className="w-4 h-4 mr-2 flex-shrink-0 text-[#FF9F43]" />
                             {example}
                           </li>
                         ))}
@@ -209,7 +209,7 @@ export default function ServicesPage() {
                   <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
                     {t('agentJourney.title')}
                   </h2>
-                  <p className="text-white/75 text-lg leading-relaxed mb-6">
+                  <p className="text-white/70 text-lg leading-relaxed mb-6">
                     {t('agentJourney.description')}
                   </p>
 

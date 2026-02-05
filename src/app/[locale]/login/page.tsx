@@ -178,7 +178,7 @@ function LoginPageContent() {
             <div className="mb-8">
               <Link
                 href="/"
-                className="inline-flex items-center text-white/55 hover:text-[#FF9F43] mb-8 sm:mb-10 transition-colors text-sm"
+                className="inline-flex items-center text-white/50 hover:text-[#FF9F43] mb-8 sm:mb-10 transition-colors text-sm"
               >
                 <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
                 {t('backToHome')}
@@ -206,7 +206,7 @@ function LoginPageContent() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="pl-10 bg-white/[0.03] border-white/15 text-white placeholder:text-white/35 focus:border-[#FF9F43] transition-colors"
+                    className="pl-10 bg-white/[0.03] border-white/10 text-white placeholder:text-white/35 focus:border-[#FF9F43] transition-colors"
                     placeholder={t('emailPlaceholder')}
                     required
                   />
@@ -232,7 +232,7 @@ function LoginPageContent() {
                     type="password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="pl-10 bg-white/[0.03] border-white/15 text-white placeholder:text-white/35 focus:border-[#FF9F43] transition-colors"
+                    className="pl-10 bg-white/[0.03] border-white/10 text-white placeholder:text-white/35 focus:border-[#FF9F43] transition-colors"
                     placeholder={t('passwordPlaceholder')}
                     required
                   />
@@ -265,7 +265,7 @@ function LoginPageContent() {
             {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/15" />
+                <div className="w-full border-t border-white/10" />
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-4 bg-black text-white/50">{t('orDivider')}</span>
@@ -278,7 +278,7 @@ function LoginPageContent() {
               onClick={handleGoogleSignIn}
               disabled={isGoogleLoading}
               variant="outline"
-              className="w-full h-12 border-white/15 hover:bg-white/[0.05] hover:border-white/30 text-white font-medium rounded-lg transition-all duration-300"
+              className="w-full h-12 border-white/10 hover:bg-white/[0.05] hover:border-white/30 text-white font-medium rounded-lg transition-all duration-300"
             >
               {isGoogleLoading ? (
                 <>
@@ -311,7 +311,7 @@ function LoginPageContent() {
             </Button>
 
             <div className="mt-8 text-center">
-              <p className="text-white/55 text-sm">
+              <p className="text-white/50 text-sm">
                 {t('noAccount')}{' '}
                 <Link
                   href="/register"
@@ -339,7 +339,7 @@ function LoginPageContent() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.2 + index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex items-start space-x-4"
+                    className="flex items-start space-x-4 p-3 -m-3 rounded-lg hover:bg-white/[0.03] transition-colors duration-200"
                   >
                     <div
                       className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0"
@@ -349,7 +349,7 @@ function LoginPageContent() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-white mb-1 text-sm">{benefit.title}</h3>
-                      <p className="text-xs text-white/55 leading-relaxed">{benefit.description}</p>
+                      <p className="text-xs text-white/50 leading-relaxed">{benefit.description}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -393,7 +393,7 @@ function LoginPageContent() {
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value)}
                 placeholder={t('twoFactor.codePlaceholder')}
-                className="bg-white/[0.03] border-white/15 text-white text-center text-lg focus:border-[#FF9F43] transition-colors"
+                className="bg-white/[0.03] border-white/10 text-white text-center text-lg focus:border-[#FF9F43] transition-colors"
                 maxLength={6}
                 autoFocus
               />
@@ -450,7 +450,7 @@ export default function LoginPage() {
         <div className="min-h-screen bg-black flex items-center justify-center">
           <div className="text-white text-center">
             <div className="w-8 h-8 border-2 border-white/30 border-t-[#FF9F43] rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-white/55">Loading...</p>
+            <p className="text-white/50">Loading...</p>
           </div>
         </div>
       }

@@ -90,7 +90,7 @@ export default function ForEveryBusiness() {
               </span>{' '}
               {t('titleEnd')}
             </h2>
-            <p className="text-lg sm:text-xl text-white/65 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
               {t('subtitle')}
             </p>
           </motion.div>
@@ -130,7 +130,7 @@ export default function ForEveryBusiness() {
                   {/* Content */}
                   <div className="flex-grow">
                     <h3 className="text-xl font-semibold text-white mb-2">{step.title}</h3>
-                    <p className="text-base font-medium text-white/85 mb-3">{step.subtitle}</p>
+                    <p className="text-base font-medium text-white/80 mb-3">{step.subtitle}</p>
                     <p className="text-white/60 mb-6 text-sm leading-relaxed">{step.description}</p>
 
                     {/* Features */}
@@ -145,7 +145,7 @@ export default function ForEveryBusiness() {
 
                     {/* Price & Timing */}
                     <div className="flex items-center justify-between text-sm mb-6">
-                      <div className="flex items-center text-white/55">
+                      <div className="flex items-center text-white/50">
                         <Calendar className="w-4 h-4 mr-2 text-[#FF9F43]" />
                         <span>Tijd:</span>
                         <span className="text-white font-medium ml-1">{step.timeframe}</span>
@@ -218,7 +218,7 @@ export default function ForEveryBusiness() {
                     <div className="space-y-2">
                       {[0, 1, 2].map((i) => (
                         <div key={i} className="flex items-center text-white/80 text-sm">
-                          <CheckCircle className="w-3 h-3 mr-2 flex-shrink-0" style={{ color: '#F87315' }} />
+                          <CheckCircle className="w-3 h-3 mr-2 flex-shrink-0 text-[#F87315]" />
                           {t(`explanation.transparentPricing.ranges.${i}`)}
                         </div>
                       ))}
@@ -231,7 +231,7 @@ export default function ForEveryBusiness() {
                     <div className="space-y-2">
                       {[0, 1, 2].map((i) => (
                         <div key={i} className="flex items-center text-white/80 text-sm">
-                          <CheckCircle className="w-3 h-3 mr-2 flex-shrink-0" style={{ color: '#F87315' }} />
+                          <CheckCircle className="w-3 h-3 mr-2 flex-shrink-0 text-[#F87315]" />
                           {t(`explanation.roiGuarantee.stats.${i}`)}
                         </div>
                       ))}

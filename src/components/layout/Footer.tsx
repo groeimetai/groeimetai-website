@@ -113,8 +113,8 @@ export default function Footer() {
                   />
                   <Button
                     type="submit"
-                    className="text-white"
-                    style={{ backgroundColor: '#F87315' }}
+                    aria-label="Subscribe to newsletter"
+                    className="bg-[#F87315] hover:bg-[#E5680F] text-white transition-colors duration-200"
                   >
                     <ArrowRight className="w-4 h-4" />
                   </Button>
@@ -131,8 +131,8 @@ export default function Footer() {
 
             {/* Contact Info */}
             <div className="space-y-2">
-              <div className="flex items-center text-white/70">
-                <Mail className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
+              <div className="flex items-center text-white/60">
+                <Mail className="w-4 h-4 mr-3 text-[#F87315]" />
                 <a href={`mailto:${t('contact.email')}`} className="hover:text-white group relative overflow-hidden transition-colors text-sm">
                   <span className="relative z-10 group-hover:text-orange-500 transition-colors">
                     {t('contact.email')}
@@ -140,8 +140,8 @@ export default function Footer() {
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                 </a>
               </div>
-              <div className="flex items-center text-white/70">
-                <Phone className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
+              <div className="flex items-center text-white/60">
+                <Phone className="w-4 h-4 mr-3 text-[#F87315]" />
                 <a href="tel:+31681739018" className="hover:text-white group relative overflow-hidden transition-colors text-sm">
                   <span className="relative z-10 group-hover:text-orange-500 transition-colors">
                     {t('contact.phone')}
@@ -149,8 +149,8 @@ export default function Footer() {
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                 </a>
               </div>
-              <div className="flex items-center text-white/70 text-sm">
-                <MapPin className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
+              <div className="flex items-center text-white/60 text-sm">
+                <MapPin className="w-4 h-4 mr-3 text-[#F87315]" />
                 <span>{t('contact.location')}</span>
               </div>
             </div>
@@ -253,7 +253,7 @@ export default function Footer() {
               {t('cta.title').includes('Agent Season') ? (
                 <>
                   {t('cta.title').split('Agent Season')[0]}
-                  <span style={{ color: '#F87315' }}>Agent Season</span>
+                  <span className="text-[#F87315]">Agent Season</span>
                   {t('cta.title').split('Agent Season')[1]}
                 </>
               ) : (
@@ -267,8 +267,7 @@ export default function Footer() {
               <Link href="/agent-readiness">
                 <Button
                   size="lg"
-                  className="text-white font-semibold"
-                  style={{ backgroundColor: '#F87315' }}
+                  className="bg-[#F87315] hover:bg-[#E5680F] text-white font-semibold shadow-lg shadow-[#F87315]/20 hover:shadow-[#F87315]/30 transition-all duration-300"
                 >
                   {t('cta.startAssessment')}
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -292,25 +291,28 @@ export default function Footer() {
               href="https://linkedin.com/company/groeimetai"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/70 hover:text-white transition-colors"
+              aria-label="LinkedIn"
+              className="text-white/50 hover:text-[#F87315] transition-all duration-300 hover:-translate-y-0.5"
             >
-              <Linkedin className="w-6 h-6" />
+              <Linkedin className="w-5 h-5" />
             </a>
             <a
               href="https://github.com/GroeimetAI"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/70 hover:text-white transition-colors"
+              aria-label="GitHub"
+              className="text-white/50 hover:text-[#F87315] transition-all duration-300 hover:-translate-y-0.5"
             >
-              <Github className="w-6 h-6" />
+              <Github className="w-5 h-5" />
             </a>
             <a
               href="https://twitter.com/groeimetai"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/70 hover:text-white transition-colors"
+              aria-label="Twitter"
+              className="text-white/50 hover:text-[#F87315] transition-all duration-300 hover:-translate-y-0.5"
             >
-              <Twitter className="w-6 h-6" />
+              <Twitter className="w-5 h-5" />
             </a>
           </div>
         </div>
@@ -326,7 +328,7 @@ export default function Footer() {
           className="border-t border-white/10 pt-6"
         >
           <div className="flex flex-col lg:flex-row items-center justify-between">
-            <div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-y-0 lg:space-x-6 text-white/60 text-sm">
+            <div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-y-0 lg:space-x-6 text-white/40 text-sm">
               <span>{t('copyright')}</span>
               <div className="flex space-x-4">
                 <Link href="/privacy" className="hover:text-white transition-colors">
@@ -344,7 +346,7 @@ export default function Footer() {
               </div>
             </div>
 
-            <div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-y-0 lg:space-x-6 text-white/60 text-sm mt-4 lg:mt-0">
+            <div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-y-0 lg:space-x-6 text-white/40 text-sm mt-4 lg:mt-0">
               <span>{t('taglines.agentReady')}</span>
               <span>{t('taglines.openSource')}</span>
             </div>

@@ -74,7 +74,7 @@ export default function OnzeRolPartner() {
               </span>{' '}
               {t('titleEnd')}
             </h2>
-            <p className="text-lg sm:text-xl text-white/65 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
               {t('subtitle')}
             </p>
           </motion.div>
@@ -120,7 +120,7 @@ export default function OnzeRolPartner() {
                     </div>
                     <div className="text-center sm:text-left flex-1">
                       <h3 className="text-xl font-semibold text-white mb-2">{role.title}</h3>
-                      <p className="text-white/65 text-sm leading-relaxed mb-2">
+                      <p className="text-white/60 text-sm leading-relaxed mb-2">
                         {role.description}
                       </p>
                       <p className="font-medium text-white mb-3">
@@ -158,7 +158,7 @@ export default function OnzeRolPartner() {
               <p className="text-lg sm:text-xl text-[#FF9F43] font-medium mb-4">
                 {t('uniqueJourney')}
               </p>
-              <p className="text-white/55 text-sm">
+              <p className="text-white/50 text-sm">
                 {t('listeningFirst')}
               </p>
             </div>

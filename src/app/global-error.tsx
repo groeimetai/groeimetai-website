@@ -10,33 +10,29 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service
     console.error('Global application error:', error);
   }, [error]);
 
   return (
     <html lang="nl">
-      <body>
+      <body style={{ margin: 0, backgroundColor: '#080D14', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
         <div
           style={{
             minHeight: '100vh',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#f9fafb',
             padding: '1rem',
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
           }}
         >
           <div
             style={{
               maxWidth: '28rem',
               width: '100%',
-              backgroundColor: 'white',
+              backgroundColor: 'rgba(255, 255, 255, 0.03)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: '1rem',
-              boxShadow:
-                '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+              boxShadow: '0 20px 60px -15px rgba(0, 0, 0, 0.5)',
               padding: '2rem',
               textAlign: 'center',
             }}
@@ -46,7 +42,8 @@ export default function GlobalError({
                 width: '4rem',
                 height: '4rem',
                 margin: '0 auto 1.5rem',
-                backgroundColor: '#fef2f2',
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid rgba(239, 68, 68, 0.2)',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
@@ -54,7 +51,7 @@ export default function GlobalError({
               }}
             >
               <svg
-                style={{ width: '2rem', height: '2rem', color: '#dc2626' }}
+                style={{ width: '2rem', height: '2rem', color: '#f87171' }}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -68,24 +65,11 @@ export default function GlobalError({
               </svg>
             </div>
 
-            <h1
-              style={{
-                fontSize: '1.5rem',
-                fontWeight: 'bold',
-                color: '#111827',
-                marginBottom: '0.5rem',
-              }}
-            >
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#ffffff', marginBottom: '0.5rem' }}>
               Kritieke Fout
             </h1>
-            <p
-              style={{
-                color: '#6b7280',
-                marginBottom: '1.5rem',
-              }}
-            >
-              Er is een kritieke fout opgetreden in de applicatie. Probeer de
-              pagina te herladen.
+            <p style={{ color: 'rgba(255, 255, 255, 0.6)', marginBottom: '1.5rem' }}>
+              Er is een kritieke fout opgetreden in de applicatie. Probeer de pagina te herladen.
             </p>
 
             <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
@@ -93,12 +77,13 @@ export default function GlobalError({
                 onClick={reset}
                 style={{
                   padding: '0.75rem 1.5rem',
-                  backgroundColor: '#2563eb',
+                  background: 'linear-gradient(135deg, #F87315, #FF9F43)',
                   color: 'white',
                   fontWeight: '500',
                   borderRadius: '0.5rem',
                   border: 'none',
                   cursor: 'pointer',
+                  fontSize: '0.875rem',
                 }}
               >
                 Opnieuw proberen
@@ -107,12 +92,14 @@ export default function GlobalError({
                 href="/"
                 style={{
                   padding: '0.75rem 1.5rem',
-                  backgroundColor: '#f3f4f6',
-                  color: '#374151',
+                  backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                  color: 'rgba(255, 255, 255, 0.8)',
                   fontWeight: '500',
                   borderRadius: '0.5rem',
                   textDecoration: 'none',
                   display: 'inline-block',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  fontSize: '0.875rem',
                 }}
               >
                 Naar homepage

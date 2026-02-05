@@ -35,7 +35,7 @@ export default function CasesPage() {
                   {t('hero.titleHighlight')}
                 </span>
               </h1>
-              <p className="text-lg sm:text-xl text-white/75 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-lg sm:text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
                 {t('hero.subtitle')}
               </p>
             </motion.div>
@@ -60,7 +60,7 @@ export default function CasesPage() {
                 {t('openSource.title')}{' '}
                 <span className="text-[#FF9F43]">{t('openSource.titleHighlight')}</span>
               </h2>
-              <p className="text-lg text-white/65 max-w-2xl">
+              <p className="text-lg text-white/60 max-w-2xl">
                 {t('openSource.subtitle')}
               </p>
             </motion.div>
@@ -104,7 +104,7 @@ export default function CasesPage() {
                   {['stars', 'tools', 'license', 'status'].map((stat) => (
                     <div key={stat} className="text-center">
                       <div className="text-xl font-bold text-white">{t(`openSource.snowFlow.stats.${stat}.value`)}</div>
-                      <div className="text-xs text-white/55">{t(`openSource.snowFlow.stats.${stat}.label`)}</div>
+                      <div className="text-xs text-white/50">{t(`openSource.snowFlow.stats.${stat}.label`)}</div>
                     </div>
                   ))}
                 </div>
@@ -188,7 +188,7 @@ export default function CasesPage() {
                 {t('clientProjects.title')}{' '}
                 <span className="text-[#FF9F43]">{t('clientProjects.titleHighlight')}</span>
               </h2>
-              <p className="text-lg text-white/65 max-w-2xl">
+              <p className="text-lg text-white/60 max-w-2xl">
                 {t('clientProjects.subtitle')}
               </p>
             </motion.div>
@@ -239,7 +239,7 @@ export default function CasesPage() {
                     {['timeline', 'features', 'status'].map((stat) => (
                       <div key={stat} className="text-center">
                         <div className="text-3xl font-bold text-white mb-1">{t(`clientProjects.novaSkin.stats.${stat}.value`)}</div>
-                        <div className="text-white/55 text-sm">{t(`clientProjects.novaSkin.stats.${stat}.label`)}</div>
+                        <div className="text-white/50 text-sm">{t(`clientProjects.novaSkin.stats.${stat}.label`)}</div>
                       </div>
                     ))}
                   </div>
@@ -267,7 +267,7 @@ export default function CasesPage() {
                 {t('ownVentures.title')}{' '}
                 <span className="text-[#FF9F43]">{t('ownVentures.titleHighlight')}</span>
               </h2>
-              <p className="text-lg text-white/65 max-w-2xl">
+              <p className="text-lg text-white/60 max-w-2xl">
                 {t('ownVentures.subtitle')}
               </p>
             </motion.div>
@@ -328,7 +328,7 @@ export default function CasesPage() {
                     {['hours', 'tokens', 'compliance'].map((stat) => (
                       <div key={stat} className="text-center">
                         <div className="text-3xl font-bold text-white mb-1">{t(`ownVentures.snelnotuleren.stats.${stat}.value`)}</div>
-                        <div className="text-white/55 text-sm">{t(`ownVentures.snelnotuleren.stats.${stat}.label`)}</div>
+                        <div className="text-white/50 text-sm">{t(`ownVentures.snelnotuleren.stats.${stat}.label`)}</div>
                       </div>
                     ))}
                   </div>
@@ -366,7 +366,7 @@ export default function CasesPage() {
                 <span className="text-[#FF9F43]">{t('voiceAI.titleHighlight')}</span>
               </h2>
 
-              <p className="text-white/65 mb-4 max-w-xl mx-auto">
+              <p className="text-white/60 mb-4 max-w-xl mx-auto">
                 {t('voiceAI.subtitle')}
               </p>
 
@@ -399,7 +399,7 @@ export default function CasesPage() {
                 {t('techStack.title')}{' '}
                 <span className="text-[#FF9F43]">{t('techStack.titleHighlight')}</span>
               </h2>
-              <p className="text-lg text-white/65 max-w-2xl mx-auto">
+              <p className="text-lg text-white/60 max-w-2xl mx-auto">
                 {t('techStack.subtitle')}
               </p>
             </motion.div>
@@ -417,7 +417,7 @@ export default function CasesPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
                   viewport={{ once: true }}
-                  className="bg-white/[0.03] border border-white/10 rounded-xl p-6"
+                  className="bg-white/[0.03] border border-white/10 rounded-xl p-6 hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300"
                 >
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${category.gradient} flex items-center justify-center mb-4`}>
                     <category.icon className="w-6 h-6 text-white" />
@@ -473,7 +473,7 @@ export default function CasesPage() {
                   viewport={{ once: true }}
                   className="bg-white/[0.03] border border-white/10 rounded-xl p-6 sm:p-8 hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300"
                 >
-                  <blockquote className="text-base sm:text-lg text-white/85 mb-6 leading-relaxed italic">
+                  <blockquote className="text-base sm:text-lg text-white/80 mb-6 leading-relaxed italic">
                     "{t(`testimonials.${testimonial}.quote`)}"
                   </blockquote>
                   <cite className="text-white/60 font-medium not-italic text-sm">
@@ -503,7 +503,7 @@ export default function CasesPage() {
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6 tracking-[-0.02em]">
                   {t('cta.title')}
                 </h2>
-                <p className="text-lg sm:text-xl text-white/75 mb-4">
+                <p className="text-lg sm:text-xl text-white/70 mb-4">
                   {t('cta.subtitle')}
                 </p>
                 <p className="text-xl sm:text-2xl font-semibold text-white mb-8">
