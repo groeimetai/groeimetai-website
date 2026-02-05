@@ -1264,6 +1264,12 @@
       "review": "Review & Submit"
     }
   },
+  "askAI": {
+    "title": "ASK AI",
+    "description": "Open a chat with your favorite AI and ask about GroeimetAI",
+    "prompt": "Tell me about GroeimetAI ({url}) - what do they do and how can they help with AI agent implementation?",
+    "openWith": "Open with {provider}"
+  },
   "footer": {
     "tagline": "We make companies agent-ready. From API to MCP. From blind to connected. From manual to autonomous.",
     "newsletter": {

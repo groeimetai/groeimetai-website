@@ -1446,6 +1446,12 @@
       "review": "Review & Verstuur"
     }
   },
+  "askAI": {
+    "title": "ASK AI",
+    "description": "Open een chat met je favoriete AI en vraag over GroeimetAI",
+    "prompt": "Vertel me over GroeimetAI ({url}) - wat doen ze en hoe kunnen ze helpen met AI agent implementatie?",
+    "openWith": "Open met {provider}"
+  },
   "footer": {
     "tagline": "Wij maken bedrijven agent-ready. Van API naar MCP. Van blind naar connected. Van handmatig naar autonoom.",
     "newsletter": {

@@ -6,11 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import Image from 'next/image';
-import { 
+import {
   ArrowRight, ExternalLink, Github, Linkedin, Twitter,
   Mail, Phone, MapPin
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import AskAI from '@/components/AskAI';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -313,6 +314,9 @@ export default function Footer() {
             </a>
           </div>
         </div>
+
+        {/* Ask AI Section */}
+        <AskAI />
 
         {/* Bottom Bar */}
         <motion.div
