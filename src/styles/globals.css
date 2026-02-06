@@ -489,6 +489,16 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up, .animate-fade-in-down,
+  .animate-scale-in, .animate-slide-in-right,
+  .animate-slide-in-left, .animate-float, .animate-pulse-glow {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* Logo styles for dark/light mode compatibility */
 @layer components {
   /* In dark mode, invert the black parts of the logo to white */
