@@ -42,19 +42,19 @@ export default function AgentReadinessHero() {
       {/* Background layers */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Layer 1: Animated orbs */}
-        {/* Center orb */}
+        {/* Center orb — dominant warm glow */}
         <motion.div
-          className="absolute w-[600px] h-[600px] sm:w-[800px] sm:h-[800px] lg:w-[1000px] lg:h-[1000px] rounded-full left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2"
+          className="absolute w-[600px] h-[600px] sm:w-[900px] sm:h-[900px] lg:w-[1100px] lg:h-[1100px] rounded-full left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2"
           style={{
-            background: 'radial-gradient(circle, rgba(248,115,21,0.18) 0%, rgba(248,115,21,0.05) 40%, transparent 70%)',
-            filter: 'blur(80px)',
+            background: 'radial-gradient(circle, rgba(248,115,21,0.30) 0%, rgba(248,115,21,0.08) 45%, transparent 70%)',
+            filter: 'blur(60px)',
           }}
           animate={
             prefersReducedMotion
               ? {}
               : {
-                  scale: [1, 1.05, 1],
-                  opacity: [1, 0.85, 1],
+                  scale: [1, 1.08, 0.97, 1],
+                  opacity: [1, 0.8, 1, 0.9, 1],
                 }
           }
           transition={{
@@ -64,90 +64,115 @@ export default function AgentReadinessHero() {
           }}
         />
 
-        {/* Top-left orb */}
+        {/* Top-left orb — warm orange satellite */}
+        <motion.div
+          className="absolute w-[550px] h-[550px] rounded-full"
+          style={{
+            left: '10%',
+            top: '15%',
+            background: 'radial-gradient(circle, rgba(248,115,21,0.22) 0%, rgba(248,115,21,0.05) 50%, transparent 70%)',
+            filter: 'blur(60px)',
+          }}
+          animate={
+            prefersReducedMotion
+              ? {}
+              : {
+                  x: [0, 60, -30, 0],
+                  y: [0, -40, 30, 0],
+                  scale: [1, 1.1, 0.95, 1],
+                }
+          }
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+
+        {/* Bottom-right orb — lighter orange */}
         <motion.div
           className="absolute w-[500px] h-[500px] rounded-full"
           style={{
-            left: '15%',
-            top: '20%',
-            background: 'radial-gradient(circle, rgba(248,115,21,0.12) 0%, transparent 70%)',
-            filter: 'blur(80px)',
-          }}
-          animate={
-            prefersReducedMotion
-              ? {}
-              : {
-                  x: [0, 30, -20, 0],
-                  y: [0, -25, 15, 0],
-                }
-          }
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-
-        {/* Bottom-right orb */}
-        <motion.div
-          className="absolute w-[450px] h-[450px] rounded-full"
-          style={{
-            left: '80%',
-            top: '75%',
+            left: '75%',
+            top: '70%',
             transform: 'translate(-50%, -50%)',
-            background: 'radial-gradient(circle, rgba(255,159,67,0.10) 0%, transparent 70%)',
-            filter: 'blur(80px)',
+            background: 'radial-gradient(circle, rgba(255,159,67,0.20) 0%, rgba(255,159,67,0.04) 50%, transparent 70%)',
+            filter: 'blur(60px)',
           }}
           animate={
             prefersReducedMotion
               ? {}
               : {
-                  x: [0, -25, 20, 0],
-                  y: [0, 20, -15, 0],
+                  x: [0, -50, 35, 0],
+                  y: [0, 35, -25, 0],
+                  scale: [1, 0.95, 1.08, 1],
                 }
           }
           transition={{
-            duration: 25,
+            duration: 22,
             repeat: Infinity,
             ease: 'easeInOut',
           }}
         />
 
-        {/* Green accent orb */}
+        {/* Green accent orb — subtle contrast color */}
         <motion.div
-          className="absolute w-[350px] h-[350px] rounded-full"
+          className="absolute w-[400px] h-[400px] rounded-full"
           style={{
-            left: '60%',
-            top: '15%',
-            background: 'radial-gradient(circle, rgba(18,83,18,0.06) 0%, transparent 70%)',
-            filter: 'blur(80px)',
+            left: '65%',
+            top: '10%',
+            background: 'radial-gradient(circle, rgba(18,83,18,0.12) 0%, rgba(18,83,18,0.03) 50%, transparent 70%)',
+            filter: 'blur(70px)',
           }}
           animate={
             prefersReducedMotion
               ? {}
               : {
-                  x: [0, 15, -10, 0],
-                  y: [0, -10, 20, 0],
+                  x: [0, 25, -15, 0],
+                  y: [0, -20, 30, 0],
+                  scale: [1, 1.05, 0.97, 1],
                 }
           }
           transition={{
-            duration: 30,
+            duration: 26,
             repeat: Infinity,
             ease: 'easeInOut',
           }}
         />
 
-        {/* Layer 2: Radial vignette */}
+        {/* Extra: small hot-spot orb near center for depth */}
+        <motion.div
+          className="absolute w-[250px] h-[250px] sm:w-[350px] sm:h-[350px] rounded-full left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2"
+          style={{
+            background: 'radial-gradient(circle, rgba(255,159,67,0.18) 0%, transparent 60%)',
+            filter: 'blur(40px)',
+          }}
+          animate={
+            prefersReducedMotion
+              ? {}
+              : {
+                  scale: [1, 1.15, 1],
+                  opacity: [0.7, 1, 0.7],
+                }
+          }
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+
+        {/* Layer 2: Radial vignette — softer so orbs stay visible */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse at center, transparent 40%, #080D14 80%)',
+            background: 'radial-gradient(ellipse at center, transparent 50%, #080D14 85%)',
           }}
         />
 
         {/* Layer 3: Grid pattern with mask fade */}
         <div
-          className="absolute inset-0 opacity-[0.02]"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage: `
               linear-gradient(rgba(248,115,21,0.5) 1px, transparent 1px),
@@ -160,7 +185,7 @@ export default function AgentReadinessHero() {
         />
 
         {/* Layer 4: Grain texture */}
-        <svg className="absolute inset-0 w-full h-full opacity-[0.04] mix-blend-overlay pointer-events-none">
+        <svg className="absolute inset-0 w-full h-full opacity-[0.07] mix-blend-overlay pointer-events-none">
           <filter id="grain">
             <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
           </filter>
