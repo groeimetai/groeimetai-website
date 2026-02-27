@@ -21,11 +21,11 @@
     "sectionGetStarted": "Get Started"
   },
   "hero": {
-    "title": "Grow your business with",
+    "title": "We build your",
     "highlight": "AI that works",
-    "subtitle": "Strategy, development, voice AI, and training — proven results in 2-4 weeks.",
+    "subtitle": "From first conversation to production — we design, build and implement every AI solution your business needs.",
     "description": "Five specialized services to accelerate your AI transformation. From first conversation to production.",
-    "badge": "AI implementation expertise since 2023",
+    "badge": "AI implementation partner since 2023",
     "explanation": "We don't just advise — we build. Websites, AI integrations, voice agents, and more.",
     "reason": "Real results for real businesses. Fixed prices, no surprises.",
     "cta": {
@@ -40,6 +40,15 @@
       "mcp": "MCP/API",
       "voice": "Voice AI",
       "training": "Training"
+    },
+    "rotatingServices": {
+      "aiStrategy": "AI Strategy",
+      "voiceAI": "Voice Agents",
+      "chatbots": "Chatbots",
+      "automation": "AI Automation",
+      "mcp": "MCP Integrations",
+      "websites": "Websites & Apps",
+      "training": "AI Training"
     },
     "stats": {
       "roi": {

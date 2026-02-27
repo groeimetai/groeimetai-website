@@ -21,11 +21,11 @@
     "sectionGetStarted": "Aan de slag"
   },
   "hero": {
-    "title": "Groei je bedrijf met",
+    "title": "Wij bouwen jouw",
     "highlight": "AI die werkt",
-    "subtitle": "Strategie, development, voice AI en training — bewezen resultaat in 2-4 weken.",
+    "subtitle": "Van eerste gesprek tot productie — wij ontwerpen, bouwen en implementeren elke AI-oplossing die jouw bedrijf nodig heeft.",
     "description": "Vijf gespecialiseerde diensten om je AI transformatie te versnellen. Van eerste gesprek tot productie.",
-    "badge": "AI implementatie expertise sinds 2023",
+    "badge": "AI implementatie partner sinds 2023",
     "explanation": "Wij adviseren niet alleen — wij bouwen. Websites, AI integraties, voice agents en meer.",
     "reason": "Echte resultaten voor echte bedrijven. Vaste prijzen, geen verrassingen.",
     "cta": {
@@ -40,6 +40,15 @@
       "mcp": "MCP/API",
       "voice": "Voice AI",
       "training": "Training"
+    },
+    "rotatingServices": {
+      "aiStrategy": "AI Strategie",
+      "voiceAI": "Voice Agents",
+      "chatbots": "Chatbots",
+      "automation": "AI Automatisering",
+      "mcp": "MCP Integraties",
+      "websites": "Websites & Apps",
+      "training": "AI Training"
     },
     "stats": {
       "roi": {
