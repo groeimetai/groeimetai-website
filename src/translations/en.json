@@ -3516,8 +3516,8 @@
         "label": "Production Ready"
       },
       "ventures": {
-        "value": "1",
-        "label": "Own SaaS Venture"
+        "value": "2",
+        "label": "Own SaaS Ventures"
       }
     }
   },
@@ -3605,6 +3605,19 @@
         },
         "highlight": "Proof that smart architecture beats expensive RAG systems",
         "link": "Visit snelnotuleren.nl"
+      },
+      "maakcveetje": {
+        "title": "MaakCVeetje.nl",
+        "subtitle": "AI CV Generator",
+        "description": "Our second SaaS venture. An AI-powered CV generator that creates professional, tailored resumes in minutes. Smart AI analyzes job descriptions and optimizes your CV for maximum impact.",
+        "features": {
+          "aiGenerated": "AI-generated content",
+          "templates": "Professional templates",
+          "speed": "Ready in minutes",
+          "language": "Dutch & English support"
+        },
+        "highlight": "From job description to perfect CV in minutes with AI",
+        "link": "Visit maakcveetje.nl"
       }
     },
     "voiceAI": {

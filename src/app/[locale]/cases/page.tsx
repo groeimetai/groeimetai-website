@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   Github, ExternalLink, ArrowRight, CheckCircle, ShoppingBag,
-  Bot, FileText, Mic, Brain, Wrench, Layers, Cloud
+  Bot, FileText, FileEdit, Mic, Brain, Wrench, Layers, Cloud
 } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
@@ -272,69 +272,105 @@ export default function CasesPage() {
               </p>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true }}
-              className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 lg:p-12"
-            >
-              <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
-                <div className="lg:col-span-2">
-                  <div className="flex items-center mb-6">
-                    <div
-                      className="w-14 h-14 rounded-xl flex items-center justify-center mr-4"
-                      style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
-                    >
-                      <FileText className="w-7 h-7 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl sm:text-3xl font-bold text-white">{t('ownVentures.snelnotuleren.title')}</h3>
-                      <p className="text-[#FF9F43]">{t('ownVentures.snelnotuleren.subtitle')}</p>
-                    </div>
-                  </div>
-
-                  <p className="text-white/70 mb-6 leading-relaxed text-lg">
-                    {t('ownVentures.snelnotuleren.description')}
-                  </p>
-
-                  <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-5 mb-6">
-                    <p className="text-white font-medium">"{t('ownVentures.snelnotuleren.highlight')}"</p>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4 mb-6">
-                    {['transcription', 'processing', 'gdpr', 'architecture'].map((feature) => (
-                      <div key={feature} className="flex items-center text-white/70">
-                        <CheckCircle className="w-5 h-5 mr-3 flex-shrink-0 text-[#FF9F43]" />
-                        {t(`ownVentures.snelnotuleren.features.${feature}`)}
-                      </div>
-                    ))}
-                  </div>
-
-                  <a
-                    href="https://snelnotuleren.nl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center text-[#FF9F43] hover:text-white transition-colors font-medium"
+            <div className="grid lg:grid-cols-2 gap-8">
+              {/* Snelnotuleren */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true }}
+                className="group bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 hover:border-white/20 hover:bg-white/[0.05] transition-all duration-300"
+              >
+                <div className="flex items-center mb-6">
+                  <div
+                    className="w-14 h-14 rounded-xl flex items-center justify-center mr-4"
+                    style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
                   >
-                    {t('ownVentures.snelnotuleren.link')}
-                    <ExternalLink className="w-4 h-4 ml-2" />
-                  </a>
-                </div>
-
-                <div className="bg-white/[0.05] rounded-xl p-6">
-                  <h4 className="text-white font-semibold mb-6">Platform Stats</h4>
-                  <div className="space-y-6">
-                    {['hours', 'tokens', 'compliance'].map((stat) => (
-                      <div key={stat} className="text-center">
-                        <div className="text-3xl font-bold text-white mb-1">{t(`ownVentures.snelnotuleren.stats.${stat}.value`)}</div>
-                        <div className="text-white/50 text-sm">{t(`ownVentures.snelnotuleren.stats.${stat}.label`)}</div>
-                      </div>
-                    ))}
+                    <FileText className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">{t('ownVentures.snelnotuleren.title')}</h3>
+                    <p className="text-[#FF9F43] text-sm">{t('ownVentures.snelnotuleren.subtitle')}</p>
                   </div>
                 </div>
-              </div>
-            </motion.div>
+
+                <p className="text-white/70 mb-6 leading-relaxed">
+                  {t('ownVentures.snelnotuleren.description')}
+                </p>
+
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                  {['transcription', 'processing', 'gdpr', 'architecture'].map((feature) => (
+                    <div key={feature} className="flex items-center text-white/70 text-sm">
+                      <CheckCircle className="w-4 h-4 mr-2 flex-shrink-0 text-[#FF9F43]" />
+                      {t(`ownVentures.snelnotuleren.features.${feature}`)}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 mb-6">
+                  <p className="text-white font-medium text-sm">"{t('ownVentures.snelnotuleren.highlight')}"</p>
+                </div>
+
+                <a
+                  href="https://snelnotuleren.nl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-[#FF9F43] hover:text-white transition-colors font-medium"
+                >
+                  {t('ownVentures.snelnotuleren.link')}
+                  <ExternalLink className="w-4 h-4 ml-2" />
+                </a>
+              </motion.div>
+
+              {/* MaakCVeetje */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true }}
+                className="group bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 hover:border-white/20 hover:bg-white/[0.05] transition-all duration-300"
+              >
+                <div className="flex items-center mb-6">
+                  <div
+                    className="w-14 h-14 rounded-xl flex items-center justify-center mr-4"
+                    style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #6366F1 100%)' }}
+                  >
+                    <FileEdit className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">{t('ownVentures.maakcveetje.title')}</h3>
+                    <p className="text-blue-400 text-sm">{t('ownVentures.maakcveetje.subtitle')}</p>
+                  </div>
+                </div>
+
+                <p className="text-white/70 mb-6 leading-relaxed">
+                  {t('ownVentures.maakcveetje.description')}
+                </p>
+
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                  {['aiGenerated', 'templates', 'speed', 'language'].map((feature) => (
+                    <div key={feature} className="flex items-center text-white/70 text-sm">
+                      <CheckCircle className="w-4 h-4 mr-2 flex-shrink-0 text-blue-400" />
+                      {t(`ownVentures.maakcveetje.features.${feature}`)}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-6">
+                  <p className="text-white font-medium text-sm">"{t('ownVentures.maakcveetje.highlight')}"</p>
+                </div>
+
+                <a
+                  href="https://maakcveetje.nl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-blue-400 hover:text-white transition-colors font-medium"
+                >
+                  {t('ownVentures.maakcveetje.link')}
+                  <ExternalLink className="w-4 h-4 ml-2" />
+                </a>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>

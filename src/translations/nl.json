@@ -643,8 +643,8 @@
         "label": "Productie Ready"
       },
       "ventures": {
-        "value": "1",
-        "label": "Eigen SaaS Venture"
+        "value": "2",
+        "label": "Eigen SaaS Ventures"
       }
     }
   },
@@ -732,6 +732,19 @@
         },
         "highlight": "Bewijs dat slimme architectuur dure RAG systemen verslaat",
         "link": "Bezoek snelnotuleren.nl"
+      },
+      "maakcveetje": {
+        "title": "MaakCVeetje.nl",
+        "subtitle": "AI CV Generator",
+        "description": "Onze tweede SaaS venture. Een AI-powered CV generator die in enkele minuten professionele, op maat gemaakte CV's maakt. Slimme AI analyseert vacatureteksten en optimaliseert je CV voor maximale impact.",
+        "features": {
+          "aiGenerated": "AI-gegenereerde content",
+          "templates": "Professionele templates",
+          "speed": "Klaar in minuten",
+          "language": "Nederlands & Engels"
+        },
+        "highlight": "Van vacaturetekst naar perfect CV in minuten met AI",
+        "link": "Bezoek maakcveetje.nl"
       }
     },
     "voiceAI": {
