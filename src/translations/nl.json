@@ -687,6 +687,20 @@
           "native": "Native ServiceNow widget"
         },
         "githubLink": "Bekijk op GitHub"
+      },
+      "mollieAP2": {
+        "title": "Mollie AP2 Protocol",
+        "subtitle": "Agent-to-Agent Payments",
+        "badge": "Hackathon Project",
+        "description": "De eerste werkende implementatie van Google's Agent-to-Agent Payment Protocol (AP2) met een echte PSP. Een AI checkout agent die het 70% cart abandonment probleem aanpakt via conversational commerce.",
+        "features": {
+          "mandate": "AP2 mandate chain",
+          "multiAgent": "Multi-agent architectuur",
+          "mollie": "Mollie PSP integratie",
+          "liveDemo": "Live demo beschikbaar"
+        },
+        "githubLink": "Bekijk op GitHub",
+        "demoLink": "Live Demo"
       }
     },
     "clientProjects": {

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   Github, ExternalLink, ArrowRight, CheckCircle, ShoppingBag,
-  Bot, FileText, FileEdit, Mic, Brain, Wrench, Layers, Cloud
+  Bot, FileText, FileEdit, Mic, Brain, Wrench, Layers, Cloud, CreditCard
 } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
@@ -65,7 +65,7 @@ export default function CasesPage() {
               </p>
             </motion.div>
 
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-3 gap-8">
               {/* Snow-Flow */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -165,6 +165,67 @@ export default function CasesPage() {
                   {t('openSource.requestWidget.githubLink')}
                   <ExternalLink className="w-4 h-4 ml-2" />
                 </a>
+              </motion.div>
+
+              {/* Mollie AP2 Protocol */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true }}
+                className="group bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 hover:border-white/20 hover:bg-white/[0.05] transition-all duration-300"
+              >
+                <div className="flex items-center mb-6">
+                  <div
+                    className="w-14 h-14 rounded-xl flex items-center justify-center mr-4"
+                    style={{ background: 'linear-gradient(135deg, #10B981 0%, #14B8A6 100%)' }}
+                  >
+                    <CreditCard className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">{t('openSource.mollieAP2.title')}</h3>
+                    <p className="text-emerald-400 text-sm">{t('openSource.mollieAP2.subtitle')}</p>
+                  </div>
+                </div>
+
+                <div className="inline-block px-3 py-1 bg-emerald-500/20 rounded-full text-emerald-400 text-sm mb-4">
+                  {t('openSource.mollieAP2.badge')}
+                </div>
+
+                <p className="text-white/70 mb-6 leading-relaxed">
+                  {t('openSource.mollieAP2.description')}
+                </p>
+
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                  {['mandate', 'multiAgent', 'mollie', 'liveDemo'].map((feature) => (
+                    <div key={feature} className="flex items-center text-white/70 text-sm">
+                      <CheckCircle className="w-4 h-4 mr-2 flex-shrink-0 text-emerald-400" />
+                      {t(`openSource.mollieAP2.features.${feature}`)}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-6">
+                  <a
+                    href="https://github.com/groeimetai/Mollie-Agent-Payments-Protocol"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-emerald-400 hover:text-white transition-colors font-medium"
+                  >
+                    <Github className="w-4 h-4 mr-2" />
+                    {t('openSource.mollieAP2.githubLink')}
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </a>
+                  <a
+                    href="https://ap2-mollie-878093427982.europe-west1.run.app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-emerald-400 hover:text-white transition-colors font-medium"
+                  >
+                    {t('openSource.mollieAP2.demoLink')}
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </a>
+                </div>
               </motion.div>
             </div>
           </div>
