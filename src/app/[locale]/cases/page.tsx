@@ -424,18 +424,11 @@ export default function CasesPage() {
                   </div>
                   <h3 className="text-lg font-semibold text-white mb-4">{t(`techStack.categories.${category.key}.title`)}</h3>
                   <div className="flex flex-wrap gap-2">
-                    {['0', '1', '2', '3', '4', '5', '6'].map((idx) => {
-                      try {
-                        const item = t(`techStack.categories.${category.key}.items.${idx}`);
-                        return (
-                          <span key={idx} className="px-3 py-1 bg-white/[0.08] rounded-full text-white/70 text-sm">
-                            {item}
-                          </span>
-                        );
-                      } catch {
-                        return null;
-                      }
-                    })}
+                    {(t.raw(`techStack.categories.${category.key}.items`) as string[]).map((item, idx) => (
+                      <span key={idx} className="px-3 py-1 bg-white/[0.08] rounded-full text-white/70 text-sm">
+                        {item}
+                      </span>
+                    ))}
                   </div>
                 </motion.div>
               ))}
