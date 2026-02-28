@@ -2,9 +2,11 @@
 # Just builds and deploys - env vars are set directly in Cloud Run
 
 steps:
-  # Step 1: Build Docker image
+  # Step 1: Build Docker image (BuildKit enabled for cache mounts)
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Build'
+    env:
+      - 'DOCKER_BUILDKIT=1'
     args:
       - 'build'
       - '-t'
