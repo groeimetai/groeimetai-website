@@ -13,7 +13,7 @@ env:
   SERVICE: groeimetai-app
 
 jobs:
-  # Code Quality and Tests (combined to save time)
+  # Code Quality and Tests
   quality-and-tests:
     name: Quality & Tests
     runs-on: ubuntu-latest
@@ -32,22 +32,35 @@ jobs:
       - name: Run TypeScript check
         run: npm run typecheck
 
-      # ESLint has react/no-unescaped-entities errors in multiple files
-      # These are cosmetic issues that don't affect functionality
       - name: Run ESLint
-        run: npm run lint || echo "⚠️ ESLint warnings/errors - continuing with build"
+        run: npm run lint || echo "ESLint warnings/errors - continuing with build"
         continue-on-error: true
 
-      # Tests have Jest/SWC configuration issues
       - name: Run Tests
-        run: npm test -- --passWithNoTests || echo "⚠️ Some tests failed - continuing with build"
+        run: npm test -- --passWithNoTests || echo "Some tests failed - continuing with build"
         continue-on-error: true
 
-  # Build and Deploy - runs in parallel with quality checks for speed
+  # Firebase rules deploy - runs in parallel with build
+  firebase-rules:
+    name: Firebase Rules
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Deploy Firebase Security Rules
+        run: npx firebase-tools deploy --only firestore:rules --project ${{ secrets.FIREBASE_PROJECT_ID }} || echo "Warning: Firebase rules deployment failed"
+
+  # Build and Deploy - runs in parallel with quality checks and firebase rules
   build-deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
-    # Removed: needs: [quality-and-tests] - now runs in parallel for faster deploys
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     permissions:
@@ -68,33 +81,19 @@ jobs:
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker europe-west1-docker.pkg.dev
 
-      # Set up Docker Buildx for better caching
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Cache Docker layers
-      - name: Cache Docker layers
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ hashFiles('package-lock.json', 'Dockerfile') }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Deploy Firebase Security Rules
-        run: |
-          npx firebase-tools deploy --only firestore:rules --project ${{ secrets.FIREBASE_PROJECT_ID }} || echo "Warning: Firebase rules deployment failed"
-
       - name: Build and Push Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: |
             europe-west1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}
             europe-west1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:latest
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           build-args: |
             NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
             NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
@@ -106,12 +105,6 @@ jobs:
             NEXT_PUBLIC_GEMINI_API_KEY=${{ secrets.NEXT_PUBLIC_GEMINI_API_KEY }}
             NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }}
             NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
-
-      # Temp fix for cache growth - move new cache to cache location
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Deploy to Cloud Run
         run: |
