@@ -102,7 +102,7 @@ export default function AICapabilities() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8 sm:mb-12 md:mb-16"
         >
-          <h2 className="mb-3 sm:mb-4 text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight">
+          <h2 className="mb-3 sm:mb-4 text-white">
             {t('heading.why')}
             <span className="text-orange-500"> {t('heading.transforms')} </span>
             {t('heading.yourBusiness')}

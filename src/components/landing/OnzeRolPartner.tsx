@@ -113,7 +113,7 @@ export default function OnzeRolPartner() {
                       <role.icon className="w-6 h-6 text-white" />
                     </div>
                     <div className="text-center sm:text-left flex-1">
-                      <h3 className="text-xl font-semibold text-white mb-2">{role.title}</h3>
+                      <h3 className="text-xl font-bold text-white mb-2">{role.title}</h3>
                       <p className="text-white/60 text-sm leading-relaxed mb-2">
                         {role.description}
                       </p>

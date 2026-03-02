@@ -41,7 +41,7 @@ export default function McpVsRestComparison() {
             >
               <div className="text-center mb-6">
                 <X className="w-12 h-12 text-red-400 mx-auto mb-4" />
-                <h3 className="text-2xl font-display font-bold text-white mb-2">{t('rest.title')}</h3>
+                <h3 className="text-2xl font-bold text-white mb-2">{t('rest.title')}</h3>
                 <p className="text-red-400 font-semibold">{t('rest.subtitle')}</p>
               </div>
 
@@ -74,7 +74,7 @@ export default function McpVsRestComparison() {
             >
               <div className="text-center mb-6">
                 <Check className="w-12 h-12 text-green-400 mx-auto mb-4" />
-                <h3 className="text-2xl font-display font-bold text-white mb-2">{t('mcp.title')}</h3>
+                <h3 className="text-2xl font-bold text-white mb-2">{t('mcp.title')}</h3>
                 <p className="text-green-400 font-semibold">{t('mcp.subtitle')}</p>
               </div>
 

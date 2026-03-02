@@ -56,7 +56,7 @@ export default function AgentServicesShowcase() {
               {t('subtitle')}
             </p>
             <div className="bg-white/[0.03] border border-white/10 rounded-lg p-5 sm:p-6 max-w-4xl mx-auto">
-              <p className="text-white/90 leading-relaxed">
+              <p className="text-white/80 leading-relaxed">
                 <strong>{t('guideIntro')}</strong>
               </p>
               <div className="grid md:grid-cols-2 gap-3 sm:gap-4 mt-4 text-sm">
@@ -87,7 +87,7 @@ export default function AgentServicesShowcase() {
                       <service.icon className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-display font-bold text-white">{t(service.titleKey)}</h3>
+                      <h3 className="text-2xl font-bold text-white">{t(service.titleKey)}</h3>
                       <p className="text-white/60 font-medium">{t(service.subtitleKey)}</p>
                     </div>
                   </div>
@@ -127,7 +127,7 @@ export default function AgentServicesShowcase() {
             className="text-center mt-16 sm:mt-20"
           >
             <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-6 sm:p-8 max-w-4xl mx-auto">
-              <h3 className="text-2xl font-display font-bold text-white mb-4">
+              <h3 className="text-2xl font-bold text-white mb-4">
                 {t('ctaTitle')}
               </h3>
               <p className="text-white/60 mb-6">

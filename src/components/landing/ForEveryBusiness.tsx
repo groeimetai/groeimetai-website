@@ -121,7 +121,7 @@ export default function ForEveryBusiness() {
 
                   {/* Content */}
                   <div className="flex-grow">
-                    <h3 className="text-xl font-semibold text-white mb-2">{step.title}</h3>
+                    <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
                     <p className="text-base font-medium text-white/80 mb-3">{step.subtitle}</p>
                     <p className="text-white/60 mb-6 text-sm leading-relaxed">{step.description}</p>
 

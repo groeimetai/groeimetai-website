@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Outfit, Syne } from 'next/font/google';
+import { Outfit, Manrope } from 'next/font/google';
 import { Providers } from './providers';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import '../styles/globals.css';
@@ -10,11 +10,11 @@ const outfit = Outfit({
   display: 'swap',
 });
 
-const syne = Syne({
+const manrope = Manrope({
   subsets: ['latin'],
   variable: '--font-display',
   display: 'swap',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['500', '600', '700', '800'],
 });
 
 export const metadata: Metadata = {
@@ -117,7 +117,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang={params?.locale || 'en'} suppressHydrationWarning>
-      <body className={`${outfit.variable} ${syne.variable} font-sans dark min-h-screen bg-background antialiased`} suppressHydrationWarning>
+      <body className={`${outfit.variable} ${manrope.variable} font-sans dark min-h-screen bg-background antialiased`} suppressHydrationWarning>
         <ErrorBoundary>
           <Providers>{children}</Providers>
         </ErrorBoundary>

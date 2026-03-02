@@ -88,7 +88,7 @@ export default function TrustIndicators() {
                 >
                   <Icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-white">
+                <h3 className="text-lg font-bold mb-2 text-white">
                   {t(`factors.${factor.key}.title`)}
                 </h3>
                 <p className="text-white/70 text-sm">{t(`factors.${factor.key}.description`)}</p>
@@ -135,7 +135,7 @@ export default function TrustIndicators() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-center"
         >
-          <h3 className="text-xl font-semibold mb-8 text-white">{t('partners.title')}</h3>
+          <h3 className="text-xl font-bold mb-8 text-white">{t('partners.title')}</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
             {techPartners.map((partner, index) => (
               <motion.div

@@ -20,7 +20,7 @@ export default function SnowFlowShowcase() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+            <h2 className="text-white mb-4 sm:mb-6">
               {t('title')}{' '}
               <span className="text-[#F87315]">{t('titleHighlight')}</span>
             </h2>

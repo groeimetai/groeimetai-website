@@ -52,7 +52,7 @@ export default function ServicesShowcase() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8 sm:mb-12 md:mb-16"
         >
-          <h2 className="mb-3 sm:mb-4 text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight">{t('title')}</h2>
+          <h2 className="mb-3 sm:mb-4 text-white">{t('title')}</h2>
           <p className="text-base sm:text-lg md:text-xl text-white/70 max-w-3xl mx-auto px-2 sm:px-0">{t('subtitle')}</p>
         </motion.div>
 
@@ -77,7 +77,7 @@ export default function ServicesShowcase() {
                 </div>
 
                 {/* Content */}
-                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-white">
+                <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-white">
                   {t(`items.${service.key}.title`)}
                 </h3>
                 <p className="text-sm sm:text-base text-white/60 mb-4 sm:mb-6">{t(`items.${service.key}.description`)}</p>

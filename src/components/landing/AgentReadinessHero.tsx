@@ -310,7 +310,7 @@ export default function AgentReadinessHero() {
                   className={`flex items-center gap-2 px-3.5 py-2 rounded-full border text-sm font-display font-medium transition-colors duration-500 cursor-default ${
                     isActive
                       ? 'border-[#F87315]/30 bg-[#F87315]/[0.08] text-white/90'
-                      : 'border-white/[0.06] bg-white/[0.02] text-white/35'
+                      : 'border-white/[0.06] bg-white/[0.02] text-white/40'
                   }`}
                   animate={
                     isActive
@@ -342,17 +342,17 @@ export default function AgentReadinessHero() {
           >
             <span className="text-white/50">
               <span className="font-display font-semibold text-white/70">{t('stats.roi.value')}</span>{' '}
-              <span className="text-white/30">{t('stats.roi.label')}</span>
+              <span className="text-white/40">{t('stats.roi.label')}</span>
             </span>
             <span className="hidden sm:inline text-white/15">|</span>
             <span className="text-white/50">
               <span className="font-display font-semibold text-white/70">{t('stats.speed.value')}</span>{' '}
-              <span className="text-white/30">{t('stats.speed.label')}</span>
+              <span className="text-white/40">{t('stats.speed.label')}</span>
             </span>
             <span className="hidden sm:inline text-white/15">|</span>
             <span className="text-white/50">
               <span className="font-display font-semibold text-white/70">{t('stats.guarantee.value')}</span>{' '}
-              <span className="text-white/30">
+              <span className="text-white/40">
                 {t('stats.guarantee.label')}
               </span>
             </span>

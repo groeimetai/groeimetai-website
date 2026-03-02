@@ -151,7 +151,7 @@ export default function LiveAgentFeed() {
           >
             <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-5 sm:p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-display font-bold text-white">{t('feedTitle')}</h3>
+                <h3 className="text-xl font-bold text-white">{t('feedTitle')}</h3>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                   <span className="text-sm text-white/60">{t('live')}</span>
@@ -208,7 +208,7 @@ export default function LiveAgentFeed() {
             className="space-y-4"
           >
             <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-5 sm:p-6">
-              <h3 className="text-xl font-display font-bold text-white mb-6">{t('metricsTitle')}</h3>
+              <h3 className="text-xl font-bold text-white mb-6">{t('metricsTitle')}</h3>
 
               <div className="space-y-6">
                 <div>
@@ -281,7 +281,7 @@ export default function LiveAgentFeed() {
 
             {/* Agent Status */}
             <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-5 sm:p-6">
-              <h4 className="text-lg font-display font-bold text-white mb-4">{t('networkTitle')}</h4>
+              <h4 className="text-lg font-bold text-white mb-4">{t('networkTitle')}</h4>
               <div className="grid grid-cols-2 gap-3">
                 {agentTypes.map((agent, index) => {
                   const Icon = agent.icon;

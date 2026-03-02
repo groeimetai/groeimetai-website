@@ -29,7 +29,7 @@ export default function ServicesOverviewSection() {
             viewport={{ once: true }}
             className="text-center mb-10 sm:mb-12"
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 tracking-[-0.02em]">
+            <h2 className="text-white mb-4">
               {t('hero.title')}{' '}
               <span className="text-white px-2 py-0.5 sm:px-3 sm:py-1 inline-block bg-gradient-to-r from-[#F87315] to-[#FF9F43] rounded-sm">
                 {t('hero.titleHighlight')}
@@ -61,7 +61,7 @@ export default function ServicesOverviewSection() {
                     >
                       <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
-                    <h3 className="text-sm sm:text-base font-semibold text-white mb-1">
+                    <h3 className="text-base sm:text-lg font-bold text-white mb-1">
                       {t(`services.${service.id}.title`)}
                     </h3>
                     <p className="text-xs sm:text-sm text-[#FF9F43] font-medium mb-2">

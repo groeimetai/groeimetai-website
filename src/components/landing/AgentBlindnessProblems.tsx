@@ -72,7 +72,7 @@ export default function AgentBlindnessProblems() {
               <span className="text-red-400">{t('titleHighlight')}</span>
             </h2>
             <div className="max-w-4xl mx-auto bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 lg:p-10">
-              <p className="text-xl sm:text-2xl text-white/90 leading-relaxed mb-4 font-medium">
+              <p className="text-xl sm:text-2xl text-white/80 leading-relaxed mb-4 font-medium">
                 {t('bridgeStatement')}
               </p>
               <p className="text-base sm:text-lg text-white/60 leading-relaxed">
@@ -102,7 +102,7 @@ export default function AgentBlindnessProblems() {
                       >
                         <system.icon className="w-5 h-5 text-white" />
                       </div>
-                      <h3 className="text-lg font-semibold text-white">{system.system}</h3>
+                      <h3 className="text-lg font-bold text-white">{system.system}</h3>
                     </div>
 
                     {/* Current State */}

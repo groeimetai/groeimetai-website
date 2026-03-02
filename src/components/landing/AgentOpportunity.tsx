@@ -47,7 +47,7 @@ export default function AgentOpportunity() {
                     <opportunity.icon className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-display font-bold text-white mb-3 leading-tight">
+                    <h3 className="text-lg font-bold text-white mb-3 leading-tight">
                       {t(opportunity.titleKey)}
                     </h3>
                     <p className="text-white/60 text-sm leading-relaxed">
@@ -68,7 +68,7 @@ export default function AgentOpportunity() {
             className="text-center"
           >
             <div className="bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-6 sm:p-8 max-w-4xl mx-auto">
-              <p className="text-lg sm:text-xl text-white/90 mb-4 leading-relaxed">
+              <p className="text-lg sm:text-xl text-white/80 mb-4 leading-relaxed">
                 <strong>{t('realityCheck')}</strong>
               </p>
               <p className="text-lg font-semibold text-[#F87315] mb-6">

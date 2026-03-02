@@ -48,7 +48,7 @@ export default function ObjectionsHandling() {
                       <HelpCircle className="w-5 h-5 text-[#F87315]" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-white mb-2">
+                      <h3 className="text-lg font-bold text-white mb-2">
                         &ldquo;{objection.question}&rdquo;
                       </h3>
                       <p className="text-white/60 leading-relaxed text-sm">

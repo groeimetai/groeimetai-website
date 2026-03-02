@@ -459,15 +459,15 @@ export default function OrchestrationVisualization() {
           className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
         >
           <div>
-            <h3 className="text-4xl font-bold text-orange-500 mb-2">5+</h3>
+            <div className="text-4xl font-display font-bold text-orange-500 mb-2">5+</div>
             <p className="text-white/70">Specialized AI Agents</p>
           </div>
           <div>
-            <h3 className="text-4xl font-bold text-orange-500 mb-2">100ms</h3>
+            <div className="text-4xl font-display font-bold text-orange-500 mb-2">100ms</div>
             <p className="text-white/70">Average Response Time</p>
           </div>
           <div>
-            <h3 className="text-4xl font-bold text-orange-500 mb-2">24/7</h3>
+            <div className="text-4xl font-display font-bold text-orange-500 mb-2">24/7</div>
             <p className="text-white/70">Continuous Operation</p>
           </div>
         </motion.div>

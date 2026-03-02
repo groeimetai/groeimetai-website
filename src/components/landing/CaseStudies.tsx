@@ -120,7 +120,7 @@ export default function CaseStudies() {
 
                     {/* Content */}
                     <div className="p-6">
-                      <h3 className="text-xl font-semibold mb-2 group-hover:gradient-text transition-all duration-300">
+                      <h3 className="text-xl font-bold mb-2 group-hover:gradient-text transition-all duration-300">
                         {t(study.titleKey)}
                       </h3>
                       <p className="text-sm text-muted-foreground mb-4">{t(study.clientKey)}</p>
@@ -173,28 +173,28 @@ export default function CaseStudies() {
               <div className="flex justify-center mb-4">
                 <Github className="w-8 h-8" />
               </div>
-              <h3 className="text-3xl font-bold mb-2">{t('stats.projects.value')}</h3>
+              <div className="text-3xl font-display font-bold mb-2">{t('stats.projects.value')}</div>
               <p className="text-white/80">{t('stats.projects.label')}</p>
             </div>
             <div>
               <div className="flex justify-center mb-4">
                 <Code className="w-8 h-8" />
               </div>
-              <h3 className="text-3xl font-bold mb-2">{t('stats.tools.value')}</h3>
+              <div className="text-3xl font-display font-bold mb-2">{t('stats.tools.value')}</div>
               <p className="text-white/80">{t('stats.tools.label')}</p>
             </div>
             <div>
               <div className="flex justify-center mb-4">
                 <CheckCircle className="w-8 h-8" />
               </div>
-              <h3 className="text-3xl font-bold mb-2">{t('stats.production.value')}</h3>
+              <div className="text-3xl font-display font-bold mb-2">{t('stats.production.value')}</div>
               <p className="text-white/80">{t('stats.production.label')}</p>
             </div>
             <div>
               <div className="flex justify-center mb-4">
                 <Brain className="w-8 h-8" />
               </div>
-              <h3 className="text-3xl font-bold mb-2">{t('stats.ventures.value')}</h3>
+              <div className="text-3xl font-display font-bold mb-2">{t('stats.ventures.value')}</div>
               <p className="text-white/80">{t('stats.ventures.label')}</p>
             </div>
           </div>
