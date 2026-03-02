@@ -4081,5 +4081,217 @@
         "lowIntent": "Ik ben er om u te helpen ontdekken hoe AI uw bedrijf kan transformeren. Over welke aspecten van AI bent u het meest nieuwsgierig?"
       }
     }
+  },
+  "testimonial": {
+    "quote": {
+      "author": "ServiceNow Manager, AI Product Content",
+      "role": "Geverifieerde ServiceNow medewerker",
+      "text": "That someone could put this together so quickly not only shows how much talent is out there in the greater ServiceNow community, but also indicates how much the entire development process is now changing. Niels van der Werf is just one of thousands who are out there now putting AI tools to work, and we're still truly in the early days of applying this tech.",
+      "context": "Over Snow-Flow: Claude + ServiceNow MCP integratie"
+    },
+    "whyTitle": "Waarom",
+    "whyHighlight": "GroeimetAI",
+    "reasons": {
+      "earlyAdopters": {
+        "title": "Early adopters",
+        "description": "We zien trends voordat ze mainstream worden"
+      },
+      "openSource": {
+        "title": "Open source first",
+        "description": "Snow-flow is onze commitment aan transparantie"
+      },
+      "practical": {
+        "title": "Praktisch",
+        "description": "Geen consultancy fluff, maar werkende code"
+      },
+      "together": {
+        "title": "Samen bouwen",
+        "description": "We leren en groeien met onze klanten"
+      },
+      "dutch": {
+        "title": "Nederlandse context",
+        "description": "We begrijpen de lokale markt en regelgeving"
+      }
+    }
+  },
+  "liveAgentFeed": {
+    "title": "AI Agents",
+    "titleHighlight": "Werken",
+    "titleEnd": "24/7",
+    "subtitle": "Bekijk hoe onze autonome agents in real-time samenwerken om uitzonderlijke resultaten te leveren",
+    "feedTitle": "Live Agent Activiteit",
+    "live": "Live",
+    "agent": "Agent",
+    "metricsTitle": "Prestatie Metrics",
+    "networkTitle": "Agent Netwerk",
+    "status": {
+      "working": "bezig",
+      "completed": "voltooid",
+      "reviewing": "reviewen"
+    },
+    "actions": {
+      "analyzing": "Vereisten analyseren",
+      "writing": "Code modules schrijven",
+      "scanning": "Beveiligingsscans uitvoeren",
+      "optimizing": "Prestaties optimaliseren",
+      "documenting": "Documentatie genereren",
+      "testing": "Edge cases testen",
+      "reviewing": "Architectuur reviewen",
+      "implementing": "Features implementeren",
+      "validating": "Outputs valideren",
+      "coordinating": "Agents coördineren"
+    },
+    "metrics": {
+      "tasksCompleted": "Taken Voltooid",
+      "activeAgents": "Actieve Agents",
+      "avgResponseTime": "Gem. Responstijd",
+      "successRate": "Slagingspercentage"
+    }
+  },
+  "agentOpportunity": {
+    "title": "Stel je",
+    "titleHighlight": "voor",
+    "opportunities": {
+      "alwaysOn": {
+        "title": "AI agents die 24/7 jouw services kunnen gebruiken",
+        "description": "Geen wachttijden, geen kantooruren — agents werken altijd"
+      },
+      "automation": {
+        "title": "Volledige automatisering van repetitieve taken",
+        "description": "Van handmatig naar automatisch — agents nemen over"
+      },
+      "instant": {
+        "title": "Klanten die instant geholpen worden",
+        "description": "Van uren wachten naar seconden respons — agents zijn er altijd"
+      },
+      "optimize": {
+        "title": "Processen die zichzelf optimaliseren",
+        "description": "Van statisch naar lerend — agents verbeteren continu"
+      }
+    },
+    "realityCheck": "Dit is geen toekomst. Dit gebeurt NU bij bedrijven die agent-ready zijn.",
+    "question": "De vraag is: hoe word JIJ agent-ready?",
+    "guidance": "Wij begeleiden je van de eerste vraag tot volledige implementatie."
+  },
+  "agentServices": {
+    "title": "Jouw weg naar",
+    "titleHighlight": "Agent Readiness",
+    "subtitle": "Van agent-blind naar agent-ready in drie stappen.",
+    "guideIntro": "Wij zijn je gids in de agent economie. Niet alleen technisch, maar vooral strategisch. We helpen je:",
+    "guidePoints": {
+      "0": "Begrijpen welke systemen prioriteit hebben",
+      "1": "Een realistische roadmap maken",
+      "2": "De juiste technische keuzes maken",
+      "3": "Stap voor stap implementeren",
+      "4": "Meten en optimaliseren"
+    },
+    "services": {
+      "assess": {
+        "title": "ASSESS",
+        "subtitle": "Agent Readiness Scan",
+        "description": "Ontdek hoe agent-ready jouw organisatie werkelijk is",
+        "features": {
+          "0": "Complete API inventory en analyse",
+          "1": "Agent toegankelijkheid assessment",
+          "2": "MCP readiness roadmap",
+          "3": "ROI berekening en prioritering"
+        },
+        "highlight": "Gratis 30-minuten assessment"
+      },
+      "build": {
+        "title": "BUILD",
+        "subtitle": "Agent Infrastructure",
+        "description": "Transformeer jouw systemen naar agent-ready platforms",
+        "features": {
+          "0": "API naar MCP protocol conversie",
+          "1": "Veilige agent toegangslagen",
+          "2": "Custom agent integrations",
+          "3": "Testing & deployment"
+        },
+        "highlight": "Bewezen methode sinds 2023"
+      },
+      "monitor": {
+        "title": "MONITOR",
+        "subtitle": "Agent Intelligence",
+        "description": "Houd bij welke agents actief zijn en wat ze doen",
+        "features": {
+          "0": "Real-time agent activity tracking",
+          "1": "Performance monitoring",
+          "2": "Nieuwe mogelijkheden detectie",
+          "3": "Competitor agent analyse"
+        },
+        "highlight": "24/7 monitoring dashboard"
+      }
+    },
+    "ctaTitle": "Wil je weten waar jij staat?",
+    "ctaDescription": "Start met onze gratis Agent Readiness Assessment en ontdek precies wat er nodig is om jouw bedrijf voor te bereiden op Agent Season 2025.",
+    "ctaButton": "Krijg jouw MCP Roadmap"
+  },
+  "mcpComparison": {
+    "title": "Waarom MCP?",
+    "titleHighlight": "Het technische verhaal",
+    "subtitle": "REST APIs zijn gemaakt voor mensen. MCP servers zijn gemaakt voor agents. Het verschil bepaalt of jouw systemen meedoen in de agent economie.",
+    "rest": {
+      "title": "REST APIs",
+      "subtitle": "De oude manier",
+      "result": "Resultaat: Agent-blind systemen"
+    },
+    "mcp": {
+      "title": "MCP Servers",
+      "subtitle": "De agent-ready manier",
+      "result": "Resultaat: Volledig agent-accessible"
+    },
+    "comparisons": {
+      "discovery": {
+        "feature": "Agent Discovery",
+        "rest": "Agents kunnen niet discoveren",
+        "mcp": "Auto-discovery voor agents"
+      },
+      "protocol": {
+        "feature": "Protocol",
+        "rest": "Geen standaard protocol",
+        "mcp": "Universeel MCP protocol"
+      },
+      "authentication": {
+        "feature": "Authentication",
+        "rest": "Complex authentication",
+        "mcp": "Built-in security"
+      },
+      "context": {
+        "feature": "Context Awareness",
+        "rest": "Geen context awareness",
+        "mcp": "Context-aware interactions"
+      },
+      "documentation": {
+        "feature": "Documentation",
+        "rest": "Handmatige documentatie",
+        "mcp": "Self-describing endpoints"
+      },
+      "integration": {
+        "feature": "Agent Integration",
+        "rest": "Custom per agent/API",
+        "mcp": "Plug & play voor alle agents"
+      }
+    },
+    "stats": {
+      "server": {
+        "value": "1x",
+        "label": "MCP Server",
+        "detail": "vs per-agent custom code"
+      },
+      "protocol": {
+        "value": "Universeel",
+        "label": "Protocol",
+        "detail": "vs agent-specifieke integraties"
+      },
+      "plugPlay": {
+        "value": "Plug & Play",
+        "label": "Voor Alle Agents",
+        "detail": "vs maanden custom development"
+      }
+    },
+    "differenceTitle": "Het verschil?",
+    "differenceDescription": "Eén MCP server werkt met alle agents. REST APIs vereisen per agent custom integratie code.",
+    "snowflowLink": "Bekijk Snow-flow: onze open source MCP server"
   }
 }

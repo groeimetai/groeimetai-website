@@ -2,139 +2,115 @@
 
 import { motion } from 'framer-motion';
 import { Eye, Wrench, Activity, ArrowRight, CheckCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/routing';
 
 export default function AgentServicesShowcase() {
+  const t = useTranslations('agentServices');
+
   const services = [
     {
       icon: Eye,
-      title: 'ASSESS',
-      subtitle: 'Agent Readiness Scan',
-      description: 'Ontdek hoe agent-ready jouw organisatie werkelijk is',
-      features: [
-        'Complete API inventory en analyse',
-        'Agent toegankelijkheid assessment', 
-        'MCP readiness roadmap',
-        'ROI berekening en prioritering'
-      ],
-      highlight: 'Gratis 30-minuten assessment'
+      titleKey: 'services.assess.title',
+      subtitleKey: 'services.assess.subtitle',
+      descriptionKey: 'services.assess.description',
+      features: ['services.assess.features.0', 'services.assess.features.1', 'services.assess.features.2', 'services.assess.features.3'],
+      highlightKey: 'services.assess.highlight',
     },
     {
       icon: Wrench,
-      title: 'BUILD', 
-      subtitle: 'Agent Infrastructure',
-      description: 'Transformeer jouw systemen naar agent-ready platforms',
-      features: [
-        'API naar MCP protocol conversie',
-        'Veilige agent toegangslagen',
-        'Custom agent integrations',
-        'Testing & deployment'
-      ],
-      highlight: 'Bewezen methode sinds 2023'
+      titleKey: 'services.build.title',
+      subtitleKey: 'services.build.subtitle',
+      descriptionKey: 'services.build.description',
+      features: ['services.build.features.0', 'services.build.features.1', 'services.build.features.2', 'services.build.features.3'],
+      highlightKey: 'services.build.highlight',
     },
     {
       icon: Activity,
-      title: 'MONITOR',
-      subtitle: 'Agent Intelligence',
-      description: 'Houd bij welke agents actief zijn en wat ze doen',
-      features: [
-        'Real-time agent activity tracking',
-        'Performance monitoring',
-        'Nieuwe mogelijkheden detectie', 
-        'Competitor agent analyse'
-      ],
-      highlight: '24/7 monitoring dashboard'
-    }
+      titleKey: 'services.monitor.title',
+      subtitleKey: 'services.monitor.subtitle',
+      descriptionKey: 'services.monitor.description',
+      features: ['services.monitor.features.0', 'services.monitor.features.1', 'services.monitor.features.2', 'services.monitor.features.3'],
+      highlightKey: 'services.monitor.highlight',
+    },
   ];
 
   return (
-    <section className="py-24 relative" style={{ backgroundColor: '#080D14' }}>
-      <div className="container mx-auto px-4">
+    <section className="py-20 sm:py-28 lg:py-36 relative bg-[#080D14]">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+            className="text-center mb-16 sm:mb-20"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Jouw weg naar{' '}
-              <span style={{ color: '#F87315' }}>Agent Readiness</span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 tracking-[-0.02em]">
+              {t('title')}{' '}
+              <span className="text-[#F87315]">{t('titleHighlight')}</span>
             </h2>
-            <p className="text-xl text-white/70 max-w-4xl mx-auto leading-relaxed mb-4">
-              Van agent-blind naar agent-ready in drie stappen.
+            <p className="text-lg sm:text-xl text-white/70 max-w-4xl mx-auto leading-relaxed mb-4">
+              {t('subtitle')}
             </p>
-            <div className="bg-white/5 rounded-lg p-6 max-w-4xl mx-auto">
+            <div className="bg-white/[0.03] border border-white/10 rounded-lg p-5 sm:p-6 max-w-4xl mx-auto">
               <p className="text-white/90 leading-relaxed">
-                <strong>Wij zijn je gids in de agent economie.</strong> Niet alleen technisch, maar vooral strategisch. We helpen je:
+                <strong>{t('guideIntro')}</strong>
               </p>
-              <div className="grid md:grid-cols-2 gap-4 mt-4 text-sm">
-                <div className="flex items-center text-white/80">
-                  <CheckCircle className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
-                  Begrijpen welke systemen prioriteit hebben
-                </div>
-                <div className="flex items-center text-white/80">
-                  <CheckCircle className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
-                  Een realistische roadmap maken
-                </div>
-                <div className="flex items-center text-white/80">
-                  <CheckCircle className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
-                  De juiste technische keuzes maken
-                </div>
-                <div className="flex items-center text-white/80">
-                  <CheckCircle className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
-                  Stap voor stap implementeren
-                </div>
-                <div className="flex items-center text-white/80">
-                  <CheckCircle className="w-4 h-4 mr-3" style={{ color: '#F87315' }} />
-                  Meten en optimaliseren
-                </div>
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4 mt-4 text-sm">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <div key={i} className="flex items-center text-white/80">
+                    <CheckCircle className="w-4 h-4 mr-3 flex-shrink-0 text-[#F87315]" />
+                    {t(`guidePoints.${i}`)}
+                  </div>
+                ))}
               </div>
             </div>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             {services.map((service, index) => (
               <motion.div
-                key={service.title}
-                initial={{ opacity: 0, y: 30 }}
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
+                transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true }}
                 className="group"
               >
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-8 h-full hover:border-white/20 hover:bg-white/10 transition-all duration-300">
+                <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-6 sm:p-8 h-full hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300 flex flex-col">
                   {/* Service Header */}
                   <div className="flex items-center mb-6">
-                    <div 
-                      className="w-12 h-12 rounded-lg flex items-center justify-center mr-4"
-                      style={{ backgroundColor: '#F87315' }}
-                    >
+                    <div className="w-12 h-12 rounded-lg flex items-center justify-center mr-4 bg-gradient-to-br from-[#F87315] to-[#FF9F43]">
                       <service.icon className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold text-white">{service.title}</h3>
-                      <p className="text-white/60 font-medium">{service.subtitle}</p>
+                      <h3 className="text-2xl font-display font-bold text-white">{t(service.titleKey)}</h3>
+                      <p className="text-white/60 font-medium">{t(service.subtitleKey)}</p>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-white/80 mb-6 leading-relaxed">
-                    {service.description}
+                  <p className="text-white/70 mb-6 leading-relaxed text-sm sm:text-base">
+                    {t(service.descriptionKey)}
                   </p>
 
                   {/* Features */}
-                  <ul className="space-y-3 mb-6">
-                    {service.features.map((feature, featureIndex) => (
+                  <ul className="space-y-3 mb-6 flex-grow">
+                    {service.features.map((featureKey, featureIndex) => (
                       <li key={featureIndex} className="flex items-start text-white/70">
-                        <CheckCircle className="w-4 h-4 mr-3 mt-0.5 flex-shrink-0" style={{ color: '#F87315' }} />
-                        <span className="text-sm">{feature}</span>
+                        <CheckCircle className="w-4 h-4 mr-3 mt-0.5 flex-shrink-0 text-[#FF9F43]" />
+                        <span className="text-sm">{t(featureKey)}</span>
                       </li>
                     ))}
                   </ul>
 
                   {/* Highlight */}
-                  <div className="pt-4 border-t border-white/10">
-                    <p className="text-sm font-semibold" style={{ color: '#F87315' }}>
-                      {service.highlight}
+                  <div className="pt-4 border-t border-white/10 mt-auto">
+                    <p className="text-sm font-semibold text-[#F87315]">
+                      {t(service.highlightKey)}
                     </p>
                   </div>
                 </div>
@@ -146,27 +122,24 @@ export default function AgentServicesShowcase() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-center mt-16"
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+            className="text-center mt-16 sm:mt-20"
           >
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-8 max-w-4xl mx-auto">
-              <h3 className="text-2xl font-bold text-white mb-4">
-                Wil je weten waar jij staat?
+            <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-6 sm:p-8 max-w-4xl mx-auto">
+              <h3 className="text-2xl font-display font-bold text-white mb-4">
+                {t('ctaTitle')}
               </h3>
-              <p className="text-white/70 mb-6">
-                Start met onze gratis Agent Readiness Assessment en ontdek precies wat er nodig is
-                om jouw bedrijf voor te bereiden op Agent Season 2025.
+              <p className="text-white/60 mb-6">
+                {t('ctaDescription')}
               </p>
-              <button 
-                className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-xl transform hover:scale-105"
-                style={{ 
-                  backgroundColor: '#F87315',
-                  boxShadow: '0 10px 25px -5px rgba(248, 115, 21, 0.25)'
-                }}
+              <Link
+                href="/contact"
+                className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.97] bg-[#F87315] hover:bg-[#E5680F] shadow-lg shadow-[#F87315]/20 hover:shadow-[#F87315]/30"
               >
-                Krijg jouw MCP Roadmap
+                {t('ctaButton')}
                 <ArrowRight className="ml-2 w-5 h-5" />
-              </button>
+              </Link>
             </div>
           </motion.div>
         </div>

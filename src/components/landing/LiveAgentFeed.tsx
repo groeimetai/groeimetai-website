@@ -12,6 +12,7 @@ import {
   AlertCircle,
   Loader2,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface AgentActivity {
   id: string;
@@ -27,21 +28,13 @@ const agentTypes = [
   { name: 'Researcher', icon: Search, color: 'text-blue-500' },
   { name: 'Developer', icon: Code, color: 'text-green-500' },
   { name: 'Validator', icon: Shield, color: 'text-purple-500' },
-  { name: 'Orchestrator', icon: GitBranch, color: 'text-orange-500' },
+  { name: 'Orchestrator', icon: GitBranch, color: 'text-[#F87315]' },
   { name: 'Analyzer', icon: Bot, color: 'text-pink-500' },
 ];
 
-const actions = [
-  'Analyzing requirements',
-  'Writing code modules',
-  'Running security scans',
-  'Optimizing performance',
-  'Generating documentation',
-  'Testing edge cases',
-  'Reviewing architecture',
-  'Implementing features',
-  'Validating outputs',
-  'Coordinating agents',
+const actionKeys = [
+  'analyzing', 'writing', 'scanning', 'optimizing', 'documenting',
+  'testing', 'reviewing', 'implementing', 'validating', 'coordinating',
 ];
 
 // Simple time formatting to avoid hydration issues
@@ -53,6 +46,7 @@ const formatTime = (date: Date) => {
 };
 
 export default function LiveAgentFeed() {
+  const t = useTranslations('liveAgentFeed');
   const [activities, setActivities] = useState<AgentActivity[]>([]);
   const [stats, setStats] = useState({
     tasksCompleted: 1247,
@@ -65,7 +59,7 @@ export default function LiveAgentFeed() {
   useEffect(() => {
     const generateActivity = (): AgentActivity => {
       const agent = agentTypes[Math.floor(Math.random() * agentTypes.length)];
-      const action = actions[Math.floor(Math.random() * actions.length)];
+      const action = actionKeys[Math.floor(Math.random() * actionKeys.length)];
       const statuses: AgentActivity['status'][] = ['working', 'completed', 'reviewing'];
       const status = statuses[Math.floor(Math.random() * statuses.length)];
 
@@ -127,38 +121,40 @@ export default function LiveAgentFeed() {
   };
 
   return (
-    <section className="py-20 bg-black relative overflow-hidden">
-      <div className="container mx-auto px-4">
+    <section className="py-20 sm:py-28 lg:py-36 bg-[#080D14] relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-12 sm:mb-16"
         >
-          <h2 className="mb-4 text-white">
-            AI Agents <span className="text-orange-500">Working</span> 24/7
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 tracking-[-0.02em]">
+            {t('title')} <span className="text-[#F87315]">{t('titleHighlight')}</span> {t('titleEnd')}
           </h2>
-          <p className="text-xl text-white/70 max-w-3xl mx-auto">
-            Watch our autonomous agents collaborate in real-time to deliver exceptional results
+          <p className="text-lg sm:text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
+            {t('subtitle')}
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
           {/* Live Feed */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="lg:col-span-2"
           >
-            <div className="bg-black/80 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+            <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-5 sm:p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold text-white">Live Agent Activity</h3>
+                <h3 className="text-xl font-display font-bold text-white">{t('feedTitle')}</h3>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  <span className="text-sm text-white/60">Live</span>
+                  <span className="text-sm text-white/60">{t('live')}</span>
                 </div>
               </div>
 
@@ -173,7 +169,7 @@ export default function LiveAgentFeed() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, x: -100 }}
                         transition={{ duration: 0.3 }}
-                        className="bg-white/5 border border-white/10 rounded-lg p-4 hover:bg-white/10 transition-colors"
+                        className="bg-white/[0.03] border border-white/10 rounded-lg p-4 hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300"
                       >
                         <div className="flex items-start gap-3">
                           <div className={`p-2 rounded-lg bg-white/10 ${activity.color}`}>
@@ -181,15 +177,15 @@ export default function LiveAgentFeed() {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center justify-between mb-1">
-                              <h4 className="font-medium text-white">{activity.agent} Agent</h4>
+                              <h4 className="font-medium text-white">{activity.agent} {t('agent')}</h4>
                               <div
                                 className={`flex items-center gap-1 ${getStatusColor(activity.status)}`}
                               >
                                 {getStatusIcon(activity.status)}
-                                <span className="text-sm capitalize">{activity.status}</span>
+                                <span className="text-sm capitalize">{t(`status.${activity.status}`)}</span>
                               </div>
                             </div>
-                            <p className="text-sm text-white/60">{activity.action}</p>
+                            <p className="text-sm text-white/60">{t(`actions.${activity.action}`)}</p>
                             <p className="text-xs text-white/40 mt-1">
                               {formatTime(new Date(activity.timestamp))}
                             </p>
@@ -208,23 +204,23 @@ export default function LiveAgentFeed() {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="space-y-4"
           >
-            <div className="bg-black/80 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-              <h3 className="text-xl font-semibold text-white mb-6">Performance Metrics</h3>
+            <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-5 sm:p-6">
+              <h3 className="text-xl font-display font-bold text-white mb-6">{t('metricsTitle')}</h3>
 
               <div className="space-y-6">
                 <div>
                   <div className="flex justify-between items-baseline mb-2">
-                    <span className="text-white/60">Tasks Completed</span>
-                    <span className="text-2xl font-bold text-orange-500">
+                    <span className="text-white/60">{t('metrics.tasksCompleted')}</span>
+                    <span className="text-2xl font-display font-bold text-[#F87315]">
                       {stats.tasksCompleted}
                     </span>
                   </div>
                   <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                     <motion.div
-                      className="h-full bg-gradient-to-r from-orange-500 to-orange-600"
+                      className="h-full bg-gradient-to-r from-[#F87315] to-[#FF9F43]"
                       initial={{ width: 0 }}
                       animate={{ width: '85%' }}
                       transition={{ duration: 1, delay: 0.2 }}
@@ -234,8 +230,8 @@ export default function LiveAgentFeed() {
 
                 <div>
                   <div className="flex justify-between items-baseline mb-2">
-                    <span className="text-white/60">Active Agents</span>
-                    <span className="text-2xl font-bold text-green-500">{stats.activeAgents}</span>
+                    <span className="text-white/60">{t('metrics.activeAgents')}</span>
+                    <span className="text-2xl font-display font-bold text-green-500">{stats.activeAgents}</span>
                   </div>
                   <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                     <motion.div
@@ -249,8 +245,8 @@ export default function LiveAgentFeed() {
 
                 <div>
                   <div className="flex justify-between items-baseline mb-2">
-                    <span className="text-white/60">Avg Response Time</span>
-                    <span className="text-2xl font-bold text-blue-500">
+                    <span className="text-white/60">{t('metrics.avgResponseTime')}</span>
+                    <span className="text-2xl font-display font-bold text-blue-500">
                       {stats.avgResponseTime}ms
                     </span>
                   </div>
@@ -266,8 +262,8 @@ export default function LiveAgentFeed() {
 
                 <div>
                   <div className="flex justify-between items-baseline mb-2">
-                    <span className="text-white/60">Success Rate</span>
-                    <span className="text-2xl font-bold text-purple-500">
+                    <span className="text-white/60">{t('metrics.successRate')}</span>
+                    <span className="text-2xl font-display font-bold text-purple-500">
                       {stats.successRate.toFixed(1)}%
                     </span>
                   </div>
@@ -284,8 +280,8 @@ export default function LiveAgentFeed() {
             </div>
 
             {/* Agent Status */}
-            <div className="bg-black/80 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-              <h4 className="text-lg font-semibold text-white mb-4">Agent Network</h4>
+            <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-5 sm:p-6">
+              <h4 className="text-lg font-display font-bold text-white mb-4">{t('networkTitle')}</h4>
               <div className="grid grid-cols-2 gap-3">
                 {agentTypes.map((agent, index) => {
                   const Icon = agent.icon;
@@ -294,11 +290,11 @@ export default function LiveAgentFeed() {
                     <div
                       key={agent.name}
                       className={`
-                        flex items-center gap-2 p-3 rounded-lg border transition-all
+                        flex items-center gap-2 p-3 rounded-lg border transition-all duration-300
                         ${
                           isActive
-                            ? 'bg-white/10 border-white/20'
-                            : 'bg-white/5 border-white/10 opacity-50'
+                            ? 'bg-white/[0.06] border-white/20'
+                            : 'bg-white/[0.02] border-white/10 opacity-50'
                         }
                       `}
                     >

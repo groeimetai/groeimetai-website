@@ -1,69 +1,57 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Clock, Zap, Users, TrendingUp, ArrowRight } from 'lucide-react';
+import { Clock, Zap, Users, TrendingUp } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function AgentOpportunity() {
+  const t = useTranslations('agentOpportunity');
+
   const opportunities = [
-    {
-      title: 'AI agents die 24/7 jouw services kunnen gebruiken',
-      icon: Clock,
-      description: 'Geen wachttijden, geen kantooruren - agents werken altijd'
-    },
-    {
-      title: 'Volledige automatisering van repetitieve taken',
-      icon: Zap,
-      description: 'Van handmatig naar automatisch - agents nemen over'
-    },
-    {
-      title: 'Klanten die instant geholpen worden',
-      icon: Users,
-      description: 'Van uren wachten naar seconden respons - agents zijn er altijd'
-    },
-    {
-      title: 'Processen die zichzelf optimaliseren', 
-      icon: TrendingUp,
-      description: 'Van statisch naar lerend - agents verbeteren continu'
-    }
+    { titleKey: 'opportunities.alwaysOn.title', descKey: 'opportunities.alwaysOn.description', icon: Clock },
+    { titleKey: 'opportunities.automation.title', descKey: 'opportunities.automation.description', icon: Zap },
+    { titleKey: 'opportunities.instant.title', descKey: 'opportunities.instant.description', icon: Users },
+    { titleKey: 'opportunities.optimize.title', descKey: 'opportunities.optimize.description', icon: TrendingUp },
   ];
 
   return (
-    <section className="py-24 relative" style={{ backgroundColor: '#080D14' }}>
-      <div className="container mx-auto px-4">
+    <section className="py-20 sm:py-28 lg:py-36 relative bg-[#080D14]">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-              Stel je <span style={{ color: '#F87315' }}>voor</span>:
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-8 tracking-[-0.02em]">
+              {t('title')} <span className="text-[#F87315]">{t('titleHighlight')}</span>:
             </h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-16">
+          <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-16">
             {opportunities.map((opportunity, index) => (
               <motion.div
-                key={opportunity.title}
-                initial={{ opacity: 0, y: 30 }}
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                className="bg-white/5 border border-white/10 rounded-xl p-6 hover:border-white/20 hover:bg-white/10 transition-all duration-300"
+                transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true }}
+                className="bg-white/[0.03] border border-white/10 rounded-xl p-5 sm:p-6 hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300"
               >
                 <div className="flex items-start gap-4">
-                  <div 
-                    className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
-                    style={{ backgroundColor: '#F87315' }}
-                  >
+                  <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 bg-[#F87315]">
                     <opportunity.icon className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-white mb-3 leading-tight">
-                      {opportunity.title}
+                    <h3 className="text-lg font-display font-bold text-white mb-3 leading-tight">
+                      {t(opportunity.titleKey)}
                     </h3>
-                    <p className="text-white/70 text-sm leading-relaxed">
-                      {opportunity.description}
+                    <p className="text-white/60 text-sm leading-relaxed">
+                      {t(opportunity.descKey)}
                     </p>
                   </div>
                 </div>
@@ -75,18 +63,19 @@ export default function AgentOpportunity() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
             className="text-center"
           >
-            <div className="bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-8 max-w-4xl mx-auto">
-              <p className="text-xl text-white/90 mb-4 leading-relaxed">
-                <strong>Dit is geen toekomst. Dit gebeurt NU bij bedrijven die agent-ready zijn.</strong>
+            <div className="bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-6 sm:p-8 max-w-4xl mx-auto">
+              <p className="text-lg sm:text-xl text-white/90 mb-4 leading-relaxed">
+                <strong>{t('realityCheck')}</strong>
               </p>
-              <p className="text-lg mb-6" style={{ color: '#F87315' }}>
-                De vraag is: hoe word <strong>JIJ</strong> agent-ready?
+              <p className="text-lg font-semibold text-[#F87315] mb-6">
+                {t('question')}
               </p>
-              <p className="text-white/70 text-sm">
-                Wij begeleiden je van de eerste vraag tot volledige implementatie.
+              <p className="text-white/60 text-sm">
+                {t('guidance')}
               </p>
             </div>
           </motion.div>

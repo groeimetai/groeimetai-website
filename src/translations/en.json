@@ -4259,5 +4259,217 @@
         "lowIntent": "I'm here to help you explore how AI can transform your business. What aspects of AI are you most curious about?"
       }
     }
+  },
+  "testimonial": {
+    "quote": {
+      "author": "ServiceNow Manager, AI Product Content",
+      "role": "Verified ServiceNow employee",
+      "text": "That someone could put this together so quickly not only shows how much talent is out there in the greater ServiceNow community, but also indicates how much the entire development process is now changing. Niels van der Werf is just one of thousands who are out there now putting AI tools to work, and we're still truly in the early days of applying this tech.",
+      "context": "About Snow-Flow: Claude + ServiceNow MCP integration"
+    },
+    "whyTitle": "Why",
+    "whyHighlight": "GroeimetAI",
+    "reasons": {
+      "earlyAdopters": {
+        "title": "Early adopters",
+        "description": "We spot trends before they go mainstream"
+      },
+      "openSource": {
+        "title": "Open source first",
+        "description": "Snow-flow is our commitment to transparency"
+      },
+      "practical": {
+        "title": "Practical",
+        "description": "No consultancy fluff, just working code"
+      },
+      "together": {
+        "title": "Building together",
+        "description": "We learn and grow with our clients"
+      },
+      "dutch": {
+        "title": "Dutch context",
+        "description": "We understand the local market and regulations"
+      }
+    }
+  },
+  "liveAgentFeed": {
+    "title": "AI Agents",
+    "titleHighlight": "Working",
+    "titleEnd": "24/7",
+    "subtitle": "Watch our autonomous agents collaborate in real-time to deliver exceptional results",
+    "feedTitle": "Live Agent Activity",
+    "live": "Live",
+    "agent": "Agent",
+    "metricsTitle": "Performance Metrics",
+    "networkTitle": "Agent Network",
+    "status": {
+      "working": "working",
+      "completed": "completed",
+      "reviewing": "reviewing"
+    },
+    "actions": {
+      "analyzing": "Analyzing requirements",
+      "writing": "Writing code modules",
+      "scanning": "Running security scans",
+      "optimizing": "Optimizing performance",
+      "documenting": "Generating documentation",
+      "testing": "Testing edge cases",
+      "reviewing": "Reviewing architecture",
+      "implementing": "Implementing features",
+      "validating": "Validating outputs",
+      "coordinating": "Coordinating agents"
+    },
+    "metrics": {
+      "tasksCompleted": "Tasks Completed",
+      "activeAgents": "Active Agents",
+      "avgResponseTime": "Avg Response Time",
+      "successRate": "Success Rate"
+    }
+  },
+  "agentOpportunity": {
+    "title": "Imagine",
+    "titleHighlight": "this",
+    "opportunities": {
+      "alwaysOn": {
+        "title": "AI agents that can use your services 24/7",
+        "description": "No waiting times, no office hours — agents are always working"
+      },
+      "automation": {
+        "title": "Full automation of repetitive tasks",
+        "description": "From manual to automatic — agents take over"
+      },
+      "instant": {
+        "title": "Customers helped instantly",
+        "description": "From hours of waiting to seconds of response — agents are always there"
+      },
+      "optimize": {
+        "title": "Processes that optimize themselves",
+        "description": "From static to learning — agents continuously improve"
+      }
+    },
+    "realityCheck": "This isn't the future. This is happening NOW at companies that are agent-ready.",
+    "question": "The question is: how do YOU become agent-ready?",
+    "guidance": "We guide you from the first question to full implementation."
+  },
+  "agentServices": {
+    "title": "Your path to",
+    "titleHighlight": "Agent Readiness",
+    "subtitle": "From agent-blind to agent-ready in three steps.",
+    "guideIntro": "We are your guide in the agent economy. Not just technically, but especially strategically. We help you:",
+    "guidePoints": {
+      "0": "Understand which systems have priority",
+      "1": "Create a realistic roadmap",
+      "2": "Make the right technical choices",
+      "3": "Implement step by step",
+      "4": "Measure and optimize"
+    },
+    "services": {
+      "assess": {
+        "title": "ASSESS",
+        "subtitle": "Agent Readiness Scan",
+        "description": "Discover how agent-ready your organization truly is",
+        "features": {
+          "0": "Complete API inventory and analysis",
+          "1": "Agent accessibility assessment",
+          "2": "MCP readiness roadmap",
+          "3": "ROI calculation and prioritization"
+        },
+        "highlight": "Free 30-minute assessment"
+      },
+      "build": {
+        "title": "BUILD",
+        "subtitle": "Agent Infrastructure",
+        "description": "Transform your systems into agent-ready platforms",
+        "features": {
+          "0": "API to MCP protocol conversion",
+          "1": "Secure agent access layers",
+          "2": "Custom agent integrations",
+          "3": "Testing & deployment"
+        },
+        "highlight": "Proven method since 2023"
+      },
+      "monitor": {
+        "title": "MONITOR",
+        "subtitle": "Agent Intelligence",
+        "description": "Track which agents are active and what they do",
+        "features": {
+          "0": "Real-time agent activity tracking",
+          "1": "Performance monitoring",
+          "2": "New opportunity detection",
+          "3": "Competitor agent analysis"
+        },
+        "highlight": "24/7 monitoring dashboard"
+      }
+    },
+    "ctaTitle": "Want to know where you stand?",
+    "ctaDescription": "Start with our free Agent Readiness Assessment and discover exactly what's needed to prepare your business for Agent Season 2025.",
+    "ctaButton": "Get your MCP Roadmap"
+  },
+  "mcpComparison": {
+    "title": "Why MCP?",
+    "titleHighlight": "The technical story",
+    "subtitle": "REST APIs are made for humans. MCP servers are made for agents. The difference determines whether your systems participate in the agent economy.",
+    "rest": {
+      "title": "REST APIs",
+      "subtitle": "The old way",
+      "result": "Result: Agent-blind systems"
+    },
+    "mcp": {
+      "title": "MCP Servers",
+      "subtitle": "The agent-ready way",
+      "result": "Result: Fully agent-accessible"
+    },
+    "comparisons": {
+      "discovery": {
+        "feature": "Agent Discovery",
+        "rest": "Agents cannot discover",
+        "mcp": "Auto-discovery for agents"
+      },
+      "protocol": {
+        "feature": "Protocol",
+        "rest": "No standard protocol",
+        "mcp": "Universal MCP protocol"
+      },
+      "authentication": {
+        "feature": "Authentication",
+        "rest": "Complex authentication",
+        "mcp": "Built-in security"
+      },
+      "context": {
+        "feature": "Context Awareness",
+        "rest": "No context awareness",
+        "mcp": "Context-aware interactions"
+      },
+      "documentation": {
+        "feature": "Documentation",
+        "rest": "Manual documentation",
+        "mcp": "Self-describing endpoints"
+      },
+      "integration": {
+        "feature": "Agent Integration",
+        "rest": "Custom per agent/API",
+        "mcp": "Plug & play for all agents"
+      }
+    },
+    "stats": {
+      "server": {
+        "value": "1x",
+        "label": "MCP Server",
+        "detail": "vs per-agent custom code"
+      },
+      "protocol": {
+        "value": "Universal",
+        "label": "Protocol",
+        "detail": "vs agent-specific integrations"
+      },
+      "plugPlay": {
+        "value": "Plug & Play",
+        "label": "For All Agents",
+        "detail": "vs months of custom development"
+      }
+    },
+    "differenceTitle": "The difference?",
+    "differenceDescription": "One MCP server works with all agents. REST APIs require custom integration code per agent.",
+    "snowflowLink": "View Snow-flow: our open source MCP server"
   }
 }
