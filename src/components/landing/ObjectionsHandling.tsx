@@ -11,19 +11,22 @@ export default function ObjectionsHandling() {
   const objections = Object.values(t.raw('faqs')) as Array<{ question: string; answer: string }>;
 
   return (
-    <section className="py-20" style={{ backgroundColor: '#080D14' }}>
-      <div className="container mx-auto px-4">
+    <section className="py-20 sm:py-28 lg:py-36 relative bg-[#080D14]">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+            className="text-center mb-16 sm:mb-20"
           >
-            <h2 className="text-4xl font-bold text-white mb-6">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 tracking-[-0.02em]">
               {t('title')} <span className="text-[#F87315]">{t('titleHighlight')}</span>
             </h2>
-            <p className="text-xl text-white/70">
+            <p className="text-lg sm:text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
               {t('subtitle')}
             </p>
           </motion.div>
@@ -36,16 +39,19 @@ export default function ObjectionsHandling() {
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  className="bg-white/5 border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all duration-300"
+                  transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                  viewport={{ once: true }}
+                  className="bg-white/[0.03] border border-white/10 rounded-xl p-5 sm:p-6 hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300"
                 >
                   <div className="flex items-start gap-4">
-                    <HelpCircle className="w-6 h-6 mt-1 flex-shrink-0 text-[#F87315]" />
+                    <div className="w-10 h-10 rounded-lg bg-[#F87315]/10 flex items-center justify-center shrink-0 mt-0.5">
+                      <HelpCircle className="w-5 h-5 text-[#F87315]" />
+                    </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-white mb-3">
-                        "{objection.question}"
+                      <h3 className="text-lg font-semibold text-white mb-2">
+                        &ldquo;{objection.question}&rdquo;
                       </h3>
-                      <p className="text-white/80 leading-relaxed mb-4">
+                      <p className="text-white/60 leading-relaxed text-sm">
                         {objection.answer}
                       </p>
                     </div>
@@ -77,14 +83,15 @@ export default function ObjectionsHandling() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-center mt-16"
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+            className="text-center mt-16 sm:mt-20"
           >
-            <div className="bg-gradient-to-r from-white/5 to-white/10 border border-white/10 rounded-xl p-6">
-              <p className="text-white/90 mb-2">
-                <strong>{t('stillDoubts')}</strong>
+            <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-8 max-w-3xl mx-auto">
+              <p className="text-lg sm:text-xl font-semibold text-white mb-2">
+                {t('stillDoubts')}
               </p>
-              <p className="text-sm text-white/70">
+              <p className="text-sm text-white/50">
                 {t('freeConsultation')}
               </p>
             </div>

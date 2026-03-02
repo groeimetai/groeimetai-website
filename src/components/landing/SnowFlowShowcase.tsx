@@ -9,8 +9,10 @@ export default function SnowFlowShowcase() {
   const t = useTranslations('snowflow');
   
   return (
-    <section className="py-8 sm:py-12 md:py-16 lg:py-24 relative" style={{ backgroundColor: '#080D14' }}>
-      <div className="container mx-auto px-2 sm:px-4">
+    <section className="py-20 sm:py-28 lg:py-36 relative bg-[#080D14]">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -131,17 +133,6 @@ export default function SnowFlowShowcase() {
             </motion.div>
           </div>
 
-          {/* Decorative Image Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="mb-16"
-          >
-            <div className="max-w-4xl mx-auto">
-            </div>
-          </motion.div>
-
           {/* GitHub Integration */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -178,18 +169,24 @@ export default function SnowFlowShowcase() {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="inline-flex items-center px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-white transition-all duration-300">
-                <Github className="mr-2 w-5 h-5" />
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <a
+                href="https://github.com/GroeimetAI/snow-flow"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-6 py-3 bg-white/[0.06] hover:bg-white/[0.10] border border-white/10 hover:border-white/20 rounded-lg text-white transition-all duration-200 text-sm font-medium"
+              >
+                <Github className="mr-2 w-4 h-4" />
                 {t('github.buttons.github')}
-                <ExternalLink className="ml-2 w-4 h-4" />
-              </button>
-              <button
-                className="inline-flex items-center px-6 py-3 bg-[#F87315] hover:bg-[#E5680F] text-white font-semibold rounded-lg transition-all duration-300 shadow-lg shadow-[#F87315]/25 hover:shadow-xl hover:shadow-[#F87315]/30 hover:scale-[1.02] active:scale-[0.98]"
+                <ExternalLink className="ml-2 w-3.5 h-3.5 opacity-50" />
+              </a>
+              <a
+                href="/contact"
+                className="inline-flex items-center justify-center px-6 py-3 bg-[#F87315] hover:bg-[#E5680F] text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-[#F87315]/20 hover:shadow-[#F87315]/30 text-sm"
               >
                 {t('github.buttons.demo')}
                 <ArrowRight className="ml-2 w-4 h-4" />
-              </button>
+              </a>
             </div>
           </motion.div>
 
@@ -207,12 +204,13 @@ export default function SnowFlowShowcase() {
               <p className="text-white/80 mb-6 text-lg">
                 {t('futureDescription')}
               </p>
-              <button
-                className="inline-flex items-center px-8 py-4 bg-[#F87315] hover:bg-[#E5680F] text-white font-bold rounded-lg transition-all duration-300 shadow-lg shadow-[#F87315]/25 hover:shadow-xl hover:shadow-[#F87315]/30 hover:scale-[1.02] active:scale-[0.98] text-lg"
+              <a
+                href="/contact"
+                className="inline-flex items-center px-8 py-4 bg-[#F87315] hover:bg-[#E5680F] text-white font-semibold rounded-lg transition-all duration-200 shadow-lg shadow-[#F87315]/20 hover:shadow-[#F87315]/30 text-base"
               >
                 {t('ctaButton')}
-                <ArrowRight className="ml-3 w-6 h-6" />
-              </button>
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </a>
             </div>
           </motion.div>
         </div>

@@ -17,7 +17,7 @@ export default function ServicesOverviewSection() {
   const t = useTranslations('servicesOverview');
 
   return (
-    <section className="py-16 sm:py-20 relative" style={{ backgroundColor: '#080D14' }}>
+    <section className="py-20 sm:py-28 relative bg-[#080D14]">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,12 +31,7 @@ export default function ServicesOverviewSection() {
           >
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 tracking-[-0.02em]">
               {t('hero.title')}{' '}
-              <span
-                className="text-white px-2 py-0.5 sm:px-3 sm:py-1 inline-block"
-                style={{
-                  background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
-                }}
-              >
+              <span className="text-white px-2 py-0.5 sm:px-3 sm:py-1 inline-block bg-gradient-to-r from-[#F87315] to-[#FF9F43] rounded-sm">
                 {t('hero.titleHighlight')}
               </span>
             </h2>
@@ -72,8 +67,8 @@ export default function ServicesOverviewSection() {
                     <p className="text-xs sm:text-sm text-[#FF9F43] font-medium mb-2">
                       {t(`services.${service.id}.tagline`)}
                     </p>
-                    <span className="inline-flex items-center text-xs text-white/50 group-hover:text-white/70 transition-colors">
-                      Learn more
+                    <span className="inline-flex items-center text-xs text-white/40 group-hover:text-[#FF9F43] transition-colors mt-1">
+                      {t('learnMore')}
                       <ArrowRight className="w-3 h-3 ml-1 transition-transform group-hover:translate-x-0.5" />
                     </span>
                   </Link>

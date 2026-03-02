@@ -278,12 +278,7 @@ export default function AgentReadinessHero() {
             <Link href="/contact" className="w-full sm:w-auto">
               <Button
                 size="lg"
-                className="group text-white border-0 w-full sm:w-auto h-14 text-base font-medium px-8 rounded-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                style={{
-                  background:
-                    'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
-                  boxShadow: '0 4px 20px -4px rgba(248, 115, 21, 0.5)',
-                }}
+                className="group text-white border-0 w-full sm:w-auto h-14 text-base font-medium px-8 rounded-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.97] bg-gradient-to-r from-[#F87315] to-[#FF9F43] shadow-lg shadow-[#F87315]/40 hover:shadow-xl hover:shadow-[#F87315]/50"
               >
                 <Calendar className="mr-2 w-5 h-5" />
                 {t('cta.consultation')}

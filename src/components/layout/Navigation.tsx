@@ -69,9 +69,30 @@ export default function Navigation() {
       setIsScrolled(window.scrollY > 20);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close mobile menu on Escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isMobileMenuOpen]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isMobileMenuOpen]);
 
   // Don't render until mounted to avoid SSR issues
   if (!mounted) {
@@ -107,12 +128,12 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-white font-medium px-3 py-2 rounded-lg hover-orange"
+                className="text-white/80 hover:text-white font-medium px-4 py-2 rounded-lg hover:bg-white/[0.06] transition-all duration-200 text-sm"
               >
                 {item.label}
               </Link>
@@ -132,7 +153,7 @@ export default function Navigation() {
                   <Link href="/dashboard">
                     <Button
                       variant="ghost"
-                      className="text-white hover:text-orange hover:bg-white/10 hover-lift"
+                      className="text-white/80 hover:text-white hover:bg-white/[0.06]"
                     >
                       <LayoutDashboard className="w-4 h-4 mr-2" />
                       {t('dashboard')}
@@ -142,7 +163,7 @@ export default function Navigation() {
                     <Link href="/dashboard/admin">
                       <Button
                         variant="ghost"
-                        className="text-white hover:text-orange hover:bg-white/10 hover-lift"
+                        className="text-white/80 hover:text-white hover:bg-white/[0.06]"
                       >
                         <Shield className="w-4 h-4 mr-2" />
                         Admin
@@ -153,7 +174,7 @@ export default function Navigation() {
                     <Button
                       onClick={handleLogout}
                       variant="ghost"
-                      className="text-white hover:text-orange hover:bg-white/10 hover-lift"
+                      className="text-white/80 hover:text-white hover:bg-white/[0.06]"
                     >
                       <LogOut className="w-4 h-4 mr-2" />
                       {t('logout')}
@@ -165,13 +186,13 @@ export default function Navigation() {
                   <Link href="/login">
                     <Button
                       variant="ghost"
-                      className="text-white hover:text-orange hover:bg-white/10 hover-lift"
+                      className="text-white/80 hover:text-white hover:bg-white/[0.06]"
                     >
                       {t('signIn')}
                     </Button>
                   </Link>
                   <StartProjectButton
-                    className="bg-orange hover:bg-orange-600 text-white border border-orange shadow-orange hover-lift"
+                    className="bg-[#F87315] hover:bg-[#E5680F] text-white shadow-lg shadow-[#F87315]/20 hover:shadow-[#F87315]/30 transition-all duration-200"
                     preselectedService="genai-consultancy"
                   >
                     {t('getStarted')}
@@ -199,6 +220,20 @@ export default function Navigation() {
         </div>
       </div>
 
+      {/* Mobile Menu Backdrop */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[-1] md:hidden"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
@@ -206,8 +241,8 @@ export default function Navigation() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="md:hidden bg-white/5 backdrop-blur-xl border-t border-white/10 shadow-2xl rounded-b-2xl"
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="md:hidden bg-black/80 backdrop-blur-xl border-t border-white/[0.06] shadow-2xl shadow-black/40 rounded-b-2xl max-h-[calc(100vh-5rem)] overflow-y-auto"
           >
             <div className="container mx-auto px-4 py-6">
               <div className="flex flex-col space-y-2">

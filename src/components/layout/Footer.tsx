@@ -8,7 +8,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   ArrowRight, ExternalLink, Github, Linkedin, Twitter,
-  Mail, Phone, MapPin
+  Mail, Phone, MapPin, CheckCircle
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import AskAI from '@/components/AskAI';
@@ -77,21 +77,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           {/* Company Info - Spans 2 columns like original */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center space-x-3 mb-4 hover:opacity-80 transition-opacity">
+            <Link href="/" className="inline-flex items-center mb-4 hover:opacity-80 transition-opacity">
               <Image
                 src="/groeimet-ai-logo.svg"
                 alt="GroeimetAI"
-                width={40}
-                height={40}
-                className="w-10 h-10"
+                width={120}
+                height={50}
+                className="h-8 w-auto"
               />
-              <div 
-                className="h-8"
-                style={{ 
-                  width: '60px',
-                  background: 'linear-gradient(135deg, #F87315, #FF8533)' 
-                }}
-              ></div>
             </Link>
             <p className="text-white/70 mb-6">
               {t('tagline')}
@@ -107,21 +100,26 @@ export default function Footer() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={t('newsletter.placeholder')}
-                    className="bg-white/5 border-white/20 text-white flex-1"
+                    className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/30 flex-1 focus:border-[#F87315]/30 focus:bg-white/[0.06]"
                     required
                   />
                   <Button
                     type="submit"
                     aria-label="Subscribe to newsletter"
-                    className="bg-[#F87315] hover:bg-[#E5680F] text-white transition-colors duration-200"
+                    className="bg-[#F87315] hover:bg-[#E5680F] text-white transition-all duration-200 px-4 shrink-0"
                   >
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </form>
               ) : (
-                <div className="text-green-400 text-sm">
+                <motion.div
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-emerald-400 text-sm flex items-center gap-2"
+                >
+                  <CheckCircle className="w-4 h-4" />
                   {t('newsletter.subscribedMessage')}
-                </div>
+                </motion.div>
               )}
               <p className="text-white/60 text-xs mt-2">
                 {t('newsletter.description')}
@@ -129,27 +127,17 @@ export default function Footer() {
             </div>
 
             {/* Contact Info */}
-            <div className="space-y-2">
-              <div className="flex items-center text-white/60">
-                <Mail className="w-4 h-4 mr-3 text-[#F87315]" />
-                <a href={`mailto:${t('contact.email')}`} className="hover:text-white group relative overflow-hidden transition-colors text-sm">
-                  <span className="relative z-10 group-hover:text-orange-500 transition-colors">
-                    {t('contact.email')}
-                  </span>
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                </a>
-              </div>
-              <div className="flex items-center text-white/60">
-                <Phone className="w-4 h-4 mr-3 text-[#F87315]" />
-                <a href="tel:+31681739018" className="hover:text-white group relative overflow-hidden transition-colors text-sm">
-                  <span className="relative z-10 group-hover:text-orange-500 transition-colors">
-                    {t('contact.phone')}
-                  </span>
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                </a>
-              </div>
-              <div className="flex items-center text-white/60 text-sm">
-                <MapPin className="w-4 h-4 mr-3 text-[#F87315]" />
+            <div className="space-y-3">
+              <a href={`mailto:${t('contact.email')}`} className="flex items-center text-white/50 hover:text-white/80 transition-colors text-sm group">
+                <Mail className="w-4 h-4 mr-3 text-[#F87315] shrink-0" />
+                <span className="group-hover:text-[#F87315] transition-colors">{t('contact.email')}</span>
+              </a>
+              <a href="tel:+31681739018" className="flex items-center text-white/50 hover:text-white/80 transition-colors text-sm group">
+                <Phone className="w-4 h-4 mr-3 text-[#F87315] shrink-0" />
+                <span className="group-hover:text-[#F87315] transition-colors">{t('contact.phone')}</span>
+              </a>
+              <div className="flex items-center text-white/50 text-sm">
+                <MapPin className="w-4 h-4 mr-3 text-[#F87315] shrink-0" />
                 <span>{t('contact.location')}</span>
               </div>
             </div>
@@ -157,13 +145,13 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className="font-semibold mb-4 text-white">{t('sections.services')}</h3>
-            <ul className="space-y-3">
+            <h3 className="font-semibold mb-4 text-white text-sm uppercase tracking-wider">{t('sections.services')}</h3>
+            <ul className="space-y-2.5">
               {footerSections.services.map((item, index) => (
                 <li key={index}>
-                  <Link 
+                  <Link
                     href={item.href}
-                    className="text-white/70 hover:text-white transition-colors text-sm block"
+                    className="text-white/50 hover:text-white/80 transition-colors text-sm block"
                   >
                     {item.label}
                   </Link>
@@ -174,29 +162,26 @@ export default function Footer() {
 
           {/* Resources */}
           <div>
-            <h3 className="font-semibold mb-4 text-white">{t('sections.resources')}</h3>
-            <ul className="space-y-3">
+            <h3 className="font-semibold mb-4 text-white text-sm uppercase tracking-wider">{t('sections.resources')}</h3>
+            <ul className="space-y-2.5">
               {footerSections.resources.map((item, index) => (
                 <li key={index}>
                   {item.external ? (
-                    <a 
+                    <a
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-white/70 hover:text-white transition-colors text-sm flex items-center"
+                      className="text-white/50 hover:text-white/80 transition-colors text-sm flex items-center gap-1"
                     >
                       {item.label}
-                      <ExternalLink className="w-3 h-3 ml-1" />
+                      <ExternalLink className="w-3 h-3 opacity-50" />
                     </a>
                   ) : (
-                    <Link 
+                    <Link
                       href={item.href}
-                      className="text-white/70 hover:text-white transition-colors text-sm block relative overflow-hidden group"
+                      className="text-white/50 hover:text-white/80 transition-colors text-sm block"
                     >
-                      <span className="relative z-10 group-hover:text-orange-500 transition-colors">
-                        {item.label}
-                      </span>
-                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                      {item.label}
                     </Link>
                   )}
                 </li>
@@ -206,37 +191,31 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="font-semibold mb-4 text-white">{t('sections.company')}</h3>
-            <ul className="space-y-3">
+            <h3 className="font-semibold mb-4 text-white text-sm uppercase tracking-wider">{t('sections.company')}</h3>
+            <ul className="space-y-2.5">
               {footerSections.company.map((item, index) => (
                 <li key={index}>
-                  <Link 
+                  <Link
                     href={item.href}
-                    className="text-white/70 hover:text-white transition-colors text-sm block relative overflow-hidden group"
+                    className="text-white/50 hover:text-white/80 transition-colors text-sm block"
                   >
-                    <span className="relative z-10 group-hover:text-orange-500 transition-colors">
-                      {item.label}
-                    </span>
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                    {item.label}
                   </Link>
                 </li>
               ))}
             </ul>
-            
+
             {/* Developer Section */}
-            <div className="mt-8">
-              <h4 className="font-semibold mb-3 text-white/80 text-sm">{t('sections.developers')}</h4>
+            <div className="mt-6 pt-6 border-t border-white/[0.06]">
+              <h4 className="font-semibold mb-3 text-white text-xs uppercase tracking-wider">{t('sections.developers')}</h4>
               <ul className="space-y-2">
                 {footerSections.developers.map((item, index) => (
                   <li key={index}>
-                    <Link 
+                    <Link
                       href={item.href}
-                      className="text-white/60 hover:text-orange-500 transition-colors text-xs block relative overflow-hidden group"
+                      className="text-white/40 hover:text-white/70 transition-colors text-xs block"
                     >
-                      <span className="relative z-10 transition-colors">
-                        {item.label}
-                      </span>
-                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                      {item.label}
                     </Link>
                   </li>
                 ))}
@@ -285,34 +264,23 @@ export default function Footer() {
           </div>
 
           {/* Social Links */}
-          <div className="flex justify-center space-x-6 mb-8">
-            <a
-              href="https://linkedin.com/company/groeimetai"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="text-white/50 hover:text-[#F87315] transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a
-              href="https://github.com/GroeimetAI"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub"
-              className="text-white/50 hover:text-[#F87315] transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <Github className="w-5 h-5" />
-            </a>
-            <a
-              href="https://twitter.com/groeimetai"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Twitter"
-              className="text-white/50 hover:text-[#F87315] transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <Twitter className="w-5 h-5" />
-            </a>
+          <div className="flex justify-center gap-3 mb-8">
+            {[
+              { href: 'https://linkedin.com/company/groeimetai', label: 'LinkedIn', Icon: Linkedin },
+              { href: 'https://github.com/GroeimetAI', label: 'GitHub', Icon: Github },
+              { href: 'https://twitter.com/groeimetai', label: 'Twitter', Icon: Twitter },
+            ].map(({ href, label, Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="w-9 h-9 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
+              >
+                <Icon className="w-4 h-4" />
+              </a>
+            ))}
           </div>
         </div>
 

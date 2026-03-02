@@ -48,7 +48,7 @@ export default function OnzeRolPartner() {
   ];
 
   return (
-    <section className="py-20 sm:py-28 lg:py-36 relative" style={{ backgroundColor: '#080D14' }}>
+    <section className="py-20 sm:py-28 lg:py-36 relative bg-[#080D14]">
       {/* Subtle section divider */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
@@ -63,13 +63,7 @@ export default function OnzeRolPartner() {
           >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 tracking-[-0.02em]">
               {t('title')}{' '}
-              <span
-                className="text-white px-3 py-1 sm:px-4 sm:py-2 inline-block"
-                style={{
-                  background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
-                  boxShadow: '0 8px 32px -8px rgba(248, 115, 21, 0.4)',
-                }}
-              >
+              <span className="text-white px-3 py-1 sm:px-4 sm:py-1.5 inline-block bg-gradient-to-r from-[#F87315] to-[#FF9F43] shadow-lg shadow-[#F87315]/30 rounded-sm">
                 {t('titleHighlight')}
               </span>{' '}
               {t('titleEnd')}
@@ -114,7 +108,7 @@ export default function OnzeRolPartner() {
                   <div className="flex flex-col sm:flex-row items-start gap-4">
                     <div
                       className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0 transition-transform duration-300 group-hover:scale-105"
-                      style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
+                      style={{ background: 'linear-gradient(135deg, #F87315, #FF9F43)' }}
                     >
                       <role.icon className="w-6 h-6 text-white" />
                     </div>

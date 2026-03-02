@@ -92,6 +92,8 @@
     overflow-x: hidden;
     width: 100%;
     position: relative;
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
   }
 
   /* Text selection styling */
@@ -103,12 +105,22 @@
     background-color: rgba(248, 115, 21, 0.3);
     color: #fff;
   }
+
+  /* Better focus-visible for all interactive elements */
+  :focus-visible {
+    @apply outline-none ring-2 ring-[#F87315]/50 ring-offset-2 ring-offset-black;
+  }
+
+  /* Smooth transition for all interactive elements */
+  a, button, input, select, textarea {
+    @apply transition-colors duration-200;
+  }
 }
 
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -116,13 +128,20 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-white/15 rounded-full;
-  border: 2px solid transparent;
+  @apply bg-white/10 rounded-full;
+  border: 1px solid transparent;
   background-clip: content-box;
+  transition: background-color 0.2s;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-white/25;
+  @apply bg-white/20;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 }
 
 /* Chat message animations */
@@ -496,6 +515,14 @@
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  /* Disable Framer Motion animations system-wide */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

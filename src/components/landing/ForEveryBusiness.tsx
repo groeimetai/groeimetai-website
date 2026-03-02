@@ -2,7 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { Search, Target, Rocket, ArrowRight, CheckCircle, Calendar } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
+import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
@@ -64,7 +65,7 @@ export default function ForEveryBusiness() {
   ];
 
   return (
-    <section className="py-20 sm:py-28 lg:py-36 relative" style={{ backgroundColor: '#080D14' }}>
+    <section className="py-20 sm:py-28 lg:py-36 relative bg-[#080D14]">
       {/* Subtle section divider */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
@@ -79,13 +80,7 @@ export default function ForEveryBusiness() {
           >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 tracking-[-0.02em]">
               {t('title')}{' '}
-              <span
-                className="text-white px-3 py-1 sm:px-4 sm:py-2 inline-block"
-                style={{
-                  background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
-                  boxShadow: '0 8px 32px -8px rgba(248, 115, 21, 0.4)',
-                }}
-              >
+              <span className="text-white px-3 py-1 sm:px-4 sm:py-1.5 inline-block bg-gradient-to-r from-[#F87315] to-[#FF9F43] shadow-lg shadow-[#F87315]/30 rounded-sm">
                 {t('highlight')}
               </span>{' '}
               {t('titleEnd')}
@@ -118,10 +113,7 @@ export default function ForEveryBusiness() {
                 <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-6 sm:p-8 h-full hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300 flex flex-col">
                   {/* Step Number */}
                   <div className="flex items-center justify-between mb-6">
-                    <div
-                      className="w-14 h-14 rounded-xl flex items-center justify-center text-xl font-bold text-white transition-transform duration-300 group-hover:scale-105"
-                      style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
-                    >
+                    <div className="w-14 h-14 rounded-xl flex items-center justify-center text-xl font-bold text-white transition-transform duration-300 group-hover:scale-105 bg-gradient-to-br from-[#F87315] to-[#FF9F43]">
                       {step.number}
                     </div>
                     <step.icon className="w-7 h-7 text-white/50" />
@@ -151,27 +143,24 @@ export default function ForEveryBusiness() {
                         <span className="text-white font-medium ml-1">{step.timeframe}</span>
                       </div>
                       <div
-                        className="px-3 py-1 rounded-full text-xs font-semibold text-white"
-                        style={{ backgroundColor: step.pricing === 'GRATIS' ? '#10B981' : '#F87315' }}
+                        className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${
+                          step.pricing === 'GRATIS' ? 'bg-emerald-500' : 'bg-[#F87315]'
+                        }`}
                       >
                         {step.pricing}
                       </div>
                     </div>
                   </div>
 
-                  {/* CTA Button - altijd onderaan */}
-                  <div className="mt-auto">
+                  {/* CTA Button */}
+                  <div className="mt-auto pt-2">
                     <Link href={step.link}>
-                      <button
-                        className="w-full py-3.5 rounded-lg font-medium text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                        style={{
-                          background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
-                          boxShadow: '0 4px 20px -4px rgba(248, 115, 21, 0.4)',
-                        }}
+                      <Button
+                        className="w-full bg-[#F87315] hover:bg-[#E5680F] text-white font-medium h-12 shadow-lg shadow-[#F87315]/20 hover:shadow-[#F87315]/30 transition-all duration-200"
                       >
                         {step.cta}
-                        <ArrowRight className="ml-2 w-4 h-4 inline" />
-                      </button>
+                        <ArrowRight className="ml-2 w-4 h-4" />
+                      </Button>
                     </Link>
                   </div>
                 </div>

@@ -54,7 +54,7 @@ export default function AgentBlindnessProblems() {
   ];
 
   return (
-    <section className="py-20 sm:py-28 lg:py-36 relative" style={{ backgroundColor: '#080D14' }}>
+    <section className="py-20 sm:py-28 lg:py-36 relative bg-[#080D14]">
       {/* Subtle section divider */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 

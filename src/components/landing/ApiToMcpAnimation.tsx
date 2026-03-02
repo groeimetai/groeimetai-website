@@ -504,7 +504,9 @@ export default function ApiToMcpAnimation() {
   const isReady = containerSize.width > 0 && containerSize.height > 0;
 
   return (
-    <section className="py-24 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
+    <section className="py-20 sm:py-28 lg:py-36 relative overflow-hidden bg-[#080D14]">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl"
@@ -513,30 +515,25 @@ export default function ApiToMcpAnimation() {
              style={{ background: `radial-gradient(circle, ${GREEN}40, transparent)` }} />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
 
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+            className="text-center mb-16 sm:mb-20"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 tracking-[-0.02em]">
               {t('title')}{' '}
-              <span
-                className="inline-block px-4 py-2"
-                style={{
-                  background: 'linear-gradient(135deg, #F87315, #FF8533)',
-                  boxShadow: '0 0 40px rgba(248, 115, 21, 0.4)'
-                }}
-              >
+              <span className="inline-block px-3 py-1 sm:px-4 sm:py-1.5 bg-gradient-to-r from-[#F87315] to-[#FF9F43] shadow-lg shadow-[#F87315]/30 rounded-sm">
                 {t('highlight')}
               </span>{' '}
               {t('titleEnd')}
             </h2>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto">{t('subtitle')}</p>
+            <p className="text-lg sm:text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">{t('subtitle')}</p>
           </motion.div>
 
           {/* Main Card */}

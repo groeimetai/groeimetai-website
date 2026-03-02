@@ -18,7 +18,7 @@ export default function CompanyTimeline() {
   ];
 
   return (
-    <section className="py-24 sm:py-32 relative overflow-hidden" style={{ backgroundColor: '#080D14' }}>
+    <section className="py-20 sm:py-28 lg:py-36 relative overflow-hidden bg-[#080D14]">
       {/* Background decorations — matching hero */}
       <div
         className="absolute inset-0 opacity-[0.03]"
