@@ -116,8 +116,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['Helvetica Neue', 'Arial', 'sans-serif'],
-        display: ['Helvetica Neue', 'Arial', 'sans-serif'],
+        sans: ['var(--font-body)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'system-ui', 'sans-serif'],
       },
       animation: {
         'pulse-slow': 'pulse-slow 4s ease-in-out infinite',

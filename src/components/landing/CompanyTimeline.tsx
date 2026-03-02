@@ -82,7 +82,7 @@ export default function CompanyTimeline() {
                   <div className="flex-1 min-w-0">
                     <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-5 sm:p-6 hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300">
                       <div className="flex items-center gap-3 mb-3">
-                        <span className="text-sm font-medium px-3 py-1 rounded-full bg-[#F87315]/10 border border-[#F87315]/30 text-[#FF9F43]">
+                        <span className="text-sm font-display font-medium px-3 py-1 rounded-full bg-[#F87315]/10 border border-[#F87315]/30 text-[#FF9F43]">
                           {milestone.date}
                         </span>
                         <span className="text-xs text-white/40">

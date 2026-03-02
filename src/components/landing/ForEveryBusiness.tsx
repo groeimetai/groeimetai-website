@@ -113,7 +113,7 @@ export default function ForEveryBusiness() {
                 <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-6 sm:p-8 h-full hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300 flex flex-col">
                   {/* Step Number */}
                   <div className="flex items-center justify-between mb-6">
-                    <div className="w-14 h-14 rounded-xl flex items-center justify-center text-xl font-bold text-white transition-transform duration-300 group-hover:scale-105 bg-gradient-to-br from-[#F87315] to-[#FF9F43]">
+                    <div className="w-14 h-14 rounded-xl flex items-center justify-center text-xl font-display font-bold text-white transition-transform duration-300 group-hover:scale-105 bg-gradient-to-br from-[#F87315] to-[#FF9F43]">
                       {step.number}
                     </div>
                     <step.icon className="w-7 h-7 text-white/50" />
@@ -232,15 +232,15 @@ export default function ForEveryBusiness() {
                     <p className="text-white/70 mb-4">{t('explanation.noLockIn.description')}</p>
                     <div className="grid grid-cols-3 gap-4 mt-4">
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-white">100%</div>
+                        <div className="text-2xl font-display font-bold text-white">100%</div>
                         <div className="text-white/60 text-xs">{t('explanation.guarantees.fixedPrice')}</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-white">2-12</div>
+                        <div className="text-2xl font-display font-bold text-white">2-12</div>
                         <div className="text-white/60 text-xs">{t('explanation.guarantees.timeframe')}</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-white">0</div>
+                        <div className="text-2xl font-display font-bold text-white">0</div>
                         <div className="text-white/60 text-xs">{t('explanation.guarantees.downtime')}</div>
                       </div>
                     </div>

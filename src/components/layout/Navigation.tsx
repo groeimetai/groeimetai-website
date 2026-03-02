@@ -133,7 +133,7 @@ export default function Navigation() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-white/80 hover:text-white font-medium px-4 py-2 rounded-lg hover:bg-white/[0.06] transition-all duration-200 text-sm"
+                className="text-white/80 hover:text-white font-display font-medium px-4 py-2 rounded-lg hover:bg-white/[0.06] transition-all duration-200 text-sm"
               >
                 {item.label}
               </Link>

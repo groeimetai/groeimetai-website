@@ -149,22 +149,22 @@ export default function SnowFlowShowcase() {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-[#F87315]">{t('github.openSourceBadge')}</div>
+                <div className="text-2xl font-display font-bold text-[#F87315]">{t('github.openSourceBadge')}</div>
                 <div className="text-white/60 text-sm">{t('github.transparency')}</div>
               </div>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6 mb-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">{t('github.stats.integrations')}</div>
+                <div className="text-3xl font-display font-bold text-white">{t('github.stats.integrations')}</div>
                 <div className="text-white/60">{t('github.stats.integrationsLabel')}</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">{t('github.stats.functions')}</div>
+                <div className="text-3xl font-display font-bold text-white">{t('github.stats.functions')}</div>
                 <div className="text-white/60">{t('github.stats.functionsLabel')}</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">{t('github.stats.community')}</div>
+                <div className="text-3xl font-display font-bold text-white">{t('github.stats.community')}</div>
                 <div className="text-white/60">{t('github.stats.communityLabel')}</div>
               </div>
             </div>

@@ -224,7 +224,7 @@ export default function AgentReadinessHero() {
             className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] mb-8 sm:mb-10"
           >
             <div className="w-2 h-2 rounded-full bg-[#F87315]" />
-            <span className="text-sm text-white/50 tracking-wide">
+            <span className="text-sm text-white/50 tracking-wide font-display">
               {t('badge')}
             </span>
           </motion.div>
@@ -278,7 +278,7 @@ export default function AgentReadinessHero() {
             <Link href="/contact" className="w-full sm:w-auto">
               <Button
                 size="lg"
-                className="group text-white border-0 w-full sm:w-auto h-14 text-base font-medium px-8 rounded-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.97] bg-gradient-to-r from-[#F87315] to-[#FF9F43] shadow-lg shadow-[#F87315]/40 hover:shadow-xl hover:shadow-[#F87315]/50"
+                className="group text-white border-0 w-full sm:w-auto h-14 text-base font-display font-semibold px-8 rounded-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.97] bg-gradient-to-r from-[#F87315] to-[#FF9F43] shadow-lg shadow-[#F87315]/40 hover:shadow-xl hover:shadow-[#F87315]/50"
               >
                 <Calendar className="mr-2 w-5 h-5" />
                 {t('cta.consultation')}
@@ -307,7 +307,7 @@ export default function AgentReadinessHero() {
               return (
                 <motion.div
                   key={service.key}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-full border text-sm font-medium transition-colors duration-500 cursor-default ${
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-full border text-sm font-display font-medium transition-colors duration-500 cursor-default ${
                     isActive
                       ? 'border-[#F87315]/30 bg-[#F87315]/[0.08] text-white/90'
                       : 'border-white/[0.06] bg-white/[0.02] text-white/35'
@@ -341,17 +341,17 @@ export default function AgentReadinessHero() {
             className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-sm"
           >
             <span className="text-white/50">
-              {t('stats.roi.value')}{' '}
+              <span className="font-display font-semibold text-white/70">{t('stats.roi.value')}</span>{' '}
               <span className="text-white/30">{t('stats.roi.label')}</span>
             </span>
             <span className="hidden sm:inline text-white/15">|</span>
             <span className="text-white/50">
-              {t('stats.speed.value')}{' '}
+              <span className="font-display font-semibold text-white/70">{t('stats.speed.value')}</span>{' '}
               <span className="text-white/30">{t('stats.speed.label')}</span>
             </span>
             <span className="hidden sm:inline text-white/15">|</span>
             <span className="text-white/50">
-              {t('stats.guarantee.value')}{' '}
+              <span className="font-display font-semibold text-white/70">{t('stats.guarantee.value')}</span>{' '}
               <span className="text-white/30">
                 {t('stats.guarantee.label')}
               </span>

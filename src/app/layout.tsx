@@ -1,10 +1,21 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Outfit, Syne } from 'next/font/google';
 import { Providers } from './providers';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import '../styles/globals.css';
 
-const inter = Inter({ subsets: ['latin'] });
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-body',
+  display: 'swap',
+});
+
+const syne = Syne({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800'],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://groeimetai.io'),
@@ -106,7 +117,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang={params?.locale || 'en'} suppressHydrationWarning>
-      <body className={`${inter.className} dark min-h-screen bg-background antialiased`} suppressHydrationWarning>
+      <body className={`${outfit.variable} ${syne.variable} font-sans dark min-h-screen bg-background antialiased`} suppressHydrationWarning>
         <ErrorBoundary>
           <Providers>{children}</Providers>
         </ErrorBoundary>
