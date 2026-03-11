@@ -139,7 +139,7 @@ export default function ForEveryBusiness() {
                     <div className="flex items-center justify-between text-sm mb-6">
                       <div className="flex items-center text-white/50">
                         <Calendar className="w-4 h-4 mr-2 text-[#FF9F43]" />
-                        <span>Tijd:</span>
+                        <span>{t('labels.time')}</span>
                         <span className="text-white font-medium ml-1">{step.timeframe}</span>
                       </div>
                       <div

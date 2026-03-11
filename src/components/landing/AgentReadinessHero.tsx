@@ -41,7 +41,7 @@ export default function AgentReadinessHero() {
     if (prefersReducedMotion) return;
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % SERVICE_KEYS.length);
-    }, 2800);
+    }, 3500);
     return () => clearInterval(interval);
   }, [prefersReducedMotion]);
 

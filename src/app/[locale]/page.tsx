@@ -3,13 +3,12 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import AgentReadinessHero from '@/components/landing/AgentReadinessHero';
-import ServicesOverviewSection from '@/components/landing/ServicesOverviewSection';
 import AgentBlindnessProblems from '@/components/landing/AgentBlindnessProblems';
-import ApiToMcpAnimation from '@/components/landing/ApiToMcpAnimation';
+import ServicesOverviewSection from '@/components/landing/ServicesOverviewSection';
+import UseCasesShowcase from '@/components/landing/UseCasesShowcase';
 import OnzeRolPartner from '@/components/landing/OnzeRolPartner';
-import CompanyTimeline from '@/components/landing/CompanyTimeline';
-import SnowFlowShowcase from '@/components/landing/SnowFlowShowcase';
 import ForEveryBusiness from '@/components/landing/ForEveryBusiness';
+import CompanyTimeline from '@/components/landing/CompanyTimeline';
 import ObjectionsHandling from '@/components/landing/ObjectionsHandling';
 import TestimonialSection from '@/components/landing/TestimonialSection';
 import AmbientLightingBackground from '@/components/landing/AmbientLightingBackground';
@@ -63,14 +62,14 @@ function HomePageContent() {
         </AnimatePresence>
 
         <AgentReadinessHero />
-        <ServicesOverviewSection />
         <AgentBlindnessProblems />
-        <ApiToMcpAnimation />
+        <ServicesOverviewSection />
+        <UseCasesShowcase />
         <OnzeRolPartner />
-        <CompanyTimeline />
-        <SnowFlowShowcase />
-        <ObjectionsHandling />
         <ForEveryBusiness />
+        <CompanyTimeline />
+        <ObjectionsHandling />
+        <TestimonialSection />
       </main>
     </>
   );

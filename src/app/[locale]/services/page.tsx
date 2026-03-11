@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import ApiToMcpAnimation from '@/components/landing/ApiToMcpAnimation';
+import SnowFlowShowcase from '@/components/landing/SnowFlowShowcase';
 
 export default function ServicesPage() {
   const t = useTranslations('servicesOverview');
@@ -280,6 +282,10 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
+
+      {/* Our Approach & Methodology - Technical Deep Dive */}
+      <ApiToMcpAnimation />
+      <SnowFlowShowcase />
 
       {/* Final CTA */}
       <section className="py-20 sm:py-28 relative overflow-hidden bg-black">

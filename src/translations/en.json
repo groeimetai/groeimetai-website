@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "GroeimetAI - Agent Infrastructure Specialists",
-    "description": "Agent Infrastructure specialists making your APIs agent-ready. From REST to MCP - we build the bridge between your systems and AI agents."
+    "title": "GroeimetAI - AI that makes your business grow",
+    "description": "We build practical AI solutions for your business. Chatbots, voice assistants, automations, and more. Fixed prices, real results."
   },
   "navigation": {
     "services": "Services",
@@ -14,8 +14,8 @@
     "getStarted": "Get Started",
     "settings": "Settings",
     "login": "Login",
-    "startAssessment": "Start Assessment",
-    "notifications": "Notifications", 
+    "startAssessment": "Free Conversation",
+    "notifications": "Notifications",
     "account": "Account",
     "sectionNavigation": "Navigation",
     "sectionGetStarted": "Get Started"
@@ -23,7 +23,7 @@
   "hero": {
     "title": "We build your",
     "highlight": "AI that works",
-    "subtitle": "From first conversation to production — we design, build and implement every AI solution your business needs.",
+    "subtitle": "Whether you want to automate reports, deploy a voice assistant, or build a smarter workflow — we make it happen.",
     "description": "Five specialized services to accelerate your AI transformation. From first conversation to production.",
     "badge": "AI implementation partner since 2023",
     "explanation": "We don't just advise — we build. Websites, AI integrations, voice agents, and more.",
@@ -43,10 +43,10 @@
     },
     "rotatingServices": {
       "aiStrategy": "AI Strategy",
-      "voiceAI": "Voice Agents",
-      "chatbots": "Chatbots",
-      "automation": "AI Automation",
-      "mcp": "MCP Integrations",
+      "voiceAI": "Voice Assistants",
+      "chatbots": "AI Assistants",
+      "automation": "Business Automation",
+      "mcp": "System Connections",
       "websites": "Websites & Apps",
       "training": "AI Training"
     },
@@ -237,60 +237,60 @@
     }
   },
   "agentBlindness": {
-    "title": "Your systems have APIs.",
-    "titleHighlight": "Agents can't access them.",
-    "bridgeStatement": "We build the bridge - for EVERY system.",
-    "bridgeDescription": "From SaaS to legacy, from custom to Excel - if it has data, we make it agent-ready.",
-    "apisWork": "Your APIs work. They're missing just one thing:",
-    "apisWorkHighlight": "A language agents understand.",
-    "keepExisting": "Keep your existing APIs - no rebuild",
-    "worksWithEverything": "Works with EVERY software - no exceptions",
-    "apiToMcp": "From API to MCP - we handle the translation",
-    "systemExamples": "ServiceNow? SAP? Excel? Custom system?",
-    "systemsPromise": "Doesn't matter. If it has data, we make it agent-ready.",
+    "title": "Sound",
+    "titleHighlight": "familiar?",
+    "bridgeStatement": "These are exactly the problems AI solves.",
+    "bridgeDescription": "Not someday — now. With the right AI tools, you automate what costs you time and never miss an opportunity again.",
+    "apisWork": "Every business has them.",
+    "apisWorkHighlight": "Processes that eat up your time.",
+    "keepExisting": "No technical knowledge required",
+    "worksWithEverything": "Works with your existing tools and systems",
+    "apiToMcp": "Measurable results within weeks",
+    "systemExamples": "Reports? Scheduling? Customer questions? Follow-ups?",
+    "systemsPromise": "If it's repetitive, AI can handle it.",
     "systems": {
       "customer": {
-        "name": "Customer System",
-        "current": "Your API: Live customer data",
-        "agent": "For agents: Unreachable",
-        "solution": "We make it: Agent-ready"
+        "name": "Manual Data Entry",
+        "current": "Still copying info between systems?",
+        "agent": "Errors and wasted hours",
+        "solution": "AI connects your systems automatically"
       },
       "inventory": {
-        "name": "Inventory System",
-        "current": "Your API: Live data",
-        "agent": "For agents: Unreachable",
-        "solution": "We make it: Agent-ready"
+        "name": "Repetitive Reports",
+        "current": "Hours on reports that follow the same pattern?",
+        "agent": "Time you could spend on clients",
+        "solution": "AI drafts them, you review and send"
       },
       "crm": {
-        "name": "CRM",
-        "current": "Your API: Customer data available",
-        "agent": "For agents: Unknown protocol",
-        "solution": "We make it: Agent-ready"
+        "name": "Missed Follow-ups",
+        "current": "Leads falling through the cracks?",
+        "agent": "Lost revenue and opportunities",
+        "solution": "AI follows up automatically, nothing gets missed"
       },
       "knowledge": {
-        "name": "Knowledge Base",
-        "current": "Your API: Documentation database",
-        "agent": "For agents: Unreadable",
-        "solution": "We make it: Agent-ready"
+        "name": "Searching for Info",
+        "current": "Too much time looking for answers?",
+        "agent": "Digging through documents and regulations",
+        "solution": "Ask a question, get the answer with source"
       },
       "planning": {
-        "name": "Planning Tools",
-        "current": "Your API: Calendar & resources",
-        "agent": "For agents: Agent-blind",
-        "solution": "We make it: Agent-ready"
+        "name": "Scheduling Chaos",
+        "current": "Still coordinating via email and phone?",
+        "agent": "Back and forth, missed appointments",
+        "solution": "AI handles intake, scheduling, and reminders"
       },
       "custom": {
-        "name": "Custom Software",
-        "current": "Your API: Custom built",
-        "agent": "For agents: Unknown protocol",
-        "solution": "We make it: Agent-ready"
+        "name": "Growing Pains",
+        "current": "Business growing but processes can't keep up?",
+        "agent": "Manual work doesn't scale",
+        "solution": "AI automates so you can keep growing"
       }
     }
   },
   "servicesPage": {
     "hero": {
       "title": "Services",
-      "titleHighlight": "Agent Infrastructure",
+      "titleHighlight": "& AI Solutions",
       "description": "From first conversation to complete agent automation.",
       "tagline": "Clear path. Fixed prices. Proven results."
     },
@@ -578,13 +578,13 @@
         "deliverables": ["AI Roadmaps", "Use Case Discovery", "ROI Analysis", "Vendor Selection"]
       },
       "mcp": {
-        "title": "MCP/API Development",
-        "tagline": "Make your systems talk to AI agents",
-        "description": "Make your systems agent-ready. We build the bridge between your existing APIs and AI agents via the MCP protocol.",
-        "targetAudience": "Companies with existing APIs that want to enable AI agent integration",
-        "outcome": "Agent-compatible systems via MCP — no rebuild required",
+        "title": "AI Integrations",
+        "tagline": "Connect your tools with smart automation",
+        "description": "Connect your existing systems and tools with AI. We build the bridges so your software works together seamlessly — with smart automation on top.",
+        "targetAudience": "Companies that want to connect their existing tools with AI automation",
+        "outcome": "Connected systems with smart AI automation — no rebuild required",
         "timeframe": "2-12 weeks",
-        "deliverables": ["API to MCP conversion", "Custom MCP servers", "System integrations", "Agent configuration"]
+        "deliverables": ["System integrations", "AI-powered workflows", "Smart automation", "Custom connections"]
       },
       "voice": {
         "title": "Voice AI Development",
@@ -3236,7 +3236,7 @@
   },
   "onzeRol": {
     "title": "We are your",
-    "titleHighlight": "Agent Infrastructure",
+    "titleHighlight": "AI Implementation",
     "titleEnd": "Partner",
     "subtitle": "Not just technical, but especially strategic. We help you:",
     "noOneSize": "No one-size-fits-all.",
@@ -3256,23 +3256,23 @@
       },
       "implementation": {
         "title": "Implementation",
-        "description": "From API to MCP. We build the bridge between",
-        "action": "your systems and AI agents.",
+        "description": "From idea to working solution. We build and connect",
+        "action": "your AI solutions with your business.",
         "details": {
-          "0": "Custom MCP server development",
-          "1": "Secure authentication layers",
-          "2": "Agent testing & validation",
+          "0": "Custom AI solution development",
+          "1": "Secure system connections",
+          "2": "Testing & validation",
           "3": "Team training & documentation"
         }
       },
       "optimization": {
         "title": "Optimization",
         "description": "Measure, learn, improve. Continuous guidance",
-        "action": "toward maximum agent value.",
+        "action": "toward maximum AI value.",
         "details": {
           "0": "Performance monitoring setup",
           "1": "Usage analytics & insights",
-          "2": "Agent behavior optimization",
+          "2": "AI optimization & tuning",
           "3": "New opportunities identification"
         }
       }
@@ -3324,9 +3324,9 @@
       },
       "6": {
         "date": "Q1-Q2 2025",
-        "title": "Agent Infrastructure Platform",
-        "description": "Snow-flow MCP + Multi-agent orchestration: From API to agent-ready ecosystem",
-        "impact": "Complete agent infrastructure for Dutch businesses"
+        "title": "AI Automation Platform",
+        "description": "Advanced AI orchestration: From idea to working automation for any business",
+        "impact": "Complete AI solutions for Dutch businesses"
       }
     },
     "statusLabels": {
@@ -3403,25 +3403,25 @@
   "objections": {
     "title": "Frequently Asked",
     "titleHighlight": "Questions",
-    "subtitle": "We understand the concerns. Here are honest answers:",
-    "stillDoubts": "Still have doubts?",
-    "freeConsultation": "Start with a free 30-min exploratory conversation. No obligations, just insights.",
+    "subtitle": "Honest answers to common questions:",
+    "stillDoubts": "More questions?",
+    "freeConsultation": "Start with a free 30-min conversation. No obligations, just clarity about what AI can do for you.",
     "faqs": {
       "0": {
-        "question": "Does this work for our own software too?",
-        "answer": "Yes! If it has APIs (or we can build them), we make it agent-ready. From Excel to enterprise - any software can become agent-accessible."
+        "question": "I'm not technical at all — can you still help?",
+        "answer": "Absolutely! Most of our clients aren't technical. We handle everything from strategy to implementation. You focus on your business, we handle the technology."
       },
       "1": {
-        "question": "Isn't this only for large companies?",
-        "answer": "No, we start from €2,500 assessment. Small businesses often benefit most from agent automation - fewer resources, more impact."
+        "question": "Is AI only for big companies with big budgets?",
+        "answer": "Not at all. We work with freelancers, SMEs, and enterprises alike. Our first conversation is always free, and projects start from practical, affordable solutions."
       },
       "2": {
-        "question": "What if we don't have technical expertise?",
-        "answer": "That's exactly why we're here. From strategy to implementation - we guide you through it. Training and documentation included."
+        "question": "How long before I see results?",
+        "answer": "Most clients see first results within 2-4 weeks. We always start with quick wins while building toward the bigger picture."
       },
       "3": {
-        "question": "Won't this take way too long?",
-        "answer": "Assessment within 1 week, first agent interactions within 2-4 weeks. We ensure quick wins while building the foundation."
+        "question": "What does it cost?",
+        "answer": "First conversation is always free. After that, we work with fixed prices — no hourly rates, no surprises. We'll give you a clear quote before any work starts."
       }
     }
   },
@@ -3435,7 +3435,51 @@
     "assessmentFirst": "Assessment first, then quote",
     "fixedPrices": "Fixed prices per phase",
     "roiGuarantee": "ROI guarantee in contract",
-    "startAssessment": "Start with Free Assessment"
+    "startAssessment": "Start with Free Conversation"
+  },
+  "useCases": {
+    "title": "What AI does for",
+    "titleHighlight": "your business",
+    "subtitle": "Real examples of how AI saves time and creates value — regardless of your industry.",
+    "labels": {
+      "before": "Before",
+      "after": "After",
+      "metric": "Result"
+    },
+    "cases": {
+      "reports": {
+        "icon": "FileText",
+        "title": "Reports & Documents",
+        "before": "Hours on reports that follow the same pattern every time",
+        "after": "AI creates the draft, you review and send",
+        "metric": "80% faster",
+        "metricValue": 80
+      },
+      "support": {
+        "icon": "MessageCircle",
+        "title": "Customer Questions & Support",
+        "before": "Same questions over and over, missed messages outside hours",
+        "after": "AI assistant answers 24/7, complex cases go to you",
+        "metric": "Always available",
+        "metricValue": 100
+      },
+      "knowledge": {
+        "icon": "Search",
+        "title": "Knowledge & Information",
+        "before": "Hours searching through documents, regulations, or systems",
+        "after": "Ask a question, get the answer with source reference instantly",
+        "metric": "In seconds",
+        "metricValue": 95
+      },
+      "intake": {
+        "icon": "ClipboardList",
+        "title": "Intake & Scheduling",
+        "before": "Manual forms, back-and-forth calling, retyping data",
+        "after": "Automatic intake, scheduling, and registration",
+        "metric": "Zero admin",
+        "metricValue": 100
+      }
+    }
   },
   "caseStudiesSection": {
     "title": "What We've Built",
@@ -4133,6 +4177,9 @@
     "highlight": "Project",
     "titleEnd": "in 3 steps",
     "subtitle": "Always in three steps - First conversation, then quote. Fixed prices per phase. No surprises.",
+    "labels": {
+      "time": "Time:"
+    },
     "steps": {
       "step1": {
         "title": "Free Consultation",

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle, Users, Package, Database, FileText, Calendar, Code } from 'lucide-react';
+import { ArrowRight, CheckCircle, ClipboardCopy, FileText, UserX, Search, Phone, TrendingUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
@@ -14,47 +14,49 @@ export default function AgentBlindnessProblems() {
       currentState: t('systems.customer.current'),
       agentState: t('systems.customer.agent'),
       solution: t('systems.customer.solution'),
-      icon: Users
+      icon: ClipboardCopy
     },
     {
       system: t('systems.inventory.name'),
       currentState: t('systems.inventory.current'),
-      agentState: t('systems.inventory.agent'), 
+      agentState: t('systems.inventory.agent'),
       solution: t('systems.inventory.solution'),
-      icon: Package
+      icon: FileText
     },
     {
       system: t('systems.crm.name'),
       currentState: t('systems.crm.current'),
       agentState: t('systems.crm.agent'),
       solution: t('systems.crm.solution'),
-      icon: Database
+      icon: UserX
     },
     {
       system: t('systems.knowledge.name'),
       currentState: t('systems.knowledge.current'),
       agentState: t('systems.knowledge.agent'),
       solution: t('systems.knowledge.solution'),
-      icon: FileText
+      icon: Search
     },
     {
       system: t('systems.planning.name'),
       currentState: t('systems.planning.current'),
       agentState: t('systems.planning.agent'),
       solution: t('systems.planning.solution'),
-      icon: Calendar
+      icon: Phone
     },
     {
       system: t('systems.custom.name'),
       currentState: t('systems.custom.current'),
       agentState: t('systems.custom.agent'),
       solution: t('systems.custom.solution'),
-      icon: Code
+      icon: TrendingUp
     }
   ];
 
   return (
     <section className="py-20 sm:py-28 lg:py-36 relative bg-[#080D14]">
+      {/* Subtle background variation for visual rhythm */}
+      <div className="absolute inset-0 bg-white/[0.02]" />
       {/* Subtle section divider */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
@@ -69,7 +71,7 @@ export default function AgentBlindnessProblems() {
           >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 tracking-[-0.02em]">
               {t('title')}{' '}
-              <span className="text-red-400">{t('titleHighlight')}</span>
+              <span className="text-[#F87315]">{t('titleHighlight')}</span>
             </h2>
             <div className="max-w-4xl mx-auto bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 lg:p-10">
               <p className="text-xl sm:text-2xl text-white/80 leading-relaxed mb-4 font-medium">

@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "GroeimetAI - Agent Infrastructure Specialists",
-    "description": "Agent Infrastructure specialists die jouw APIs agent-ready maken. Van REST naar MCP - wij bouwen de brug tussen jouw systemen en AI agents."
+    "title": "GroeimetAI - AI die jouw bedrijf laat groeien",
+    "description": "Wij bouwen praktische AI-oplossingen voor jouw bedrijf. Chatbots, spraakassistenten, automatiseringen en meer. Vaste prijzen, echte resultaten."
   },
   "navigation": {
     "services": "Diensten", 
@@ -14,7 +14,7 @@
     "getStarted": "Aan de slag",
     "settings": "Instellingen",
     "login": "Inloggen",
-    "startAssessment": "Start Assessment",
+    "startAssessment": "Gratis Gesprek",
     "notifications": "Notificaties",
     "account": "Account",
     "sectionNavigation": "Navigatie",
@@ -23,7 +23,7 @@
   "hero": {
     "title": "Wij bouwen jouw",
     "highlight": "AI die werkt",
-    "subtitle": "Van eerste gesprek tot productie — wij ontwerpen, bouwen en implementeren elke AI-oplossing die jouw bedrijf nodig heeft.",
+    "subtitle": "Of je nu rapporten wilt automatiseren, een spraakassistent wilt inzetten, of een slimmere workflow wilt bouwen — wij regelen het.",
     "description": "Vijf gespecialiseerde diensten om je AI transformatie te versnellen. Van eerste gesprek tot productie.",
     "badge": "AI implementatie partner sinds 2023",
     "explanation": "Wij adviseren niet alleen — wij bouwen. Websites, AI integraties, voice agents en meer.",
@@ -43,10 +43,10 @@
     },
     "rotatingServices": {
       "aiStrategy": "AI Strategie",
-      "voiceAI": "Voice Agents",
-      "chatbots": "Chatbots",
-      "automation": "AI Automatisering",
-      "mcp": "MCP Integraties",
+      "voiceAI": "Spraakassistenten",
+      "chatbots": "AI Assistenten",
+      "automation": "Bedrijfsautomatisering",
+      "mcp": "Systeemkoppelingen",
       "websites": "Websites & Apps",
       "training": "AI Training"
     },
@@ -220,7 +220,7 @@
   "servicesPage": {
     "hero": {
       "title": "Services",
-      "titleHighlight": "Agent Infrastructure",
+      "titleHighlight": "& AI Oplossingen",
       "description": "Van eerste gesprek tot volledige agent automatisering.",
       "tagline": "Clear path. Fixed prices. Proven results."
     },
@@ -508,13 +508,13 @@
         "deliverables": ["AI Roadmaps", "Use Case Discovery", "ROI Analyse", "Vendor Selectie"]
       },
       "mcp": {
-        "title": "MCP/API Development",
-        "tagline": "Laat je systemen praten met AI agents",
-        "description": "Maak je systemen agent-ready. Wij bouwen de brug tussen je bestaande APIs en AI agents via het MCP protocol.",
-        "targetAudience": "Bedrijven met bestaande APIs die AI agent integratie willen mogelijk maken",
-        "outcome": "Agent-compatible systemen via MCP — geen rebuild nodig",
+        "title": "AI Integraties",
+        "tagline": "Koppel je tools met slimme automatisering",
+        "description": "Verbind je bestaande systemen en tools met AI. Wij bouwen de bruggen zodat je software naadloos samenwerkt — met slimme automatisering erbij.",
+        "targetAudience": "Bedrijven die hun bestaande tools willen verbinden met AI-automatisering",
+        "outcome": "Verbonden systemen met slimme AI-automatisering — geen rebuild nodig",
         "timeframe": "2-12 weken",
-        "deliverables": ["API naar MCP conversie", "Custom MCP servers", "Systeem integraties", "Agent configuratie"]
+        "deliverables": ["Systeem integraties", "AI-gestuurde workflows", "Slimme automatisering", "Maatwerk koppelingen"]
       },
       "voice": {
         "title": "Voice AI Development",
@@ -3234,59 +3234,59 @@
     }
   },
   "agentBlindness": {
-    "title": "Jouw systemen hebben APIs.",
-    "titleHighlight": "Agents kunnen er niet bij.",
-    "bridgeStatement": "Wij bouwen de brug - voor ELK systeem.",
-    "bridgeDescription": "Van SaaS tot legacy, van maatwerk tot Excel - als het data heeft, maken we het agent-ready.",
-    "apisWork": "Jouw APIs werken. Ze missen alleen één ding:",
-    "apisWorkHighlight": "Een taal die agents verstaan.",
-    "keepExisting": "Behoud je bestaande APIs - geen rebuild",
-    "worksWithEverything": "Werk met ELKE software - geen uitzonderingen",
-    "apiToMcp": "Van API naar MCP - wij regelen de vertaling",
-    "systemExamples": "ServiceNow? SAP? Excel? Eigen systeem?",
-    "systemsPromise": "Maakt niet uit. Als het data heeft, maken we het agent-ready.",
+    "title": "Herken je",
+    "titleHighlight": "dit?",
+    "bridgeStatement": "Dit zijn precies de problemen die AI oplost.",
+    "bridgeDescription": "Niet ooit — nu. Met de juiste AI-tools automatiseer je wat je tijd kost en mis je nooit meer een kans.",
+    "apisWork": "Elk bedrijf heeft ze.",
+    "apisWorkHighlight": "Processen die je tijd opvreten.",
+    "keepExisting": "Geen technische kennis nodig",
+    "worksWithEverything": "Werkt met je bestaande tools en systemen",
+    "apiToMcp": "Meetbare resultaten binnen weken",
+    "systemExamples": "Rapporten? Planning? Klantvragen? Opvolging?",
+    "systemsPromise": "Als het herhalend is, kan AI het overnemen.",
     "systems": {
       "customer": {
-        "name": "Klantsysteem",
-        "current": "Jouw API: Klantgegevens live",
-        "agent": "Voor agents: Onvindbaar",
-        "solution": "Wij maken het: Agent-ready"
+        "name": "Handmatig Invoeren",
+        "current": "Nog steeds data overzetten tussen systemen?",
+        "agent": "Fouten en verloren uren",
+        "solution": "AI koppelt je systemen automatisch"
       },
       "inventory": {
-        "name": "Voorraadsysteem",
-        "current": "Jouw API: Live data",
-        "agent": "Voor agents: Onbereikbaar",
-        "solution": "Wij maken het: Agent-ready"
+        "name": "Terugkerende Rapporten",
+        "current": "Uren aan rapporten die steeds hetzelfde patroon volgen?",
+        "agent": "Tijd die je aan klanten kunt besteden",
+        "solution": "AI maakt concept, jij reviewt en stuurt"
       },
       "crm": {
-        "name": "CRM",
-        "current": "Jouw API: Klantdata beschikbaar",
-        "agent": "Voor agents: Niet vindbaar",
-        "solution": "Wij maken het: Agent-ready"
+        "name": "Gemiste Opvolging",
+        "current": "Leads die door de mand vallen?",
+        "agent": "Gemiste omzet en kansen",
+        "solution": "AI volgt automatisch op, niets wordt gemist"
       },
       "knowledge": {
-        "name": "Kennisbank",
-        "current": "Jouw API: Documentatie database",
-        "agent": "Voor agents: Onleesbaar",
-        "solution": "Wij maken het: Agent-ready"
+        "name": "Informatie Zoeken",
+        "current": "Te veel tijd kwijt aan het zoeken van antwoorden?",
+        "agent": "Graven door documenten en regelgeving",
+        "solution": "Stel een vraag, krijg het antwoord met bron"
       },
       "planning": {
-        "name": "Planning tools",
-        "current": "Jouw API: Agenda & resources",
-        "agent": "Voor agents: Agent-blind",
-        "solution": "Wij maken het: Agent-ready"
+        "name": "Planning Chaos",
+        "current": "Nog steeds via email en telefoon plannen?",
+        "agent": "Heen en weer, gemiste afspraken",
+        "solution": "AI regelt intake, planning en herinneringen"
       },
       "custom": {
-        "name": "Eigen software",
-        "current": "Jouw API: Custom gebouwd",
-        "agent": "Voor agents: Onbekend protocol",
-        "solution": "Wij maken het: Agent-ready"
+        "name": "Groeipijnen",
+        "current": "Bedrijf groeit maar processen niet?",
+        "agent": "Handmatig werk schaalt niet",
+        "solution": "AI automatiseert zodat jij kunt blijven groeien"
       }
     }
   },
   "onzeRol": {
     "title": "Wij zijn je",
-    "titleHighlight": "Agent Infrastructure",
+    "titleHighlight": "AI Implementatie",
     "titleEnd": "Partner",
     "subtitle": "Niet alleen technisch, maar vooral strategisch. We helpen je:",
     "noOneSize": "Geen one-size-fits-all.",
@@ -3306,23 +3306,23 @@
       },
       "implementation": {
         "title": "Implementatie",
-        "description": "Van API naar MCP. Wij bouwen de brug tussen",
-        "action": "jouw systemen en AI agents.",
+        "description": "Van idee naar werkende oplossing. Wij bouwen en verbinden",
+        "action": "jouw AI-oplossingen met je bedrijf.",
         "details": {
-          "0": "Custom MCP server development",
-          "1": "Veilige authentication layers",
-          "2": "Agent testing & validatie",
+          "0": "Custom AI-oplossing development",
+          "1": "Veilige systeemkoppelingen",
+          "2": "Testing & validatie",
           "3": "Team training & documentatie"
         }
       },
       "optimization": {
         "title": "Optimalisatie",
         "description": "Meten, leren, verbeteren. Continue begeleiding",
-        "action": "naar maximale agent-waarde.",
+        "action": "naar maximale AI-waarde.",
         "details": {
           "0": "Performance monitoring setup",
           "1": "Usage analytics & insights",
-          "2": "Agent gedrag optimalisatie",
+          "2": "AI optimalisatie & bijsturing",
           "3": "Nieuwe mogelijkheden identificatie"
         }
       }
@@ -3374,9 +3374,9 @@
       },
       {
         "date": "Q1-Q2 2025",
-        "title": "Agent Infrastructure Platform",
-        "description": "Snow-flow MCP + Multi-agent orchestration: Van API naar agent-ready ecosysteem",
-        "impact": "Complete agent infrastructure voor Nederlandse bedrijven"
+        "title": "AI Automatisering Platform",
+        "description": "Geavanceerde AI-orchestratie: Van idee naar werkende automatisering voor elk bedrijf",
+        "impact": "Complete AI-oplossingen voor Nederlandse bedrijven"
       }
     ],
     "statusLabels": {
@@ -3453,25 +3453,25 @@
   "objections": {
     "title": "Veelgestelde",
     "titleHighlight": "Vragen",
-    "subtitle": "We begrijpen de zorgen. Hier zijn eerlijke antwoorden:",
-    "stillDoubts": "Nog steeds twijfels?",
-    "freeConsultation": "Start met een gratis 30-min verkennend gesprek. Geen verplichtingen, alleen inzicht.",
+    "subtitle": "Eerlijke antwoorden op veelgestelde vragen:",
+    "stillDoubts": "Meer vragen?",
+    "freeConsultation": "Begin met een gratis 30-min gesprek. Geen verplichtingen, alleen duidelijkheid over wat AI voor jou kan doen.",
     "faqs": {
       "0": {
-        "question": "Werkt dit ook voor onze eigen software?",
-        "answer": "Ja! Als het APIs heeft (of we kunnen ze bouwen), maken we het agent-ready. Van Excel tot enterprise - elke software kan agent-accessible worden."
+        "question": "Ik ben helemaal niet technisch — kunnen jullie dan toch helpen?",
+        "answer": "Absoluut! De meeste van onze klanten zijn niet technisch. Wij regelen alles van strategie tot implementatie. Jij focust op je bedrijf, wij op de technologie."
       },
       "1": {
-        "question": "Is dit niet alleen voor grote bedrijven?",
-        "answer": "Nee, we beginnen vanaf €2.500 assessment. Kleine bedrijven hebben vaak de meeste baat bij agent-automatisering - minder resources, meer impact."
+        "question": "Is AI niet alleen voor grote bedrijven met grote budgetten?",
+        "answer": "Helemaal niet. We werken met zzp'ers, mkb en enterprise. Het eerste gesprek is altijd gratis, en projecten starten vanuit praktische, betaalbare oplossingen."
       },
       "2": {
-        "question": "Wat als we geen technische expertise hebben?",
-        "answer": "Dat is precies waarom we er zijn. Van strategie tot implementatie - we nemen je bij de hand. Training en documentatie inbegrepen."
+        "question": "Hoe snel zie ik resultaat?",
+        "answer": "De meeste klanten zien de eerste resultaten binnen 2-4 weken. We beginnen altijd met quick wins terwijl we aan het grotere plaatje werken."
       },
       "3": {
-        "question": "Duurt dit niet veel te lang?",
-        "answer": "Assessment binnen 1 week, eerste agent interacties binnen 2-4 weken. We zorgen voor snelle wins terwijl we de fundamenten leggen."
+        "question": "Wat kost het?",
+        "answer": "Het eerste gesprek is altijd gratis. Daarna werken we met vaste prijzen — geen uurtje-factuurtje, geen verrassingen. Je krijgt een duidelijke offerte voordat er werk begint."
       }
     }
   },
@@ -3485,7 +3485,7 @@
     "assessmentFirst": "Eerst assessment, dan pas offerte",
     "fixedPrices": "Vaste prijzen per fase",
     "roiGuarantee": "ROI garantie in contract",
-    "startAssessment": "Begin met Gratis Assessment",
+    "startAssessment": "Begin met Gratis Gesprek",
     "steps": [
       {
         "number": "1️⃣",
@@ -3511,6 +3511,50 @@
     ],
     "projectInfo": "Typische projecten: €15-75k • Doorlooptijd: 2-12 weken • ROI: 3-6 maanden",
     "timeLabel": "Tijd:"
+  },
+  "useCases": {
+    "title": "Wat AI doet voor",
+    "titleHighlight": "jouw bedrijf",
+    "subtitle": "Echte voorbeelden van hoe AI tijd bespaart en waarde creëert — ongeacht je branche.",
+    "labels": {
+      "before": "Voor",
+      "after": "Na",
+      "metric": "Resultaat"
+    },
+    "cases": {
+      "reports": {
+        "icon": "FileText",
+        "title": "Rapportages & Documenten",
+        "before": "Uren aan rapporten die steeds hetzelfde patroon volgen",
+        "after": "AI maakt concept, jij reviewt en stuurt",
+        "metric": "80% sneller",
+        "metricValue": 80
+      },
+      "support": {
+        "icon": "MessageCircle",
+        "title": "Klantvragen & Support",
+        "before": "Steeds dezelfde vragen beantwoorden, berichten missen buiten werktijd",
+        "after": "AI assistent antwoordt 24/7, complexe zaken naar jou",
+        "metric": "Altijd bereikbaar",
+        "metricValue": 100
+      },
+      "knowledge": {
+        "icon": "Search",
+        "title": "Kennis & Informatie",
+        "before": "Uren zoeken in documenten, regelgeving of systemen",
+        "after": "Stel een vraag, krijg direct het antwoord met bronverwijzing",
+        "metric": "In seconden",
+        "metricValue": 95
+      },
+      "intake": {
+        "icon": "ClipboardList",
+        "title": "Intake & Planning",
+        "before": "Handmatige formulieren, heen-en-weer bellen, data overtypen",
+        "after": "Automatische intake, planning en registratie",
+        "metric": "Zero admin",
+        "metricValue": 100
+      }
+    }
   },
   "contactPage": {
     "header": {
@@ -3955,6 +3999,9 @@
     "highlight": "Project",
     "titleEnd": "in 3 stappen",
     "subtitle": "Altijd in drie stappen - Eerst gesprek, dan pas offerte. Vaste prijzen per fase. Geen verrassingen.",
+    "labels": {
+      "time": "Tijd:"
+    },
     "steps": {
       "step1": {
         "title": "Gratis Gesprek",
