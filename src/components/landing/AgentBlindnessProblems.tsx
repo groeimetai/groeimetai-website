@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import ScrollReveal from '@/components/ui/ScrollReveal';
 import { ArrowRight, CheckCircle, ClipboardCopy, FileText, UserX, Search, Phone, TrendingUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -62,13 +62,7 @@ export default function AgentBlindnessProblems() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-            className="text-center mb-16 sm:mb-20"
-          >
+          <ScrollReveal className="text-center mb-16 sm:mb-20">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 tracking-[-0.02em]">
               {t('title')}{' '}
               <span className="text-[#F87315]">{t('titleHighlight')}</span>
@@ -81,18 +75,14 @@ export default function AgentBlindnessProblems() {
                 {t('bridgeDescription')}
               </p>
             </div>
-          </motion.div>
+          </ScrollReveal>
 
           <div className="grid lg:grid-cols-3 gap-6 sm:gap-8 mb-16 sm:mb-20 items-stretch">
             {/* System Cards - 2 wide, 3 high */}
             <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {systems.map((system, index) => (
-                <motion.div
+              {systems.map((system) => (
+                <ScrollReveal
                   key={system.system}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                  viewport={{ once: true }}
                   className="group"
                 >
                   <div className="bg-white/[0.03] border border-white/10 rounded-xl p-5 sm:p-6 h-full hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300">
@@ -129,18 +119,13 @@ export default function AgentBlindnessProblems() {
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </ScrollReveal>
               ))}
             </div>
             
             {/* Sfeer Image naast tekst */}
             <div className="lg:col-span-1 hidden lg:block">
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="h-full flex items-center justify-center"
-              >
+              <ScrollReveal direction="right" distance={20} className="h-full flex items-center justify-center">
                 <div className="sfeer-image w-full h-full">
                   <Image
                     src="/images/warren-umoh-FC-2ilPSO6A-unsplash.jpg"
@@ -150,18 +135,12 @@ export default function AgentBlindnessProblems() {
                     className="object-cover w-full h-full"
                   />
                 </div>
-              </motion.div>
+              </ScrollReveal>
             </div>
           </div>
 
           {/* Universal Compatibility Message */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
+          <ScrollReveal className="text-center">
             <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-8 sm:p-10 max-w-4xl mx-auto">
               <h3 className="text-2xl sm:text-3xl font-bold text-white mb-8 leading-snug">
                 {t('apisWork')}{' '}
@@ -193,7 +172,7 @@ export default function AgentBlindnessProblems() {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

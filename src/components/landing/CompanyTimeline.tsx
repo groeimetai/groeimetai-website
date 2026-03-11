@@ -1,11 +1,93 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { Calendar, TrendingUp, Zap, Brain } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import ScrollReveal from '@/components/ui/ScrollReveal';
+
+function TimelineMilestone({
+  milestone,
+  isLast,
+  statusLabel,
+  impactLabel,
+}: {
+  milestone: { date: string; title: string; description: string; impact: string; icon: React.ComponentType<{ className?: string }> };
+  isLast: boolean;
+  statusLabel: string;
+  impactLabel: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+
+  const opacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+  const x = useTransform(scrollYProgress, [0, 0.3], [-20, 0]);
+
+  const Icon = milestone.icon;
+
+  return (
+    <motion.div
+      ref={ref}
+      style={prefersReducedMotion ? {} : { opacity, x }}
+      className="relative flex items-start gap-5 sm:gap-8"
+    >
+      {/* Timeline node */}
+      <div className="relative flex-shrink-0">
+        <div
+          className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center z-10 border border-white/10"
+          style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
+        >
+          <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+        </div>
+        <div className="absolute inset-0 rounded-xl bg-[#F87315]/20 blur-lg -z-10" />
+      </div>
+
+      {/* Card */}
+      <div className="flex-1 min-w-0">
+        <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-5 sm:p-6 hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-sm font-display font-medium px-3 py-1 rounded-full bg-[#F87315]/10 border border-[#F87315]/30 text-[#FF9F43]">
+              {milestone.date}
+            </span>
+            <span className="text-xs text-white/40">
+              {statusLabel}
+            </span>
+          </div>
+
+          <h3 className="text-lg sm:text-xl font-bold text-white mb-2 tracking-[-0.01em]">
+            {milestone.title}
+          </h3>
+
+          <p className="text-white/60 mb-4 leading-relaxed text-sm sm:text-base">
+            {milestone.description}
+          </p>
+
+          <div className="flex items-center text-sm">
+            <span className="text-white/40 mr-2">{impactLabel}</span>
+            <span className="text-[#FF9F43] font-semibold">{milestone.impact}</span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function CompanyTimeline() {
   const t = useTranslations('timeline');
+  const prefersReducedMotion = useReducedMotion();
+  const timelineRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress: sectionProgress } = useScroll({
+    target: timelineRef,
+    offset: ['start end', 'end start'],
+  });
+
+  // Timeline line draws progressively as you scroll through the section
+  const lineScaleY = useTransform(sectionProgress, [0.1, 0.85], [0, 1]);
 
   const milestones = [
     { date: t('milestones.0.date'), title: t('milestones.0.title'), description: t('milestones.0.description'), impact: t('milestones.0.impact'), icon: Brain },
@@ -18,7 +100,7 @@ export default function CompanyTimeline() {
   ];
 
   return (
-    <section className="py-20 sm:py-28 lg:py-36 relative overflow-hidden bg-[#080D14]">
+    <section ref={timelineRef} className="py-20 sm:py-28 lg:py-36 relative overflow-hidden bg-[#080D14]">
       {/* Background decorations — matching hero */}
       <div
         className="absolute inset-0 opacity-[0.03]"
@@ -36,13 +118,7 @@ export default function CompanyTimeline() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-            className="text-center mb-16 sm:mb-20"
-          >
+          <ScrollReveal className="text-center mb-16 sm:mb-20">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 tracking-[-0.02em]">
               {t('title')}{' '}
               <span className="text-[#F87315]">{t('titleHighlight')}</span>
@@ -50,73 +126,32 @@ export default function CompanyTimeline() {
             <p className="text-lg sm:text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
               {t('subtitle')}
             </p>
-          </motion.div>
+          </ScrollReveal>
 
           {/* Timeline */}
           <div className="relative">
-            {/* Gradient timeline line */}
-            <div className="absolute left-6 sm:left-7 top-0 bottom-0 w-px bg-gradient-to-b from-[#F87315]/60 via-white/15 to-transparent" />
+            {/* Scroll-driven timeline line */}
+            <div className="absolute left-6 sm:left-7 top-0 bottom-0 w-px bg-white/[0.06]" />
+            <motion.div
+              className="absolute left-6 sm:left-7 top-0 bottom-0 w-px origin-top bg-gradient-to-b from-[#F87315] via-[#FF9F43] to-[#F87315]/60"
+              style={prefersReducedMotion ? {} : { scaleY: lineScaleY }}
+            />
 
             <div className="space-y-6 sm:space-y-8">
               {milestones.map((milestone, index) => (
-                <motion.div
+                <TimelineMilestone
                   key={milestone.date}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                  viewport={{ once: true }}
-                  className="relative flex items-start gap-5 sm:gap-8"
-                >
-                  {/* Timeline node */}
-                  <div className="relative flex-shrink-0">
-                    <div
-                      className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center z-10 border border-white/10"
-                      style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
-                    >
-                      <milestone.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                    </div>
-                    <div className="absolute inset-0 rounded-xl bg-[#F87315]/20 blur-lg -z-10" />
-                  </div>
-
-                  {/* Card */}
-                  <div className="flex-1 min-w-0">
-                    <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-5 sm:p-6 hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300">
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="text-sm font-display font-medium px-3 py-1 rounded-full bg-[#F87315]/10 border border-[#F87315]/30 text-[#FF9F43]">
-                          {milestone.date}
-                        </span>
-                        <span className="text-xs text-white/40">
-                          {index < milestones.length - 1 ? t('statusLabels.completed') : t('statusLabels.inProgress')}
-                        </span>
-                      </div>
-
-                      <h3 className="text-lg sm:text-xl font-bold text-white mb-2 tracking-[-0.01em]">
-                        {milestone.title}
-                      </h3>
-
-                      <p className="text-white/60 mb-4 leading-relaxed text-sm sm:text-base">
-                        {milestone.description}
-                      </p>
-
-                      <div className="flex items-center text-sm">
-                        <span className="text-white/40 mr-2">{t('statusLabels.impact')}</span>
-                        <span className="text-[#FF9F43] font-semibold">{milestone.impact}</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
+                  milestone={milestone}
+                  isLast={index === milestones.length - 1}
+                  statusLabel={index < milestones.length - 1 ? t('statusLabels.completed') : t('statusLabels.inProgress')}
+                  impactLabel={t('statusLabels.impact')}
+                />
               ))}
             </div>
           </div>
 
           {/* Bottom CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-            className="text-center mt-20 sm:mt-24"
-          >
+          <ScrollReveal className="text-center mt-20 sm:mt-24">
             <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-8 sm:p-10 max-w-3xl mx-auto relative overflow-hidden">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-[#F87315]/10 rounded-full blur-[80px]" />
               <div className="relative">
@@ -131,7 +166,7 @@ export default function CompanyTimeline() {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

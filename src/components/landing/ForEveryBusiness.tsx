@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Search, Target, Rocket, ArrowRight, CheckCircle, Calendar } from 'lucide-react';
+import ScrollReveal from '@/components/ui/ScrollReveal';
 import { Link } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
@@ -71,13 +71,7 @@ export default function ForEveryBusiness() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-            className="text-center mb-16 sm:mb-20"
-          >
+          <ScrollReveal className="text-center mb-16 sm:mb-20">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 tracking-[-0.02em]">
               {t('title')}{' '}
               <span className="text-white px-3 py-1 sm:px-4 sm:py-1.5 inline-block bg-gradient-to-r from-[#F87315] to-[#FF9F43] shadow-lg shadow-[#F87315]/30 rounded-sm">
@@ -88,17 +82,13 @@ export default function ForEveryBusiness() {
             <p className="text-lg sm:text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
               {t('subtitle')}
             </p>
-          </motion.div>
+          </ScrollReveal>
 
           {/* Steps Cards */}
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-16">
             {steps.map((step, index) => (
-              <motion.div
+              <ScrollReveal
                 key={step.number}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                viewport={{ once: true }}
                 className="relative group"
               >
                 {/* Connection Line */}
@@ -164,19 +154,14 @@ export default function ForEveryBusiness() {
                     </Link>
                   </div>
                 </div>
-              </motion.div>
+              </ScrollReveal>
             ))}
           </div>
 
           {/* Bottom Section - Image naast Explanation */}
           <div className="grid lg:grid-cols-2 gap-12 mt-16 items-stretch">
             {/* Linker kolom - Sfeer image */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex"
-            >
+            <ScrollReveal direction="left" distance={30} className="flex">
               <div className="sfeer-image w-full">
                 <Image
                   src="/images/nathan-duck-Jo5FUEkhB_4-unsplash.jpg"
@@ -186,15 +171,10 @@ export default function ForEveryBusiness() {
                   className="object-cover w-full h-full rounded-xl"
                 />
               </div>
-            </motion.div>
+            </ScrollReveal>
 
             {/* Rechter kolom - Transparent Collaboration */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="flex"
-            >
+            <ScrollReveal direction="right" distance={30} className="flex">
               <div className="bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-8 w-full h-full flex flex-col justify-center">
                 <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
                   {t('explanation.title')}
@@ -247,7 +227,7 @@ export default function ForEveryBusiness() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </ScrollReveal>
           </div>
         </div>
       </div>

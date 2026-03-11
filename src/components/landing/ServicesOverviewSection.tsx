@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Code, Lightbulb, Zap, Mic, Users, ArrowRight } from 'lucide-react';
+import ScrollReveal from '@/components/ui/ScrollReveal';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 
@@ -22,13 +22,7 @@ export default function ServicesOverviewSection() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-            className="text-center mb-10 sm:mb-12"
-          >
+          <ScrollReveal className="text-center mb-10 sm:mb-12">
             <h2 className="text-white mb-4">
               {t('hero.title')}{' '}
               <span className="text-white px-2 py-0.5 sm:px-3 sm:py-1 inline-block bg-gradient-to-r from-[#F87315] to-[#FF9F43] rounded-sm">
@@ -38,19 +32,13 @@ export default function ServicesOverviewSection() {
             <p className="text-base sm:text-lg text-white/60 max-w-2xl mx-auto">
               {t('hero.subtitle')}
             </p>
-          </motion.div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {serviceConfig.map((service, index) => {
+            {serviceConfig.map((service) => {
               const Icon = service.icon;
               return (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                  viewport={{ once: true }}
-                >
+                <ScrollReveal key={service.id}>
                   <Link
                     href={`/services#${service.id}`}
                     className="group block bg-white/[0.03] border border-white/10 rounded-xl p-4 sm:p-5 hover:border-white/20 hover:bg-white/[0.06] transition-all duration-300 h-full"
@@ -72,7 +60,7 @@ export default function ServicesOverviewSection() {
                       <ArrowRight className="w-3 h-3 ml-1 transition-transform group-hover:translate-x-0.5" />
                     </span>
                   </Link>
-                </motion.div>
+                </ScrollReveal>
               );
             })}
           </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import ScrollReveal from '@/components/ui/ScrollReveal';
 import { Quote, CheckCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -21,13 +21,7 @@ export default function TestimonialSection() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
+          <ScrollReveal className="text-center">
             <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-xl p-6 sm:p-8 relative hover:border-white/20 transition-all duration-300">
               {/* Quote Icon */}
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
@@ -67,12 +61,9 @@ export default function TestimonialSection() {
 
               <div className="grid md:grid-cols-2 gap-4 sm:gap-6 text-left">
                 {reasons.map((reason, index) => (
-                  <motion.div
+                  <ScrollReveal
                     key={index}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                    viewport={{ once: true }}
+                    distance={10}
                     className="flex items-start gap-3"
                   >
                     <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 bg-[#F87315]">
@@ -82,11 +73,11 @@ export default function TestimonialSection() {
                       <p className="text-white font-medium">{t(reason.titleKey)}</p>
                       <p className="text-white/60 text-sm">{t(reason.descKey)}</p>
                     </div>
-                  </motion.div>
+                  </ScrollReveal>
                 ))}
               </div>
             </div>
-          </motion.div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
