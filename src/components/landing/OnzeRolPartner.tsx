@@ -4,6 +4,7 @@ import ScrollReveal from '@/components/ui/ScrollReveal';
 import { Target, Wrench, BarChart3, CheckCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { blurDataURLs } from '@/lib/image-blurs';
 
 export default function OnzeRolPartner() {
   const t = useTranslations('onzeRol');
@@ -76,6 +77,9 @@ export default function OnzeRolPartner() {
                   alt=""
                   width={528}
                   height={600}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  placeholder="blur"
+                  blurDataURL={blurDataURLs['/images/solen-feyissa-sT2AShu9tsA-unsplash.jpg']}
                   className="object-cover w-full h-full"
                 />
               </div>

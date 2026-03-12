@@ -15,6 +15,7 @@ import {
   User, Building, Clock, ArrowRight, CheckCircle, Briefcase
 } from 'lucide-react';
 import Image from 'next/image';
+import { blurDataURLs } from '@/lib/image-blurs';
 import dynamic from 'next/dynamic';
 
 const GoogleMapEmbed = dynamic(() => import('@/components/contact/GoogleMapEmbed'), {
@@ -488,6 +489,9 @@ function ContactPageContent() {
                       src="/images/philippe-bontemps-FUfJGhpKITo-unsplash.jpg"
                       alt=""
                       fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      placeholder="blur"
+                      blurDataURL={blurDataURLs['/images/philippe-bontemps-FUfJGhpKITo-unsplash.jpg']}
                       className="object-cover"
                       priority
                     />

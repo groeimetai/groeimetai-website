@@ -8,6 +8,7 @@ import { Link } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { blurDataURLs } from '@/lib/image-blurs';
 
 function StepCard({
   step,
@@ -224,6 +225,9 @@ export default function ForEveryBusiness() {
                   alt=""
                   width={400}
                   height={500}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  placeholder="blur"
+                  blurDataURL={blurDataURLs['/images/nathan-duck-Jo5FUEkhB_4-unsplash.jpg']}
                   className="object-cover w-full h-full rounded-xl"
                 />
               </div>

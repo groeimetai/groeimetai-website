@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { blurDataURLs } from '@/lib/image-blurs';
 import ApiToMcpAnimation from '@/components/landing/ApiToMcpAnimation';
 import SnowFlowShowcase from '@/components/landing/SnowFlowShowcase';
 
@@ -235,6 +236,9 @@ export default function ServicesPage() {
                       src="/images/mariola-grobelska-siujy-8IPrk-unsplash.jpg"
                       alt=""
                       fill
+                      sizes="100vw"
+                      placeholder="blur"
+                      blurDataURL={blurDataURLs['/images/mariola-grobelska-siujy-8IPrk-unsplash.jpg']}
                       className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent" />

@@ -4,6 +4,7 @@ import ScrollReveal from '@/components/ui/ScrollReveal';
 import { ArrowRight, CheckCircle, ClipboardCopy, FileText, UserX, Search, Phone, TrendingUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { blurDataURLs } from '@/lib/image-blurs';
 
 export default function AgentBlindnessProblems() {
   const t = useTranslations('agentBlindness');
@@ -132,6 +133,9 @@ export default function AgentBlindnessProblems() {
                     alt=""
                     width={330}
                     height={500}
+                    sizes="(max-width: 1024px) 0px, 33vw"
+                    placeholder="blur"
+                    blurDataURL={blurDataURLs['/images/warren-umoh-FC-2ilPSO6A-unsplash.jpg']}
                     className="object-cover w-full h-full"
                   />
                 </div>

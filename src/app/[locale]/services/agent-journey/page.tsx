@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { blurDataURLs } from '@/lib/image-blurs';
 
 export default function AgentJourneyPage() {
   const t = useTranslations('servicesPage');
@@ -221,6 +222,9 @@ export default function AgentJourneyPage() {
                     alt=""
                     width={500}
                     height={300}
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    placeholder="blur"
+                    blurDataURL={blurDataURLs['/images/mariola-grobelska-siujy-8IPrk-unsplash.jpg']}
                     className="w-full h-auto object-cover"
                   />
                 </motion.div>
@@ -236,6 +240,9 @@ export default function AgentJourneyPage() {
                     alt=""
                     width={400}
                     height={250}
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    placeholder="blur"
+                    blurDataURL={blurDataURLs['/images/ambrose-chua-zxbNbuncq1g-unsplash.jpg']}
                     className="w-full h-auto object-cover"
                   />
                 </motion.div>
@@ -510,6 +517,9 @@ export default function AgentJourneyPage() {
                     alt=""
                     width={600}
                     height={600}
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    placeholder="blur"
+                    blurDataURL={blurDataURLs['/images/sumaid-pal-singh-bakshi-avWFUikdFrc-unsplash.jpg']}
                     className="object-cover w-full h-full"
                   />
                 </div>

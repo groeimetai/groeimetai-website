@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { blurDataURLs } from '@/lib/image-blurs';
 
 export default function AboutPage() {
   const t = useTranslations('about');
@@ -111,6 +112,9 @@ export default function AboutPage() {
                 alt=""
                 width={500}
                 height={300}
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                placeholder="blur"
+                blurDataURL={blurDataURLs['/images/planet-volumes-byU63rK5W2E-unsplash.jpg']}
                 className="w-full h-auto object-cover"
               />
             </motion.div>
@@ -159,6 +163,9 @@ export default function AboutPage() {
                 alt=""
                 width={600}
                 height={400}
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                placeholder="blur"
+                blurDataURL={blurDataURLs['/images/jelena-lapina-hX8n1lbjNH8-unsplash.jpg']}
                 className="w-full h-auto object-cover"
               />
             </motion.div>
@@ -223,6 +230,9 @@ export default function AboutPage() {
                   alt=""
                   width={600}
                   height={500}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  placeholder="blur"
+                  blurDataURL={blurDataURLs['/images/warren-umoh-FC-2ilPSO6A-unsplash.jpg']}
                   className="w-full h-full object-cover"
                 />
               </motion.div>

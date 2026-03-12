@@ -4,6 +4,7 @@ import ScrollReveal from '@/components/ui/ScrollReveal';
 import { CheckCircle, HelpCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { blurDataURLs } from '@/lib/image-blurs';
 
 export default function ObjectionsHandling() {
   const t = useTranslations('objections');
@@ -58,6 +59,9 @@ export default function ObjectionsHandling() {
                   alt=""
                   width={500}
                   height={750}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  placeholder="blur"
+                  blurDataURL={blurDataURLs['/images/anne-nygard-w7-cOgX-IVQ-unsplash.jpg']}
                   className="object-cover w-full h-full"
                 />
               </div>
