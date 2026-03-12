@@ -99,7 +99,9 @@ export default function DynamicNavigation() {
     const baseItems: NavigationItem[] = [
       { href: '/services', label: t('services'), icon: Target },
       { href: '/cases', label: t('cases'), icon: Rocket },
+      { href: '/blog', label: t('blog'), icon: FileText },
       { href: '/about', label: t('about'), icon: Users },
+      { href: '/faq', label: t('faq'), icon: MessageSquare },
       { href: '/contact', label: t('contact'), icon: Phone },
     ];
 

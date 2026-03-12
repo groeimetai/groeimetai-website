@@ -47,6 +47,7 @@ export default function Footer() {
       { label: t('resources.snowFlowGithub'), href: 'https://github.com/GroeimetAI/snow-flow', external: true },
       { label: t('resources.agentReadinessTest'), href: '/agent-readiness' },
       { label: t('resources.blog'), href: '/blog' },
+      { label: t('resources.faq'), href: '/faq' },
       { label: t('resources.documentation'), href: '/docs' },
       { label: t('resources.apiStatus'), href: '/status' }
     ],

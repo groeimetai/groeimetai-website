@@ -8,6 +8,8 @@
     "cases": "Cases",
     "about": "About Us",
     "contact": "Contact",
+    "blog": "Blog",
+    "faq": "FAQ",
     "signIn": "Sign In",
     "dashboard": "Dashboard",
     "logout": "Logout",
@@ -1355,6 +1357,7 @@
       "snowFlowGithub": "Snow-flow GitHub",
       "agentReadinessTest": "Agent Readiness Test",
       "blog": "Blog",
+      "faq": "FAQ",
       "documentation": "Documentation",
       "apiStatus": "API Status"
     },

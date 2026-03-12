@@ -12,10 +12,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/contact', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/blog', priority: 0.7, changeFrequency: 'daily' as const },
     { path: '/cases', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/faq', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' as const },
     { path: '/terms', priority: 0.3, changeFrequency: 'yearly' as const },
     { path: '/agent-readiness', priority: 0.7, changeFrequency: 'monthly' as const },
-    { path: '/faq', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/assessments', priority: 0.6, changeFrequency: 'monthly' as const },
+    { path: '/mcp-guide', priority: 0.5, changeFrequency: 'monthly' as const },
+    { path: '/advisory-services', priority: 0.5, changeFrequency: 'monthly' as const },
+    { path: '/team', priority: 0.5, changeFrequency: 'monthly' as const },
+    { path: '/roadmap', priority: 0.5, changeFrequency: 'monthly' as const },
   ];
 
   const staticPages: MetadataRoute.Sitemap = locales.flatMap((locale) =>
@@ -46,7 +51,44 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   );
 
-  // Blog posts (in production, this would be fetched from a CMS or database)
+  // Case study detail pages
+  const caseStudies = [
+    'enterprise-llm-implementation',
+    'snelnotuleren-ai-transcription',
+    'groeimetai-learning-platform',
+    'intelligent-ticket-routing',
+  ];
+
+  const casePages: MetadataRoute.Sitemap = locales.flatMap((locale) =>
+    caseStudies.map((slug) => ({
+      url: `${baseUrl}/${locale}/cases/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    }))
+  );
+
+  // Assessment sub-pages
+  const assessments = [
+    'ai-maturity',
+    'ai-security',
+    'cx-ai',
+    'data-readiness',
+    'integration-readiness',
+    'process-automation',
+    'roi-calculator',
+  ];
+
+  const assessmentPages: MetadataRoute.Sitemap = locales.flatMap((locale) =>
+    assessments.map((assessment) => ({
+      url: `${baseUrl}/${locale}/assessments/${assessment}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    }))
+  );
+
+  // Blog posts
   const blogPosts = [
     'multi-agent-systems-future-automation',
     'rag-architectuur-best-practices',
@@ -65,5 +107,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   );
 
-  return [...staticPages, ...servicePages, ...blogPages];
+  return [...staticPages, ...servicePages, ...casePages, ...assessmentPages, ...blogPages];
 }

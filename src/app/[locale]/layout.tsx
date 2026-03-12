@@ -3,6 +3,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Footer from '@/components/layout/Footer';
+import CrawlerNav from '@/components/navigation/CrawlerNav';
 import type { RootLayoutProps } from '@/types/layout';
 import { locales } from '@/i18n';
 import { LocaleProviders } from '@/components/LocaleProviders';
@@ -34,6 +35,7 @@ export default async function LocaleLayout({ children, params: { locale } }: Roo
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <LocaleProviders>
+        <CrawlerNav locale={locale} />
         <DynamicNavigation />
         {children}
         <Footer />
