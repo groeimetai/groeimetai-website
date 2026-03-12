@@ -4518,5 +4518,105 @@
     "differenceTitle": "The difference?",
     "differenceDescription": "One MCP server works with all agents. REST APIs require custom integration code per agent.",
     "snowflowLink": "View Snow-flow: our open source MCP server"
+  },
+  "faqPage": {
+    "title": "Frequently Asked",
+    "titleHighlight": "Questions",
+    "subtitle": "Honest answers to the most common questions about AI for businesses.",
+    "categories": {
+      "general": {
+        "title": "General Questions about AI",
+        "faqs": {
+          "0": {
+            "question": "What does GroeimetAI do?",
+            "answer": "GroeimetAI is an AI implementation partner based in the Netherlands. We build practical AI solutions for businesses: chatbots, voice assistants, automations, system integrations, and AI strategy. We handle everything from strategy to production deployment."
+          },
+          "1": {
+            "question": "Who can benefit from AI?",
+            "answer": "Every business that deals with repetitive tasks, customer questions, reports, scheduling, or data entry. From freelancers to enterprises — AI is not just for big tech companies. We work with healthcare professionals, consultants, retailers, manufacturers, and many more."
+          },
+          "2": {
+            "question": "I'm not technical at all — can you still help?",
+            "answer": "Absolutely! Most of our clients aren't technical. We handle everything from strategy to implementation. You focus on your business, we handle the technology. We explain everything in plain language."
+          },
+          "3": {
+            "question": "What kind of AI solutions do you build?",
+            "answer": "We build AI chatbots for customer service, voice assistants for phone calls, document automation, smart workflows, system integrations, and custom AI tools. Anything where AI can save you time or improve your service."
+          },
+          "4": {
+            "question": "Do you work with companies outside the Netherlands?",
+            "answer": "Yes, we work with companies across Europe. Our team speaks Dutch and English fluently. Most of our work is done remotely, so location is not a barrier."
+          }
+        }
+      },
+      "costs": {
+        "title": "Costs & Pricing",
+        "faqs": {
+          "0": {
+            "question": "What does AI implementation cost?",
+            "answer": "We work with fixed prices — no hourly rates, no surprises. Projects typically range from a few thousand euros for simple automations to larger investments for enterprise solutions. We always provide a clear quote before any work starts."
+          },
+          "1": {
+            "question": "Is the first conversation really free?",
+            "answer": "Yes, always. The first conversation is a 30-minute call where we explore your situation, identify opportunities, and discuss what AI could do for your business. No obligations, no sales pitch — just honest advice."
+          },
+          "2": {
+            "question": "Is AI only for companies with big budgets?",
+            "answer": "Not at all. We work with freelancers, small businesses, and enterprises alike. Many of our most impactful projects are relatively small — a smart chatbot or document automation can be surprisingly affordable and deliver immediate ROI."
+          },
+          "3": {
+            "question": "Are there ongoing costs after implementation?",
+            "answer": "AI solutions typically have small ongoing costs for the AI models used (like OpenAI or Claude API usage). We're transparent about these costs upfront and help you optimize them. There are no hidden maintenance fees from our side."
+          }
+        }
+      },
+      "process": {
+        "title": "Process & Timeline",
+        "faqs": {
+          "0": {
+            "question": "How long before I see results?",
+            "answer": "Most clients see first results within 2-4 weeks. We always start with quick wins while building toward the bigger picture. Simple automations can be live within days."
+          },
+          "1": {
+            "question": "How does the process work?",
+            "answer": "Three steps: (1) Free conversation to discover opportunities, (2) Expert assessment with a concrete proposal and fixed price, (3) Implementation — we build, test, and deploy. You're involved at every step but don't need to do the technical work."
+          },
+          "2": {
+            "question": "What if I'm not happy with the result?",
+            "answer": "We work with fixed deliverables agreed upfront. During the project, we have regular check-ins to make sure we're on track. If something isn't right, we fix it — it's in our interest to deliver results you're happy with."
+          },
+          "3": {
+            "question": "Do I need to change my existing systems?",
+            "answer": "No. We integrate with your existing tools and systems. Whether you use Excel, Salesforce, SAP, or custom software — we build the bridges. No need to replace anything."
+          }
+        }
+      },
+      "technical": {
+        "title": "Technical Questions",
+        "faqs": {
+          "0": {
+            "question": "Is my data safe?",
+            "answer": "Yes. We follow GDPR guidelines and work with enterprise-grade security. Your data stays yours. We can work with on-premise solutions if your industry requires it, and we're transparent about which AI providers process your data."
+          },
+          "1": {
+            "question": "Which AI models do you use?",
+            "answer": "We work with the best models for each use case: OpenAI GPT, Anthropic Claude, Google Gemini, and open-source models. We're not tied to one vendor — we choose what works best for your specific needs."
+          },
+          "2": {
+            "question": "Can AI handle Dutch language?",
+            "answer": "Yes, modern AI models handle Dutch exceptionally well. Our voice assistants, chatbots, and document tools all work fluently in Dutch and English, including industry-specific terminology."
+          },
+          "3": {
+            "question": "What is MCP and why does it matter?",
+            "answer": "MCP (Model Context Protocol) is a standard for connecting AI models to your business systems. Think of it as a universal plug that lets AI talk to your CRM, email, calendar, and other tools. We're specialists in this technology."
+          }
+        }
+      }
+    },
+    "cta": {
+      "title": "Question not answered?",
+      "subtitle": "Start with a free 30-minute conversation. No obligations, just clarity about what AI can do for you.",
+      "button": "Schedule a free call"
+    }
   }
 }

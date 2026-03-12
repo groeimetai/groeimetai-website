@@ -1,6 +1,7 @@
 'use client';
 
 import ScrollReveal from '@/components/ui/ScrollReveal';
+import { FAQJsonLd } from '@/components/JsonLd';
 import { CheckCircle, HelpCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -13,6 +14,7 @@ export default function ObjectionsHandling() {
 
   return (
     <section className="py-20 sm:py-28 lg:py-36 relative bg-[#080D14]">
+      <FAQJsonLd faqs={objections} />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

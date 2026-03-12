@@ -25,8 +25,8 @@ export function generateAlternateLinks(pathname: string) {
 export function generateMetadataWithAlternates({
   locale,
   pathname,
-  title = 'GroeimetAI - AI Consultancy & Innovation',
-  description = 'Transform your business with cutting-edge AI solutions. Expert consultancy in GenAI, LLM integration, RAG architecture, and ServiceNow implementation.',
+  title = 'GroeimetAI — AI Implementation Partner | Chatbots, Voice AI & Automation',
+  description = 'We build practical AI solutions for your business. Chatbots, voice assistants, automations, and system integrations. Fixed prices, real results.',
   image = '/og-image.png',
 }: GenerateMetadataParams): Metadata {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://groeimetai.io';

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Outfit, Manrope } from 'next/font/google';
 import { Providers } from './providers';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { OrganizationJsonLd, ServicesJsonLd, WebSiteJsonLd } from '@/components/JsonLd';
 import '../styles/globals.css';
 
 const outfit = Outfit({
@@ -19,11 +20,11 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://groeimetai.io'),
-  title: 'GroeimetAI - AI Consultancy & Innovation',
+  title: 'GroeimetAI — AI Implementation Partner | Chatbots, Voice AI & Automation',
   description:
-    'Transform your business with cutting-edge AI solutions. Expert consultancy in GenAI, LLM integration, RAG architecture, and ServiceNow implementation.',
+    'We build practical AI solutions for your business. Chatbots, voice assistants, automations, and system integrations. Fixed prices, real results. Based in the Netherlands.',
   keywords:
-    'AI consultancy, GenAI, LLM, ServiceNow, RAG architecture, AI automation, multi-agent orchestration, Netherlands',
+    'AI implementation, AI developer Netherlands, AI chatbot bouwen, voice AI, business automation, AI integrations, AI consultancy, AI for business, MKB AI, AI partner Nederland',
   authors: [{ name: 'GroeimetAI', url: 'https://groeimetai.io' }],
   creator: 'GroeimetAI',
   publisher: 'GroeimetAI',
@@ -57,8 +58,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     alternateLocale: 'nl_NL',
     url: 'https://groeimetai.io',
-    title: 'GroeimetAI - AI Consultancy & Innovation',
-    description: 'Transform your business with cutting-edge AI solutions',
+    title: 'GroeimetAI — AI Implementation Partner | Chatbots, Voice AI & Automation',
+    description: 'We build practical AI solutions for your business. Chatbots, voice assistants, automations, and system integrations. Fixed prices, real results.',
     siteName: 'GroeimetAI',
     images: [
       {
@@ -71,8 +72,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'GroeimetAI - AI Consultancy & Innovation',
-    description: 'Transform your business with cutting-edge AI solutions',
+    title: 'GroeimetAI — AI Implementation Partner | Chatbots, Voice AI & Automation',
+    description: 'We build practical AI solutions for your business. Chatbots, voice assistants, automations, and system integrations. Fixed prices, real results.',
     creator: '@groeimetai',
     images: ['/twitter-image.png'],
   },
@@ -117,6 +118,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang={params?.locale || 'en'} suppressHydrationWarning>
+      <head>
+        <OrganizationJsonLd />
+        <ServicesJsonLd />
+        <WebSiteJsonLd />
+      </head>
       <body className={`${outfit.variable} ${manrope.variable} font-sans dark min-h-screen bg-background antialiased`} suppressHydrationWarning>
         <ErrorBoundary>
           <Providers>{children}</Providers>

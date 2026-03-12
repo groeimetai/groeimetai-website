@@ -1,0 +1,66 @@
+# GroeimetAI — AI Implementation Partner
+
+> GroeimetAI is an AI implementation partner based in the Netherlands. We build practical AI solutions for businesses of all sizes: chatbots, voice assistants, automations, system integrations, and AI strategy. Fixed prices, real results.
+
+## About
+
+- Company: GroeimetAI (Groei met AI)
+- Founded: 2023
+- Location: Netherlands
+- Languages: Dutch, English
+- Website: https://groeimetai.io
+- Contact: https://groeimetai.io/contact
+- GitHub: https://github.com/GroeimetAI
+
+## What We Do
+
+GroeimetAI helps businesses implement AI solutions that save time and create value. We are not a consultancy that only advises — we build, deploy, and maintain production AI systems.
+
+### Services
+
+- **AI Strategy & Consultancy**: Use case discovery, implementation roadmaps, ROI analysis. Helping leaders understand where AI delivers the most value.
+- **AI Integrations**: Connecting existing systems and tools with AI automation. MCP protocol, API integrations, smart workflows.
+- **Voice AI Development**: Intelligent voice agents for inbound calls, lead qualification, appointment scheduling, and 24/7 customer support.
+- **Full-stack Web Development**: Modern websites and web applications built with Next.js, React, and TypeScript.
+- **AI Training & Workshops**: Getting teams AI-ready with hands-on training, from fundamentals to advanced agent development.
+
+### Industries We Serve
+
+We work across all industries. Our clients include freelancers, SMEs, and enterprises in healthcare, professional services, retail, manufacturing, real estate, and more. AI is not just for big tech — we make it accessible for every business.
+
+## Our Approach
+
+1. **Free Conversation** — Discover opportunities, no obligations
+2. **Expert Assessment** — Deep analysis with concrete proposal, fixed price
+3. **Implementation** — Build, test, deploy. Fixed price, guaranteed results
+
+### Key Differentiators
+
+- Fixed prices, no hourly rates
+- First conversation always free
+- Results within 2-4 weeks
+- We handle everything from strategy to production
+- No vendor lock-in
+- Dutch-based, GDPR-compliant
+
+## Technologies
+
+- Large Language Models (OpenAI, Anthropic Claude, Google Gemini)
+- Voice AI (AssemblyAI, ElevenLabs, custom telephony)
+- MCP Protocol for system integrations
+- RAG Architecture for knowledge systems
+- Next.js, React, TypeScript, Python
+- Firebase, Google Cloud Platform
+
+## Open Source
+
+- Snow-Flow: ServiceNow AI orchestration framework — https://github.com/GroeimetAI/snow-flow
+
+## Key Pages
+
+- Home: https://groeimetai.io
+- Services: https://groeimetai.io/services
+- About: https://groeimetai.io/about
+- Contact: https://groeimetai.io/contact
+- Blog: https://groeimetai.io/blog
+- Cases: https://groeimetai.io/cases

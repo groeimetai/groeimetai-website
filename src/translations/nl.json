@@ -4340,5 +4340,105 @@
     "differenceTitle": "Het verschil?",
     "differenceDescription": "Eén MCP server werkt met alle agents. REST APIs vereisen per agent custom integratie code.",
     "snowflowLink": "Bekijk Snow-flow: onze open source MCP server"
+  },
+  "faqPage": {
+    "title": "Veelgestelde",
+    "titleHighlight": "Vragen",
+    "subtitle": "Eerlijke antwoorden op de meest gestelde vragen over AI voor bedrijven.",
+    "categories": {
+      "general": {
+        "title": "Algemene Vragen over AI",
+        "faqs": {
+          "0": {
+            "question": "Wat doet GroeimetAI?",
+            "answer": "GroeimetAI is een AI-implementatiepartner uit Nederland. Wij bouwen praktische AI-oplossingen voor bedrijven: chatbots, spraakassistenten, automatiseringen, systeemintegraties en AI-strategie. Wij regelen alles van strategie tot productie-deployment."
+          },
+          "1": {
+            "question": "Voor wie is AI geschikt?",
+            "answer": "Elk bedrijf dat te maken heeft met terugkerende taken, klantvragen, rapporten, planning of data-invoer. Van zzp'ers tot grote ondernemingen — AI is niet alleen voor big tech. Wij werken met zorgprofessionals, consultants, retailers, productiebedrijven en meer."
+          },
+          "2": {
+            "question": "Ik ben helemaal niet technisch — kunnen jullie dan toch helpen?",
+            "answer": "Absoluut! De meeste van onze klanten zijn niet technisch. Wij regelen alles van strategie tot implementatie. Jij focust op je bedrijf, wij op de technologie. We leggen alles uit in begrijpelijke taal."
+          },
+          "3": {
+            "question": "Wat voor AI-oplossingen bouwen jullie?",
+            "answer": "Wij bouwen AI-chatbots voor klantenservice, spraakassistenten voor telefoongesprekken, documentautomatisering, slimme workflows, systeemintegraties en op maat gemaakte AI-tools. Alles waar AI je tijd kan besparen of je service kan verbeteren."
+          },
+          "4": {
+            "question": "Werken jullie ook met bedrijven buiten Nederland?",
+            "answer": "Ja, we werken met bedrijven door heel Europa. Ons team spreekt vloeiend Nederlands en Engels. Het meeste werk doen we op afstand, dus locatie is geen belemmering."
+          }
+        }
+      },
+      "costs": {
+        "title": "Kosten & Prijzen",
+        "faqs": {
+          "0": {
+            "question": "Wat kost AI-implementatie?",
+            "answer": "Wij werken met vaste prijzen — geen uurtarieven, geen verrassingen. Projecten variëren van enkele duizenden euro's voor simpele automatiseringen tot grotere investeringen voor enterprise-oplossingen. Je krijgt altijd een heldere offerte voordat het werk begint."
+          },
+          "1": {
+            "question": "Is het eerste gesprek echt gratis?",
+            "answer": "Ja, altijd. Het eerste gesprek is een 30-minuten call waarin we je situatie verkennen, kansen identificeren en bespreken wat AI voor je bedrijf kan betekenen. Geen verplichtingen, geen verkooppraatje — gewoon eerlijk advies."
+          },
+          "2": {
+            "question": "Is AI alleen voor bedrijven met een groot budget?",
+            "answer": "Absoluut niet. Wij werken met zzp'ers, MKB en grote ondernemingen. Veel van onze meest impactvolle projecten zijn relatief klein — een slimme chatbot of documentautomatisering kan verrassend betaalbaar zijn en direct ROI opleveren."
+          },
+          "3": {
+            "question": "Zijn er doorlopende kosten na implementatie?",
+            "answer": "AI-oplossingen hebben doorgaans kleine doorlopende kosten voor de gebruikte AI-modellen (zoals OpenAI of Claude API-gebruik). We zijn hier vooraf transparant over en helpen je deze te optimaliseren. Er zijn geen verborgen onderhoudskosten van onze kant."
+          }
+        }
+      },
+      "process": {
+        "title": "Proces & Tijdlijn",
+        "faqs": {
+          "0": {
+            "question": "Hoe snel zie ik resultaat?",
+            "answer": "De meeste klanten zien eerste resultaten binnen 2-4 weken. We beginnen altijd met quick wins terwijl we toewerken naar het grotere plaatje. Simpele automatiseringen kunnen binnen dagen live staan."
+          },
+          "1": {
+            "question": "Hoe werkt het proces?",
+            "answer": "Drie stappen: (1) Gratis gesprek om kansen te ontdekken, (2) Expert assessment met een concreet voorstel en vaste prijs, (3) Implementatie — wij bouwen, testen en deployen. Je bent bij elke stap betrokken maar hoeft het technische werk niet te doen."
+          },
+          "2": {
+            "question": "Wat als ik niet tevreden ben met het resultaat?",
+            "answer": "We werken met vaste deliverables die vooraf worden afgesproken. Tijdens het project hebben we regelmatige check-ins om te zorgen dat we op koers liggen. Als iets niet goed is, lossen we het op — het is in ons belang om resultaten te leveren waar je blij mee bent."
+          },
+          "3": {
+            "question": "Moet ik mijn bestaande systemen vervangen?",
+            "answer": "Nee. Wij integreren met je bestaande tools en systemen. Of je nu Excel, Salesforce, SAP of eigen software gebruikt — wij bouwen de bruggen. Je hoeft niets te vervangen."
+          }
+        }
+      },
+      "technical": {
+        "title": "Technische Vragen",
+        "faqs": {
+          "0": {
+            "question": "Is mijn data veilig?",
+            "answer": "Ja. We volgen AVG/GDPR-richtlijnen en werken met enterprise-grade beveiliging. Jouw data blijft van jou. We kunnen werken met on-premise oplossingen als je sector dat vereist, en we zijn transparant over welke AI-providers je data verwerken."
+          },
+          "1": {
+            "question": "Welke AI-modellen gebruiken jullie?",
+            "answer": "We werken met de beste modellen voor elke use case: OpenAI GPT, Anthropic Claude, Google Gemini en open-source modellen. We zijn niet gebonden aan één leverancier — we kiezen wat het beste werkt voor jouw specifieke situatie."
+          },
+          "2": {
+            "question": "Kan AI goed omgaan met de Nederlandse taal?",
+            "answer": "Ja, moderne AI-modellen werken uitstekend met Nederlands. Onze spraakassistenten, chatbots en documenttools werken vloeiend in Nederlands en Engels, inclusief vakspecifieke terminologie."
+          },
+          "3": {
+            "question": "Wat is MCP en waarom is het belangrijk?",
+            "answer": "MCP (Model Context Protocol) is een standaard om AI-modellen te koppelen aan je bedrijfssystemen. Zie het als een universele stekker waarmee AI kan praten met je CRM, e-mail, agenda en andere tools. Wij zijn specialisten in deze technologie."
+          }
+        }
+      }
+    },
+    "cta": {
+      "title": "Vraag niet beantwoord?",
+      "subtitle": "Begin met een gratis gesprek van 30 minuten. Geen verplichtingen, gewoon duidelijkheid over wat AI voor jou kan doen.",
+      "button": "Plan een gratis gesprek"
+    }
   }
 }
