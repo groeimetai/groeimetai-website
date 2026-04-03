@@ -1,13 +1,12 @@
 import { Metadata } from 'next';
+import { brandSiteContent } from '@/data/brandSiteContent';
 
 export const metadata: Metadata = {
-  title: 'AI Services — Chatbots, Voice AI, Automation & Strategy | GroeimetAI',
-  description:
-    'Onze AI-diensten: AI Strategy & Consultancy, AI Integrations, Voice AI Development, Full-stack Web Development, en AI Training & Workshops. Vaste prijzen, echte resultaten.',
+  title: brandSiteContent.nl.metadata.services.title,
+  description: brandSiteContent.nl.metadata.services.description,
   openGraph: {
-    title: 'AI Services — GroeimetAI',
-    description:
-      'Van strategie tot implementatie. Chatbots, spraakassistenten, automatiseringen en meer. Vaste prijzen.',
+    title: brandSiteContent.nl.metadata.services.title,
+    description: brandSiteContent.nl.metadata.services.description,
   },
 };
 

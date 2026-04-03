@@ -3,6 +3,7 @@ import { Outfit, Manrope } from 'next/font/google';
 import { Providers } from './providers';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { OrganizationJsonLd, ServicesJsonLd, WebSiteJsonLd } from '@/components/JsonLd';
+import { brandSiteContent } from '@/data/brandSiteContent';
 import '../styles/globals.css';
 
 const outfit = Outfit({
@@ -20,11 +21,9 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://groeimetai.io'),
-  title: 'GroeimetAI — AI Implementation Partner | Chatbots, Voice AI & Automation',
-  description:
-    'We build practical AI solutions for your business. Chatbots, voice assistants, automations, and system integrations. Fixed prices, real results. Based in the Netherlands.',
-  keywords:
-    'AI implementation, AI developer Netherlands, AI chatbot bouwen, voice AI, business automation, AI integrations, AI consultancy, AI for business, MKB AI, AI partner Nederland',
+  title: brandSiteContent.nl.metadata.root.title,
+  description: brandSiteContent.nl.metadata.root.description,
+  keywords: brandSiteContent.nl.metadata.root.keywords,
   authors: [{ name: 'GroeimetAI', url: 'https://groeimetai.io' }],
   creator: 'GroeimetAI',
   publisher: 'GroeimetAI',
@@ -58,8 +57,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     alternateLocale: 'nl_NL',
     url: 'https://groeimetai.io',
-    title: 'GroeimetAI — AI Implementation Partner | Chatbots, Voice AI & Automation',
-    description: 'We build practical AI solutions for your business. Chatbots, voice assistants, automations, and system integrations. Fixed prices, real results.',
+    title: brandSiteContent.nl.metadata.root.title,
+    description: brandSiteContent.nl.metadata.root.description,
     siteName: 'GroeimetAI',
     images: [
       {
@@ -72,8 +71,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'GroeimetAI — AI Implementation Partner | Chatbots, Voice AI & Automation',
-    description: 'We build practical AI solutions for your business. Chatbots, voice assistants, automations, and system integrations. Fixed prices, real results.',
+    title: brandSiteContent.nl.metadata.root.title,
+    description: brandSiteContent.nl.metadata.root.description,
     creator: '@groeimetai',
     images: ['/twitter-image.png'],
   },
