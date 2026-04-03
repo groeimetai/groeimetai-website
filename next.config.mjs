@@ -129,6 +129,26 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
+      {
+        source: '/:locale(agent-readiness|expert-assessment|implementation-proposal|pilot-intake)',
+        destination: '/:locale/services',
+        permanent: true,
+      },
+      {
+        source: '/:locale/mcp-guide',
+        destination: '/:locale/snow-flow',
+        permanent: true,
+      },
+      {
+        source: '/:locale/advisory-services',
+        destination: '/:locale/services',
+        permanent: true,
+      },
+      {
+        source: '/:locale/services/agent-journey',
+        destination: '/:locale/services',
+        permanent: true,
+      },
     ];
   },
 

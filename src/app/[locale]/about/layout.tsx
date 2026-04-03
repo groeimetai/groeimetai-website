@@ -1,13 +1,12 @@
 import { Metadata } from 'next';
+import { brandSiteContent } from '@/data/brandSiteContent';
 
 export const metadata: Metadata = {
-  title: 'Over GroeimetAI — AI Implementation Partner sinds 2023',
-  description:
-    'GroeimetAI is een Nederlandse AI-implementatiepartner. Wij bouwen praktische AI-oplossingen: chatbots, spraakassistenten, automatiseringen en systeemintegraties. Al 3 jaar actief.',
+  title: brandSiteContent.nl.metadata.about.title,
+  description: brandSiteContent.nl.metadata.about.description,
   openGraph: {
-    title: 'Over GroeimetAI — AI Implementation Partner',
-    description:
-      'Nederlandse AI-implementatiepartner. Praktische AI-oplossingen voor bedrijven van elke omvang.',
+    title: brandSiteContent.nl.metadata.about.title,
+    description: brandSiteContent.nl.metadata.about.description,
   },
 };
 

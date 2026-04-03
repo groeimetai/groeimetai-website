@@ -1,325 +1,63 @@
-'use client';
-
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import Link from 'next/link';
-import Image from 'next/image';
-import {
-  ArrowRight, ExternalLink, Github, Linkedin, Twitter,
-  Mail, Phone, MapPin, CheckCircle
-} from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import AskAI from '@/components/AskAI';
+import { Mail, MapPin, Phone } from 'lucide-react';
+import { getLocale } from 'next-intl/server';
+import { getBrandSiteContent } from '@/data/brandSiteContent';
 
-export default function Footer() {
-  const [email, setEmail] = useState('');
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const t = useTranslations('footer');
-
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    
-    try {
-      await fetch('/api/newsletter/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-      setIsSubscribed(true);
-    } catch (error) {
-      console.error('Subscription error:', error);
-    }
-  };
-
-  const footerSections = {
-    services: [
-      { label: t('services.web'), href: '/services#web' },
-      { label: t('services.aiStrategy'), href: '/services#aiStrategy' },
-      { label: t('services.mcp'), href: '/services#mcp' },
-      { label: t('services.voice'), href: '/services#voice' },
-      { label: t('services.training'), href: '/services#training' }
-    ],
-    resources: [
-      { label: t('resources.mcpGuide'), href: '/mcp-guide' },
-      { label: t('resources.snowFlowGithub'), href: 'https://github.com/GroeimetAI/snow-flow', external: true },
-      { label: t('resources.agentReadinessTest'), href: '/agent-readiness' },
-      { label: t('resources.blog'), href: '/blog' },
-      { label: t('resources.faq'), href: '/faq' },
-      { label: t('resources.documentation'), href: '/docs' },
-      { label: t('resources.apiStatus'), href: '/status' }
-    ],
-    developers: [
-      { label: t('developers.mcpFormatGuide'), href: '/mcp-guide', external: false },
-      { label: t('developers.agentSetup'), href: '/docs', external: false },
-      { label: t('developers.apiDocs'), href: '/docs', external: false }
-    ],
-    company: [
-      { label: t('company.about'), href: '/about' },
-      { label: t('company.cases'), href: '/cases' },
-      { label: t('company.roadmap'), href: '/roadmap' },
-      { label: t('company.team'), href: '/team' },
-      { label: t('company.contact'), href: '/contact' }
-    ],
-    support: [
-      { label: t('support.clientPortal'), href: '/dashboard' },
-      { label: t('support.helpCenter'), href: '/docs' },
-      { label: t('support.systemStatus'), href: '/status' },
-      { label: t('support.reportIssue'), href: '/contact' },
-      { label: t('support.scheduleCall'), href: '/contact' }
-    ]
-  };
+export default async function Footer() {
+  const locale = await getLocale();
+  const content = getBrandSiteContent(locale).footer;
 
   return (
-    <footer className="bg-black border-t border-white/10">
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
-          {/* Company Info - Spans 2 columns like original */}
-          <div className="lg:col-span-2">
-            <Link href="/" className="inline-flex items-center mb-4 hover:opacity-80 transition-opacity">
-              <Image
-                src="/groeimet-ai-logo.svg"
-                alt="GroeimetAI"
-                width={120}
-                height={50}
-                className="h-8 w-auto"
-              />
-            </Link>
-            <p className="text-white/70 mb-6">
-              {t('tagline')}
-            </p>
-
-            {/* Newsletter */}
-            <div className="mb-6">
-              <h3 className="font-semibold mb-3 text-white">{t('newsletter.title')}</h3>
-              {!isSubscribed ? (
-                <form onSubmit={handleSubscribe} className="flex gap-2">
-                  <Input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={t('newsletter.placeholder')}
-                    className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/30 flex-1 focus:border-[#F87315]/30 focus:bg-white/[0.06]"
-                    required
-                  />
-                  <Button
-                    type="submit"
-                    aria-label="Subscribe to newsletter"
-                    className="bg-[#F87315] hover:bg-[#E5680F] text-white transition-all duration-200 px-4 shrink-0"
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </form>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-emerald-400 text-sm flex items-center gap-2"
-                >
-                  <CheckCircle className="w-4 h-4" />
-                  {t('newsletter.subscribedMessage')}
-                </motion.div>
-              )}
-              <p className="text-white/60 text-xs mt-2">
-                {t('newsletter.description')}
-              </p>
-            </div>
-
-            {/* Contact Info */}
-            <div className="space-y-3">
-              <a href={`mailto:${t('contact.email')}`} className="flex items-center text-white/50 hover:text-white/80 transition-colors text-sm group">
-                <Mail className="w-4 h-4 mr-3 text-[#F87315] shrink-0" />
-                <span className="group-hover:text-[#F87315] transition-colors">{t('contact.email')}</span>
+    <footer className="border-t border-white/10 bg-[#0F0F0F] text-[#F6F2E8]">
+      <div className="container mx-auto px-4 py-14 sm:px-6 lg:px-8">
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr_1fr_1fr]">
+          <div className="max-w-md">
+            <p className="text-xl font-semibold tracking-[-0.04em]">GroeimetAI</p>
+            <p className="mt-4 text-sm leading-7 text-[#C8C0B2]">{content.tagline}</p>
+            <div className="mt-6 space-y-3 text-sm text-[#D7D0C4]">
+              <a href={`mailto:${content.emailLabel}`} className="flex items-center gap-3 hover:text-white">
+                <Mail className="h-4 w-4 text-[#B7C6A5]" />
+                <span>{content.emailLabel}</span>
               </a>
-              <a href="tel:+31681739018" className="flex items-center text-white/50 hover:text-white/80 transition-colors text-sm group">
-                <Phone className="w-4 h-4 mr-3 text-[#F87315] shrink-0" />
-                <span className="group-hover:text-[#F87315] transition-colors">{t('contact.phone')}</span>
+              <a href="tel:+31681739018" className="flex items-center gap-3 hover:text-white">
+                <Phone className="h-4 w-4 text-[#B7C6A5]" />
+                <span>{content.phoneLabel}</span>
               </a>
-              <div className="flex items-center text-white/50 text-sm">
-                <MapPin className="w-4 h-4 mr-3 text-[#F87315] shrink-0" />
-                <span>{t('contact.location')}</span>
+              <div className="flex items-center gap-3 text-[#C8C0B2]">
+                <MapPin className="h-4 w-4 text-[#B7C6A5]" />
+                <span>{content.locationLabel}</span>
               </div>
             </div>
           </div>
 
-          {/* Services */}
-          <div>
-            <h3 className="font-semibold mb-4 text-white text-sm uppercase tracking-wider">{t('sections.services')}</h3>
-            <ul className="space-y-2.5">
-              {footerSections.services.map((item, index) => (
-                <li key={index}>
-                  <Link
-                    href={item.href}
-                    className="text-white/50 hover:text-white/80 transition-colors text-sm block"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Resources */}
-          <div>
-            <h3 className="font-semibold mb-4 text-white text-sm uppercase tracking-wider">{t('sections.resources')}</h3>
-            <ul className="space-y-2.5">
-              {footerSections.resources.map((item, index) => (
-                <li key={index}>
-                  {item.external ? (
-                    <a
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/50 hover:text-white/80 transition-colors text-sm flex items-center gap-1"
-                    >
-                      {item.label}
-                      <ExternalLink className="w-3 h-3 opacity-50" />
-                    </a>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      className="text-white/50 hover:text-white/80 transition-colors text-sm block"
-                    >
-                      {item.label}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h3 className="font-semibold mb-4 text-white text-sm uppercase tracking-wider">{t('sections.company')}</h3>
-            <ul className="space-y-2.5">
-              {footerSections.company.map((item, index) => (
-                <li key={index}>
-                  <Link
-                    href={item.href}
-                    className="text-white/50 hover:text-white/80 transition-colors text-sm block"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            {/* Developer Section */}
-            <div className="mt-6 pt-6 border-t border-white/[0.06]">
-              <h4 className="font-semibold mb-3 text-white text-xs uppercase tracking-wider">{t('sections.developers')}</h4>
-              <ul className="space-y-2">
-                {footerSections.developers.map((item, index) => (
-                  <li key={index}>
-                    <Link
-                      href={item.href}
-                      className="text-white/40 hover:text-white/70 transition-colors text-xs block"
-                    >
-                      {item.label}
-                    </Link>
+          {content.groups.map((group) => (
+            <div key={group.title}>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#9B9386]">{group.title}</p>
+              <ul className="mt-5 space-y-3">
+                {group.links.map((link) => (
+                  <li key={link.label}>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="text-sm text-[#D7D0C4] transition hover:text-white"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link href={`/${locale}${link.href === '/' ? '' : link.href}`} className="text-sm text-[#D7D0C4] transition hover:text-white">
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
-          </div>
+          ))}
         </div>
 
-        {/* Bottom Section with CTA */}
-        <div className="border-t border-white/10 pt-8 mb-8">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              {t('cta.title').includes('AI') ? (
-                <>
-                  {t('cta.title').split('AI')[0]}
-                  <span className="text-[#F87315]">AI</span>
-                  {t('cta.title').split('AI').slice(1).join('AI')}
-                </>
-              ) : (
-                t('cta.title')
-              )}
-            </h3>
-            <p className="text-white/70 mb-6">
-              {t('cta.description')}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  className="bg-[#F87315] hover:bg-[#E5680F] text-white font-semibold shadow-lg shadow-[#F87315]/20 hover:shadow-[#F87315]/30 transition-all duration-300"
-                >
-                  {t('cta.startAssessment')}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-white/20 text-white hover:bg-white/10"
-                >
-                  {t('cta.planCall')}
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          {/* Social Links */}
-          <div className="flex justify-center gap-3 mb-8">
-            {[
-              { href: 'https://linkedin.com/company/groeimetai', label: 'LinkedIn', Icon: Linkedin },
-              { href: 'https://github.com/GroeimetAI', label: 'GitHub', Icon: Github },
-              { href: 'https://twitter.com/groeimetai', label: 'Twitter', Icon: Twitter },
-            ].map(({ href, label, Icon }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className="w-9 h-9 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
-              >
-                <Icon className="w-4 h-4" />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Ask AI Section */}
-        <AskAI />
-
-        {/* Bottom Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          className="border-t border-white/10 pt-6"
-        >
-          <div className="flex flex-col lg:flex-row items-center justify-between">
-            <div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-y-0 lg:space-x-6 text-white/40 text-sm">
-              <span>{t('copyright')}</span>
-              <div className="flex space-x-4">
-                <Link href="/privacy" className="hover:text-white transition-colors">
-                  {t('legal.privacy')}
-                </Link>
-                <Link href="/terms" className="hover:text-white transition-colors">
-                  {t('legal.terms')}
-                </Link>
-                <Link href="/cookies" className="hover:text-white transition-colors">
-                  {t('legal.cookies')}
-                </Link>
-                <Link href="/status" className="hover:text-white transition-colors">
-                  {t('legal.status')}
-                </Link>
-              </div>
-            </div>
-
-            <div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-y-0 lg:space-x-6 text-white/40 text-sm mt-4 lg:mt-0">
-              <span>{t('taglines.agentReady')}</span>
-              <span>{t('taglines.openSource')}</span>
-            </div>
-          </div>
-        </motion.div>
+        <div className="mt-10 border-t border-white/10 pt-6 text-sm text-[#9B9386]">{content.bottom}</div>
       </div>
     </footer>
   );

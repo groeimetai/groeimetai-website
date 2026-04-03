@@ -7,7 +7,7 @@ export function OrganizationJsonLd() {
     url: 'https://groeimetai.io',
     logo: 'https://groeimetai.io/gecentreerd-logo.svg',
     description:
-      'AI implementation partner that builds practical AI solutions for businesses. Chatbots, voice assistants, automations, system integrations, and AI strategy. Fixed prices, real results.',
+      'GroeimetAI helps companies use AI with practical training, workflow improvement, safe integrations, and clear adoption guidance.',
     foundingDate: '2023',
     founder: {
       '@type': 'Person',
@@ -29,15 +29,14 @@ export function OrganizationJsonLd() {
     },
     knowsAbout: [
       'Artificial Intelligence',
-      'AI Automation',
-      'Voice AI',
-      'AI Chatbots',
+      'AI Training',
       'AI Strategy',
-      'Business Automation',
+      'AI Adoption',
+      'Workflow Improvement',
       'System Integration',
-      'MCP Protocol',
+      'Open Standards',
       'Large Language Models',
-      'RAG Architecture',
+      'Governance',
     ],
     sameAs: [
       'https://github.com/GroeimetAI',
@@ -62,33 +61,27 @@ export function OrganizationJsonLd() {
 export function ServicesJsonLd() {
   const services = [
     {
-      name: 'AI Strategy & Consultancy',
-      description:
-        'Practical advice on how AI can strengthen your business. From use case discovery to implementation roadmaps and ROI analysis.',
-      url: 'https://groeimetai.io/services',
-    },
-    {
-      name: 'AI Integrations',
-      description:
-        'Connect your existing systems and tools with AI. We build the bridges so your software works together seamlessly with smart automation.',
-      url: 'https://groeimetai.io/services',
-    },
-    {
-      name: 'Voice AI Development',
-      description:
-        'Intelligent voice agents that handle inbound calls, qualify leads, book appointments, and provide 24/7 customer support.',
-      url: 'https://groeimetai.io/services',
-    },
-    {
-      name: 'Full-stack Web Development',
-      description:
-        'Modern, scalable websites and web applications. From landing pages to complex platforms built with Next.js, React, and TypeScript.',
-      url: 'https://groeimetai.io/services',
-    },
-    {
       name: 'AI Training & Workshops',
       description:
-        'Get your team AI-ready. From fundamentals to hands-on agent development workshops. 1-3 day programs.',
+        'Practical workshops and team training that help people work better with modern AI models in daily operations.',
+      url: 'https://groeimetai.io/services',
+    },
+    {
+      name: 'AI Strategy & Adoption',
+      description:
+        'Use-case selection, adoption guidance, and roadmap work for organizations that want grounded AI decisions instead of hype-driven experimentation.',
+      url: 'https://groeimetai.io/services',
+    },
+    {
+      name: 'Workflow Redesign & Implementation',
+      description:
+        'Workflow analysis and redesign that uses AI to reduce manual work, improve quality, and fit how teams already operate.',
+      url: 'https://groeimetai.io/services',
+    },
+    {
+      name: 'Safe Integrations & Tooling',
+      description:
+        'Integrations, internal tools, and custom software when off-the-shelf AI tools are not enough and durable value requires implementation.',
       url: 'https://groeimetai.io/services',
     },
   ];
@@ -153,7 +146,7 @@ export function WebSiteJsonLd() {
     name: 'GroeimetAI',
     url: 'https://groeimetai.io',
     description:
-      'AI implementation partner for businesses. We build chatbots, voice assistants, automations, and AI integrations. Fixed prices, real results.',
+      'No-bullshit AI for teams that want to work better through training, adoption, workflow improvement, and safe integrations.',
     inLanguage: ['nl', 'en'],
     publisher: {
       '@type': 'Organization',
