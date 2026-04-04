@@ -1,15 +1,14 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import {
   marketingBadge,
-  marketingLightButton,
   marketingOrangePanel,
   marketingPanel,
   marketingPrimaryButton,
   marketingSecondaryButton,
 } from '@/components/marketing/marketingStyles';
 import { getBrandSiteContent } from '@/data/brandSiteContent';
+import { Link } from '@/i18n/routing';
 import { blurDataURLs } from '@/lib/image-blurs';
 
 export default function ServicesPage({
@@ -18,6 +17,7 @@ export default function ServicesPage({
   params: { locale: string };
 }) {
   const content = getBrandSiteContent(params.locale).servicesPage;
+  const isEn = params.locale === 'en';
   const ids = params.locale === 'en'
     ? ['training', 'strategy', 'workflow', 'integrations']
     : ['training', 'strategie', 'workflow', 'integraties'];
@@ -92,7 +92,7 @@ export default function ServicesPage({
       <section className="border-b border-white/10 bg-[#120F0C]" id={approachId}>
         <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
           <div className="max-w-3xl">
-            <p className="text-xs uppercase tracking-[0.22em] text-[#F4B382]">Approach</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#F4B382]">{isEn ? 'Approach' : 'Aanpak'}</p>
             <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{content.processTitle}</h2>
           </div>
           <div className="mt-12 grid gap-5 lg:grid-cols-3">
@@ -112,7 +112,7 @@ export default function ServicesPage({
             <h2 className="max-w-3xl text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{content.finalCta.title}</h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[#E6D7CC]">{content.finalCta.body}</p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <Link href={content.finalCta.primaryHref} className={marketingLightButton}>
+              <Link href={content.finalCta.primaryHref} className={marketingPrimaryButton}>
                 {content.finalCta.primaryCta}
                 <ArrowRight className="h-4 w-4" />
               </Link>

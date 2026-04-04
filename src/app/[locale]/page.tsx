@@ -1,15 +1,14 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Shield, Sparkles } from 'lucide-react';
 import {
   marketingBadge,
-  marketingLightButton,
   marketingOrangePanel,
   marketingPanel,
   marketingPrimaryButton,
   marketingSecondaryButton,
 } from '@/components/marketing/marketingStyles';
 import { getBrandSiteContent } from '@/data/brandSiteContent';
+import { Link } from '@/i18n/routing';
 import { blurDataURLs } from '@/lib/image-blurs';
 
 function SectionHeader({
@@ -54,6 +53,31 @@ export default function HomePage({
         'Verbeter workflows vóór je software bouwt',
         'Werk met sterke modellen zonder de controle kwijt te raken',
       ];
+  const heroSideTitle = isEn
+    ? 'Foundation models, sharper workflows, and teams that stay in control.'
+    : 'Sterke foundation models, scherpere workflows en teams die zelf de controle houden.';
+  const heroPositioningItems = isEn
+    ? [
+        'Training and workshops that improve how people work',
+        'Workflow improvements before custom software',
+        'Safe implementation without black-box dependency',
+        'Open standards where possible, governance where needed',
+      ]
+    : [
+        'Training en workshops die mensen beter laten werken',
+        'Workflowverbetering vóór maatwerksoftware',
+        'Veilige implementatie zonder black-box afhankelijkheid',
+        'Open standaarden waar mogelijk, governance waar nodig',
+      ];
+  const heroMessage = isEn
+    ? 'We teach teams how to work better with AI, and only build tooling or integrations when they add durable value.'
+    : 'We leren teams hoe ze beter werken met AI, en bouwen alleen tooling of integraties wanneer dat echt duurzame waarde toevoegt.';
+  const positioningLabel = isEn ? 'Positioning' : 'Positionering';
+  const primaryMessageLabel = isEn ? 'Primary message' : 'Kernboodschap';
+  const technicalDepthLabel = isEn ? 'Technical depth' : 'Technische diepgang';
+  const problemsImageText = isEn
+    ? 'The problem usually is not that you have too little AI. The problem is that there is no clear foundation.'
+    : 'Het probleem is meestal niet dat je te weinig AI hebt. Het probleem is dat er geen helder fundament ligt.';
 
   return (
     <main className="bg-[#120F0C] text-[#F6F2E8]">
@@ -116,7 +140,7 @@ export default function HomePage({
                   <div className="absolute bottom-0 left-0 right-0 p-7">
                     <p className="text-xs uppercase tracking-[0.22em] text-[#E9C8B0]">No-bullshit AI</p>
                     <p className="mt-3 max-w-sm text-2xl font-semibold leading-tight tracking-[-0.04em] text-white">
-                      Foundation models, better workflows, and people who know what they are doing.
+                      {heroSideTitle}
                     </p>
                   </div>
                 </div>
@@ -125,18 +149,13 @@ export default function HomePage({
                   <div className="rounded-[2rem] bg-[linear-gradient(180deg,rgba(236,116,40,0.17),rgba(255,255,255,0.04))] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.22)]">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-xs uppercase tracking-[0.2em] text-[#F8D6BE]">Positioning</p>
+                        <p className="text-xs uppercase tracking-[0.2em] text-[#F8D6BE]">{positioningLabel}</p>
                         <p className="mt-2 text-2xl font-semibold tracking-[-0.04em]">No-bullshit AI</p>
                       </div>
                       <Shield className="h-7 w-7 text-[#F6C7A4]" />
                     </div>
                     <div className="mt-6 space-y-4">
-                      {[
-                        'Training en workshops die mensen beter laten werken',
-                        'Workflowverbetering vóór maatwerksoftware',
-                        'Veilige implementatie zonder black-box afhankelijkheid',
-                        'Open standaarden waar mogelijk, governance waar nodig',
-                      ].map((item) => (
+                      {heroPositioningItems.map((item) => (
                         <div key={item} className="flex items-start gap-3">
                           <CheckCircle2 className="mt-0.5 h-5 w-5 flex-none text-[#FFD1AE]" />
                           <p className="text-sm leading-6 text-[#F5E8DE]">{item}</p>
@@ -159,9 +178,9 @@ export default function HomePage({
                       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(18,12,9,0.55))]" />
                     </div>
                     <div className="rounded-[1.8rem] bg-[#16110E] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-                      <p className="text-xs uppercase tracking-[0.18em] text-[#C9A98D]">Primary message</p>
+                      <p className="text-xs uppercase tracking-[0.18em] text-[#C9A98D]">{primaryMessageLabel}</p>
                       <p className="mt-3 text-lg leading-7 text-[#F6F2E8]">
-                        We leren teams hoe ze beter werken met AI, en bouwen alleen tooling of integraties wanneer dat echt duurzame waarde toevoegt.
+                        {heroMessage}
                       </p>
                     </div>
                   </div>
@@ -172,7 +191,8 @@ export default function HomePage({
         </div>
       </section>
 
-      <section className="border-b border-white/10 bg-[linear-gradient(180deg,#17110D_0%,#14110F_100%)]">
+      <section className="relative border-b border-white/10 bg-[linear-gradient(180deg,#1A120D_0%,#14110F_100%)]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_18%,rgba(242,138,63,0.12),transparent_22%)]" />
         <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
           <SectionHeader {...content.problemsIntro} />
           <div className="mt-12 grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
@@ -189,7 +209,7 @@ export default function HomePage({
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.06),rgba(25,15,10,0.74))]" />
               <div className="absolute bottom-0 left-0 right-0 p-7">
                 <p className="text-sm leading-7 text-[#F4E7DB]">
-                  Het probleem is meestal niet dat je te weinig AI hebt. Het probleem is dat er geen helder fundament ligt.
+                  {problemsImageText}
                 </p>
               </div>
             </div>
@@ -205,7 +225,8 @@ export default function HomePage({
         </div>
       </section>
 
-      <section className="border-b border-white/10 bg-[#130F0D]">
+      <section className="relative border-b border-white/10 bg-[#130F0D]">
+        <div className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(242,138,63,0.1),transparent)]" />
         <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
           <SectionHeader {...content.principlesIntro} />
           <div className="mt-12 grid gap-5 md:grid-cols-2">
@@ -229,7 +250,8 @@ export default function HomePage({
         </div>
       </section>
 
-      <section className="border-b border-white/10 bg-[linear-gradient(180deg,#16100D_0%,#120F0C_100%)]">
+      <section className="relative border-b border-white/10 bg-[linear-gradient(180deg,#1A120E_0%,#120F0C_100%)]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_20%,rgba(242,138,63,0.1),transparent_20%)]" />
         <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
           <SectionHeader {...content.servicesIntro} />
           <div className="mt-12 grid gap-6 xl:grid-cols-2">
@@ -292,7 +314,8 @@ export default function HomePage({
         </div>
       </section>
 
-      <section className="border-b border-white/10 bg-[linear-gradient(180deg,#17110E_0%,#120F0C_100%)]" id="aanpak">
+      <section className="relative border-b border-white/10 bg-[linear-gradient(180deg,#17110E_0%,#120F0C_100%)]" id="aanpak">
+        <div className="absolute inset-y-0 left-0 w-1/3 bg-[radial-gradient(circle_at_20%_40%,rgba(242,138,63,0.12),transparent_45%)]" />
         <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
           <SectionHeader {...content.approachIntro} />
           <div className="mt-12 grid gap-5 lg:grid-cols-[0.78fr_1.22fr]">
@@ -358,7 +381,7 @@ export default function HomePage({
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(18,10,8,0.72))]" />
               <div className="absolute bottom-0 left-0 right-0 p-7">
-                <p className="text-xs uppercase tracking-[0.2em] text-[#F6C8A3]">Technical depth</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-[#F6C8A3]">{technicalDepthLabel}</p>
                 <p className="mt-3 max-w-sm text-lg leading-7 text-white">
                   Snow-Flow blijft zichtbaar als bewijs van open source, secure enterprise integratie en technische controle onder de motorkap.
                 </p>
@@ -392,7 +415,7 @@ export default function HomePage({
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <Link
                 href={content.finalCta.primaryHref}
-                className={marketingLightButton}
+                className={marketingPrimaryButton}
               >
                 {content.finalCta.primaryCta}
                 <ArrowRight className="h-4 w-4" />

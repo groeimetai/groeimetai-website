@@ -1,15 +1,14 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import {
   marketingBadge,
-  marketingLightButton,
   marketingOrangePanel,
   marketingPanel,
   marketingPrimaryButton,
   marketingSecondaryButton,
 } from '@/components/marketing/marketingStyles';
 import { getBrandSiteContent } from '@/data/brandSiteContent';
+import { Link } from '@/i18n/routing';
 import { blurDataURLs } from '@/lib/image-blurs';
 
 export default function AboutPage({
@@ -18,6 +17,17 @@ export default function AboutPage({
   params: { locale: string };
 }) {
   const content = getBrandSiteContent(params.locale).aboutPage;
+  const isEn = params.locale === 'en';
+  const coreStanceLabel = isEn ? 'Core stance' : 'Kernhouding';
+  const coreStanceTitle = isEn
+    ? 'Advise what works. Build what lasts.'
+    : 'Adviseer wat werkt. Bouw wat blijft staan.';
+  const coreStanceBody = isEn
+    ? 'GroeimetAI sits between vague consulting and feature-first delivery. The positioning is sharper on purpose: practical AI, safer rollout, and stronger teams.'
+    : 'GroeimetAI zit tussen vage consultancy en feature-first delivery in. De positionering is bewust scherper: praktische AI, veiligere implementatie en teams die zelf sterker worden.';
+  const principlesLabel = isEn ? 'Principles' : 'Principes';
+  const commercialLabel = isEn ? 'Commercially relevant' : 'Commercieel relevant';
+  const nielsLabel = isEn ? 'Niels' : 'Niels';
 
   return (
     <main className="bg-[#120F0C] text-[#F6F2E8]">
@@ -70,10 +80,10 @@ export default function AboutPage({
               ))}
             </div>
             <div className={marketingOrangePanel}>
-              <p className="text-xs uppercase tracking-[0.22em] text-[#B7C6A5]">Core stance</p>
-              <p className="mt-4 text-2xl font-semibold tracking-[-0.04em]">Advise what works. Build what lasts.</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-[#B7C6A5]">{coreStanceLabel}</p>
+              <p className="mt-4 text-2xl font-semibold tracking-[-0.04em]">{coreStanceTitle}</p>
               <p className="mt-4 text-sm leading-7 text-[#C8C0B2]">
-                GroeimetAI sits between vague consulting and feature-first delivery. The positioning is sharper on purpose: practical AI, safer rollout, and stronger teams.
+                {coreStanceBody}
               </p>
             </div>
           </div>
@@ -83,7 +93,7 @@ export default function AboutPage({
       <section className="border-b border-white/10 bg-[#120F0C]">
         <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
           <div className="max-w-3xl">
-            <p className="text-xs uppercase tracking-[0.22em] text-[#F4B382]">Principles</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#F4B382]">{principlesLabel}</p>
             <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{content.principlesTitle}</h2>
           </div>
           <div className="mt-12 grid gap-5 md:grid-cols-2">
@@ -101,7 +111,7 @@ export default function AboutPage({
         <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
           <div className="grid gap-5 lg:grid-cols-2">
             <article className={marketingPanel}>
-              <p className="text-xs uppercase tracking-[0.22em] text-[#B7C6A5]">Niels</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-[#B7C6A5]">{nielsLabel}</p>
               <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em]">{content.nielsTitle}</h2>
               {content.nielsBody.map((paragraph) => (
                 <p key={paragraph} className="mt-4 text-sm leading-7 text-[#C8C0B2]">
@@ -110,7 +120,7 @@ export default function AboutPage({
               ))}
             </article>
             <article className={marketingOrangePanel}>
-              <p className="text-xs uppercase tracking-[0.22em] text-[#CD6F2E]">Commercially relevant</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-[#CD6F2E]">{commercialLabel}</p>
               <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em]">{content.credibilityTitle}</h2>
               <ul className="mt-6 space-y-4">
                 {content.credibility.map((item) => (
@@ -131,7 +141,7 @@ export default function AboutPage({
             <h2 className="max-w-3xl text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{content.finalCta.title}</h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[#E6D7CC]">{content.finalCta.body}</p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <Link href={content.finalCta.primaryHref} className={marketingLightButton}>
+              <Link href={content.finalCta.primaryHref} className={marketingPrimaryButton}>
                 {content.finalCta.primaryCta}
                 <ArrowRight className="h-4 w-4" />
               </Link>

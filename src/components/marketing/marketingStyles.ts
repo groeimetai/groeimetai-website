@@ -15,3 +15,12 @@ export const marketingPanel =
 
 export const marketingOrangePanel =
   'rounded-[1.9rem] bg-[linear-gradient(180deg,rgba(242,138,63,0.14),rgba(255,255,255,0.03))] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]';
+
+export const marketingField =
+  'mt-1.5 h-12 rounded-2xl border border-white/10 bg-white/[0.04] px-4 text-white transition placeholder:text-white/35 focus-visible:border-[#F2A56D] focus-visible:ring-2 focus-visible:ring-[#F28A3F]/20 focus-visible:ring-offset-0';
+
+export const marketingTextarea =
+  'mt-1.5 min-h-[132px] rounded-[1.4rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-white transition placeholder:text-white/35 focus-visible:border-[#F2A56D] focus-visible:ring-2 focus-visible:ring-[#F28A3F]/20 focus-visible:ring-offset-0 resize-none';
+
+export const marketingSelect =
+  'mt-1.5 w-full rounded-2xl border border-white/10 bg-[#18110E] px-4 py-3 text-white transition focus:border-[#F2A56D] focus:outline-none focus:ring-2 focus:ring-[#F28A3F]/20';

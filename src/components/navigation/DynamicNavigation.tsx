@@ -9,6 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import LanguageSwitcher from '@/components/layout/LanguageSwitcher';
 import NotificationCenter from '@/components/NotificationCenter';
+import { marketingPrimaryButton } from '@/components/marketing/marketingStyles';
 import { getBrandSiteContent } from '@/data/brandSiteContent';
 import { LayoutDashboard, LogOut, Menu, Settings, X } from 'lucide-react';
 
@@ -114,7 +115,7 @@ export default function DynamicNavigation() {
                   </Button>
                 </Link>
                 <Link href="/contact">
-                  <Button className="rounded-full bg-[#F2E9DB] px-5 text-[#111111] hover:bg-white">
+                  <Button className={marketingPrimaryButton}>
                     {content.nav.contactCta}
                   </Button>
                 </Link>
@@ -194,7 +195,7 @@ export default function DynamicNavigation() {
                 <Link
                   href="/contact"
                   onClick={() => setOpen(false)}
-                  className="mt-2 inline-flex items-center justify-center rounded-full bg-[#F2E9DB] px-5 py-3 text-sm font-semibold text-[#111111]"
+                  className={`mt-2 ${marketingPrimaryButton}`}
                 >
                   {content.nav.contactCta}
                 </Link>

@@ -1,15 +1,14 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { ArrowRight, ExternalLink } from 'lucide-react';
 import {
   marketingBadge,
-  marketingLightButton,
   marketingOrangePanel,
   marketingPanel,
   marketingPrimaryButton,
   marketingSecondaryButton,
 } from '@/components/marketing/marketingStyles';
 import { getBrandSiteContent } from '@/data/brandSiteContent';
+import { Link } from '@/i18n/routing';
 import { blurDataURLs } from '@/lib/image-blurs';
 
 export default function SnowFlowPage({
@@ -18,7 +17,17 @@ export default function SnowFlowPage({
   params: { locale: string };
 }) {
   const content = getBrandSiteContent(params.locale).snowFlowPage;
+  const isEn = params.locale === 'en';
   const isExternal = content.hero.primaryHref.startsWith('http');
+  const roleLabel = isEn ? 'Role on this site' : 'Rol op deze site';
+  const roleTitle = isEn
+    ? 'Visible as proof, not leading as the offer.'
+    : 'Zichtbaar als bewijs, niet leidend als aanbod.';
+  const roleBody = isEn
+    ? 'Snow-Flow should reinforce the message that GroeimetAI understands the technical foundation deeply, while keeping the main commercial story focused on adoption, training, and practical implementation.'
+    : 'Snow-Flow moet vooral laten zien dat GroeimetAI de technische fundering diep begrijpt, terwijl het commerciële hoofdverhaal draait om adoptie, training en praktische implementatie.';
+  const foundationsLabel = isEn ? 'Foundations' : 'Fundament';
+  const whyLabel = isEn ? 'Why it matters' : 'Waarom dit belangrijk is';
 
   return (
     <main className="bg-[#120F0C] text-[#F6F2E8]">
@@ -76,12 +85,12 @@ export default function SnowFlowPage({
               ))}
             </article>
             <article className={marketingOrangePanel}>
-              <p className="text-xs uppercase tracking-[0.22em] text-[#B7C6A5]">Role on this site</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-[#B7C6A5]">{roleLabel}</p>
               <p className="mt-4 text-2xl font-semibold tracking-[-0.04em]">
-                Visible as proof, not leading as the offer.
+                {roleTitle}
               </p>
               <p className="mt-4 text-sm leading-7 text-[#C8C0B2]">
-                Snow-Flow should reinforce the message that GroeimetAI understands the technical foundation deeply, while keeping the main commercial story focused on adoption, training, and practical implementation.
+                {roleBody}
               </p>
             </article>
           </div>
@@ -91,7 +100,7 @@ export default function SnowFlowPage({
       <section className="border-b border-white/10 bg-[#120F0C]">
         <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
           <div className="max-w-3xl">
-            <p className="text-xs uppercase tracking-[0.22em] text-[#F4B382]">Foundations</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#F4B382]">{foundationsLabel}</p>
             <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{content.pillarsTitle}</h2>
           </div>
           <div className="mt-12 grid gap-5 md:grid-cols-3">
@@ -108,7 +117,7 @@ export default function SnowFlowPage({
       <section className="border-b border-white/10 bg-[#15110E]">
         <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
           <div className="max-w-3xl">
-            <p className="text-xs uppercase tracking-[0.22em] text-[#CD6F2E]">Why it matters</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#CD6F2E]">{whyLabel}</p>
             <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{content.whyTitle}</h2>
           </div>
           <ul className="mt-10 grid gap-5 lg:grid-cols-3">
@@ -127,7 +136,7 @@ export default function SnowFlowPage({
             <h2 className="max-w-3xl text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{content.finalCta.title}</h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[#E6D7CC]">{content.finalCta.body}</p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <Link href={content.finalCta.primaryHref} className={marketingLightButton}>
+              <Link href={content.finalCta.primaryHref} className={marketingPrimaryButton}>
                 {content.finalCta.primaryCta}
                 <ArrowRight className="h-4 w-4" />
               </Link>
