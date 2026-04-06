@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { ArrowRight, CheckCircle2, Shield, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import {
   marketingBadge,
   marketingOrangePanel,
@@ -42,35 +42,9 @@ export default function HomePage({
 }) {
   const content = getBrandSiteContent(params.locale).home;
   const isEn = params.locale === 'en';
-  const heroPrinciples = isEn
-    ? [
-        'Train the team before buying the next tool',
-        'Improve workflows before building software',
-        'Use strong models without losing control',
-      ]
-    : [
-        'Train het team vóór je de volgende tool koopt',
-        'Verbeter workflows vóór je software bouwt',
-        'Werk met sterke modellen zonder de controle kwijt te raken',
-      ];
   const heroSideTitle = isEn
     ? 'Foundation models, sharper workflows, and teams that stay in control.'
     : 'Sterke foundation models, scherpere workflows en teams die zelf de controle houden.';
-  const heroPositioningItems = isEn
-    ? [
-        'Training and workshops that improve how people work',
-        'Workflow improvements before custom software',
-        'Safe implementation without black-box dependency',
-        'Open standards where possible, governance where needed',
-      ]
-    : [
-        'Training en workshops die mensen beter laten werken',
-        'Workflowverbetering vóór maatwerksoftware',
-        'Veilige implementatie zonder black-box afhankelijkheid',
-        'Open standaarden waar mogelijk, governance waar nodig',
-      ];
-  const positioningLabel = isEn ? 'Positioning' : 'Positionering';
-  const technicalDepthLabel = isEn ? 'Technical depth' : 'Technische diepgang';
   const problemsImageText = isEn
     ? 'The problem usually is not that you have too little AI. The problem is that there is no clear foundation.'
     : 'Het probleem is meestal niet dat je te weinig AI hebt. Het probleem is dat er geen helder fundament ligt.';
@@ -109,54 +83,26 @@ export default function HomePage({
                   {content.hero.secondaryCta}
                 </Link>
               </div>
-              <div className="mt-10 grid gap-3 sm:max-w-2xl sm:grid-cols-3">
-                {heroPrinciples.map((item) => (
-                  <div key={item} className="rounded-[1.4rem] bg-white/[0.04] px-4 py-4 text-sm leading-6 text-[#F3E4D8] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-                    {item}
-                  </div>
-                ))}
-              </div>
-              <p className="mt-8 max-w-2xl text-sm leading-6 text-[#A7968A]">{content.hero.supporting}</p>
             </div>
 
             <div className="relative">
               <div className="absolute -right-6 top-8 hidden h-48 w-48 rounded-full bg-[#F28A3F]/20 blur-3xl lg:block" />
-              <div className="grid gap-5">
-                <div className="relative overflow-hidden rounded-[2.3rem] border border-white/10 bg-[#1D120D] shadow-[0_35px_120px_rgba(0,0,0,0.35)]">
-                  <Image
-                    src="/images/mariola-grobelska-siujy-8IPrk-unsplash.jpg"
-                    alt=""
-                    width={760}
-                    height={980}
-                    placeholder="blur"
-                    blurDataURL={blurDataURLs['/images/mariola-grobelska-siujy-8IPrk-unsplash.jpg']}
-                    className="h-[380px] w-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(15,10,8,0.78))]" />
-                  <div className="absolute bottom-0 left-0 right-0 p-7">
-                    <p className="text-xs uppercase tracking-[0.22em] text-[#E9C8B0]">No-bullshit AI</p>
-                    <p className="mt-3 max-w-sm text-2xl font-semibold leading-tight tracking-[-0.04em] text-white">
-                      {heroSideTitle}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="rounded-[2rem] bg-[linear-gradient(180deg,rgba(236,116,40,0.17),rgba(255,255,255,0.04))] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.22)]">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.2em] text-[#F8D6BE]">{positioningLabel}</p>
-                      <p className="mt-2 text-2xl font-semibold tracking-[-0.04em]">No-bullshit AI</p>
-                    </div>
-                    <Shield className="h-7 w-7 text-[#F6C7A4]" />
-                  </div>
-                  <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                    {heroPositioningItems.map((item) => (
-                      <div key={item} className="flex items-start gap-3">
-                        <CheckCircle2 className="mt-0.5 h-5 w-5 flex-none text-[#FFD1AE]" />
-                        <p className="text-sm leading-6 text-[#F5E8DE]">{item}</p>
-                      </div>
-                    ))}
-                  </div>
+              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#1D120D] shadow-[0_35px_120px_rgba(0,0,0,0.35)] sm:rounded-[2.3rem]">
+                <Image
+                  src="/images/mariola-grobelska-siujy-8IPrk-unsplash.jpg"
+                  alt=""
+                  width={760}
+                  height={980}
+                  placeholder="blur"
+                  blurDataURL={blurDataURLs['/images/mariola-grobelska-siujy-8IPrk-unsplash.jpg']}
+                  className="h-[300px] w-full object-cover sm:h-[480px]"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(15,10,8,0.78))]" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-7">
+                  <p className="text-xs uppercase tracking-[0.22em] text-[#E9C8B0]">No-bullshit AI</p>
+                  <p className="mt-3 max-w-sm text-xl font-semibold leading-tight tracking-[-0.04em] text-white sm:text-2xl">
+                    {heroSideTitle}
+                  </p>
                 </div>
               </div>
             </div>
@@ -257,36 +203,6 @@ export default function HomePage({
         </div>
       </section>
 
-      <section className="border-b border-white/10 bg-[#130F0D]">
-        <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
-          <SectionHeader {...content.audienceIntro} />
-          <div className="mt-12 grid gap-5 lg:grid-cols-2">
-            <article className={marketingOrangePanel}>
-              <p className="text-xs uppercase tracking-[0.2em] text-[#B7C6A5]">Goede fit</p>
-              <ul className="mt-5 space-y-4">
-                {content.audience.goodFit.map((item) => (
-                  <li key={item} className="flex gap-3 text-sm leading-7 text-[#D7D0C4]">
-                    <CheckCircle2 className="mt-1 h-5 w-5 flex-none text-[#B7C6A5]" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </article>
-            <article className={marketingPanel}>
-              <p className="text-xs uppercase tracking-[0.2em] text-[#CD6F2E]">Minder geschikt</p>
-              <ul className="mt-5 space-y-4">
-                {content.audience.notFit.map((item) => (
-                  <li key={item} className="flex gap-3 text-sm leading-7 text-[#C8C0B2]">
-                    <span className="mt-3 h-px w-5 flex-none bg-[#CD6F2E]" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          </div>
-        </div>
-      </section>
-
       <section className="relative border-b border-white/10 bg-[linear-gradient(180deg,#17110E_0%,#120F0C_100%)]" id="aanpak">
         <div className="absolute inset-y-0 left-0 w-1/3 bg-[radial-gradient(circle_at_20%_40%,rgba(242,138,63,0.12),transparent_45%)]" />
         <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
@@ -323,61 +239,6 @@ export default function HomePage({
         </div>
       </section>
 
-      <section className="border-b border-white/10 bg-[#120F0C]">
-        <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
-          <SectionHeader {...content.proofIntro} />
-          <div className="mt-12 grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
-            <div className="grid gap-5">
-            {content.proofs.map((proof, index) => (
-              <article
-                key={proof.title}
-                className={`${
-                  index === 1
-                    ? marketingOrangePanel
-                    : marketingPanel
-                }`}
-              >
-                <h3 className="text-xl font-semibold tracking-[-0.03em] text-[#F6F2E8]">{proof.title}</h3>
-                <p className="mt-4 text-sm leading-7 text-[#C8C0B2]">{proof.body}</p>
-              </article>
-            ))}
-            </div>
-            <div className="relative overflow-hidden rounded-[2rem] bg-[#24140D]">
-              <Image
-                src="/images/warren-umoh-FC-2ilPSO6A-unsplash.jpg"
-                alt=""
-                width={780}
-                height={980}
-                placeholder="blur"
-                blurDataURL={blurDataURLs['/images/warren-umoh-FC-2ilPSO6A-unsplash.jpg']}
-                className="h-full min-h-[420px] w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(18,10,8,0.72))]" />
-              <div className="absolute bottom-0 left-0 right-0 p-7">
-                <p className="text-xs uppercase tracking-[0.2em] text-[#F6C8A3]">{technicalDepthLabel}</p>
-                <p className="mt-3 max-w-sm text-lg leading-7 text-white">
-                  Snow-Flow blijft zichtbaar als bewijs van open source, secure enterprise integratie en technische controle onder de motorkap.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-b border-white/10 bg-[linear-gradient(180deg,#17110E_0%,#120F0C_100%)]">
-        <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
-          <SectionHeader {...content.snowFlowIntro} />
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <Link
-              href="/snow-flow"
-              className={marketingSecondaryButton}
-            >
-              {content.snowFlowCta}
-            </Link>
-          </div>
-        </div>
-      </section>
-
       <section className="bg-[#120F0C]">
         <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
           <div className="overflow-hidden rounded-[2.2rem] bg-[linear-gradient(135deg,rgba(235,111,35,0.24),rgba(255,255,255,0.05))] p-8 shadow-[0_30px_100px_rgba(0,0,0,0.28)] sm:p-12">
@@ -400,6 +261,13 @@ export default function HomePage({
                 {content.finalCta.secondaryCta}
               </Link>
             </div>
+            <p className="mt-8 text-sm leading-6 text-[#A7968A]">
+              {isEn ? 'Curious about the technical depth underneath? ' : 'Benieuwd naar de technische diepgang onder de motorkap? '}
+              <Link href="/snow-flow" className="text-[#F2A56D] underline-offset-4 hover:underline">
+                {isEn ? 'Read about Snow-Flow' : 'Lees over Snow-Flow'}
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </section>
