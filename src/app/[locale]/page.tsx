@@ -69,11 +69,7 @@ export default function HomePage({
         'Veilige implementatie zonder black-box afhankelijkheid',
         'Open standaarden waar mogelijk, governance waar nodig',
       ];
-  const heroMessage = isEn
-    ? 'We teach teams how to work better with AI, and only build tooling or integrations when they add durable value.'
-    : 'We leren teams hoe ze beter werken met AI, en bouwen alleen tooling of integraties wanneer dat echt duurzame waarde toevoegt.';
   const positioningLabel = isEn ? 'Positioning' : 'Positionering';
-  const primaryMessageLabel = isEn ? 'Primary message' : 'Kernboodschap';
   const technicalDepthLabel = isEn ? 'Technical depth' : 'Technische diepgang';
   const problemsImageText = isEn
     ? 'The problem usually is not that you have too little AI. The problem is that there is no clear foundation.'
@@ -125,7 +121,7 @@ export default function HomePage({
 
             <div className="relative">
               <div className="absolute -right-6 top-8 hidden h-48 w-48 rounded-full bg-[#F28A3F]/20 blur-3xl lg:block" />
-              <div className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+              <div className="grid gap-5">
                 <div className="relative overflow-hidden rounded-[2.3rem] border border-white/10 bg-[#1D120D] shadow-[0_35px_120px_rgba(0,0,0,0.35)]">
                   <Image
                     src="/images/mariola-grobelska-siujy-8IPrk-unsplash.jpg"
@@ -134,7 +130,7 @@ export default function HomePage({
                     height={980}
                     placeholder="blur"
                     blurDataURL={blurDataURLs['/images/mariola-grobelska-siujy-8IPrk-unsplash.jpg']}
-                    className="h-[520px] w-full object-cover"
+                    className="h-[380px] w-full object-cover"
                   />
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(15,10,8,0.78))]" />
                   <div className="absolute bottom-0 left-0 right-0 p-7">
@@ -145,44 +141,21 @@ export default function HomePage({
                   </div>
                 </div>
 
-                <div className="grid gap-5">
-                  <div className="rounded-[2rem] bg-[linear-gradient(180deg,rgba(236,116,40,0.17),rgba(255,255,255,0.04))] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.22)]">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs uppercase tracking-[0.2em] text-[#F8D6BE]">{positioningLabel}</p>
-                        <p className="mt-2 text-2xl font-semibold tracking-[-0.04em]">No-bullshit AI</p>
-                      </div>
-                      <Shield className="h-7 w-7 text-[#F6C7A4]" />
+                <div className="rounded-[2rem] bg-[linear-gradient(180deg,rgba(236,116,40,0.17),rgba(255,255,255,0.04))] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.22)]">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.2em] text-[#F8D6BE]">{positioningLabel}</p>
+                      <p className="mt-2 text-2xl font-semibold tracking-[-0.04em]">No-bullshit AI</p>
                     </div>
-                    <div className="mt-6 space-y-4">
-                      {heroPositioningItems.map((item) => (
-                        <div key={item} className="flex items-start gap-3">
-                          <CheckCircle2 className="mt-0.5 h-5 w-5 flex-none text-[#FFD1AE]" />
-                          <p className="text-sm leading-6 text-[#F5E8DE]">{item}</p>
-                        </div>
-                      ))}
-                    </div>
+                    <Shield className="h-7 w-7 text-[#F6C7A4]" />
                   </div>
-
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <div className="relative overflow-hidden rounded-[1.8rem] bg-[#26160F]">
-                      <Image
-                        src="/images/planet-volumes-byU63rK5W2E-unsplash.jpg"
-                        alt=""
-                        width={420}
-                        height={420}
-                        placeholder="blur"
-                        blurDataURL={blurDataURLs['/images/planet-volumes-byU63rK5W2E-unsplash.jpg']}
-                        className="h-52 w-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(18,12,9,0.55))]" />
-                    </div>
-                    <div className="rounded-[1.8rem] bg-[#16110E] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-                      <p className="text-xs uppercase tracking-[0.18em] text-[#C9A98D]">{primaryMessageLabel}</p>
-                      <p className="mt-3 text-lg leading-7 text-[#F6F2E8]">
-                        {heroMessage}
-                      </p>
-                    </div>
+                  <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                    {heroPositioningItems.map((item) => (
+                      <div key={item} className="flex items-start gap-3">
+                        <CheckCircle2 className="mt-0.5 h-5 w-5 flex-none text-[#FFD1AE]" />
+                        <p className="text-sm leading-6 text-[#F5E8DE]">{item}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

@@ -184,9 +184,9 @@ function ContactPageContent() {
   return (
     <div className="min-h-screen bg-[#120F0C] text-[#F6F2E8]">
       <section className="relative overflow-hidden border-b border-white/10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_16%,rgba(255,142,73,0.28),transparent_24%),radial-gradient(circle_at_84%_18%,rgba(255,199,142,0.14),transparent_22%),linear-gradient(180deg,#1E140F_0%,#120F0C_72%)]" />
-        <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'linear-gradient(rgba(255,245,235,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,245,235,0.18) 1px, transparent 1px)', backgroundSize: '52px 52px' }} />
-        <div className="container relative mx-auto px-4 pb-20 pt-24 sm:px-6 sm:pb-28 sm:pt-32 lg:px-8">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_16%,rgba(255,142,73,0.28),transparent_24%),radial-gradient(circle_at_84%_18%,rgba(255,199,142,0.14),transparent_22%),linear-gradient(180deg,#1E140F_0%,#120F0C_72%)]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'linear-gradient(rgba(255,245,235,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,245,235,0.18) 1px, transparent 1px)', backgroundSize: '52px 52px' }} />
+        <div className="container relative mx-auto px-4 pb-14 pt-20 sm:px-6 sm:pb-28 sm:pt-32 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[1fr_0.92fr] lg:items-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -197,13 +197,13 @@ function ContactPageContent() {
                 <span className="h-2 w-2 rounded-full bg-[#F28A3F]" />
                 Direct en nuchter contact
               </p>
-              <h1 className="mt-8 max-w-4xl text-5xl font-semibold leading-none tracking-[-0.055em] text-[#F6F2E8] sm:text-6xl lg:text-7xl">
+              <h1 className="mt-6 max-w-4xl text-3xl font-semibold leading-tight tracking-[-0.04em] text-[#F6F2E8] sm:mt-8 sm:text-5xl sm:leading-none sm:tracking-[-0.055em] lg:text-7xl">
                 {t('header.title')} <span className="text-[#FFD8BF]">{t('header.highlight')}</span>
               </h1>
-              <p className="mt-8 max-w-3xl text-lg leading-8 text-[#DDC8BA] sm:text-xl">
+              <p className="mt-5 max-w-3xl text-base leading-7 text-[#DDC8BA] sm:mt-8 sm:text-xl sm:leading-8">
                 {t('header.subtitle')}
               </p>
-              <div className="mt-10 grid gap-3 sm:max-w-2xl sm:grid-cols-3">
+              <div className="mt-6 grid gap-3 sm:mt-10 sm:max-w-2xl sm:grid-cols-3">
                 {[
                   'Geen hype of vaag intakeproces',
                   'Snel scherp waar de eerste winst zit',
@@ -211,7 +211,7 @@ function ContactPageContent() {
                 ].map((item) => (
                   <div
                     key={item}
-                    className="rounded-[1.4rem] bg-white/[0.04] px-4 py-4 text-sm leading-6 text-[#F3E4D8] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+                    className="rounded-xl bg-white/[0.04] px-4 py-3 text-sm leading-6 text-[#F3E4D8] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] sm:rounded-[1.4rem] sm:py-4"
                   >
                     {item}
                   </div>
@@ -225,7 +225,7 @@ function ContactPageContent() {
               transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
               className="grid gap-5"
             >
-              <div className="relative overflow-hidden rounded-[2.3rem] border border-white/10 bg-[#1D120D] shadow-[0_35px_120px_rgba(0,0,0,0.35)]">
+              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#1D120D] shadow-[0_35px_120px_rgba(0,0,0,0.35)] sm:rounded-[2.3rem]">
                 <Image
                   src="/images/philippe-bontemps-FUfJGhpKITo-unsplash.jpg"
                   alt=""
@@ -233,19 +233,19 @@ function ContactPageContent() {
                   height={900}
                   placeholder="blur"
                   blurDataURL={blurDataURLs['/images/philippe-bontemps-FUfJGhpKITo-unsplash.jpg']}
-                  className="h-[420px] w-full object-cover"
+                  className="h-[260px] w-full object-cover sm:h-[420px]"
                   priority
                 />
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(15,10,8,0.78))]" />
-                <div className="absolute bottom-0 left-0 right-0 p-7">
+                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
                   <p className="text-xs uppercase tracking-[0.22em] text-[#E9C8B0]">Plan een gesprek</p>
-                  <p className="mt-3 max-w-md text-2xl font-semibold leading-tight tracking-[-0.04em] text-white">
+                  <p className="mt-2 max-w-md text-xl font-semibold leading-tight tracking-[-0.04em] text-white sm:mt-3 sm:text-2xl">
                     Eerst helderheid. Daarna pas tooling, integraties of implementatie.
                   </p>
                 </div>
               </div>
 
-              <div className="grid gap-5 md:grid-cols-2">
+              <div className="grid gap-4 sm:gap-5 md:grid-cols-2">
                 <div className={marketingOrangePanel}>
                   <p className="text-xs uppercase tracking-[0.2em] text-[#F8D6BE]">Rechtstreeks</p>
                   <div className="mt-5 space-y-3">
@@ -288,10 +288,10 @@ function ContactPageContent() {
       </section>
 
       <section className="relative border-b border-white/10 bg-[linear-gradient(180deg,#17110D_0%,#120F0C_100%)]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_84%_22%,rgba(242,138,63,0.1),transparent_24%)]" />
-        <div className="container mx-auto px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_84%_22%,rgba(242,138,63,0.1),transparent_24%)]" />
+        <div className="container relative mx-auto px-4 py-12 sm:px-6 sm:py-24 lg:px-8">
           <div className="mx-auto max-w-6xl">
-            <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:gap-12">
+            <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-12">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -300,12 +300,12 @@ function ContactPageContent() {
               >
                 <div className="max-w-3xl">
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#B7C6A5]">Kies het soort gesprek</p>
-                  <h2 className="mt-4 text-3xl font-semibold tracking-[-0.03em] text-[#F6F2E8] sm:text-4xl">
+                  <h2 className="mt-4 text-2xl font-semibold tracking-[-0.03em] text-[#F6F2E8] sm:text-4xl">
                     {t('conversationTypes.title')}
                   </h2>
                 </div>
 
-                <div className="mt-10 space-y-5">
+                <div className="mt-6 space-y-4 sm:mt-10 sm:space-y-5">
                   {gespreksTypes.map((type, index) => {
                     const Icon = type.icon;
                     const isSelected = selectedType === type.id;
@@ -319,12 +319,12 @@ function ContactPageContent() {
                         transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
                         viewport={{ once: true }}
                         onClick={() => setSelectedType(type.id)}
-                        className={`block w-full cursor-pointer overflow-hidden rounded-[1.9rem] p-0 text-left transition-all duration-300 ${
+                        className={`block w-full cursor-pointer overflow-hidden rounded-2xl text-left transition-all duration-300 sm:rounded-[1.9rem] ${
                           isSelected ? marketingOrangePanel : marketingPanel
                         }`}
                       >
-                        <div className="flex items-start gap-4">
-                          <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${
+                        <div className="flex items-start gap-3 sm:gap-4">
+                          <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:h-12 sm:w-12 sm:rounded-2xl ${
                             isSelected
                               ? 'bg-[linear-gradient(135deg,#F28A3F,#E96A1C)] text-white shadow-[0_14px_30px_rgba(233,106,28,0.24)]'
                               : 'bg-white/[0.05] text-[#F6F2E8]'
@@ -365,7 +365,7 @@ function ContactPageContent() {
                 transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
               >
-                <div className="overflow-hidden rounded-[2.1rem] border border-white/10 bg-[#17110E] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.24)] sm:p-8">
+                <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#17110E] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.24)] sm:rounded-[2.1rem] sm:p-8">
                   <h3 className="text-2xl font-semibold tracking-[-0.03em] text-white">{t('form.title')}</h3>
                   <p className="mt-3 text-sm leading-6 text-[#C8C0B2]">
                     Beschrijf kort waar je vastloopt of wat je wilt verbeteren. Dan maken we het gesprek meteen nuttig.
@@ -518,8 +518,8 @@ function ContactPageContent() {
         </div>
       </section>
 
-      <section className="relative bg-[#130F0D] py-20 sm:py-24">
-        <div className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(242,138,63,0.1),transparent)]" />
+      <section className="relative bg-[#130F0D] py-12 sm:py-24">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(242,138,63,0.1),transparent)]" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-6xl">
             <motion.div
@@ -530,7 +530,7 @@ function ContactPageContent() {
               className="max-w-3xl"
             >
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#B7C6A5]">Locatie</p>
-              <h2 className="mt-4 text-3xl font-semibold tracking-[-0.03em] text-[#F6F2E8] sm:text-4xl">
+              <h2 className="mt-4 text-2xl font-semibold tracking-[-0.03em] text-[#F6F2E8] sm:text-3xl md:text-4xl">
                 Bezoek ons kantoor of plan direct online afstemming.
               </h2>
             </motion.div>
@@ -540,7 +540,7 @@ function ContactPageContent() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
-              className="mt-10 overflow-hidden rounded-[2.1rem] border border-white/10"
+              className="mt-8 overflow-hidden rounded-2xl border border-white/10 sm:mt-10 sm:rounded-[2.1rem]"
             >
               <GoogleMapEmbed className="overflow-hidden" />
             </motion.div>

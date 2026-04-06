@@ -11,10 +11,10 @@ export const marketingBadge =
   'inline-flex rounded-full border border-[#FFB17B]/25 bg-[#F07A2A]/12 px-4 py-2 text-xs uppercase tracking-[0.22em] text-[#F8D6BE]';
 
 export const marketingPanel =
-  'rounded-[1.9rem] bg-white/[0.035] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]';
+  'rounded-xl bg-white/[0.035] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] sm:rounded-[1.9rem] sm:p-7';
 
 export const marketingOrangePanel =
-  'rounded-[1.9rem] bg-[linear-gradient(180deg,rgba(242,138,63,0.14),rgba(255,255,255,0.03))] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]';
+  'rounded-xl bg-[linear-gradient(180deg,rgba(242,138,63,0.14),rgba(255,255,255,0.03))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:rounded-[1.9rem] sm:p-7';
 
 export const marketingField =
   'mt-1.5 h-12 rounded-2xl border border-white/10 bg-white/[0.04] px-4 text-white transition placeholder:text-white/35 focus-visible:border-[#F2A56D] focus-visible:ring-2 focus-visible:ring-[#F28A3F]/20 focus-visible:ring-offset-0';
