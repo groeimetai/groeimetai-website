@@ -112,7 +112,7 @@ export default function HomePage({
 
       <section className="relative border-b border-white/10 bg-[linear-gradient(180deg,#1A120D_0%,#14110F_100%)]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_18%,rgba(242,138,63,0.12),transparent_22%)]" />
-        <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
+        <div className="container mx-auto px-4 py-14 sm:px-6 sm:py-24 lg:px-8">
           <SectionHeader {...content.problemsIntro} />
           <div className="mt-12 grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
             <div className="relative overflow-hidden rounded-[2rem] bg-[#25150E] shadow-[0_24px_80px_rgba(0,0,0,0.25)]">
@@ -146,7 +146,7 @@ export default function HomePage({
 
       <section className="relative border-b border-white/10 bg-[#130F0D]">
         <div className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(242,138,63,0.1),transparent)]" />
-        <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
+        <div className="container mx-auto px-4 py-14 sm:px-6 sm:py-24 lg:px-8">
           <SectionHeader {...content.principlesIntro} />
           <div className="mt-12 grid gap-5 md:grid-cols-2">
             {content.principles.map((principle, index) => (
@@ -171,7 +171,7 @@ export default function HomePage({
 
       <section className="relative border-b border-white/10 bg-[linear-gradient(180deg,#1A120E_0%,#120F0C_100%)]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_20%,rgba(242,138,63,0.1),transparent_20%)]" />
-        <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
+        <div className="container mx-auto px-4 py-14 sm:px-6 sm:py-24 lg:px-8">
           <SectionHeader {...content.servicesIntro} />
           <div className="mt-12 grid gap-6 xl:grid-cols-2">
             {content.services.map((service, index) => {
@@ -205,7 +205,7 @@ export default function HomePage({
 
       <section className="relative border-b border-white/10 bg-[linear-gradient(180deg,#17110E_0%,#120F0C_100%)]" id="aanpak">
         <div className="absolute inset-y-0 left-0 w-1/3 bg-[radial-gradient(circle_at_20%_40%,rgba(242,138,63,0.12),transparent_45%)]" />
-        <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
+        <div className="container mx-auto px-4 py-14 sm:px-6 sm:py-24 lg:px-8">
           <SectionHeader {...content.approachIntro} />
           <div className="mt-12 grid gap-5 lg:grid-cols-[0.78fr_1.22fr]">
             <div className="relative overflow-hidden rounded-[2rem] bg-[#241610]">
@@ -240,7 +240,7 @@ export default function HomePage({
       </section>
 
       <section className="bg-[#120F0C]">
-        <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
+        <div className="container mx-auto px-4 py-14 sm:px-6 sm:py-24 lg:px-8">
           <div className="overflow-hidden rounded-[2.2rem] bg-[linear-gradient(135deg,rgba(235,111,35,0.24),rgba(255,255,255,0.05))] p-8 shadow-[0_30px_100px_rgba(0,0,0,0.28)] sm:p-12">
             <h2 className="max-w-3xl text-3xl font-semibold tracking-[-0.04em] text-[#F6F2E8] sm:text-4xl">
               {content.finalCta.title}

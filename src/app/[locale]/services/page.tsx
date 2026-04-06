@@ -64,7 +64,7 @@ export default function ServicesPage({
       </section>
 
       <section className="border-b border-white/10 bg-[#15110E]">
-        <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
+        <div className="container mx-auto px-4 py-14 sm:px-6 sm:py-24 lg:px-8">
           <p className="max-w-3xl text-lg leading-8 text-[#D2C0B3]">{content.intro}</p>
           <div className="mt-12 grid gap-5 xl:grid-cols-2">
             {content.serviceCards.map((service, index) => (
@@ -90,7 +90,7 @@ export default function ServicesPage({
       </section>
 
       <section className="border-b border-white/10 bg-[#120F0C]" id={approachId}>
-        <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
+        <div className="container mx-auto px-4 py-14 sm:px-6 sm:py-24 lg:px-8">
           <div className="max-w-3xl">
             <p className="text-xs uppercase tracking-[0.22em] text-[#F4B382]">{isEn ? 'Approach' : 'Aanpak'}</p>
             <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{content.processTitle}</h2>
@@ -107,7 +107,7 @@ export default function ServicesPage({
       </section>
 
       <section className="bg-[#15110E]">
-        <div className="container mx-auto px-4 py-18 sm:px-6 sm:py-24 lg:px-8">
+        <div className="container mx-auto px-4 py-14 sm:px-6 sm:py-24 lg:px-8">
           <div className="rounded-[2rem] bg-[linear-gradient(135deg,rgba(235,111,35,0.24),rgba(255,255,255,0.05))] p-8 shadow-[0_30px_100px_rgba(0,0,0,0.28)] sm:p-12">
             <h2 className="max-w-3xl text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{content.finalCta.title}</h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[#E6D7CC]">{content.finalCta.body}</p>
