@@ -11,12 +11,12 @@ import LanguageSwitcher from '@/components/layout/LanguageSwitcher';
 import NotificationCenter from '@/components/NotificationCenter';
 import { marketingPrimaryButton } from '@/components/marketing/marketingStyles';
 import { getBrandSiteContent } from '@/data/brandSiteContent';
-import { LayoutDashboard, LogOut, Menu, Settings, X } from 'lucide-react';
+import { LayoutDashboard, LogOut, Menu, Settings, Shield, X } from 'lucide-react';
 
 export default function DynamicNavigation() {
   const pathname = usePathname();
   const locale = useLocale();
-  const { user, logout } = useAuth();
+  const { user, isAdmin, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const content = getBrandSiteContent(locale);
@@ -92,6 +92,14 @@ export default function DynamicNavigation() {
                     {content.nav.dashboard}
                   </Button>
                 </Link>
+                {isAdmin && (
+                  <Link href="/dashboard/admin">
+                    <Button variant="ghost" className="text-[#C8C0B2] hover:bg-white/5 hover:text-[#F6F2E8]">
+                      <Shield className="mr-2 h-4 w-4" />
+                      Admin
+                    </Button>
+                  </Link>
+                )}
                 <Link href="/settings">
                   <Button variant="ghost" className="text-[#C8C0B2] hover:bg-white/5 hover:text-[#F6F2E8]">
                     <Settings className="mr-2 h-4 w-4" />
@@ -165,6 +173,15 @@ export default function DynamicNavigation() {
                 >
                   {content.nav.dashboard}
                 </Link>
+                {isAdmin && (
+                  <Link
+                    href="/dashboard/admin"
+                    onClick={() => setOpen(false)}
+                    className="rounded-2xl px-4 py-3 text-sm font-medium text-[#C8C0B2] hover:bg-white/5 hover:text-[#F6F2E8]"
+                  >
+                    Admin
+                  </Link>
+                )}
                 <Link
                   href="/settings"
                   onClick={() => setOpen(false)}
