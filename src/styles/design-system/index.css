@@ -1,0 +1,9 @@
+/* GroeimetAI Design System — barrel
+   Loaded from src/styles/globals.css after Tailwind directives.
+   Tokens are global; bare-element styles are scoped under .ds. */
+
+@import './tokens.css';
+@import './base.css';
+@import './components.css';
+@import './pages.css';
+@import './agent-anatomy.css';

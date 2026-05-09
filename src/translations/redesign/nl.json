@@ -1,0 +1,513 @@
+{
+  "nav": {
+    "home": "Home",
+    "agents": "Agents",
+    "trainingen": "Trainingen",
+    "cases": "Cases",
+    "about": "Over Niels",
+    "contact": "Plan gesprek",
+    "github": "Serac"
+  },
+  "footer": {
+    "tagline": "Trainingen en agents voor teams die zelf de controle willen houden. Klein, nuchter, eerlijk.",
+    "servicesHeading": "Diensten",
+    "agentImplementation": "Agent implementatie",
+    "trainingen": "Trainingen",
+    "literacy": "AI Literacy programma",
+    "workHeading": "Werk",
+    "cases": "Cases",
+    "seracOss": "Serac (OSS)",
+    "githubOrg": "Open source op GitHub",
+    "contactHeading": "Contact",
+    "aboutNiels": "Over Niels",
+    "planCall": "Plan een gesprek",
+    "phone": "+31 6 8173 9018",
+    "copyright": "© 2026 GroeimetAI · KvK 92341234",
+    "lockinLine": "Geen hype. Geen lock-in als standaard."
+  },
+  "home": {
+    "metaTitle": "GroeimetAI — Agents bouwen die je zelf begrijpt",
+    "metaDescription": "GroeimetAI traint teams om AI agents te bouwen, beheren en aanpassen. Geen black box, geen lock-in, geen hype.",
+    "hero": {
+      "pill": "Beschikbaar voor Q3 trajecten",
+      "title1": "Een agent is geen",
+      "title2": "magie. Het is een",
+      "titleAccent": "folder, instructies en tools.",
+      "lead": "Wij leren teams agents bouwen die ze zelf begrijpen, beheren en aanpassen. Geen black box. Geen lock-in. Geen hype.",
+      "ctaPrimary": "Plan een verkennend gesprek",
+      "ctaGhost": "Zo bouwen wij ze",
+      "meta1": "1-op-1 met Niels",
+      "meta2": "Antwoord binnen 24u",
+      "meta3": "NL & remote"
+    },
+    "logoBarLabel": "Teams die met ons werken",
+    "problem": {
+      "eyebrow": "Het echte probleem",
+      "title1": "Veel teams hebben geen AI-probleem.",
+      "title2": "Ze hebben een focusprobleem.",
+      "lead": "Pilots zonder vervolg. Tools zonder eigenaar. Demo's die indrukwekkend voelen, maar nooit landen in dagelijks werk. Klinkt bekend?",
+      "card1Tag": "Symptoom 01",
+      "card1Title": "Te veel tools, te weinig lijn",
+      "card1Body": "Iedereen probeert iets anders. Niets landt in een gedeelde manier van werken.",
+      "card2Tag": "Symptoom 02",
+      "card2Title": "Automatisering zonder eigenaar",
+      "card2Body": "Slimme demo's voelen sterk, maar niemand weet wie ze beheert of wanneer ze fout mogen zitten.",
+      "card3Tag": "Symptoom 03",
+      "card3Title": "Hype vervangt besluitvorming",
+      "card3Body": "Teams praten over agents, niet over processen, risico's en waar de eerste winst echt zit."
+    },
+    "pillars": {
+      "eyebrow": "Drie pijlers",
+      "title": "Trainen. Bouwen. Borgen.",
+      "lead": "We gaan niet voor 'transformatie'. We gaan voor teams die zelf agents kunnen bouwen, draaien en bijsturen.",
+      "p1Tag": "Pijler 01",
+      "p1Title": "AI Agent trainingen",
+      "p1Desc": "Voor teams die willen begrijpen wat een agent eigenlijk is, en er zelf één willen bouwen die hun werk verlicht.",
+      "p1Items": [
+        "1-daagse hands-on workshops",
+        "Modellen, prompts, folders en tools",
+        "Eigen use-case als rode draad",
+        "Naslagwerk dat blijft hangen"
+      ],
+      "p2Tag": "Pijler 02",
+      "p2Title": "Agent implementatie",
+      "p2Desc": "Voor situaties waar een eerste agent moet landen in productie — verbonden met je echte systemen, niet met een demo-database.",
+      "p2Items": [
+        "Discovery van use-cases",
+        "Bouw met je eigen team erbij",
+        "Veilige integraties (Slack, Exact, etc.)",
+        "Overdracht en governance"
+      ],
+      "p3Tag": "Pijler 03",
+      "p3Title": "AI Literacy & adoptie",
+      "p3Desc": "Voor organisaties die management én uitvoering op één lijn willen krijgen, voordat de eerste tool wordt aangeschaft.",
+      "p3Items": [
+        "Leiderschapssessies",
+        "Org-brede curriculum",
+        "Use-case prioritering",
+        "Beleid en governance"
+      ]
+    },
+    "anatomy": {
+      "eyebrow": "Anatomie van een agent",
+      "title": "Drie dingen. Niet meer.",
+      "lead": "Als je dit snapt, snap je elke agent die er straks komt — los van het framework, los van de hype.",
+      "card1Num": "01 / Folders",
+      "card1Title1": "Dit is wat de agent",
+      "card1Title2": "weet",
+      "card1Body": "Jouw documentatie, tone of voice, voorbeelden, beleid. Geen vage trainingsdata — concrete bestanden die jij beheert.",
+      "card2Num": "02 / Instructies",
+      "card2Title1": "Dit is hoe de agent",
+      "card2Title2": "denkt",
+      "card2Body": "Eén document met regels, edge cases en doelen. Leesbaar voor mensen, uitvoerbaar door het model.",
+      "card3Num": "03 / Tools",
+      "card3Title1": "Dit is wat de agent",
+      "card3Title2": "kan",
+      "card3Body": "Concrete acties: een mail sturen, een factuur opzoeken, een afspraak boeken. Niets meer dan jij toestaat."
+    },
+    "quote": {
+      "text": "We dachten dat we agents nodig hadden. Bleek dat we eerst moesten leren wat ze waren. Niels heeft ons in 2 dagen verder geholpen dan een half jaar PowerPoints.",
+      "author": "Mariska de Boer",
+      "authorRole": "Head of Operations, MKB-tech bedrijf",
+      "stat1Num": "200+",
+      "stat1Label": "Mensen getraind",
+      "stat2Num": "14",
+      "stat2Label": "Agents in productie",
+      "stat3Num": "0",
+      "stat3Label": "Vendor lock-ins"
+    },
+    "casesPreview": {
+      "eyebrow": "Recent werk",
+      "title": "Wat er ontstaat als teams het zelf doen",
+      "viewAll": "Alle cases bekijken",
+      "c1Industry": "Logistiek",
+      "c1Title": "Account-assistent voor sales engineers",
+      "c1Snippet": "Een agent die offerte-aanvragen voorbereidt op basis van CRM, mail en historische deals. Engineer kiest, agent typt.",
+      "c1MetricNum": "−4u",
+      "c1MetricLabel": "per offerte",
+      "c2Industry": "ServiceNow consultancy",
+      "c2Title": "Serac open source toolkit",
+      "c2Snippet": "Onze eigen agent-framework voor ServiceNow flows, gebouwd in productie en daarna open source gemaakt.",
+      "c2MetricNum": "OSS",
+      "c2MetricLabel": "op GitHub",
+      "c3Industry": "Professional services",
+      "c3Title": "Org-brede AI literacy programma",
+      "c3Snippet": "Van directie tot uitvoerend: in 6 weken één gedeelde manier van denken over AI, agents en risico's.",
+      "c3MetricNum": "120",
+      "c3MetricLabel": "deelnemers"
+    },
+    "cta": {
+      "eyebrow": "Klaar om te beginnen?",
+      "title1": "AI hoeft niet groter.",
+      "title2": "Het moet duidelijker.",
+      "lead": "Eén verkennend gesprek. We kijken naar je team, je systemen en je echte vraag. Geen sales-funnel, geen forecast.",
+      "ctaPrimary": "Plan een gesprek",
+      "ctaGhost": "Maak kennis met Niels"
+    }
+  },
+  "agents": {
+    "metaTitle": "Agent implementatie · GroeimetAI",
+    "metaDescription": "We bouwen samen met je team agents die je zelf begrijpt en kan onderhouden. Op jouw stack, zonder lock-in.",
+    "head": {
+      "crumb1": "Diensten",
+      "crumbCurrent": "Agent implementatie",
+      "title1": "Agents bouwen die",
+      "titleAccent": "jij",
+      "title2": "begrijpt.",
+      "lead": "Geen black-box demo's. We bouwen samen met je team, op jouw stack, en lichten elke regel toe. Na oplevering kan jij ze zelf aanpassen."
+    },
+    "model": {
+      "eyebrow": "Hoe wij het zien",
+      "title1": "Een agent is geen product.",
+      "title2": "Het is een werkwijze.",
+      "lead": "Als je begrijpt waar een agent uit bestaat, kan je hem zelf bouwen, debuggen en uitbreiden. Wij leren je het patroon.",
+      "card1Num": "01 / Knowledge folder",
+      "card1Title": "Wat hij weet",
+      "card1Body": "Eén folder met markdown-bestanden. Documentatie, beleid, voorbeelden, tone of voice. Versioneerbaar in git, te bewerken door iedereen.",
+      "card1Hint": "knowledge/*.md, *.json",
+      "card2Num": "02 / System prompt",
+      "card2Title": "Hoe hij denkt",
+      "card2Body": "Eén leesbaar document. Doelen, regels, edge cases en escalatiepaden. Geen YAML-spaghetti, geen flowchart van 47 stappen.",
+      "card2Hint": "instructions.md",
+      "card3Num": "03 / Tool calls",
+      "card3Title": "Wat hij kan",
+      "card3Body": "Functies in jouw eigen code. Mail sturen, ticket aanmaken, factuur opzoeken. Met permissions, audit log en menselijke review waar nodig.",
+      "card3Hint": "tools/*.ts"
+    },
+    "process": {
+      "eyebrow": "Aanpak",
+      "title": "Vier fases. Jouw team is steeds aan boord.",
+      "lead": "We bouwen niet voor je. We bouwen mét je. Anders heb je over een half jaar nog een tool waar niemand iets van begrijpt.",
+      "step1N": "FASE 01",
+      "step1Title": "Verkennen",
+      "step1Body": "We brengen 1-3 use-cases in kaart. Welke past bij een agent, welke is gewoon een script? Wat is de waarde, wat zijn de risico's?",
+      "step2N": "FASE 02",
+      "step2Title": "Trainen",
+      "step2Body": "Het team dat de agent gaat bouwen of beheren krijgt eerst de basis. Folder, instructies, tools — geen magie.",
+      "step3N": "FASE 03",
+      "step3Title": "Bouwen",
+      "step3Body": "Pair-building. Wij sturen, jullie typen. Of andersom. Eerste werkende versie binnen weken, niet kwartalen.",
+      "step4N": "FASE 04",
+      "step4Title": "Borgen",
+      "step4Body": "Overdracht, runbook, monitoring. Wat doe je als hij iets fout zegt? Wie keurt nieuwe versies goed?"
+    },
+    "boundaries": {
+      "eyebrow": "Wat we niet doen",
+      "title": "Eerlijk over de grenzen.",
+      "lead": "We zijn niet voor iedereen. Hier zijn signalen dat je beter een andere partij kan zoeken:",
+      "item1Bold": "\"Bouw ons een chatbot\"",
+      "item1Rest": " — zonder dat duidelijk is wat hij moet kunnen of wie de eigenaar is.",
+      "item2Bold": "\"We willen alles geautomatiseerd\"",
+      "item2Rest": " — zonder eerst te kijken welk werk waarde heeft om weg te halen.",
+      "item3Bold": "\"Zoek het uit en lever op\"",
+      "item3Rest": " — wij bouwen alleen mét teams. Anders wordt het schaduw-IT.",
+      "item4Bold": "\"Het mag wel een beetje creatief\"",
+      "item4Rest": " — agents in klantcontact horen voorspelbaar te zijn. Punt."
+    },
+    "cta": {
+      "eyebrow": "Een use-case in gedachten?",
+      "title1": "Vertel waar je tegenaan loopt.",
+      "title2": "We zeggen eerlijk of een agent past.",
+      "ctaPrimary": "Plan een gesprek",
+      "ctaGhost": "Bekijk eerdere agents"
+    }
+  },
+  "trainingen": {
+    "metaTitle": "Trainingen · GroeimetAI",
+    "metaDescription": "Hands-on AI agent trainingen voor teams en management. In-company, NL of EN.",
+    "head": {
+      "crumb1": "Diensten",
+      "crumbCurrent": "Trainingen",
+      "title1": "Trainingen die",
+      "titleAccent": "blijven",
+      "title2": "hangen.",
+      "lead": "Geen 'AI awareness' van twee uur. Wel concrete dagen waarin je team aan het eind iets werkends heeft gebouwd — en snapt hoe het werkt."
+    },
+    "list": [
+      {
+        "tag": "01 / Hands-on",
+        "duration": "1 dag · 6-12 personen · op locatie of remote",
+        "level": "Voor: teams die zelf gaan bouwen",
+        "title": "Bouw je eerste agent",
+        "desc": "Aan het eind van de dag heeft elk team een werkende agent met eigen folder, instructies en één tool. Geen slides over 'de toekomst van werk'.",
+        "bullets": [
+          "Anatomie: folders, instructies, tools",
+          "Prompting voor productie (niet voor demo)",
+          "Tool calls en wanneer je ze NIET inzet",
+          "Hands-on: één werkend prototype per team"
+        ]
+      },
+      {
+        "tag": "02 / Strategisch",
+        "duration": "Halve dag · directie + L&D · op locatie",
+        "level": "Voor: leiders die richting willen geven",
+        "title": "AI Literacy voor management",
+        "desc": "Een sessie waarin we het verschil scherp maken tussen wat agents wél en niet kunnen, en welke beslissingen alleen jullie kunnen nemen.",
+        "bullets": [
+          "Wat is een agent — en wat niet",
+          "Use-case prioritering op impact + risico",
+          "Beleid, governance en menselijke controle",
+          "Roadmap voor de komende 6 maanden"
+        ]
+      },
+      {
+        "tag": "03 / Programma",
+        "duration": "6 weken · org-breed · hybride",
+        "level": "Voor: organisaties die schaalbaar willen leren",
+        "title": "Org-brede AI adoptie",
+        "desc": "Curriculum voor management én uitvoerend, met dezelfde taal en dezelfde voorbeelden. Je hele organisatie op één lijn.",
+        "bullets": [
+          "Module per rolgroep (sales, ops, finance, etc.)",
+          "Wekelijkse hands-on sprints",
+          "Use-case incubator met begeleiding",
+          "Train-the-trainer voor doorlopende borging"
+        ]
+      }
+    ],
+    "whatYouLearn": "WAT JE LEERT",
+    "moreInfo": "Meer weten over deze training",
+    "features": {
+      "eyebrow": "In elke training",
+      "title": "Niet de standaard 'AI workshop'.",
+      "lead": "Wat alle trainingen gemeen hebben — los van duur of niveau.",
+      "f1Title": "Hands-on, geen slides",
+      "f1Body": "Je werkt met echte tools, op je eigen casus.",
+      "f2Title": "Naslagwerk dat blijft",
+      "f2Body": "Documentatie die je over 6 maanden nog gebruikt.",
+      "f3Title": "Eigen use-case als rode draad",
+      "f3Body": "We bouwen aan iets wat jullie morgen al inzetten.",
+      "f4Title": "Niels zelf, niet een trainee",
+      "f4Body": "Je krijgt de persoon die het ook bouwt in productie."
+    },
+    "faq": {
+      "eyebrow": "Veelgestelde vragen",
+      "title": "Wat klanten vooraf willen weten.",
+      "fallback": "Staat je vraag er niet bij?",
+      "fallbackLink": "Stel hem direct →",
+      "items": [
+        {
+          "q": "Geven jullie ook open trainingen?",
+          "a": "Nee. We werken alleen in-company. Een training werkt pas écht als deelnemers met collega's aan eigen use-cases kunnen werken."
+        },
+        {
+          "q": "Welke modellen gebruiken we?",
+          "a": "Afhankelijk van je context. We zijn niet gebonden aan één leverancier en behandelen Anthropic, OpenAI, Google en open source modellen op gelijk niveau."
+        },
+        {
+          "q": "Wat is het minimum aantal deelnemers?",
+          "a": "Voor hands-on trainingen: 6 personen. Voor strategische sessies: vanaf 3, meestal directie + L&D + key stakeholder."
+        },
+        {
+          "q": "Krijgen we ook iets mee?",
+          "a": "Ja. Naast de werkende agent uit de hands-on dag krijg je naslagwerk, templates en een runbook dat je ook over een half jaar nog gebruikt."
+        },
+        {
+          "q": "Trainen jullie ook in het Engels?",
+          "a": "Ja. Standaard NL, op aanvraag in het Engels."
+        }
+      ]
+    },
+    "cta": {
+      "eyebrow": "Een training plannen?",
+      "title1": "Vertel over je team. We stellen samen",
+      "title2": "het juiste programma samen.",
+      "ctaPrimary": "Plan een gesprek"
+    }
+  },
+  "cases": {
+    "metaTitle": "Cases · GroeimetAI",
+    "metaDescription": "Recente agents en trainingsprogramma's: wat we bouwden, met welke stack, en waarom het werkte.",
+    "head": {
+      "crumb1": "Werk",
+      "crumbCurrent": "Cases",
+      "title1": "Wat er ontstaat als",
+      "titleAccent": "teams",
+      "title2": "het zelf doen.",
+      "lead": "Niet de glanzende slide-versie. Wel de eerlijke: wat we bouwden, met welke stack, en waarom het werkte."
+    },
+    "labelCase": "CASE",
+    "labelStack": "STACK",
+    "labelResult": "RESULTAAT",
+    "list": [
+      {
+        "industry": "Logistiek · MKB",
+        "title": "Account-assistent voor sales engineers",
+        "role": "Bouw + training",
+        "summary": "Een agent die offerte-aanvragen voorbereidt: leest CRM, oude offertes en de mail-thread. Engineer reviewt en stuurt.",
+        "stack": ["Sonnet 4", "Custom MCP", "Exact Online", "Slack"],
+        "outcomes": [
+          { "num": "−4u", "label": "per offerte" },
+          { "num": "8 wkn", "label": "tot productie" },
+          { "num": "100%", "label": "review door mens" }
+        ],
+        "why": "Sales engineers verloren halve dagen aan voorbereiding. We bouwden geen 'AI sales rep' — we bouwden hun eigen kladblok dat al gevuld is."
+      },
+      {
+        "industry": "Open source · Eigen werk",
+        "title": "Serac: agent-framework voor ServiceNow",
+        "role": "Eigen product",
+        "summary": "Onze eigen toolkit voor agents die ServiceNow flows orchestreren. Begonnen als klantwerk, daarna open source gemaakt.",
+        "stack": ["TypeScript", "ServiceNow REST", "Anthropic SDK", "MIT"],
+        "outcomes": [
+          { "num": "OSS", "label": "MIT licentie" },
+          { "num": "GitHub", "label": "groeimetai/serac" },
+          { "num": "v1.x", "label": "in productie" }
+        ],
+        "why": "Omdat we vinden dat klanten geen vendor lock-in mogen krijgen op iets wat hun eigen processen automatiseert."
+      },
+      {
+        "industry": "Professional services · 800+ FTE",
+        "title": "Org-brede AI literacy programma",
+        "role": "Programma + curriculum",
+        "summary": "Zes weken. Directie, management én uitvoerend. Eén gedeelde taal, één gedeeld besef van wat agents wel/niet zijn.",
+        "stack": ["Curriculum", "Use-case incubator", "Train-the-trainer"],
+        "outcomes": [
+          { "num": "120", "label": "deelnemers" },
+          { "num": "9", "label": "use-cases gevalideerd" },
+          { "num": "3", "label": "agents in productie na 6 mnd" }
+        ],
+        "why": "Niet omdat ze 'iets met AI moesten'. Omdat ze niet wilden dat 12 teams 12 verschillende kanten op gingen."
+      },
+      {
+        "industry": "Industrie · Manufacturing",
+        "title": "Klacht-triage voor service desk",
+        "role": "Pilot + overdracht",
+        "summary": "Een agent die binnenkomende serviceklachten classificeert, urgentie inschat en de juiste engineer toewijst. Mens beslist alsnog.",
+        "stack": ["Sonnet 4", "Email", "Internal CRM"],
+        "outcomes": [
+          { "num": "62%", "label": "minder triage-tijd" },
+          { "num": "0", "label": "verkeerde escalaties" },
+          { "num": "Eigen", "label": "team beheert nu" }
+        ],
+        "why": "De service desk verzoop. Niet in klachten, maar in het sorteren ervan. Daar zat de winst."
+      }
+    ],
+    "cta": {
+      "eyebrow": "Een use-case in gedachten?",
+      "title1": "De volgende case zou van",
+      "title2": "jullie kunnen zijn.",
+      "ctaPrimary": "Plan een gesprek",
+      "ctaGhost": "Lees over onze aanpak"
+    }
+  },
+  "about": {
+    "metaTitle": "Over Niels · GroeimetAI",
+    "metaDescription": "GroeimetAI is bewust klein. Eén bouwer, één gesprekspartner. Geen funnel, geen pipeline.",
+    "head": {
+      "crumb1": "Over",
+      "crumbCurrent": "Niels & GroeimetAI",
+      "title1": "GroeimetAI is",
+      "titleAccent": "klein",
+      "title2": ". Met opzet.",
+      "lead": "Eén persoon op de stoel waar het toe doet. Niels van der Werf — bouwer, trainer, gesprekspartner. Geen account manager, geen handover, geen Powerpoint-leger."
+    },
+    "niels": {
+      "eyebrow": "Niels van der Werf",
+      "title1": "Bouwer eerst,",
+      "title2": "verkoper niet.",
+      "para1Pre": "Ik bouw al sinds modellen 'GPT-3' heetten. Eerst voor mezelf, daarna voor klanten. Wat ik in die jaren leerde: de techniek is bijna nooit het probleem. Het zit in ",
+      "para1Em1": "focus",
+      "para1Mid1": ", in ",
+      "para1Em2": "eigenaarschap",
+      "para1Mid2": ", en in ",
+      "para1Em3": "begrijpen wat je bouwt",
+      "para1Post": ".",
+      "para2": "Daarom is GroeimetAI bewust klein. Geen funnel, geen pipeline. Wel persoonlijk werk met teams die echt iets willen veranderen — en die snappen dat dat tijd kost.",
+      "para3": "Naast klantwerk maak ik open source. Serac is daar het meest zichtbare voorbeeld van: een agent-framework voor ServiceNow, dat ik begon voor één klant en daarna onder MIT op GitHub heb gezet. Want als ik klanten geen lock-in beloof, moet ik dat zelf ook waarmaken.",
+      "signatureName": "Niels van der Werf",
+      "signatureRole": "Founder · GroeimetAI",
+      "portraitPlaceholder": "[ portret van Niels ]"
+    },
+    "beliefs": {
+      "eyebrow": "Wat we geloven",
+      "title": "Vijf dingen die we niet veranderen.",
+      "lead": "Soms zijn we het oneens met een potentiële klant. Dat is okay. Beter vooraf eerlijk dan halverwege ongelukkig.",
+      "items": [
+        {
+          "n": "01",
+          "t": "Mens beslist, agent ondersteunt",
+          "d": "Klantcontact, juridisch, financieel — daar gaat geen agent zelfstandig over. Punt."
+        },
+        {
+          "n": "02",
+          "t": "Geen vendor lock-in als standaard",
+          "d": "We bouwen op de meest geschikte stack, niet op de stack waar wij commissie van krijgen (die is er sowieso niet)."
+        },
+        {
+          "n": "03",
+          "t": "Documentatie is geen afterthought",
+          "d": "Als jullie het na overdracht niet kunnen lezen, hebben we ons werk niet af."
+        },
+        {
+          "n": "04",
+          "t": "Trainen boven bouwen, waar mogelijk",
+          "d": "Als één training jullie zelf de bouwers maakt, is dat altijd te verkiezen boven een opgeleverd product."
+        },
+        {
+          "n": "05",
+          "t": "Klein blijven",
+          "d": "We groeien niet voor de groei. We willen scherp blijven, niet schaalbaar."
+        }
+      ]
+    },
+    "oss": {
+      "eyebrow": "Open source",
+      "title1": "Wat we maken,",
+      "title2": "geven we vaak terug.",
+      "lead": "Niet uit ideologie — uit principe. Als wij klanten beloven: geen lock-in, dan moet wat wij bouwen óók weg te halen zijn.",
+      "ghLabel": "github.com/GroeimetAI",
+      "card": {
+        "owner": "groeimetai/",
+        "repo": "serac",
+        "license": "MIT",
+        "desc": "Agent framework voor ServiceNow. Orchestreert flows met tool calls, audit log en menselijke approval-stap waar nodig.",
+        "badge1": "★ TypeScript",
+        "badge2": "● MIT",
+        "badge3": "v1.x"
+      }
+    },
+    "cta": {
+      "eyebrow": "Eens praten?",
+      "title1": "Eén gesprek met de persoon",
+      "title2": "die het werk ook gaat doen.",
+      "ctaPrimary": "Plan een gesprek"
+    }
+  },
+  "contact": {
+    "metaTitle": "Contact · GroeimetAI",
+    "metaDescription": "Plan een verkennend gesprek met Niels. Geen sales-funnel.",
+    "head": {
+      "crumb1": "Contact",
+      "crumbCurrent": "Plan een gesprek",
+      "title1": "Eén verkennend gesprek.",
+      "titleAccent": "Geen sales-funnel.",
+      "lead": "30-45 minuten. Je vertelt waar je tegenaan loopt, ik vertel eerlijk of we kunnen helpen — of dat een andere partij beter past."
+    },
+    "direct": {
+      "eyebrow": "Direct mailen",
+      "title": "Of sla het formulier over.",
+      "emailLabel": "EMAIL",
+      "phoneLabel": "TELEFOON",
+      "baseLabel": "BASIS",
+      "baseValue": "Nederland · werkt NL & remote",
+      "signatureName": "Je spreekt Niels.",
+      "signatureRole": "Founder · antwoord binnen 24u",
+      "signatureBody": "Geen tussenpersoon, geen 'we komen er bij je op terug'. Je gesprek is met de persoon die ook het werk doet."
+    },
+    "form": {
+      "label": "FORMULIER",
+      "title": "Vertel kort waar het over gaat.",
+      "name": "Naam",
+      "namePlaceholder": "Je naam",
+      "org": "Organisatie",
+      "orgPlaceholder": "Bedrijfsnaam",
+      "email": "Email",
+      "emailPlaceholder": "naam@bedrijf.nl",
+      "message": "Waar gaat het over?",
+      "messagePlaceholder": "Bijv: We willen een agent bouwen voor onze service desk, maar we weten niet waar te beginnen...",
+      "submit": "Verstuur bericht",
+      "successTitle": "Bericht binnen.",
+      "successBody": "Niels reageert persoonlijk binnen 24 uur. Houd je inbox in de gaten."
+    }
+  }
+}

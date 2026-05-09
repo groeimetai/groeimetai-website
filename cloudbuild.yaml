@@ -1,5 +1,11 @@
 # Cloud Build configuration for GroeimetAI
-# Just builds and deploys - env vars are set directly in Cloud Run
+#
+# Twee deploy-modes op basis van branch:
+#   - main          → deploy met 100% productie traffic
+#   - andere branch → deploy als tagged Cloud Run revision met --no-traffic
+#                     URL: https://preview-<slug>---groeimetai-app-<hash>.run.app
+#
+# Env vars zijn al direct in Cloud Run geconfigureerd, niet hier.
 
 steps:
   # Step 1: Build Docker image (BuildKit enabled for cache mounts)
@@ -23,18 +29,45 @@ steps:
       - '--all-tags'
       - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app'
 
-  # Step 3: Deploy to Cloud Run (env vars already configured in Cloud Run)
+  # Step 3: Deploy to Cloud Run — main = productie, anders = tagged preview
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     id: 'Deploy'
-    entrypoint: gcloud
+    entrypoint: bash
     args:
-      - 'run'
-      - 'deploy'
-      - 'groeimetai-app'
-      - '--platform=managed'
-      - '--image=europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app:${COMMIT_SHA}'
-      - '--region=europe-west1'
-      - '--quiet'
+      - '-c'
+      - |
+        set -euo pipefail
+
+        IMAGE="europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app:${COMMIT_SHA}"
+        SERVICE="groeimetai-app"
+        REGION="europe-west1"
+        BRANCH="${BRANCH_NAME}"
+
+        if [ "$$BRANCH" = "main" ]; then
+          echo "==> Production deploy from main (100% traffic)"
+          gcloud run deploy "$$SERVICE" \
+            --platform=managed \
+            --image="$$IMAGE" \
+            --region="$$REGION" \
+            --quiet
+        else
+          # Slug = branch met / vervangen door -, max 50 chars (Cloud Run tag max 63)
+          SLUG=$$(echo "$$BRANCH" | tr '/' '-' | tr '_' '-' | tr '[:upper:]' '[:lower:]' | cut -c1-50)
+          TAG="preview-$$SLUG"
+          echo "==> Preview deploy for branch '$$BRANCH' as tag '$$TAG' (no traffic)"
+          gcloud run deploy "$$SERVICE" \
+            --platform=managed \
+            --image="$$IMAGE" \
+            --region="$$REGION" \
+            --tag="$$TAG" \
+            --no-traffic \
+            --quiet
+          echo ""
+          echo "Preview URL:"
+          gcloud run services describe "$$SERVICE" \
+            --region="$$REGION" \
+            --format="value(status.traffic[?tag=='$$TAG'].url)"
+        fi
 
 images:
   - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/groeimetai-app/groeimetai-app:${COMMIT_SHA}'

@@ -1,0 +1,93 @@
+/* ===== Page-specific styles (training rows, cases stack, etc.) ===== */
+
+/* Training rows */
+.training-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 64px;
+  padding: 56px 0;
+  border-top: 1px solid var(--line);
+  align-items: start;
+}
+.training-row:first-child { border-top: none; padding-top: 0; }
+.training-meta {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--fg-mute);
+  padding-top: 20px;
+  border-top: 1px dashed var(--line);
+}
+.training-list {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; gap: 12px;
+}
+.training-list li {
+  display: flex; gap: 12px;
+  font-size: 15px;
+  color: var(--fg-dim);
+  line-height: 1.5;
+}
+@media (max-width: 800px) {
+  .training-row { grid-template-columns: 1fr; gap: 32px; }
+}
+
+/* Cases stack */
+.cases-stack {
+  display: grid;
+  gap: 0;
+}
+.case-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 48px;
+  padding: 56px 0;
+  border-top: 1px solid var(--line);
+}
+.case-row:first-child { border-top: none; padding-top: 0; }
+.case-row-num {
+  font-size: 11px;
+  color: var(--fg-mute);
+  letter-spacing: 0.08em;
+}
+.case-row-role {
+  margin-top: 14px;
+  font-size: 11px;
+  color: var(--fg-mute);
+}
+.case-stack-row { margin-top: 28px; }
+.stack-pill {
+  font-size: 11px;
+  padding: 5px 10px;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--fg-dim);
+}
+@media (max-width: 1000px) {
+  .case-row { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* Contact lines */
+.contact-line {
+  display: flex; align-items: center; gap: 18px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg-elev);
+  cursor: pointer;
+  transition: all .2s var(--ease);
+}
+.contact-line:hover { border-color: var(--accent); background: var(--bg-elev-2); }
+.contact-line-icon {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  background: rgba(255,90,31,0.12);
+  color: var(--accent);
+  display: grid; place-items: center;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  flex-shrink: 0;
+}

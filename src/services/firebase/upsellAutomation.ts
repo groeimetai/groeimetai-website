@@ -271,8 +271,8 @@ export class UpsellAutomation {
         },
         { 
           delay: 72, 
-          template: 'educational_mcp_guide',
-          subject: 'Gratis MCP Guide + Unlock Extra Insights',
+          template: 'educational_agent_intro',
+          subject: 'Drie bouwstenen van een agent: hoe je begint',
           cta: 'Download Guide',
           urgency: 'low'
         },

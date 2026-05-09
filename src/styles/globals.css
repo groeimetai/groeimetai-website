@@ -8,41 +8,46 @@
 /* ReactFlow styles */
 @import 'reactflow/dist/style.css';
 
+/* GroeimetAI design system — tokens globally, bare-element styles scoped under .ds */
+@import './design-system/index.css';
+
 @layer base {
   :root {
-    /* New color scheme: 80% Black, 10% Orange, 5% White, 5% Green */
-    --background: 0 0% 0%; /* Black background as default */
-    --foreground: 0 0% 100%; /* White text as default */
-    --card: 0 0% 4%;
-    --card-foreground: 0 0% 100%;
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 20 100% 50%; /* Orange */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 120 30% 30%; /* Green */
-    --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 70%;
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 100%;
+    /* shadcn HSL tokens — re-themed to align with the design-system palette
+       (--bg #0a0a0b, --bg-elev #111114, --accent #ff5a1f, --line #26262d, etc.).
+       Existing admin/dashboard pages inherit these automatically. */
+    --background: 240 4% 5%; /* matches DS --bg #0a0a0b */
+    --foreground: 60 11% 95%; /* matches DS --fg #f4f4f1 */
+    --card: 240 7% 7%; /* matches DS --bg-elev #111114 */
+    --card-foreground: 60 11% 95%;
+    --popover: 240 7% 9%; /* matches DS --bg-elev-2 #18181d */
+    --popover-foreground: 60 11% 95%;
+    --primary: 16 100% 56%; /* matches DS --accent #ff5a1f */
+    --primary-foreground: 18 88% 6%;
+    --secondary: 240 5% 12%;
+    --secondary-foreground: 60 11% 95%;
+    --muted: 240 5% 12%;
+    --muted-foreground: 240 4% 46%; /* matches DS --fg-mute #71717a */
+    --accent: 16 100% 56%; /* matches DS --accent */
+    --accent-foreground: 18 88% 6%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 20 100% 50%; /* Orange ring */
+    --border: 240 6% 16%; /* matches DS --line #26262d */
+    --input: 240 6% 16%;
+    --ring: 16 100% 56%; /* matches DS --accent */
     --radius: 0.75rem;
 
-    /* Additional premium variables */
-    --gradient-primary: linear-gradient(135deg, hsl(20 100% 50%), hsl(20 100% 60%));
-    --gradient-dark: linear-gradient(135deg, hsl(0 0% 0%), hsl(0 0% 8%));
+    /* Additional premium variables — aligned with DS accent #ff5a1f */
+    --gradient-primary: linear-gradient(135deg, hsl(16 100% 56%), hsl(20 100% 62%));
+    --gradient-dark: linear-gradient(135deg, hsl(240 4% 5%), hsl(240 7% 9%));
     --gradient-light: linear-gradient(135deg, hsl(0 0% 100%), hsl(0 0% 97%));
-    --gradient-orange-black: linear-gradient(135deg, hsl(20 100% 50%), hsl(0 0% 0%));
-    --gradient-green-black: linear-gradient(135deg, hsl(120 30% 25%), hsl(0 0% 0%));
+    --gradient-orange-black: linear-gradient(135deg, hsl(16 100% 56%), hsl(240 4% 5%));
+    --gradient-green-black: linear-gradient(135deg, hsl(150 60% 67%), hsl(240 4% 5%));
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.15), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.15);
-    --shadow-orange: 0 10px 25px -5px rgba(255, 102, 0, 0.25);
+    --shadow-orange: 0 10px 25px -5px rgba(255, 90, 31, 0.25);
 
     /* WCAG AA Compliant contrast variables */
     --text-high-contrast: 0 0% 0%; /* Pure black for critical text */
@@ -51,25 +56,26 @@
   }
 
   .dark {
-    --background: 0 0% 0%; /* Pure black background */
-    --foreground: 0 0% 100%; /* White text */
-    --card: 0 0% 4%; /* Very dark card */
-    --card-foreground: 0 0% 100%;
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 20 100% 50%; /* Orange stays vibrant */
-    --primary-foreground: 0 0% 0%;
-    --secondary: 120 30% 30%; /* Slightly brighter green in dark mode */
-    --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 70%;
-    --accent: 120 30% 30%; /* Green accent */
-    --accent-foreground: 0 0% 100%;
+    /* Dark mode mirrors :root since the site forces dark via Providers. */
+    --background: 240 4% 5%;
+    --foreground: 60 11% 95%;
+    --card: 240 7% 7%;
+    --card-foreground: 60 11% 95%;
+    --popover: 240 7% 9%;
+    --popover-foreground: 60 11% 95%;
+    --primary: 16 100% 56%;
+    --primary-foreground: 18 88% 6%;
+    --secondary: 240 5% 12%;
+    --secondary-foreground: 60 11% 95%;
+    --muted: 240 5% 12%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 16 100% 56%;
+    --accent-foreground: 18 88% 6%;
     --destructive: 0 62.8% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 20%; /* Subtle borders */
-    --input: 0 0% 20%;
-    --ring: 20 100% 50%; /* Orange ring */
+    --border: 240 6% 16%;
+    --input: 240 6% 16%;
+    --ring: 16 100% 56%;
 
     /* WCAG AA Compliant contrast variables - Dark mode */
     --text-high-contrast: 210 40% 98%; /* For critical text in dark mode */
@@ -98,17 +104,17 @@
 
   /* Text selection styling */
   ::selection {
-    background-color: rgba(248, 115, 21, 0.3);
+    background-color: rgba(255, 90, 31, 0.3);
     color: #fff;
   }
   ::-moz-selection {
-    background-color: rgba(248, 115, 21, 0.3);
+    background-color: rgba(255, 90, 31, 0.3);
     color: #fff;
   }
 
   /* Better focus-visible for all interactive elements */
   :focus-visible {
-    @apply outline-none ring-2 ring-[#F87315]/50 ring-offset-2 ring-offset-black;
+    @apply outline-none ring-2 ring-[#ff5a1f]/50 ring-offset-2 ring-offset-black;
   }
 
   /* Smooth transition for all interactive elements */

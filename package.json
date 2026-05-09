@@ -55,6 +55,7 @@
     "date-fns": "^4.1.0",
     "firebase": "^11.10.0",
     "framer-motion": "^11.0.0",
+    "geist": "^1.7.0",
     "google-auth-library": "^10.1.0",
     "gray-matter": "^4.0.3",
     "isomorphic-dompurify": "^2.25.0",

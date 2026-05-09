@@ -159,7 +159,7 @@ export class HomepageRouter {
 
   private static handleDownloadGuide(context: any): RoutingResult {
     return {
-      destination: '/mcp-guide',
+      destination: '/agents',
       intent: 'low',
       trackingData: {
         entry: 'download_guide',
@@ -291,7 +291,7 @@ export class HomepageRouter {
         break;
 
       case 'start_nurture_sequence':
-        await this.addToNurtureSequence(context.email, 'mcp_guide_sequence');
+        await this.addToNurtureSequence(context.email, 'agent_intro_sequence');
         break;
 
       case 'track_developer_interest':

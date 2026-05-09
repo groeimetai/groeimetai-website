@@ -22,9 +22,15 @@ export default getRequestConfig(async ({ locale }) => {
   const validLocale = locale || defaultLocale;
   if (!locales.includes(validLocale as any)) notFound();
 
+  const baseMessages = (await import(`./translations/${validLocale}.json`)).default;
+  const redesignMessages = (await import(`./translations/redesign/${validLocale}.json`)).default;
+
   return {
     locale: validLocale,
-    messages: (await import(`./translations/${validLocale}.json`)).default,
+    messages: {
+      ...baseMessages,
+      redesign: redesignMessages,
+    },
     timeZone: validLocale === 'nl' ? 'Europe/Amsterdam' : 'UTC',
     now: new Date(),
   };

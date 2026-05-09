@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>GroeimetAI — Agents bouwen die je zelf begrijpt</title>
+  <meta name="description" content="GroeimetAI traint teams om AI agents te bouwen, beheren en aanpassen. Geen black box, geen lock-in, geen hype."/>
+
+  <!-- Fonts: multiple pairings for tweaks -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Crimson+Pro:wght@400;500;600;700&family=Geist+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="components.css"/>
+  <link rel="stylesheet" href="pages.css"/>
+  <link rel="stylesheet" href="agent-anatomy.css"/>
+  <link rel="stylesheet" href="brand.css"/>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="icons.jsx"></script>
+  <script type="text/babel" src="logo-concepts.jsx"></script>
+  <script type="text/babel" src="logo-premium.jsx"></script>
+  <script type="text/babel" src="components.jsx"></script>
+  <script type="text/babel" src="agent-anatomy.jsx"></script>
+  <script type="text/babel" src="page-home.jsx"></script>
+  <script type="text/babel" src="page-agents.jsx"></script>
+  <script type="text/babel" src="page-trainingen.jsx"></script>
+  <script type="text/babel" src="page-cases.jsx"></script>
+  <script type="text/babel" src="page-about.jsx"></script>
+  <script type="text/babel" src="page-contact.jsx"></script>
+  <script type="text/babel" src="page-brand.jsx"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+
+  <script type="text/babel">
+    const NAV = [
+      { id: "home",       label: "Home" },
+      { id: "agents",     label: "Agents" },
+      { id: "trainingen", label: "Trainingen" },
+      { id: "cases",      label: "Cases" },
+      { id: "about",      label: "Over Niels" },
+      { id: "brand",      label: "Brand" },
+    ];
+
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "fontSet": "geist"
+    }/*EDITMODE-END*/;
+
+    const FONT_SETS = {
+      geist: {
+        label: "Geist + Geist Mono",
+        sub: "Modern, neutral · standaard",
+        display: "'Geist', ui-sans-serif, system-ui, sans-serif",
+        sans:    "'Geist', ui-sans-serif, system-ui, sans-serif",
+        mono:    "'Geist Mono', ui-monospace, monospace",
+      },
+      grotesk: {
+        label: "Space Grotesk + JetBrains Mono",
+        sub: "Tech-forward, geometrisch",
+        display: "'Space Grotesk', ui-sans-serif, system-ui, sans-serif",
+        sans:    "'Space Grotesk', ui-sans-serif, system-ui, sans-serif",
+        mono:    "'JetBrains Mono', ui-monospace, monospace",
+      },
+      plex: {
+        label: "IBM Plex Sans + Plex Mono",
+        sub: "Engineered, IBM heritage",
+        display: "'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif",
+        sans:    "'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif",
+        mono:    "'IBM Plex Mono', ui-monospace, monospace",
+      },
+      editorial: {
+        label: "Instrument Serif + Geist Mono",
+        sub: "Editorial, contrast, character",
+        display: "'Instrument Serif', ui-serif, Georgia, serif",
+        sans:    "'Geist', ui-sans-serif, system-ui, sans-serif",
+        mono:    "'Geist Mono', ui-monospace, monospace",
+      },
+      fraunces: {
+        label: "Fraunces + DM Mono",
+        sub: "Warm-serif, opvallend, eigenzinnig",
+        display: "'Fraunces', ui-serif, Georgia, serif",
+        sans:    "'DM Sans', ui-sans-serif, system-ui, sans-serif",
+        mono:    "'DM Mono', ui-monospace, monospace",
+      },
+      manrope: {
+        label: "Manrope + JetBrains Mono",
+        sub: "Soft, human, leesbaar",
+        display: "'Manrope', ui-sans-serif, system-ui, sans-serif",
+        sans:    "'Manrope', ui-sans-serif, system-ui, sans-serif",
+        mono:    "'JetBrains Mono', ui-monospace, monospace",
+      },
+      crimson: {
+        label: "Crimson Pro + IBM Plex Mono",
+        sub: "Klassiek, gewichtig, lange tekst",
+        display: "'Crimson Pro', ui-serif, Georgia, serif",
+        sans:    "'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif",
+        mono:    "'IBM Plex Mono', ui-monospace, monospace",
+      },
+    };
+
+    const App = () => {
+      const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+      const fs = FONT_SETS[t.fontSet] || FONT_SETS.geist;
+
+      React.useEffect(() => {
+        const root = document.documentElement;
+        root.style.setProperty("--font-display", fs.display);
+        root.style.setProperty("--font-sans", fs.sans);
+        root.style.setProperty("--font-mono", fs.mono);
+      }, [t.fontSet]);
+
+      const [page, setPage] = React.useState(() => {
+        const h = window.location.hash.replace("#", "");
+        return NAV.find(n => n.id === h) || h === "contact" ? h : "home";
+      });
+
+      const go = (id) => {
+        setPage(id);
+        window.location.hash = id;
+        window.scrollTo({ top: 0, behavior: "instant" });
+      };
+
+      React.useEffect(() => {
+        const onHash = () => {
+          const h = window.location.hash.replace("#", "") || "home";
+          setPage(h);
+          window.scrollTo({ top: 0, behavior: "instant" });
+        };
+        window.addEventListener("hashchange", onHash);
+        return () => window.removeEventListener("hashchange", onHash);
+      }, []);
+
+      const PageComp = {
+        home: HomePage,
+        agents: AgentsPage,
+        trainingen: TrainingenPage,
+        cases: CasesPage,
+        about: AboutPage,
+        contact: ContactPage,
+        brand: BrandPage,
+      }[page] || HomePage;
+
+      return (
+        <div data-screen-label={"Page: " + page}>
+          {/* Top nav */}
+          <nav className="nav">
+            <div className="nav-inner">
+              <a className="nav-brand" onClick={() => go("home")} style={{cursor: "pointer"}}>
+                <Logo_Aurora size={32}/>
+                <span>GroeimetAI</span>
+              </a>
+              <div className="nav-links">
+                {NAV.map(n => (
+                  <a
+                    key={n.id}
+                    onClick={() => go(n.id)}
+                    className={page === n.id ? "active" : ""}
+                    style={{cursor: "pointer"}}
+                  >
+                    {n.label}
+                  </a>
+                ))}
+              </div>
+              <div className="nav-cta">
+                <Btn variant="ghost" onClick={() => window.open("https://github.com/GroeimetAI/serac", "_blank")} style={{padding: "8px 14px", fontSize: 13}}>
+                  <IconGithub size={14}/> Serac
+                </Btn>
+                <Btn variant="primary" onClick={() => go("contact")} style={{padding: "9px 16px", fontSize: 13}}>
+                  Plan gesprek <IconArrow size={12}/>
+                </Btn>
+              </div>
+            </div>
+          </nav>
+
+          {/* Pages */}
+          <main key={page}>
+            <PageComp go={go}/>
+          </main>
+
+          {/* Footer */}
+          <footer className="foot">
+            <div className="container">
+              <div className="foot-grid">
+                <div>
+                  <div className="nav-brand" style={{marginBottom: 16}}>
+                    <Logo_Aurora size={32}/>
+                    <span style={{color: "var(--fg)"}}>GroeimetAI</span>
+                  </div>
+                  <p style={{maxWidth: "32ch", fontSize: 14, color: "var(--fg-dim)"}}>
+                    Trainingen en agents voor teams die zelf de controle willen houden. Klein, nuchter, eerlijk.
+                  </p>
+                  <div style={{marginTop: 24}}>
+                    <a href="mailto:info@groeimetai.io" style={{color: "var(--fg)", fontSize: 14, fontFamily: "var(--font-mono)"}}>info@groeimetai.io</a>
+                  </div>
+                </div>
+                <div>
+                  <h5>Diensten</h5>
+                  <ul>
+                    <li><a onClick={() => go("agents")} style={{cursor: "pointer"}}>Agent implementatie</a></li>
+                    <li><a onClick={() => go("trainingen")} style={{cursor: "pointer"}}>Trainingen</a></li>
+                    <li><a onClick={() => go("trainingen")} style={{cursor: "pointer"}}>AI Literacy programma</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h5>Werk</h5>
+                  <ul>
+                    <li><a onClick={() => go("cases")} style={{cursor: "pointer"}}>Cases</a></li>
+                    <li><a href="https://github.com/GroeimetAI/serac" target="_blank">Serac (OSS)</a></li>
+                    <li><a href="https://github.com/GroeimetAI" target="_blank">Open source op GitHub</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h5>Contact</h5>
+                  <ul>
+                    <li><a onClick={() => go("about")} style={{cursor: "pointer"}}>Over Niels</a></li>
+                    <li><a onClick={() => go("contact")} style={{cursor: "pointer"}}>Plan een gesprek</a></li>
+                    <li><a href="tel:+31681739018">+31 6 8173 9018</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div className="foot-bottom">
+                <div>© 2026 GroeimetAI · KvK 92341234</div>
+                <div>Geen hype. Geen lock-in als standaard.</div>
+              </div>
+            </div>
+          </footer>
+          {/* Tweaks panel */}
+          <TweaksPanel title="Tweaks">
+            <TweakSection label="Typografie"/>
+            <TweakSelect
+              label="Lettertype-set"
+              value={t.fontSet}
+              onChange={(v) => setTweak('fontSet', v)}
+              options={Object.entries(FONT_SETS).map(([id, f]) => ({ value: id, label: f.label }))}
+            />
+            <div style={{padding: "8px 0 4px", fontSize: 11, opacity: 0.7, fontFamily: "var(--font-mono)"}}>
+              {fs.sub}
+            </div>
+            <div style={{
+              marginTop: 8,
+              padding: 14,
+              borderRadius: 8,
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}>
+              <div style={{fontFamily: fs.display, fontSize: 22, fontWeight: 500, letterSpacing: "-0.02em", lineHeight: 1.1}}>
+                Display 22
+              </div>
+              <div style={{fontFamily: fs.sans, fontSize: 13, marginTop: 6, opacity: 0.85}}>
+                Body voorbeeldtekst
+              </div>
+              <div style={{fontFamily: fs.mono, fontSize: 11, marginTop: 6, opacity: 0.6, letterSpacing: "0.04em"}}>
+                MONO 11px · ABC123
+              </div>
+            </div>
+          </TweaksPanel>
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  </script>
+</body>
+</html>

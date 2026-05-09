@@ -1,0 +1,50 @@
+/* ====== GroeimetAI Design System — Tokens ====== */
+/* Variables only. Loaded globally via globals.css.
+   Bare-element styles live in base.css under the .ds wrapper
+   so they don't bleed into shadcn-styled admin/dashboard pages. */
+
+:root {
+  /* Colors — dark base, warm light, hot orange accent */
+  --bg: #0a0a0b;
+  --bg-elev: #111114;
+  --bg-elev-2: #18181d;
+  --line: #26262d;
+  --line-strong: #38383f;
+  --fg: #f4f4f1;
+  --fg-dim: #a1a1aa;
+  --fg-mute: #71717a;
+
+  --paper: #f6f3ec;
+  --paper-elev: #ffffff;
+  --paper-line: #e5e0d4;
+  --paper-line-strong: #c9c3b3;
+  --ink: #18181b;
+  --ink-dim: #52525b;
+  --ink-mute: #8a8580;
+
+  --accent: #ff5a1f;
+  --accent-hot: #ff7a3d;
+  --accent-deep: #b8340a;
+  --accent-soft: #ffd9c2;
+
+  --good: #6ee7b7;
+  --warn: #fbbf24;
+
+  /* Type — driven by `geist` package CSS variables (see src/app/layout.tsx) */
+  --font-display: var(--font-geist-sans), "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans:    var(--font-geist-sans), "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:    var(--font-geist-mono), "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Radius */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+
+  /* Layout */
+  --maxw: 1240px;
+  --gutter: 24px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}

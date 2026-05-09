@@ -1,0 +1,513 @@
+{
+  "nav": {
+    "home": "Home",
+    "agents": "Agents",
+    "trainingen": "Training",
+    "cases": "Cases",
+    "about": "About Niels",
+    "contact": "Book a call",
+    "github": "Serac"
+  },
+  "footer": {
+    "tagline": "Training and agents for teams that want to stay in control. Small, sober, honest.",
+    "servicesHeading": "Services",
+    "agentImplementation": "Agent implementation",
+    "trainingen": "Training",
+    "literacy": "AI Literacy programme",
+    "workHeading": "Work",
+    "cases": "Cases",
+    "seracOss": "Serac (OSS)",
+    "githubOrg": "Open source on GitHub",
+    "contactHeading": "Contact",
+    "aboutNiels": "About Niels",
+    "planCall": "Book a call",
+    "phone": "+31 6 8173 9018",
+    "copyright": "© 2026 GroeimetAI · KvK 92341234",
+    "lockinLine": "No hype. No lock-in by default."
+  },
+  "home": {
+    "metaTitle": "GroeimetAI — Build agents you actually understand",
+    "metaDescription": "GroeimetAI trains teams to build, run and maintain AI agents. No black box, no lock-in, no hype.",
+    "hero": {
+      "pill": "Available for Q3 engagements",
+      "title1": "An agent isn't",
+      "title2": "magic. It's a",
+      "titleAccent": "folder, instructions and tools.",
+      "lead": "We teach teams to build agents they actually understand, run and adapt themselves. No black box. No lock-in. No hype.",
+      "ctaPrimary": "Book an intro call",
+      "ctaGhost": "How we build them",
+      "meta1": "Direct with Niels",
+      "meta2": "Reply within 24h",
+      "meta3": "NL & remote"
+    },
+    "logoBarLabel": "Teams we work with",
+    "problem": {
+      "eyebrow": "The real problem",
+      "title1": "Most teams don't have an AI problem.",
+      "title2": "They have a focus problem.",
+      "lead": "Pilots without follow-up. Tools without an owner. Demos that feel impressive but never land in actual work. Sound familiar?",
+      "card1Tag": "Symptom 01",
+      "card1Title": "Too many tools, too little direction",
+      "card1Body": "Everyone is trying something different. Nothing converges into a shared way of working.",
+      "card2Tag": "Symptom 02",
+      "card2Title": "Automation without an owner",
+      "card2Body": "Slick demos feel powerful, but no one knows who maintains them or when they're allowed to be wrong.",
+      "card3Tag": "Symptom 03",
+      "card3Title": "Hype replaces decision-making",
+      "card3Body": "Teams talk about agents, not about processes, risks and where the first real win actually is."
+    },
+    "pillars": {
+      "eyebrow": "Three pillars",
+      "title": "Train. Build. Embed.",
+      "lead": "We're not chasing 'transformation'. We're after teams that can build, run and tune their own agents.",
+      "p1Tag": "Pillar 01",
+      "p1Title": "AI agent training",
+      "p1Desc": "For teams that want to understand what an agent actually is, and want to build one that lightens their work.",
+      "p1Items": [
+        "1-day hands-on workshops",
+        "Models, prompts, folders and tools",
+        "Your own use case as the through-line",
+        "Reference material that sticks"
+      ],
+      "p2Tag": "Pillar 02",
+      "p2Title": "Agent implementation",
+      "p2Desc": "For situations where a first agent has to land in production — connected to your real systems, not a demo database.",
+      "p2Items": [
+        "Use-case discovery",
+        "Build with your own team alongside",
+        "Safe integrations (Slack, Exact, etc.)",
+        "Handover and governance"
+      ],
+      "p3Tag": "Pillar 03",
+      "p3Title": "AI literacy & adoption",
+      "p3Desc": "For organisations that want management and execution on the same page — before the first tool is purchased.",
+      "p3Items": [
+        "Leadership sessions",
+        "Org-wide curriculum",
+        "Use-case prioritisation",
+        "Policy and governance"
+      ]
+    },
+    "anatomy": {
+      "eyebrow": "Anatomy of an agent",
+      "title": "Three things. No more.",
+      "lead": "If you understand this, you'll understand every agent that comes next — independent of framework, independent of hype.",
+      "card1Num": "01 / Folders",
+      "card1Title1": "This is what the agent",
+      "card1Title2": "knows",
+      "card1Body": "Your documentation, tone of voice, examples, policies. Not vague training data — concrete files that you maintain.",
+      "card2Num": "02 / Instructions",
+      "card2Title1": "This is how the agent",
+      "card2Title2": "thinks",
+      "card2Body": "One document with rules, edge cases and goals. Readable by humans, executable by the model.",
+      "card3Num": "03 / Tools",
+      "card3Title1": "This is what the agent",
+      "card3Title2": "can do",
+      "card3Body": "Concrete actions: send an email, look up an invoice, book a meeting. Nothing more than what you allow."
+    },
+    "quote": {
+      "text": "We thought we needed agents. Turns out we first needed to learn what they were. Niels got us further in 2 days than half a year of PowerPoints.",
+      "author": "Mariska de Boer",
+      "authorRole": "Head of Operations, mid-sized tech firm",
+      "stat1Num": "200+",
+      "stat1Label": "People trained",
+      "stat2Num": "14",
+      "stat2Label": "Agents in production",
+      "stat3Num": "0",
+      "stat3Label": "Vendor lock-ins"
+    },
+    "casesPreview": {
+      "eyebrow": "Recent work",
+      "title": "What happens when teams own it",
+      "viewAll": "View all cases",
+      "c1Industry": "Logistics",
+      "c1Title": "Account assistant for sales engineers",
+      "c1Snippet": "An agent that prepares quote requests using CRM, mail and historic deals. Engineer picks, agent types.",
+      "c1MetricNum": "−4h",
+      "c1MetricLabel": "per quote",
+      "c2Industry": "ServiceNow consultancy",
+      "c2Title": "Serac open source toolkit",
+      "c2Snippet": "Our own agent framework for ServiceNow flows, built in production and then released as open source.",
+      "c2MetricNum": "OSS",
+      "c2MetricLabel": "on GitHub",
+      "c3Industry": "Professional services",
+      "c3Title": "Org-wide AI literacy programme",
+      "c3Snippet": "From board to floor: in 6 weeks one shared way of thinking about AI, agents and risks.",
+      "c3MetricNum": "120",
+      "c3MetricLabel": "participants"
+    },
+    "cta": {
+      "eyebrow": "Ready to start?",
+      "title1": "AI doesn't need to be bigger.",
+      "title2": "It needs to be clearer.",
+      "lead": "One intro call. We look at your team, your systems and your real question. No sales funnel, no forecast.",
+      "ctaPrimary": "Book a call",
+      "ctaGhost": "Meet Niels"
+    }
+  },
+  "agents": {
+    "metaTitle": "Agent implementation · GroeimetAI",
+    "metaDescription": "We build agents alongside your team — on your stack, with no lock-in. Yours to run and adapt afterwards.",
+    "head": {
+      "crumb1": "Services",
+      "crumbCurrent": "Agent implementation",
+      "title1": "Agents that",
+      "titleAccent": "you",
+      "title2": "actually understand.",
+      "lead": "No black-box demos. We build alongside your team, on your stack, and explain every line. After delivery you can adapt them yourself."
+    },
+    "model": {
+      "eyebrow": "How we see it",
+      "title1": "An agent is not a product.",
+      "title2": "It's a way of working.",
+      "lead": "Once you understand what an agent is made of, you can build, debug and extend one yourself. We teach you the pattern.",
+      "card1Num": "01 / Knowledge folder",
+      "card1Title": "What it knows",
+      "card1Body": "One folder with markdown files. Documentation, policies, examples, tone of voice. Versionable in git, editable by anyone.",
+      "card1Hint": "knowledge/*.md, *.json",
+      "card2Num": "02 / System prompt",
+      "card2Title": "How it thinks",
+      "card2Body": "One readable document. Goals, rules, edge cases and escalation paths. No YAML spaghetti, no 47-step flowchart.",
+      "card2Hint": "instructions.md",
+      "card3Num": "03 / Tool calls",
+      "card3Title": "What it can do",
+      "card3Body": "Functions in your own code. Send mail, create a ticket, look up an invoice. With permissions, audit log and human review where it counts.",
+      "card3Hint": "tools/*.ts"
+    },
+    "process": {
+      "eyebrow": "Approach",
+      "title": "Four phases. Your team is on board the whole way.",
+      "lead": "We don't build for you — we build with you. Otherwise you end up with a tool nobody understands six months from now.",
+      "step1N": "PHASE 01",
+      "step1Title": "Discover",
+      "step1Body": "We map 1-3 use cases. Which fits an agent, which is just a script? What's the value, what are the risks?",
+      "step2N": "PHASE 02",
+      "step2Title": "Train",
+      "step2Body": "The team building or maintaining the agent gets the foundation first. Folder, instructions, tools — no magic.",
+      "step3N": "PHASE 03",
+      "step3Title": "Build",
+      "step3Body": "Pair-building. We steer, you type. Or vice versa. First working version in weeks, not quarters.",
+      "step4N": "PHASE 04",
+      "step4Title": "Embed",
+      "step4Body": "Handover, runbook, monitoring. What do you do if it gets something wrong? Who approves new versions?"
+    },
+    "boundaries": {
+      "eyebrow": "What we don't do",
+      "title": "Honest about the boundaries.",
+      "lead": "We're not for everyone. Signals that another partner suits you better:",
+      "item1Bold": "\"Build us a chatbot\"",
+      "item1Rest": " — without clarity on what it should do or who owns it.",
+      "item2Bold": "\"We want everything automated\"",
+      "item2Rest": " — without first looking at which work is actually worth removing.",
+      "item3Bold": "\"Figure it out and deliver\"",
+      "item3Rest": " — we only build with teams. Otherwise it becomes shadow IT.",
+      "item4Bold": "\"It can be a little creative\"",
+      "item4Rest": " — agents in customer contact need to be predictable. Period."
+    },
+    "cta": {
+      "eyebrow": "Got a use case in mind?",
+      "title1": "Tell us where you're stuck.",
+      "title2": "We'll tell you honestly if an agent fits.",
+      "ctaPrimary": "Book a call",
+      "ctaGhost": "See earlier agents"
+    }
+  },
+  "trainingen": {
+    "metaTitle": "Training · GroeimetAI",
+    "metaDescription": "Hands-on AI agent training for teams and management. In-company, NL or EN.",
+    "head": {
+      "crumb1": "Services",
+      "crumbCurrent": "Training",
+      "title1": "Training that",
+      "titleAccent": "sticks",
+      "title2": ".",
+      "lead": "No two-hour 'AI awareness' deck. Concrete days where your team has built something working by the end — and understands how it works."
+    },
+    "list": [
+      {
+        "tag": "01 / Hands-on",
+        "duration": "1 day · 6-12 people · onsite or remote",
+        "level": "For: teams that will build it themselves",
+        "title": "Build your first agent",
+        "desc": "By the end of the day every team has a working agent with its own folder, instructions and one tool. No slides about 'the future of work'.",
+        "bullets": [
+          "Anatomy: folders, instructions, tools",
+          "Prompting for production (not demos)",
+          "Tool calls — and when NOT to use them",
+          "Hands-on: one working prototype per team"
+        ]
+      },
+      {
+        "tag": "02 / Strategic",
+        "duration": "Half day · board + L&D · onsite",
+        "level": "For: leaders setting direction",
+        "title": "AI literacy for management",
+        "desc": "A session that sharpens the difference between what agents can and cannot do, and which decisions only you can make.",
+        "bullets": [
+          "What is an agent — and what isn't",
+          "Use-case prioritisation on impact + risk",
+          "Policy, governance and human control",
+          "Roadmap for the next 6 months"
+        ]
+      },
+      {
+        "tag": "03 / Programme",
+        "duration": "6 weeks · org-wide · hybrid",
+        "level": "For: organisations that want to learn at scale",
+        "title": "Org-wide AI adoption",
+        "desc": "Curriculum for management and execution, with the same language and the same examples. Your whole organisation on one page.",
+        "bullets": [
+          "Module per role group (sales, ops, finance, etc.)",
+          "Weekly hands-on sprints",
+          "Use-case incubator with coaching",
+          "Train-the-trainer for ongoing embedding"
+        ]
+      }
+    ],
+    "whatYouLearn": "WHAT YOU LEARN",
+    "moreInfo": "More about this training",
+    "features": {
+      "eyebrow": "In every training",
+      "title": "Not the standard 'AI workshop'.",
+      "lead": "What every training has in common — regardless of length or level.",
+      "f1Title": "Hands-on, no slides",
+      "f1Body": "You work with real tools, on your own case.",
+      "f2Title": "Reference material that lasts",
+      "f2Body": "Documentation you'll still use in six months.",
+      "f3Title": "Your own use case as through-line",
+      "f3Body": "We build something you can put to work tomorrow.",
+      "f4Title": "Niels himself, not a trainee",
+      "f4Body": "You get the person who also builds it in production."
+    },
+    "faq": {
+      "eyebrow": "Frequently asked",
+      "title": "What clients want to know upfront.",
+      "fallback": "Question not here?",
+      "fallbackLink": "Ask directly →",
+      "items": [
+        {
+          "q": "Do you also offer open trainings?",
+          "a": "No. We only work in-company. Training really lands when participants can work on their own use cases with colleagues."
+        },
+        {
+          "q": "Which models do we use?",
+          "a": "It depends on your context. We're not tied to one vendor and treat Anthropic, OpenAI, Google and open source models on equal footing."
+        },
+        {
+          "q": "What's the minimum number of participants?",
+          "a": "For hands-on training: 6 people. For strategic sessions: from 3, usually board + L&D + key stakeholder."
+        },
+        {
+          "q": "Do we get anything to take with us?",
+          "a": "Yes. Alongside the working agent from the hands-on day you get reference material, templates and a runbook you'll still use in six months."
+        },
+        {
+          "q": "Do you also train in English?",
+          "a": "Yes. NL by default, EN on request."
+        }
+      ]
+    },
+    "cta": {
+      "eyebrow": "Plan a training?",
+      "title1": "Tell us about your team. We'll shape",
+      "title2": "the right programme together.",
+      "ctaPrimary": "Book a call"
+    }
+  },
+  "cases": {
+    "metaTitle": "Cases · GroeimetAI",
+    "metaDescription": "Recent agents and training programmes: what we built, with which stack, and why it worked.",
+    "head": {
+      "crumb1": "Work",
+      "crumbCurrent": "Cases",
+      "title1": "What happens when",
+      "titleAccent": "teams",
+      "title2": "own it.",
+      "lead": "Not the polished slide version. The honest one: what we built, with which stack, and why it worked."
+    },
+    "labelCase": "CASE",
+    "labelStack": "STACK",
+    "labelResult": "RESULT",
+    "list": [
+      {
+        "industry": "Logistics · SMB",
+        "title": "Account assistant for sales engineers",
+        "role": "Build + training",
+        "summary": "An agent that prepares quote requests: reads CRM, past quotes and the email thread. Engineer reviews and sends.",
+        "stack": ["Sonnet 4", "Custom MCP", "Exact Online", "Slack"],
+        "outcomes": [
+          { "num": "−4h", "label": "per quote" },
+          { "num": "8 wks", "label": "to production" },
+          { "num": "100%", "label": "human review" }
+        ],
+        "why": "Sales engineers were losing half-days to preparation. We didn't build an 'AI sales rep' — we built their own scratchpad already filled in."
+      },
+      {
+        "industry": "Open source · Our own",
+        "title": "Serac: agent framework for ServiceNow",
+        "role": "Own product",
+        "summary": "Our toolkit for agents that orchestrate ServiceNow flows. Started as client work, then released open source.",
+        "stack": ["TypeScript", "ServiceNow REST", "Anthropic SDK", "MIT"],
+        "outcomes": [
+          { "num": "OSS", "label": "MIT licence" },
+          { "num": "GitHub", "label": "groeimetai/serac" },
+          { "num": "v1.x", "label": "in production" }
+        ],
+        "why": "Because clients shouldn't be locked in to something automating their own processes."
+      },
+      {
+        "industry": "Professional services · 800+ FTE",
+        "title": "Org-wide AI literacy programme",
+        "role": "Programme + curriculum",
+        "summary": "Six weeks. Board, management and execution. One shared language, one shared sense of what agents are and aren't.",
+        "stack": ["Curriculum", "Use-case incubator", "Train-the-trainer"],
+        "outcomes": [
+          { "num": "120", "label": "participants" },
+          { "num": "9", "label": "use cases validated" },
+          { "num": "3", "label": "agents live after 6 months" }
+        ],
+        "why": "Not because they 'had to do something with AI'. Because they didn't want 12 teams going 12 different directions."
+      },
+      {
+        "industry": "Industry · Manufacturing",
+        "title": "Complaint triage for the service desk",
+        "role": "Pilot + handover",
+        "summary": "An agent that classifies incoming service complaints, estimates urgency and assigns the right engineer. Humans still decide.",
+        "stack": ["Sonnet 4", "Email", "Internal CRM"],
+        "outcomes": [
+          { "num": "62%", "label": "less triage time" },
+          { "num": "0", "label": "wrong escalations" },
+          { "num": "Own", "label": "team runs it now" }
+        ],
+        "why": "The service desk was drowning. Not in complaints, but in sorting them. That's where the win was."
+      }
+    ],
+    "cta": {
+      "eyebrow": "Got a use case in mind?",
+      "title1": "The next case could be",
+      "title2": "yours.",
+      "ctaPrimary": "Book a call",
+      "ctaGhost": "Read about our approach"
+    }
+  },
+  "about": {
+    "metaTitle": "About Niels · GroeimetAI",
+    "metaDescription": "GroeimetAI is deliberately small. One builder, one conversation partner. No funnel, no pipeline.",
+    "head": {
+      "crumb1": "About",
+      "crumbCurrent": "Niels & GroeimetAI",
+      "title1": "GroeimetAI is",
+      "titleAccent": "small",
+      "title2": ". On purpose.",
+      "lead": "One person in the seat that matters. Niels van der Werf — builder, trainer, conversation partner. No account manager, no handover, no PowerPoint army."
+    },
+    "niels": {
+      "eyebrow": "Niels van der Werf",
+      "title1": "Builder first,",
+      "title2": "salesman not.",
+      "para1Pre": "I've been building since models were called 'GPT-3'. First for myself, then for clients. What I learned in those years: technology is almost never the problem. It's about ",
+      "para1Em1": "focus",
+      "para1Mid1": ", about ",
+      "para1Em2": "ownership",
+      "para1Mid2": ", and about ",
+      "para1Em3": "understanding what you build",
+      "para1Post": ".",
+      "para2": "That's why GroeimetAI is deliberately small. No funnel, no pipeline. Just personal work with teams that genuinely want to change something — and understand it takes time.",
+      "para3": "Alongside client work I make open source. Serac is the most visible example: an agent framework for ServiceNow that I started for one client and then put on GitHub under MIT. If I promise clients no lock-in, I have to live by it.",
+      "signatureName": "Niels van der Werf",
+      "signatureRole": "Founder · GroeimetAI",
+      "portraitPlaceholder": "[ portrait of Niels ]"
+    },
+    "beliefs": {
+      "eyebrow": "What we believe",
+      "title": "Five things we don't change.",
+      "lead": "Sometimes we disagree with a prospective client. That's OK. Better honest upfront than unhappy halfway through.",
+      "items": [
+        {
+          "n": "01",
+          "t": "Humans decide, agents support",
+          "d": "Customer contact, legal, financial — no agent decides on those alone. Period."
+        },
+        {
+          "n": "02",
+          "t": "No vendor lock-in by default",
+          "d": "We build on the most appropriate stack, not on the one we earn commission from (we don't get any anyway)."
+        },
+        {
+          "n": "03",
+          "t": "Documentation is not an afterthought",
+          "d": "If you can't read it after handover, our work isn't done."
+        },
+        {
+          "n": "04",
+          "t": "Train over build, where possible",
+          "d": "If one training turns you into the builders, that always beats handing over a finished product."
+        },
+        {
+          "n": "05",
+          "t": "Stay small",
+          "d": "We don't grow for the sake of growth. We want to stay sharp, not scalable."
+        }
+      ]
+    },
+    "oss": {
+      "eyebrow": "Open source",
+      "title1": "What we make,",
+      "title2": "we often give back.",
+      "lead": "Not from ideology — from principle. If we promise clients no lock-in, what we build has to be removable too.",
+      "ghLabel": "github.com/GroeimetAI",
+      "card": {
+        "owner": "groeimetai/",
+        "repo": "serac",
+        "license": "MIT",
+        "desc": "Agent framework for ServiceNow. Orchestrates flows with tool calls, audit log and human approval where it matters.",
+        "badge1": "★ TypeScript",
+        "badge2": "● MIT",
+        "badge3": "v1.x"
+      }
+    },
+    "cta": {
+      "eyebrow": "Want to talk?",
+      "title1": "One conversation with the person",
+      "title2": "who'll also do the work.",
+      "ctaPrimary": "Book a call"
+    }
+  },
+  "contact": {
+    "metaTitle": "Contact · GroeimetAI",
+    "metaDescription": "Book an intro call with Niels. No sales funnel.",
+    "head": {
+      "crumb1": "Contact",
+      "crumbCurrent": "Book a call",
+      "title1": "One intro call.",
+      "titleAccent": "No sales funnel.",
+      "lead": "30-45 minutes. You tell me where you're stuck, I tell you honestly if we can help — or if another partner is a better fit."
+    },
+    "direct": {
+      "eyebrow": "Mail directly",
+      "title": "Or skip the form.",
+      "emailLabel": "EMAIL",
+      "phoneLabel": "PHONE",
+      "baseLabel": "BASE",
+      "baseValue": "Netherlands · works NL & remote",
+      "signatureName": "You're talking to Niels.",
+      "signatureRole": "Founder · reply within 24h",
+      "signatureBody": "No middleman, no 'we'll get back to you'. Your conversation is with the person who actually does the work."
+    },
+    "form": {
+      "label": "FORM",
+      "title": "Briefly tell us what it's about.",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "org": "Organisation",
+      "orgPlaceholder": "Company name",
+      "email": "Email",
+      "emailPlaceholder": "name@company.com",
+      "message": "What's it about?",
+      "messagePlaceholder": "E.g. We want to build an agent for our service desk, but we don't know where to start...",
+      "submit": "Send message",
+      "successTitle": "Message in.",
+      "successBody": "Niels will reply personally within 24 hours. Keep an eye on your inbox."
+    }
+  }
+}

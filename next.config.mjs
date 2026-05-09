@@ -129,24 +129,50 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
+      // Old positioning routes redirect into new structure
       {
-        source: '/:locale(agent-readiness|expert-assessment|implementation-proposal|pilot-intake)',
-        destination: '/:locale/services',
+        source: '/:locale(nl|en)/services',
+        destination: '/:locale/trainingen',
         permanent: true,
       },
       {
-        source: '/:locale/mcp-guide',
-        destination: '/:locale/snow-flow',
+        source: '/:locale(nl|en)/services/:rest*',
+        destination: '/:locale/trainingen',
         permanent: true,
       },
       {
-        source: '/:locale/advisory-services',
-        destination: '/:locale/services',
+        source: '/:locale(nl|en)/agent-readiness',
+        destination: '/:locale/agents',
         permanent: true,
       },
       {
-        source: '/:locale/services/agent-journey',
-        destination: '/:locale/services',
+        source: '/:locale(nl|en)/expert-assessment',
+        destination: '/:locale/contact',
+        permanent: true,
+      },
+      {
+        source: '/:locale(nl|en)/implementation-proposal',
+        destination: '/:locale/agents',
+        permanent: true,
+      },
+      {
+        source: '/:locale(nl|en)/pilot-intake',
+        destination: '/:locale/contact',
+        permanent: true,
+      },
+      {
+        source: '/:locale(nl|en)/advisory-services',
+        destination: '/:locale/agents',
+        permanent: true,
+      },
+      {
+        source: '/:locale(nl|en)/mcp-guide',
+        destination: '/:locale/agents',
+        permanent: true,
+      },
+      {
+        source: '/:locale(nl|en)/mcp-kennis',
+        destination: '/:locale/agents',
         permanent: true,
       },
     ];

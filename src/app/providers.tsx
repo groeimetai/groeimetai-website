@@ -4,7 +4,6 @@ import { ReactNode } from 'react';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from 'react-hot-toast';
-import Footer from '@/components/layout/Footer';
 
 interface ProvidersProps {
   children: ReactNode;

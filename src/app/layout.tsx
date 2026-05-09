@@ -1,10 +1,23 @@
 import type { Metadata } from 'next';
 import { Outfit, Manrope } from 'next/font/google';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 import { Providers } from './providers';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { OrganizationJsonLd, ServicesJsonLd, WebSiteJsonLd } from '@/components/JsonLd';
-import { brandSiteContent } from '@/data/brandSiteContent';
 import '../styles/globals.css';
+
+const ROOT_TITLE = 'GroeimetAI — Agents bouwen die je zelf begrijpt';
+const ROOT_DESCRIPTION =
+  'GroeimetAI traint teams om AI agents te bouwen, beheren en aanpassen. Geen black box, geen lock-in, geen hype.';
+const ROOT_KEYWORDS = [
+  'AI agents',
+  'AI training',
+  'AI literacy',
+  'agent implementatie',
+  'GenAI consultancy',
+  'GroeimetAI',
+];
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -21,9 +34,9 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://groeimetai.io'),
-  title: brandSiteContent.nl.metadata.root.title,
-  description: brandSiteContent.nl.metadata.root.description,
-  keywords: brandSiteContent.nl.metadata.root.keywords,
+  title: ROOT_TITLE,
+  description: ROOT_DESCRIPTION,
+  keywords: ROOT_KEYWORDS,
   authors: [{ name: 'GroeimetAI', url: 'https://groeimetai.io' }],
   creator: 'GroeimetAI',
   publisher: 'GroeimetAI',
@@ -57,8 +70,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     alternateLocale: 'nl_NL',
     url: 'https://groeimetai.io',
-    title: brandSiteContent.nl.metadata.root.title,
-    description: brandSiteContent.nl.metadata.root.description,
+    title: ROOT_TITLE,
+    description: ROOT_DESCRIPTION,
     siteName: 'GroeimetAI',
     images: [
       {
@@ -71,8 +84,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: brandSiteContent.nl.metadata.root.title,
-    description: brandSiteContent.nl.metadata.root.description,
+    title: ROOT_TITLE,
+    description: ROOT_DESCRIPTION,
     creator: '@groeimetai',
     images: ['/twitter-image.png'],
   },
@@ -122,7 +135,7 @@ export default function RootLayout({
         <ServicesJsonLd />
         <WebSiteJsonLd />
       </head>
-      <body className={`${outfit.variable} ${manrope.variable} font-sans dark min-h-screen bg-background antialiased`} suppressHydrationWarning>
+      <body className={`${outfit.variable} ${manrope.variable} ${GeistSans.variable} ${GeistMono.variable} font-sans dark min-h-screen bg-background antialiased`} suppressHydrationWarning>
         <ErrorBoundary>
           <Providers>{children}</Providers>
         </ErrorBoundary>

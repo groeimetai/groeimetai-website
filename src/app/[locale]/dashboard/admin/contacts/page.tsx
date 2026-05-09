@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { collection, query, orderBy, onSnapshot, doc, updateDoc, addDoc, Timestamp, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import NavigationLayout from '@/components/layout/NavigationLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -516,8 +515,7 @@ ${emailContent}
   };
 
   return (
-    <NavigationLayout>
-      <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8">
       {/* Page Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -790,6 +788,5 @@ ${emailContent}
         </DialogContent>
       </Dialog>
       </div>
-    </NavigationLayout>
   );
 }

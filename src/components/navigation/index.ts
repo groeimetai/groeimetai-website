@@ -1,20 +1,11 @@
-// Main navigation components
-export { default as UnifiedNavigation } from './UnifiedNavigation';
-export { default as UnifiedNavigationLayout, SimpleNavigationLayout, navigationThemes } from './UnifiedNavigationLayout';
-export { default as AccessibleNavigationWrapper, FullyAccessibleNavigation } from './AccessibleNavigationWrapper';
-export { default as NotificationBadge } from './NotificationBadge';
+export { default as CrawlerNav } from './CrawlerNav';
 
-// Existing components (for backward compatibility)
-export { default as Navigation } from '../layout/Navigation';
-export { default as DynamicNavigation } from './DynamicNavigation';
-export { default as AccessibleNav } from './AccessibleNav';
-
-// Hooks and utilities
+// Hooks and utilities (still referenced by some pages)
 export {
   useUserContext,
   useNavigationContext,
   useNavigationItems,
-  useFilteredNavigationItems
+  useFilteredNavigationItems,
 } from '../../hooks/useNavigationContext';
 
 // Types
@@ -28,5 +19,5 @@ export type {
   UnifiedNavigationProps,
   MobileNavigationProps,
   NotificationBadgeProps,
-  UserMenuProps
+  UserMenuProps,
 } from '../../types/navigation';
