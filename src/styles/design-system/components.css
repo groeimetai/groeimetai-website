@@ -94,7 +94,10 @@
 .hero .glow { top: -200px; left: -100px; opacity: .8; }
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.05fr 1fr;
+  /* minmax(0, ...) prevents the right column from growing when the
+     anatomy contains long mono lines — otherwise the track widens to
+     fit its content and squeezes the hero title. */
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   gap: 64px;
   align-items: center;
   position: relative;

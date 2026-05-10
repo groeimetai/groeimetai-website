@@ -157,6 +157,11 @@
   margin: 0;
   padding: 0 22px;
   color: var(--fg-dim);
+  /* pre-wrap so long rules wrap inside the box instead of pushing the
+     anatomy wider; otherwise the hero grid track grows on this tab. */
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-width: 0;
 }
 .anatomy-code .line { min-height: calc(13px * 1.85); }
 .line-comment { color: var(--fg-mute); font-style: italic; }
