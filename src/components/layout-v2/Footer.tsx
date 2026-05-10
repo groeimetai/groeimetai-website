@@ -14,7 +14,7 @@ export function Footer({ basePath = '' }: { basePath?: string }) {
             <div className="nav-brand" style={{ marginBottom: 16 }} aria-label="GroeimetAI">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/groeimet-ai-logo.svg"
+                src="/groeimet-ai-logo-dark.svg"
                 alt="GroeimetAI"
                 height={28}
                 style={{ height: 28, width: 'auto' }}

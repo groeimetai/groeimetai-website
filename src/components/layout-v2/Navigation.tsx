@@ -50,7 +50,7 @@ export function Navigation({ basePath = '' }: { basePath?: string }) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="nav-brand-wide"
-            src="/groeimet-ai-logo.svg"
+            src="/groeimet-ai-logo-dark.svg"
             alt="GroeimetAI"
             height={28}
             style={{ height: 28, width: 'auto' }}
@@ -58,7 +58,7 @@ export function Navigation({ basePath = '' }: { basePath?: string }) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="nav-brand-icon"
-            src="/gecentreerd-logo.svg"
+            src="/gecentreerd-logo-dark.svg"
             alt="GroeimetAI"
             height={32}
             width={32}
