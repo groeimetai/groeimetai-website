@@ -105,16 +105,19 @@
       "card3Title2": "can do",
       "card3Body": "Concrete actions: send an email, look up an invoice, book a meeting. Nothing more than what you allow."
     },
-    "quote": {
-      "text": "We thought we needed agents. Turns out we first needed to learn what they were. Niels got us further in 2 days than half a year of PowerPoints.",
-      "author": "Mariska de Boer",
-      "authorRole": "Head of Operations, mid-sized tech firm",
-      "stat1Num": "200+",
-      "stat1Label": "People trained",
-      "stat2Num": "14",
-      "stat2Label": "Agents in production",
-      "stat3Num": "0",
-      "stat3Label": "Vendor lock-ins"
+    "proof": {
+      "eyebrow": "Open source proof",
+      "title": "No testimonials.",
+      "titleAccent": "Just code others reuse.",
+      "body": "Architects run Serac — our open source toolkit for agents — in production without us ever speaking. That's the proof. Read the code, fork it, or build on top.",
+      "cardOwner": "groeimetai/",
+      "cardRepo": "serac",
+      "cardLicense": "MIT",
+      "cardDesc": "Agent framework for ServiceNow flows. Tool calls, audit log, human approval where it matters.",
+      "cardBadge1": "★ TypeScript",
+      "cardBadge2": "● MIT",
+      "cardBadge3": "v1.x in production",
+      "cta": "View Serac on GitHub"
     },
     "casesPreview": {
       "eyebrow": "Recent work",

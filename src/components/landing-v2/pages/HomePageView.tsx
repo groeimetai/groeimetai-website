@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useReveal } from '@/hooks/useReveal';
-import { Btn, Eyebrow, Section, PillarCard, CaseCard, LogoBar, Stat, DsLink } from '@/components/ds';
+import { Btn, Eyebrow, Section, PillarCard, CaseCard, LogoBar, DsLink } from '@/components/ds';
 import { IconArrow, IconFolder, IconInstructions, IconTool } from '@/components/ds/icons';
 import { AgentAnatomy } from '@/components/landing-v2/AgentAnatomy';
 
@@ -176,22 +176,57 @@ export function HomePageView({ basePath }: { basePath: string }) {
         </div>
       </Section>
 
-      <Section id="quote" light tight>
+      <Section id="proof" light tight>
         <div className="ds-grid-2" style={{ alignItems: 'center', gap: 80 }}>
-          <div className="bigquote reveal">
-            &ldquo;{t('quote.text')}&rdquo;
-            <div className="bigquote-source">
-              <div className="bigquote-avatar">M</div>
-              <div>
-                <div style={{ color: 'var(--ink)' }}>{t('quote.author')}</div>
-                <div>{t('quote.authorRole')}</div>
-              </div>
+          <div className="reveal">
+            <Eyebrow>{t('proof.eyebrow')}</Eyebrow>
+            <h2 style={{ marginTop: 16 }}>
+              {t('proof.title')}
+              <br />
+              <em style={{ color: 'var(--accent)', fontStyle: 'normal' }}>{t('proof.titleAccent')}</em>
+            </h2>
+            <p style={{ marginTop: 20, fontSize: 17 }}>{t('proof.body')}</p>
+            <div style={{ marginTop: 28 }}>
+              <Btn variant="ghost" href="https://github.com/GroeimetAI/serac">
+                {t('proof.cta')} <IconArrow size={14} />
+              </Btn>
             </div>
           </div>
-          <div className="reveal" style={{ display: 'grid', gap: 32 }}>
-            <Stat num={t('quote.stat1Num')} label={t('quote.stat1Label')} />
-            <Stat num={t('quote.stat2Num')} label={t('quote.stat2Label')} />
-            <Stat num={t('quote.stat3Num')} label={t('quote.stat3Label')} />
+          <div className="reveal">
+            <div className="card" style={{ padding: 32 }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'start',
+                  marginBottom: 16,
+                }}
+              >
+                <div>
+                  <div className="mono" style={{ fontSize: 11, color: 'var(--ink-mute)' }}>
+                    {t('proof.cardOwner')}
+                  </div>
+                  <h3 style={{ marginTop: 4, fontSize: 24, color: 'var(--ink)' }}>{t('proof.cardRepo')}</h3>
+                </div>
+                <div className="tag">{t('proof.cardLicense')}</div>
+              </div>
+              <p style={{ fontSize: 14, color: 'var(--ink-dim)' }}>{t('proof.cardDesc')}</p>
+              <div
+                style={{
+                  marginTop: 20,
+                  display: 'flex',
+                  gap: 16,
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 12,
+                  color: 'var(--ink-mute)',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <span>{t('proof.cardBadge1')}</span>
+                <span>{t('proof.cardBadge2')}</span>
+                <span>{t('proof.cardBadge3')}</span>
+              </div>
+            </div>
           </div>
         </div>
       </Section>

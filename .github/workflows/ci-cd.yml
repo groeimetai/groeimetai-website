@@ -55,7 +55,7 @@ jobs:
           cache: 'npm'
 
       - name: Deploy Firebase Security Rules
-        run: npx firebase-tools deploy --only firestore:rules --project ${{ secrets.FIREBASE_PROJECT_ID }} || echo "Warning: Firebase rules deployment failed"
+        run: npx firebase-tools deploy --only firestore:rules --project ${{ secrets.FIREBASE_PROJECT_ID }} || echo "Warning - Firebase rules deployment failed"
 
   # Build and Deploy - runs in parallel with quality checks and firebase rules
   build-deploy:

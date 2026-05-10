@@ -105,16 +105,19 @@
       "card3Title2": "kan",
       "card3Body": "Concrete acties: een mail sturen, een factuur opzoeken, een afspraak boeken. Niets meer dan jij toestaat."
     },
-    "quote": {
-      "text": "We dachten dat we agents nodig hadden. Bleek dat we eerst moesten leren wat ze waren. Niels heeft ons in 2 dagen verder geholpen dan een half jaar PowerPoints.",
-      "author": "Mariska de Boer",
-      "authorRole": "Head of Operations, MKB-tech bedrijf",
-      "stat1Num": "200+",
-      "stat1Label": "Mensen getraind",
-      "stat2Num": "14",
-      "stat2Label": "Agents in productie",
-      "stat3Num": "0",
-      "stat3Label": "Vendor lock-ins"
+    "proof": {
+      "eyebrow": "Open source proof",
+      "title": "Geen testimonials.",
+      "titleAccent": "Wel code die anderen herbruiken.",
+      "body": "Architecten draaien Serac — onze open source toolkit voor agents — in productie zonder dat we ze ooit gesproken hebben. Dat is de proof. Bekijk de code, fork hem, of bouw erop verder.",
+      "cardOwner": "groeimetai/",
+      "cardRepo": "serac",
+      "cardLicense": "MIT",
+      "cardDesc": "Agent framework voor ServiceNow flows. Tool calls, audit log, menselijke approval-stap waar het ertoe doet.",
+      "cardBadge1": "★ TypeScript",
+      "cardBadge2": "● MIT",
+      "cardBadge3": "v1.x in productie",
+      "cta": "Bekijk Serac op GitHub"
     },
     "casesPreview": {
       "eyebrow": "Recent werk",
