@@ -4079,8 +4079,8 @@
   "chatbot": {
     "interface": {
       "title": "GroeimetAI Assistant",
-      "subtitle": "Altijd hier om te helpen",
-      "initialMessage": "Welkom bij GroeimetAI! 👋 Ik ben uw AI-assistent. Hoe kan ik u helpen met onze AI consultancy diensten? U kunt mij vragen stellen over GenAI, multi-agent orchestration, ServiceNow integratie of een van onze andere expertise gebieden.",
+      "subtitle": "Folders + instructies + tools",
+      "initialMessage": "Hoi 👋 Ik ben de assistent van GroeimetAI. Wij leren teams agents bouwen die ze zelf begrijpen — een agent is een mappenstructuur met instructies en tools, geen black box. Vraag gerust over trainingen, hoe een implementatie eruitziet, of plan een gesprek met Niels.",
       "placeholderText": "Typ uw bericht...",
       "placeholderVoice": "Spreek of typ uw bericht...",
       "sendMessage": "Bericht versturen",
@@ -4098,7 +4098,7 @@
       "switchToVoice": "Schakel naar spraak"
     },
     "widget": {
-      "proactiveMessage": "👋 Hulp nodig bij het verkennen van onze AI oplossingen? Ik ben er om te helpen!",
+      "proactiveMessage": "👋 Vragen over wat een agent eigenlijk is, of hoe een training eruitziet? Stel ze gerust.",
       "notNow": "Niet nu",
       "letsChat": "Laten we chatten",
       "openChat": "Chat openen",

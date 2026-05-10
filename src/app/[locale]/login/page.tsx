@@ -178,7 +178,7 @@ function LoginPageContent() {
             <div className="mb-8">
               <Link
                 href="/"
-                className="inline-flex items-center text-white/50 hover:text-[#FF9F43] mb-8 sm:mb-10 transition-colors text-sm"
+                className="inline-flex items-center text-white/50 hover:text-[#ff7a3d] mb-8 sm:mb-10 transition-colors text-sm"
               >
                 <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
                 {t('backToHome')}
@@ -206,7 +206,7 @@ function LoginPageContent() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="pl-10 bg-white/[0.03] border-white/10 text-white placeholder:text-white/35 focus:border-[#FF9F43] transition-colors"
+                    className="pl-10 bg-white/[0.03] border-white/10 text-white placeholder:text-white/35 focus:border-[#ff7a3d] transition-colors"
                     placeholder={t('emailPlaceholder')}
                     required
                   />
@@ -220,7 +220,7 @@ function LoginPageContent() {
                   </Label>
                   <Link
                     href="/forgot-password"
-                    className="text-sm text-[#FF9F43] hover:text-[#FF9F43]/80 transition-colors"
+                    className="text-sm text-[#ff7a3d] hover:text-[#ff7a3d]/80 transition-colors"
                   >
                     {t('forgotPassword')}
                   </Link>
@@ -232,7 +232,7 @@ function LoginPageContent() {
                     type="password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="pl-10 bg-white/[0.03] border-white/10 text-white placeholder:text-white/35 focus:border-[#FF9F43] transition-colors"
+                    className="pl-10 bg-white/[0.03] border-white/10 text-white placeholder:text-white/35 focus:border-[#ff7a3d] transition-colors"
                     placeholder={t('passwordPlaceholder')}
                     required
                   />
@@ -244,8 +244,8 @@ function LoginPageContent() {
                 disabled={isLoading}
                 className="w-full h-12 text-white font-medium rounded-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                 style={{
-                  background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
-                  boxShadow: '0 4px 20px -4px rgba(248, 115, 21, 0.5)',
+                  background: 'linear-gradient(135deg, #ff5a1f 0%, #ff7a3d 100%)',
+                  boxShadow: '0 4px 20px -4px rgba(255, 90, 31, 0.5)',
                 }}
               >
                 {isLoading ? (
@@ -312,13 +312,13 @@ function LoginPageContent() {
 
             <div className="mt-8 text-center">
               <p className="text-white/50 text-sm">
-                {t('noAccount')}{' '}
-                <Link
-                  href="/register"
-                  className="text-[#FF9F43] hover:text-[#FF9F43]/80 transition-colors font-medium"
+                Toegang nodig? Mail{' '}
+                <a
+                  href="mailto:info@groeimetai.io"
+                  className="text-[#ff5a1f] hover:text-[#ff7a3d] transition-colors font-medium"
                 >
-                  {t('getStarted')}
-                </Link>
+                  info@groeimetai.io
+                </a>
               </p>
             </div>
           </motion.div>
@@ -343,7 +343,7 @@ function LoginPageContent() {
                   >
                     <div
                       className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0"
-                      style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
+                      style={{ background: 'linear-gradient(135deg, #ff5a1f 0%, #ff7a3d 100%)' }}
                     >
                       <benefit.icon className="w-5 h-5 text-white" />
                     </div>
@@ -355,7 +355,7 @@ function LoginPageContent() {
                 ))}
               </div>
 
-              <div className="mt-6 p-4 bg-gradient-to-br from-[#F87315]/15 to-[#F87315]/5 rounded-xl border border-[#F87315]/20">
+              <div className="mt-6 p-4 bg-gradient-to-br from-[#ff5a1f]/15 to-[#ff5a1f]/5 rounded-xl border border-[#ff5a1f]/20">
                 <p className="text-sm text-white/80">{t('trustMessage')}</p>
               </div>
             </div>
@@ -377,7 +377,7 @@ function LoginPageContent() {
             <div className="flex justify-center">
               <div
                 className="w-16 h-16 rounded-xl flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #ff5a1f 0%, #ff7a3d 100%)' }}
               >
                 <Smartphone className="w-8 h-8 text-white" />
               </div>
@@ -393,7 +393,7 @@ function LoginPageContent() {
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value)}
                 placeholder={t('twoFactor.codePlaceholder')}
-                className="bg-white/[0.03] border-white/10 text-white text-center text-lg focus:border-[#FF9F43] transition-colors"
+                className="bg-white/[0.03] border-white/10 text-white text-center text-lg focus:border-[#ff7a3d] transition-colors"
                 maxLength={6}
                 autoFocus
               />
@@ -425,7 +425,7 @@ function LoginPageContent() {
               onClick={handle2FAVerification}
               className="text-white"
               style={{
-                background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
+                background: 'linear-gradient(135deg, #ff5a1f 0%, #ff7a3d 100%)',
               }}
               disabled={verifying2FA || verificationCode.length !== 6}
             >
@@ -449,7 +449,7 @@ export default function LoginPage() {
       fallback={
         <div className="min-h-screen bg-black flex items-center justify-center">
           <div className="text-white text-center">
-            <div className="w-8 h-8 border-2 border-white/30 border-t-[#FF9F43] rounded-full animate-spin mx-auto mb-4" />
+            <div className="w-8 h-8 border-2 border-white/30 border-t-[#ff7a3d] rounded-full animate-spin mx-auto mb-4" />
             <p className="text-white/50">Loading...</p>
           </div>
         </div>

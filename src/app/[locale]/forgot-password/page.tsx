@@ -57,7 +57,7 @@ export default function ForgotPasswordPage() {
               <div className="mb-8">
                 <Link
                   href="/login"
-                  className="inline-flex items-center text-white/60 hover:text-[#FF9F43] mb-6 transition-colors"
+                  className="inline-flex items-center text-white/60 hover:text-[#ff7a3d] mb-6 transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to login
@@ -85,7 +85,7 @@ export default function ForgotPasswordPage() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="pl-10 bg-white/[0.03] border-white/10 text-white placeholder:text-white/40 focus:border-[#FF9F43] focus:ring-[#FF9F43]/20"
+                      className="pl-10 bg-white/[0.03] border-white/10 text-white placeholder:text-white/40 focus:border-[#ff7a3d] focus:ring-[#ff7a3d]/20"
                       placeholder="you@company.com"
                       required
                     />
@@ -97,8 +97,8 @@ export default function ForgotPasswordPage() {
                   disabled={isLoading}
                   className="w-full text-white py-6 text-lg font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                   style={{
-                    background: 'linear-gradient(135deg, #F87315 0%, #FF9F43 100%)',
-                    boxShadow: '0 4px 20px -4px rgba(248, 115, 21, 0.5)'
+                    background: 'linear-gradient(135deg, #ff5a1f 0%, #ff7a3d 100%)',
+                    boxShadow: '0 4px 20px -4px rgba(255, 90, 31, 0.5)'
                   }}
                 >
                   {isLoading ? (
@@ -144,7 +144,7 @@ export default function ForgotPasswordPage() {
                 Didn&apos;t receive the email? Check your spam folder or{' '}
                 <button
                   onClick={() => setIsSuccess(false)}
-                  className="text-[#FF9F43] hover:text-[#FF9F43]/80 transition-colors underline"
+                  className="text-[#ff7a3d] hover:text-[#ff7a3d]/80 transition-colors underline"
                 >
                   try again
                 </button>
