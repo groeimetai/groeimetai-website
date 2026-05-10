@@ -1,4 +1,4 @@
-const DEFAULT_LOGOS = ['ABN AMRO', 'NS', 'DIM Haarlem'];
+const DEFAULT_LOGOS = ['ABN AMRO', 'NS', 'DIM Haarlem', 'NovaSkin'];
 
 export function LogoBar({ logos = DEFAULT_LOGOS }: { logos?: string[] }) {
   // Static row (no marquee) — better readable when there are only a handful of names.
