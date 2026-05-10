@@ -67,16 +67,19 @@
 .anatomy-tab.is-active .anatomy-tab-count { background: rgba(255,90,31,0.16); color: var(--accent); }
 
 .anatomy-body {
-  min-height: 360px;
+  height: 360px;
   background: var(--bg-elev);
+  overflow: hidden;
 }
 
 /* Folders */
 .anatomy-folders {
   display: grid;
   grid-template-columns: 240px 1fr;
-  min-height: 360px;
+  height: 100%;
 }
+.anatomy-tree { overflow-y: auto; }
+.anatomy-preview { overflow-y: auto; }
 .anatomy-tree {
   border-right: 1px solid var(--line);
   padding: 12px 0;
@@ -138,6 +141,8 @@
   font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.85;
+  height: 100%;
+  overflow-y: auto;
 }
 .anatomy-lineno {
   color: var(--fg-mute);
@@ -163,6 +168,9 @@
   display: grid;
   gap: 1px;
   background: var(--line);
+  height: 100%;
+  overflow-y: auto;
+  align-content: start;
 }
 .anatomy-tool {
   background: var(--bg-elev);
