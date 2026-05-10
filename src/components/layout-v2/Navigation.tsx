@@ -50,7 +50,7 @@ export function Navigation({ basePath = '' }: { basePath?: string }) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="nav-brand-wide"
-            src="/groeimet-ai-logo-dark.svg"
+            src="/groeimet-ai-logo.svg"
             alt="GroeimetAI"
             height={28}
             style={{ height: 28, width: 'auto' }}
