@@ -187,7 +187,7 @@ export function HomePageView({ basePath }: { basePath: string }) {
             </h2>
             <p style={{ marginTop: 20, fontSize: 17 }}>{t('proof.body')}</p>
             <div style={{ marginTop: 28 }}>
-              <Btn variant="ghost" href="https://github.com/GroeimetAI/serac">
+              <Btn variant="ghost" href="https://github.com/serac-labs/serac">
                 {t('proof.cta')} <IconArrow size={14} />
               </Btn>
             </div>

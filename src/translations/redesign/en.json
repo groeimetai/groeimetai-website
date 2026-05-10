@@ -110,12 +110,12 @@
       "title": "No testimonials.",
       "titleAccent": "Just code others reuse.",
       "body": "Architects run Serac — our open source toolkit for agents — in production without us ever speaking. That's the proof. Read the code, fork it, or build on top.",
-      "cardOwner": "groeimetai/",
+      "cardOwner": "serac-labs/",
       "cardRepo": "serac",
-      "cardLicense": "MIT",
+      "cardLicense": "Elastic v2",
       "cardDesc": "Agent framework for ServiceNow flows. Tool calls, audit log, human approval where it matters.",
       "cardBadge1": "★ TypeScript",
-      "cardBadge2": "● MIT",
+      "cardBadge2": "● Elastic v2",
       "cardBadge3": "v1.x in production",
       "cta": "View Serac on GitHub"
     },
@@ -350,10 +350,10 @@
         "title": "Serac: agent framework for ServiceNow",
         "role": "Own product",
         "summary": "Our toolkit for agents that orchestrate ServiceNow flows. Started as client work, then released open source.",
-        "stack": ["TypeScript", "ServiceNow REST", "Anthropic SDK", "MIT"],
+        "stack": ["TypeScript", "ServiceNow REST", "Anthropic SDK", "Elastic v2"],
         "outcomes": [
-          { "num": "OSS", "label": "MIT licence" },
-          { "num": "GitHub", "label": "groeimetai/serac" },
+          { "num": "OSS", "label": "Elastic v2 licence" },
+          { "num": "GitHub", "label": "serac-labs/serac" },
           { "num": "v1.x", "label": "in production" }
         ],
         "why": "Because clients shouldn't be locked in to something automating their own processes."
@@ -416,7 +416,7 @@
       "para1Em3": "understanding what you build",
       "para1Post": ".",
       "para2": "That's why GroeimetAI is deliberately small. No funnel, no pipeline. Just personal work with teams that genuinely want to change something — and understand it takes time.",
-      "para3": "Alongside client work I make open source. Serac is the most visible example: an agent framework for ServiceNow that I started for one client and then put on GitHub under MIT. If I promise clients no lock-in, I have to live by it.",
+      "para3": "Alongside client work I make open source. Serac is the most visible example: an agent framework for ServiceNow that I started for one client and then put on GitHub under Elastic v2. If I promise clients no lock-in, I have to live by it.",
       "signatureName": "Niels van der Werf",
       "signatureRole": "Founder · GroeimetAI",
       "portraitPlaceholder": "[ portrait of Niels ]"
@@ -460,12 +460,12 @@
       "lead": "Not from ideology — from principle. If we promise clients no lock-in, what we build has to be removable too.",
       "ghLabel": "github.com/GroeimetAI",
       "card": {
-        "owner": "groeimetai/",
+        "owner": "serac-labs/",
         "repo": "serac",
-        "license": "MIT",
+        "license": "Elastic v2",
         "desc": "Agent framework for ServiceNow. Orchestrates flows with tool calls, audit log and human approval where it matters.",
         "badge1": "★ TypeScript",
-        "badge2": "● MIT",
+        "badge2": "● Elastic v2",
         "badge3": "v1.x"
       }
     },

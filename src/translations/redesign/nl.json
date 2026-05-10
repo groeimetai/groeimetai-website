@@ -110,12 +110,12 @@
       "title": "Geen testimonials.",
       "titleAccent": "Wel code die anderen herbruiken.",
       "body": "Architecten draaien Serac — onze open source toolkit voor agents — in productie zonder dat we ze ooit gesproken hebben. Dat is de proof. Bekijk de code, fork hem, of bouw erop verder.",
-      "cardOwner": "groeimetai/",
+      "cardOwner": "serac-labs/",
       "cardRepo": "serac",
-      "cardLicense": "MIT",
+      "cardLicense": "Elastic v2",
       "cardDesc": "Agent framework voor ServiceNow flows. Tool calls, audit log, menselijke approval-stap waar het ertoe doet.",
       "cardBadge1": "★ TypeScript",
-      "cardBadge2": "● MIT",
+      "cardBadge2": "● Elastic v2",
       "cardBadge3": "v1.x in productie",
       "cta": "Bekijk Serac op GitHub"
     },
@@ -350,10 +350,10 @@
         "title": "Serac: agent-framework voor ServiceNow",
         "role": "Eigen product",
         "summary": "Onze eigen toolkit voor agents die ServiceNow flows orchestreren. Begonnen als klantwerk, daarna open source gemaakt.",
-        "stack": ["TypeScript", "ServiceNow REST", "Anthropic SDK", "MIT"],
+        "stack": ["TypeScript", "ServiceNow REST", "Anthropic SDK", "Elastic v2"],
         "outcomes": [
-          { "num": "OSS", "label": "MIT licentie" },
-          { "num": "GitHub", "label": "groeimetai/serac" },
+          { "num": "OSS", "label": "Elastic v2 licentie" },
+          { "num": "GitHub", "label": "serac-labs/serac" },
           { "num": "v1.x", "label": "in productie" }
         ],
         "why": "Omdat we vinden dat klanten geen vendor lock-in mogen krijgen op iets wat hun eigen processen automatiseert."
@@ -416,7 +416,7 @@
       "para1Em3": "begrijpen wat je bouwt",
       "para1Post": ".",
       "para2": "Daarom is GroeimetAI bewust klein. Geen funnel, geen pipeline. Wel persoonlijk werk met teams die echt iets willen veranderen — en die snappen dat dat tijd kost.",
-      "para3": "Naast klantwerk maak ik open source. Serac is daar het meest zichtbare voorbeeld van: een agent-framework voor ServiceNow, dat ik begon voor één klant en daarna onder MIT op GitHub heb gezet. Want als ik klanten geen lock-in beloof, moet ik dat zelf ook waarmaken.",
+      "para3": "Naast klantwerk maak ik open source. Serac is daar het meest zichtbare voorbeeld van: een agent-framework voor ServiceNow, dat ik begon voor één klant en daarna onder Elastic v2 op GitHub heb gezet. Want als ik klanten geen lock-in beloof, moet ik dat zelf ook waarmaken.",
       "signatureName": "Niels van der Werf",
       "signatureRole": "Founder · GroeimetAI",
       "portraitPlaceholder": "[ portret van Niels ]"
@@ -460,12 +460,12 @@
       "lead": "Niet uit ideologie — uit principe. Als wij klanten beloven: geen lock-in, dan moet wat wij bouwen óók weg te halen zijn.",
       "ghLabel": "github.com/GroeimetAI",
       "card": {
-        "owner": "groeimetai/",
+        "owner": "serac-labs/",
         "repo": "serac",
-        "license": "MIT",
+        "license": "Elastic v2",
         "desc": "Agent framework voor ServiceNow. Orchestreert flows met tool calls, audit log en menselijke approval-stap waar nodig.",
         "badge1": "★ TypeScript",
-        "badge2": "● MIT",
+        "badge2": "● Elastic v2",
         "badge3": "v1.x"
       }
     },
