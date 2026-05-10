@@ -106,6 +106,16 @@ jobs:
             NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }}
             NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
 
+      - name: Clear stale Cloud Run secret bindings
+        # Some env vars (notably SMTP_PASS) were once attached as secret
+        # references via the Console; this step strips those bindings so
+        # the deploy can set them as plain env vars without a type conflict.
+        run: |
+          gcloud run services update ${{ env.SERVICE }} \
+            --region ${{ env.REGION }} \
+            --remove-secrets=SMTP_PASS,SMTP_USER,SMTP_HOST,SMTP_PORT,FIREBASE_PRIVATE_KEY,GEMINI_API_KEY,OPENAI_API_KEY,PINECONE_API_KEY \
+            || echo "no stale secret bindings to clear"
+
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ env.SERVICE }} \
