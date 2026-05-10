@@ -1,6 +1,10 @@
 /**
- * Tool Definitions for Anthropic Claude Function Calling
- * These schemas define what tools the agent can use
+ * Tool definitions for the site-assistant.
+ *
+ * The assistant follows the meta-agent pattern: its knowledge lives in
+ * markdown files inside `src/agents/site-assistant/knowledge/` and it
+ * reads those files via two file-system tools rather than relying on
+ * hard-coded static answers.
  */
 
 import Anthropic from '@anthropic-ai/sdk';
@@ -8,104 +12,85 @@ import Anthropic from '@anthropic-ai/sdk';
 type Tool = Anthropic.Tool;
 
 /**
- * Get user's projects from Firestore
- * Requires authentication
+ * List every available knowledge markdown file with a short summary.
+ * Always available, no auth required.
+ */
+export const listKnowledgeTool: Tool = {
+  name: 'listKnowledge',
+  description:
+    'Geeft een lijst van alle knowledge-bestanden waar de site-assistent uit kan putten, elk met een korte beschrijving. Gebruik dit altijd vóór readKnowledge zodat je weet welk bestand het meest relevant is. / Lists every knowledge markdown file the site assistant can read, each with a short summary. Use this first to pick the right file before readKnowledge.',
+  input_schema: {
+    type: 'object' as const,
+    properties: {},
+  },
+};
+
+/**
+ * Read one knowledge markdown file by path.
+ * Always available, no auth required.
+ */
+export const readKnowledgeTool: Tool = {
+  name: 'readKnowledge',
+  description:
+    'Leest één markdown-bestand uit de knowledge folder. Gebruik dit om concrete content terug te geven in plaats van te raden. Pad-formaat: "knowledge/<bestand>.md". / Reads a single markdown file from the knowledge folder. Use this to ground answers in concrete content instead of guessing. Path format: "knowledge/<file>.md".',
+  input_schema: {
+    type: 'object' as const,
+    properties: {
+      path: {
+        type: 'string',
+        description:
+          'Pad naar het bestand, zoals teruggegeven door listKnowledge. Bijv. "knowledge/trainingen.md". / Path returned by listKnowledge, e.g. "knowledge/trainingen.md".',
+      },
+    },
+    required: ['path'],
+  },
+};
+
+/**
+ * Authenticated-only: get the logged-in user's projects from Firestore.
  */
 export const getProjectsTool: Tool = {
   name: 'getProjects',
   description:
-    'Haal projecten op voor de ingelogde gebruiker. Geeft project status, voortgang, milestones en budget informatie terug. / Get projects for the logged-in user. Returns project status, progress, milestones, and budget information.',
+    'Haal projecten op voor de ingelogde gebruiker. / Get projects for the logged-in user.',
   input_schema: {
     type: 'object' as const,
     properties: {
       status: {
         type: 'string',
-        description:
-          'Filter op project status. Mogelijke waarden: all, active, completed, on_hold, cancelled. / Filter by project status.',
+        description: 'Filter by project status.',
         enum: ['all', 'active', 'completed', 'on_hold', 'cancelled'],
       },
       limit: {
         type: 'number',
-        description:
-          'Maximum aantal projecten om terug te geven (standaard: 5). / Maximum number of projects to return (default: 5).',
+        description: 'Maximum number of projects to return (default: 5).',
       },
     },
   },
 };
 
 /**
- * Get user's AI readiness assessment results
- * Requires authentication
+ * Authenticated-only: get the logged-in user's assessment results.
  */
 export const getAssessmentTool: Tool = {
   name: 'getAssessment',
   description:
-    'Haal de AI-readiness assessment resultaten op voor de gebruiker. Geeft score, niveau en aanbevelingen terug. / Get AI readiness assessment results for the user. Returns score, level, and recommendations.',
+    'Haal de assessment-resultaten op voor de ingelogde gebruiker. / Get assessment results for the logged-in user.',
   input_schema: {
     type: 'object' as const,
     properties: {},
   },
 };
 
-/**
- * Get information about GroeimetAI services
- * Available to all users (including guests)
- */
-export const getServiceInfoTool: Tool = {
-  name: 'getServiceInfo',
-  description:
-    'Haal informatie op over GroeimetAI diensten zoals GenAI implementatie, ServiceNow integratie, Multi-agent orchestration, RAG architectuur. / Get information about GroeimetAI services like GenAI implementation, ServiceNow integration, Multi-agent orchestration, RAG architecture.',
-  input_schema: {
-    type: 'object' as const,
-    properties: {
-      service: {
-        type: 'string',
-        description:
-          'Specifieke dienst om informatie over op te halen. / Specific service to get information about.',
-        enum: ['all', 'genai', 'servicenow', 'multi-agent', 'rag', 'custom'],
-      },
-    },
-  },
-};
+/** Tools available to guests (anyone visiting the public site). */
+export const guestTools: Tool[] = [listKnowledgeTool, readKnowledgeTool];
 
-/**
- * Get contact information for GroeimetAI
- * Available to all users (including guests)
- */
-export const getContactInfoTool: Tool = {
-  name: 'getContactInfo',
-  description:
-    'Haal contactgegevens op voor GroeimetAI inclusief email, telefoon en afspraak links. / Get contact information for GroeimetAI including email, phone, and booking links.',
-  input_schema: {
-    type: 'object' as const,
-    properties: {},
-  },
-};
-
-/**
- * All available tools for the agent
- */
-export const allTools: Tool[] = [
-  getProjectsTool,
-  getAssessmentTool,
-  getServiceInfoTool,
-  getContactInfoTool,
-];
-
-/**
- * Tools available to authenticated users only
- */
+/** Tools available to authenticated admin/team-members. */
 export const authenticatedTools: Tool[] = [
+  ...guestTools,
   getProjectsTool,
   getAssessmentTool,
-  getServiceInfoTool,
-  getContactInfoTool,
 ];
 
-/**
- * Tools available to guests (unauthenticated users)
- */
-export const guestTools: Tool[] = [
-  getServiceInfoTool,
-  getContactInfoTool,
-];
+/** Every tool, for completeness. */
+export const allTools: Tool[] = authenticatedTools;

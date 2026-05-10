@@ -87,33 +87,23 @@ export async function createAgentContext(
 }
 
 /**
- * Check if user is authorized to access a specific tool
+ * Check if user is authorized to access a specific tool.
+ *
+ * The site-assistant follows the meta-agent pattern: its public tools
+ * are file-system reads (listKnowledge / readKnowledge). Authenticated
+ * admin sessions get extra Firestore tools.
  */
 export function isAuthorizedForTool(
   toolName: string,
   context: AgentContext
 ): boolean {
-  // Tools that require authentication
-  const authRequiredTools = [
-    'getProjects',
-    'getAssessment',
-  ];
+  const publicTools = ['listKnowledge', 'readKnowledge'];
+  const authRequiredTools = ['getProjects', 'getAssessment'];
 
-  // Tools available to everyone
-  const publicTools = [
-    'getServiceInfo',
-    'getContactInfo',
-  ];
-
-  if (publicTools.includes(toolName)) {
-    return true;
-  }
-
+  if (publicTools.includes(toolName)) return true;
   if (authRequiredTools.includes(toolName)) {
     return context.isAuthenticated && !!context.userId;
   }
-
-  // Unknown tool - deny by default
   return false;
 }
 
@@ -121,11 +111,9 @@ export function isAuthorizedForTool(
  * Get available tools based on authentication status
  */
 export function getAvailableTools(context: AgentContext): string[] {
-  const publicTools = ['getServiceInfo', 'getContactInfo'];
-
+  const publicTools = ['listKnowledge', 'readKnowledge'];
   if (context.isAuthenticated) {
     return [...publicTools, 'getProjects', 'getAssessment'];
   }
-
   return publicTools;
 }

@@ -2,16 +2,11 @@
 
 import { useState } from 'react';
 import { Link } from '@/i18n/routing';
-import { useRouter } from '@/i18n/routing';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
-import { Mail, ArrowRight, ArrowLeft, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
+import { Btn } from '@/components/ds/Btn';
+import { IconArrow, IconCheck, IconMail } from '@/components/ds/icons';
 
 export default function ForgotPasswordPage() {
-  const router = useRouter();
   const { resetPassword } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -22,18 +17,17 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-
     try {
       await resetPassword(email);
       setIsSuccess(true);
-    } catch (error: any) {
-      console.error('Password reset failed:', error);
-      if (error.code === 'auth/user-not-found') {
-        setError('No account found with this email address.');
-      } else if (error.code === 'auth/invalid-email') {
-        setError('Please enter a valid email address.');
+    } catch (err: any) {
+      console.error('Password reset failed:', err);
+      if (err.code === 'auth/user-not-found') {
+        setError('Geen account gevonden bij dit e-mailadres.');
+      } else if (err.code === 'auth/invalid-email') {
+        setError('Ongeldig e-mailadres.');
       } else {
-        setError('An error occurred. Please try again.');
+        setError('Er ging iets mis. Probeer het opnieuw.');
       }
     } finally {
       setIsLoading(false);
@@ -41,118 +35,147 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4 py-12 relative" style={{ backgroundColor: '#080D14' }}>
-      {/* Subtle section divider */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+    <div className="ds">
+      <main
+        style={{
+          minHeight: 'calc(100vh - 64px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '64px 24px',
+          background: 'var(--bg)',
+        }}
+      >
+        <div style={{ width: '100%', maxWidth: 440 }}>
+          <Link
+            href="/login"
+            className="mono"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              fontSize: 12,
+              color: 'var(--fg-mute)',
+              marginBottom: 28,
+            }}
+          >
+            <span style={{ display: 'inline-block', transform: 'rotate(180deg)' }}>
+              <IconArrow size={12} />
+            </span>
+            Terug naar inloggen
+          </Link>
 
-      <div className="w-full max-w-md mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="bg-white/[0.03] backdrop-blur-sm rounded-2xl p-8 border border-white/10"
-        >
-          {!isSuccess ? (
-            <>
-              <div className="mb-8">
-                <Link
-                  href="/login"
-                  className="inline-flex items-center text-white/60 hover:text-[#ff7a3d] mb-6 transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to login
-                </Link>
-                <h1 className="text-3xl font-bold text-white mb-2 tracking-[-0.02em]">Forgot Password?</h1>
-                <p className="text-white/60">No worries, we&apos;ll send you reset instructions.</p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {error && (
-                  <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 flex items-start space-x-3">
-                    <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-red-500">{error}</p>
-                  </div>
-                )}
-
-                <div>
-                  <Label htmlFor="email" className="text-white">
-                    Email Address
-                  </Label>
-                  <div className="relative mt-1">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/50" />
-                    <Input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="pl-10 bg-white/[0.03] border-white/10 text-white placeholder:text-white/40 focus:border-[#ff7a3d] focus:ring-[#ff7a3d]/20"
-                      placeholder="you@company.com"
-                      required
-                    />
-                  </div>
+          <div className="card" style={{ padding: 32 }}>
+            {!isSuccess ? (
+              <>
+                <div className="mono" style={{ fontSize: 11, color: 'var(--fg-mute)', letterSpacing: '0.06em', marginBottom: 8 }}>
+                  WACHTWOORD VERGETEN
                 </div>
+                <h1 style={{ fontSize: 28, marginBottom: 6 }}>Reset je wachtwoord</h1>
+                <p style={{ fontSize: 14, color: 'var(--fg-dim)', marginBottom: 28 }}>
+                  Vul je e-mailadres in. Je krijgt een link om je wachtwoord opnieuw in te stellen.
+                </p>
 
-                <Button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full text-white py-6 text-lg font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                <form onSubmit={handleSubmit} className="contact-form">
+                  {error && (
+                    <div
+                      style={{
+                        padding: '12px 14px',
+                        background: 'rgba(255,90,31,0.08)',
+                        border: '1px solid rgba(255,90,31,0.4)',
+                        borderRadius: 8,
+                        color: 'var(--accent-hot)',
+                        fontSize: 13,
+                      }}
+                    >
+                      {error}
+                    </div>
+                  )}
+
+                  <div>
+                    <label htmlFor="email">E-mailadres</label>
+                    <div style={{ position: 'relative' }}>
+                      <span
+                        style={{
+                          position: 'absolute',
+                          left: 12,
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          color: 'var(--fg-mute)',
+                        }}
+                      >
+                        <IconMail size={16} />
+                      </span>
+                      <input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="naam@bedrijf.nl"
+                        required
+                        style={{ paddingLeft: 38 }}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ marginTop: 8 }}>
+                    <Btn variant="primary" type="submit" disabled={isLoading} style={{ width: '100%' }}>
+                      {isLoading ? 'Versturen…' : 'Verstuur reset-link'}
+                      {!isLoading && <IconArrow size={14} />}
+                    </Btn>
+                  </div>
+                </form>
+              </>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '8px 0' }}>
+                <div
                   style={{
-                    background: 'linear-gradient(135deg, #ff5a1f 0%, #ff7a3d 100%)',
-                    boxShadow: '0 4px 20px -4px rgba(255, 90, 31, 0.5)'
+                    width: 64,
+                    height: 64,
+                    borderRadius: '50%',
+                    background: 'rgba(255,90,31,0.12)',
+                    color: 'var(--accent)',
+                    display: 'grid',
+                    placeItems: 'center',
+                    margin: '0 auto 24px',
                   }}
                 >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Sending...
-                    </>
-                  ) : (
-                    <>
-                      Reset Password
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </>
-                  )}
-                </Button>
-              </form>
-            </>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-              className="text-center py-8"
-            >
-              <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-                style={{ background: 'linear-gradient(135deg, #10B981 0%, #34D399 100%)' }}
-              >
-                <CheckCircle className="w-8 h-8 text-white" />
+                  <IconCheck size={28} />
+                </div>
+                <h1 style={{ fontSize: 22, marginBottom: 8 }}>Mail onderweg</h1>
+                <p style={{ fontSize: 14, color: 'var(--fg-dim)', maxWidth: '32ch', margin: '0 auto 24px' }}>
+                  We hebben de reset-link gestuurd naar
+                  <br />
+                  <strong style={{ color: 'var(--fg)' }}>{email}</strong>.
+                </p>
+                <Link href="/login">
+                  <Btn variant="ghost" type="button">
+                    Terug naar inloggen
+                  </Btn>
+                </Link>
+                <p style={{ fontSize: 12, color: 'var(--fg-mute)', marginTop: 20 }}>
+                  Niets ontvangen? Check je spam-folder, of{' '}
+                  <button
+                    type="button"
+                    onClick={() => setIsSuccess(false)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: 0,
+                      color: 'var(--accent)',
+                      cursor: 'pointer',
+                      borderBottom: '1px dashed currentColor',
+                    }}
+                  >
+                    probeer het opnieuw
+                  </button>
+                  .
+                </p>
               </div>
-              <h2 className="text-2xl font-bold text-white mb-2 tracking-[-0.02em]">Check your email</h2>
-              <p className="text-white/60 mb-6">
-                We&apos;ve sent password reset instructions to:
-                <br />
-                <span className="text-white font-medium">{email}</span>
-              </p>
-              <Link href="/login">
-                <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to login
-                </Button>
-              </Link>
-              <p className="text-sm text-white/40 mt-6">
-                Didn&apos;t receive the email? Check your spam folder or{' '}
-                <button
-                  onClick={() => setIsSuccess(false)}
-                  className="text-[#ff7a3d] hover:text-[#ff7a3d]/80 transition-colors underline"
-                >
-                  try again
-                </button>
-              </p>
-            </motion.div>
-          )}
-        </motion.div>
-      </div>
-    </main>
+            )}
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }

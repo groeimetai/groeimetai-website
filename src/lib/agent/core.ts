@@ -91,8 +91,8 @@ export async function runAgent(
     // Get tools based on authentication status
     const tools = context.isAuthenticated ? authenticatedTools : guestTools;
 
-    // Build system prompt
-    const systemPrompt = getSystemPrompt(context);
+    // Build system prompt (now loaded from CLAUDE.md on disk)
+    const systemPrompt = await getSystemPrompt(context);
 
     // Build messages array
     const messages: Anthropic.MessageParam[] = [
@@ -223,7 +223,7 @@ export async function runSimpleAgent(
   history: ConversationMessage[] = []
 ): Promise<AgentResponse> {
   try {
-    const systemPrompt = getSystemPrompt(context);
+    const systemPrompt = await getSystemPrompt(context);
 
     const response = await anthropic.messages.create({
       model: MODEL,

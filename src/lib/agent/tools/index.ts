@@ -1,43 +1,34 @@
 /**
- * Tools Index
- * Central registry for all agent tools
+ * Tool registry for the site-assistant.
  */
 
 import type { AgentContext, ToolResult } from '../types';
 import { executeGetProjects, executeGetAssessment } from './firestore';
-import { executeGetServiceInfo, executeGetContactInfo } from './static';
+import { executeListKnowledge, executeReadKnowledge } from './knowledge';
 import { isAuthorizedForTool } from '../security';
 
-// Re-export tool definitions
 export { allTools, authenticatedTools, guestTools } from './definitions';
+export { readClaudeMd } from './knowledge';
 
-/**
- * Tool executor function type
- */
 type ToolExecutor = (
   args: Record<string, unknown>,
   context: AgentContext
 ) => Promise<ToolResult>;
 
-/**
- * Registry mapping tool names to their executors
- */
 const toolRegistry: Record<string, ToolExecutor> = {
+  // File-system tools — available to everyone.
+  listKnowledge: executeListKnowledge,
+  readKnowledge: executeReadKnowledge,
+  // Authenticated-only Firestore tools.
   getProjects: executeGetProjects,
   getAssessment: executeGetAssessment,
-  getServiceInfo: executeGetServiceInfo,
-  getContactInfo: executeGetContactInfo,
 };
 
-/**
- * Execute a tool by name
- */
 export async function executeTool(
   toolName: string,
   args: Record<string, unknown>,
   context: AgentContext
 ): Promise<ToolResult> {
-  // Check authorization
   if (!isAuthorizedForTool(toolName, context)) {
     return {
       success: false,
@@ -48,7 +39,6 @@ export async function executeTool(
     };
   }
 
-  // Get executor
   const executor = toolRegistry[toolName];
   if (!executor) {
     return {
@@ -60,7 +50,6 @@ export async function executeTool(
     };
   }
 
-  // Execute tool
   try {
     return await executor(args, context);
   } catch (error) {
