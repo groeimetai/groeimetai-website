@@ -1,106 +1,228 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
-import { IconFolder, IconInstructions, IconTool, IconNotes } from '@/components/ds/icons';
+import { useState } from 'react';
+import { IconFolder, IconNotes } from '@/components/ds/icons';
+
+type Lang = 'md' | 'py' | 'json' | 'txt';
 
 type FileNode = {
-  name: string;
   type: 'file';
+  name: string;
   size: string;
-  lang: string;
-  root?: boolean;
+  lang: Lang;
+  path: string;
 };
 type DirNode = {
-  name: string;
   type: 'dir';
+  name: string;
   open?: boolean;
   children: TreeNode[];
 };
 type TreeNode = FileNode | DirNode;
 
-const folderTree: TreeNode[] = [
+/* The whole agent — one folder. Instructions (CLAUDE.md), knowledge,
+   slash commands (.claude/commands/), tools (mcp-servers/), examples,
+   logs. Same pattern as github.com/groeimetai/meta-agent. */
+const tree: TreeNode[] = [
   {
+    type: 'file',
+    name: 'CLAUDE.md',
+    size: '2.1kb',
+    lang: 'md',
+    path: 'CLAUDE.md',
+  },
+  {
+    type: 'dir',
+    name: '.claude/',
+    open: true,
+    children: [
+      {
+        type: 'dir',
+        name: 'commands/',
+        open: true,
+        children: [
+          {
+            type: 'file',
+            name: 'plan-meeting.md',
+            size: '1.4kb',
+            lang: 'md',
+            path: '.claude/commands/plan-meeting.md',
+          },
+          {
+            type: 'file',
+            name: 'lookup-invoice.md',
+            size: '0.8kb',
+            lang: 'md',
+            path: '.claude/commands/lookup-invoice.md',
+          },
+          {
+            type: 'file',
+            name: 'create-draft.md',
+            size: '2.3kb',
+            lang: 'md',
+            path: '.claude/commands/create-draft.md',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'dir',
     name: 'knowledge/',
-    type: 'dir',
     open: true,
     children: [
-      { name: 'klant-onboarding.md', type: 'file', size: '4.2kb', lang: 'md' },
-      { name: 'tone-of-voice.md', type: 'file', size: '1.1kb', lang: 'md' },
-      { name: 'facturatie-faq.md', type: 'file', size: '8.9kb', lang: 'md' },
-      { name: 'product-specs.json', type: 'file', size: '12kb', lang: 'json' },
+      {
+        type: 'file',
+        name: 'klant-onboarding.md',
+        size: '4.2kb',
+        lang: 'md',
+        path: 'knowledge/klant-onboarding.md',
+      },
+      {
+        type: 'file',
+        name: 'tone-of-voice.md',
+        size: '1.1kb',
+        lang: 'md',
+        path: 'knowledge/tone-of-voice.md',
+      },
+      {
+        type: 'file',
+        name: 'product-specs.json',
+        size: '12kb',
+        lang: 'json',
+        path: 'knowledge/product-specs.json',
+      },
     ],
   },
   {
+    type: 'dir',
     name: 'voorbeelden/',
-    type: 'dir',
-    open: true,
     children: [
-      { name: 'goede-reactie-01.md', type: 'file', size: '2.3kb', lang: 'md' },
-      { name: 'afgewezen-deal.md', type: 'file', size: '1.7kb', lang: 'md' },
+      {
+        type: 'file',
+        name: 'goede-reactie.md',
+        size: '2.3kb',
+        lang: 'md',
+        path: 'voorbeelden/goede-reactie.md',
+      },
+      {
+        type: 'file',
+        name: 'afgewezen-deal.md',
+        size: '1.7kb',
+        lang: 'md',
+        path: 'voorbeelden/afgewezen-deal.md',
+      },
     ],
   },
-  { name: 'context.md', type: 'file', size: '0.8kb', lang: 'md', root: true },
-];
-
-type InstructionLine =
-  | { type: 'comment'; text: string }
-  | { type: 'rule'; text: string }
-  | { type: 'text'; text: string }
-  | { type: 'blank' };
-
-const instructionLines: InstructionLine[] = [
-  { type: 'comment', text: '// SYSTEM PROMPT — AccountAgent v3' },
-  { type: 'blank' },
-  { type: 'text', text: 'Jij bent een account-assistent voor sales engineers.' },
-  { type: 'text', text: 'Antwoord in NL, kort en concreet. Geen marketing-taal.' },
-  { type: 'blank' },
-  { type: 'rule', text: '1. Lees altijd eerst de relevante folder uit knowledge/' },
-  { type: 'rule', text: '2. Twijfel? Vraag door — geen aannames over prijs of scope.' },
-  { type: 'rule', text: '3. Plan-acties altijd via planMeeting() — niet inline beantwoorden.' },
-  { type: 'rule', text: '4. Als de vraag buiten scope valt: escaleer naar Niels.' },
-  { type: 'blank' },
-  { type: 'comment', text: '// edge cases' },
-  { type: 'text', text: 'Bij vragen over facturatie → tool: lookupInvoice()' },
-  { type: 'text', text: 'Bij offerte-aanvraag → tool: createDraft()' },
-];
-
-const tools = [
   {
-    name: 'lookupInvoice',
-    desc: 'Haalt openstaande facturen op uit Exact Online.',
-    params: '(klantId: string)',
-    source: 'exact-online',
+    type: 'dir',
+    name: 'mcp-servers/',
+    open: true,
+    children: [
+      {
+        type: 'dir',
+        name: 'exact-online/',
+        children: [
+          {
+            type: 'file',
+            name: 'server.py',
+            size: '3.2kb',
+            lang: 'py',
+            path: 'mcp-servers/exact-online/server.py',
+          },
+          {
+            type: 'file',
+            name: 'requirements.txt',
+            size: '0.1kb',
+            lang: 'txt',
+            path: 'mcp-servers/exact-online/requirements.txt',
+          },
+        ],
+      },
+      {
+        type: 'dir',
+        name: 'google-calendar/',
+        children: [
+          {
+            type: 'file',
+            name: 'server.py',
+            size: '4.1kb',
+            lang: 'py',
+            path: 'mcp-servers/google-calendar/server.py',
+          },
+        ],
+      },
+    ],
   },
   {
-    name: 'planMeeting',
-    desc: 'Boekt een slot in Niels’ agenda met confirmatie-mail.',
-    params: '(slot: ISODate, met: string)',
-    source: 'google-calendar',
-  },
-  {
-    name: 'createDraft',
-    desc: 'Genereert een offerte-concept op basis van scope.',
-    params: '(scope: Scope)',
-    source: 'internal',
-  },
-  {
-    name: 'searchSlack',
-    desc: 'Doorzoekt #klanten kanaal naar eerdere context.',
-    params: '(query: string)',
-    source: 'slack',
+    type: 'dir',
+    name: 'logs/',
+    children: [
+      {
+        type: 'dir',
+        name: 'conversations/',
+        children: [
+          {
+            type: 'file',
+            name: '2026-05-09-offerte-acme.md',
+            size: '3.4kb',
+            lang: 'md',
+            path: 'logs/conversations/2026-05-09-offerte-acme.md',
+          },
+        ],
+      },
+    ],
   },
 ];
 
 const fileSamples: Record<string, string[]> = {
-  'tone-of-voice.md': [
-    '# Tone of Voice',
+  'CLAUDE.md': [
+    '# AccountAgent v3',
     '',
-    "- Direct. Geen 'wij geloven dat'.",
-    '- Nederlands, met Engelse tech-termen waar nodig.',
-    '- Voorbeelden boven beweringen.',
-    "- Geen emoji's in zakelijke mail.",
+    'Jij bent een account-assistent voor sales engineers.',
+    'Antwoord in NL, kort en concreet. Geen marketing-taal.',
+    '',
+    '## Regels',
+    '1. Lees altijd eerst de relevante folder uit knowledge/',
+    '2. Twijfel? Vraag door — geen aannames over prijs of scope.',
+    '3. Plan-acties via planMeeting() — niet inline beantwoorden.',
+    '4. Buiten scope? Escaleer naar Niels.',
+    '',
+    '## Tools',
+    '- mcp-servers/exact-online (lookupInvoice)',
+    '- mcp-servers/google-calendar (planMeeting)',
   ],
-  'klant-onboarding.md': [
+  '.claude/commands/plan-meeting.md': [
+    '# /plan-meeting',
+    '',
+    'Boek een slot in de agenda.',
+    '',
+    '## Stappen',
+    '1. Vraag de gewenste datum/tijd.',
+    '2. Roep tool `planMeeting(slot, met)` aan.',
+    '3. Bevestig in NL.',
+  ],
+  '.claude/commands/lookup-invoice.md': [
+    '# /lookup-invoice',
+    '',
+    'Zoek een factuur op uit Exact Online.',
+    '',
+    '## Stappen',
+    '1. Vraag klant-id of factuurnummer.',
+    '2. Roep tool `lookupInvoice(klantId)` aan.',
+    '3. Geef status en bedrag terug.',
+  ],
+  '.claude/commands/create-draft.md': [
+    '# /create-draft',
+    '',
+    'Genereer een offerte-concept op basis van scope.',
+    '',
+    '## Stappen',
+    '1. Lees voorbeelden/goede-reactie.md.',
+    '2. Roep tool `createDraft(scope)` aan.',
+    '3. Lever het concept op voor review.',
+  ],
+  'knowledge/klant-onboarding.md': [
     '# Onboarding stappen',
     '',
     '1. Kickoff binnen 5 werkdagen.',
@@ -108,16 +230,15 @@ const fileSamples: Record<string, string[]> = {
     '3. Eerste pilot live binnen 3 weken.',
     '4. Wekelijkse check-ins met team.',
   ],
-  'facturatie-faq.md': [
-    '# Facturatie FAQ',
+  'knowledge/tone-of-voice.md': [
+    '# Tone of Voice',
     '',
-    '## Wanneer wordt er gefactureerd?',
-    'Maandelijks achteraf, op de 1e.',
-    '',
-    '## Welke betaaltermijn?',
-    '14 dagen netto.',
+    "- Direct. Geen 'wij geloven dat'.",
+    '- Nederlands, met Engelse tech-termen waar nodig.',
+    '- Voorbeelden boven beweringen.',
+    "- Geen emoji's in zakelijke mail.",
   ],
-  'product-specs.json': [
+  'knowledge/product-specs.json': [
     '{',
     '  "model": "sonnet-4",',
     '  "context_window": 200000,',
@@ -125,7 +246,7 @@ const fileSamples: Record<string, string[]> = {
     '  "temperature": 0.2',
     '}',
   ],
-  'goede-reactie-01.md': [
+  'voorbeelden/goede-reactie.md': [
     '# Voorbeeld: goede reactie',
     '',
     "Vraag: 'Kunnen we dit ook zonder Microsoft?'",
@@ -134,32 +255,58 @@ const fileSamples: Record<string, string[]> = {
     'maar we kunnen Azure of self-hosted leveren.',
     "Wat is voor jullie de doorslag?'",
   ],
-  'afgewezen-deal.md': [
+  'voorbeelden/afgewezen-deal.md': [
     '# Waarom we deze deal lieten lopen',
     '',
     '- Scope onhelder na 3 calls.',
     "- Klant wilde 'agent' zonder use case.",
     '- Geen eigenaar binnen org.',
   ],
-  'context.md': [
-    '# Bedrijfscontext',
+  'mcp-servers/exact-online/server.py': [
+    '# Exact Online MCP server',
+    'from mcp.server import Server',
+    'import os',
     '',
-    'GroeimetAI helpt teams AI nuchter inzetten.',
-    'Doelgroep: MKB tot enterprise, NL.',
-    'Niels van der Werf is contactpersoon.',
+    'app = Server("exact-online")',
+    '',
+    '@app.tool()',
+    'def lookupInvoice(klantId: str) -> dict:',
+    '    """Haalt openstaande facturen op."""',
+    '    token = os.environ["EXACT_TOKEN"]',
+    '    # ...request to Exact API',
+    '    return {"open": 2, "totaal": 1840.00}',
+  ],
+  'mcp-servers/exact-online/requirements.txt': [
+    'mcp>=1.0',
+    'httpx>=0.27',
+  ],
+  'mcp-servers/google-calendar/server.py': [
+    '# Google Calendar MCP server',
+    'from mcp.server import Server',
+    'from datetime import datetime',
+    '',
+    'app = Server("google-calendar")',
+    '',
+    '@app.tool()',
+    'def planMeeting(slot: datetime, met: str) -> dict:',
+    '    """Boekt een slot + verstuurt invite."""',
+    '    # ...calendar API call',
+    '    return {"event_id": "abc", "status": "booked"}',
+  ],
+  'logs/conversations/2026-05-09-offerte-acme.md': [
+    '# 2026-05-09 — Offerte ACME',
+    '',
+    '## Samenvatting',
+    '- Klant: ACME',
+    '- Scope: pilot agent voor service desk',
+    '- Eigenaar: Sander',
+    '',
+    '## Acties',
+    '- [ ] Volg op met klant binnen week 21',
   ],
 };
 
-type TabId = 'folders' | 'instructions' | 'tools';
-
-const TABS: { id: TabId; label: string; Glyph: typeof IconFolder; count: number }[] = [
-  { id: 'folders', label: 'Folders', Glyph: IconFolder, count: 12 },
-  { id: 'instructions', label: 'Instructies', Glyph: IconInstructions, count: 1 },
-  { id: 'tools', label: 'Tools', Glyph: IconTool, count: 4 },
-];
-
 export function AgentAnatomy() {
-  const [active, setActive] = useState<TabId>('folders');
   const [openFile, setOpenFile] = useState<FileNode | null>(null);
 
   return (
@@ -177,90 +324,35 @@ export function AgentAnatomy() {
         </div>
       </div>
 
-      <div className="anatomy-tabs">
-        {TABS.map((t) => {
-          const G = t.Glyph;
-          return (
-            <button
-              key={t.id}
-              className={'anatomy-tab ' + (active === t.id ? 'is-active' : '')}
-              onClick={() => setActive(t.id)}
-            >
-              <span className="anatomy-tab-glyph">
-                <G size={15} />
-              </span>
-              <span>{t.label}</span>
-              <span className="anatomy-tab-count mono">{t.count}</span>
-            </button>
-          );
-        })}
-      </div>
-
       <div className="anatomy-body">
-        {active === 'folders' && (
-          <div className="anatomy-folders">
-            <div className="anatomy-tree">
-              {folderTree.map((node, i) => (
-                <FolderNode key={i} node={node} onOpen={setOpenFile} openFile={openFile} />
-              ))}
-            </div>
-            <div className="anatomy-preview">
-              {openFile ? (
-                <FilePreview file={openFile} />
-              ) : (
-                <div className="anatomy-empty">
-                  <div className="mono" style={{ fontSize: 11, color: 'var(--fg-mute)', marginBottom: 12 }}>
-                    // preview
-                  </div>
-                  <div style={{ color: 'var(--fg-dim)', fontSize: 14, lineHeight: 1.6 }}>
-                    Klik op een bestand links. Dit is wat de agent <em>weet</em>: jouw eigen documentatie, tone of voice,
-                    voorbeelden. Geen vage trainingsdata.
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {active === 'instructions' && (
-          <div className="anatomy-instructions">
-            <div className="anatomy-lineno mono">
-              {instructionLines.map((_, i) => (
-                <div key={i}>{(i + 1).toString().padStart(2, '0')}</div>
-              ))}
-            </div>
-            <pre className="anatomy-code">
-              {instructionLines.map((line, i) => (
-                <div key={i} className={'line line-' + line.type}>
-                  {line.type === 'blank' ? ' ' : line.text}
-                </div>
-              ))}
-            </pre>
-          </div>
-        )}
-
-        {active === 'tools' && (
-          <div className="anatomy-tools">
-            {tools.map((t, i) => (
-              <div className="anatomy-tool" key={i} style={{ animationDelay: i * 60 + 'ms' }}>
-                <div className="anatomy-tool-head">
-                  <span className="anatomy-tool-name mono">
-                    {t.name}
-                    <span className="anatomy-tool-params">{t.params}</span>
-                  </span>
-                  <span className="anatomy-tool-source mono">{t.source}</span>
-                </div>
-                <div className="anatomy-tool-desc">{t.desc}</div>
-              </div>
+        <div className="anatomy-folders">
+          <div className="anatomy-tree">
+            {tree.map((node, i) => (
+              <FolderNode key={i} node={node} onOpen={setOpenFile} openFile={openFile} />
             ))}
           </div>
-        )}
+          <div className="anatomy-preview">
+            {openFile ? (
+              <FilePreview file={openFile} />
+            ) : (
+              <div className="anatomy-empty">
+                <div className="mono" style={{ fontSize: 11, color: 'var(--fg-mute)', marginBottom: 12 }}>
+                  // preview
+                </div>
+                <div style={{ color: 'var(--fg-dim)', fontSize: 14, lineHeight: 1.6 }}>
+                  Een agent is één map. <em>CLAUDE.md</em> is de instructie, <em>knowledge/</em> is wat hij weet,{' '}
+                  <em>mcp-servers/</em> zijn de tools. Klik een bestand om te kijken.
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="anatomy-foot mono">
         <span>$ agent.invoke()</span>
         <span className="anatomy-foot-spacer">→</span>
-        <span style={{ color: 'var(--accent)' }}>1 antwoord, geen hallucinatie.</span>
+        <span style={{ color: 'var(--accent)' }}>1 map. 1 antwoord. Geen black box.</span>
       </div>
     </div>
   );
@@ -278,7 +370,7 @@ function FolderNode({
   openFile: FileNode | null;
 }) {
   const [open, setOpen] = useState(node.type === 'dir' ? node.open !== false : false);
-  const isActive = openFile?.name === node.name;
+  const isActive = openFile && node.type === 'file' && openFile.path === node.path;
 
   if (node.type === 'dir') {
     return (
@@ -321,6 +413,14 @@ function FolderNode({
           <span className="mono" style={{ fontSize: 10 }}>
             {'{ }'}
           </span>
+        ) : node.lang === 'py' ? (
+          <span className="mono" style={{ fontSize: 10, color: 'var(--accent-hot)' }}>
+            py
+          </span>
+        ) : node.lang === 'txt' ? (
+          <span className="mono" style={{ fontSize: 10 }}>
+            txt
+          </span>
         ) : (
           <IconNotes size={13} />
         )}
@@ -332,18 +432,18 @@ function FolderNode({
 }
 
 function FilePreview({ file }: { file: FileNode }) {
-  const lines = fileSamples[file.name] ?? ['// no preview available'];
+  const lines = fileSamples[file.path] ?? ['// no preview available'];
   return (
     <div className="file-preview">
-      <div className="file-preview-head mono">{file.name}</div>
+      <div className="file-preview-head mono">{file.path}</div>
       <pre className="file-preview-body mono">
         {lines.map((l, i) => (
           <div
             key={i}
-            className={'fp-line ' + (l.startsWith('#') ? 'fp-h' : l.startsWith('//') ? 'fp-c' : '')}
+            className={'fp-line ' + (l.startsWith('#') ? 'fp-h' : l.startsWith('//') || l.startsWith('# ') ? 'fp-c' : '')}
           >
             <span className="fp-ln">{(i + 1).toString().padStart(2, '0')}</span>
-            <span>{l || ' '}</span>
+            <span>{l || ' '}</span>
           </div>
         ))}
       </pre>
