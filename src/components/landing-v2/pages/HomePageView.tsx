@@ -57,10 +57,12 @@ export function HomePageView({ basePath }: { basePath: string }) {
         </div>
       </section>
 
-      <section className="section tight" style={{ paddingTop: 24, paddingBottom: 32 }}>
-        <div className="container">
-          <div className="divider-mono">{t('logoBarLabel')}</div>
-          <LogoBar />
+      <section className="section tight" style={{ paddingTop: 48, paddingBottom: 64 }}>
+        <div className="container" style={{ textAlign: 'center' }}>
+          <Eyebrow>{t('logoBarLabel')}</Eyebrow>
+          <div style={{ marginTop: 28 }}>
+            <LogoBar />
+          </div>
         </div>
       </section>
 
