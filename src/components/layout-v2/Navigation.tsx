@@ -58,7 +58,7 @@ export function Navigation({ basePath = '' }: { basePath?: string }) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="nav-brand-icon"
-            src="/gecentreerd-logo-dark.svg"
+            src="/gecentreerd-logo.svg"
             alt="GroeimetAI"
             height={32}
             width={32}
