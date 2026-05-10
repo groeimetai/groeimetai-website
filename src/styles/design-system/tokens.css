@@ -22,10 +22,8 @@
   --ink-dim: #52525b;
   --ink-mute: #8a8580;
 
-  --accent: #ff5a1f;
-  --accent-hot: #ff7a3d;
-  --accent-deep: #b8340a;
-  --accent-soft: #ffd9c2;
+  /* Note: --accent and family are scoped to .ds (see below) to avoid
+     colliding with shadcn's --accent (HSL space) used by admin pages. */
 
   --good: #6ee7b7;
   --warn: #fbbf24;
@@ -47,4 +45,13 @@
 
   /* Motion */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* DS-scoped accent tokens — color literals, not HSL components.
+   shadcn keeps its own --accent on :root for admin/dashboard. */
+.ds {
+  --accent: #ff5a1f;
+  --accent-hot: #ff7a3d;
+  --accent-deep: #b8340a;
+  --accent-soft: #ffd9c2;
 }

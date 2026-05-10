@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Btn } from '@/components/ds/Btn';
-import { LogoMark, IconArrow, IconGithub } from '@/components/ds/icons';
+import { IconArrow, IconGithub } from '@/components/ds/icons';
 
 export function Navigation({ basePath = '' }: { basePath?: string }) {
   const pathname = usePathname() ?? '';
@@ -29,9 +29,14 @@ export function Navigation({ basePath = '' }: { basePath?: string }) {
   return (
     <nav className="nav">
       <div className="nav-inner">
-        <Link href={basePath || '/'} className="nav-brand" style={{ cursor: 'pointer' }}>
-          <LogoMark size={32} />
-          <span>GroeimetAI</span>
+        <Link href={basePath || '/'} className="nav-brand" aria-label="GroeimetAI">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/groeimet-ai-logo.svg"
+            alt="GroeimetAI"
+            height={28}
+            style={{ height: 28, width: 'auto' }}
+          />
         </Link>
         <div className="nav-links">
           {items.map((n) => (

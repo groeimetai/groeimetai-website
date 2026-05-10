@@ -1,26 +1,23 @@
-const DEFAULT_LOGOS = [
-  "Brouwerij 't IJ",
-  'MKB Nederland',
-  'TNO',
-  'Coolblue',
-  'Bever',
-  'Schiphol Group',
-  'Achmea',
-  'Rabobank',
-  'Picnic',
-  'Bol',
-];
+const DEFAULT_LOGOS = ['ABN AMRO', 'NS', 'DIM Haarlem', 'MediaMarkt'];
 
 export function LogoBar({ logos = DEFAULT_LOGOS }: { logos?: string[] }) {
+  // Static row (no marquee) — better readable when there are only a handful of names.
   return (
-    <div className="marquee">
-      <div className="marquee-track">
-        {[...logos, ...logos].map((l, i) => (
-          <div key={i} className="logo-text">
-            {l}
-          </div>
-        ))}
-      </div>
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        gap: 48,
+        rowGap: 16,
+      }}
+    >
+      {logos.map((l, i) => (
+        <div key={i} className="logo-text">
+          {l}
+        </div>
+      ))}
     </div>
   );
 }

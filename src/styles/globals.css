@@ -1,15 +1,11 @@
+/* @imports must appear before any non-@import rules per CSS spec */
+@import 'react-day-picker/dist/style.css';
+@import 'reactflow/dist/style.css';
+@import './design-system/index.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* React Day Picker styles */
-@import 'react-day-picker/dist/style.css';
-
-/* ReactFlow styles */
-@import 'reactflow/dist/style.css';
-
-/* GroeimetAI design system — tokens globally, bare-element styles scoped under .ds */
-@import './design-system/index.css';
 
 @layer base {
   :root {

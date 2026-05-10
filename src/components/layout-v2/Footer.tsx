@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { LogoMark } from '@/components/ds/icons';
 
 export function Footer({ basePath = '' }: { basePath?: string }) {
   const t = useTranslations('redesign.footer');
@@ -12,9 +11,14 @@ export function Footer({ basePath = '' }: { basePath?: string }) {
       <div className="container">
         <div className="foot-grid">
           <div>
-            <div className="nav-brand" style={{ marginBottom: 16 }}>
-              <LogoMark size={32} />
-              <span style={{ color: 'var(--fg)' }}>GroeimetAI</span>
+            <div className="nav-brand" style={{ marginBottom: 16 }} aria-label="GroeimetAI">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/groeimet-ai-logo.svg"
+                alt="GroeimetAI"
+                height={28}
+                style={{ height: 28, width: 'auto' }}
+              />
             </div>
             <p style={{ maxWidth: '32ch', fontSize: 14, color: 'var(--fg-dim)' }}>{t('tagline')}</p>
             <div style={{ marginTop: 24 }}>
