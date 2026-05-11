@@ -305,7 +305,7 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
   return (
     <div
       className={cn(
-        'fixed z-50 transition-all duration-300',
+        'ds fixed z-50 transition-all duration-300',
         isMobile ? 'bottom-0 right-0 left-0' : 'bottom-4 right-4',
         isMinimized ? 'w-80' : (isMobile ? 'w-full' : 'w-96'),
         className

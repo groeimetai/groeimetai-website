@@ -115,7 +115,7 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
   }
 
   return (
-    <>
+    <div className="ds">
       {/* Proactive Message */}
       {showProactive && (
         <div
@@ -223,7 +223,7 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
           </div>
         </button>
       )}
-    </>
+    </div>
   );
 };
 
