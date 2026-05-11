@@ -61,7 +61,7 @@ export function HomePageView({ basePath }: { basePath: string }) {
         <div className="container" style={{ textAlign: 'center' }}>
           <Eyebrow>{t('logoBarLabel')}</Eyebrow>
           <div style={{ marginTop: 28 }}>
-            <LogoBar />
+            <LogoBar more={t('logoBarMore')} />
           </div>
         </div>
       </section>

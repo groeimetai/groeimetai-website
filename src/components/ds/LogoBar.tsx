@@ -2,7 +2,14 @@ import { Fragment } from 'react';
 
 const DEFAULT_LOGOS = ['ABN AMRO', 'NS', 'DIM Haarlem', 'NovaSkin'];
 
-export function LogoBar({ logos = DEFAULT_LOGOS }: { logos?: string[] }) {
+export function LogoBar({
+  logos = DEFAULT_LOGOS,
+  more,
+}: {
+  logos?: string[];
+  /** Optional dimmed "+ … (NDA / more / etc.)" tail, separated by the same · */
+  more?: string;
+}) {
   return (
     <div
       style={{
@@ -14,12 +21,9 @@ export function LogoBar({ logos = DEFAULT_LOGOS }: { logos?: string[] }) {
       }}
     >
       {logos.map((l, i) => (
-        <Fragment key={i}>
+        <Fragment key={`logo-${i}`}>
           {i > 0 && (
-            <span
-              aria-hidden
-              style={{ color: 'var(--fg-mute)', opacity: 0.4, fontSize: 18 }}
-            >
+            <span aria-hidden style={{ color: 'var(--fg-mute)', opacity: 0.4, fontSize: 18 }}>
               ·
             </span>
           )}
@@ -37,6 +41,26 @@ export function LogoBar({ logos = DEFAULT_LOGOS }: { logos?: string[] }) {
           </div>
         </Fragment>
       ))}
+      {more && (
+        <Fragment>
+          <span aria-hidden style={{ color: 'var(--fg-mute)', opacity: 0.4, fontSize: 18 }}>
+            ·
+          </span>
+          <div
+            className="mono"
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: 'clamp(11px, 1.1vw, 13px)',
+              color: 'var(--fg-mute)',
+              letterSpacing: '0.02em',
+              whiteSpace: 'nowrap',
+            }}
+            title="Andere klanten/opdrachten die we vanwege NDA niet bij naam noemen"
+          >
+            {more}
+          </div>
+        </Fragment>
+      )}
     </div>
   );
 }
