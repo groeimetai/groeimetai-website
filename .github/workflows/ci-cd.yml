@@ -113,7 +113,7 @@ jobs:
         run: |
           gcloud run services update ${{ env.SERVICE }} \
             --region ${{ env.REGION }} \
-            --remove-secrets=SMTP_PASS,SMTP_USER,SMTP_HOST,SMTP_PORT,FIREBASE_PRIVATE_KEY,GEMINI_API_KEY,OPENAI_API_KEY,PINECONE_API_KEY \
+            --remove-secrets=SMTP_PASS,SMTP_USER,SMTP_HOST,SMTP_PORT,FIREBASE_PRIVATE_KEY,GEMINI_API_KEY,OPENAI_API_KEY,PINECONE_API_KEY,ANTHROPIC_API_KEY,CONTACT_EMAIL \
             || echo "no stale secret bindings to clear"
 
       - name: Deploy to Cloud Run
@@ -138,6 +138,8 @@ jobs:
             --set-env-vars GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} \
             --set-env-vars PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }} \
             --set-env-vars OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
+            --set-env-vars ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }} \
+            --set-env-vars CONTACT_EMAIL=${{ secrets.CONTACT_EMAIL }} \
             --min-instances 1 \
             --max-instances 10 \
             --memory 1Gi \

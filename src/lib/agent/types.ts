@@ -34,6 +34,8 @@ export interface ConversationMessage {
 export interface AgentResponse {
   text: string;
   toolsUsed?: string[];
+  /** Knowledge-file paths the agent read while answering, in call order. */
+  filesRead?: string[];
   error?: string;
 }
 

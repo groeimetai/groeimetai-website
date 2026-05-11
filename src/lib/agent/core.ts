@@ -86,6 +86,7 @@ export async function runAgent(
   history: ConversationMessage[] = []
 ): Promise<AgentResponse> {
   const toolsUsed: string[] = [];
+  const filesRead: string[] = [];
 
   try {
     // Get tools based on authentication status
@@ -134,11 +135,12 @@ export async function runAgent(
         console.log(`🔧 Executing tool: ${toolCall.name}`);
         toolsUsed.push(toolCall.name);
 
-        const toolResult = await executeTool(
-          toolCall.name,
-          (toolCall.input as Record<string, unknown>) || {},
-          context
-        );
+        const input = (toolCall.input as Record<string, unknown>) || {};
+        if (toolCall.name === 'readKnowledge' && typeof input.path === 'string') {
+          filesRead.push(input.path);
+        }
+
+        const toolResult = await executeTool(toolCall.name, input, context);
 
         toolResults.push({
           type: 'tool_result',
@@ -174,6 +176,7 @@ export async function runAgent(
       return {
         text: getFallbackResponse(topic, context.locale),
         toolsUsed,
+        filesRead,
       };
     }
 
@@ -183,6 +186,7 @@ export async function runAgent(
     return {
       text: truncatedText,
       toolsUsed,
+      filesRead,
     };
   } catch (error) {
     console.error('Agent error:', error);
@@ -199,6 +203,7 @@ export async function runAgent(
               ? 'De chatbot is tijdelijk overbelast. Probeer het over een minuut opnieuw.'
               : 'The chatbot is temporarily overloaded. Please try again in a minute.',
           toolsUsed,
+          filesRead,
           error: 'Rate limited',
         };
       }
@@ -209,6 +214,7 @@ export async function runAgent(
     return {
       text: getFallbackResponse(topic, context.locale),
       toolsUsed,
+      filesRead,
       error: error instanceof Error ? error.message : 'Unknown error',
     };
   }

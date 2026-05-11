@@ -12,6 +12,8 @@ interface Message {
   content: string;
   timestamp: Date;
   isTyping?: boolean;
+  /** Knowledge files the agent read while producing this answer. */
+  filesRead?: string[];
 }
 
 interface ChatbotInterfaceProps {
@@ -139,6 +141,7 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
         role: 'assistant',
         content: data.response,
         timestamp: new Date(),
+        filesRead: Array.isArray(data.filesRead) ? data.filesRead : undefined,
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -277,6 +280,35 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
                   )}
                 >
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                  {message.role === 'assistant' && message.filesRead && message.filesRead.length > 0 && (
+                    <div
+                      className="mt-2 pt-2 border-t border-white/10 flex flex-wrap gap-1.5"
+                      aria-label="Knowledge files read for this answer"
+                    >
+                      {Array.from(new Set(message.filesRead)).map((path) => (
+                        <span
+                          key={path}
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/[0.06] text-[10px] font-mono text-white/70"
+                          title={`De agent las ${path} om dit te beantwoorden`}
+                        >
+                          <svg
+                            width="10"
+                            height="10"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden
+                          >
+                            <path d="M3 7 V18 a2 2 0 0 0 2 2 H19 a2 2 0 0 0 2 -2 V9 a2 2 0 0 0 -2 -2 H12 L10 5 H5 a2 2 0 0 0 -2 2 Z" />
+                          </svg>
+                          {path.replace(/^knowledge\//, '')}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                   <p
                     className={cn(
                       'text-xs mt-1',

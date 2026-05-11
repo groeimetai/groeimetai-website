@@ -256,7 +256,11 @@ export async function POST(request: NextRequest) {
       console.log(`🔧 Tools used: ${agentResponse.toolsUsed.join(', ')}`);
     }
 
-    const apiResponse = NextResponse.json({ response: agentResponse.text });
+    const apiResponse = NextResponse.json({
+      response: agentResponse.text,
+      toolsUsed: agentResponse.toolsUsed ?? [],
+      filesRead: agentResponse.filesRead ?? [],
+    });
     return addSecurityHeaders(apiResponse);
   } catch (error) {
     console.error('Chat API error:', error);
