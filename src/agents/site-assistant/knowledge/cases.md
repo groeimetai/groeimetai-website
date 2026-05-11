@@ -1,48 +1,51 @@
 # Recente cases
 
-Niet de glanzende slide-versie. De eerlijke: wat we bouwden, met welke stack, en waarom het werkte.
+Niet de glanzende slide-versie. De eerlijke: agents die Niels recent gebouwd heeft. Voor elk project — klantwerk én eigen tooling — bouwt hij in dezelfde stijl: een folder met instructies en lokale tools.
 
-## Case 01 — Logistiek (MKB)
-**Account-assistent voor sales engineers.** Bouw + training.
+## Case 01 — ServiceNow AI Universal Request Widget (klantwerk + OSS)
 
-Een agent die offerte-aanvragen voorbereidt: leest CRM, oude offertes en de mail-thread. Engineer reviewt en stuurt. Stack: Sonnet 4, Custom MCP, Exact Online, Slack.
+Een Service Portal widget die binnenkomende requests automatisch classificeert (incident / service request / vraag / HR), live status toont, relevante KB-artikelen vindt en contextuele vervolgvragen genereert. NL + EN auto-detect.
 
-Resultaten:
-- −4 uur per offerte
-- 8 weken tot productie
-- 100% review door mens
+Stack: ServiceNow Quebec+, LLM-classificatie, JavaScript widget, MIT licentie.
 
-Waarom het werkte: sales engineers verloren halve dagen aan voorbereiding. We bouwden geen "AI sales rep" — we bouwden hun eigen kladblok dat al gevuld is.
+Repo: github.com/groeimetai/servicenow-ai-universal-request-widget
 
-## Case 02 — Open source (eigen werk)
-**Serac: agent-framework voor ServiceNow.** Eigen product, Elastic v2.
+Waarom het werkte: klanten zelf het juiste formulier laten kiezen werkte niet — te complex. Een agent doet de classificatie goed genoeg, en de service desk reviewt waar het ertoe doet.
 
-Onze toolkit voor agents die ServiceNow flows orchestreren. Begonnen als klantwerk, daarna open source gemaakt. Stack: TypeScript, ServiceNow REST, Anthropic SDK.
+## Case 02 — Social media agent met Telegram approval (eigen tooling)
 
-Repo: github.com/serac-labs/serac.
+Eén folder die ideeën, drafts en publicaties beheert voor drie merken: Niels van der Werf (persoonlijk), GroeimetAI (bedrijf), Snow-Flow (open-core). Slash commands voor `/idea`, `/draft`, `/publish`. Optionele headless flow met Telegram approval-stap.
 
-## Case 03 — Professional services (800+ FTE)
-**Org-brede AI literacy programma.** Programma + curriculum.
+Stack: Claude Code, MCP servers, Telegram, LinkedIn.
 
-Zes weken. Directie, management én uitvoerend. Eén gedeelde taal, één gedeeld besef van wat agents wel/niet zijn.
+Waarom: geen dashboard, geen abonnement. Een folder met instructies + slash commands die handmatig of autonoom kunnen draaien — afhankelijk van hoeveel je wil afgeven.
 
-Resultaten:
-- 120 deelnemers
-- 9 use-cases gevalideerd
-- 3 agents in productie na 6 maanden
+## Case 03 — BTW-aangifte agent met localhost dashboard (eigen tooling)
 
-Waarom: ze wilden niet dat 12 teams 12 verschillende kanten op gingen.
+Lokale agent voor BTW-kwartaalaangiftes. Haalt transacties uit bunq en Mollie, classificeert elke regel (zakelijk / gemengd / privé) met voorstel en reden, biedt een localhost Python-dashboard om interactief bij te schaven. Leert van correcties per kwartaal.
 
-## Case 04 — Industrie (manufacturing)
-**Klacht-triage voor service desk.** Pilot + overdracht.
+Stack: bunq MCP, Mollie MCP, Python localhost, xlsx-export.
 
-Een agent die binnenkomende serviceklachten classificeert, urgentie inschat en de juiste engineer toewijst. Mens beslist alsnog. Stack: Sonnet 4, Email, Internal CRM.
+Waarom: boekhouden hoort lokaal en uitlegbaar. De agent doet het werk, Niels keurt op regelniveau. Geen SaaS die je creditcard wil bij elke nieuwe heuristiek.
 
-Resultaten:
-- 62% minder triage-tijd
-- 0 verkeerde escalaties
-- Eigen team beheert nu
+## Case 04 — Wekelijkse timesheet-agent (eigen ops)
 
-Waarom: de service desk verzoop. Niet in klachten, maar in het sorteren ervan. Daar zat de winst.
+Leest commits uit GitHub-org `groeimetai` + Google Calendar, past session-inferentie toe op coding-gaps, mergt met handmatige toevoegingen, schrijft per ISO-week een markdown-ledger. Draait elke vrijdag 17:00 via launchd. CSV-export voor de accountant.
 
-Bekijk meer op `/cases`.
+Stack: GitHub MCP, Google Calendar MCP, launchd, Markdown + CSV.
+
+Waarom: de Belastingdienst vraagt aantoonbare uren voor het urencriterium (≥1225/jaar). Een agent die wekelijks de bestaande systemen leest doet dat beter dan een Excel die niemand bijhoudt.
+
+## Case 05 — Dagelijkse marktanalyse via TradingView MCP (eigen tooling / experiment)
+
+Leest live charts uit TradingView Desktop via een lokale MCP server (78 tools), scant 12 assets per dag (crypto, indices, AI stocks, consultancy-relevant), levert bias + key levels + signaal-of-wait + risk plan. Pure analyse, geen orders.
+
+Stack: TradingView MCP, Claude, Markdown journal.
+
+Waarom: beslissingsondersteuning hoort lokaal en transparant. Elke analyse is een markdown-bestand dat je later kan teruglezen. Geen black box, geen broker-API.
+
+## Patroon
+
+Wat opvalt: voor elk project — klantwerk én eigen werk — gebruikt Niels hetzelfde patroon. Folder + CLAUDE.md + knowledge/ + .claude/commands/ + mcp-servers/. Dat maakt het patroon zelf onderwijsbaar — wat je in de trainingen leert is exact hoe deze agents in elkaar zitten.
+
+Voor het volledige overzicht: `/cases` op de site.
