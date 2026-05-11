@@ -323,19 +323,17 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
         <div className="flex items-center space-x-3">
           <div className="relative">
             <div
-              className="rounded-md flex items-center justify-center"
-              style={{
-                width: 36,
-                height: 36,
-                background: 'var(--accent)',
-                color: '#1a0d05',
-                fontFamily: 'var(--font-mono)',
-                fontWeight: 700,
-                fontSize: 16,
-                boxShadow: '0 0 0 1px rgba(255,90,31,.35), 0 6px 18px -6px rgba(255,90,31,.5)',
-              }}
+              className="flex items-center justify-center"
+              style={{ width: 36, height: 36 }}
             >
-              ^
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/gecentreerd-logo.svg"
+                alt="GroeimetAI"
+                width={36}
+                height={36}
+                style={{ width: 36, height: 36 }}
+              />
             </div>
             <div
               className="absolute -bottom-1 -right-1 rounded-full"
