@@ -118,25 +118,54 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
     <>
       {/* Proactive Message */}
       {showProactive && (
-        <div className="fixed bottom-20 right-2 sm:right-4 z-40 animate-fade-in">
-          <div className="bg-black rounded-lg shadow-xl p-3 sm:p-4 max-w-[280px] sm:max-w-xs border border-white/20">
-            <p className="text-sm text-white mb-2">{proactiveMessage || t('widget.proactiveMessage')}</p>
-            <div className="flex justify-end space-x-2">
+        <div
+          className="fixed bottom-20 right-2 sm:right-4 z-40"
+          style={{ animation: 'ds-chat-fadeIn .25s ease-out' }}
+        >
+          <div
+            style={{
+              background: 'var(--bg-elev-2, #18181d)',
+              border: '1px solid var(--line, #26262d)',
+              borderRadius: 12,
+              padding: 14,
+              maxWidth: 300,
+              boxShadow: '0 20px 50px -20px rgba(0,0,0,0.7)',
+            }}
+          >
+            <p style={{ fontSize: 13, color: 'var(--fg, #f4f4f1)', margin: 0, lineHeight: 1.5 }}>
+              {proactiveMessage || t('widget.proactiveMessage')}
+            </p>
+            <div className="flex justify-end" style={{ gap: 8, marginTop: 12 }}>
               <button
                 onClick={handleDismissProactive}
-                className="text-xs text-white/60 hover:text-white"
+                style={{
+                  fontSize: 12,
+                  color: 'var(--fg-mute, #71717a)',
+                  background: 'transparent',
+                  border: 'none',
+                  padding: '6px 10px',
+                  cursor: 'pointer',
+                }}
               >
                 {t('widget.notNow')}
               </button>
               <button
                 onClick={handleOpen}
-                className="text-xs bg-orange text-white px-3 py-1 rounded hover:bg-orange-600 transition-colors"
+                style={{
+                  fontSize: 12,
+                  fontWeight: 500,
+                  background: 'var(--accent, #ff5a1f)',
+                  color: '#1a0d05',
+                  border: '1px solid var(--accent, #ff5a1f)',
+                  padding: '6px 12px',
+                  borderRadius: 6,
+                  cursor: 'pointer',
+                }}
               >
                 {t('widget.letsChat')}
               </button>
             </div>
           </div>
-          <div className="absolute -bottom-2 right-6 sm:right-8 w-4 h-4 bg-black transform rotate-45 border-r border-b border-white/20"></div>
         </div>
       )}
 
@@ -144,24 +173,51 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
       {!hideButton && (
         <button
           onClick={handleOpen}
-          className={cn(
-            'fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-40',
-            'bg-black border-2 border-orange',
-            'text-orange rounded-full p-3 sm:p-4',
-            'shadow-lg hover:shadow-xl',
-            'transform transition-all duration-300',
-            'hover:scale-110 active:scale-95',
-            'hover:bg-orange hover:text-white',
-            'group'
-          )}
+          className="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-40 group"
+          style={{
+            width: 52,
+            height: 52,
+            borderRadius: '50%',
+            background: 'var(--accent, #ff5a1f)',
+            color: '#1a0d05',
+            border: '1px solid var(--accent, #ff5a1f)',
+            boxShadow: '0 0 0 1px rgba(255,90,31,.25), 0 12px 30px -10px rgba(255,90,31,.6)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+          }}
           aria-label={t('widget.openChat')}
         >
           <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6" />
-          <span className="absolute -top-1 -right-1 h-2.5 w-2.5 sm:h-3 sm:w-3 bg-green-400 rounded-full animate-pulse"></span>
-
-          {/* Hover tooltip */}
-          <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none hidden sm:block">
-            <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+          <span
+            className="absolute"
+            style={{
+              top: -2,
+              right: -2,
+              width: 12,
+              height: 12,
+              background: 'var(--good, #6ee7b7)',
+              borderRadius: '50%',
+              border: '2px solid var(--bg, #0a0a0b)',
+              animation: 'ds-chat-pulse 2s infinite',
+            }}
+          />
+          <div
+            className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none hidden sm:block"
+          >
+            <div
+              style={{
+                background: 'var(--bg-elev-2, #18181d)',
+                color: 'var(--fg, #f4f4f1)',
+                fontSize: 11,
+                padding: '4px 10px',
+                borderRadius: 6,
+                border: '1px solid var(--line, #26262d)',
+                whiteSpace: 'nowrap',
+                fontFamily: 'var(--font-mono)',
+              }}
+            >
               {t('widget.tooltip')}
             </div>
           </div>
