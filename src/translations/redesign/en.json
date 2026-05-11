@@ -41,7 +41,7 @@
       "meta3": "NL & remote"
     },
     "logoBarLabel": "Previously worked with",
-    "logoBarMore": "+ others under NDA",
+    "logoBarMore": "+ and more",
     "problem": {
       "eyebrow": "The real problem",
       "title1": "Most teams don't have an AI problem.",
@@ -122,23 +122,23 @@
     },
     "casesPreview": {
       "eyebrow": "Recent work",
-      "title": "What happens when teams own it",
+      "title": "Agents I actually build",
       "viewAll": "View all cases",
-      "c1Industry": "Logistics",
-      "c1Title": "Account assistant for sales engineers",
-      "c1Snippet": "An agent that prepares quote requests using CRM, mail and historic deals. Engineer picks, agent types.",
-      "c1MetricNum": "−4h",
-      "c1MetricLabel": "per quote",
-      "c2Industry": "ServiceNow consultancy",
-      "c2Title": "Serac open source toolkit",
-      "c2Snippet": "Our own agent framework for ServiceNow flows, built in production and then released as open source.",
-      "c2MetricNum": "OSS",
-      "c2MetricLabel": "on GitHub",
-      "c3Industry": "Professional services",
-      "c3Title": "Org-wide AI literacy programme",
-      "c3Snippet": "From board to floor: in 6 weeks one shared way of thinking about AI, agents and risks.",
-      "c3MetricNum": "120",
-      "c3MetricLabel": "participants"
+      "c1Industry": "ServiceNow · Client + OSS",
+      "c1Title": "AI classification for the Service Portal",
+      "c1Snippet": "Widget that auto-classifies requests (incident / service request / question / HR), with live status and KB suggestions. MIT on GitHub.",
+      "c1MetricNum": "OSS",
+      "c1MetricLabel": "MIT on GitHub",
+      "c2Industry": "Personal branding",
+      "c2Title": "Social media agent with Telegram approval",
+      "c2Snippet": "One folder running /idea, /draft, /publish slash commands for three brands. Headless with a Telegram approval step.",
+      "c2MetricNum": "3",
+      "c2MetricLabel": "brands in one agent",
+      "c3Industry": "Finance · Solo",
+      "c3Title": "VAT-return agent with localhost dashboard",
+      "c3Snippet": "Pulls bunq + Mollie, classifies each line, offers a local dashboard. Learns from corrections each quarter.",
+      "c3MetricNum": "1 hr",
+      "c3MetricLabel": "per quarter"
     },
     "cta": {
       "eyebrow": "Ready to start?",
@@ -320,70 +320,83 @@
   },
   "cases": {
     "metaTitle": "Cases · GroeimetAI",
-    "metaDescription": "Recent agents and training programmes: what we built, with which stack, and why it worked.",
+    "metaDescription": "Recent agents I built — client work and personal tooling. Folder + instructions + tools, not a black box.",
     "head": {
       "crumb1": "Work",
       "crumbCurrent": "Cases",
-      "title1": "What happens when",
-      "titleAccent": "teams",
-      "title2": "own it.",
-      "lead": "Not the polished slide version. The honest one: what we built, with which stack, and why it worked."
+      "title1": "Agents I",
+      "titleAccent": "actually",
+      "title2": "build.",
+      "lead": "For every project — client work and personal tooling — I build an agent the same way: a folder with instructions and local tools. Here are a few recent ones."
     },
     "labelCase": "CASE",
     "labelStack": "STACK",
     "labelResult": "RESULT",
     "list": [
       {
-        "industry": "Logistics · SMB",
-        "title": "Account assistant for sales engineers",
-        "role": "Build + training",
-        "summary": "An agent that prepares quote requests: reads CRM, past quotes and the email thread. Engineer reviews and sends.",
-        "stack": ["Sonnet 4", "Custom MCP", "Exact Online", "Slack"],
+        "industry": "ServiceNow · Client work + open source",
+        "title": "AI classification for the Service Portal",
+        "role": "Build + open source",
+        "summary": "A widget that automatically classifies incoming requests (incident / service request / question / HR), shows live status, finds relevant KB articles and generates contextual follow-up questions. Auto-detects NL or EN. MIT on GitHub.",
+        "stack": ["ServiceNow Quebec+", "LLM classification", "JavaScript widget", "MIT"],
         "outcomes": [
-          { "num": "−4h", "label": "per quote" },
-          { "num": "8 wks", "label": "to production" },
-          { "num": "100%", "label": "human review" }
+          { "num": "Auto", "label": "request-type detection" },
+          { "num": "500ms", "label": "live status polling" },
+          { "num": "OSS", "label": "groeimetai/servicenow-ai-universal-request-widget" }
         ],
-        "why": "Sales engineers were losing half-days to preparation. We didn't build an 'AI sales rep' — we built their own scratchpad already filled in."
+        "why": "Letting users pick the right form themselves didn't work — too complex. An agent handles that classification well enough, and the service desk reviews where it matters."
       },
       {
-        "industry": "Open source · Our own",
-        "title": "Serac: agent framework for ServiceNow",
-        "role": "Own product",
-        "summary": "Our toolkit for agents that orchestrate ServiceNow flows. Started as client work, then released open source.",
-        "stack": ["TypeScript", "ServiceNow REST", "Anthropic SDK", "Elastic v2"],
+        "industry": "Personal branding · Own tooling",
+        "title": "Social media agent with Telegram approval",
+        "role": "Own work",
+        "summary": "One folder that manages ideas, drafts and publications for three brands (Niels, GroeimetAI, Snow-Flow). Slash commands for /idea, /draft, /publish. Headless flow with a Telegram approval step.",
+        "stack": ["Claude Code", "MCP servers", "Telegram", "LinkedIn"],
         "outcomes": [
-          { "num": "OSS", "label": "Elastic v2 licence" },
-          { "num": "GitHub", "label": "serac-labs/serac" },
-          { "num": "v1.x", "label": "in production" }
+          { "num": "3", "label": "brands in one agent" },
+          { "num": "0", "label": "scheduling SaaS" },
+          { "num": "Headless", "label": "with approval step" }
         ],
-        "why": "Because clients shouldn't be locked in to something automating their own processes."
+        "why": "No dashboard, no subscription. A folder with instructions and slash commands that can run manually or autonomously — depending on how much you want to hand off."
       },
       {
-        "industry": "Professional services · 800+ FTE",
-        "title": "Org-wide AI literacy programme",
-        "role": "Programme + curriculum",
-        "summary": "Six weeks. Board, management and execution. One shared language, one shared sense of what agents are and aren't.",
-        "stack": ["Curriculum", "Use-case incubator", "Train-the-trainer"],
+        "industry": "Finance · Solo",
+        "title": "VAT-return agent with localhost dashboard",
+        "role": "Own tooling",
+        "summary": "Pulls transactions from bunq and Mollie, classifies them (business / mixed / private) with reason and proposal. Localhost dashboard to interactively refine. Learns from corrections each quarter.",
+        "stack": ["bunq MCP", "Mollie MCP", "Python localhost", "xlsx export"],
         "outcomes": [
-          { "num": "120", "label": "participants" },
-          { "num": "9", "label": "use cases validated" },
-          { "num": "3", "label": "agents live after 6 months" }
+          { "num": "1 hr", "label": "per quarter instead of 1 day" },
+          { "num": "0", "label": "financial data sent off-device" },
+          { "num": "Per Q", "label": "rules grow with the data" }
         ],
-        "why": "Not because they 'had to do something with AI'. Because they didn't want 12 teams going 12 different directions."
+        "why": "Bookkeeping belongs local and explainable. The agent does the work, I approve at the rule level. No SaaS asking for a credit card on every new heuristic."
       },
       {
-        "industry": "Industry · Manufacturing",
-        "title": "Complaint triage for the service desk",
-        "role": "Pilot + handover",
-        "summary": "An agent that classifies incoming service complaints, estimates urgency and assigns the right engineer. Humans still decide.",
-        "stack": ["Sonnet 4", "Email", "Internal CRM"],
+        "industry": "Own ops · GroeimetAI",
+        "title": "Weekly timesheet agent for the Dutch hours criterion",
+        "role": "Own tooling",
+        "summary": "Reads commits from the `groeimetai` GitHub org and Google Calendar, applies session inference to coding gaps, merges with manual entries, writes a markdown ledger per ISO week. Runs every Friday 17:00 via launchd.",
+        "stack": ["GitHub MCP", "Google Calendar MCP", "launchd", "Markdown + CSV"],
         "outcomes": [
-          { "num": "62%", "label": "less triage time" },
-          { "num": "0", "label": "wrong escalations" },
-          { "num": "Own", "label": "team runs it now" }
+          { "num": "1225", "label": "hours-criterion tracked" },
+          { "num": "Auto", "label": "every Friday 17:00" },
+          { "num": "CSV", "label": "export for the accountant" }
         ],
-        "why": "The service desk was drowning. Not in complaints, but in sorting them. That's where the win was."
+        "why": "The Dutch tax office wants provable hours. An agent that reads the existing systems weekly does that better than an Excel nobody maintains."
+      },
+      {
+        "industry": "Trading research · Experiment",
+        "title": "Daily market analysis via TradingView MCP",
+        "role": "Own tooling",
+        "summary": "Reads live charts from TradingView Desktop via a local MCP server (78 tools), scans 12 assets per day, produces bias + key levels + signal-or-wait + risk plan. Pure analysis, no orders.",
+        "stack": ["TradingView MCP", "Claude", "Markdown journal"],
+        "outcomes": [
+          { "num": "12", "label": "assets per daily scan" },
+          { "num": "78", "label": "tools via MCP" },
+          { "num": "0", "label": "orders — analysis only" }
+        ],
+        "why": "Decision support belongs local and transparent. Every analysis is a markdown file you can revisit. No black box, no broker API."
       }
     ],
     "cta": {
