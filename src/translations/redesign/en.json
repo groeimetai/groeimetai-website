@@ -124,21 +124,21 @@
       "eyebrow": "Recent work",
       "title": "Agents I actually build",
       "viewAll": "View all cases",
-      "c1Industry": "Personal branding",
-      "c1Title": "Social media agent with Telegram approval",
-      "c1Snippet": "One folder running /idea, /draft, /publish slash commands for three brands. Headless with a Telegram approval step.",
-      "c1MetricNum": "3",
-      "c1MetricLabel": "brands in one agent",
-      "c2Industry": "Finance · Solo",
-      "c2Title": "VAT-return agent with localhost dashboard",
-      "c2Snippet": "Pulls bunq + Mollie, classifies each line, offers a local dashboard. Learns from corrections each quarter.",
-      "c2MetricNum": "1 hr",
-      "c2MetricLabel": "per quarter",
-      "c3Industry": "Own ops · GroeimetAI",
-      "c3Title": "Weekly timesheet agent",
-      "c3Snippet": "GitHub commits + Google Calendar → markdown ledger per ISO week. Runs every Friday 17:00 via launchd. CSV for the accountant.",
-      "c3MetricNum": "1225",
-      "c3MetricLabel": "hours-criterion tracked"
+      "c1Industry": "ServiceNow · Client work",
+      "c1Title": "AI classification for the Service Portal",
+      "c1Snippet": "Widget that auto-classifies requests, shows live status and surfaces KB articles. Implemented at multiple clients.",
+      "c1MetricNum": "Multi",
+      "c1MetricLabel": "client implementations",
+      "c2Industry": "Personal branding",
+      "c2Title": "Social media agent with Telegram approval",
+      "c2Snippet": "One folder running /idea, /draft, /publish slash commands for three brands. Headless with a Telegram approval step.",
+      "c2MetricNum": "3",
+      "c2MetricLabel": "brands in one agent",
+      "c3Industry": "Finance · Solo",
+      "c3Title": "VAT-return agent with localhost dashboard",
+      "c3Snippet": "Pulls bunq + Mollie, classifies each line, offers a local dashboard. Learns from corrections each quarter.",
+      "c3MetricNum": "1 hr",
+      "c3MetricLabel": "per quarter"
     },
     "cta": {
       "eyebrow": "Ready to start?",
@@ -333,6 +333,19 @@
     "labelStack": "STACK",
     "labelResult": "RESULT",
     "list": [
+      {
+        "industry": "ServiceNow · Client work",
+        "title": "AI classification for the Service Portal",
+        "role": "Build + implementation",
+        "summary": "A Service Portal widget that automatically classifies incoming requests (incident / service request / question / HR), shows live status, surfaces relevant KB articles and generates contextual follow-up questions. Auto-detects NL or EN. Implemented at multiple clients inside their own ServiceNow environment.",
+        "stack": ["ServiceNow Quebec+", "LLM classification", "JavaScript widget"],
+        "outcomes": [
+          { "num": "Auto", "label": "request-type detection" },
+          { "num": "500ms", "label": "live status polling" },
+          { "num": "Multi", "label": "client implementations" }
+        ],
+        "why": "Letting users pick the right form themselves didn't work — too complex. A widget handles classification well enough, and the service desk reviews where it matters. The code lives inside the client's environment; we share the pattern, not the codebase."
+      },
       {
         "industry": "Personal branding · Own tooling",
         "title": "Social media agent with Telegram approval",

@@ -124,21 +124,21 @@
       "eyebrow": "Recent werk",
       "title": "Agents die ik zelf bouw",
       "viewAll": "Alle cases bekijken",
-      "c1Industry": "Persoonlijke branding",
-      "c1Title": "Social media agent met Telegram approval",
-      "c1Snippet": "Eén folder die /idea, /draft, /publish slash commands draait voor drie merken. Headless met Telegram-approval-stap.",
-      "c1MetricNum": "3",
-      "c1MetricLabel": "merken in één agent",
-      "c2Industry": "Finance · ZZP",
-      "c2Title": "BTW-aangifte agent met localhost dashboard",
-      "c2Snippet": "Pakt bunq + Mollie, classificeert elke regel, biedt een lokaal dashboard. Leert van correcties per kwartaal.",
-      "c2MetricNum": "1 uur",
-      "c2MetricLabel": "per kwartaal",
-      "c3Industry": "Eigen ops · GroeimetAI",
-      "c3Title": "Wekelijkse timesheet-agent",
-      "c3Snippet": "GitHub commits + Google Calendar → markdown-ledger per ISO-week. Draait elke vrijdag 17:00 via launchd. CSV voor de accountant.",
-      "c3MetricNum": "1225",
-      "c3MetricLabel": "uren-criterium getrackt"
+      "c1Industry": "ServiceNow · Klantwerk",
+      "c1Title": "AI-classificatie voor het Service Portal",
+      "c1Snippet": "Widget die requests automatisch classificeert, live status toont en KB-artikelen suggereert. Geïmplementeerd bij meerdere klanten.",
+      "c1MetricNum": "Multi",
+      "c1MetricLabel": "klant-implementaties",
+      "c2Industry": "Persoonlijke branding",
+      "c2Title": "Social media agent met Telegram approval",
+      "c2Snippet": "Eén folder die /idea, /draft, /publish slash commands draait voor drie merken. Headless met Telegram-approval-stap.",
+      "c2MetricNum": "3",
+      "c2MetricLabel": "merken in één agent",
+      "c3Industry": "Finance · ZZP",
+      "c3Title": "BTW-aangifte agent met localhost dashboard",
+      "c3Snippet": "Pakt bunq + Mollie, classificeert elke regel, biedt een lokaal dashboard. Leert van correcties per kwartaal.",
+      "c3MetricNum": "1 uur",
+      "c3MetricLabel": "per kwartaal"
     },
     "cta": {
       "eyebrow": "Klaar om te beginnen?",
@@ -333,6 +333,19 @@
     "labelStack": "STACK",
     "labelResult": "RESULTAAT",
     "list": [
+      {
+        "industry": "ServiceNow · Klantwerk",
+        "title": "AI-classificatie voor het Service Portal",
+        "role": "Bouw + implementatie",
+        "summary": "Een widget op het Service Portal die binnenkomende requests automatisch classificeert (incident / service request / vraag / HR), live status toont, relevante KB-artikelen ophaalt en contextuele vervolgvragen genereert. NL + EN auto-detect. Geïmplementeerd bij meerdere klanten in hun eigen ServiceNow-omgeving.",
+        "stack": ["ServiceNow Quebec+", "LLM-classificatie", "JavaScript widget"],
+        "outcomes": [
+          { "num": "Auto", "label": "request-type detectie" },
+          { "num": "500ms", "label": "live status polling" },
+          { "num": "Multi", "label": "klant-implementaties" }
+        ],
+        "why": "Klanten zelf het juiste formulier laten kiezen werkte niet — te complex. Een widget doet die classificatie goed genoeg, en de service desk reviewt waar het ertoe doet. Code zelf zit in de omgeving van de klant; we delen het patroon, niet de codebase."
+      },
       {
         "industry": "Persoonlijke branding · Eigen tooling",
         "title": "Social media agent met Telegram approval",
