@@ -396,9 +396,9 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
                     className="rounded-xl px-4 py-3"
                     style={{
                       maxWidth: '80%',
-                      background: isUser ? 'var(--accent)' : 'var(--bg-elev)',
-                      color: isUser ? '#1a0d05' : 'var(--fg)',
-                      border: isUser ? '1px solid var(--accent)' : '1px solid var(--line)',
+                      background: isUser ? '#ff5a1f' : 'var(--bg-elev, #111114)',
+                      color: isUser ? '#1a0d05' : 'var(--fg, #f4f4f1)',
+                      border: isUser ? '1px solid #ff5a1f' : '1px solid var(--line, #26262d)',
                     }}
                   >
                     {isUser ? (
@@ -601,9 +601,9 @@ export const ChatbotInterface: React.FC<ChatbotInterfaceProps> = ({
                   width: 40,
                   height: 40,
                   borderRadius: 8,
-                  border: '1px solid var(--accent)',
-                  background: isLoading || !input.trim() ? 'var(--bg-elev)' : 'var(--accent)',
-                  color: isLoading || !input.trim() ? 'var(--fg-mute)' : '#1a0d05',
+                  border: '1px solid #ff5a1f',
+                  background: isLoading || !input.trim() ? 'var(--bg-elev, #111114)' : '#ff5a1f',
+                  color: isLoading || !input.trim() ? 'var(--fg-mute, #71717a)' : '#1a0d05',
                   cursor: isLoading || !input.trim() ? 'not-allowed' : 'pointer',
                   display: 'inline-flex',
                   alignItems: 'center',
