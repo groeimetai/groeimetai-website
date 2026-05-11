@@ -15,8 +15,10 @@ const anthropic = new Anthropic({
 });
 
 // Model configuration
-// Claude Sonnet 4.5 - most intelligent model, best for coding and complex agents
-const MODEL = 'claude-sonnet-4-5-20250929';
+// Claude Haiku 4.5 — fast and cheap, plenty for a file-reading site assistant.
+// The agent's job is to listKnowledge -> readKnowledge -> short answer; we
+// don't need Sonnet-level reasoning for that.
+const MODEL = 'claude-haiku-4-5-20251001';
 const MAX_TOKENS = 1024;
 
 /**
