@@ -124,21 +124,21 @@
       "eyebrow": "Recent work",
       "title": "Agents I actually build",
       "viewAll": "View all cases",
-      "c1Industry": "ServiceNow · Client + OSS",
-      "c1Title": "AI classification for the Service Portal",
-      "c1Snippet": "Widget that auto-classifies requests (incident / service request / question / HR), with live status and KB suggestions. MIT on GitHub.",
-      "c1MetricNum": "OSS",
-      "c1MetricLabel": "MIT on GitHub",
-      "c2Industry": "Personal branding",
-      "c2Title": "Social media agent with Telegram approval",
-      "c2Snippet": "One folder running /idea, /draft, /publish slash commands for three brands. Headless with a Telegram approval step.",
-      "c2MetricNum": "3",
-      "c2MetricLabel": "brands in one agent",
-      "c3Industry": "Finance · Solo",
-      "c3Title": "VAT-return agent with localhost dashboard",
-      "c3Snippet": "Pulls bunq + Mollie, classifies each line, offers a local dashboard. Learns from corrections each quarter.",
-      "c3MetricNum": "1 hr",
-      "c3MetricLabel": "per quarter"
+      "c1Industry": "Personal branding",
+      "c1Title": "Social media agent with Telegram approval",
+      "c1Snippet": "One folder running /idea, /draft, /publish slash commands for three brands. Headless with a Telegram approval step.",
+      "c1MetricNum": "3",
+      "c1MetricLabel": "brands in one agent",
+      "c2Industry": "Finance · Solo",
+      "c2Title": "VAT-return agent with localhost dashboard",
+      "c2Snippet": "Pulls bunq + Mollie, classifies each line, offers a local dashboard. Learns from corrections each quarter.",
+      "c2MetricNum": "1 hr",
+      "c2MetricLabel": "per quarter",
+      "c3Industry": "Own ops · GroeimetAI",
+      "c3Title": "Weekly timesheet agent",
+      "c3Snippet": "GitHub commits + Google Calendar → markdown ledger per ISO week. Runs every Friday 17:00 via launchd. CSV for the accountant.",
+      "c3MetricNum": "1225",
+      "c3MetricLabel": "hours-criterion tracked"
     },
     "cta": {
       "eyebrow": "Ready to start?",
@@ -333,19 +333,6 @@
     "labelStack": "STACK",
     "labelResult": "RESULT",
     "list": [
-      {
-        "industry": "ServiceNow · Client work + open source",
-        "title": "AI classification for the Service Portal",
-        "role": "Build + open source",
-        "summary": "A widget that automatically classifies incoming requests (incident / service request / question / HR), shows live status, finds relevant KB articles and generates contextual follow-up questions. Auto-detects NL or EN. MIT on GitHub.",
-        "stack": ["ServiceNow Quebec+", "LLM classification", "JavaScript widget", "MIT"],
-        "outcomes": [
-          { "num": "Auto", "label": "request-type detection" },
-          { "num": "500ms", "label": "live status polling" },
-          { "num": "OSS", "label": "groeimetai/servicenow-ai-universal-request-widget" }
-        ],
-        "why": "Letting users pick the right form themselves didn't work — too complex. An agent handles that classification well enough, and the service desk reviews where it matters."
-      },
       {
         "industry": "Personal branding · Own tooling",
         "title": "Social media agent with Telegram approval",
