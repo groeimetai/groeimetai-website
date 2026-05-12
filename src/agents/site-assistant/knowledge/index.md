@@ -13,3 +13,4 @@ Overzicht van alle bestanden in deze knowledge folder. De assistent kan deze lez
 | `knowledge/faq.md` | Veelgestelde vragen over trainingen en samenwerking. |
 | `knowledge/pricing.md` | Onze stance over prijzen: niet op de site, principe-uitleg. |
 | `knowledge/anatomy.md` | Wat een agent is volgens GroeimetAI: folder + instructies + tools. |
+| `knowledge/lethal-trifecta.md` | Simon Willison's lethal trifecta voor agent-security. Hoe wij die in elk ontwerp doorknippen. |

@@ -195,6 +195,24 @@
       "step4Title": "Embed",
       "step4Body": "Handover, runbook, monitoring. What do you do if it gets something wrong? Who approves new versions?"
     },
+    "trifecta": {
+      "eyebrow": "Security",
+      "title1": "How we cut the",
+      "titleAccent": "lethal trifecta",
+      "title2": ".",
+      "lead": "A term from Simon Willison. An agent that has all three of these properties at once is a prompt-injection target. We design our agents so at least one is always missing — or so there's a human in the loop at the point where it matters.",
+      "card1Num": "01",
+      "card1Title": "Access to private data",
+      "card1Body": "The agent reads your documents, customer list, CRM, email threads. Fine on its own — until you add 2 and 3.",
+      "card2Num": "02",
+      "card2Title": "Exposure to untrusted input",
+      "card2Body": "Web pages, customer uploads, third-party emails, scraped data. An attacker can hide instructions in there which the agent will follow.",
+      "card3Num": "03",
+      "card3Title": "Ability to act externally",
+      "card3Body": "The agent can reach out: send mail, call APIs, post messages. The channel an attacker uses to exfiltrate your data.",
+      "footer": "Combine all three and you've built a data-exfiltration pipeline. We design every agent explicitly to prevent that — separated capabilities, an audit log per tool call, human approval on the dangerous steps.",
+      "attribution": "Concept: Simon Willison (simonwillison.net)"
+    },
     "boundaries": {
       "eyebrow": "What we don't do",
       "title": "Honest about the boundaries.",

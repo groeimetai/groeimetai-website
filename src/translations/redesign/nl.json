@@ -195,6 +195,24 @@
       "step4Title": "Borgen",
       "step4Body": "Overdracht, runbook, monitoring. Wat doe je als hij iets fout zegt? Wie keurt nieuwe versies goed?"
     },
+    "trifecta": {
+      "eyebrow": "Security",
+      "title1": "Hoe wij de",
+      "titleAccent": "lethal trifecta",
+      "title2": "knippen.",
+      "lead": "Een term van Simon Willison. Een agent met alle drie deze eigenschappen tegelijk is een prompt-injectie doelwit. Wij bouwen onze agents zo dat altijd minstens één ontbreekt — of dat er een mens-in-the-loop tussen zit op het punt waar het ertoe doet.",
+      "card1Num": "01",
+      "card1Title": "Toegang tot privédata",
+      "card1Body": "De agent leest jouw documenten, klantenlijst, CRM, mail-threads. Op zichzelf prima — tot je er nummer 2 en 3 bij optelt.",
+      "card2Num": "02",
+      "card2Title": "Blootstelling aan onvertrouwde input",
+      "card2Body": "Webpages, klant-uploads, e-mails van derden, scraped data. Daarin kan een aanvaller instructies verstoppen die de agent gewoon volgt.",
+      "card3Num": "03",
+      "card3Title": "Externe uitvoeractie",
+      "card3Body": "De agent kan zelf naar buiten: mail versturen, API calls maken, posts plaatsen. Het kanaal waarmee een aanvaller jouw data eruit krijgt.",
+      "footer": "Combineer ze alle drie en je hebt een data-exfiltratie-pijplijn. Wij ontwerpen elke agent expliciet om dat te voorkomen — gescheiden capabilities, audit log per tool-call, menselijke approval op de gevaarlijke stappen.",
+      "attribution": "Concept: Simon Willison (simonwillison.net)"
+    },
     "boundaries": {
       "eyebrow": "Wat we niet doen",
       "title": "Eerlijk over de grenzen.",

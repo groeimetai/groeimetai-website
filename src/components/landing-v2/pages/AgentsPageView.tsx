@@ -89,6 +89,56 @@ export function AgentsPageView({ basePath }: { basePath: string }) {
       </Section>
 
       <Section>
+        <div className="sec-head reveal">
+          <div>
+            <Eyebrow>{t('trifecta.eyebrow')}</Eyebrow>
+            <h2 style={{ marginTop: 16 }}>
+              {t('trifecta.title1')}{' '}
+              <em style={{ color: 'var(--accent)', fontStyle: 'normal' }}>{t('trifecta.titleAccent')}</em>
+              {t('trifecta.title2')}
+            </h2>
+          </div>
+          <div className="sec-head-right">
+            <p className="lead">{t('trifecta.lead')}</p>
+          </div>
+        </div>
+        <div className="approach-grid reveal">
+          {[1, 2, 3].map((i) => (
+            <div className="approach-card" key={i}>
+              <div className="num">{t(`trifecta.card${i}Num`)}</div>
+              <h4>{t(`trifecta.card${i}Title`)}</h4>
+              <p>{t(`trifecta.card${i}Body`)}</p>
+            </div>
+          ))}
+        </div>
+        <div
+          className="reveal"
+          style={{
+            marginTop: 32,
+            padding: 24,
+            borderLeft: '2px solid var(--accent)',
+            background: 'var(--bg-elev)',
+            borderRadius: '0 12px 12px 0',
+          }}
+        >
+          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6 }}>{t('trifecta.footer')}</p>
+          <p
+            className="mono"
+            style={{
+              marginTop: 12,
+              marginBottom: 0,
+              fontSize: 11,
+              color: 'var(--fg-mute)',
+              letterSpacing: '0.04em',
+              fontFamily: 'var(--font-mono)',
+            }}
+          >
+            {t('trifecta.attribution')}
+          </p>
+        </div>
+      </Section>
+
+      <Section>
         <div className="ds-grid-2" style={{ gap: 80 }}>
           <div className="reveal">
             <Eyebrow>{t('boundaries.eyebrow')}</Eyebrow>
