@@ -41,7 +41,7 @@ export function CasesPageView({ basePath }: { basePath: string }) {
       </div>
 
       <Section>
-        <div className="cases-stack">
+        <div className="cases-stack" data-cases-stack>
           {cases.map((c, i) => (
             <div className="case-row reveal" key={i}>
               <div className="case-row-meta">
@@ -110,6 +110,23 @@ export function CasesPageView({ basePath }: { basePath: string }) {
               </div>
             </div>
           ))}
+        </div>
+        <div
+          className="mono reveal"
+          style={{
+            marginTop: 48,
+            paddingTop: 32,
+            borderTop: '1px dashed var(--line)',
+            textAlign: 'center',
+            fontSize: 13,
+            color: 'var(--fg-mute)',
+            letterSpacing: '0.01em',
+            maxWidth: '64ch',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          {t('listFooter')}
         </div>
       </Section>
 
