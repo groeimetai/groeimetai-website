@@ -23,7 +23,15 @@
     "planCall": "Book a call",
     "phone": "+31 6 8173 9018",
     "copyright": "© 2026 GroeimetAI · KvK 92341234",
-    "lockinLine": "No hype. No lock-in by default."
+    "lockinLine": "No hype. No lock-in by default.",
+    "insightsHeading": "Insights",
+    "blog": "Blog",
+    "faq": "FAQ",
+    "forHeading": "For whom",
+    "forCto": "CTOs and tech leadership",
+    "forOperations": "Operations and process teams",
+    "forMkbGm": "SME owners and management",
+    "forEnterprise": "Enterprise transformation"
   },
   "home": {
     "metaTitle": "GroeimetAI — Build agents you actually understand",

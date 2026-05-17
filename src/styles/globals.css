@@ -643,3 +643,110 @@
   background-size: 200px 100%;
   animation: skeleton-loading 1.5s ease-in-out infinite;
 }
+
+/* ---------- Content article (blog, pillars, programmatic) ----------- */
+/* Custom prose styles — replaces @tailwindcss/typography so we own the
+   spacing, weights and link color on long-form content pages. */
+
+.content-article {
+  font-size: 17px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.content-article > * + * {
+  margin-top: 1.2em;
+}
+
+.content-h1 {
+  font-size: clamp(28px, 3.2vw, 36px);
+  line-height: 1.2;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-top: 2.2em;
+}
+
+.content-h2 {
+  font-size: clamp(24px, 2.6vw, 30px);
+  line-height: 1.25;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.015em;
+  margin-top: 2em;
+  scroll-margin-top: 100px;
+}
+
+.content-h3 {
+  font-size: clamp(20px, 2.1vw, 24px);
+  line-height: 1.3;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  margin-top: 1.8em;
+  scroll-margin-top: 100px;
+}
+
+.content-p {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.content-p strong,
+.content-ul strong,
+.content-ol strong,
+.content-quote strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.content-link {
+  color: #ff9f43;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 159, 67, 0.4);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s;
+}
+
+.content-link:hover {
+  text-decoration-color: rgba(255, 159, 67, 0.9);
+}
+
+.content-code {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.92em;
+  background: rgba(248, 115, 21, 0.08);
+  color: #ffb476;
+  padding: 0.15em 0.45em;
+  border-radius: 4px;
+}
+
+.content-ul,
+.content-ol {
+  padding-left: 1.4em;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.content-ul {
+  list-style: disc;
+}
+
+.content-ol {
+  list-style: decimal;
+}
+
+.content-ul li,
+.content-ol li {
+  margin-top: 0.5em;
+}
+
+.content-quote {
+  border-left: 3px solid #f87315;
+  padding-left: 1.2em;
+  color: rgba(255, 255, 255, 0.85);
+  font-style: italic;
+}
+
+.content-hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 2.5em 0;
+}

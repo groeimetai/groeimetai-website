@@ -63,6 +63,37 @@ export function Footer({ basePath = '' }: { basePath?: string }) {
             </ul>
           </div>
           <div>
+            <h5>{t('forHeading')}</h5>
+            <ul>
+              <li>
+                <Link href={basePath + '/voor/voor-cto-tech-leadership'}>{t('forCto')}</Link>
+              </li>
+              <li>
+                <Link href={basePath + '/voor/voor-operations-procesteams'}>{t('forOperations')}</Link>
+              </li>
+              <li>
+                <Link href={basePath + '/voor/voor-mkb-ondernemers-directie'}>{t('forMkbGm')}</Link>
+              </li>
+              <li>
+                <Link href={basePath + '/voor/voor-enterprise-digital-transformation'}>{t('forEnterprise')}</Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h5>{t('insightsHeading')}</h5>
+            <ul>
+              <li>
+                <Link href={basePath + '/blog'}>{t('blog')}</Link>
+              </li>
+              <li>
+                <Link href={basePath + '/faq'}>{t('faq')}</Link>
+              </li>
+              <li>
+                <Link href={basePath + '/trainingen'}>{t('trainingen')}</Link>
+              </li>
+            </ul>
+          </div>
+          <div>
             <h5>{t('contactHeading')}</h5>
             <ul>
               <li>
