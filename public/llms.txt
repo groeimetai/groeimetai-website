@@ -1,103 +1,117 @@
-# GroeimetAI — AI Implementation Partner
+# GroeimetAI — AI implementation partner (training, strategy, adoption)
 
-> GroeimetAI is an AI implementation partner based in the Netherlands. We build practical AI solutions for businesses of all sizes: chatbots, voice assistants, automations, system integrations, and AI strategy. Fixed prices, real results.
+> GroeimetAI helps SME and mid-market organisations work pragmatically with AI: training, strategy, adoption guidance, workflow redesign, and safe integrations. Tooling and development are a second step, not the headline. Based in Apeldoorn, Netherlands. Founded 2023 by Niels van der Werf.
+
+## Positioning
+
+- Tagline: "No AI hype. Just teams that actually work better with it."
+- Target audience: SME and mid-market decision-makers — owners, MT-level, department heads — who see AI happening but want to use it without falling for hype or losing control.
+- What we sell first: AI training, AI strategy, adoption guidance, workflow redesign, safe integrations.
+- What we sell second: tooling and custom development, only where the first four don't suffice and durable value requires it.
+- What we don't claim: that AI replaces teams, that one-size-fits-all stacks exist, or that you can buy black-box solutions and be done.
 
 ## About
 
 - Company: GroeimetAI (Groei met AI)
 - Founded: 2023
+- Founder: Niels van der Werf (solo, technical, hands-on)
 - Location: Apeldoorn, Netherlands
-- Languages: Dutch, English
+- Languages: Dutch (primary), English
 - Website: https://groeimetai.io
 - Contact: https://groeimetai.io/contact
 - GitHub: https://github.com/GroeimetAI
+- LinkedIn: https://www.linkedin.com/company/groeimetai
 
-## What We Do
+## Services
 
-GroeimetAI helps businesses implement AI solutions that save time and create value. We are not a consultancy that only advises — we build, deploy, and maintain production AI systems.
+- **AI Training & Workshops** — Practical training that starts at the team's daily work, not the tools. Helps people identify where AI is the right answer and where it isn't.
+- **AI Strategy & Adoption** — Use-case selection, adoption guidance, governance, roadmap work. Grounded decisions, not hype-driven experimentation.
+- **Workflow Redesign & Implementation** — Process analysis and redesign that uses AI to reduce manual work and fit how teams already operate.
+- **Safe Integrations & Tooling** — Integrations, internal tools, and custom software when off-the-shelf AI tools are not enough.
 
-### Services
+## Audience-specific pillar pages
 
-- **AI Strategy & Consultancy**: Use case discovery, implementation roadmaps, ROI analysis. Helping leaders understand where AI delivers the most value.
-- **AI Integrations**: Connecting existing systems and tools with AI automation. MCP protocol, API integrations, smart workflows.
-- **Voice AI Development**: Intelligent voice agents for inbound calls, lead qualification, appointment scheduling, and 24/7 customer support.
-- **Full-stack Web Development**: Modern websites and web applications built with Next.js, React, and TypeScript.
-- **AI Training & Workshops**: Getting teams AI-ready with hands-on training, from fundamentals to advanced agent development.
+- For CTOs and tech leadership: https://groeimetai.io/nl/voor/voor-cto-tech-leadership
+- For operations and process teams: https://groeimetai.io/nl/voor/voor-operations-procesteams
+- For SME owners and management: https://groeimetai.io/nl/voor/voor-mkb-ondernemers-directie
+- For enterprise digital transformation: https://groeimetai.io/nl/voor/voor-enterprise-digital-transformation
 
-### Industries We Serve
+## How we work
 
-We work across all industries. Our clients include freelancers, SMEs, and enterprises in healthcare, professional services, retail, manufacturing, real estate, and more. AI is not just for big tech — we make it accessible for every business.
+1. **Scoping conversation** — Free, no obligation. We explore where AI fits in your situation and where it doesn't.
+2. **Inventory and use-case selection** — One to two weeks. Map current workflows honestly, pick 1-3 use cases with measurable ROI.
+3. **Pilot** — Three to six weeks. One team, one workflow. Pre-defined success metrics.
+4. **Scale or stop** — If the pilot delivers measured value, scale. If not, stop and learn. No "press on because we already invested".
+5. **Handover** — The internal team runs the system. We stay available for specific questions. Dependency is expensive over time.
 
-## Our Approach
+## Differentiators
 
-1. **Free Conversation** — Discover opportunities, no obligations
-2. **Expert Assessment** — Deep analysis with concrete proposal, fixed price
-3. **Implementation** — Build, test, deploy. Fixed price, guaranteed results
+- We respect existing infrastructure and add the minimum necessary
+- We say no to use cases that don't fit, even when there's budget
+- We hand over to internal teams; we don't lock you in
+- We're transparent about what AI can't do
+- We work mainly with NL/EU organisations; data residency is part of every design
 
-### Key Differentiators
-
-- Fixed prices, no hourly rates
-- First conversation always free
-- Results within 2-4 weeks
-- We handle everything from strategy to production
-- No vendor lock-in
-- Dutch-based, GDPR-compliant
-
-## Target Audience
-
-- **SMEs & Startups** looking to automate processes and integrate AI
-- **Enterprise teams** needing custom AI solutions and integrations
-- **Freelancers & Consultants** wanting AI-powered tools for their business
-- **IT Leaders & CTOs** evaluating AI strategy and implementation partners
-
-## Results & Impact
-
-- 50-80% time savings on repetitive tasks through AI automation
-- 24/7 availability with voice AI and chatbot solutions
-- Seamless integration with existing tools and workflows
-- Measurable ROI from day one
-
-## Technologies
-
-- Large Language Models (OpenAI, Anthropic Claude, Google Gemini)
-- Voice AI (AssemblyAI, ElevenLabs, custom telephony)
-- MCP Protocol for system integrations
-- RAG Architecture for knowledge systems
-- Next.js, React, TypeScript, Python
-- Firebase, Google Cloud Platform
-
-## Open Source
-
-- Snow-Flow: ServiceNow AI orchestration framework — https://github.com/GroeimetAI/snow-flow
-
-## Key Pages
+## Key pages
 
 - Home: https://groeimetai.io
-- Services: https://groeimetai.io/services
-- About: https://groeimetai.io/about
-- Contact: https://groeimetai.io/contact
-- Blog: https://groeimetai.io/blog
-- Cases: https://groeimetai.io/cases
-- FAQ: https://groeimetai.io/faq
-- Assessments: https://groeimetai.io/assessments
-- Agent Readiness Test: https://groeimetai.io/agent-readiness
-- MCP Guide: https://groeimetai.io/mcp-guide
-- Team: https://groeimetai.io/team
-- Roadmap: https://groeimetai.io/roadmap
+- About Niels: https://groeimetai.io/nl/about
+- Services: https://groeimetai.io/nl/services
+- Approach: https://groeimetai.io/nl/cases
+- Contact: https://groeimetai.io/nl/contact
+- Insights (blog): https://groeimetai.io/nl/blog
+- FAQ: https://groeimetai.io/nl/faq
 
-## Case Studies
+## AI training per industry (Dutch primary)
 
-- Enterprise LLM Implementation: https://groeimetai.io/cases/enterprise-llm-implementation
-- SnelNotuleren AI Transcription: https://groeimetai.io/cases/snelnotuleren-ai-transcription
-- GroeimetAI Learning Platform: https://groeimetai.io/cases/groeimetai-learning-platform
-- Intelligent Ticket Routing: https://groeimetai.io/cases/intelligent-ticket-routing
+- Healthcare: https://groeimetai.io/nl/training/zorg
+- Retail and e-commerce: https://groeimetai.io/nl/training/retail
+- Financial services: https://groeimetai.io/nl/training/finance
+- Construction and engineering: https://groeimetai.io/nl/training/bouw
+- Logistics and transport: https://groeimetai.io/nl/training/logistiek
+- Accountancy: https://groeimetai.io/nl/training/accountancy
+- Legal: https://groeimetai.io/nl/training/juridisch
+- Education: https://groeimetai.io/nl/training/onderwijs
+- Real estate: https://groeimetai.io/nl/training/vastgoed
+- Manufacturing: https://groeimetai.io/nl/training/maakindustrie
+- Government: https://groeimetai.io/nl/training/overheid
+- Hospitality: https://groeimetai.io/nl/training/horeca
+- Marketing agencies: https://groeimetai.io/nl/training/marketing
+- Media and publishers: https://groeimetai.io/nl/training/media
+- Recruitment and HR: https://groeimetai.io/nl/training/recruitment
+- Insurers: https://groeimetai.io/nl/training/verzekering
+- Non-profits: https://groeimetai.io/nl/training/non-profit
+- Energy and utilities: https://groeimetai.io/nl/training/energie
+- Consultancies: https://groeimetai.io/nl/training/consultancy
+- IT services and software firms: https://groeimetai.io/nl/training/it-dienstverlening
 
-## Assessments
+## Featured insights
 
-- AI Maturity Assessment: https://groeimetai.io/assessments/ai-maturity
-- Data Readiness Assessment: https://groeimetai.io/assessments/data-readiness
-- Process Automation Assessment: https://groeimetai.io/assessments/process-automation
-- ROI Calculator: https://groeimetai.io/assessments/roi-calculator
-- Integration Readiness: https://groeimetai.io/assessments/integration-readiness
-- AI Security Assessment: https://groeimetai.io/assessments/ai-security
-- CX AI Assessment: https://groeimetai.io/assessments/cx-ai
+- AI training that starts at the work, not the tool: https://groeimetai.io/nl/blog/ai-training-praktisch-beginnen
+- The adoption gap — why most AI licenses go unused: https://groeimetai.io/nl/blog/ai-adoptie-kloof-mkb
+- Workflow redesign with AI, step by step: https://groeimetai.io/nl/blog/workflow-herontwerp-stappenplan
+- Safe AI integrations: architectural choices that matter: https://groeimetai.io/nl/blog/veilige-ai-integraties-checklist
+- AI governance for SMEs — one page, no committee: https://groeimetai.io/nl/blog/ai-governance-mkb
+- Prompt engineering for teams — six patterns that always work: https://groeimetai.io/nl/blog/prompt-engineering-teams
+- Filtering AI hype as a decision-maker: https://groeimetai.io/nl/blog/ai-hype-filtreren-beslissers
+- Copilot vs custom: a fair comparison for SMEs: https://groeimetai.io/nl/blog/copilot-vs-custom
+- Calculating AI ROI on one A4: https://groeimetai.io/nl/blog/ai-roi-berekenen-zonder-tools
+- Change management for AI: https://groeimetai.io/nl/blog/change-management-ai
+- AI pilots that never scale: https://groeimetai.io/nl/blog/ai-pilots-die-nooit-opschalen
+- Choosing a foundation model in 2026: https://groeimetai.io/nl/blog/foundation-models-kiezen
+- Multi-agent systems — why you probably don't need one: https://groeimetai.io/nl/blog/multi-agent-systems-future-automation
+- RAG in practice: https://groeimetai.io/nl/blog/rag-architectuur-best-practices
+- ServiceNow plus AI: https://groeimetai.io/nl/blog/servicenow-ai-transformatie
+- LLM security and compliance for SMEs: https://groeimetai.io/nl/blog/llm-security-compliance
+
+## For LLM crawlers
+
+A full-content version of this site is available at https://groeimetai.io/llms-full.txt — it bundles all long-form content in plain markdown.
+
+robots.txt distinguishes between AI search crawlers (allowed) and AI training crawlers (blocked) on https://groeimetai.io/robots.txt.
+
+## Contact and engagement
+
+- Scoping conversation: free, one hour, no obligation. Use https://groeimetai.io/nl/contact to schedule.
+- We work primarily in Dutch and English, primarily in the Netherlands but also Belgium and Germany.
+- We do not offer 24/7 SLAs, large transformation programmes, or platform-style multi-year contracts. For those, we recommend specialised partners.

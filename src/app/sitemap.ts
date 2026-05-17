@@ -1,17 +1,20 @@
 import { MetadataRoute } from 'next';
+import { allPostSlugs } from '@/content/blog';
+import { allPillarSlugs } from '@/content/pillars';
+import { allProgrammaticSlugs } from '@/content/programmatic';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://groeimetai.io';
   const locales = ['nl', 'en'];
+  const now = new Date();
 
-  // Static pages
   const staticPaths = [
     { path: '', priority: 1, changeFrequency: 'daily' as const },
     { path: '/about', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/services', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/snow-flow', priority: 0.7, changeFrequency: 'monthly' as const },
+    { path: '/snow-flow', priority: 0.6, changeFrequency: 'monthly' as const },
     { path: '/contact', priority: 0.8, changeFrequency: 'monthly' as const },
-    { path: '/blog', priority: 0.7, changeFrequency: 'daily' as const },
+    { path: '/blog', priority: 0.8, changeFrequency: 'daily' as const },
     { path: '/cases', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/faq', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' as const },
@@ -19,18 +22,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/assessments', priority: 0.6, changeFrequency: 'monthly' as const },
     { path: '/team', priority: 0.5, changeFrequency: 'monthly' as const },
     { path: '/roadmap', priority: 0.5, changeFrequency: 'monthly' as const },
+    { path: '/trainingen', priority: 0.7, changeFrequency: 'monthly' as const },
   ];
 
   const staticPages: MetadataRoute.Sitemap = locales.flatMap((locale) =>
     staticPaths.map(({ path, priority, changeFrequency }) => ({
       url: `${baseUrl}/${locale}${path}`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency,
       priority,
     }))
   );
 
-  // Service pages
   const services = [
     'genai-consultancy',
     'llm-integration',
@@ -43,13 +46,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const servicePages: MetadataRoute.Sitemap = locales.flatMap((locale) =>
     services.map((service) => ({
       url: `${baseUrl}/${locale}/services/${service}`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
       priority: 0.7,
     }))
   );
 
-  // Case study detail pages
   const caseStudies = [
     'enterprise-llm-implementation',
     'snelnotuleren-ai-transcription',
@@ -60,13 +62,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const casePages: MetadataRoute.Sitemap = locales.flatMap((locale) =>
     caseStudies.map((slug) => ({
       url: `${baseUrl}/${locale}/cases/${slug}`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     }))
   );
 
-  // Assessment sub-pages
   const assessments = [
     'ai-maturity',
     'ai-security',
@@ -80,30 +81,45 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const assessmentPages: MetadataRoute.Sitemap = locales.flatMap((locale) =>
     assessments.map((assessment) => ({
       url: `${baseUrl}/${locale}/assessments/${assessment}`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
     }))
   );
 
-  // Blog posts
-  const blogPosts = [
-    'multi-agent-systems-future-automation',
-    'rag-architectuur-best-practices',
-    'servicenow-ai-transformatie',
-    'llm-security-compliance',
-    'genai-roi-measurement',
-    'prompt-engineering-advanced',
-  ];
+  // Blog posts — only include locale-slug pairs that actually exist
+  const blogPages: MetadataRoute.Sitemap = allPostSlugs().map(({ slug, locale }) => ({
+    url: `${baseUrl}/${locale}/blog/${slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
 
-  const blogPages: MetadataRoute.Sitemap = locales.flatMap((locale) =>
-    blogPosts.map((post) => ({
-      url: `${baseUrl}/${locale}/blog/${post}`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
+  // Pillar pages
+  const pillarPages: MetadataRoute.Sitemap = allPillarSlugs().map(({ slug, locale }) => ({
+    url: `${baseUrl}/${locale}/voor/${slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly' as const,
+    priority: 0.85,
+  }));
+
+  // Programmatic SEO pages
+  const programmaticPages: MetadataRoute.Sitemap = allProgrammaticSlugs().map(
+    ({ slug, locale }) => ({
+      url: `${baseUrl}/${locale}/training/${slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
       priority: 0.6,
-    }))
+    })
   );
 
-  return [...staticPages, ...servicePages, ...casePages, ...assessmentPages, ...blogPages];
+  return [
+    ...staticPages,
+    ...servicePages,
+    ...casePages,
+    ...assessmentPages,
+    ...blogPages,
+    ...pillarPages,
+    ...programmaticPages,
+  ];
 }
