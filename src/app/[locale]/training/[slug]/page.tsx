@@ -29,6 +29,7 @@ export async function generateMetadata({
       languages: {
         'nl-NL': `${BASE}/nl/training/${params.slug}`,
         en: `${BASE}/en/training/${params.slug}`,
+        'x-default': `${BASE}/nl/training/${params.slug}`,
       },
     },
     openGraph: {

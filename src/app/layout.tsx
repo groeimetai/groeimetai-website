@@ -58,13 +58,9 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  alternates: {
-    canonical: 'https://groeimetai.io',
-    languages: {
-      en: 'https://groeimetai.io/en',
-      'nl-NL': 'https://groeimetai.io/nl',
-    },
-  },
+  // Note: no global canonical or hreflang here. The root path "/" is a redirect
+  // to /nl and should not be a canonical target itself. Each locale page sets
+  // its own self-referential canonical via generateMetadataWithAlternates().
   openGraph: {
     type: 'website',
     locale: 'en_US',

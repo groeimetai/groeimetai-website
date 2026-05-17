@@ -25,10 +25,13 @@ export async function generateMetadata({
     title: `${page.title} — GroeimetAI`,
     description: page.intro,
     alternates: {
+      // Pillar pages are NL-only — no EN hreflang. Self-referential canonical
+      // and an x-default that mirrors the canonical so search engines don't
+      // try to find a non-existent translation.
       canonical: url,
       languages: {
         'nl-NL': `${BASE}/nl/voor/${params.slug}`,
-        en: `${BASE}/en/voor/${params.slug}`,
+        'x-default': `${BASE}/nl/voor/${params.slug}`,
       },
     },
     openGraph: {
