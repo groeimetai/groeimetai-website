@@ -45,13 +45,17 @@ auth = getAuth(app);
 db = getFirestore(app);
 storage = getStorage(app);
 
-// Initialize Analytics and Performance only on client side
+// Initialize Analytics and Performance only on client side, AFTER the page
+// is idle. Firebase Analytics injects the GA script (~141 KiB) and runs
+// during initialization — doing this synchronously delays LCP/FCP. We use
+// requestIdleCallback (with a setTimeout fallback) so analytics fires after
+// the page is interactive instead of competing with paint.
 if (typeof window !== 'undefined') {
-  isSupported().then((supported) => {
-    if (supported) {
+  const initFirebaseClientSdks = () => {
+    isSupported().then((supported) => {
+      if (!supported) return;
       analytics = getAnalytics(app);
 
-      // Only initialize performance if not disabled
       if (process.env.NEXT_PUBLIC_DISABLE_FIREBASE_PERFORMANCE !== 'true') {
         performance = getPerformance(app);
 
@@ -65,8 +69,14 @@ if (typeof window !== 'undefined') {
           }
         }
       }
-    }
-  });
+    });
+  };
+
+  if ('requestIdleCallback' in window) {
+    (window as any).requestIdleCallback(initFirebaseClientSdks, { timeout: 5000 });
+  } else {
+    setTimeout(initFirebaseClientSdks, 2000);
+  }
 }
 
 // Offline persistence is now enabled by default in newer Firebase versions

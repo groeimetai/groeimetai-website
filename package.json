@@ -129,5 +129,20 @@
       "prettier --write"
     ],
     "*.{json,css,md}": "prettier --write"
+  },
+  "browserslist": {
+    "production": [
+      ">0.3%",
+      "not dead",
+      "not op_mini all",
+      "not ie 11",
+      "not safari < 14",
+      "not ios_saf < 14"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

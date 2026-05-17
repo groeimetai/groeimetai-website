@@ -127,6 +127,16 @@ export default function RootLayout({
   return (
     <html lang={params?.locale || 'en'} suppressHydrationWarning>
       <head>
+        {/* Preconnect to third-party origins we hit on initial load — saves
+            ~100-200ms when GA/Firebase fires its first call. dns-prefetch is
+            kept as a safety net for browsers that ignore preconnect under
+            heavy load. */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="" />
+        <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="" />
+        <link rel="preconnect" href="https://firestore.googleapis.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
         <OrganizationJsonLd />
         <ServicesJsonLd />
         <WebSiteJsonLd />

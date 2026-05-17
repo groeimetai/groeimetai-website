@@ -16,6 +16,7 @@ export function Footer({ basePath = '' }: { basePath?: string }) {
               <img
                 src="/groeimet-ai-logo.svg"
                 alt="GroeimetAI"
+                width={149}
                 height={28}
                 style={{ height: 28, width: 'auto' }}
               />
