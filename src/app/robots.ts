@@ -50,27 +50,33 @@ const AI_TRAINING_BOTS = [
   'Webzio-Extended',
 ];
 
+// Curated, LLM-optimized content surfaced explicitly in robots.txt so crawlers
+// (and humans inspecting the file) can find it: /llms.txt is a short index,
+// /llms-full.txt the full machine-readable corpus.
+const LLM_FILES = ['/llms.txt', '/llms-full.txt'];
+const ALLOW = ['/', ...LLM_FILES];
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: ALLOW,
         disallow: PRIVATE_PATHS,
       },
       {
         userAgent: 'Googlebot',
-        allow: '/',
+        allow: ALLOW,
         disallow: PRIVATE_PATHS,
       },
       {
         userAgent: 'Bingbot',
-        allow: '/',
+        allow: ALLOW,
         disallow: PRIVATE_PATHS,
       },
       ...AI_SEARCH_BOTS.map((userAgent) => ({
         userAgent,
-        allow: '/',
+        allow: ALLOW,
         disallow: PRIVATE_PATHS,
       })),
       ...AI_TRAINING_BOTS.map((userAgent) => ({
