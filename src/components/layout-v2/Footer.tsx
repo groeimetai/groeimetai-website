@@ -51,6 +51,11 @@ export function Footer({ basePath = '' }: { basePath?: string }) {
                 <Link href={basePath + '/cases'}>{t('cases')}</Link>
               </li>
               <li>
+                <a href="https://groei.studio" target="_blank" rel="noopener noreferrer">
+                  Studio Groei
+                </a>
+              </li>
+              <li>
                 <a href="https://github.com/serac-labs/serac" target="_blank" rel="noopener noreferrer">
                   {t('seracOss')}
                 </a>
