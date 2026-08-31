@@ -61,6 +61,10 @@ interface CaseDetail {
   diagram: React.ComponentType;
 }
 
+const BASE = 'https://groeimetai.io';
+// Generated card image (src/app/opengraph-image.tsx).
+const OG_IMAGE = 'https://groeimetai.io/opengraph-image/og.png';
+
 const caseDetails: Record<string, CaseDetail> = {
   'enterprise-llm-implementation': {
     slug: 'enterprise-llm-implementation',
@@ -402,9 +406,40 @@ export async function generateMetadata({
     };
   }
 
+  const url = `${BASE}/${params.locale}/cases/${params.slug}`;
+
+  // `caseDetails` is not locale-scoped and generateStaticParams builds every
+  // slug for both locales, so /nl/cases/<slug> and /en/cases/<slug> both exist
+  // and can reference each other reciprocally. x-default points at the Dutch
+  // URL because nl is the default locale.
+  const languages: Record<string, string> = {
+    'nl-NL': `${BASE}/nl/cases/${params.slug}`,
+    en: `${BASE}/en/cases/${params.slug}`,
+    'x-default': `${BASE}/nl/cases/${params.slug}`,
+  };
+
   return {
     title: `${caseDetail.title} - GroeimetAI Case Study`,
     description: caseDetail.overview,
+    alternates: {
+      canonical: url,
+      languages,
+    },
+    openGraph: {
+      title: caseDetail.title,
+      description: caseDetail.overview,
+      type: 'article',
+      url,
+      siteName: 'GroeimetAI',
+      locale: params.locale === 'nl' ? 'nl_NL' : 'en_US',
+      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: caseDetail.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: caseDetail.title,
+      description: caseDetail.overview,
+      images: [OG_IMAGE],
+    },
   };
 }
 

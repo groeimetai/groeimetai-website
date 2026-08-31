@@ -1,121 +1,125 @@
 import { MetadataRoute } from 'next';
-import { allPostSlugs } from '@/content/blog';
-import { allPillarSlugs } from '@/content/pillars';
-import { allProgrammaticSlugs } from '@/content/programmatic';
+import { allPosts } from '@/content/blog';
+import { allPillars } from '@/content/pillars';
+import { allProgrammatic } from '@/content/programmatic';
+
+const BASE_URL = 'https://groeimetai.io';
+const LOCALES = ['nl', 'en'] as const;
+
+type ChangeFrequency = NonNullable<MetadataRoute.Sitemap[number]['changeFrequency']>;
+
+interface StaticPath {
+  path: string;
+  priority: number;
+  changeFrequency: ChangeFrequency;
+  /**
+   * Date this page's content last changed, as YYYY-MM-DD. Hand-maintained:
+   * bump the entry when you edit the page. Google only uses <lastmod> when it
+   * is "consistently and verifiably accurate", so a build timestamp on every
+   * URL is worse than none — it claims every page changed at the same
+   * millisecond. Under-claiming (a stale date) is safe; over-claiming is not.
+   */
+  lastModified: string;
+}
+
+// Only routes that actually exist under src/app/[locale]/ belong here.
+// /services, /services/* and /snow-flow were removed: the first two 308-redirect
+// to /trainingen (next.config.mjs) and the third has no route at all.
+const STATIC_PATHS: StaticPath[] = [
+  { path: '', priority: 1, changeFrequency: 'weekly', lastModified: '2026-05-17' },
+  { path: '/agents', priority: 0.9, changeFrequency: 'monthly', lastModified: '2026-05-10' },
+  { path: '/trainingen', priority: 0.7, changeFrequency: 'monthly', lastModified: '2026-05-17' },
+  { path: '/about', priority: 0.8, changeFrequency: 'monthly', lastModified: '2026-05-17' },
+  { path: '/contact', priority: 0.8, changeFrequency: 'monthly', lastModified: '2026-05-17' },
+  { path: '/blog', priority: 0.8, changeFrequency: 'weekly', lastModified: '2026-01-13' },
+  { path: '/cases', priority: 0.8, changeFrequency: 'weekly', lastModified: '2026-05-17' },
+  { path: '/faq', priority: 0.8, changeFrequency: 'weekly', lastModified: '2026-03-12' },
+  { path: '/assessments', priority: 0.6, changeFrequency: 'monthly', lastModified: '2026-01-14' },
+  { path: '/privacy', priority: 0.3, changeFrequency: 'yearly', lastModified: '2026-01-13' },
+  { path: '/terms', priority: 0.3, changeFrequency: 'yearly', lastModified: '2026-01-13' },
+  { path: '/cookies', priority: 0.3, changeFrequency: 'yearly', lastModified: '2025-07-04' },
+];
+
+const CASE_STUDIES = [
+  'enterprise-llm-implementation',
+  'snelnotuleren-ai-transcription',
+  'groeimetai-learning-platform',
+  'intelligent-ticket-routing',
+];
+const CASES_LAST_MODIFIED = '2025-07-04';
+
+const ASSESSMENTS = [
+  'ai-maturity',
+  'ai-security',
+  'cx-ai',
+  'data-readiness',
+  'integration-readiness',
+  'process-automation',
+  'roi-calculator',
+];
+const ASSESSMENTS_LAST_MODIFIED = '2026-01-14';
+
+// ProgrammaticPage (src/content/types.ts) carries no date field — the 20
+// industry pages are generated from industries.ts + template.ts, so their
+// content date is the date those two modules were last revised. Bump this
+// when the industry set or the page template changes.
+const PROGRAMMATIC_LAST_MODIFIED = '2026-05-17';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://groeimetai.io';
-  const locales = ['nl', 'en'];
-  const now = new Date();
-
-  const staticPaths = [
-    { path: '', priority: 1, changeFrequency: 'daily' as const },
-    { path: '/about', priority: 0.8, changeFrequency: 'monthly' as const },
-    { path: '/services', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/snow-flow', priority: 0.6, changeFrequency: 'monthly' as const },
-    { path: '/contact', priority: 0.8, changeFrequency: 'monthly' as const },
-    { path: '/blog', priority: 0.8, changeFrequency: 'daily' as const },
-    { path: '/cases', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/faq', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' as const },
-    { path: '/terms', priority: 0.3, changeFrequency: 'yearly' as const },
-    { path: '/assessments', priority: 0.6, changeFrequency: 'monthly' as const },
-    { path: '/team', priority: 0.5, changeFrequency: 'monthly' as const },
-    { path: '/roadmap', priority: 0.5, changeFrequency: 'monthly' as const },
-    { path: '/trainingen', priority: 0.7, changeFrequency: 'monthly' as const },
-  ];
-
-  const staticPages: MetadataRoute.Sitemap = locales.flatMap((locale) =>
-    staticPaths.map(({ path, priority, changeFrequency }) => ({
-      url: `${baseUrl}/${locale}${path}`,
-      lastModified: now,
+  const staticPages: MetadataRoute.Sitemap = LOCALES.flatMap((locale) =>
+    STATIC_PATHS.map(({ path, priority, changeFrequency, lastModified }) => ({
+      url: `${BASE_URL}/${locale}${path}`,
+      lastModified,
       changeFrequency,
       priority,
     }))
   );
 
-  const services = [
-    'genai-consultancy',
-    'llm-integration',
-    'rag-architecture',
-    'servicenow-ai',
-    'multi-agent-orchestration',
-    'custom-solutions',
-  ];
-
-  const servicePages: MetadataRoute.Sitemap = locales.flatMap((locale) =>
-    services.map((service) => ({
-      url: `${baseUrl}/${locale}/services/${service}`,
-      lastModified: now,
+  const casePages: MetadataRoute.Sitemap = LOCALES.flatMap((locale) =>
+    CASE_STUDIES.map((slug) => ({
+      url: `${BASE_URL}/${locale}/cases/${slug}`,
+      lastModified: CASES_LAST_MODIFIED,
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     }))
   );
 
-  const caseStudies = [
-    'enterprise-llm-implementation',
-    'snelnotuleren-ai-transcription',
-    'groeimetai-learning-platform',
-    'intelligent-ticket-routing',
-  ];
-
-  const casePages: MetadataRoute.Sitemap = locales.flatMap((locale) =>
-    caseStudies.map((slug) => ({
-      url: `${baseUrl}/${locale}/cases/${slug}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    }))
-  );
-
-  const assessments = [
-    'ai-maturity',
-    'ai-security',
-    'cx-ai',
-    'data-readiness',
-    'integration-readiness',
-    'process-automation',
-    'roi-calculator',
-  ];
-
-  const assessmentPages: MetadataRoute.Sitemap = locales.flatMap((locale) =>
-    assessments.map((assessment) => ({
-      url: `${baseUrl}/${locale}/assessments/${assessment}`,
-      lastModified: now,
+  const assessmentPages: MetadataRoute.Sitemap = LOCALES.flatMap((locale) =>
+    ASSESSMENTS.map((slug) => ({
+      url: `${BASE_URL}/${locale}/assessments/${slug}`,
+      lastModified: ASSESSMENTS_LAST_MODIFIED,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
     }))
   );
 
-  // Blog posts — only include locale-slug pairs that actually exist
-  const blogPages: MetadataRoute.Sitemap = allPostSlugs().map(({ slug, locale }) => ({
-    url: `${baseUrl}/${locale}/blog/${slug}`,
-    lastModified: now,
-    changeFrequency: 'monthly' as const,
+  // Blog posts — only locale/slug pairs that actually exist, each with its own
+  // publication (or revision) date from the content record.
+  const blogPages: MetadataRoute.Sitemap = allPosts().map((post) => ({
+    url: `${BASE_URL}/${post.locale}/blog/${post.slug}`,
+    lastModified: post.updated ?? post.date,
+    changeFrequency: 'yearly' as const,
     priority: 0.7,
   }));
 
   // Pillar pages
-  const pillarPages: MetadataRoute.Sitemap = allPillarSlugs().map(({ slug, locale }) => ({
-    url: `${baseUrl}/${locale}/voor/${slug}`,
-    lastModified: now,
-    changeFrequency: 'monthly' as const,
+  const pillarPages: MetadataRoute.Sitemap = allPillars().map((pillar) => ({
+    url: `${BASE_URL}/${pillar.locale}/voor/${pillar.slug}`,
+    lastModified: pillar.updated ?? pillar.date,
+    changeFrequency: 'yearly' as const,
     priority: 0.85,
   }));
 
-  // Programmatic SEO pages
-  const programmaticPages: MetadataRoute.Sitemap = allProgrammaticSlugs().map(
-    ({ slug, locale }) => ({
-      url: `${baseUrl}/${locale}/training/${slug}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    })
-  );
+  // Programmatic SEO pages — "AI training per branche"
+  const programmaticPages: MetadataRoute.Sitemap = allProgrammatic().map((page) => ({
+    url: `${BASE_URL}/${page.locale}/training/${page.slug}`,
+    lastModified: PROGRAMMATIC_LAST_MODIFIED,
+    changeFrequency: 'yearly' as const,
+    priority: 0.6,
+  }));
 
   return [
     ...staticPages,
-    ...servicePages,
     ...casePages,
     ...assessmentPages,
     ...blogPages,

@@ -3,10 +3,12 @@ import { notFound } from 'next/navigation';
 import { allProgrammaticSlugs, getProgrammatic } from '@/content/programmatic';
 import { ArticleLayout } from '@/components/content/ArticleLayout';
 import { MarkdownArticle } from '@/components/content/MarkdownArticle';
-import { ArticleJsonLd, BreadcrumbJsonLd, FAQJsonLd } from '@/components/JsonLd';
+import { CourseJsonLd, BreadcrumbJsonLd, FAQJsonLd } from '@/components/JsonLd';
 import type { Locale } from '@/content/types';
 
 const BASE = 'https://groeimetai.io';
+// Generated card image (src/app/opengraph-image.tsx).
+const OG_IMAGE = 'https://groeimetai.io/opengraph-image/og.png';
 
 export async function generateStaticParams() {
   return allProgrammaticSlugs().map(({ slug, locale }) => ({ slug, locale }));
@@ -38,6 +40,13 @@ export async function generateMetadata({
       url,
       type: 'article',
       locale: params.locale === 'nl' ? 'nl_NL' : 'en_US',
+      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: page.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: page.title,
+      description: page.intro,
+      images: [OG_IMAGE],
     },
   };
 }
@@ -52,7 +61,11 @@ export default function ProgrammaticPage({
 
   const url = `${BASE}/${params.locale}/training/${params.slug}`;
   const breadcrumbs = [
-    { name: params.locale === 'nl' ? 'Training' : 'Training', url: `${BASE}/${params.locale}` },
+    { name: 'Home', url: `${BASE}/${params.locale}` },
+    {
+      name: params.locale === 'nl' ? 'Trainingen' : 'Training',
+      url: `${BASE}/${params.locale}/trainingen`,
+    },
     { name: page.title, url },
   ];
 
@@ -63,15 +76,23 @@ export default function ProgrammaticPage({
 
   return (
     <>
-      <ArticleJsonLd
-        headline={page.title}
+      {/*
+        These pages describe a training programme, not an article, so they are
+        typed Course. No datePublished/dateModified: the industry records in
+        src/content/programmatic/ carry no dates, and the previous hardcoded
+        "2026-05-15" was identical on all 40 pages. Nothing is asserted here
+        that is not in the page content: `teaches` is the examples list the
+        page renders, `courseMode` is how GroeimetAI states it delivers
+        training everywhere on the site ("op locatie of remote", "NL & remote"
+        — src/translations/redesign/nl.json). No price, duration or rating.
+      */}
+      <CourseJsonLd
+        name={page.title}
         description={page.intro}
         url={url}
-        datePublished="2026-05-15"
-        authorName="Niels van der Werf"
-        authorUrl={`${BASE}/${params.locale}/about#niels-van-der-werf`}
         inLanguage={params.locale === 'nl' ? 'nl' : 'en'}
-        articleSection="Training"
+        teaches={page.examples}
+        courseMode={['onsite', 'online']}
       />
       <BreadcrumbJsonLd items={breadcrumbs} />
       <FAQJsonLd faqs={page.faqs} />

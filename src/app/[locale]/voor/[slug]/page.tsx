@@ -3,10 +3,12 @@ import { notFound } from 'next/navigation';
 import { allPillarSlugs, getPillar } from '@/content/pillars';
 import { MarkdownArticle } from '@/components/content/MarkdownArticle';
 import { ArticleLayout } from '@/components/content/ArticleLayout';
-import { ArticleJsonLd, BreadcrumbJsonLd, FAQJsonLd } from '@/components/JsonLd';
+import { ArticleJsonLd, BreadcrumbJsonLd, FAQJsonLd, FOUNDER_ID } from '@/components/JsonLd';
 import type { Locale } from '@/content/types';
 
 const BASE = 'https://groeimetai.io';
+// Generated card image (src/app/opengraph-image.tsx).
+const OG_IMAGE = 'https://groeimetai.io/opengraph-image/og.png';
 
 export async function generateStaticParams() {
   return allPillarSlugs().map(({ slug, locale }) => ({ slug, locale }));
@@ -40,6 +42,13 @@ export async function generateMetadata({
       url,
       type: 'article',
       locale: params.locale === 'nl' ? 'nl_NL' : 'en_US',
+      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: page.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: page.title,
+      description: page.intro,
+      images: [OG_IMAGE],
     },
     keywords: page.keywords,
   };
@@ -55,7 +64,7 @@ export default function PillarPage({
 
   const url = `${BASE}/${params.locale}/voor/${params.slug}`;
   const breadcrumbs = [
-    { name: params.locale === 'nl' ? 'Voor' : 'For', url: `${BASE}/${params.locale}` },
+    { name: 'Home', url: `${BASE}/${params.locale}` },
     { name: page.title, url },
   ];
 
@@ -65,6 +74,7 @@ export default function PillarPage({
         headline={page.title}
         description={page.intro}
         url={url}
+        authorId={FOUNDER_ID}
         datePublished={page.date}
         dateModified={page.updated || page.date}
         authorName="Niels van der Werf"
