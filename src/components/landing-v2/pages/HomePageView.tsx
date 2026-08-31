@@ -86,6 +86,47 @@ const PAGE_CSS = `
 `;
 
 /** Start state for a `[data-reveal]` element — the loop only sets the end state. */
+/* Pinned-section pacing.
+ *
+ * The three stages sit at t = 0, 0.5 and 1 over the 420vh track. Originally a
+ * stage was fully legible at exactly one scroll position (o = 1 - |t-c|/0.3
+ * peaks at a single point), so the text was only ever sharp in passing and you
+ * could not comfortably stop on it.
+ *
+ * Now each stage gets a plateau: fully clear while |t-c| <= HOLD, then a short
+ * ramp to zero at |t-c| = HOLD+FADE. With 0.15 + 0.10 that ramp ends exactly at
+ * the midpoint between two stages, so stages never overlap and each one stays
+ * readable across 30% of the track — roughly 126vh of scrolling.
+ */
+const STAGE_HOLD = 0.15;
+const STAGE_FADE = 0.1;
+
+/** Trapezoid: 1 on the plateau, linear ramp to 0 at HOLD + FADE. */
+function stageClarity(t: number, centre: number): number {
+  const d = Math.abs(t - centre) - STAGE_HOLD;
+  if (d <= 0) return 1;
+  const o = 1 - d / STAGE_FADE;
+  return o < 0 ? 0 : o;
+}
+
+/**
+ * Remaps raw scroll to the progress the 3D object gets, so the object rests on
+ * its shape while a stage is being read and does its morph during the ramps.
+ * Without this the text holds still while the composition keeps rearranging
+ * behind it, which reads as two unrelated animations.
+ */
+function morphProgress(t: number): number {
+  const a = STAGE_HOLD; // 0.15 — end of the first plateau
+  const b = 0.5 - STAGE_HOLD; // 0.35 — start of the middle plateau
+  const c = 0.5 + STAGE_HOLD; // 0.65 — end of the middle plateau
+  const d = 1 - STAGE_HOLD; // 0.85 — start of the last plateau
+  if (t <= a) return 0;
+  if (t < b) return ((t - a) / (b - a)) * 0.5;
+  if (t <= c) return 0.5;
+  if (t < d) return 0.5 + ((t - c) / (d - c)) * 0.5;
+  return 1;
+}
+
 const reveal = (delay = 0, dy = 24): CSSProperties => ({
   opacity: 0,
   transform: `translateY(${dy}px)`,
@@ -166,9 +207,12 @@ export function HomePageView({ basePath }: { basePath: string }) {
       const r = track.getBoundingClientRect();
       const span = Math.max(1, r.height - vh);
       const t2 = clamp01(-r.top / span);
-      morph.current?.setProgress(t2);
+      // The object follows the paced progress, not raw scroll, so it settles
+      // while you read and moves while you travel between stages.
+      const mp = morphProgress(t2);
+      morph.current?.setProgress(mp);
 
-      const s2 = t2 * 2;
+      const s2 = mp * 2;
       const i0 = Math.min(1, Math.floor(s2));
       const burst = Math.sin(Math.PI * clamp01(s2 - i0));
       const enter = clamp01(t2 / 0.07);
@@ -207,11 +251,15 @@ export function HomePageView({ basePath }: { basePath: string }) {
 
       for (let i = 0; i < 3; i++) {
         const centre = i * 0.5;
-        const o = clamp01(1 - Math.abs(t2 - centre) / 0.3);
+        const o = stageClarity(t2, centre);
+        // Drift only once the stage starts leaving its plateau — while it is
+        // legible it should sit still, or the eye keeps chasing it.
+        const past =
+          Math.sign(t2 - centre) * Math.max(0, Math.abs(t2 - centre) - STAGE_HOLD);
         const st = stageRefs.current[i];
         if (st) {
           st.style.opacity = String(o);
-          st.style.transform = `translate3d(0,${(t2 - centre) * -46 * k}px,0)`;
+          st.style.transform = `translate3d(0,${past * -110 * k}px,0)`;
           st.style.pointerEvents = o > 0.5 ? 'auto' : 'none';
           if (k) {
             st.style.filter = `blur(${((1 - o) * 7).toFixed(2)}px)`;
@@ -222,7 +270,7 @@ export function HomePageView({ basePath }: { basePath: string }) {
         const bn = numRefs.current[i];
         if (bn) {
           bn.style.opacity = (o * 0.95).toFixed(3);
-          bn.style.transform = `translateY(-50%) translate3d(0,${((t2 - centre) * -110 * k).toFixed(
+          bn.style.transform = `translateY(-50%) translate3d(0,${(past * -260 * k).toFixed(
             1
           )}px,0) scale(${(0.9 + o * 0.1).toFixed(3)})`;
         }
@@ -415,7 +463,12 @@ export function HomePageView({ basePath }: { basePath: string }) {
         </>
       }
     >
-      <style>{PAGE_CSS}</style>
+      {/* dangerouslySetInnerHTML, not children: React escapes text children of
+          <style> on the server (' -> &#x27;, " -> &quot;) but not on the client,
+          which is a hydration text mismatch. React then throws away the whole
+          server document and re-mounts it — detaching every node useSiteMotion
+          had captured, so the entire scroll-motion layer went dead. */}
+      <style dangerouslySetInnerHTML={{ __html: PAGE_CSS }} />
 
       <div className="page home-2026">
         {/* ============================= hero ============================= */}
