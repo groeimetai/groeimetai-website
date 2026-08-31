@@ -1,0 +1,218 @@
+{
+  "pkg": "@/components/ds",
+  "globalName": "GroeimetAI",
+  "shape": "package",
+  "projectId": "35021c9a-c8a9-42eb-be72-8bf0d221069f",
+  "entry": ".design-sync/ds-entry.tsx",
+  "srcDir": "src/components/ds",
+  "tsconfig": ".design-sync/tsconfig.sync.json",
+  "docsDir": ".design-sync/docs",
+  "extraFonts": [
+    ".design-sync/fonts/brand.css"
+  ],
+  "provider": {
+    "component": "DsRoot"
+  },
+  "componentSrcMap": {
+    "Btn": "src/components/ds/Btn.tsx",
+    "DsLink": "src/components/ds/DsLink.tsx",
+    "Section": "src/components/ds/Section.tsx",
+    "Eyebrow": "src/components/ds/Eyebrow.tsx",
+    "Stat": "src/components/ds/Stat.tsx",
+    "Numbered": "src/components/ds/Numbered.tsx",
+    "PillarCard": "src/components/ds/PillarCard.tsx",
+    "CaseCard": "src/components/ds/CaseCard.tsx",
+    "Pill": "src/components/ds/Pill.tsx",
+    "Tag": "src/components/ds/Tag.tsx",
+    "LogoBar": "src/components/ds/LogoBar.tsx",
+    "LogoMark": "src/components/ds/icons.tsx",
+    "IconFolder": "src/components/ds/icons.tsx",
+    "IconInstructions": "src/components/ds/icons.tsx",
+    "IconTool": "src/components/ds/icons.tsx",
+    "IconCompass": "src/components/ds/icons.tsx",
+    "IconBook": "src/components/ds/icons.tsx",
+    "IconUsers": "src/components/ds/icons.tsx",
+    "IconWrench": "src/components/ds/icons.tsx",
+    "IconShield": "src/components/ds/icons.tsx",
+    "IconGraph": "src/components/ds/icons.tsx",
+    "IconSpark": "src/components/ds/icons.tsx",
+    "IconArrow": "src/components/ds/icons.tsx",
+    "IconCheck": "src/components/ds/icons.tsx",
+    "IconX": "src/components/ds/icons.tsx",
+    "IconPlus": "src/components/ds/icons.tsx",
+    "IconMail": "src/components/ds/icons.tsx",
+    "IconPhone": "src/components/ds/icons.tsx",
+    "IconPin": "src/components/ds/icons.tsx",
+    "IconGithub": "src/components/ds/icons.tsx",
+    "IconTerminal": "src/components/ds/icons.tsx",
+    "IconCode": "src/components/ds/icons.tsx",
+    "IconClock": "src/components/ds/icons.tsx",
+    "IconLock": "src/components/ds/icons.tsx",
+    "IconSettings": "src/components/ds/icons.tsx",
+    "IconLayers": "src/components/ds/icons.tsx",
+    "IconTarget": "src/components/ds/icons.tsx",
+    "IconChat": "src/components/ds/icons.tsx",
+    "IconBolt": "src/components/ds/icons.tsx",
+    "IconSearch": "src/components/ds/icons.tsx",
+    "IconNotes": "src/components/ds/icons.tsx",
+    "IconBracket": "src/components/ds/icons.tsx"
+  },
+  "overrides": {
+    "Section": {
+      "cardMode": "column",
+      "viewport": "1240x820"
+    },
+    "PillarCard": {
+      "cardMode": "column",
+      "viewport": "1240x620"
+    },
+    "CaseCard": {
+      "cardMode": "column",
+      "viewport": "1240x620"
+    },
+    "Numbered": {
+      "cardMode": "column",
+      "viewport": "1100x620"
+    },
+    "Stat": {
+      "cardMode": "column",
+      "viewport": "1240x420"
+    },
+    "LogoBar": {
+      "cardMode": "column",
+      "viewport": "1240x360"
+    },
+    "DsLink": {
+      "cardMode": "column"
+    },
+    "LogoMark": {
+      "cardMode": "column"
+    },
+    "IconArrow": {
+      "cardMode": "column"
+    },
+    "IconBolt": {
+      "cardMode": "column"
+    },
+    "IconBracket": {
+      "cardMode": "column"
+    },
+    "IconChat": {
+      "cardMode": "column"
+    },
+    "IconCheck": {
+      "cardMode": "column"
+    },
+    "IconClock": {
+      "cardMode": "column"
+    },
+    "IconCode": {
+      "cardMode": "column"
+    },
+    "IconGithub": {
+      "cardMode": "column"
+    },
+    "IconGraph": {
+      "cardMode": "column"
+    },
+    "IconLayers": {
+      "cardMode": "column"
+    },
+    "IconLock": {
+      "cardMode": "column"
+    },
+    "IconMail": {
+      "cardMode": "column"
+    },
+    "IconNotes": {
+      "cardMode": "column"
+    },
+    "IconPhone": {
+      "cardMode": "column"
+    },
+    "IconPin": {
+      "cardMode": "column"
+    },
+    "IconPlus": {
+      "cardMode": "column"
+    },
+    "IconSearch": {
+      "cardMode": "column"
+    },
+    "IconSettings": {
+      "cardMode": "column"
+    },
+    "IconShield": {
+      "cardMode": "column"
+    },
+    "IconSpark": {
+      "cardMode": "column"
+    },
+    "IconTarget": {
+      "cardMode": "column"
+    },
+    "IconTerminal": {
+      "cardMode": "column"
+    },
+    "IconUsers": {
+      "cardMode": "column"
+    },
+    "IconWrench": {
+      "cardMode": "column"
+    },
+    "IconX": {
+      "cardMode": "column"
+    },
+    "Pill": {
+      "cardMode": "column"
+    },
+    "Eyebrow": {
+      "cardMode": "column"
+    }
+  },
+  "dtsPropsFor": {
+    "Btn": "  /** Visual treatment. `primary` is the solid orange CTA — one per view; `ghost` is the bordered secondary action beside it. */\n  variant?: 'primary' | 'ghost';\n  /** Set this and the component renders an <a> instead of a <button>, with the anchor attributes below available. */\n  href?: string;\n  children: React.ReactNode;\n  /** Appended to `btn btn-<variant>` — safe for layout classes. */\n  className?: string;\n  onClick?: React.MouseEventHandler<HTMLElement>;\n  disabled?: boolean;\n  type?: 'button' | 'submit' | 'reset';\n  target?: string;\n  rel?: string;",
+    "DsLink": "  children: React.ReactNode;\n  /** An internal path renders a Next Link; an http(s) URL renders an anchor with target=\"_blank\" rel=\"noopener noreferrer\"; omitting href gives a click-only <a href=\"#\">. */\n  href?: string;\n  onClick?: React.MouseEventHandler<HTMLAnchorElement>;",
+    "Section": "  /** Anchor target for in-page navigation. */\n  id?: string;\n  /** Flip the band to the warm paper surface (--paper / --ink). Cards, buttons and body copy inside switch to their light treatment automatically. */\n  light?: boolean;\n  /** 64px of vertical padding instead of 96px, for a band that belongs with the one above it. */\n  tight?: boolean;\n  children: React.ReactNode;\n  /** Escape hatch for a one-off background or offset. */\n  style?: React.CSSProperties;",
+    "Eyebrow": "  /** One to three words, written in normal case — the stylesheet uppercases and letterspaces it. */\n  children: React.ReactNode;",
+    "Stat": "  /** The figure, as a string. Non-numeric values are idiomatic in this design system (\"Auto\", \"Multi\", \"1 uur\", \"Headless\"), and a Dutch thousands separator (\"1.200\") stays intact. */\n  num: string;\n  /** What the figure measures. One line, sentence case — the stylesheet uppercases it. */\n  label: string;\n  /** Unit, rendered smaller and in accent orange: \"%\", \"u\", \"x\". */\n  suffix?: string;",
+    "Numbered": "  /** Step number, zero-padded in the house style: \"01\". */\n  n: string;\n  title: string;\n  /** One or two sentences, rendered inside a <p>. */\n  children: React.ReactNode;",
+    "PillarCard": "  /** Short mono label, numbered in the house style: \"01 / FOLDERS\". */\n  tag: string;\n  title: string;\n  /** One or two sentences in plain language. */\n  desc: string;\n  /** Three to five short phrases — concrete deliverables, not benefits. */\n  items: string[];\n  /** The whole card is the click target. */\n  onClick?: () => void;",
+    "CaseCard": "  /** Sector or client type in mono caps: \"FINANCIEEL\". */\n  industry: string;\n  /** What was achieved — not the client name. */\n  title: string;\n  snippet: string;\n  /** The single number this case is remembered by; pinned to the bottom of the card so metrics align across a row. */\n  metric: { num: string; label: string };",
+    "Pill": "  children: React.ReactNode;\n  /** The green status dot. Defaults to true; set false for a neutral label. */\n  withDot?: boolean;",
+    "Tag": "  /** Uppercase, one or two words. Written in normal case — the stylesheet uppercases it. */\n  children: React.ReactNode;",
+    "LogoBar": "  /** Client names as plain strings — this design system sets logos as type, not images. Defaults to ['ABN AMRO', 'NS', 'DIM Haarlem', 'NovaSkin']. Only ever pass real clients. */\n  logos?: string[];\n  /** Dimmed mono tail for work that can't be named; production passes the translated \"+ en andere\". */\n  more?: string;",
+    "LogoMark": "  /** Pixel size, default 28. Drawn on a 32x32 grid; below 20px the interior detail closes up. */\n  size?: number;\n  /** Tile colour, defaults to var(--accent). */\n  accent?: string;\n  /** Glyph colour, defaults to the near-black #1a0d05 used on orange. */\n  ink?: string;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Every other <svg> attribute is forwarded. */\n  [key: string]: unknown;",
+    "IconFolder": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconInstructions": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconTool": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconCompass": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconBook": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconUsers": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconWrench": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconShield": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconGraph": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconSpark": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconArrow": "  /** Width and height in pixels. Default 14. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconCheck": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconX": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconPlus": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconMail": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconPhone": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconPin": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconGithub": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconTerminal": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconCode": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconClock": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconLock": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconSettings": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconLayers": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconTarget": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconChat": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconBolt": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconSearch": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconNotes": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "IconBracket": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;"
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}

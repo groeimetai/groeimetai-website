@@ -166,3 +166,9 @@ dist
 gcp-sa-key.json
 service-account-key.json
 temp-service-account.json
+# design-sync (claude.ai/design sync) — staged scripts + regenerated output
+.ds-sync/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/node_modules
