@@ -25,7 +25,7 @@
     "Pill": "src/components/ds/Pill.tsx",
     "Tag": "src/components/ds/Tag.tsx",
     "LogoBar": "src/components/ds/LogoBar.tsx",
-    "LogoMark": "src/components/ds/icons.tsx",
+    "LogoMark": "src/components/ds/Brand.tsx",
     "IconFolder": "src/components/ds/icons.tsx",
     "IconInstructions": "src/components/ds/icons.tsx",
     "IconTool": "src/components/ds/icons.tsx",
@@ -55,7 +55,9 @@
     "IconBolt": "src/components/ds/icons.tsx",
     "IconSearch": "src/components/ds/icons.tsx",
     "IconNotes": "src/components/ds/icons.tsx",
-    "IconBracket": "src/components/ds/icons.tsx"
+    "IconBracket": "src/components/ds/icons.tsx",
+    "Wordmark": "src/components/ds/Brand.tsx",
+    "Logo": "src/components/ds/Brand.tsx"
   },
   "overrides": {
     "Section": {
@@ -168,6 +170,9 @@
     },
     "Eyebrow": {
       "cardMode": "column"
+    },
+    "Logo": {
+      "cardMode": "column"
     }
   },
   "dtsPropsFor": {
@@ -182,7 +187,7 @@
     "Pill": "  children: React.ReactNode;\n  /** The green status dot. Defaults to true; set false for a neutral label. */\n  withDot?: boolean;",
     "Tag": "  /** Uppercase, one or two words. Written in normal case — the stylesheet uppercases it. */\n  children: React.ReactNode;",
     "LogoBar": "  /** Client names as plain strings — this design system sets logos as type, not images. Defaults to ['ABN AMRO', 'NS', 'DIM Haarlem', 'NovaSkin']. Only ever pass real clients. */\n  logos?: string[];\n  /** Dimmed mono tail for work that can't be named; production passes the translated \"+ en andere\". */\n  more?: string;",
-    "LogoMark": "  /** Pixel size, default 28. Drawn on a 32x32 grid; below 20px the interior detail closes up. */\n  size?: number;\n  /** Tile colour, defaults to var(--accent). */\n  accent?: string;\n  /** Glyph colour, defaults to the near-black #1a0d05 used on orange. */\n  ink?: string;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Every other <svg> attribute is forwarded. */\n  [key: string]: unknown;",
+    "LogoMark": "  /** Rendered size in px. Default 28. Below 24 use `compact`. */\n  size?: number;\n  /** Bracket colour. Defaults to `currentColor`, so the mark inherits the surrounding text colour and works on both the dark and the paper surface without a variant prop. */\n  bracket?: string;\n  /** Folder colour — the one place the accent is allowed. Defaults to var(--accent). */\n  folder?: string;\n  /** Heavier brackets and a larger folder, for 14-24px. Set automatically by `Logo` below 24. */\n  compact?: boolean;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Sets role=\"img\" and an accessible name; without it the mark is aria-hidden. */\n  title?: string;",
     "IconFolder": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
     "IconInstructions": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
     "IconTool": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
@@ -212,7 +217,9 @@
     "IconBolt": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
     "IconSearch": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
     "IconNotes": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
-    "IconBracket": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;"
+    "IconBracket": "  /** Width and height in pixels. Default 20. House sizes: 14 inside a button or link, 16-20 inline with body copy, 22-28 in an accent tile, 32-48 as a standalone feature glyph. */\n  size?: number;\n  className?: string;\n  style?: React.CSSProperties;\n  /** Decorative icons should set this. */\n  'aria-hidden'?: boolean | 'true' | 'false';\n  role?: string;\n  /** Every other <svg> attribute is forwarded — the props are SVGProps<SVGSVGElement> & { size?: number }. The glyph is stroke-only with stroke=\"currentColor\", so its colour comes from the surrounding text colour, never from a prop. */\n  [key: string]: unknown;",
+    "Wordmark": "  /** Font size in px. Default 21.5, the size used in the horizontal lockup. */\n  size?: number;\n  /** Colour of \"Groeimet\". \"AI\" is always the accent. */\n  color?: string;\n  className?: string;\n  style?: React.CSSProperties;",
+    "Logo": "  /** Mark size in px; the wordmark and gap scale from it. Default 32. */\n  size?: number;\n  /** Stacked puts the wordmark under the mark, both centred. */\n  stacked?: boolean;\n  /** Use the compact mark. Set automatically below 24px. */\n  compact?: boolean;\n  color?: string;\n  className?: string;\n  style?: React.CSSProperties;"
   },
   "readmeHeader": ".design-sync/conventions.md"
 }

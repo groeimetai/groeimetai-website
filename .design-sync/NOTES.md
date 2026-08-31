@@ -207,6 +207,25 @@ previews document around them rather than papering over them.
 Groups in the Design System pane come only from doc frontmatter: actions, brand, cards, content,
 data, icons, labels, layout, typography.
 
+## Re-sync log
+
+**2026-08-31 — na de 2026-redesign.** Het merkteken en het accent zijn veranderd, dus deze re-sync
+raakte alles: `--accent` van `#ff5a1f` naar `#ff7014` betekent dat elke render-hash wijzigt en er
+niets kan doorschuiven. Daarom zonder `--remote` gedraaid: een anchor had toch niets bespaard.
+
+Wat er bij die ronde misging en waar je op moet letten:
+- **`componentSrcMap` wees `LogoMark` nog naar `icons.tsx`** terwijl de component naar
+  `Brand.tsx` was verhuisd — precies het stille verouderen dat hierboven al beschreven staat.
+  Ook `Wordmark` en `Logo` waren nieuw en stonden nergens. Nu 44 componenten.
+- **De `LogoMark`-preview gebruikte nog de oude props** (`accent`, `ink`). Die bestaan niet meer
+  (nu `bracket`, `folder`, `compact`), dus de kaart toonde een API die weg is. Herschreven.
+- Er stond een verouderd KvK-nummer in de `Groot`-cel van diezelfde preview. Previews bevatten echte
+  bedrijfsgegevens — die lopen mee als het bedrijf verandert.
+- De nieuwe `Logo`-kaart kreeg `[GRID_OVERFLOW]`; opgelost met `cardMode: "column"`.
+
+Grades schoven wél door: de previews zelf veranderden niet, en styling-churn invalideert een grade
+niet. 44 carried forward, 0 opnieuw te graden.
+
 ## Re-sync risks — what can silently go stale
 
 - **`componentSrcMap` is a hand-maintained list.** New components in `src/components/ds/` are

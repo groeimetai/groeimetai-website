@@ -70,7 +70,7 @@ export const Groot = () => (
     <div className="divider" style={{ marginTop: 28 }} />
     <div className="spread" style={{ marginTop: 16 }}>
       <div className="mono" style={{ fontSize: 11, color: 'var(--fg-mute)' }}>
-        © 2026 GroeimetAI · KvK 92341234
+        © 2026 GroeimetAI · KvK 90102304
       </div>
       <div className="mono" style={{ fontSize: 11, color: 'var(--fg-mute)' }}>
         Geen hype. Geen lock-in als standaard.
@@ -96,25 +96,45 @@ export const Maten = () => (
   </Frame>
 );
 
-export const AccentEnInk = () => (
+export const KleurVarianten = () => (
   <Frame>
-    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 40 }}>
+    <div className="row" style={{ gap: 44, alignItems: 'flex-end', flexWrap: 'wrap' }}>
       <div style={{ textAlign: 'center' }}>
         <LogoMark size={72} />
-        <Caption>standaard</Caption>
+        <Caption>standaard — brackets erven currentColor</Caption>
       </div>
       <div style={{ textAlign: 'center' }}>
-        <LogoMark size={72} accent="var(--fg)" ink="#0a0a0b" />
-        <Caption>accent=fg</Caption>
+        <LogoMark size={72} bracket="var(--accent)" folder="var(--accent-deep)" />
+        <Caption>bracket + folder — één tint</Caption>
       </div>
-      <div style={{ textAlign: 'center' }}>
-        <LogoMark size={72} accent="#1a0d05" ink="var(--accent-soft)" />
-        <Caption>ink=accent-soft</Caption>
+      <div
+        style={{
+          textAlign: 'center',
+          background: 'var(--accent)',
+          padding: '18px 22px',
+          borderRadius: 'var(--r-md)',
+        }}
+      >
+        <LogoMark size={72} bracket="#1a0d05" folder="#1a0d05" />
+        <Caption>knockout op accent</Caption>
       </div>
     </div>
-    <p style={{ marginTop: 28, maxWidth: '56ch' }}>
-      De twee omgekeerde varianten zijn er voor plekken waar het oranje vlak niet kan: een
-      e-mailhandtekening, een certificaat, een gedrukt hand-out. Op de site blijft de tile oranje.
-    </p>
+  </Frame>
+);
+
+export const Compact = () => (
+  <Frame>
+    <div className="row" style={{ gap: 40, alignItems: 'flex-end', flexWrap: 'wrap' }}>
+      {[14, 18, 24].map((s) => (
+        <div key={s} style={{ textAlign: 'center' }}>
+          <LogoMark size={s} compact />
+          <Caption>{s}px compact</Caption>
+        </div>
+      ))}
+      <div style={{ textAlign: 'center' }}>
+        <LogoMark size={18} />
+        <Caption>18px zonder compact — de tab valt dicht</Caption>
+      </div>
+    </div>
   </Frame>
 );
