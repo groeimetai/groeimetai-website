@@ -100,6 +100,8 @@ const PAGE_CSS = `
  */
 const STAGE_HOLD = 0.15;
 const STAGE_FADE = 0.1;
+/** Half-width of a stage: it owns the track from centre - SPAN to centre + SPAN. */
+const STAGE_SPAN = STAGE_HOLD + STAGE_FADE;
 
 /** Trapezoid: 1 on the plateau, linear ramp to 0 at HOLD + FADE. */
 function stageClarity(t: number, centre: number): number {
@@ -275,7 +277,16 @@ export function HomePageView({ basePath }: { basePath: string }) {
           )}px,0) scale(${(0.9 + o * 0.1).toFixed(3)})`;
         }
         const bar = barRefs.current[i];
-        if (bar) bar.style.transform = `scaleX(${clamp01((t2 - (i * 0.5 - 0.25)) / 0.5)})`;
+        // Each bar fills across the slice of the track its own stage owns, so
+        // it is exactly full at the moment the next stage takes over. The old
+        // formula divided every bar by a fixed 0.5, which is only correct for
+        // the middle stage: stages 1 and 3 are cut in half by the ends of the
+        // track, so bar 3 topped out at 50% and never finished.
+        if (bar) {
+          const lo = Math.max(0, centre - STAGE_SPAN);
+          const hi = Math.min(1, centre + STAGE_SPAN);
+          bar.style.transform = `scaleX(${clamp01((t2 - lo) / (hi - lo))})`;
+        }
         const lab = stepRefs.current[i];
         if (lab) {
           lab.style.opacity = (0.32 + o * 0.68).toFixed(3);
