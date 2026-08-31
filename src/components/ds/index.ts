@@ -9,4 +9,5 @@ export { LogoBar } from './LogoBar';
 export { Pill } from './Pill';
 export { Tag } from './Tag';
 export { DsLink } from './DsLink';
+export { LogoMark, Wordmark, Logo } from './Brand';
 export * from './icons';

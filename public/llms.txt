@@ -1,117 +1,136 @@
-# GroeimetAI — AI implementation partner (training, strategy, adoption)
+# GroeimetAI
 
-> GroeimetAI helps SME and mid-market organisations work pragmatically with AI: training, strategy, adoption guidance, workflow redesign, and safe integrations. Tooling and development are a second step, not the headline. Based in Apeldoorn, Netherlands. Founded 2023 by Niels van der Werf.
+> GroeimetAI leert MKB- en middelgrote organisaties zelf beter werken met AI: training, strategie, adoptiebegeleiding, workflow-herontwerp en veilige integraties. Opgericht in 2023 door Niels van der Werf, gevestigd in Apeldoorn, werkzaam in Nederland, België en Duitsland.
 
-## Positioning
+Tagline: "Geen AI-hype. Wel teams die er echt beter door werken."
 
-- Tagline: "No AI hype. Just teams that actually work better with it."
-- Target audience: SME and mid-market decision-makers — owners, MT-level, department heads — who see AI happening but want to use it without falling for hype or losing control.
-- What we sell first: AI training, AI strategy, adoption guidance, workflow redesign, safe integrations.
-- What we sell second: tooling and custom development, only where the first four don't suffice and durable value requires it.
-- What we don't claim: that AI replaces teams, that one-size-fits-all stacks exist, or that you can buy black-box solutions and be done.
+Voor wie: MKB-bedrijven en dienstverlenende organisaties die AI serieus willen inzetten maar genoeg hebben van hype, losse tools en onduidelijke ROI. De gesprekspartner is meestal een eigenaar, MT-lid of afdelingshoofd — geen developer.
 
-## About
+Wat we als eerste doen:
 
-- Company: GroeimetAI (Groei met AI)
-- Founded: 2023
-- Founder: Niels van der Werf (solo, technical, hands-on)
-- Location: Apeldoorn, Netherlands
-- Languages: Dutch (primary), English
-- Website: https://groeimetai.io
-- Contact: https://groeimetai.io/contact
+- AI-training en workshops — praktische training die begint bij het dagelijkse werk van een team, niet bij de tools. Mensen leren herkennen waar AI het juiste antwoord is en waar niet.
+- AI-strategie en adoptiebegeleiding — use-case selectie, adoptie, governance en roadmap. Onderbouwde keuzes in plaats van experimenteren op gevoel.
+- Workflow-herontwerp met AI — processen analyseren en opnieuw inrichten, zodat AI handwerk wegneemt binnen de manier waarop een team al werkt.
+- Veilige AI-integraties en tooling — koppelingen, interne tools en maatwerk, pas wanneer standaard AI-tools niet volstaan.
+
+Tooling en development zijn een tweede stap, geen openingspitch. Die bouwen we alleen als de vier punten hierboven niet volstaan en er duurzame waarde tegenover staat.
+
+Wat we niet beweren: dat AI teams vervangt, dat er één stack bestaat die overal past, of dat je een black box kunt inkopen en daarna klaar bent.
+
+Hoe een traject verloopt:
+
+- Verkennend gesprek — 30 tot 45 minuten, vrijblijvend, direct met Niels. We kijken waar AI in jouw situatie past en waar niet.
+- Inventarisatie en use-case selectie — één tot twee weken. Huidige workflows eerlijk in kaart, daarna 1 tot 3 use cases met meetbare opbrengst.
+- Pilot — drie tot zes weken. Eén team, één workflow, vooraf afgesproken succescriteria.
+- Opschalen of stoppen — levert de pilot aantoonbare waarde op, dan schalen we. Zo niet, dan stoppen we. Niet doorgaan omdat er al geld in zit.
+- Borgen — het interne team draait het systeem zelf. Wij blijven bereikbaar voor specifieke vragen. Afhankelijkheid is op termijn duur.
+
+Waarin we ons onderscheiden:
+
+- We respecteren bestaande infrastructuur en voegen zo min mogelijk toe.
+- We zeggen nee tegen use cases die niet passen, ook als er budget is.
+- We dragen over aan interne teams in plaats van klanten vast te zetten.
+- We zijn expliciet over wat AI niet kan.
+- We werken vooral met NL/EU-organisaties; dataresidentie zit in elk ontwerp.
+
+Wat we niet leveren: 24/7-SLA's, grote meerjarige transformatieprogramma's of platformcontracten. Daarvoor verwijzen we naar gespecialiseerde partijen.
+
+Praktische gegevens:
+
+- Bedrijf: GroeimetAI (Groei met AI), KvK 90102304
+- Oprichter: Niels van der Werf — solo, technisch, hands-on
+- Adres: Kweekweg 23, 7315AP Apeldoorn, Nederland
+- Telefoon: +31 6 8173 9018
+- E-mail: info@groeimetai.io
+- Talen: Nederlands (primair) en Engels
 - GitHub: https://github.com/GroeimetAI
 - LinkedIn: https://www.linkedin.com/company/groeimetai
 
-## Services
+This site is primarily in Dutch. The 20 industry training pages also exist in English under /en/training/<slug>; the blog posts and the audience pages under /nl/voor/ are Dutch only.
 
-- **AI Training & Workshops** — Practical training that starts at the team's daily work, not the tools. Helps people identify where AI is the right answer and where it isn't.
-- **AI Strategy & Adoption** — Use-case selection, adoption guidance, governance, roadmap work. Grounded decisions, not hype-driven experimentation.
-- **Workflow Redesign & Implementation** — Process analysis and redesign that uses AI to reduce manual work and fit how teams already operate.
-- **Safe Integrations & Tooling** — Integrations, internal tools, and custom software when off-the-shelf AI tools are not enough.
+## Kernpagina's
 
-## Audience-specific pillar pages
+- [Home](https://groeimetai.io/nl): Startpunt — wat GroeimetAI doet, voor wie, en wat de eerste stap is.
+- [Trainingen](https://groeimetai.io/nl/trainingen): Het trainingsaanbod: hands-on dag voor teams, halve dag AI-literacy voor management, en een org-breed adoptieprogramma van zes weken.
+- [AI-implementatie](https://groeimetai.io/nl/agents): De tweede stap — samen met je eigen team bouwen op je eigen stack, inclusief overdracht, runbook en monitoring. Geen black box, geen lock-in.
+- [Cases](https://groeimetai.io/nl/cases): Overzicht van uitgevoerd werk: klantprojecten en eigen tooling, met aanpak en resultaat per project.
+- [Over Niels van der Werf](https://groeimetai.io/nl/about): Achtergrond van de oprichter en waarom GroeimetAI bewust klein blijft: één bouwer, één gesprekspartner.
+- [Blog](https://groeimetai.io/nl/blog): Artikelen over AI-adoptie, governance, workflow-herontwerp en het filteren van hype.
+- [Veelgestelde vragen](https://groeimetai.io/nl/faq): Antwoorden over aanpak, kosten, doorlooptijd, privacy en wat we bewust niet doen.
+- [Contact](https://groeimetai.io/nl/contact): Een verkennend gesprek plannen van 30 tot 45 minuten, direct met Niels. Geen sales-funnel.
 
-- For CTOs and tech leadership: https://groeimetai.io/nl/voor/voor-cto-tech-leadership
-- For operations and process teams: https://groeimetai.io/nl/voor/voor-operations-procesteams
-- For SME owners and management: https://groeimetai.io/nl/voor/voor-mkb-ondernemers-directie
-- For enterprise digital transformation: https://groeimetai.io/nl/voor/voor-enterprise-digital-transformation
+## Voor wie wij werken
 
-## How we work
+- [AI voor CTOs en tech-leiderschap](https://groeimetai.io/nl/voor/voor-cto-tech-leadership): Routekaart voor CTOs en tech-leads: architectuurkeuzes, foundation-model-keuze, governance en waar je je tijd het beste insteekt.
+- [AI voor operations en procesteams](https://groeimetai.io/nl/voor/voor-operations-procesteams): Voor operations-managers en proceseigenaren: waar AI in ticketstromen, documentwerk en dagelijkse processen echt iets oplost.
+- [AI voor MKB-ondernemers en directie](https://groeimetai.io/nl/voor/voor-mkb-ondernemers-directie): Voor eigenaren en MT-leden zonder technische achtergrond: welke vragen je leveranciers stelt en hoe je voorkomt dat AI een dure leerschool wordt.
+- [AI in enterprise digital transformation](https://groeimetai.io/nl/voor/voor-enterprise-digital-transformation): Voor innovation managers en transformatie-leads in grote organisaties: hoe AI realistisch in een transformatie past en wat er hier vaker misgaat dan in het MKB.
 
-1. **Scoping conversation** — Free, no obligation. We explore where AI fits in your situation and where it doesn't.
-2. **Inventory and use-case selection** — One to two weeks. Map current workflows honestly, pick 1-3 use cases with measurable ROI.
-3. **Pilot** — Three to six weeks. One team, one workflow. Pre-defined success metrics.
-4. **Scale or stop** — If the pilot delivers measured value, scale. If not, stop and learn. No "press on because we already invested".
-5. **Handover** — The internal team runs the system. We stay available for specific questions. Dependency is expensive over time.
+## AI-training per branche
 
-## Differentiators
+- [AI-training voor de zorg](https://groeimetai.io/nl/training/zorg): Zorgorganisaties hebben veel administratieve last en weinig ruimte voor experiment. Training die rekening houdt met privacy, hiërarchie en de status van patiëntcontact.
+- [AI-training voor retail en e-commerce](https://groeimetai.io/nl/training/retail): Gericht op productdata en product-content, klantservice en operationele rapportages onder doorlooptijd-druk.
+- [AI-training voor financiële dienstverlening](https://groeimetai.io/nl/training/finance): Voor een sector waar compliance en accuratesse de basis zijn: AI gekoppeld aan governance, controleerbaarheid en professionele aansprakelijkheid.
+- [AI-training voor de bouw en techniek](https://groeimetai.io/nl/training/bouw): Projectadministratie, offertewerk en kennis die vastzit bij individuele projectleiders bruikbaar maken zonder dat het projectwerk eronder lijdt.
+- [AI-training voor logistiek en transport](https://groeimetai.io/nl/training/logistiek): Communicatie tussen ketenpartijen versnellen en uitzonderingen eerder signaleren.
+- [AI-training voor accountancy en administratiekantoren](https://groeimetai.io/nl/training/accountancy): Krimpend personeelsbestand en stijgende eisen: productiviteit binnen de strikte beroepsverantwoordelijkheid.
+- [AI-training voor de juridische sector](https://groeimetai.io/nl/training/juridisch): Grote tekstvolumes met directe ROI, ingericht rond aansprakelijkheid en vertrouwelijkheid.
+- [AI-training voor het onderwijs](https://groeimetai.io/nl/training/onderwijs): Docenten en onderwijsondersteuners ontlasten van administratie zonder de pedagogische kant te verstoren.
+- [AI-training voor de vastgoedsector](https://groeimetai.io/nl/training/vastgoed): Voor makelaars, vastgoedbeheerders en ontwikkelaars: standaardstromen in klantcommunicatie en documentwerk versnellen.
+- [AI-training voor de maakindustrie](https://groeimetai.io/nl/training/maakindustrie): Kantoor- en kwaliteitsprocessen waar AI direct waarde levert, zonder in het productieproces zelf te snijden.
+- [AI-training voor de overheid en publieke sector](https://groeimetai.io/nl/training/overheid): Rekening houdend met transparantie-eisen, publieke verantwoording en zorgvuldige communicatie naar burgers.
+- [AI-training voor horeca en hospitality](https://groeimetai.io/nl/training/horeca): Gericht op de backoffice bij krappe marges — niet op het serveren zelf, wel op alles eromheen.
+- [AI-training voor marketingbureaus](https://groeimetai.io/nl/training/marketing): Veel klanten, veel content, hoge urgentie: productiviteit winnen zonder dat de creatieve kwaliteit inzakt.
+- [AI-training voor mediabedrijven en uitgevers](https://groeimetai.io/nl/training/media): Productiviteit in redactionele processen zonder geloofwaardigheid in te ruilen.
+- [AI-training voor recruitment en HR-dienstverlening](https://groeimetai.io/nl/training/recruitment): Standaardwerk in vacatureteksten, screening en correspondentie versnellen, met tijd over voor het menselijke deel.
+- [AI-training voor verzekeraars](https://groeimetai.io/nl/training/verzekering): Claims-afhandeling, polisbeheer en klantcommunicatie, met menselijke verantwoording op de eindbeslissing.
+- [AI-training voor non-profitorganisaties en goede doelen](https://groeimetai.io/nl/training/non-profit): Met krappe middelen en veel vrijwilligerswerk meer voor de doelgroep bereiken.
+- [AI-training voor energie- en utility-bedrijven](https://groeimetai.io/nl/training/energie): Klantcommunicatie en operationele rapportages, zorgvuldig gescheiden van de technische operatie zelf.
+- [AI-training voor consultancybureaus](https://groeimetai.io/nl/training/consultancy): Klant-specifieke documentatie en strakke deadlines, zonder de strategische denkkracht en klantrelatie uit te hollen.
+- [AI-training voor IT-dienstverleners en software-bureaus](https://groeimetai.io/nl/training/it-dienstverlening): De valkuilen van vroege gebruikers: te veel parallel experimenteren, adoptie buiten engineering vergeten, en technische mogelijkheid verwarren met klantwaarde.
 
-- We respect existing infrastructure and add the minimum necessary
-- We say no to use cases that don't fit, even when there's budget
-- We hand over to internal teams; we don't lock you in
-- We're transparent about what AI can't do
-- We work mainly with NL/EU organisations; data residency is part of every design
+## Cases
 
-## Key pages
+- [Bedrijfsbrede LLM-assistent voor 50.000 medewerkers](https://groeimetai.io/nl/cases/enterprise-llm-implementation): Een verouderde trigger-chatbot bij een grote Nederlandse bank vervangen door een AI-assistent met ServiceNow-koppeling, gefaseerd uitgerold met training per groep.
+- [Intelligente ticket-routering met vector search](https://groeimetai.io/nl/cases/intelligent-ticket-routing): Duizenden routeringstemplates vervangen door zoeken op betekenis, zodat tickets zonder handmatige regels bij het juiste team landen.
+- [Snelnotuleren.nl — AI-transcriptie](https://groeimetai.io/nl/cases/snelnotuleren-ai-transcription): Eigen product: een AVG-proof transcriptieplatform voor vergaderingen. Wat het leerde over privacy, kosten per uur audio en gebruikersadoptie.
+- [GroeimetAI Learning Platform](https://groeimetai.io/nl/cases/groeimetai-learning-platform): Eigen leerplatform met cursussen, modules en certificering, in twee weken gebouwd met AI-ondersteuning — een test van hoe ver je daarmee komt.
 
-- Home: https://groeimetai.io
-- About Niels: https://groeimetai.io/nl/about
-- Services: https://groeimetai.io/nl/services
-- Approach: https://groeimetai.io/nl/cases
-- Contact: https://groeimetai.io/nl/contact
-- Insights (blog): https://groeimetai.io/nl/blog
-- FAQ: https://groeimetai.io/nl/faq
+## Inzichten
 
-## AI training per industry (Dutch primary)
+- [AI-training voor je team: waarom de eerste sessie nooit over tools moet gaan](https://groeimetai.io/nl/blog/ai-training-praktisch-beginnen): De meeste AI-trainingen leren mensen prompts schrijven. Dat is stap drie. Stap één is begrijpen waar AI hen wel en niet helpt.
+- [De adoptiekloof: waarom de meeste AI-licenties niet worden gebruikt](https://groeimetai.io/nl/blog/ai-adoptie-kloof-mkb): Organisaties kopen Copilot, ChatGPT Enterprise of Gemini in en zien daarna weinig terug. Waar het misgaat en hoe je het herstelt.
+- [Workflow-herontwerp met AI: het stappenplan dat werkt](https://groeimetai.io/nl/blog/workflow-herontwerp-stappenplan): AI in een bestaand proces stoppen is meestal verspilling. AI als aanleiding gebruiken om het proces te herontwerpen levert wel winst op.
+- [AI integreren in bestaande systemen: de architectuur-keuzes die ertoe doen](https://groeimetai.io/nl/blog/veilige-ai-integraties-checklist): De makkelijke integratiepatronen van vandaag zijn de technische schuld van morgen. Welke keuzes een integratie over twee jaar nog laten meebewegen.
+- [AI-governance voor MKB: één pagina, geen comité](https://groeimetai.io/nl/blog/ai-governance-mkb): Governance hoeft geen werkgroep, charter of jaarrapport te zijn. Voor MKB is één duidelijke pagina meer waard dan een framework.
+- [Prompt engineering voor teams: zes patronen die altijd werken](https://groeimetai.io/nl/blog/prompt-engineering-teams): Zes promptstructuren die terugkomen bij teams die echt resultaat halen uit AI — zonder de frameworks van LinkedIn.
+- [AI-hype filteren als beslisser: zeven vragen die de meeste pitches doen sneuvelen](https://groeimetai.io/nl/blog/ai-hype-filtreren-beslissers): Zeven vragen die echte oplossingen scheiden van verkooppraatjes, ook als je zelf geen data scientist bent.
+- [Copilot of zelf bouwen: een eerlijke vergelijking voor MKB](https://groeimetai.io/nl/blog/copilot-vs-custom): Microsoft Copilot of een eigen oplossing? Hoe wij die afweging voor klanten maken, met de echte kosten en valkuilen.
+- [AI-ROI berekenen zonder calculator-tools: hoe je het op één A4 doet](https://groeimetai.io/nl/blog/ai-roi-berekenen-zonder-tools): ROI-calculators zijn meestal verkoopaanleidingen vermomd als analyse. Een rekenoefening die je in 30 minuten zelf doet.
+- [Change management bij AI: waarom de techniek het makkelijke deel is](https://groeimetai.io/nl/blog/change-management-ai): De grootste hindernis is niet techniek, budget of veiligheid, maar hoe je het werk van mensen verandert zonder ze tegen het project te keren.
+- [AI-pilots die nooit opschalen: de zeven redenen die we steeds zien](https://groeimetai.io/nl/blog/ai-pilots-die-nooit-opschalen): De pilot werkt, het team is enthousiast, en toch komt er geen uitrol. Zeven patronen achter pilot-purgatory.
+- [Welk foundation model kies je in 2026? Een nuchtere kijk](https://groeimetai.io/nl/blog/foundation-models-kiezen): GPT, Claude, Gemini, Mistral, Llama. De keuze lijkt complex maar valt uiteen in een paar simpele afwegingen.
+- [Multi-agent systemen: waarom je er waarschijnlijk geen nodig hebt](https://groeimetai.io/nl/blog/multi-agent-systems-future-automation): Multi-agent klinkt goed in een sales deck. In de praktijk lost één goed gebouwde workflow hetzelfde op, met minder breekrisico.
+- [RAG in de praktijk: wat we wel en niet doen voor klanten](https://groeimetai.io/nl/blog/rag-architectuur-best-practices): Retrieval-augmented generation is een prima patroon, maar de meeste RAG-implementaties zijn te complex voor het probleem dat ze oplossen.
+- [ServiceNow plus AI: waar het echt waarde oplevert (en waar niet)](https://groeimetai.io/nl/blog/servicenow-ai-transformatie): ServiceNow heeft eigen AI-features en externe integraties hebben ook hun plek. Hoe we per use case kiezen.
+- [LLM security en compliance: een nuchtere checklist voor MKB](https://groeimetai.io/nl/blog/llm-security-compliance): AI veilig gebruiken kost geen extra licenties maar discipline. Wat we standaard checken voor een productie-implementatie.
 
-- Healthcare: https://groeimetai.io/nl/training/zorg
-- Retail and e-commerce: https://groeimetai.io/nl/training/retail
-- Financial services: https://groeimetai.io/nl/training/finance
-- Construction and engineering: https://groeimetai.io/nl/training/bouw
-- Logistics and transport: https://groeimetai.io/nl/training/logistiek
-- Accountancy: https://groeimetai.io/nl/training/accountancy
-- Legal: https://groeimetai.io/nl/training/juridisch
-- Education: https://groeimetai.io/nl/training/onderwijs
-- Real estate: https://groeimetai.io/nl/training/vastgoed
-- Manufacturing: https://groeimetai.io/nl/training/maakindustrie
-- Government: https://groeimetai.io/nl/training/overheid
-- Hospitality: https://groeimetai.io/nl/training/horeca
-- Marketing agencies: https://groeimetai.io/nl/training/marketing
-- Media and publishers: https://groeimetai.io/nl/training/media
-- Recruitment and HR: https://groeimetai.io/nl/training/recruitment
-- Insurers: https://groeimetai.io/nl/training/verzekering
-- Non-profits: https://groeimetai.io/nl/training/non-profit
-- Energy and utilities: https://groeimetai.io/nl/training/energie
-- Consultancies: https://groeimetai.io/nl/training/consultancy
-- IT services and software firms: https://groeimetai.io/nl/training/it-dienstverlening
+## Machineleesbare bronnen
 
-## Featured insights
+- [Volledige site-inhoud (llms-full.txt)](https://groeimetai.io/llms-full.txt): Alle blogposts, doelgroeppagina's en branchetrainingen als platte markdown, met de bron-URL bij elk stuk.
+- [robots.txt](https://groeimetai.io/robots.txt): Crawlregels. AI-zoekcrawlers die citeren zijn toegestaan; crawlers die content in trainingscorpora opnemen zijn geblokkeerd.
+- [sitemap.xml](https://groeimetai.io/sitemap.xml): Alle publieke URL's van de site in beide talen.
 
-- AI training that starts at the work, not the tool: https://groeimetai.io/nl/blog/ai-training-praktisch-beginnen
-- The adoption gap — why most AI licenses go unused: https://groeimetai.io/nl/blog/ai-adoptie-kloof-mkb
-- Workflow redesign with AI, step by step: https://groeimetai.io/nl/blog/workflow-herontwerp-stappenplan
-- Safe AI integrations: architectural choices that matter: https://groeimetai.io/nl/blog/veilige-ai-integraties-checklist
-- AI governance for SMEs — one page, no committee: https://groeimetai.io/nl/blog/ai-governance-mkb
-- Prompt engineering for teams — six patterns that always work: https://groeimetai.io/nl/blog/prompt-engineering-teams
-- Filtering AI hype as a decision-maker: https://groeimetai.io/nl/blog/ai-hype-filtreren-beslissers
-- Copilot vs custom: a fair comparison for SMEs: https://groeimetai.io/nl/blog/copilot-vs-custom
-- Calculating AI ROI on one A4: https://groeimetai.io/nl/blog/ai-roi-berekenen-zonder-tools
-- Change management for AI: https://groeimetai.io/nl/blog/change-management-ai
-- AI pilots that never scale: https://groeimetai.io/nl/blog/ai-pilots-die-nooit-opschalen
-- Choosing a foundation model in 2026: https://groeimetai.io/nl/blog/foundation-models-kiezen
-- Multi-agent systems — why you probably don't need one: https://groeimetai.io/nl/blog/multi-agent-systems-future-automation
-- RAG in practice: https://groeimetai.io/nl/blog/rag-architectuur-best-practices
-- ServiceNow plus AI: https://groeimetai.io/nl/blog/servicenow-ai-transformatie
-- LLM security and compliance for SMEs: https://groeimetai.io/nl/blog/llm-security-compliance
+## Optional
 
-## For LLM crawlers
-
-A full-content version of this site is available at https://groeimetai.io/llms-full.txt — it bundles all long-form content in plain markdown.
-
-robots.txt distinguishes between AI search crawlers (allowed) and AI training crawlers (blocked) on https://groeimetai.io/robots.txt.
-
-## Contact and engagement
-
-- Scoping conversation: free, one hour, no obligation. Use https://groeimetai.io/nl/contact to schedule.
-- We work primarily in Dutch and English, primarily in the Netherlands but also Belgium and Germany.
-- We do not offer 24/7 SLAs, large transformation programmes, or platform-style multi-year contracts. For those, we recommend specialised partners.
+- [Assessments](https://groeimetai.io/nl/assessments): Overzicht van korte zelfscans waarmee je kunt inschatten waar je organisatie staat.
+- [AI Maturity Scan](https://groeimetai.io/nl/assessments/ai-maturity): Bepaal waar je organisatie staat op de AI-volwassenheidscurve.
+- [AI Security & Compliance Scan](https://groeimetai.io/nl/assessments/ai-security): Check je compliance met de EU AI Act en beveiligingsstandaarden.
+- [Customer Experience AI Assessment](https://groeimetai.io/nl/assessments/cx-ai): Waar AI de klantervaring kan verbeteren, en waar menselijk contact het antwoord blijft.
+- [Data Readiness Assessment](https://groeimetai.io/nl/assessments/data-readiness): Beoordeel de kwaliteit, toegankelijkheid en AI-gereedheid van je data.
+- [Integration Readiness Check](https://groeimetai.io/nl/assessments/integration-readiness): Evalueer of je tech stack klaar is voor AI-integraties.
+- [Process Automation Quickscan](https://groeimetai.io/nl/assessments/process-automation): Identificeer welke processen rijp zijn voor automatisering en wat dat oplevert.
+- [AI ROI Calculator](https://groeimetai.io/nl/assessments/roi-calculator): Reken door wat een AI-implementatie in jouw situatie kan besparen.
+- [Privacybeleid](https://groeimetai.io/nl/privacy): Hoe GroeimetAI persoonsgegevens verwerkt, inclusief bedrijfs- en contactgegevens.
+- [Cookiebeleid](https://groeimetai.io/nl/cookies): Welke cookies de site gebruikt en waarvoor.
+- [Algemene voorwaarden](https://groeimetai.io/nl/terms): De voorwaarden waaronder GroeimetAI diensten levert.

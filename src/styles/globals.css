@@ -10,7 +10,7 @@
 @layer base {
   :root {
     /* shadcn HSL tokens — re-themed to align with the design-system palette
-       (--bg #0a0a0b, --bg-elev #111114, --accent #ff5a1f, --line #26262d, etc.).
+       (--bg #0a0a0b, --bg-elev #111114, --accent #ff7014, --line #26262d, etc.).
        Existing admin/dashboard pages inherit these automatically. */
     --background: 240 4% 5%; /* matches DS --bg #0a0a0b */
     --foreground: 60 11% 95%; /* matches DS --fg #f4f4f1 */
@@ -18,26 +18,26 @@
     --card-foreground: 60 11% 95%;
     --popover: 240 7% 9%; /* matches DS --bg-elev-2 #18181d */
     --popover-foreground: 60 11% 95%;
-    --primary: 16 100% 56%; /* matches DS --accent #ff5a1f */
+    --primary: 24 100% 54%; /* matches DS --accent #ff7014 */
     --primary-foreground: 18 88% 6%;
     --secondary: 240 5% 12%;
     --secondary-foreground: 60 11% 95%;
     --muted: 240 5% 12%;
     --muted-foreground: 240 4% 46%; /* matches DS --fg-mute #71717a */
-    --accent: 16 100% 56%; /* matches DS --accent */
+    --accent: 24 100% 54%; /* matches DS --accent */
     --accent-foreground: 18 88% 6%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
     --border: 240 6% 16%; /* matches DS --line #26262d */
     --input: 240 6% 16%;
-    --ring: 16 100% 56%; /* matches DS --accent */
+    --ring: 24 100% 54%; /* matches DS --accent */
     --radius: 0.75rem;
 
-    /* Additional premium variables — aligned with DS accent #ff5a1f */
-    --gradient-primary: linear-gradient(135deg, hsl(16 100% 56%), hsl(20 100% 62%));
+    /* Additional premium variables — aligned with DS accent #ff7014 */
+    --gradient-primary: linear-gradient(135deg, hsl(24 100% 54%), hsl(28 100% 60%));
     --gradient-dark: linear-gradient(135deg, hsl(240 4% 5%), hsl(240 7% 9%));
     --gradient-light: linear-gradient(135deg, hsl(0 0% 100%), hsl(0 0% 97%));
-    --gradient-orange-black: linear-gradient(135deg, hsl(16 100% 56%), hsl(240 4% 5%));
+    --gradient-orange-black: linear-gradient(135deg, hsl(24 100% 54%), hsl(240 4% 5%));
     --gradient-green-black: linear-gradient(135deg, hsl(150 60% 67%), hsl(240 4% 5%));
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.15), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
@@ -59,19 +59,19 @@
     --card-foreground: 60 11% 95%;
     --popover: 240 7% 9%;
     --popover-foreground: 60 11% 95%;
-    --primary: 16 100% 56%;
+    --primary: 24 100% 54%;
     --primary-foreground: 18 88% 6%;
     --secondary: 240 5% 12%;
     --secondary-foreground: 60 11% 95%;
     --muted: 240 5% 12%;
     --muted-foreground: 240 4% 46%;
-    --accent: 16 100% 56%;
+    --accent: 24 100% 54%;
     --accent-foreground: 18 88% 6%;
     --destructive: 0 62.8% 50%;
     --destructive-foreground: 0 0% 100%;
     --border: 240 6% 16%;
     --input: 240 6% 16%;
-    --ring: 16 100% 56%;
+    --ring: 24 100% 54%;
 
     /* WCAG AA Compliant contrast variables - Dark mode */
     --text-high-contrast: 210 40% 98%; /* For critical text in dark mode */
@@ -85,13 +85,19 @@
     border-color: hsl(var(--border));
   }
   html {
-    overflow-x: hidden;
+    /* `clip`, not `hidden`: overflow-x:hidden turns the element into a scroll
+       container, and `position: sticky` inside a scroll container sticks to that
+       container instead of the viewport — which silently killed the pinned
+       sections on the marketing pages. `clip` suppresses the same horizontal
+       overflow without creating a scroll container. */
+    overflow-x: clip;
     width: 100%;
     scroll-behavior: smooth;
   }
   body {
     @apply bg-background text-foreground;
-    overflow-x: hidden;
+    /* See the note on html above — same reason. */
+    overflow-x: clip;
     width: 100%;
     position: relative;
     text-rendering: optimizeLegibility;
@@ -100,17 +106,17 @@
 
   /* Text selection styling */
   ::selection {
-    background-color: rgba(255, 90, 31, 0.3);
+    background-color: rgba(255, 112, 20, 0.28);
     color: #fff;
   }
   ::-moz-selection {
-    background-color: rgba(255, 90, 31, 0.3);
+    background-color: rgba(255, 112, 20, 0.28);
     color: #fff;
   }
 
   /* Better focus-visible for all interactive elements */
   :focus-visible {
-    @apply outline-none ring-2 ring-[#ff5a1f]/50 ring-offset-2 ring-offset-black;
+    @apply outline-none ring-2 ring-[#ff7014]/50 ring-offset-2 ring-offset-black;
   }
 
   /* Smooth transition for all interactive elements */
@@ -557,18 +563,11 @@
   }
 }
 
-/* Logo styles for dark/light mode compatibility */
+/* Logo styles.
+   The dark-mode invert/hue-rotate hacks are gone: they existed to flip the old
+   black artwork to white, and the current mark already ships in the dark-surface
+   colours (#f4f4f1 brackets, #ff7014 folder). Inverting it now would wreck it. */
 @layer components {
-  /* In dark mode, invert the black parts of the logo to white */
-  .dark img[src*='groeimet-ai-logo'] {
-    filter: invert(1) hue-rotate(150deg) saturate(2);
-  }
-
-  .dark img[src*='gecentreerd-logo'] {
-    filter: invert(1) hue-rotate(150deg) saturate(2);
-  }
-
-  /* Ensure logos have proper contrast in both modes */
   img[src*='logo'] {
     @apply transition-all duration-300;
   }

@@ -5,7 +5,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Btn } from '@/components/ds/Btn';
+import { LogoMark } from '@/components/ds/Brand';
 import { IconArrow, IconGithub } from '@/components/ds/icons';
+
+const SOFT_MAG: React.CSSProperties = {
+  display: 'inline-flex',
+  willChange: 'transform',
+  transition: 'transform .5s var(--ease)',
+};
 
 export function Navigation({ basePath = '' }: { basePath?: string }) {
   const pathname = usePathname() ?? '';
@@ -43,28 +50,24 @@ export function Navigation({ basePath = '' }: { basePath?: string }) {
   };
 
   return (
-    <nav className="nav">
+    <nav className="nav" data-r="nav">
       <div className="nav-inner">
         <Link href={basePath || '/'} className="nav-brand" aria-label="GroeimetAI">
-          {/* Wide logo on desktop, square icon on mobile — swapped via CSS */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          {/* Inline SVG, not <img>: an image cannot see the page's CSS custom
+              properties, which is why the old wordmark rendered black-on-black. */}
+          <LogoMark size={28} bracket="var(--fg)" />
+          <span
             className="nav-brand-wide"
-            src="/groeimet-ai-logo.svg"
-            alt="GroeimetAI"
-            width={149}
-            height={28}
-            style={{ height: 28, width: 'auto' }}
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="nav-brand-icon"
-            src="/gecentreerd-logo.svg"
-            alt="GroeimetAI"
-            height={32}
-            width={32}
-            style={{ height: 32, width: 32 }}
-          />
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 500,
+              fontSize: 17,
+              letterSpacing: '-0.02em',
+              color: 'var(--fg)',
+            }}
+          >
+            Groeimet<span style={{ color: 'var(--accent)' }}>AI</span>
+          </span>
         </Link>
 
         <div className="nav-links">
@@ -81,20 +84,26 @@ export function Navigation({ basePath = '' }: { basePath?: string }) {
         </div>
 
         <div className="nav-cta">
-          <Btn
-            variant="ghost"
-            href="https://github.com/serac-labs/serac"
-            style={{ padding: '8px 14px', fontSize: 13 }}
-          >
-            <IconGithub size={14} /> {t('github')}
-          </Btn>
-          <Btn
-            variant="primary"
-            href={basePath + '/contact'}
-            style={{ padding: '9px 16px', fontSize: 13 } as React.CSSProperties}
-          >
-            {t('contact')} <IconArrow size={12} />
-          </Btn>
+          {/* data-mag="soft" — the gentle magnet (3.2px pull). At full strength
+              the nav pair reads as chasing the cursor. */}
+          <span style={SOFT_MAG} data-mag="soft">
+            <Btn
+              variant="ghost"
+              href="https://github.com/serac-labs/serac"
+              style={{ padding: '8px 14px', fontSize: 13 }}
+            >
+              <IconGithub size={14} /> {t('github')}
+            </Btn>
+          </span>
+          <span style={SOFT_MAG} data-mag="soft">
+            <Btn
+              variant="primary"
+              href={basePath + '/contact'}
+              style={{ padding: '9px 16px', fontSize: 13 } as React.CSSProperties}
+            >
+              {t('contact')} <IconArrow size={12} />
+            </Btn>
+          </span>
         </div>
 
         <button

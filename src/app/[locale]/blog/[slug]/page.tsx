@@ -9,6 +9,8 @@ import type { Locale } from '@/content/types';
 import { ArrowRight } from 'lucide-react';
 
 const BASE = 'https://groeimetai.io';
+// Generated card image (src/app/opengraph-image.tsx).
+const OG_IMAGE = 'https://groeimetai.io/opengraph-image/og.png';
 
 export async function generateStaticParams() {
   return allPostSlugs().map(({ slug, locale }) => ({ slug, locale }));
@@ -23,21 +25,44 @@ export async function generateMetadata({
   if (!post) return { title: 'Artikel niet gevonden — GroeimetAI Blog' };
 
   const url = `${BASE}/${params.locale}/blog/${params.slug}`;
+
+  // Only advertise a locale that actually has this post. The registry filters
+  // on locale (src/content/blog/index.ts), and every post is currently NL-only,
+  // so emitting an /en/ alternate unconditionally would point hreflang at a 404
+  // and Google would discard the whole cluster. As soon as an English version of
+  // a post is registered, its alternate appears here automatically.
+  const languages: Record<string, string> = {};
+  if (getPost(params.slug, 'nl')) languages['nl-NL'] = `${BASE}/nl/blog/${params.slug}`;
+  if (getPost(params.slug, 'en')) languages.en = `${BASE}/en/blog/${params.slug}`;
+  // x-default points at the Dutch version when we have one, otherwise at the
+  // only version that exists.
+  const xDefault = languages['nl-NL'] ?? languages.en;
+  if (xDefault) languages['x-default'] = xDefault;
+
   return {
     title: `${post.title} — GroeimetAI`,
     description: post.excerpt,
     alternates: {
       canonical: url,
+      languages,
     },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: 'article',
       url,
+      siteName: 'GroeimetAI',
       publishedTime: post.date,
       modifiedTime: post.updated || post.date,
       authors: [post.author.name],
       locale: params.locale === 'nl' ? 'nl_NL' : 'en_US',
+      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: post.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt,
+      images: [OG_IMAGE],
     },
     keywords: post.tags,
   };
@@ -64,6 +89,7 @@ export default function BlogPostPage({
         dateModified={post.updated || post.date}
         authorName={post.author.name}
         authorUrl={post.author.url}
+        authorId={post.author.id}
         image={post.image}
         inLanguage={post.locale}
         keywords={post.tags}
@@ -71,6 +97,7 @@ export default function BlogPostPage({
       />
       <BreadcrumbJsonLd
         items={[
+          { name: 'Home', url: `${BASE}/${params.locale}` },
           { name: 'Blog', url: `${BASE}/${params.locale}/blog` },
           { name: post.title, url },
         ]}

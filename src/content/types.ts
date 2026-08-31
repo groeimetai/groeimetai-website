@@ -8,6 +8,13 @@ export interface Author {
   name: string;
   role: string;
   bio?: string;
+  /**
+   * Canonical, locale-independent JSON-LD @id for this person. Keep it in sync
+   * with FOUNDER_ID in src/components/JsonLd.tsx so every Article author, the
+   * Person node on /about and Organization.founder resolve to one entity.
+   */
+  id?: string;
+  /** Human-readable profile page. Locale-prefixed: the bare path redirects. */
   url?: string;
   image?: string;
   linkedin?: string;
@@ -17,7 +24,8 @@ export const NIELS: Author = {
   name: 'Niels van der Werf',
   role: 'Founder, GroeimetAI',
   bio: 'Helpt MKB-teams nuchter met AI werken: training, strategie, workflow-herontwerp en veilige integraties.',
-  url: 'https://groeimetai.io/about#niels-van-der-werf',
+  id: 'https://groeimetai.io/#niels-van-der-werf',
+  url: 'https://groeimetai.io/nl/about#niels-van-der-werf',
   linkedin: 'https://www.linkedin.com/in/nielsvanderwerf',
 };
 

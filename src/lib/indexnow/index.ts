@@ -19,18 +19,45 @@ const KEY = 'b47aede02d0c7bdb8a1f91a99dcefa42';
 const KEY_LOCATION = `https://${HOST}/${KEY}.txt`;
 const ENDPOINT = 'https://api.indexnow.org/IndexNow';
 
+// Keep in sync with STATIC_PATHS in src/app/sitemap.ts — both lists describe
+// the same set of locale-prefixed marketing routes. Only paths that resolve to
+// a real page under src/app/[locale]/ belong here: submitting a redirect or a
+// 404 to IndexNow pushes a dead URL straight into Bing, the index ChatGPT
+// search reads. /services (308 → /trainingen) and /snow-flow (no route) were
+// removed for exactly that reason.
 const STATIC_PATHS = [
   '',
+  '/agents',
+  '/trainingen',
   '/about',
-  '/services',
   '/contact',
   '/blog',
   '/cases',
   '/faq',
-  '/team',
-  '/roadmap',
   '/assessments',
-  '/snow-flow',
+  '/privacy',
+  '/terms',
+  '/cookies',
+];
+
+// Detail routes that have no content registry to enumerate them. Same rule:
+// keep in sync with src/app/sitemap.ts when a case study or assessment is
+// added or retired.
+const CASE_STUDIES = [
+  'enterprise-llm-implementation',
+  'snelnotuleren-ai-transcription',
+  'groeimetai-learning-platform',
+  'intelligent-ticket-routing',
+];
+
+const ASSESSMENTS = [
+  'ai-maturity',
+  'ai-security',
+  'cx-ai',
+  'data-readiness',
+  'integration-readiness',
+  'process-automation',
+  'roi-calculator',
 ];
 
 const LOCALES = ['nl', 'en'] as const;
@@ -43,6 +70,12 @@ export function listIndexableUrls(): string[] {
   for (const locale of LOCALES) {
     for (const path of STATIC_PATHS) {
       urls.add(`${base}/${locale}${path}`);
+    }
+    for (const slug of CASE_STUDIES) {
+      urls.add(`${base}/${locale}/cases/${slug}`);
+    }
+    for (const slug of ASSESSMENTS) {
+      urls.add(`${base}/${locale}/assessments/${slug}`);
     }
   }
 

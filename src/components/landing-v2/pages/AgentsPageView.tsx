@@ -1,139 +1,336 @@
 'use client';
 
+import { Fragment, useEffect, useState, type CSSProperties } from 'react';
+import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
-import { useReveal } from '@/hooks/useReveal';
+import { MotionShell } from '@/components/landing-v2/MotionShell';
 import { Btn, Eyebrow, Section } from '@/components/ds';
 import { IconArrow, IconFolder, IconInstructions, IconTool } from '@/components/ds/icons';
 
+/** WebGL only — never renders on the server, so the copy around it stays server-rendered. */
+const MorphObject = dynamic(
+  () => import('@/components/landing-v2/MorphObject').then((m) => ({ default: m.MorphObject })),
+  { ssr: false }
+);
+
+const EASE = 'var(--ease)';
+
+/**
+ * Start state for a `[data-reveal]` element. The motion loop clears opacity and
+ * transform when it enters the viewport; the content itself is always rendered.
+ */
+/**
+ * The trifecta heading is built as `title1 <em>accent</em> title2`. In Dutch
+ * title2 is a word ("knippen."), in English it is bare punctuation ("."), so a
+ * hardcoded space renders "trifecta ." in one language and "trifectaknippen."
+ * in the other. Space it only when it does not start with punctuation.
+ */
+function afterAccent(tail: string): string {
+  return /^[.,!?;:]/.test(tail) ? tail : ` ${tail}`;
+}
+
+function reveal(dy = 24, dur = 0.8, delay = 0): CSSProperties {
+  return {
+    opacity: 0,
+    transform: `translateY(${dy}px)`,
+    transition: `opacity ${dur}s ${EASE}, transform ${dur}s ${EASE}`,
+    ...(delay ? { transitionDelay: `${delay}s` } : null),
+  };
+}
+
+/** Magnetic-hover wrapper — the loop needs its own transform to push around. */
+const MAG: CSSProperties = {
+  display: 'inline-flex',
+  willChange: 'transform',
+  transition: `transform .3s ${EASE}`,
+};
+
+const MODEL_CARDS = [
+  { key: 'card1', icon: <IconFolder size={22} /> },
+  { key: 'card2', icon: <IconInstructions size={22} /> },
+  { key: 'card3', icon: <IconTool size={22} /> },
+];
+
+/** Split a translated line into per-word spans, keeping the spaces as real text. */
+function words(line: string) {
+  return line.split(' ').filter(Boolean);
+}
+
 export function AgentsPageView({ basePath }: { basePath: string }) {
-  useReveal();
   const t = useTranslations('redesign.agents');
 
-  return (
-    <div className="page">
-      <div className="page-head">
-        <div className="glow" />
-        <div className="container page-head-inner">
-          <div className="crumbs">
-            <span>{t('head.crumb1')}</span>
-            <span className="sep">/</span>
-            <span className="current">{t('head.crumbCurrent')}</span>
-          </div>
-          <h1>
-            {t('head.title1')}{' '}
-            <em style={{ color: 'var(--accent)', fontStyle: 'normal' }}>{t('head.titleAccent')}</em>{' '}
-            {t('head.title2')}
-          </h1>
-          <p>{t('head.lead')}</p>
-        </div>
-      </div>
+  // The ambient object bleeds off the right edge of the two-column band. Below
+  // ~1000px that column is gone and it would wash out the copy it sits behind.
+  const [wide, setWide] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1001px)');
+    const sync = () => setWide(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
 
-      <Section>
-        <div className="sec-head reveal">
-          <div>
-            <Eyebrow>{t('model.eyebrow')}</Eyebrow>
-            <h2 style={{ marginTop: 16 }}>
-              {t('model.title1')}
-              <br />
-              {t('model.title2')}
-            </h2>
+  const headWords: { w: string; accent?: boolean }[] = [
+    ...words(t('head.title1')).map((w) => ({ w })),
+    { w: t('head.titleAccent'), accent: true },
+    ...words(t('head.title2')).map((w) => ({ w })),
+  ];
+
+  return (
+    <MotionShell>
+      <div className="page">
+        <div className="page-head" style={{ padding: '88px 0 56px' }}>
+          <div className="grid-bg" data-parallax="0.14" style={{ willChange: 'transform' }} />
+          <div
+            aria-hidden
+            data-parallax="0.3"
+            style={{ position: 'absolute', inset: 0, pointerEvents: 'none', willChange: 'transform' }}
+          >
+            <div className="glow" />
           </div>
-          <div className="sec-head-right">
-            <p className="lead">{t('model.lead')}</p>
+          <div className="container">
+            <div className="page-head-inner">
+              <div className="crumbs" data-reveal style={reveal(14, 0.6)}>
+                <span>{t('head.crumb1')}</span>
+                <span className="sep">/</span>
+                <span className="current">{t('head.crumbCurrent')}</span>
+              </div>
+              <h1>
+                {headWords.map((word, i) => (
+                  <Fragment key={i}>
+                    {i > 0 ? ' ' : null}
+                    <span
+                      data-reveal
+                      style={{
+                        display: 'inline-block',
+                        color: word.accent ? 'var(--accent)' : undefined,
+                        opacity: 0,
+                        transform: 'translateY(0.42em)',
+                        transition: `opacity .85s ${EASE}, transform .85s ${EASE}`,
+                        transitionDelay: `${(0.06 + i * 0.06).toFixed(2)}s`,
+                      }}
+                    >
+                      {word.w}
+                    </span>
+                  </Fragment>
+                ))}
+              </h1>
+              <p data-reveal style={reveal(18, 0.8, 0.4)}>
+                {t('head.lead')}
+              </p>
+            </div>
           </div>
         </div>
-        <div className="approach-grid reveal">
-          {[
-            { icon: <IconFolder size={22} />, num: 'card1Num', title: 'card1Title', body: 'card1Body', hint: 'card1Hint' },
-            {
-              icon: <IconInstructions size={22} />,
-              num: 'card2Num',
-              title: 'card2Title',
-              body: 'card2Body',
-              hint: 'card2Hint',
-            },
-            { icon: <IconTool size={22} />, num: 'card3Num', title: 'card3Title', body: 'card3Body', hint: 'card3Hint' },
-          ].map((c, i) => (
-            <div className="approach-card" key={i}>
-              <div className="approach-icon">{c.icon}</div>
-              <div className="num">{t(`model.${c.num}`)}</div>
-              <h4>{t(`model.${c.title}`)}</h4>
-              <p>{t(`model.${c.body}`)}</p>
-              <div className="mono" style={{ fontSize: 11, color: 'var(--fg-mute)', marginTop: 8 }}>
-                {t(`model.${c.hint}`)}
+
+        <section className="section" style={{ overflow: 'hidden' }}>
+          <div
+            data-r="modelObj"
+            aria-hidden
+            style={{
+              position: 'absolute',
+              top: '50%',
+              right: '-6%',
+              width: '46%',
+              height: '120%',
+              transform: 'translateY(-50%)',
+              opacity: 0.28,
+              pointerEvents: 'none',
+              zIndex: 0,
+              display: wide ? 'block' : 'none',
+            }}
+          >
+            {wide ? <MorphObject variant="ambient" /> : null}
+          </div>
+          <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+            <div className="sec-head" data-reveal style={reveal(24)}>
+              <div>
+                <Eyebrow>{t('model.eyebrow')}</Eyebrow>
+                <h2 data-words style={{ marginTop: 16 }}>
+                  {words(t('model.title1')).map((w, i) => (
+                    <Fragment key={`t1-${i}`}>
+                      {i > 0 ? ' ' : null}
+                      <span data-w>{w}</span>
+                    </Fragment>
+                  ))}
+                  <br />
+                  {words(t('model.title2')).map((w, i) => (
+                    <Fragment key={`t2-${i}`}>
+                      {i > 0 ? ' ' : null}
+                      <span data-w>{w}</span>
+                    </Fragment>
+                  ))}
+                </h2>
+              </div>
+              <div className="sec-head-right">
+                <p className="lead">{t('model.lead')}</p>
               </div>
             </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section light>
-        <div className="sec-head reveal">
-          <div>
-            <Eyebrow>{t('process.eyebrow')}</Eyebrow>
-            <h2 style={{ marginTop: 16 }}>{t('process.title')}</h2>
-          </div>
-          <div className="sec-head-right">
-            <p className="lead">{t('process.lead')}</p>
-          </div>
-        </div>
-        <div className="steps reveal">
-          {[1, 2, 3, 4].map((i) => (
-            <div className="step" key={i}>
-              <div className="step-n">{t(`process.step${i}N`)}</div>
-              <h4>{t(`process.step${i}Title`)}</h4>
-              <p>{t(`process.step${i}Body`)}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section>
-        <div className="ds-grid-2" style={{ gap: 80 }}>
-          <div className="reveal">
-            <Eyebrow>{t('boundaries.eyebrow')}</Eyebrow>
-            <h2 style={{ marginTop: 16 }}>{t('boundaries.title')}</h2>
-            <p style={{ marginTop: 20 }} className="lead">
-              {t('boundaries.lead')}
-            </p>
-          </div>
-          <div className="reveal">
-            <div className="checklist">
-              {[1, 2, 3, 4].map((i) => (
-                <div className="checklist-item" key={i}>
-                  <span className="x">×</span>
-                  <div>
-                    <strong style={{ color: 'var(--fg)' }}>{t(`boundaries.item${i}Bold`)}</strong>
-                    {t(`boundaries.item${i}Rest`)}
+            <div className="approach-grid">
+              {MODEL_CARDS.map((c) => (
+                <div
+                  className="approach-card"
+                  key={c.key}
+                  data-reveal
+                  data-tilt
+                  style={{ ...reveal(28), willChange: 'transform' }}
+                >
+                  <div className="approach-icon">{c.icon}</div>
+                  <div className="num">{t(`model.${c.key}Num`)}</div>
+                  <h4>{t(`model.${c.key}Title`)}</h4>
+                  <p>{t(`model.${c.key}Body`)}</p>
+                  <div className="mono" style={{ fontSize: 11, color: 'var(--fg-mute)', marginTop: 8 }}>
+                    {t(`model.${c.key}Hint`)}
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-      </Section>
+        </section>
 
-      <Section tight>
-        <div className="cta-block reveal">
-          <div className="cta-block-inner">
-            <Eyebrow>{t('cta.eyebrow')}</Eyebrow>
-            <h2 style={{ marginTop: 18 }}>
-              {t('cta.title1')}
-              <br />
-              {t('cta.title2')}
-            </h2>
-            <div className="row">
-              <Btn variant="primary" href={`${basePath}/contact`}>
-                {t('cta.ctaPrimary')} <IconArrow size={14} />
-              </Btn>
-              <Btn variant="ghost" href={`${basePath}/cases`}>
-                {t('cta.ctaGhost')}
-              </Btn>
+        <div data-band="paper">
+          <Section light>
+            <div className="sec-head" data-reveal style={reveal(24)}>
+              <div>
+                <Eyebrow>{t('process.eyebrow')}</Eyebrow>
+                <h2 style={{ marginTop: 16 }}>{t('process.title')}</h2>
+              </div>
+              <div className="sec-head-right">
+                <p className="lead">{t('process.lead')}</p>
+              </div>
+            </div>
+            <div className="steps" style={{ marginTop: 32 }}>
+              {[1, 2, 3, 4].map((n, i) => (
+                <div className="step" key={n} data-reveal style={reveal(22, 0.7, i * 0.1)}>
+                  <div className="step-n">{t(`process.step${n}N`)}</div>
+                  <h4>{t(`process.step${n}Title`)}</h4>
+                  <p>{t(`process.step${n}Body`)}</p>
+                </div>
+              ))}
+            </div>
+          </Section>
+        </div>
+
+        {/* "Lethal trifecta" — added on main in 21cb413 while this page was being
+            redesigned. Kept verbatim in content, converted to the redesign's
+            motion idiom: data-reveal + staggered inline transitions instead of
+            the old .reveal class. */}
+        <Section>
+          <div className="sec-head" data-reveal style={reveal(22)}>
+            <div>
+              <Eyebrow>{t('trifecta.eyebrow')}</Eyebrow>
+              <h2 style={{ marginTop: 16 }}>
+                {t('trifecta.title1')}{' '}
+                <em style={{ color: 'var(--accent)', fontStyle: 'normal' }}>
+                  {t('trifecta.titleAccent')}
+                </em>
+                {afterAccent(t('trifecta.title2'))}
+              </h2>
+            </div>
+            <div className="sec-head-right">
+              <p className="lead">{t('trifecta.lead')}</p>
             </div>
           </div>
-        </div>
-      </Section>
-    </div>
+          <div className="approach-grid">
+            {[1, 2, 3].map((i) => (
+              <div
+                className="approach-card"
+                key={i}
+                data-reveal
+                data-tilt
+                style={reveal(22, 0.8, 0.08 * i)}
+              >
+                <div className="num">{t(`trifecta.card${i}Num`)}</div>
+                <h4>{t(`trifecta.card${i}Title`)}</h4>
+                <p>{t(`trifecta.card${i}Body`)}</p>
+              </div>
+            ))}
+          </div>
+          <div
+            data-reveal
+            style={{
+              ...reveal(20, 0.8, 0.32),
+              marginTop: 32,
+              padding: 24,
+              borderLeft: '2px solid var(--accent)',
+              background: 'var(--bg-elev)',
+              borderRadius: '0 12px 12px 0',
+            }}
+          >
+            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6 }}>{t('trifecta.footer')}</p>
+            <p
+              className="mono"
+              style={{
+                marginTop: 12,
+                marginBottom: 0,
+                fontSize: 11,
+                color: 'var(--fg-mute)',
+                letterSpacing: '0.04em',
+              }}
+            >
+              {t('trifecta.attribution')}
+            </p>
+          </div>
+        </Section>
+
+        <Section>
+          <div className="ds-grid-2" style={{ gap: 80 }}>
+            <div data-reveal style={reveal(24)}>
+              <Eyebrow>{t('boundaries.eyebrow')}</Eyebrow>
+              <h2 style={{ marginTop: 16 }}>{t('boundaries.title')}</h2>
+              <p className="lead" style={{ marginTop: 20 }}>
+                {t('boundaries.lead')}
+              </p>
+            </div>
+            <div data-reveal style={reveal(24, 0.8, 0.1)}>
+              <div className="checklist">
+                {[1, 2, 3, 4].map((i) => (
+                  <div className="checklist-item" key={i}>
+                    <span className="x">×</span>
+                    <div>
+                      <strong style={{ color: 'var(--fg)', fontWeight: 500 }}>
+                        {t(`boundaries.item${i}Bold`)}
+                      </strong>
+                      {t(`boundaries.item${i}Rest`)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        <Section>
+          <div className="cta-block" data-reveal style={reveal(28, 0.9)}>
+            <div
+              className="glow"
+              aria-hidden
+              data-parallax="-0.05"
+              style={{ top: -340, right: -220, willChange: 'transform' }}
+            />
+            <div className="cta-block-inner">
+              <Eyebrow>{t('cta.eyebrow')}</Eyebrow>
+              <h2 style={{ marginTop: 18 }}>
+                {t('cta.title1')}
+                <br />
+                {t('cta.title2')}
+              </h2>
+              <div className="row">
+                <span data-mag style={MAG}>
+                  <Btn variant="primary" href={`${basePath}/contact`}>
+                    {t('cta.ctaPrimary')} <IconArrow size={14} />
+                  </Btn>
+                </span>
+                <span data-mag style={MAG}>
+                  <Btn variant="ghost" href={`${basePath}/cases`}>
+                    {t('cta.ctaGhost')}
+                  </Btn>
+                </span>
+              </div>
+            </div>
+          </div>
+        </Section>
+      </div>
+    </MotionShell>
   );
 }
 
