@@ -8,6 +8,12 @@ import { Btn } from '@/components/ds/Btn';
 import { LogoMark } from '@/components/ds/Brand';
 import { IconArrow, IconGithub } from '@/components/ds/icons';
 
+const SOFT_MAG: React.CSSProperties = {
+  display: 'inline-flex',
+  willChange: 'transform',
+  transition: 'transform .5s var(--ease)',
+};
+
 export function Navigation({ basePath = '' }: { basePath?: string }) {
   const pathname = usePathname() ?? '';
   const t = useTranslations('redesign.nav');
@@ -78,20 +84,26 @@ export function Navigation({ basePath = '' }: { basePath?: string }) {
         </div>
 
         <div className="nav-cta">
-          <Btn
-            variant="ghost"
-            href="https://github.com/serac-labs/serac"
-            style={{ padding: '8px 14px', fontSize: 13 }}
-          >
-            <IconGithub size={14} /> {t('github')}
-          </Btn>
-          <Btn
-            variant="primary"
-            href={basePath + '/contact'}
-            style={{ padding: '9px 16px', fontSize: 13 } as React.CSSProperties}
-          >
-            {t('contact')} <IconArrow size={12} />
-          </Btn>
+          {/* data-mag="soft" — the gentle magnet (3.2px pull). At full strength
+              the nav pair reads as chasing the cursor. */}
+          <span style={SOFT_MAG} data-mag="soft">
+            <Btn
+              variant="ghost"
+              href="https://github.com/serac-labs/serac"
+              style={{ padding: '8px 14px', fontSize: 13 }}
+            >
+              <IconGithub size={14} /> {t('github')}
+            </Btn>
+          </span>
+          <span style={SOFT_MAG} data-mag="soft">
+            <Btn
+              variant="primary"
+              href={basePath + '/contact'}
+              style={{ padding: '9px 16px', fontSize: 13 } as React.CSSProperties}
+            >
+              {t('contact')} <IconArrow size={12} />
+            </Btn>
+          </span>
         </div>
 
         <button

@@ -11,6 +11,13 @@ export interface MotionShellProps {
   spotlight?: boolean;
   /** Per-page choreography, called once per animation frame. */
   onFrame?: (state: FrameState) => void;
+  /**
+   * Fixed page chrome (e.g. the homepage section HUD). Rendered as a sibling of
+   * the content stack rather than inside it: the content sits in its own
+   * `z-index: 2` stacking context, so a child declaring `z-index: 55` could
+   * never rise above it.
+   */
+  overlay?: ReactNode;
 }
 
 /**
@@ -23,11 +30,11 @@ export interface MotionShellProps {
  *
  * Sections that should pull the page toward paper carry `data-band="paper"`.
  */
-export function MotionShell({ children, motionLevel, spotlight, onFrame }: MotionShellProps) {
+export function MotionShell({ children, motionLevel, spotlight, onFrame, overlay }: MotionShellProps) {
   useSiteMotion({ motionLevel, spotlight, onFrame });
 
   return (
-    <div data-r="root">
+    <div data-r="root" style={{ position: 'relative', background: 'transparent' }}>
       <div
         data-r="backdrop"
         aria-hidden
@@ -36,7 +43,6 @@ export function MotionShell({ children, motionLevel, spotlight, onFrame }: Motio
           inset: 0,
           zIndex: 0,
           background: 'var(--bg)',
-          transition: 'background .5s linear',
           pointerEvents: 'none',
         }}
       />
@@ -54,6 +60,8 @@ export function MotionShell({ children, motionLevel, spotlight, onFrame }: Motio
           marginTop: -380,
           borderRadius: '50%',
           opacity: 0,
+          transition: 'opacity .6s linear',
+          willChange: 'transform',
           pointerEvents: 'none',
           filter: 'blur(10px)',
           background:
@@ -62,7 +70,16 @@ export function MotionShell({ children, motionLevel, spotlight, onFrame }: Motio
       />
       <div
         aria-hidden
-        style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 2, zIndex: 60 }}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 2,
+          zIndex: 60,
+          background: 'rgba(255,255,255,.06)',
+          pointerEvents: 'none',
+        }}
       >
         <div
           data-r="prog"
@@ -71,11 +88,12 @@ export function MotionShell({ children, motionLevel, spotlight, onFrame }: Motio
             width: '0%',
             background:
               'linear-gradient(90deg, var(--accent-deep), var(--accent), var(--accent-hot))',
-            boxShadow: '0 0 12px var(--accent)',
+            boxShadow: '0 0 12px rgba(255,112,20,.6)',
           }}
         />
       </div>
       <div style={{ position: 'relative', zIndex: 2 }}>{children}</div>
+      {overlay}
     </div>
   );
 }

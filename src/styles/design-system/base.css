@@ -75,9 +75,13 @@
 .ds .nav {
   position: sticky; top: 0;
   z-index: 50;
-  background: rgba(10,10,11,0.7);
-  backdrop-filter: saturate(140%) blur(14px);
+  background: rgba(10,10,11,0.74);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
   border-bottom: 1px solid var(--line);
+  /* The motion loop drives background and border-colour over the paper bands;
+     without a transition the flip is a hard cut. */
+  transition: background .5s linear, border-color .5s linear;
 }
 .ds .nav-inner {
   display: flex; align-items: center; justify-content: space-between;

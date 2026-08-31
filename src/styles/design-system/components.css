@@ -97,17 +97,17 @@
   /* minmax(0, ...) prevents the right column from growing when the
      anatomy contains long mono lines — otherwise the track widens to
      fit its content and squeezes the hero title. */
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: 64px;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+  gap: 60px;
   align-items: center;
   position: relative;
   z-index: 2;
 }
 .hero h1 { margin-top: 24px; }
 .hero h1 em { font-style: normal; color: var(--accent); font-weight: 500; }
-.hero-sub { margin-top: 24px; max-width: 48ch; }
+.hero-sub { margin-top: 26px; max-width: 48ch; }
 .hero-cta { margin-top: 36px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-.hero-meta { margin-top: 32px; display: flex; gap: 24px; flex-wrap: wrap; }
+.hero-meta { margin-top: 34px; display: flex; gap: 24px; flex-wrap: wrap; }
 .hero-meta-item {
   display: flex; gap: 10px; align-items: center;
   font-family: var(--font-mono);
@@ -116,8 +116,8 @@
 }
 .hero-meta-item .icon { color: var(--accent); }
 
-@media (max-width: 980px) {
-  .hero-grid { grid-template-columns: 1fr; }
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 44px; }
 }
 
 /* Section header */

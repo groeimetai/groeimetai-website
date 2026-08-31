@@ -49,12 +49,16 @@ const PAGE_CSS = `
 .home-2026 .hero .pill .dot { animation: ds-pulse 2s infinite; }
 /* the drifting glow below replaces the static one baked into .cta-block */
 .home-2026 .cta-block::before { display: none; }
-/* three Stats inside the Serac card: a third of a card, not a third of a section */
-.home-2026 [data-proofstats] .stat { padding-left: 14px; }
-.home-2026 [data-proofstats] .stat-num { font-size: clamp(22px, 2.2vw, 32px); }
-.home-2026 [data-proofstats] .stat-label { margin-top: 8px; font-size: 11px; }
-@media (max-width: 980px) {
+@media (max-width: 900px) {
   .home-2026 [data-heroobj] { display: none !important; }
+}
+/* Homepage-only cta-block metrics: the prototype deliberately runs larger here
+   than on the other five pages (70/56 vs 64/56, 760 vs 720, row 34 vs 32). */
+.home-2026 .cta-block { padding: 70px 56px; }
+.home-2026 .cta-block-inner { max-width: 760px; }
+.home-2026 .cta-block .row { margin-top: 34px; }
+@media (max-width: 900px) {
+  .home-2026 .cta-block { padding: 44px 26px; }
 }
 @media (max-width: 1040px) {
   .home-2026 [data-morphgrid] { grid-template-columns: 1fr !important; gap: 0 !important; }
@@ -344,7 +348,73 @@ export function HomePageView({ basePath }: { basePath: string }) {
   };
 
   return (
-    <MotionShell onFrame={onFrame}>
+    <MotionShell
+      onFrame={onFrame}
+      overlay={
+        <>
+        {/* ====================== right-edge section HUD ====================== */}
+        <aside
+          data-home-hud
+          ref={hudRef}
+          style={{
+            position: 'fixed',
+            right: 26,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            zIndex: 55,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 14,
+            alignItems: 'flex-end',
+            pointerEvents: 'none',
+            opacity: 0,
+            visibility: 'hidden',
+            transition: 'opacity .5s var(--ease), visibility .5s var(--ease)',
+          }}
+        >
+          {HUD_IDS.map((id, i) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              aria-label={hudLabels[i]}
+              style={{ display: 'flex', alignItems: 'center', gap: 10, pointerEvents: 'auto' }}
+            >
+              <span
+                className="mono"
+                aria-hidden
+                ref={(el) => {
+                  hudLabelRefs.current[i] = el;
+                }}
+                style={{
+                  fontSize: 10,
+                  letterSpacing: '.1em',
+                  color: 'var(--om-hud, var(--fg-mute))',
+                  opacity: 0.35,
+                  transition: 'opacity .3s var(--ease), color .3s linear',
+                }}
+              >
+                {`0${i + 1}`}
+              </span>
+              <span
+                aria-hidden
+                ref={(el) => {
+                  hudDotRefs.current[i] = el;
+                }}
+                style={{
+                  width: 7,
+                  height: 7,
+                  borderRadius: '50%',
+                  background: 'var(--om-hud, var(--fg-mute))',
+                  opacity: 0.35,
+                  transition: 'all .35s var(--ease)',
+                }}
+              />
+            </a>
+          ))}
+        </aside>
+        </>
+      }
+    >
       <style>{PAGE_CSS}</style>
 
       <div className="page home-2026">
@@ -947,7 +1017,7 @@ export function HomePageView({ basePath }: { basePath: string }) {
               }}
             >
               {[1, 2, 3].map((i) => (
-                <div key={i} style={{ flex: '0 0 min(400px, 78vw)', display: 'flex' }}>
+                <div key={i} style={{ flex: '0 0 400px', display: 'flex' }}>
                   <CaseCard
                     industry={t(`casesPreview.c${i}Industry`)}
                     title={t(`casesPreview.c${i}Title`)}
@@ -959,7 +1029,7 @@ export function HomePageView({ basePath }: { basePath: string }) {
                   />
                 </div>
               ))}
-              <div style={{ flex: '0 0 min(400px, 78vw)', display: 'flex' }}>
+              <div style={{ flex: '0 0 400px', display: 'flex' }}>
                 <div
                   className="card"
                   style={{
@@ -968,7 +1038,7 @@ export function HomePageView({ basePath }: { basePath: string }) {
                     justifyContent: 'space-between',
                     width: '100%',
                     background:
-                      'linear-gradient(150deg, var(--bg-elev-2) 0%, var(--bg-elev) 100%)',
+                      'linear-gradient(150deg,#17171d 0%,#0d0d11 100%)',
                   }}
                 >
                   <div>
@@ -1053,7 +1123,6 @@ export function HomePageView({ basePath }: { basePath: string }) {
                   </div>
                   <div className="divider" style={{ margin: '22px 0 18px' }} />
                   <div
-                    data-proofstats
                     style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}
                   >
                     {[1, 2, 3].map((i) => (
@@ -1071,8 +1140,8 @@ export function HomePageView({ basePath }: { basePath: string }) {
         </div>
 
         {/* ============================== cta ============================== */}
-        <Section id="cta" tight style={{ paddingBottom: 96 }}>
-          <div className="cta-block" data-reveal style={reveal(0, 28)}>
+        <Section id="cta" style={{ paddingBottom: 96 }}>
+          <div className="cta-block" data-reveal style={{ opacity: 0, transform: 'translateY(28px)', transition: 'opacity .9s var(--ease), transform .9s var(--ease)' }}>
             <div
               ref={ctaGlowRef}
               aria-hidden
@@ -1113,66 +1182,6 @@ export function HomePageView({ basePath }: { basePath: string }) {
         </Section>
       </div>
 
-      {/* ====================== right-edge section HUD ====================== */}
-      <aside
-        data-home-hud
-        ref={hudRef}
-        style={{
-          position: 'fixed',
-          right: 26,
-          top: '50%',
-          transform: 'translateY(-50%)',
-          zIndex: 55,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 14,
-          alignItems: 'flex-end',
-          pointerEvents: 'none',
-          opacity: 0,
-          visibility: 'hidden',
-          transition: 'opacity .5s var(--ease), visibility .5s var(--ease)',
-        }}
-      >
-        {HUD_IDS.map((id, i) => (
-          <a
-            key={id}
-            href={`#${id}`}
-            aria-label={hudLabels[i]}
-            style={{ display: 'flex', alignItems: 'center', gap: 10, pointerEvents: 'auto' }}
-          >
-            <span
-              className="mono"
-              aria-hidden
-              ref={(el) => {
-                hudLabelRefs.current[i] = el;
-              }}
-              style={{
-                fontSize: 10,
-                letterSpacing: '.1em',
-                color: 'var(--om-hud, var(--fg-mute))',
-                opacity: 0.35,
-                transition: 'opacity .3s var(--ease), color .3s linear',
-              }}
-            >
-              {`0${i + 1}`}
-            </span>
-            <span
-              aria-hidden
-              ref={(el) => {
-                hudDotRefs.current[i] = el;
-              }}
-              style={{
-                width: 7,
-                height: 7,
-                borderRadius: '50%',
-                background: 'var(--om-hud, var(--fg-mute))',
-                opacity: 0.35,
-                transition: 'all .35s var(--ease)',
-              }}
-            />
-          </a>
-        ))}
-      </aside>
     </MotionShell>
   );
 }
