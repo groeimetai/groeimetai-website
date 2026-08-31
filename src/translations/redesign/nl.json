@@ -354,152 +354,330 @@
   },
   "cases": {
     "metaTitle": "Cases · GroeimetAI",
-    "metaDescription": "Recente agents die ik bouwde — klantwerk en eigen tooling. Folder + instructies + tools, geen black box.",
+    "metaDescription": "Tien projecten van GroeimetAI: eigen producten, open source en betaald klantwerk, met cijfers en waar mogelijk de publieke code.",
     "head": {
       "crumb1": "Werk",
       "crumbCurrent": "Cases",
-      "title1": "Agents die ik",
+      "title1": "Wat ik",
       "titleAccent": "zelf",
-      "title2": "bouw.",
-      "lead": "Voor elk project — klantwerk én eigen tooling — bouw ik een agent in dezelfde stijl: een folder met instructies en lokale tools. Hier een paar recente."
+      "title2": "gebouwd heb.",
+      "lead": "Tien projecten die er staan of hebben gestaan — eigen producten, open source en betaald klantwerk. Met de cijfers erbij, en waar het publiek is de link erheen."
     },
     "labelCase": "CASE",
     "labelStack": "STACK",
     "labelResult": "RESULTAAT",
-    "listFooter": "+ en nog wat meer agents die hier niet bij staan — voor elk project bouw ik er een, dus de lijst groeit.",
+    "listFooter": "+ nog zo'n zestig projecten die hier niet bij staan — van trading-tooling tot webshops. Vraag ernaar als je iets specifieks zoekt.",
     "list": [
       {
-        "industry": "ServiceNow · Klantwerk",
-        "title": "AI-classificatie voor het Service Portal",
-        "role": "Bouw + implementatie",
-        "summary": "Een widget op het Service Portal die binnenkomende requests automatisch classificeert (incident / service request / vraag / HR), live status toont, relevante KB-artikelen ophaalt en contextuele vervolgvragen genereert. NL + EN auto-detect. Geïmplementeerd bij meerdere klanten in hun eigen ServiceNow-omgeving.",
+        "industry": "Open source · ServiceNow",
+        "title": "Een ServiceNow-agent die vanuit de terminal werkt",
+        "role": "Eigen product · Apache 2.0",
+        "summary": "Serac is een terminal-agent voor ServiceNow-ontwikkelaars en -consultants: bouwen, analyseren en uitrollen vanaf de command line, met 429 ServiceNow-tools ontsloten via MCP. Je koppelt je eigen AI-provider en je eigen instance, dus er zit geen tussenpartij in de keten.",
         "stack": [
-          "ServiceNow Quebec+",
-          "LLM-classificatie",
-          "JavaScript widget"
+          "TypeScript",
+          "Bun",
+          "Turborepo",
+          "MCP",
+          "Tauri",
+          "Rust"
         ],
         "outcomes": [
           {
-            "num": "Auto",
-            "label": "request-type detectie"
+            "num": "429",
+            "label": "ServiceNow-tools via MCP"
           },
           {
-            "num": "500ms",
-            "label": "live status polling"
+            "num": "55",
+            "label": "gebundelde domein-skills"
           },
           {
-            "num": "Multi",
-            "label": "klant-implementaties"
+            "num": "20+",
+            "label": "AI-providers naar keuze"
           }
         ],
-        "why": "Klanten zelf het juiste formulier laten kiezen werkte niet — te complex. Een widget doet die classificatie goed genoeg, en de service desk reviewt waar het ertoe doet. Code zelf zit in de omgeving van de klant; we delen het patroon, niet de codebase."
+        "why": "Een monorepo van zo'n achttien packages, met build- en plan-agents die per stap instelbare permissies hebben. Open onder Apache 2.0, te installeren via npm, Homebrew, Scoop, Choco en AUR — je kunt zelf nakijken wat het doet voordat je het op je instance loslaat.",
+        "link": {
+          "label": "github.com/serac-labs/serac",
+          "href": "https://github.com/serac-labs/serac"
+        }
       },
       {
-        "industry": "Persoonlijke branding · Eigen tooling",
-        "title": "Social media agent met Telegram approval",
-        "role": "Eigen werk",
-        "summary": "Eén folder die ideeën, drafts en publicaties beheert voor drie merken (Niels, GroeimetAI, Snow-Flow). Slash commands voor /idea, /draft, /publish. Headless flow met Telegram approval-stap.",
+        "industry": "B2B SaaS · Eigen product",
+        "title": "Van gratis tool naar betaald platform in productie",
+        "role": "Bouw + exploitatie",
+        "summary": "Rondom de gratis agent draait een commercieel platform: gehoste runtime, licentiesleutels en koppelingen naar Jira, Azure DevOps, Confluence, GitHub en GitLab. Credentials liggen versleuteld in een eigen vault, met white-label portalen en een on-prem variant voor wie niets buiten de deur wil.",
         "stack": [
-          "Claude Code",
-          "MCP servers",
-          "Telegram",
-          "LinkedIn"
+          "TypeScript",
+          "Express",
+          "React",
+          "MySQL 8.4",
+          "Docker Compose",
+          "Hetzner"
+        ],
+        "outcomes": [
+          {
+            "num": "2.0.0",
+            "label": "draait in productie"
+          },
+          {
+            "num": "5",
+            "label": "gekoppelde systemen"
+          },
+          {
+            "num": "40+",
+            "label": "tools bovenop de gratis CLI"
+          }
+        ],
+        "why": "Open source bewijst dat het werkt; een platform eromheen maakt het bruikbaar voor organisaties die geen CLI willen beheren. AES-256-GCM voor klant-credentials, want dat is precies het soort data dat je niet luchtig behandelt.",
+        "link": {
+          "label": "serac.build",
+          "href": "https://serac.build"
+        }
+      },
+      {
+        "industry": "Arbeidsdeskundig advies",
+        "title": "Casemanagement voor het Tweede Spoor-traject",
+        "role": "Klantwerk · DIM Arbeidsdeskundigen",
+        "summary": "DIM laat het hele Tweede Spoor-traject via één platform lopen. De wettelijke re-integratiestappen en de UWV-week-cadens zitten in het datamodel zelf, niet in losse afspraken naast het systeem.",
+        "stack": [
+          "Next.js",
+          "Prisma",
+          "Cloud SQL Postgres (RLS)",
+          "Vertex AI",
+          "Documenso",
+          "Cloud Run"
+        ],
+        "outcomes": [
+          {
+            "num": "RLS",
+            "label": "data-isolatie per dossier"
+          },
+          {
+            "num": "Fase 1",
+            "label": "eigendom gaat over naar de klant"
+          },
+          {
+            "num": "0",
+            "label": "doorgefactureerde hosting"
+          }
+        ],
+        "why": "Data-isolatie tussen dossiers via Postgres Row-Level Security, niet via zorgvuldig geschreven queries — dat laatste gaat een keer mis. En na betaling van fase 1 gaan code, data en infrastructuur volledig over naar DIM. Geen lock-in, ook niet als het commercieel handiger was geweest."
+      },
+      {
+        "industry": "Vergaderingen · Eigen SaaS",
+        "title": "Vergaderaudio automatisch naar concept-notulen",
+        "role": "Gebouwd, geëxploiteerd en bewust afgebouwd",
+        "summary": "Notulen maken van een opname is handwerk dat niemand leuk vindt. Snelnotuleren.nl deed het automatisch: audio erin, transcript en concept-notulen eruit, plus een chat over het transcript om details terug te zoeken.",
+        "stack": [
+          "Python",
+          "Flask",
+          "Docker",
+          "Cloud Run",
+          "Cloud Build",
+          "Firestore"
+        ],
+        "outcomes": [
+          {
+            "num": "4",
+            "label": "microservices in productie"
+          },
+          {
+            "num": "€5–€25",
+            "label": "betaalde rapporttypes"
+          },
+          {
+            "num": "2023–2025",
+            "label": "zelf gedraaid"
+          }
+        ],
+        "why": "Vier microservices met CI/CD naar Cloud Run, aparte test- en prod-branches. Ik heb het na de looptijd bewust afgebouwd in plaats van het te laten doorsudderen — een product dat je niet meer onderhoudt, moet je niet blijven verkopen."
+      },
+      {
+        "industry": "Vastgoed- en VvE-beheer",
+        "title": "Reparatiemeldingen uitgevraagd via telefoon en WhatsApp",
+        "role": "Betaalde klantopdracht",
+        "summary": "Bij een beheerorganisatie moest elke reparatiemelding handmatig worden nagebeld en uitgevraagd. De agent belt de melder zelf terug of voert het gesprek via WhatsApp, vraagt de melding gestructureerd uit en schrijft de gegevens direct weg. Draait in productie.",
+        "stack": [
+          "TypeScript",
+          "Twilio",
+          "OpenAI Realtime API",
+          "Supabase",
+          "Azure Container Apps"
+        ],
+        "outcomes": [
+          {
+            "num": "2",
+            "label": "kanalen: bellen en WhatsApp"
+          },
+          {
+            "num": "Realtime",
+            "label": "audiobrug Twilio ↔ OpenAI"
+          },
+          {
+            "num": "1",
+            "label": "set tools voor beide kanalen"
+          }
+        ],
+        "why": "Beide kanalen delen dezelfde tool-definities en prompts, dus een wijziging in de uitvraag geldt meteen voor allebei. De telefoniekant heeft een handgeschreven mu-law/PCM16-conversie en answering machine detection — dat soort dingen bepaalt of het in de praktijk werkt. De klant blijft ongenoemd; het werk niet."
+      },
+      {
+        "industry": "HR en recruitment · Eigen SaaS",
+        "title": "CV's afstemmen op de vacature, met open code",
+        "role": "Live product",
+        "summary": "Elk CV opnieuw op een vacature afstemmen kost tijd. CVeetje doet dat met AI: je brengt je eigen versleutelde AI-sleutel mee of je betaalt per credit, en je krijgt je CV terug in je eigen template.",
+        "stack": [
+          "Next.js 16",
+          "React 19",
+          "Firebase",
+          "Vercel AI SDK",
+          "pdf-lib",
+          "Mollie"
         ],
         "outcomes": [
           {
             "num": "3",
-            "label": "merken in één agent"
+            "label": "AI-providers met fallback"
           },
           {
-            "num": "0",
-            "label": "scheduling SaaS"
+            "num": "2",
+            "label": "formaten: DOCX en PDF"
           },
           {
-            "num": "Headless",
-            "label": "met approval-stap"
+            "num": "Open",
+            "label": "code publiek te controleren"
           }
         ],
-        "why": "Geen dashboard, geen abonnement. Een folder met instructies + slash commands die handmatig of autonoom kunnen draaien — afhankelijk van hoeveel je wil afgeven."
+        "why": "De code is bewust open source, zodat gebruikers kunnen nakijken dat hun data in hun eigen Firebase-project blijft. Platte PDF's zonder formuliervelden gaan door een vision-route die het document als overlay invult — de vervelende gevallen zijn precies waar het om gaat.",
+        "link": {
+          "label": "maakcveetje.nl",
+          "href": "https://maakcveetje.nl"
+        }
       },
       {
-        "industry": "Finance · ZZP",
-        "title": "BTW-aangifte agent met localhost dashboard",
-        "role": "Eigen tooling",
-        "summary": "Haalt transacties uit bunq en Mollie, classificeert ze (zakelijk / gemengd / privé) met reden en voorstel. Localhost dashboard om interactief bij te schaven. Leert van correcties per kwartaal.",
+        "industry": "Betalingen · Eigen product",
+        "title": "Een AI-checkout die afrekent met een ondertekend mandaat",
+        "role": "Eerste integratie met een echte PSP",
+        "summary": "Google's Agent Payments Protocol beschrijft hoe een AI-agent namens iemand mag betalen. Deze integratie koppelt dat aan Mollie. Je keurt één keer goed; daarna handelt de agent de betaling af, met een cryptografisch ondertekende mandaatketen als bewijs van wat precies is toegestaan.",
         "stack": [
-          "bunq MCP",
-          "Mollie MCP",
-          "Python localhost",
-          "xlsx-export"
+          "Next.js 16",
+          "Vercel AI SDK",
+          "Mollie API",
+          "JOSE (JWT)",
+          "Cloud Run"
         ],
         "outcomes": [
           {
-            "num": "1 uur",
-            "label": "per kwartaal ipv 1 dag"
+            "num": "3",
+            "label": "gedemonstreerde betaalflows"
           },
           {
             "num": "0",
-            "label": "financiële data extern"
+            "label": "clicks bij een herhaalaankoop"
           },
           {
-            "num": "Per Q",
-            "label": "regels groeien mee"
+            "num": "Per stap",
+            "label": "ondertekend en te auditen"
           }
         ],
-        "why": "Boekhouden hoort lokaal en uitlegbaar. De agent doet het werk, ik keur op regelniveau. Geen SaaS die je creditcard wil bij elke nieuwe heuristiek."
+        "why": "Vier agents — orchestrator, shopping, mandate, payment — en de volledige keten van intent tot betaling als JWT ondertekend. Een agent die geld uitgeeft zonder audittrail is geen product maar een risico.",
+        "link": {
+          "label": "github.com/groeimetai/Mollie-Agent-Payments-Protocol",
+          "href": "https://github.com/groeimetai/Mollie-Agent-Payments-Protocol"
+        }
       },
       {
-        "industry": "Eigen ops · GroeimetAI",
-        "title": "Wekelijkse timesheet-agent voor het urencriterium",
-        "role": "Eigen tooling",
-        "summary": "Leest commits uit GitHub-org `groeimetai` + Google Calendar, past session-inferentie toe op coding-gaps, mergt met handmatige toevoegingen, schrijft per ISO-week een markdown-ledger. Draait elke vrijdag 17:00 via launchd.",
+        "industry": "Agent-architectuur · Eigen tooling",
+        "title": "Nieuwe agents opzetten volgens één vast patroon",
+        "role": "Interne standaard",
+        "summary": "Elke agent begon als een eigen bouwsel: andere mapstructuur, andere manier om credentials te regelen, andere afspraken. De meta-agent stelt zes vragen en zet daarna een complete agent-map neer volgens één vastgelegde architectuur.",
         "stack": [
-          "GitHub MCP",
-          "Google Calendar MCP",
-          "launchd",
-          "Markdown + CSV"
+          "Python",
+          "FastMCP",
+          "MCP",
+          "Claude Code",
+          "uv"
         ],
         "outcomes": [
           {
-            "num": "1225",
-            "label": "uren-criterium getrackt"
+            "num": "7",
+            "label": "agents op hetzelfde patroon"
           },
           {
-            "num": "Auto",
-            "label": "elke vrijdag 17:00"
+            "num": "8",
+            "label": "architectuurregels, vastgelegd"
           },
           {
-            "num": "CSV",
-            "label": "export voor de accountant"
+            "num": "2",
+            "label": "zelfsturende loops eruit voortgekomen"
           }
         ],
-        "why": "De Belastingdienst vraagt aantoonbare uren. Een agent die wekelijks de bestaande systemen leest doet dat beter dan een Excel die niemand bijhoudt."
+        "why": "File-based en model-agnostisch, geen webapp of dashboard. Er zit een dry-run in voordat er iets wordt weggeschreven, en kosten-logging voor runs die zonder mens draaien. Dit is precies wat ik teams leer: structuur eerst, tooling daarna.",
+        "link": {
+          "label": "github.com/groeimetai/meta-agent",
+          "href": "https://github.com/groeimetai/meta-agent"
+        }
       },
       {
-        "industry": "Trading research · Experiment",
-        "title": "Dagelijkse marktanalyse via TradingView MCP",
-        "role": "Eigen tooling",
-        "summary": "Leest live charts uit TradingView Desktop via een lokale MCP server (78 tools), scant 12 assets per dag, levert bias + key levels + signaal-of-wait + risk plan. Pure analyse, geen orders.",
+        "industry": "Softwareontwikkeling · Eigen tooling",
+        "title": "Een agent die issues oppakt, met een testpoort ervoor",
+        "role": "Draait dagelijks",
+        "summary": "Kleine bugs bleven liggen omdat ze te klein waren om in te plannen. Deze loop draait elke werkdag, pakt gelabelde issues op, maakt een branch en een draft-PR, en laat er een aparte reviewer-pas overheen gaan. Per repo bepaalt een poort wat daarna mag.",
         "stack": [
-          "TradingView MCP",
-          "Claude",
-          "Markdown journal"
+          "Claude Code",
+          "MCP",
+          "GitHub CLI",
+          "Playwright",
+          "launchd"
         ],
         "outcomes": [
           {
-            "num": "12",
-            "label": "assets per dagelijkse scan"
+            "num": "ma–vr",
+            "label": "draait om 08:17"
           },
           {
-            "num": "78",
-            "label": "tools via MCP"
+            "num": "6/6",
+            "label": "flows groen vóór een merge"
           },
           {
-            "num": "0",
-            "label": "orders — alleen analyse"
+            "num": "4",
+            "label": "repo's in de loop"
           }
         ],
-        "why": "Beslissingsondersteuning hoort lokaal en transparant. Elke analyse is een markdown-bestand dat je later kan teruglezen. Geen black box, geen broker-API."
+        "why": "Gevoelige zones — auth, betalingen, credentials, migraties, multi-tenant — worden nooit automatisch gemerged. En de reviewer mag nooit zijn eigen PR mergen. Autonomie is pas bruikbaar als je precies hebt afgebakend waar hij ophoudt."
+      },
+      {
+        "industry": "AI-consultancy · Eigen product",
+        "title": "Een site die zelf offerte, betaling en factuur afhandelt",
+        "role": "Deze site",
+        "summary": "De site waar je nu op zit is geen brochure maar het product zelf. Bezoekers stellen vragen aan een chatbot die op de eigen content zoekt, vragen een offerte aan die automatisch wordt opgesteld, en betalen via Mollie waarna de facturatie vanzelf volgt.",
+        "stack": [
+          "Next.js 14",
+          "LangChain",
+          "Pinecone",
+          "Gemini",
+          "Mollie",
+          "Cloud Run",
+          "Sentry"
+        ],
+        "outcomes": [
+          {
+            "num": "2",
+            "label": "talen met auto-detect"
+          },
+          {
+            "num": "Per branch",
+            "label": "preview-revisie vóór live"
+          },
+          {
+            "num": "RAG",
+            "label": "chatbot op eigen content"
+          }
+        ],
+        "why": "Elke branch krijgt een getagde Cloud Run preview-revisie die end-to-end getest wordt voordat er iets live gaat. Dat is dezelfde discipline die ik bij klanten inricht — het zou raar zijn om het op mijn eigen site niet te doen.",
+        "link": {
+          "label": "github.com/groeimetai/groeimetai-website",
+          "href": "https://github.com/groeimetai/groeimetai-website"
+        }
       }
     ],
     "cta": {
@@ -508,7 +686,8 @@
       "title2": "jullie kunnen zijn.",
       "ctaPrimary": "Plan een gesprek",
       "ctaGhost": "Lees over onze aanpak"
-    }
+    },
+    "labelLink": "TE ZIEN"
   },
   "about": {
     "metaTitle": "Over Niels · GroeimetAI",

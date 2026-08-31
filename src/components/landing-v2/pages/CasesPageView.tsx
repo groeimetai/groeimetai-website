@@ -2,7 +2,7 @@
 
 import { Fragment, type CSSProperties } from 'react';
 import { useTranslations } from 'next-intl';
-import { Btn, Eyebrow, Section } from '@/components/ds';
+import { Btn, DsLink, Eyebrow, Section } from '@/components/ds';
 import { IconArrow } from '@/components/ds/icons';
 import { MotionShell } from '@/components/landing-v2/MotionShell';
 
@@ -15,6 +15,8 @@ type CaseItem = {
   stack: string[];
   outcomes: Outcome[];
   why: string;
+  /** Only on work that is genuinely public — a repo or a live product. */
+  link?: { label: string; href: string };
 };
 
 /* Page-local chrome the design system has no class for: the load-in keyframes
@@ -167,6 +169,14 @@ export function CasesPageView({ basePath }: { basePath: string }) {
                       ))}
                     </div>
                   </div>
+                  {c.link ? (
+                    <div style={{ marginTop: 24 }}>
+                      <div className="mono" style={{ ...label, marginBottom: 8 }}>
+                        {t('labelLink')}
+                      </div>
+                      <DsLink href={c.link.href}>{c.link.label}</DsLink>
+                    </div>
+                  ) : null}
                 </div>
                 <div className="case-row-results">
                   <div className="mono" style={{ ...label, marginBottom: 16 }}>

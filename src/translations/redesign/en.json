@@ -354,152 +354,330 @@
   },
   "cases": {
     "metaTitle": "Cases · GroeimetAI",
-    "metaDescription": "Recent agents I built — client work and personal tooling. Folder + instructions + tools, not a black box.",
+    "metaDescription": "Ten GroeimetAI projects: own products, open source and paid client work, with figures and public code where available.",
     "head": {
       "crumb1": "Work",
       "crumbCurrent": "Cases",
-      "title1": "Agents I",
-      "titleAccent": "actually",
-      "title2": "build.",
-      "lead": "For every project — client work and personal tooling — I build an agent the same way: a folder with instructions and local tools. Here are a few recent ones."
+      "title1": "What I",
+      "titleAccent": "built",
+      "title2": "myself.",
+      "lead": "Ten projects that stand or have stood — own products, open source and paid client work. With the figures, and the link where the work is public."
     },
     "labelCase": "CASE",
     "labelStack": "STACK",
     "labelResult": "RESULT",
-    "listFooter": "+ a handful more agents not listed here — I build one for every project, so the list keeps growing.",
+    "listFooter": "+ around sixty more projects not listed here, from trading tooling to webshops. Ask if you are looking for something specific.",
     "list": [
       {
-        "industry": "ServiceNow · Client work",
-        "title": "AI classification for the Service Portal",
-        "role": "Build + implementation",
-        "summary": "A Service Portal widget that automatically classifies incoming requests (incident / service request / question / HR), shows live status, surfaces relevant KB articles and generates contextual follow-up questions. Auto-detects NL or EN. Implemented at multiple clients inside their own ServiceNow environment.",
+        "industry": "Open source · ServiceNow",
+        "title": "A ServiceNow agent that works from the terminal",
+        "role": "Own product · Apache 2.0",
+        "summary": "Serac is a terminal agent for ServiceNow developers and consultants: build, analyse and deploy from the command line, with 429 ServiceNow tools exposed over MCP. You bring your own AI provider and your own instance, so there is no third party in the chain.",
         "stack": [
-          "ServiceNow Quebec+",
-          "LLM classification",
-          "JavaScript widget"
+          "TypeScript",
+          "Bun",
+          "Turborepo",
+          "MCP",
+          "Tauri",
+          "Rust"
         ],
         "outcomes": [
           {
-            "num": "Auto",
-            "label": "request-type detection"
+            "num": "429",
+            "label": "ServiceNow tools over MCP"
           },
           {
-            "num": "500ms",
-            "label": "live status polling"
+            "num": "55",
+            "label": "bundled domain skills"
           },
           {
-            "num": "Multi",
-            "label": "client implementations"
+            "num": "20+",
+            "label": "AI providers to choose from"
           }
         ],
-        "why": "Letting users pick the right form themselves didn't work — too complex. A widget handles classification well enough, and the service desk reviews where it matters. The code lives inside the client's environment; we share the pattern, not the codebase."
+        "why": "A monorepo of roughly eighteen packages, with build and plan agents whose permissions you set per step. Apache 2.0, installable via npm, Homebrew, Scoop, Choco and AUR — you can check what it does before pointing it at your instance.",
+        "link": {
+          "label": "github.com/serac-labs/serac",
+          "href": "https://github.com/serac-labs/serac"
+        }
       },
       {
-        "industry": "Personal branding · Own tooling",
-        "title": "Social media agent with Telegram approval",
-        "role": "Own work",
-        "summary": "One folder that manages ideas, drafts and publications for three brands (Niels, GroeimetAI, Snow-Flow). Slash commands for /idea, /draft, /publish. Headless flow with a Telegram approval step.",
+        "industry": "B2B SaaS · Own product",
+        "title": "From free tool to a paid platform in production",
+        "role": "Built and operated",
+        "summary": "A commercial platform runs around the free agent: hosted runtime, licence keys and connectors to Jira, Azure DevOps, Confluence, GitHub and GitLab. Credentials sit encrypted in a dedicated vault, with white-label portals and an on-prem variant for those who want nothing leaving the building.",
         "stack": [
-          "Claude Code",
-          "MCP servers",
-          "Telegram",
-          "LinkedIn"
+          "TypeScript",
+          "Express",
+          "React",
+          "MySQL 8.4",
+          "Docker Compose",
+          "Hetzner"
+        ],
+        "outcomes": [
+          {
+            "num": "2.0.0",
+            "label": "running in production"
+          },
+          {
+            "num": "5",
+            "label": "connected systems"
+          },
+          {
+            "num": "40+",
+            "label": "tools on top of the free CLI"
+          }
+        ],
+        "why": "Open source proves it works; a platform around it makes it usable for organisations that do not want to run a CLI. AES-256-GCM for customer credentials, because that is exactly the kind of data you do not treat casually.",
+        "link": {
+          "label": "serac.build",
+          "href": "https://serac.build"
+        }
+      },
+      {
+        "industry": "Occupational health advice",
+        "title": "Case management for the Dutch Tweede Spoor track",
+        "role": "Client work · DIM Arbeidsdeskundigen",
+        "summary": "DIM runs the entire Tweede Spoor reintegration track through one platform. The statutory steps and the UWV weekly cadence live in the data model itself, not in agreements alongside the system.",
+        "stack": [
+          "Next.js",
+          "Prisma",
+          "Cloud SQL Postgres (RLS)",
+          "Vertex AI",
+          "Documenso",
+          "Cloud Run"
+        ],
+        "outcomes": [
+          {
+            "num": "RLS",
+            "label": "data isolation per case file"
+          },
+          {
+            "num": "Phase 1",
+            "label": "ownership transfers to the client"
+          },
+          {
+            "num": "0",
+            "label": "hosting billed onward"
+          }
+        ],
+        "why": "Isolation between case files via Postgres Row-Level Security rather than carefully written queries — the latter goes wrong eventually. And after phase 1 is paid, code, data and infrastructure transfer fully to DIM. No lock-in, even where lock-in would have been commercially convenient."
+      },
+      {
+        "industry": "Meetings · Own SaaS",
+        "title": "Meeting audio straight to draft minutes",
+        "role": "Built, operated, deliberately wound down",
+        "summary": "Turning a recording into minutes is work nobody enjoys. Snelnotuleren.nl did it automatically: audio in, transcript and draft minutes out, plus a chat over the transcript to find details again.",
+        "stack": [
+          "Python",
+          "Flask",
+          "Docker",
+          "Cloud Run",
+          "Cloud Build",
+          "Firestore"
+        ],
+        "outcomes": [
+          {
+            "num": "4",
+            "label": "microservices in production"
+          },
+          {
+            "num": "€5–€25",
+            "label": "paid report types"
+          },
+          {
+            "num": "2023–2025",
+            "label": "run by me"
+          }
+        ],
+        "why": "Four microservices with CI/CD to Cloud Run and separate test and prod branches. I wound it down deliberately rather than letting it linger — a product you no longer maintain is one you should stop selling."
+      },
+      {
+        "industry": "Property and HOA management",
+        "title": "Repair reports gathered by phone and WhatsApp",
+        "role": "Paid client engagement",
+        "summary": "At a property management firm every repair report had to be called back and worked through by hand. The agent calls the reporter itself or handles it over WhatsApp, works through the report in a structured way and writes the data straight through. Running in production.",
+        "stack": [
+          "TypeScript",
+          "Twilio",
+          "OpenAI Realtime API",
+          "Supabase",
+          "Azure Container Apps"
+        ],
+        "outcomes": [
+          {
+            "num": "2",
+            "label": "channels: phone and WhatsApp"
+          },
+          {
+            "num": "Realtime",
+            "label": "Twilio ↔ OpenAI audio bridge"
+          },
+          {
+            "num": "1",
+            "label": "tool set for both channels"
+          }
+        ],
+        "why": "Both channels share the same tool definitions and prompts, so a change to the questions applies to both at once. The telephony side has hand-written mu-law/PCM16 conversion and answering machine detection — that kind of detail decides whether it works in practice. The client stays unnamed; the work does not."
+      },
+      {
+        "industry": "HR and recruitment · Own SaaS",
+        "title": "Tailoring CVs to the vacancy, with open code",
+        "role": "Live product",
+        "summary": "Retailoring a CV for every vacancy takes time. CVeetje does it with AI: bring your own encrypted AI key or pay per credit, and get your CV back in your own template.",
+        "stack": [
+          "Next.js 16",
+          "React 19",
+          "Firebase",
+          "Vercel AI SDK",
+          "pdf-lib",
+          "Mollie"
         ],
         "outcomes": [
           {
             "num": "3",
-            "label": "brands in one agent"
+            "label": "AI providers with fallback"
           },
           {
-            "num": "0",
-            "label": "scheduling SaaS"
+            "num": "2",
+            "label": "formats: DOCX and PDF"
           },
           {
-            "num": "Headless",
-            "label": "with approval step"
+            "num": "Open",
+            "label": "code anyone can audit"
           }
         ],
-        "why": "No dashboard, no subscription. A folder with instructions and slash commands that can run manually or autonomously — depending on how much you want to hand off."
+        "why": "The code is deliberately open source so users can verify their data stays in their own Firebase project. Flat PDFs without form fields go through a vision route that fills the document as an overlay — the awkward cases are the whole point.",
+        "link": {
+          "label": "maakcveetje.nl",
+          "href": "https://maakcveetje.nl"
+        }
       },
       {
-        "industry": "Finance · Solo",
-        "title": "VAT-return agent with localhost dashboard",
-        "role": "Own tooling",
-        "summary": "Pulls transactions from bunq and Mollie, classifies them (business / mixed / private) with reason and proposal. Localhost dashboard to interactively refine. Learns from corrections each quarter.",
+        "industry": "Payments · Own product",
+        "title": "An AI checkout that pays with a signed mandate",
+        "role": "First integration with a real PSP",
+        "summary": "Google's Agent Payments Protocol describes how an AI agent may pay on someone's behalf. This integration connects it to Mollie. You approve once; the agent handles the payment after that, with a cryptographically signed mandate chain as proof of exactly what was allowed.",
         "stack": [
-          "bunq MCP",
-          "Mollie MCP",
-          "Python localhost",
-          "xlsx export"
+          "Next.js 16",
+          "Vercel AI SDK",
+          "Mollie API",
+          "JOSE (JWT)",
+          "Cloud Run"
         ],
         "outcomes": [
           {
-            "num": "1 hr",
-            "label": "per quarter instead of 1 day"
+            "num": "3",
+            "label": "payment flows demonstrated"
           },
           {
             "num": "0",
-            "label": "financial data sent off-device"
+            "label": "clicks on a repeat purchase"
           },
           {
-            "num": "Per Q",
-            "label": "rules grow with the data"
+            "num": "Per step",
+            "label": "signed and auditable"
           }
         ],
-        "why": "Bookkeeping belongs local and explainable. The agent does the work, I approve at the rule level. No SaaS asking for a credit card on every new heuristic."
+        "why": "Four agents — orchestrator, shopping, mandate, payment — and the full chain from intent to payment signed as JWT. An agent that spends money without an audit trail is not a product, it is a liability.",
+        "link": {
+          "label": "github.com/groeimetai/Mollie-Agent-Payments-Protocol",
+          "href": "https://github.com/groeimetai/Mollie-Agent-Payments-Protocol"
+        }
       },
       {
-        "industry": "Own ops · GroeimetAI",
-        "title": "Weekly timesheet agent for the Dutch hours criterion",
-        "role": "Own tooling",
-        "summary": "Reads commits from the `groeimetai` GitHub org and Google Calendar, applies session inference to coding gaps, merges with manual entries, writes a markdown ledger per ISO week. Runs every Friday 17:00 via launchd.",
+        "industry": "Agent architecture · Own tooling",
+        "title": "Scaffolding new agents to one fixed pattern",
+        "role": "Internal standard",
+        "summary": "Every agent used to start as its own construction: different folder layout, different way of handling credentials, different conventions. The meta-agent asks six questions and then lays down a complete agent folder to one recorded architecture.",
         "stack": [
-          "GitHub MCP",
-          "Google Calendar MCP",
-          "launchd",
-          "Markdown + CSV"
+          "Python",
+          "FastMCP",
+          "MCP",
+          "Claude Code",
+          "uv"
         ],
         "outcomes": [
           {
-            "num": "1225",
-            "label": "hours-criterion tracked"
+            "num": "7",
+            "label": "agents on the same pattern"
           },
           {
-            "num": "Auto",
-            "label": "every Friday 17:00"
+            "num": "8",
+            "label": "architecture rules, written down"
           },
           {
-            "num": "CSV",
-            "label": "export for the accountant"
+            "num": "2",
+            "label": "self-driving loops came out of it"
           }
         ],
-        "why": "The Dutch tax office wants provable hours. An agent that reads the existing systems weekly does that better than an Excel nobody maintains."
+        "why": "File-based and model-agnostic, no web app or dashboard. There is a dry run before anything is written, and cost logging for runs that happen without a human. This is exactly what I teach teams: structure first, tooling after.",
+        "link": {
+          "label": "github.com/groeimetai/meta-agent",
+          "href": "https://github.com/groeimetai/meta-agent"
+        }
       },
       {
-        "industry": "Trading research · Experiment",
-        "title": "Daily market analysis via TradingView MCP",
-        "role": "Own tooling",
-        "summary": "Reads live charts from TradingView Desktop via a local MCP server (78 tools), scans 12 assets per day, produces bias + key levels + signal-or-wait + risk plan. Pure analysis, no orders.",
+        "industry": "Software development · Own tooling",
+        "title": "An agent that picks up issues, behind a test gate",
+        "role": "Runs daily",
+        "summary": "Small bugs kept sliding because they were too small to plan. This loop runs every working day, picks up labelled issues, opens a branch and a draft PR, and sends a separate reviewer pass over it. A per-repo gate decides what may happen next.",
         "stack": [
-          "TradingView MCP",
-          "Claude",
-          "Markdown journal"
+          "Claude Code",
+          "MCP",
+          "GitHub CLI",
+          "Playwright",
+          "launchd"
         ],
         "outcomes": [
           {
-            "num": "12",
-            "label": "assets per daily scan"
+            "num": "Mon–Fri",
+            "label": "runs at 08:17"
           },
           {
-            "num": "78",
-            "label": "tools via MCP"
+            "num": "6/6",
+            "label": "flows green before a merge"
           },
           {
-            "num": "0",
-            "label": "orders — analysis only"
+            "num": "4",
+            "label": "repos in the loop"
           }
         ],
-        "why": "Decision support belongs local and transparent. Every analysis is a markdown file you can revisit. No black box, no broker API."
+        "why": "Sensitive areas — auth, payments, credentials, migrations, multi-tenant — are never merged automatically. And the reviewer may never merge its own PR. Autonomy is only useful once you have drawn the line where it stops."
+      },
+      {
+        "industry": "AI consultancy · Own product",
+        "title": "A site that handles its own quotes, payments and invoices",
+        "role": "This site",
+        "summary": "The site you are on is not a brochure, it is the product. Visitors ask a chatbot that searches the site's own content, request a quote that is drafted automatically, and pay through Mollie after which invoicing follows on its own.",
+        "stack": [
+          "Next.js 14",
+          "LangChain",
+          "Pinecone",
+          "Gemini",
+          "Mollie",
+          "Cloud Run",
+          "Sentry"
+        ],
+        "outcomes": [
+          {
+            "num": "2",
+            "label": "languages with auto-detect"
+          },
+          {
+            "num": "Per branch",
+            "label": "preview revision before live"
+          },
+          {
+            "num": "RAG",
+            "label": "chatbot on own content"
+          }
+        ],
+        "why": "Every branch gets a tagged Cloud Run preview revision that is tested end to end before anything goes live. That is the same discipline I set up at clients — it would be odd not to run it on my own site.",
+        "link": {
+          "label": "github.com/groeimetai/groeimetai-website",
+          "href": "https://github.com/groeimetai/groeimetai-website"
+        }
       }
     ],
     "cta": {
@@ -508,7 +686,8 @@
       "title2": "yours.",
       "ctaPrimary": "Book a call",
       "ctaGhost": "Read about our approach"
-    }
+    },
+    "labelLink": "SEE IT"
   },
   "about": {
     "metaTitle": "About Niels · GroeimetAI",
