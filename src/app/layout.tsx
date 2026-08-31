@@ -1,36 +1,24 @@
 import type { Metadata } from 'next';
-import { Outfit, Manrope } from 'next/font/google';
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
-import { Providers } from './providers';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { OrganizationJsonLd, ServicesJsonLd, WebSiteJsonLd } from '@/components/JsonLd';
 import '../styles/globals.css';
 
-const ROOT_TITLE = 'GroeimetAI — Agents bouwen die je zelf begrijpt';
+// Positioning per website-repositioning-2026-04.md (April 2026): AI-training,
+// strategie, adoptiebegeleiding, workflow-herontwerp en veilige integraties
+// voor het MKB. Deze strings moeten gelijk blijven aan de Organization-
+// description in src/components/JsonLd.tsx en aan public/llms.txt.
+const ROOT_TITLE = 'GroeimetAI — AI-training, strategie en adoptie voor het MKB';
+// Absolute URL of the generated card image (src/app/opengraph-image.tsx).
+// The `/og.png` id keeps the path dotted so the next-intl matcher skips it.
+const OG_IMAGE = 'https://groeimetai.io/opengraph-image/og.png';
 const ROOT_DESCRIPTION =
-  'GroeimetAI traint teams om AI agents te bouwen, beheren en aanpassen. Geen black box, geen lock-in, geen hype.';
+  'GroeimetAI helpt MKB-organisaties nuchter werken met AI: training, strategie, adoptiebegeleiding, workflow-herontwerp en veilige integraties.';
 const ROOT_KEYWORDS = [
-  'AI agents',
-  'AI training',
-  'AI literacy',
-  'agent implementatie',
-  'GenAI consultancy',
+  'AI-training',
+  'AI-adoptie',
+  'AI-strategie MKB',
+  'workflow-herontwerp',
+  'veilige AI-integraties',
   'GroeimetAI',
 ];
-
-const outfit = Outfit({
-  subsets: ['latin'],
-  variable: '--font-body',
-  display: 'swap',
-});
-
-const manrope = Manrope({
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
-  weight: ['500', '600', '700', '800'],
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://groeimetai.io'),
@@ -40,13 +28,9 @@ export const metadata: Metadata = {
   authors: [{ name: 'GroeimetAI', url: 'https://groeimetai.io' }],
   creator: 'GroeimetAI',
   publisher: 'GroeimetAI',
-  icons: {
-    icon: [
-      { url: '/gecentreerd-logo.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico', sizes: 'any' },
-    ],
-    apple: '/apple-icon.png',
-  },
+  // No `icons` block here on purpose: src/app/icon.svg (Next file convention)
+  // supplies the favicon. Next only falls back to file-based icons when
+  // `metadata.icons` is undefined, so setting it here would suppress them.
   robots: {
     index: true,
     follow: true,
@@ -58,36 +42,34 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  alternates: {
-    canonical: 'https://groeimetai.io',
-    languages: {
-      en: 'https://groeimetai.io/en',
-      'nl-NL': 'https://groeimetai.io/nl',
-    },
-  },
+  // Note: no global canonical or hreflang here. The root path "/" is a redirect
+  // to /nl and should not be a canonical target itself. Each locale page sets
+  // its own self-referential canonical via generateMetadataWithAlternates().
   openGraph: {
     type: 'website',
-    locale: 'en_US',
-    alternateLocale: 'nl_NL',
+    // Dutch is the default locale and the bulk of the content; pages that use
+    // generateMetadataWithAlternates() override this per locale.
+    locale: 'nl_NL',
+    alternateLocale: 'en_US',
     url: 'https://groeimetai.io',
     title: ROOT_TITLE,
     description: ROOT_DESCRIPTION,
     siteName: 'GroeimetAI',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'GroeimetAI - AI Consultancy',
-      },
-    ],
+    // Reference the generated image explicitly rather than relying on Next to
+    // merge the src/app/opengraph-image.tsx file convention: verified against a
+    // production build, the convention did not reach the [locale] pages (a page
+    // that defines its own `openGraph` replaces this object wholesale, and even
+    // pages inheriting it emitted no og:image). An explicit URL is deterministic
+    // — /opengraph-image/og.png returns 200 image/png.
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: ROOT_TITLE }],
   },
   twitter: {
     card: 'summary_large_image',
     title: ROOT_TITLE,
     description: ROOT_DESCRIPTION,
     creator: '@groeimetai',
-    images: ['/twitter-image.png'],
+    // Explicit for the same reason as openGraph.images above.
+    images: [OG_IMAGE],
   },
 };
 
@@ -116,30 +98,15 @@ if (typeof window !== 'undefined') {
   });
 }
 
-// Generate static params for all supported locales
-export function generateStaticParams() {
-  return [{ locale: 'en' }, { locale: 'nl' }];
-}
-
-export default function RootLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { locale: string };
-}) {
-  return (
-    <html lang={params?.locale || 'en'} suppressHydrationWarning>
-      <head>
-        <OrganizationJsonLd />
-        <ServicesJsonLd />
-        <WebSiteJsonLd />
-      </head>
-      <body className={`${outfit.variable} ${manrope.variable} ${GeistSans.variable} ${GeistMono.variable} font-sans dark min-h-screen bg-background antialiased`} suppressHydrationWarning>
-        <ErrorBoundary>
-          <Providers>{children}</Providers>
-        </ErrorBoundary>
-      </body>
-    </html>
-  );
+/**
+ * Pass-through root layout.
+ *
+ * The <html>/<body> shell lives in src/app/[locale]/layout.tsx because that is
+ * the first layout that actually receives the locale segment — this file sits
+ * above [locale], so its `params` never contained `locale` and every Dutch page
+ * was served as <html lang="en">. Everything that used to render here (fonts,
+ * providers, JSON-LD, preconnects) moved down one level in the same order.
+ */
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }

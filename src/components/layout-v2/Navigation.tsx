@@ -52,6 +52,7 @@ export function Navigation({ basePath = '' }: { basePath?: string }) {
             className="nav-brand-wide"
             src="/groeimet-ai-logo.svg"
             alt="GroeimetAI"
+            width={149}
             height={28}
             style={{ height: 28, width: 'auto' }}
           />

@@ -34,16 +34,16 @@
     "forEnterprise": "Enterprise transformation"
   },
   "home": {
-    "metaTitle": "GroeimetAI — Build agents you actually understand",
-    "metaDescription": "GroeimetAI trains teams to build, run and maintain AI agents. No black box, no lock-in, no hype.",
+    "metaTitle": "AI training and adoption without the hype — GroeimetAI",
+    "metaDescription": "GroeimetAI helps SME teams work better with AI: training, strategy, adoption and safe integrations. No hype, no black box, no lock-in.",
     "hero": {
       "pill": "Available for Q3 engagements",
-      "title1": "An agent isn't",
-      "title2": "magic. It's a",
-      "titleAccent": "folder, instructions and tools.",
-      "lead": "We teach teams to build agents they actually understand, run and adapt themselves. No black box. No lock-in. No hype.",
+      "title1": "Using AI without the hype,",
+      "title2": "lock-in or",
+      "titleAccent": "dependency.",
+      "lead": "We help teams work better with AI: training, practical workflows and safe integrations. No black box. No lock-in. No hype.",
       "ctaPrimary": "Book an intro call",
-      "ctaGhost": "How we build them",
+      "ctaGhost": "See how we work",
       "meta1": "Direct with Niels",
       "meta2": "Reply within 24h",
       "meta3": "NL & remote"

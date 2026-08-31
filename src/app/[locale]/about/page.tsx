@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { AboutPageView } from '@/components/landing-v2/pages/AboutPageView';
-import { PersonJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd';
+import { PersonJsonLd, BreadcrumbJsonLd, FOUNDER_ID } from '@/components/JsonLd';
 
 const BASE = 'https://groeimetai.io';
+// Generated card image (src/app/opengraph-image.tsx).
+const OG_IMAGE = 'https://groeimetai.io/opengraph-image/og.png';
 
 export async function generateMetadata({
   params,
@@ -27,6 +29,7 @@ export async function generateMetadata({
       languages: {
         'nl-NL': `${BASE}/nl/about`,
         en: `${BASE}/en/about`,
+        'x-default': `${BASE}/nl/about`,
       },
     },
     openGraph: {
@@ -35,6 +38,13 @@ export async function generateMetadata({
       url,
       type: 'profile',
       locale: params.locale === 'nl' ? 'nl_NL' : 'en_US',
+      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [OG_IMAGE],
     },
   };
 }
@@ -48,7 +58,14 @@ export default function AboutPage({ params }: { params: { locale: string } }) {
 
   return (
     <>
+      {/*
+        One canonical, locale-independent @id (FOUNDER_ID) so /nl/about and
+        /en/about describe the same person instead of two entities, and so
+        Organization.founder resolves to a real node. The locale-specific page
+        stays in `url`, which is what `url` is for.
+      */}
       <PersonJsonLd
+        id={FOUNDER_ID}
         name="Niels van der Werf"
         jobTitle={params.locale === 'nl' ? 'Founder, GroeimetAI' : 'Founder, GroeimetAI'}
         description={personDescription}

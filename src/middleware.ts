@@ -9,6 +9,12 @@ const intlMiddleware = createIntlMiddleware({
   locales,
   defaultLocale,
   localePrefix: 'always',
+  // Do not emit the `Link: <...>; hreflang="..."` response header. next-intl
+  // derives it purely from the URL, so it advertises an /en/ counterpart for
+  // NL-only content (blog posts, pillar pages) that returns 404, and it uses
+  // `hreflang="nl"` where our HTML uses `nl-NL`. The per-page
+  // `alternates.languages` in generateMetadata is the single source of truth.
+  alternateLinks: false,
 });
 
 export default async function middleware(request: NextRequest) {

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { HomePageView } from '@/components/landing-v2/pages/HomePageView';
+import { generateMetadataWithAlternates } from '@/utils/metadata';
 
 export async function generateMetadata({
   params,
@@ -8,10 +9,12 @@ export async function generateMetadata({
   params: { locale: string };
 }): Promise<Metadata> {
   const t = await getTranslations({ locale: params.locale, namespace: 'redesign.home' });
-  return {
+  return generateMetadataWithAlternates({
+    locale: params.locale,
+    pathname: '/',
     title: t('metaTitle'),
     description: t('metaDescription'),
-  };
+  });
 }
 
 export default function HomePage({ params }: { params: { locale: string } }) {
