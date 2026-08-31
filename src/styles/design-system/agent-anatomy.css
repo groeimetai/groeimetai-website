@@ -7,7 +7,7 @@
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.02),
     0 30px 80px -30px rgba(0,0,0,0.8),
-    0 60px 120px -40px rgba(255,90,31,0.18);
+    0 60px 120px -40px rgba(255,112,20,0.18);
   font-family: var(--font-sans);
   position: relative;
   z-index: 2;
@@ -65,7 +65,7 @@
   cursor: pointer;
 }
 .tree-row:hover { background: rgba(255,255,255,0.03); color: var(--fg); }
-.tree-row.is-active { background: rgba(255,90,31,0.1); color: var(--accent); }
+.tree-row.is-active { background: rgba(255,112,20,0.1); color: var(--accent); }
 .tree-caret {
   font-size: 8px; width: 10px;
   color: var(--fg-mute);

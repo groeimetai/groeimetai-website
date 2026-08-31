@@ -19,20 +19,6 @@ const I = ({ size = 20, children, className = '', ...rest }: IconProps & { child
   </svg>
 );
 
-export const LogoMark = ({
-  size = 28,
-  accent = 'var(--accent)',
-  ink = '#1a0d05',
-  ...rest
-}: SVGProps<SVGSVGElement> & { size?: number; accent?: string; ink?: string }) => (
-  <svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...rest}>
-    <rect x="0" y="0" width="32" height="32" rx="8" fill={accent} />
-    <path d="M7 11 H13 L15 13 H25" stroke={ink} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M7 11 V23 H25 V13" stroke={ink} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M11 18 H17" stroke={ink} strokeWidth="1.6" strokeLinecap="round" />
-    <circle cx="20" cy="18" r="1.4" fill={ink} />
-  </svg>
-);
 
 export const IconFolder = (p: IconProps) => (
   <I {...p}>

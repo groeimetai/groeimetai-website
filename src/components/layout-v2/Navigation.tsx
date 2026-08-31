@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Btn } from '@/components/ds/Btn';
+import { LogoMark } from '@/components/ds/Brand';
 import { IconArrow, IconGithub } from '@/components/ds/icons';
 
 export function Navigation({ basePath = '' }: { basePath?: string }) {
@@ -43,28 +44,24 @@ export function Navigation({ basePath = '' }: { basePath?: string }) {
   };
 
   return (
-    <nav className="nav">
+    <nav className="nav" data-r="nav">
       <div className="nav-inner">
         <Link href={basePath || '/'} className="nav-brand" aria-label="GroeimetAI">
-          {/* Wide logo on desktop, square icon on mobile — swapped via CSS */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          {/* Inline SVG, not <img>: an image cannot see the page's CSS custom
+              properties, which is why the old wordmark rendered black-on-black. */}
+          <LogoMark size={28} bracket="var(--fg)" />
+          <span
             className="nav-brand-wide"
-            src="/groeimet-ai-logo.svg"
-            alt="GroeimetAI"
-            width={149}
-            height={28}
-            style={{ height: 28, width: 'auto' }}
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="nav-brand-icon"
-            src="/gecentreerd-logo.svg"
-            alt="GroeimetAI"
-            height={32}
-            width={32}
-            style={{ height: 32, width: 32 }}
-          />
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 500,
+              fontSize: 17,
+              letterSpacing: '-0.02em',
+              color: 'var(--fg)',
+            }}
+          >
+            Groeimet<span style={{ color: 'var(--accent)' }}>AI</span>
+          </span>
         </Link>
 
         <div className="nav-links">

@@ -340,8 +340,9 @@ export function AgentAnatomy() {
                   // preview
                 </div>
                 <div style={{ color: 'var(--fg-dim)', fontSize: 14, lineHeight: 1.6 }}>
-                  Een agent is één map. <em>CLAUDE.md</em> is de instructie, <em>knowledge/</em> is wat hij weet,{' '}
-                  <em>mcp-servers/</em> zijn de tools. Klik een bestand om te kijken.
+                  Eén map, meer is het niet. <em>knowledge/</em> is wat het systeem weet,{' '}
+                  <em>CLAUDE.md</em> zijn de afspraken, <em>mcp-servers/</em> zijn de handelingen.
+                  Klik een bestand om te kijken.
                 </div>
               </div>
             )}

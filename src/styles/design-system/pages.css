@@ -84,7 +84,7 @@
 .contact-line-icon {
   width: 40px; height: 40px;
   border-radius: 8px;
-  background: rgba(255,90,31,0.12);
+  background: rgba(255,112,20,0.12);
   color: var(--accent);
   display: grid; place-items: center;
   font-family: var(--font-mono);

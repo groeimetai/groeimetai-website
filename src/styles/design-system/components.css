@@ -233,7 +233,7 @@
 .cta-block::before {
   content: ""; position: absolute;
   width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(255,90,31,0.18), transparent 60%);
+  background: radial-gradient(circle, rgba(255,112,20,0.18), transparent 60%);
   top: -300px; right: -200px;
   filter: blur(40px);
 }
@@ -278,7 +278,7 @@
 .checklist-item .x {
   width: 22px; height: 22px;
   border-radius: 50%;
-  background: rgba(255,90,31,0.12);
+  background: rgba(255,112,20,0.12);
   color: var(--accent);
   display: grid; place-items: center;
   font-size: 11px;
@@ -386,7 +386,7 @@
 .team-portrait {
   aspect-ratio: 4/3;
   background:
-    linear-gradient(135deg, rgba(255,90,31,0.18), rgba(255,90,31,0.04)),
+    linear-gradient(135deg, rgba(255,112,20,0.18), rgba(255,112,20,0.04)),
     repeating-linear-gradient(45deg, var(--bg-elev-2), var(--bg-elev-2) 6px, transparent 6px, transparent 12px);
   border-radius: 8px;
   display: grid; place-items: center;
@@ -416,13 +416,13 @@
 .approach-icon {
   width: 44px; height: 44px;
   border-radius: 10px;
-  background: rgba(255,90,31,0.12);
+  background: rgba(255,112,20,0.12);
   color: var(--accent);
   display: grid; place-items: center;
   font-size: 20px;
   margin-bottom: 8px;
 }
-.section.light .approach-icon { background: rgba(255,90,31,0.12); }
+.section.light .approach-icon { background: rgba(255,112,20,0.12); }
 .approach-card h4 { font-size: 18px; }
 .approach-card .num {
   font-family: var(--font-mono);

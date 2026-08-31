@@ -1,6 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 166 32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <path d="M4 5h6.5v3H7v16h3.5v3H4V5z" fill="#f4f4f1"></path>
   <path d="M28 5h-6.5v3H25v16h-3.5v3h6.5V5z" fill="#f4f4f1"></path>
   <path d="M10.9 10.7H13.7a0.9 0.9 0 0 1 0.9 0.9V12.6a0.7 0.7 0 0 0 0.7 0.7H20.7a1.3 1.3 0 0 1 1.3 1.3V20a1.3 1.3 0 0 1-1.3 1.3H11.3A1.3 1.3 0 0 1 10 20V11.6a0.9 0.9 0 0 1 0.9-0.9z" fill="#ff7014"></path>
-  <text x="43" y="23" font-family="Geist,Manrope,ui-sans-serif,system-ui,-apple-system,sans-serif" font-size="21.5" font-weight="500" letter-spacing="-0.43" fill="#f4f4f1">Groeimet<tspan fill="#ff7014">AI</tspan></text>
 </svg>

@@ -50,8 +50,11 @@
 /* DS-scoped accent tokens — color literals, not HSL components.
    shadcn keeps its own --accent on :root for admin/dashboard. */
 .ds {
-  --accent: #ff5a1f;
-  --accent-hot: #ff7a3d;
-  --accent-deep: #b8340a;
-  --accent-soft: #ffd9c2;
+  /* Accent shifted from hue 13deg (red-leaning) to ~24deg at the same
+     saturation, per design_handoff_website_2026. Old family, for reference:
+     #ff7014 / #ff7a3d / #b8340a / #ffd9c2. */
+  --accent: #ff7014;
+  --accent-hot: #ff8c33;
+  --accent-deep: #c24a05;
+  --accent-soft: #ffe0c4;
 }
