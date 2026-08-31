@@ -19,6 +19,16 @@ const EASE = 'var(--ease)';
  * Start state for a `[data-reveal]` element. The motion loop clears opacity and
  * transform when it enters the viewport; the content itself is always rendered.
  */
+/**
+ * The trifecta heading is built as `title1 <em>accent</em> title2`. In Dutch
+ * title2 is a word ("knippen."), in English it is bare punctuation ("."), so a
+ * hardcoded space renders "trifecta ." in one language and "trifectaknippen."
+ * in the other. Space it only when it does not start with punctuation.
+ */
+function afterAccent(tail: string): string {
+  return /^[.,!?;:]/.test(tail) ? tail : ` ${tail}`;
+}
+
 function reveal(dy = 24, dur = 0.8, delay = 0): CSSProperties {
   return {
     opacity: 0,
@@ -199,6 +209,68 @@ export function AgentsPageView({ basePath }: { basePath: string }) {
             </div>
           </Section>
         </div>
+
+        {/* "Lethal trifecta" — added on main in 21cb413 while this page was being
+            redesigned. Kept verbatim in content, converted to the redesign's
+            motion idiom: data-reveal + staggered inline transitions instead of
+            the old .reveal class. */}
+        <Section>
+          <div className="sec-head" data-reveal style={reveal(22)}>
+            <div>
+              <Eyebrow>{t('trifecta.eyebrow')}</Eyebrow>
+              <h2 style={{ marginTop: 16 }}>
+                {t('trifecta.title1')}{' '}
+                <em style={{ color: 'var(--accent)', fontStyle: 'normal' }}>
+                  {t('trifecta.titleAccent')}
+                </em>
+                {afterAccent(t('trifecta.title2'))}
+              </h2>
+            </div>
+            <div className="sec-head-right">
+              <p className="lead">{t('trifecta.lead')}</p>
+            </div>
+          </div>
+          <div className="approach-grid">
+            {[1, 2, 3].map((i) => (
+              <div
+                className="approach-card"
+                key={i}
+                data-reveal
+                data-tilt
+                style={reveal(22, 0.8, 0.08 * i)}
+              >
+                <div className="num">{t(`trifecta.card${i}Num`)}</div>
+                <h4>{t(`trifecta.card${i}Title`)}</h4>
+                <p>{t(`trifecta.card${i}Body`)}</p>
+              </div>
+            ))}
+          </div>
+          <div
+            data-reveal
+            style={{
+              ...reveal(20, 0.8, 0.32),
+              marginTop: 32,
+              padding: 24,
+              borderLeft: '2px solid var(--accent)',
+              background: 'var(--bg-elev)',
+              borderRadius: '0 12px 12px 0',
+            }}
+          >
+            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6 }}>{t('trifecta.footer')}</p>
+            <p
+              className="mono"
+              style={{
+                marginTop: 12,
+                marginBottom: 0,
+                fontSize: 11,
+                color: 'var(--fg-mute)',
+                letterSpacing: '0.04em',
+              }}
+            >
+              {t('trifecta.attribution')}
+            </p>
+          </div>
+        </Section>
 
         <Section>
           <div className="ds-grid-2" style={{ gap: 80 }}>
