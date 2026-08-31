@@ -1,5 +1,6 @@
 'use client';
 
+import { LogoMark } from '@/components/ds/Brand';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
@@ -12,14 +13,18 @@ export function Footer({ basePath = '' }: { basePath?: string }) {
         <div className="foot-grid">
           <div>
             <div className="nav-brand" style={{ marginBottom: 16 }} aria-label="GroeimetAI">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/groeimet-ai-logo.svg"
-                alt="GroeimetAI"
-                width={149}
-                height={28}
-                style={{ height: 28, width: 'auto' }}
-              />
+              <LogoMark size={28} bracket="var(--fg)" />
+              <span
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 500,
+                  fontSize: 17,
+                  letterSpacing: '-0.02em',
+                  color: 'var(--fg)',
+                }}
+              >
+                Groeimet<span style={{ color: 'var(--accent)' }}>AI</span>
+              </span>
             </div>
             <p style={{ maxWidth: '32ch', fontSize: 14, color: 'var(--fg-dim)' }}>{t('tagline')}</p>
             <div style={{ marginTop: 24 }}>

@@ -37,7 +37,7 @@
     "metaTitle": "AI-training en adoptie zonder hype — GroeimetAI",
     "metaDescription": "GroeimetAI helpt MKB-teams beter werken met AI: training, strategie, adoptie en veilige integraties. Geen hype, geen black box, geen lock-in.",
     "hero": {
-      "pill": "Beschikbaar voor Q3 trajecten",
+      "pill": "Nog twee plekken in Q4",
       "title1": "AI inzetten zonder hype,",
       "title2": "lock-in of",
       "titleAccent": "afhankelijkheid.",
@@ -98,21 +98,27 @@
       ]
     },
     "anatomy": {
-      "eyebrow": "Anatomie van een agent",
+      "eyebrow": "Hoe wij het uitleggen",
       "title": "Drie dingen. Niet meer.",
-      "lead": "Als je dit snapt, snap je elke agent die er straks komt — los van het framework, los van de hype.",
-      "card1Num": "01 / Folders",
-      "card1Title1": "Dit is wat de agent",
+      "lead": "Elk AI-traject dat blijft hangen, valt uiteen in dezelfde drie delen. Snap je die, dan kun je zelf beoordelen wat een tool wel en niet voor je doet.",
+      "card1Num": "01 / Kennis",
+      "card1Title1": "Dit is wat het systeem",
       "card1Title2": "weet",
-      "card1Body": "Jouw documentatie, tone of voice, voorbeelden, beleid. Geen vage trainingsdata — concrete bestanden die jij beheert.",
-      "card2Num": "02 / Instructies",
-      "card2Title1": "Dit is hoe de agent",
-      "card2Title2": "denkt",
-      "card2Body": "Eén document met regels, edge cases en doelen. Leesbaar voor mensen, uitvoerbaar door het model.",
-      "card3Num": "03 / Tools",
-      "card3Title1": "Dit is wat de agent",
-      "card3Title2": "kan",
-      "card3Body": "Concrete acties: een mail sturen, een factuur opzoeken, een afspraak boeken. Niets meer dan jij toestaat."
+      "card1Body": "Jullie documentatie, tone of voice, voorbeelden en beleid. Geen vage trainingsdata — concrete bestanden die jullie zelf beheren.",
+      "card2Num": "02 / Afspraken",
+      "card2Title1": "Dit is hoe het",
+      "card2Title2": "werkt",
+      "card2Body": "Eén document met regels, uitzonderingen en doelen. Leesbaar voor collega’s, uitvoerbaar door het model. Geen flowchart van 47 stappen.",
+      "card3Num": "03 / Handelingen",
+      "card3Title1": "Dit is wat het",
+      "card3Title2": "mag",
+      "card3Body": "Concrete acties: een mail opstellen, een factuur opzoeken, een afspraak voorbereiden. Niets meer dan jullie toestaan. Met audit log en menselijke review.",
+      "stage1Label": "01 · Kennis",
+      "stage2Label": "02 · Afspraken",
+      "stage3Label": "03 · Handelingen",
+      "stage1Path": "kennis/*.md",
+      "stage2Path": "werkafspraken.md",
+      "stage3Path": "handelingen/*.yaml"
     },
     "proof": {
       "eyebrow": "Open source proof",
@@ -146,7 +152,9 @@
       "c3Title": "BTW-aangifte agent met localhost dashboard",
       "c3Snippet": "Pakt bunq + Mollie, classificeert elke regel, biedt een lokaal dashboard. Leert van correcties per kwartaal.",
       "c3MetricNum": "1 uur",
-      "c3MetricLabel": "per kwartaal"
+      "c3MetricLabel": "per kwartaal",
+      "moreTitle": "Elke case is één map die je kunt lezen",
+      "moreBody": "Geen screenshots van dashboards. De kennis, de afspraken en de handelingen — dat is de case."
     },
     "cta": {
       "eyebrow": "Klaar om te beginnen?",
@@ -365,11 +373,24 @@
         "title": "AI-classificatie voor het Service Portal",
         "role": "Bouw + implementatie",
         "summary": "Een widget op het Service Portal die binnenkomende requests automatisch classificeert (incident / service request / vraag / HR), live status toont, relevante KB-artikelen ophaalt en contextuele vervolgvragen genereert. NL + EN auto-detect. Geïmplementeerd bij meerdere klanten in hun eigen ServiceNow-omgeving.",
-        "stack": ["ServiceNow Quebec+", "LLM-classificatie", "JavaScript widget"],
+        "stack": [
+          "ServiceNow Quebec+",
+          "LLM-classificatie",
+          "JavaScript widget"
+        ],
         "outcomes": [
-          { "num": "Auto", "label": "request-type detectie" },
-          { "num": "500ms", "label": "live status polling" },
-          { "num": "Multi", "label": "klant-implementaties" }
+          {
+            "num": "Auto",
+            "label": "request-type detectie"
+          },
+          {
+            "num": "500ms",
+            "label": "live status polling"
+          },
+          {
+            "num": "Multi",
+            "label": "klant-implementaties"
+          }
         ],
         "why": "Klanten zelf het juiste formulier laten kiezen werkte niet — te complex. Een widget doet die classificatie goed genoeg, en de service desk reviewt waar het ertoe doet. Code zelf zit in de omgeving van de klant; we delen het patroon, niet de codebase."
       },
@@ -378,11 +399,25 @@
         "title": "Social media agent met Telegram approval",
         "role": "Eigen werk",
         "summary": "Eén folder die ideeën, drafts en publicaties beheert voor drie merken (Niels, GroeimetAI, Snow-Flow). Slash commands voor /idea, /draft, /publish. Headless flow met Telegram approval-stap.",
-        "stack": ["Claude Code", "MCP servers", "Telegram", "LinkedIn"],
+        "stack": [
+          "Claude Code",
+          "MCP servers",
+          "Telegram",
+          "LinkedIn"
+        ],
         "outcomes": [
-          { "num": "3", "label": "merken in één agent" },
-          { "num": "0", "label": "scheduling SaaS" },
-          { "num": "Headless", "label": "met approval-stap" }
+          {
+            "num": "3",
+            "label": "merken in één agent"
+          },
+          {
+            "num": "0",
+            "label": "scheduling SaaS"
+          },
+          {
+            "num": "Headless",
+            "label": "met approval-stap"
+          }
         ],
         "why": "Geen dashboard, geen abonnement. Een folder met instructies + slash commands die handmatig of autonoom kunnen draaien — afhankelijk van hoeveel je wil afgeven."
       },
@@ -391,11 +426,25 @@
         "title": "BTW-aangifte agent met localhost dashboard",
         "role": "Eigen tooling",
         "summary": "Haalt transacties uit bunq en Mollie, classificeert ze (zakelijk / gemengd / privé) met reden en voorstel. Localhost dashboard om interactief bij te schaven. Leert van correcties per kwartaal.",
-        "stack": ["bunq MCP", "Mollie MCP", "Python localhost", "xlsx-export"],
+        "stack": [
+          "bunq MCP",
+          "Mollie MCP",
+          "Python localhost",
+          "xlsx-export"
+        ],
         "outcomes": [
-          { "num": "1 uur", "label": "per kwartaal ipv 1 dag" },
-          { "num": "0", "label": "financiële data extern" },
-          { "num": "Per Q", "label": "regels groeien mee" }
+          {
+            "num": "1 uur",
+            "label": "per kwartaal ipv 1 dag"
+          },
+          {
+            "num": "0",
+            "label": "financiële data extern"
+          },
+          {
+            "num": "Per Q",
+            "label": "regels groeien mee"
+          }
         ],
         "why": "Boekhouden hoort lokaal en uitlegbaar. De agent doet het werk, ik keur op regelniveau. Geen SaaS die je creditcard wil bij elke nieuwe heuristiek."
       },
@@ -404,11 +453,25 @@
         "title": "Wekelijkse timesheet-agent voor het urencriterium",
         "role": "Eigen tooling",
         "summary": "Leest commits uit GitHub-org `groeimetai` + Google Calendar, past session-inferentie toe op coding-gaps, mergt met handmatige toevoegingen, schrijft per ISO-week een markdown-ledger. Draait elke vrijdag 17:00 via launchd.",
-        "stack": ["GitHub MCP", "Google Calendar MCP", "launchd", "Markdown + CSV"],
+        "stack": [
+          "GitHub MCP",
+          "Google Calendar MCP",
+          "launchd",
+          "Markdown + CSV"
+        ],
         "outcomes": [
-          { "num": "1225", "label": "uren-criterium getrackt" },
-          { "num": "Auto", "label": "elke vrijdag 17:00" },
-          { "num": "CSV", "label": "export voor de accountant" }
+          {
+            "num": "1225",
+            "label": "uren-criterium getrackt"
+          },
+          {
+            "num": "Auto",
+            "label": "elke vrijdag 17:00"
+          },
+          {
+            "num": "CSV",
+            "label": "export voor de accountant"
+          }
         ],
         "why": "De Belastingdienst vraagt aantoonbare uren. Een agent die wekelijks de bestaande systemen leest doet dat beter dan een Excel die niemand bijhoudt."
       },
@@ -417,11 +480,24 @@
         "title": "Dagelijkse marktanalyse via TradingView MCP",
         "role": "Eigen tooling",
         "summary": "Leest live charts uit TradingView Desktop via een lokale MCP server (78 tools), scant 12 assets per dag, levert bias + key levels + signaal-of-wait + risk plan. Pure analyse, geen orders.",
-        "stack": ["TradingView MCP", "Claude", "Markdown journal"],
+        "stack": [
+          "TradingView MCP",
+          "Claude",
+          "Markdown journal"
+        ],
         "outcomes": [
-          { "num": "12", "label": "assets per dagelijkse scan" },
-          { "num": "78", "label": "tools via MCP" },
-          { "num": "0", "label": "orders — alleen analyse" }
+          {
+            "num": "12",
+            "label": "assets per dagelijkse scan"
+          },
+          {
+            "num": "78",
+            "label": "tools via MCP"
+          },
+          {
+            "num": "0",
+            "label": "orders — alleen analyse"
+          }
         ],
         "why": "Beslissingsondersteuning hoort lokaal en transparant. Elke analyse is een markdown-bestand dat je later kan teruglezen. Geen black box, geen broker-API."
       }

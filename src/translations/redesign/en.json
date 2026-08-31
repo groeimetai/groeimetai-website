@@ -37,7 +37,7 @@
     "metaTitle": "AI training and adoption without the hype — GroeimetAI",
     "metaDescription": "GroeimetAI helps SME teams work better with AI: training, strategy, adoption and safe integrations. No hype, no black box, no lock-in.",
     "hero": {
-      "pill": "Available for Q3 engagements",
+      "pill": "Two slots left in Q4",
       "title1": "Using AI without the hype,",
       "title2": "lock-in or",
       "titleAccent": "dependency.",
@@ -98,21 +98,27 @@
       ]
     },
     "anatomy": {
-      "eyebrow": "Anatomy of an agent",
+      "eyebrow": "How we explain it",
       "title": "Three things. No more.",
-      "lead": "If you understand this, you'll understand every agent that comes next — independent of framework, independent of hype.",
-      "card1Num": "01 / Folders",
-      "card1Title1": "This is what the agent",
+      "lead": "Every AI project that actually sticks breaks down into the same three parts. Understand those and you can judge for yourself what a tool does and does not do for you.",
+      "card1Num": "01 / Knowledge",
+      "card1Title1": "This is what the system",
       "card1Title2": "knows",
-      "card1Body": "Your documentation, tone of voice, examples, policies. Not vague training data — concrete files that you maintain.",
-      "card2Num": "02 / Instructions",
-      "card2Title1": "This is how the agent",
-      "card2Title2": "thinks",
-      "card2Body": "One document with rules, edge cases and goals. Readable by humans, executable by the model.",
-      "card3Num": "03 / Tools",
-      "card3Title1": "This is what the agent",
-      "card3Title2": "can do",
-      "card3Body": "Concrete actions: send an email, look up an invoice, book a meeting. Nothing more than what you allow."
+      "card1Body": "Your documentation, tone of voice, examples and policy. Not vague training data — concrete files you manage yourself.",
+      "card2Num": "02 / Agreements",
+      "card2Title1": "This is how it",
+      "card2Title2": "works",
+      "card2Body": "One document with rules, exceptions and goals. Readable by colleagues, executable by the model. Not a 47-step flowchart.",
+      "card3Num": "03 / Actions",
+      "card3Title1": "This is what it",
+      "card3Title2": "may do",
+      "card3Body": "Concrete actions: draft an email, look up an invoice, prepare a meeting. Nothing beyond what you allow. With an audit log and human review.",
+      "stage1Label": "01 · Knowledge",
+      "stage2Label": "02 · Agreements",
+      "stage3Label": "03 · Actions",
+      "stage1Path": "knowledge/*.md",
+      "stage2Path": "working-agreements.md",
+      "stage3Path": "actions/*.yaml"
     },
     "proof": {
       "eyebrow": "Open source proof",
@@ -146,7 +152,9 @@
       "c3Title": "VAT-return agent with localhost dashboard",
       "c3Snippet": "Pulls bunq + Mollie, classifies each line, offers a local dashboard. Learns from corrections each quarter.",
       "c3MetricNum": "1 hr",
-      "c3MetricLabel": "per quarter"
+      "c3MetricLabel": "per quarter",
+      "moreTitle": "Every case is one folder you can read",
+      "moreBody": "No dashboard screenshots. The knowledge, the agreements and the actions — that is the case."
     },
     "cta": {
       "eyebrow": "Ready to start?",
@@ -365,11 +373,24 @@
         "title": "AI classification for the Service Portal",
         "role": "Build + implementation",
         "summary": "A Service Portal widget that automatically classifies incoming requests (incident / service request / question / HR), shows live status, surfaces relevant KB articles and generates contextual follow-up questions. Auto-detects NL or EN. Implemented at multiple clients inside their own ServiceNow environment.",
-        "stack": ["ServiceNow Quebec+", "LLM classification", "JavaScript widget"],
+        "stack": [
+          "ServiceNow Quebec+",
+          "LLM classification",
+          "JavaScript widget"
+        ],
         "outcomes": [
-          { "num": "Auto", "label": "request-type detection" },
-          { "num": "500ms", "label": "live status polling" },
-          { "num": "Multi", "label": "client implementations" }
+          {
+            "num": "Auto",
+            "label": "request-type detection"
+          },
+          {
+            "num": "500ms",
+            "label": "live status polling"
+          },
+          {
+            "num": "Multi",
+            "label": "client implementations"
+          }
         ],
         "why": "Letting users pick the right form themselves didn't work — too complex. A widget handles classification well enough, and the service desk reviews where it matters. The code lives inside the client's environment; we share the pattern, not the codebase."
       },
@@ -378,11 +399,25 @@
         "title": "Social media agent with Telegram approval",
         "role": "Own work",
         "summary": "One folder that manages ideas, drafts and publications for three brands (Niels, GroeimetAI, Snow-Flow). Slash commands for /idea, /draft, /publish. Headless flow with a Telegram approval step.",
-        "stack": ["Claude Code", "MCP servers", "Telegram", "LinkedIn"],
+        "stack": [
+          "Claude Code",
+          "MCP servers",
+          "Telegram",
+          "LinkedIn"
+        ],
         "outcomes": [
-          { "num": "3", "label": "brands in one agent" },
-          { "num": "0", "label": "scheduling SaaS" },
-          { "num": "Headless", "label": "with approval step" }
+          {
+            "num": "3",
+            "label": "brands in one agent"
+          },
+          {
+            "num": "0",
+            "label": "scheduling SaaS"
+          },
+          {
+            "num": "Headless",
+            "label": "with approval step"
+          }
         ],
         "why": "No dashboard, no subscription. A folder with instructions and slash commands that can run manually or autonomously — depending on how much you want to hand off."
       },
@@ -391,11 +426,25 @@
         "title": "VAT-return agent with localhost dashboard",
         "role": "Own tooling",
         "summary": "Pulls transactions from bunq and Mollie, classifies them (business / mixed / private) with reason and proposal. Localhost dashboard to interactively refine. Learns from corrections each quarter.",
-        "stack": ["bunq MCP", "Mollie MCP", "Python localhost", "xlsx export"],
+        "stack": [
+          "bunq MCP",
+          "Mollie MCP",
+          "Python localhost",
+          "xlsx export"
+        ],
         "outcomes": [
-          { "num": "1 hr", "label": "per quarter instead of 1 day" },
-          { "num": "0", "label": "financial data sent off-device" },
-          { "num": "Per Q", "label": "rules grow with the data" }
+          {
+            "num": "1 hr",
+            "label": "per quarter instead of 1 day"
+          },
+          {
+            "num": "0",
+            "label": "financial data sent off-device"
+          },
+          {
+            "num": "Per Q",
+            "label": "rules grow with the data"
+          }
         ],
         "why": "Bookkeeping belongs local and explainable. The agent does the work, I approve at the rule level. No SaaS asking for a credit card on every new heuristic."
       },
@@ -404,11 +453,25 @@
         "title": "Weekly timesheet agent for the Dutch hours criterion",
         "role": "Own tooling",
         "summary": "Reads commits from the `groeimetai` GitHub org and Google Calendar, applies session inference to coding gaps, merges with manual entries, writes a markdown ledger per ISO week. Runs every Friday 17:00 via launchd.",
-        "stack": ["GitHub MCP", "Google Calendar MCP", "launchd", "Markdown + CSV"],
+        "stack": [
+          "GitHub MCP",
+          "Google Calendar MCP",
+          "launchd",
+          "Markdown + CSV"
+        ],
         "outcomes": [
-          { "num": "1225", "label": "hours-criterion tracked" },
-          { "num": "Auto", "label": "every Friday 17:00" },
-          { "num": "CSV", "label": "export for the accountant" }
+          {
+            "num": "1225",
+            "label": "hours-criterion tracked"
+          },
+          {
+            "num": "Auto",
+            "label": "every Friday 17:00"
+          },
+          {
+            "num": "CSV",
+            "label": "export for the accountant"
+          }
         ],
         "why": "The Dutch tax office wants provable hours. An agent that reads the existing systems weekly does that better than an Excel nobody maintains."
       },
@@ -417,11 +480,24 @@
         "title": "Daily market analysis via TradingView MCP",
         "role": "Own tooling",
         "summary": "Reads live charts from TradingView Desktop via a local MCP server (78 tools), scans 12 assets per day, produces bias + key levels + signal-or-wait + risk plan. Pure analysis, no orders.",
-        "stack": ["TradingView MCP", "Claude", "Markdown journal"],
+        "stack": [
+          "TradingView MCP",
+          "Claude",
+          "Markdown journal"
+        ],
         "outcomes": [
-          { "num": "12", "label": "assets per daily scan" },
-          { "num": "78", "label": "tools via MCP" },
-          { "num": "0", "label": "orders — analysis only" }
+          {
+            "num": "12",
+            "label": "assets per daily scan"
+          },
+          {
+            "num": "78",
+            "label": "tools via MCP"
+          },
+          {
+            "num": "0",
+            "label": "orders — analysis only"
+          }
         ],
         "why": "Decision support belongs local and transparent. Every analysis is a markdown file you can revisit. No black box, no broker API."
       }

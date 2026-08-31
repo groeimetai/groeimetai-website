@@ -75,9 +75,13 @@
 .ds .nav {
   position: sticky; top: 0;
   z-index: 50;
-  background: rgba(10,10,11,0.7);
-  backdrop-filter: saturate(140%) blur(14px);
+  background: rgba(10,10,11,0.74);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
   border-bottom: 1px solid var(--line);
+  /* The motion loop drives background and border-colour over the paper bands;
+     without a transition the flip is a hard cut. */
+  transition: background .5s linear, border-color .5s linear;
 }
 .ds .nav-inner {
   display: flex; align-items: center; justify-content: space-between;
@@ -98,7 +102,7 @@
   display: grid; place-items: center;
   color: #1a0d05; font-weight: 700; font-family: var(--font-mono);
   font-size: 14px;
-  box-shadow: 0 0 0 1px rgba(255,90,31,.35), 0 6px 18px -6px rgba(255,90,31,.6);
+  box-shadow: 0 0 0 1px rgba(255,112,20,.35), 0 6px 18px -6px rgba(255,112,20,.6);
 }
 .ds .nav-links {
   display: flex; gap: 6px;
@@ -260,7 +264,7 @@
   background: var(--accent);
   color: #1a0d05;
   border-color: var(--accent);
-  box-shadow: 0 0 0 1px rgba(255,90,31,.25), 0 10px 26px -10px rgba(255,90,31,.7);
+  box-shadow: 0 0 0 1px rgba(255,112,20,.25), 0 10px 26px -10px rgba(255,112,20,.7);
 }
 .ds .btn-primary:hover { background: var(--accent-hot); border-color: var(--accent-hot); }
 .ds .btn-ghost {
@@ -365,7 +369,7 @@
 .ds .glow {
   position: absolute;
   width: 800px; height: 800px;
-  background: radial-gradient(circle, rgba(255,90,31,0.18), transparent 60%);
+  background: radial-gradient(circle, rgba(255,112,20,0.18), transparent 60%);
   filter: blur(40px);
   pointer-events: none;
   z-index: 0;
@@ -394,7 +398,7 @@
   display: inline-block;
   padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(255,90,31,0.12);
+  background: rgba(255,112,20,0.12);
   color: var(--accent);
   font-family: var(--font-mono);
   font-size: 11px;
