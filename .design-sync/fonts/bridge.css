@@ -1,0 +1,20 @@
+/* Font-variable bridge.
+
+   In the Next app these three variables are bound at runtime:
+   · --font-geist-sans / --font-geist-mono  by `geist/font/*` on <body>
+   · --font-display                          by next/font/google (Manrope) on <body>
+
+   src/styles/design-system/tokens.css only *references* them, so outside Next
+   they resolve to nothing and every font-family declaration in the DS becomes
+   invalid. This file binds them to the @font-face families shipped in fonts/,
+   reproducing exactly what the live site renders.
+
+   Imported last from .design-sync/ds-entry.tsx so it wins over tokens.css. */
+
+:root {
+  --font-geist-sans: "Geist";
+  --font-geist-mono: "Geist Mono";
+  --font-display: "Manrope", "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
